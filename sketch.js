@@ -6,6 +6,10 @@ var curpyr, prevpyr, pointCount, pointStatus, prevxy, curxy;
 var w = 640;
 var h = 480;
 var maxPoints = 1000;
+var mymousex = 0;
+var mymousey = 0;
+var sensitivityX = 10;
+var sensitivityY = 8;
 
 function setup() {
 	capture = createCapture({
@@ -96,15 +100,35 @@ function draw() {
 			epsilon, minEigen);
 		prunePoints();
 
+		var movementX = 0;
+		var movementY = 0;
+		var numMovements = 0;
 		for (var i = 0; i < pointCount; i++) {
 			var pointOffset = i * 2;
 			var distMoved = Math.hypot(prevxy[pointOffset] - curxy[pointOffset], prevxy[pointOffset + 1] - curxy[pointOffset + 1]);
+			// TODO: ignore points that were just initialized
 			if (distMoved >= 1) {
 				fill("lime");
+				movementX += curxy[pointOffset] - prevxy[pointOffset];
+				movementY += curxy[pointOffset + 1] - prevxy[pointOffset + 1];
+				numMovements += 1;
 			} else {
 				fill("gray");
 			}
 			ellipse(curxy[pointOffset], curxy[pointOffset + 1], 8, 8);
 		}
+		if (numMovements > 0) {
+			movementX /= numMovements;
+			movementY /= numMovements;
+		}
+
+		mymousex -= movementX * sensitivityX;
+		mymousey += movementY * sensitivityY;
+
+		mymousex = Math.min(Math.max(0, mymousex), w);
+		mymousey = Math.min(Math.max(0, mymousey), h);
+
+		fill("red");
+		ellipse(mymousex, mymousey, 20, 20);
 	}
 }
