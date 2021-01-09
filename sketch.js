@@ -37,11 +37,11 @@ function setup() {
 	curxy = new Float32Array(maxPoints * 2);
 }
 
-function keyPressed(key) {
-	for (var i = 0; i < 100; i++) {
-		addPoint(random(width), random(height));
-	}
-}
+// function keyPressed(key) {
+// 	for (var i = 0; i < 100; i++) {
+// 		addPoint(random(width), random(height));
+// 	}
+// }
 
 function mousePressed() {
 	addPoint(mouseX, mouseY);
