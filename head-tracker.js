@@ -1,3 +1,6 @@
+var mirrorCheckbox = document.getElementById("mirror");
+var sensitivityXSlider = document.getElementById("sensitivity-x");
+var sensitivityYSlider = document.getElementById("sensitivity-y");
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
@@ -17,14 +20,27 @@ var h = 480;
 var maxPoints = 1000;
 var mouseX = 0;
 var mouseY = 0;
-var sensitivityX = 0.02;
-var sensitivityY = 0.03;
+var sensitivityX;
+var sensitivityY;
 var face;
 var faceScore = 0;
 var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
-var mirror = true;
+var mirror;
+
+sensitivityXSlider.onchange = ()=> {
+	sensitivityX = sensitivityXSlider.value / 1000;
+};
+sensitivityYSlider.onchange = ()=> {
+	sensitivityY = sensitivityYSlider.value / 1000;
+};
+mirrorCheckbox.onchange = ()=> {
+	mirror = mirrorCheckbox.checked;
+};
+mirrorCheckbox.onchange();
+sensitivityXSlider.onchange();
+sensitivityYSlider.onchange();
 
 var ctrack = new clm.tracker();
 ctrack.init();
