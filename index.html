@@ -4,8 +4,22 @@
 	<meta charset="UTF-8">
 	<title>Head Tracker</title>
 
-	<script src="lib/tf.js"></script>
-	<script src="lib/facemesh/facemesh.js"></script>
+	<!-- <script src="lib/tf.js"></script> -->
+	<!-- <script src="lib/facemesh/facemesh.js"></script> -->
+	<script type="module">
+		import workerize from './lib/workerize.js';
+		console.log("HELLO");
+
+		window.facemesh = workerize(`
+			import facemesh from './lib/facemesh';
+
+			export function load(...args) {
+				return facemesh.load(...args)
+			};
+		`, { type: 'module' });
+
+		console.log(facemesh);
+	</script>
 
 	<script src="lib/clmtrackr.js"></script>
 
@@ -30,7 +44,7 @@
 		<!-- <label>Smoothing <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
 		<label><input type="checkbox" checked id="mirror"> Mirror</label>
 	</div>
-	<script src="head-tracker.js"></script>
+	<script src="head-tracker.js" async></script>
 </body>
 
 </html>
