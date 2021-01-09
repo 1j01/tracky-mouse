@@ -101,7 +101,8 @@ function maybeAddPoint(x, y) {
 	for (var pointIndex = 0; pointIndex < pointCount; pointIndex++) {
 		var pointOffset = pointIndex * 2;
 		var distance = Math.hypot(x - curXY[pointOffset], y - curXY[pointOffset + 1]);
-		if (distance < 20) {
+		// If its' useful to have this higher, it should probably be based on the size of the face
+		if (distance < 8) {
 			return;
 		}
 	}
@@ -232,7 +233,7 @@ function draw() {
 			movementX += curXY[pointOffset] - prevXY[pointOffset];
 			movementY += curXY[pointOffset + 1] - prevXY[pointOffset + 1];
 			numMovements += 1;
-			circle(curXY[pointOffset], curXY[pointOffset + 1], 4);
+			circle(curXY[pointOffset], curXY[pointOffset + 1], 3);
 		}
 		if (numMovements > 0) {
 			movementX /= numMovements;
