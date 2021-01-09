@@ -19,8 +19,11 @@ var mouseX = 0;
 var mouseY = 0;
 var sensitivityX = 0.02;
 var sensitivityY = 0.03;
-var faceThreshold = 0.5;
+var face;
+var faceScore = 0;
+var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
+const SLOWMO = true;
 
 var ctrack = new clm.tracker();
 ctrack.init();
@@ -141,14 +144,17 @@ function prunePoints() {
 
 function animate() {
 	requestAnimationFrame(animate);
-	draw();
+	draw(!SLOWMO);
 }
 
-function draw() {
+function draw(update=true) {
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-	if (true) {
+	if (update) {
+		face = ctrack.getCurrentPosition();
+		faceScore = ctrack.getScore();
+
 		var xyswap = prevXY;
 		prevXY = curXY;
 		curXY = xyswap;
@@ -172,30 +178,31 @@ function draw() {
 			pointStatus,
 			epsilon, minEigen);
 		prunePoints();
+	}
 
-		ctx.save();
-		ctx.fillStyle = "#fff";
-		ctx.strokeStyle = "#000";
-		ctx.lineWidth = 3;
-		ctx.font = "20px sans-serif";
-		ctx.beginPath();
-		ctx.strokeText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
-		ctx.fillText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
-		ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
-		ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
-		ctx.stroke();
-		ctx.fill();
-		ctx.restore();
-		
-		var face = ctrack.getCurrentPosition();
-		if (face) {
-			const bad = ctrack.getScore() < faceThreshold;
-			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-			if (!bad || pointCount < 4 || ctrack.getScore() > pointsBasedOnFaceScore + 0.05) {
-				if (bad) {
-					ctx.strokeStyle = 'rgba(255,0,255)';
-				}
-				pointsBasedOnFaceScore = ctrack.getScore();
+	ctx.save();
+	ctx.fillStyle = "#fff";
+	ctx.strokeStyle = "#000";
+	ctx.lineWidth = 3;
+	ctx.font = "20px sans-serif";
+	ctx.beginPath();
+	ctx.strokeText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
+	ctx.fillText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
+	ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+	ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+	ctx.stroke();
+	ctx.fill();
+	ctx.restore();
+	
+	if (face) {
+		const bad = faceScore < faceScoreThreshold;
+		ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
+		if (!bad || pointCount < 4 || faceScore > pointsBasedOnFaceScore + 0.05) {
+			if (bad) {
+				ctx.strokeStyle = 'rgba(255,0,255)';
+			}
+			if (update) {
+				pointsBasedOnFaceScore = faceScore;
 
 				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
 				// - fallback to random points or points based on face detection geometry if less than N points
@@ -222,34 +229,36 @@ function draw() {
 					}
 					return true;
 				});
-			} else {
+			}
+		} else {
+			if (update) {
 				pointsBasedOnFaceScore -= 0.001;
 			}
-			ctrack.draw(canvas, undefined, undefined, true);
 		}
-
-		var movementX = 0;
-		var movementY = 0;
-		var numMovements = 0;
-		for (var i = 0; i < pointCount; i++) {
-			var pointOffset = i * 2;
-			var distMoved = Math.hypot(prevXY[pointOffset] - curXY[pointOffset], prevXY[pointOffset + 1] - curXY[pointOffset + 1]);
-			// TODO: ignore points that were just initialized
-			if (distMoved >= 1) {
-				ctx.fillStyle = "lime";
-			} else {
-				ctx.fillStyle = "gray";
-			}
-			movementX += curXY[pointOffset] - prevXY[pointOffset];
-			movementY += curXY[pointOffset + 1] - prevXY[pointOffset + 1];
-			numMovements += 1;
-			circle(curXY[pointOffset], curXY[pointOffset + 1], 3);
+		ctrack.draw(canvas, undefined, undefined, true);
+	}
+	var movementX = 0;
+	var movementY = 0;
+	var numMovements = 0;
+	for (var i = 0; i < pointCount; i++) {
+		var pointOffset = i * 2;
+		var distMoved = Math.hypot(prevXY[pointOffset] - curXY[pointOffset], prevXY[pointOffset + 1] - curXY[pointOffset + 1]);
+		// TODO: ignore points that were just initialized
+		if (distMoved >= 1) {
+			ctx.fillStyle = "lime";
+		} else {
+			ctx.fillStyle = "gray";
 		}
-		if (numMovements > 0) {
-			movementX /= numMovements;
-			movementY /= numMovements;
-		}
-
+		movementX += curXY[pointOffset] - prevXY[pointOffset];
+		movementY += curXY[pointOffset + 1] - prevXY[pointOffset + 1];
+		numMovements += 1;
+		circle(curXY[pointOffset], curXY[pointOffset + 1], 3);
+	}
+	if (numMovements > 0) {
+		movementX /= numMovements;
+		movementY /= numMovements;
+	}
+	if (update) {
 		mouseX -= movementX * sensitivityX * innerWidth;
 		mouseY += movementY * sensitivityY * innerHeight;
 
@@ -271,3 +280,6 @@ function circle(x, y, r) {
 }
 
 animate();
+if (SLOWMO) {
+	setInterval(draw, 500);
+}
