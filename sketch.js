@@ -1,8 +1,14 @@
 // https://inspirit.github.io/jsfeat/sample_oflow_lk.html
 
-var cnv;
-var canvasElement;
-var capture;
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext('2d');
+
+document.body.appendChild(canvas);
+
+var cameraVideo = document.createElement('video');
+// required to work in iOS 11 & up:
+cameraVideo.setAttribute('playsinline', '');
+
 var curpyr, prevpyr, pointCount, pointStatus, prevxy, curxy;
 var w = 640;
 var h = 480;
@@ -17,11 +23,6 @@ ctrack.init();
 var trackingStarted = false;
 
 function setup() {
-
-	var cameraVideo = document.createElement('video');
-	// required to work in iOS 11 & up:
-	cameraVideo.setAttribute('playsinline', '');
-
 	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
 		throw new DOMException('getUserMedia not supported in this browser');
 	}
@@ -46,18 +47,15 @@ function setup() {
 		console.log(error);
 	});
 
-	capture = new p5.MediaElement(cameraVideo, p5);
-	capture.loadedmetadata = false;
 	cameraVideo.addEventListener('loadedmetadata', function () {
 		cameraVideo.play();
 		if (cameraVideo.width) {
-			capture.width = cameraVideo.width;
-			capture.height = cameraVideo.height;
+			// capture.width = cameraVideo.width;
+			// capture.height = cameraVideo.height;
 		} else {
-			capture.width = capture.elt.width = cameraVideo.videoWidth;
-			capture.height = capture.elt.height = cameraVideo.videoHeight;
+			// capture.width = cameraVideo.width = cameraVideo.videoWidth;
+			// capture.height = cameraVideo.height = cameraVideo.videoHeight;
 		}
-		capture.loadedmetadata = true;
 
 		console.log('capture ready.');
 	});
@@ -66,9 +64,9 @@ function setup() {
 		trackingStarted = true;
 	});
 
-	cnv = createCanvas(w, h);
-	capture.size(w, h);
-	capture.hide();
+	canvas.width = w;
+	canvas.height = h;
+	// capture.size(w, h);
 
 	curpyr = new jsfeat.pyramid_t(3);
 	prevpyr = new jsfeat.pyramid_t(3);
@@ -79,9 +77,9 @@ function setup() {
 	pointStatus = new Uint8Array(maxPoints);
 	prevxy = new Float32Array(maxPoints * 2);
 	curxy = new Float32Array(maxPoints * 2);
-
-	canvasElement = document.querySelector('canvas');
 }
+
+setup();
 
 // function keyPressed(key) {
 // 	for (var i = 0; i < 100; i++) {
@@ -89,9 +87,9 @@ function setup() {
 // 	}
 // }
 
-function mousePressed() {
-	addPoint(mouseX, mouseY);
-}
+canvas.addEventListener('click', (event)=> {
+	addPoint(event.offsetX, event.offsetY);
+});
 
 function addPoint(x, y) {
 	if (pointCount < maxPoints) {
@@ -118,10 +116,16 @@ function prunePoints() {
 	pointCount = outputPoint;
 }
 
+function animate() {
+	requestAnimationFrame(animate);
+	draw();
+}
+
 function draw() {
-	image(capture, 0, 0, w, h);
-	capture.loadPixels();
-	if (capture.pixels.length > 0) { // don't forget this!
+	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	
+	if (true) {
 		var xyswap = prevxy;
 		prevxy = curxy;
 		curxy = xyswap;
@@ -135,7 +139,7 @@ function draw() {
 		var epsilon = 0.01;
 		var minEigen = 0.001;
 
-		jsfeat.imgproc.grayscale(capture.pixels, w, h, curpyr.data[0]);
+		jsfeat.imgproc.grayscale(imageData.data, w, h, curpyr.data[0]);
 		curpyr.build(curpyr.data[0], true);
 		jsfeat.optical_flow_lk.track(
 			prevpyr, curpyr,
@@ -146,13 +150,19 @@ function draw() {
 			epsilon, minEigen);
 		prunePoints();
 
-		fill("#fff");
-		stroke("#000");
-		strokeWeight(3);
-		text("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
-		noStroke();
+		ctx.save();
+		ctx.fillStyle = "#fff";
+		ctx.strokeStyle = "#000";
+		ctx.lineWidth = 3;
+		ctx.font = "20px sans-serif";
+		ctx.beginPath();
+		ctx.strokeText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
+		ctx.fillText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
+		ctx.stroke();
+		ctx.fill();
+		ctx.restore();
 		if (ctrack.getCurrentPosition()) {
-			ctrack.draw(canvasElement);
+			ctrack.draw(canvas);
 		}
 
 		var movementX = 0;
@@ -163,14 +173,14 @@ function draw() {
 			var distMoved = Math.hypot(prevxy[pointOffset] - curxy[pointOffset], prevxy[pointOffset + 1] - curxy[pointOffset + 1]);
 			// TODO: ignore points that were just initialized
 			if (distMoved >= 1) {
-				fill("lime");
+				ctx.fillStyle = "lime";
 			} else {
-				fill("gray");
+				ctx.fillStyle = "gray";
 			}
 			movementX += curxy[pointOffset] - prevxy[pointOffset];
 			movementY += curxy[pointOffset + 1] - prevxy[pointOffset + 1];
 			numMovements += 1;
-			ellipse(curxy[pointOffset], curxy[pointOffset + 1], 8, 8);
+			circle(curxy[pointOffset], curxy[pointOffset + 1], 4);
 		}
 		if (numMovements > 0) {
 			movementX /= numMovements;
@@ -183,7 +193,16 @@ function draw() {
 		mymousex = Math.min(Math.max(0, mymousex), w);
 		mymousey = Math.min(Math.max(0, mymousey), h);
 
-		fill("red");
-		ellipse(mymousex, mymousey, 20, 20);
+		ctx.fillStyle = "red";
+		circle(mymousex, mymousey, 10);
 	}
 }
+
+function circle(x, y, r) {
+	ctx.beginPath();
+	ctx.arc(x, y, r, 0, Math.PI * 2);
+	ctx.fill();
+	// ctx.stroke();
+}
+
+animate();
