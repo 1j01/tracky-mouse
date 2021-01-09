@@ -109,12 +109,12 @@ function draw() {
 			// TODO: ignore points that were just initialized
 			if (distMoved >= 1) {
 				fill("lime");
-				movementX += curxy[pointOffset] - prevxy[pointOffset];
-				movementY += curxy[pointOffset + 1] - prevxy[pointOffset + 1];
-				numMovements += 1;
 			} else {
 				fill("gray");
 			}
+			movementX += curxy[pointOffset] - prevxy[pointOffset];
+			movementY += curxy[pointOffset + 1] - prevxy[pointOffset + 1];
+			numMovements += 1;
 			ellipse(curxy[pointOffset], curxy[pointOffset + 1], 8, 8);
 		}
 		if (numMovements > 0) {
