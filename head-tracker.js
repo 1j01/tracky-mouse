@@ -181,6 +181,8 @@ function draw() {
 		ctx.beginPath();
 		ctx.strokeText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
 		ctx.fillText("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
+		ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+		ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
 		ctx.stroke();
 		ctx.fill();
 		ctx.restore();
@@ -189,7 +191,7 @@ function draw() {
 		if (face) {
 			const bad = ctrack.getScore() < faceThreshold;
 			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-			if (!bad || pointCount < 2 || ctrack.getScore() > pointsBasedOnFaceScore + 0.05) {
+			if (!bad || pointCount < 4 || ctrack.getScore() > pointsBasedOnFaceScore + 0.05) {
 				if (bad) {
 					ctx.strokeStyle = 'rgba(255,0,255)';
 				}
@@ -220,6 +222,8 @@ function draw() {
 					}
 					return true;
 				});
+			} else {
+				pointsBasedOnFaceScore -= 0.001;
 			}
 			ctrack.draw(canvas, undefined, undefined, true);
 		}
