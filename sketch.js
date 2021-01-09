@@ -1,6 +1,7 @@
 // https://inspirit.github.io/jsfeat/sample_oflow_lk.html
 
 var cnv;
+var canvasElement;
 var capture;
 var curpyr, prevpyr, pointCount, pointStatus, prevxy, curxy;
 var w = 640;
@@ -10,6 +11,10 @@ var mymousex = 0;
 var mymousey = 0;
 var sensitivityX = 10;
 var sensitivityY = 8;
+
+var ctrack = new clm.tracker();
+ctrack.init();
+var trackingStarted = false;
 
 function setup() {
 	capture = createCapture({
@@ -22,6 +27,11 @@ function setup() {
 		console.log('capture ready.')
 	});
 	capture.elt.setAttribute('playsinline', '');
+	capture.elt.addEventListener('canplay', () => {
+		ctrack.start(capture.elt);
+		trackingStarted = true;
+	});
+
 	cnv = createCanvas(w, h);
 	capture.size(w, h);
 	capture.hide();
@@ -35,6 +45,8 @@ function setup() {
 	pointStatus = new Uint8Array(maxPoints);
 	prevxy = new Float32Array(maxPoints * 2);
 	curxy = new Float32Array(maxPoints * 2);
+
+	canvasElement = document.querySelector('canvas');
 }
 
 // function keyPressed(key) {
@@ -99,6 +111,15 @@ function draw() {
 			pointStatus,
 			epsilon, minEigen);
 		prunePoints();
+
+		fill("#fff");
+		stroke("#000");
+		strokeWeight(3);
+		text("Face tracking score: " + ctrack.getScore().toFixed(4), 50, 50);
+		noStroke();
+		if (ctrack.getCurrentPosition()) {
+			ctrack.draw(canvasElement);
+		}
 
 		var movementX = 0;
 		var movementY = 0;
