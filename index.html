@@ -2,7 +2,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>PointTracking</title>
+	<title>Head Tracker</title>
 
 	<script src="lib/p5.js"></script>
 	<script src="lib/clmtrackr.js"></script>
@@ -11,8 +11,15 @@
 </head>
 
 <body>
-	<h2>Point Tracking <a href="sketch.js">source</a></h2>
-	<p>Track points in video. Try clicking details to track in the video. This is also called Lucas–Kanade optical flow.</p>
+	<h2>Point Tracking and Head Tracking (<a href="sketch.js">source</a>)</h2>
+	<p>
+		This is an experiment in implementing a head tracking system similar to <a href="https://eviacam.crea-si.com/">eViacam</a>,
+		using <a href="https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method">Lucas–Kanade optical flow</a> to track points for high accuracy,
+		and face recognition as a coarse input for understanding of where to place tracking points.
+	</p>
+	<p>
+		Try clicking details to track in the video. Eventually this should be automatic.
+	</p>
 	<script src="sketch.js"></script>
 </body>
 
