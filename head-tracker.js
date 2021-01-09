@@ -23,7 +23,7 @@ var face;
 var faceScore = 0;
 var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
-const SLOWMO = true;
+const SLOWMO = false;
 var mirror = true;
 
 var ctrack = new clm.tracker();
