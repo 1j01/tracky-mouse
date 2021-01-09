@@ -17,6 +17,7 @@ var mymousex = 0;
 var mymousey = 0;
 var sensitivityX = 10;
 var sensitivityY = 8;
+var faceThreshold = 0.5;
 
 var ctrack = new clm.tracker();
 ctrack.init();
@@ -158,7 +159,8 @@ function draw() {
 		ctx.fill();
 		ctx.restore();
 		if (ctrack.getCurrentPosition()) {
-			ctrack.draw(canvas);
+			ctx.strokeStyle = ctrack.getScore() < faceThreshold ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
+			ctrack.draw(canvas, undefined, undefined, true);
 		}
 
 		var movementX = 0;
