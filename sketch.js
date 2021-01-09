@@ -49,13 +49,8 @@ function setup() {
 
 	cameraVideo.addEventListener('loadedmetadata', function () {
 		cameraVideo.play();
-		if (cameraVideo.width) {
-			// capture.width = cameraVideo.width;
-			// capture.height = cameraVideo.height;
-		} else {
-			// capture.width = cameraVideo.width = cameraVideo.videoWidth;
-			// capture.height = cameraVideo.height = cameraVideo.videoHeight;
-		}
+		cameraVideo.width = cameraVideo.videoWidth;
+		cameraVideo.height = cameraVideo.videoHeight;
 
 		console.log('capture ready.');
 	});
@@ -66,7 +61,8 @@ function setup() {
 
 	canvas.width = w;
 	canvas.height = h;
-	// capture.size(w, h);
+	cameraVideo.width = w;
+	cameraVideo.height = h;
 
 	curpyr = new jsfeat.pyramid_t(3);
 	prevpyr = new jsfeat.pyramid_t(3);
@@ -139,7 +135,7 @@ function draw() {
 		var epsilon = 0.01;
 		var minEigen = 0.001;
 
-		jsfeat.imgproc.grayscale(imageData.data, w, h, curpyr.data[0]);
+		jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, curpyr.data[0]);
 		curpyr.build(curpyr.data[0], true);
 		jsfeat.optical_flow_lk.track(
 			prevpyr, curpyr,
