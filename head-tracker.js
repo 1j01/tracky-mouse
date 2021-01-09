@@ -92,6 +92,17 @@ function addPoint(x, y) {
 	}
 }
 
+function maybeAddPoint(x, y) {
+	for (var pointIndex = 0; pointIndex < pointCount; pointIndex++) {
+		var pointOffset = pointIndex * 2;
+		var distance = Math.hypot(x - curXY[pointOffset], y - curXY[pointOffset + 1]);
+		if (distance < 20) {
+			return;
+		}
+	}
+	addPoint(x, y);
+}
+
 function prunePoints() {
 	var outputPoint = 0;
 	for (var inputPoint = 0; inputPoint < pointCount; inputPoint++) {
@@ -153,9 +164,25 @@ function draw() {
 		ctx.stroke();
 		ctx.fill();
 		ctx.restore();
-		if (ctrack.getCurrentPosition()) {
-			ctx.strokeStyle = ctrack.getScore() < faceThreshold ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
+		
+		var face = ctrack.getCurrentPosition();
+		if (face) {
+			const bad = ctrack.getScore() < faceThreshold;
+			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
 			ctrack.draw(canvas, undefined, undefined, true);
+			if (!bad) {
+				// TODO: cull points to those within useful facial region
+				// TODO: actively cull points that have collapsed together
+				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
+				// - fallback to random points or points based on face detection geometry if less than N points
+
+				// nostrils
+				maybeAddPoint(face[42][0], face[42][1]);
+				maybeAddPoint(face[43][0], face[43][1]);
+				// inner eye corners
+				maybeAddPoint(face[25][0], face[25][1]);
+				maybeAddPoint(face[30][0], face[30][1]);
+			}
 		}
 
 		var movementX = 0;
