@@ -11,8 +11,9 @@
 		console.log("HELLO");
 
 		window.facemesh = workerize(`
-			//import facemesh from './lib/facemesh';
-			importScripts('${location.origin}/lib/facemesh.js');
+			//import facemesh from './lib/facemesh/facemesh.js';
+			importScripts('${location.origin}/lib/tf.js');
+			importScripts('${location.origin}/lib/facemesh/facemesh.js');
 
 			export async function load(...args) {
 console.log("helllloooo??", ...args);
