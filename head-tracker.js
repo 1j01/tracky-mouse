@@ -61,7 +61,7 @@ cameraVideo.addEventListener('loadedmetadata', function () {
 	console.log('capture ready.');
 });
 cameraVideo.addEventListener('canplay', () => {
-	ctrack.start(cameraVideo);
+	ctrack.initFaceDetector(cameraVideo);
 	trackingStarted = true;
 });
 
@@ -152,8 +152,11 @@ function draw(update=true) {
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
 	if (update) {
-		face = ctrack.getCurrentPosition();
-		faceScore = ctrack.getScore();
+		if (trackingStarted) {
+			ctrack.track(cameraVideo);
+			face = ctrack.getCurrentPosition();
+			faceScore = ctrack.getScore();
+		}
 
 		var xyswap = prevXY;
 		prevXY = curXY;
@@ -281,5 +284,5 @@ function circle(x, y, r) {
 
 animate();
 if (SLOWMO) {
-	setInterval(draw, 500);
+	setInterval(draw, 200);
 }
