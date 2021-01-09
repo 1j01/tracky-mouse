@@ -24,6 +24,7 @@ var faceScore = 0;
 var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = true;
+var mirror = true;
 
 var ctrack = new clm.tracker();
 ctrack.init();
@@ -87,7 +88,11 @@ curXY = new Float32Array(maxPoints * 2);
 // }
 
 canvas.addEventListener('click', (event) => {
-	addPoint(event.offsetX, event.offsetY);
+	if (mirror) {
+		addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
+	} else {
+		addPoint(event.offsetX, event.offsetY);
+	}
 });
 
 function addPoint(x, y) {
@@ -148,8 +153,15 @@ function animate() {
 }
 
 function draw(update=true) {
+	ctx.save();
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+	if (mirror) {
+		ctx.translate(canvas.width, 0);
+		ctx.scale(-1, 1);
+		ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+	}
 
 	if (update) {
 		if (trackingStarted) {
@@ -182,20 +194,6 @@ function draw(update=true) {
 			epsilon, minEigen);
 		prunePoints();
 	}
-
-	ctx.save();
-	ctx.fillStyle = "#fff";
-	ctx.strokeStyle = "#000";
-	ctx.lineWidth = 3;
-	ctx.font = "20px sans-serif";
-	ctx.beginPath();
-	ctx.strokeText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
-	ctx.fillText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
-	ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
-	ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
-	ctx.stroke();
-	ctx.fill();
-	ctx.restore();
 	
 	if (face) {
 		const bad = faceScore < faceScoreThreshold;
@@ -273,6 +271,21 @@ function draw(update=true) {
 		mouseEl.style.left = `${mouseX}px`;
 		mouseEl.style.top = `${mouseY}px`;
 	}
+	ctx.restore();
+
+	ctx.save();
+	ctx.fillStyle = "#fff";
+	ctx.strokeStyle = "#000";
+	ctx.lineWidth = 3;
+	ctx.font = "20px sans-serif";
+	ctx.beginPath();
+	ctx.strokeText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
+	ctx.fillText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
+	ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+	ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+	ctx.stroke();
+	ctx.fill();
+	ctx.restore();
 }
 
 function circle(x, y, r) {
