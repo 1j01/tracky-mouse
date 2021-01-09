@@ -197,10 +197,12 @@ function draw() {
 				// cull points to those within useful facial region
 				filterPoints((pointIndex)=> {
 					var pointOffset = pointIndex * 2;
-					// distance from tip of nose
-					var distance = Math.hypot(face[62][0] - curXY[pointOffset], face[62][1] - curXY[pointOffset + 1]);
+					// distance from tip of nose (stretched so make an ellipse taller than wide)
+					var distance = Math.hypot((face[62][0] - curXY[pointOffset]) * 1.4, face[62][1] - curXY[pointOffset + 1]);
+					// distance based on outer eye corners
+					var headSize = Math.hypot(face[23][0] - face[28][0], face[23][1] - face[28][1]);
 					// TODO: base on head size
-					if (distance > 100) {
+					if (distance > headSize) {
 						return false;
 					}
 					return true;
