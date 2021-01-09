@@ -20,6 +20,8 @@ var h = 480;
 var maxPoints = 1000;
 var mouseX = 0;
 var mouseY = 0;
+// var prevMovementX = 0;
+// var prevMovementY = 0;
 var sensitivityX;
 var sensitivityY;
 var face;
@@ -28,6 +30,25 @@ var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
 var mirror;
+
+var useClmtrackr = false;
+var showClmtrackr = useClmtrackr;
+var useFacemesh = true;
+
+var facemeshTensorFlowModel;
+var facemeshEstimating = false;
+var facemeshPrediction;
+if (useFacemesh) {
+	facemesh.load({
+		maxContinuousChecks: 5,
+		detectionConfidence: 0.9,
+		maxFaces: 1,
+		iouThreshold: 0.3,
+		scoreThreshold: 0.75
+	}).then((tensorFlowModel)=> {
+		facemeshTensorFlowModel = tensorFlowModel;
+	});
+}
 
 sensitivityXSlider.onchange = ()=> {
 	sensitivityX = sensitivityXSlider.value / 1000;
@@ -169,6 +190,7 @@ function animate() {
 }
 
 function draw(update=true) {
+	ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
 	ctx.save();
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -184,6 +206,18 @@ function draw(update=true) {
 			ctrack.track(cameraVideo);
 			face = ctrack.getCurrentPosition();
 			faceScore = ctrack.getScore();
+
+			if (facemeshTensorFlowModel) {
+				if (!facemeshEstimating) {
+					facemeshEstimating = true;
+					facemeshTensorFlowModel.estimateFaces(cameraVideo).then((predictions)=> {
+						facemeshPrediction = predictions[0]; // may be undefined
+						facemeshEstimating = false;
+					}, ()=> {
+						facemeshEstimating = false;
+					});
+				}
+			}
 		}
 
 		var xyswap = prevXY;
@@ -211,6 +245,57 @@ function draw(update=true) {
 		prunePoints();
 	}
 	
+	if (facemeshPrediction) {
+		// console.log(facemeshPrediction);
+		ctx.fillStyle = "red";
+
+		const bad = false;//faceScore < faceScoreThreshold;
+		ctx.fillStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
+		if (!bad || pointCount < 4 /*|| faceScore > pointsBasedOnFaceScore + 0.05*/) {
+			if (bad) {
+				ctx.fillStyle = 'rgba(255,0,255)';
+			}
+			if (update && useFacemesh) {
+				// pointsBasedOnFaceScore = faceScore;
+
+				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
+				// - fallback to random points or points based on face detection geometry if less than N points
+
+				const {annotations} = facemeshPrediction;
+				// console.log(annotations);
+				// nostrils
+				maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+				maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+				// inner eye corners
+				maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+				maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+
+				// TODO: separate threshold for culling?
+
+				// cull points to those within useful facial region
+				filterPoints((pointIndex)=> {
+					var pointOffset = pointIndex * 2;
+					// distance from tip of nose (stretched so make an ellipse taller than wide)
+					var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
+					var headSize = Math.hypot(annotations.leftCheek[0][0] - annotations.rightCheek[0][0], annotations.leftCheek[0][1] - annotations.rightCheek[0][1]);
+					if (distance > headSize) {
+						return false;
+					}
+					return true;
+				});
+			}
+			facemeshPrediction.scaledMesh.forEach(([x, y, z])=> {
+				// x += prevMovementX;
+				// y += prevMovementY;
+				ctx.fillRect(x, y, 1, 1);
+			});
+		} else {
+			if (update && useFacemesh) {
+				pointsBasedOnFaceScore -= 0.001;
+			}
+		}
+	}
+
 	if (face) {
 		const bad = faceScore < faceScoreThreshold;
 		ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
@@ -218,7 +303,7 @@ function draw(update=true) {
 			if (bad) {
 				ctx.strokeStyle = 'rgba(255,0,255)';
 			}
-			if (update) {
+			if (update && useClmtrackr) {
 				pointsBasedOnFaceScore = faceScore;
 
 				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
@@ -240,7 +325,6 @@ function draw(update=true) {
 					var distance = Math.hypot((face[62][0] - curXY[pointOffset]) * 1.4, face[62][1] - curXY[pointOffset + 1]);
 					// distance based on outer eye corners
 					var headSize = Math.hypot(face[23][0] - face[28][0], face[23][1] - face[28][1]);
-					// TODO: base on head size
 					if (distance > headSize) {
 						return false;
 					}
@@ -248,11 +332,13 @@ function draw(update=true) {
 				});
 			}
 		} else {
-			if (update) {
+			if (update && useClmtrackr) {
 				pointsBasedOnFaceScore -= 0.001;
 			}
 		}
-		ctrack.draw(canvas, undefined, undefined, true);
+		if (showClmtrackr) {
+			ctrack.draw(canvas, undefined, undefined, true);
+		}
 	}
 	var movementX = 0;
 	var movementY = 0;
@@ -286,6 +372,9 @@ function draw(update=true) {
 		// circle(mouseX, mouseY, 10);
 		mouseEl.style.left = `${mouseX}px`;
 		mouseEl.style.top = `${mouseY}px`;
+
+		// prevMovementX = movementX;
+		// prevMovementY = movementY;
 	}
 	ctx.restore();
 
