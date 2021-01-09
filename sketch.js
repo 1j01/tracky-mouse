@@ -98,6 +98,12 @@ function draw() {
 
 		for (var i = 0; i < pointCount; i++) {
 			var pointOffset = i * 2;
+			var distMoved = Math.hypot(prevxy[pointOffset] - curxy[pointOffset], prevxy[pointOffset + 1] - curxy[pointOffset + 1]);
+			if (distMoved >= 1) {
+				fill("lime");
+			} else {
+				fill("gray");
+			}
 			ellipse(curxy[pointOffset], curxy[pointOffset + 1], 8, 8);
 		}
 	}
