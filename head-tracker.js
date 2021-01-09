@@ -38,6 +38,8 @@ var useFacemesh = true;
 var facemeshTensorFlowModel;
 var facemeshEstimating = false;
 var facemeshPrediction;
+var faceInViewConfidenceThreshold = 0.7;
+var pointsBasedOnFaceInViewConfidence = 0;
 if (useFacemesh) {
 	facemesh.load({
 		maxContinuousChecks: 5,
@@ -246,17 +248,16 @@ function draw(update=true) {
 	}
 	
 	if (facemeshPrediction) {
-		// console.log(facemeshPrediction);
 		ctx.fillStyle = "red";
 
-		const bad = false;//faceScore < faceScoreThreshold;
+		const bad = facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold;
 		ctx.fillStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-		if (!bad || pointCount < 4 /*|| faceScore > pointsBasedOnFaceScore + 0.05*/) {
+		if (!bad || pointCount < 4 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
 			if (bad) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
 			if (update && useFacemesh) {
-				// pointsBasedOnFaceScore = faceScore;
+				pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
 				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
 				// - fallback to random points or points based on face detection geometry if less than N points
@@ -291,7 +292,7 @@ function draw(update=true) {
 			});
 		} else {
 			if (update && useFacemesh) {
-				pointsBasedOnFaceScore -= 0.001;
+				pointsBasedOnFaceInViewConfidence -= 0.001;
 			}
 		}
 	}
@@ -384,10 +385,12 @@ function draw(update=true) {
 	ctx.lineWidth = 3;
 	ctx.font = "20px sans-serif";
 	ctx.beginPath();
-	ctx.strokeText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
-	ctx.fillText("Face tracking score: " + faceScore.toFixed(4), 50, 50);
-	ctx.strokeText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
-	ctx.fillText("Points based on score: " + pointsBasedOnFaceScore.toFixed(4), 50, 70);
+	const text1 = "Face tracking score: " + (useFacemesh ? (facemeshPrediction ? facemeshPrediction.faceInViewConfidence : 0) : faceScore).toFixed(4);
+	const text2 = "Points based on score: " + (useFacemesh ? (facemeshPrediction ? pointsBasedOnFaceInViewConfidence : 0) : pointsBasedOnFaceScore).toFixed(4);
+	ctx.strokeText(text1, 50, 50);
+	ctx.fillText(text1, 50, 50);
+	ctx.strokeText(text2, 50, 70);
+	ctx.fillText(text2, 50, 70);
 	ctx.stroke();
 	ctx.fill();
 	ctx.restore();
