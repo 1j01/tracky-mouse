@@ -4,8 +4,45 @@
 	<meta charset="UTF-8">
 	<title>Head Tracker</title>
 
-	<script src="lib/tf.js"></script>
-	<script src="lib/facemesh/facemesh.js"></script>
+	<script type="module">
+		// console.log("HELLO");
+
+		window.facemesh = new Worker("./facemesh.worker.js");
+
+		facemesh.load = function load(...args) {
+			return new Promise((resolve, reject)=> {
+				facemesh.addEventListener("message", (e)=> {
+					// console.log('Message received from worker', e.data);
+					if (e.data.type === "LOADED") {
+						resolve({
+							estimateFaces: (videoElement)=> {
+								const canvas = document.createElement("canvas");
+								const ctx = canvas.getContext('2d');
+								canvas.width = videoElement.videoWidth;
+								canvas.height = videoElement.videoHeight;
+								ctx.drawImage(videoElement, 0, 0);
+								const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+								facemesh.postMessage({type: "ESTIMATE_FACES", imageData});
+								return new Promise((resolve, reject)=> {
+									facemesh.addEventListener("message", (e)=> {
+										if (e.data.type === "ESTIMATED_FACES") {
+											resolve(e.data.predictions);
+										}
+									}, {once: true});
+								});
+							}
+						});
+					}
+				}, {once: true});
+				facemesh.postMessage({type: "LOAD"});
+			});
+		};
+		facemesh.onmessage = (e)=> {
+			// console.log('Message received from worker', e.data);
+		};
+
+		// console.log(facemesh);
+	</script>
 
 	<script src="lib/clmtrackr.js"></script>
 
@@ -30,7 +67,7 @@
 		<!-- <label>Smoothing <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
 		<label><input type="checkbox" checked id="mirror"> Mirror</label>
 	</div>
-	<script src="head-tracker.js"></script>
+	<script src="head-tracker.js" async></script>
 </body>
 
 </html>
