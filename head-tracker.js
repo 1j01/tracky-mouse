@@ -1,8 +1,11 @@
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
-
 document.body.appendChild(canvas);
+
+var mouseEl = document.createElement('div');
+mouseEl.className = "mouse";
+document.body.appendChild(mouseEl);
 
 var cameraVideo = document.createElement('video');
 // required to work in iOS 11 & up:
@@ -14,8 +17,8 @@ var h = 480;
 var maxPoints = 1000;
 var mouseX = 0;
 var mouseY = 0;
-var sensitivityX = 10;
-var sensitivityY = 8;
+var sensitivityX = 0.02;
+var sensitivityY = 0.03;
 var faceThreshold = 0.5;
 
 var ctrack = new clm.tracker();
@@ -232,14 +235,16 @@ function draw() {
 			movementY /= numMovements;
 		}
 
-		mouseX -= movementX * sensitivityX;
-		mouseY += movementY * sensitivityY;
+		mouseX -= movementX * sensitivityX * innerWidth;
+		mouseY += movementY * sensitivityY * innerHeight;
 
-		mouseX = Math.min(Math.max(0, mouseX), w);
-		mouseY = Math.min(Math.max(0, mouseY), h);
+		mouseX = Math.min(Math.max(0, mouseX), innerWidth);
+		mouseY = Math.min(Math.max(0, mouseY), innerHeight);
 
-		ctx.fillStyle = "red";
-		circle(mouseX, mouseY, 10);
+		// ctx.fillStyle = "red";
+		// circle(mouseX, mouseY, 10);
+		mouseEl.style.left = `${mouseX}px`;
+		mouseEl.style.top = `${mouseY}px`;
 	}
 }
 

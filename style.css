@@ -1,0 +1,8 @@
+.mouse {
+	border-radius: 50%;
+	background-color: red;
+	width: 20px;
+	height: 20px;
+	position: fixed;
+	transform: translate(-50%, -50%);
+}
