@@ -91,6 +91,8 @@ function addPoint(x, y) {
 		var pointIndex = pointCount * 2;
 		curXY[pointIndex] = x;
 		curXY[pointIndex + 1] = y;
+		prevXY[pointIndex] = x;
+		prevXY[pointIndex + 1] = y;
 		pointCount++;
 	}
 }
@@ -115,6 +117,8 @@ function filterPoints(condition) {
 				var outputOffset = outputPointIndex * 2;
 				curXY[outputOffset] = curXY[inputOffset];
 				curXY[outputOffset + 1] = curXY[inputOffset + 1];
+				prevXY[outputOffset] = prevXY[inputOffset];
+				prevXY[outputOffset + 1] = prevXY[inputOffset + 1];
 			}
 			outputPointIndex++;
 		}
