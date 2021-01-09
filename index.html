@@ -11,12 +11,14 @@
 		console.log("HELLO");
 
 		window.facemesh = workerize(`
-			import facemesh from './lib/facemesh';
+			//import facemesh from './lib/facemesh';
+			importScripts('${location.origin}/lib/facemesh.js');
 
-			export function load(...args) {
-				return facemesh.load(...args)
+			export async function load(...args) {
+console.log("helllloooo??", ...args);
+				return await facemesh.load(...args)
 			};
-		`, { type: 'module' });
+		`);
 
 		console.log(facemesh);
 	</script>
