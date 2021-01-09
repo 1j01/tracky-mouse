@@ -103,20 +103,31 @@ function maybeAddPoint(x, y) {
 	addPoint(x, y);
 }
 
-function prunePoints() {
-	var outputPoint = 0;
-	for (var inputPoint = 0; inputPoint < pointCount; inputPoint++) {
-		if (pointStatus[inputPoint] == 1) {
-			if (outputPoint < inputPoint) {
-				var inputIndex = inputPoint * 2;
-				var outputIndex = outputPoint * 2;
-				curXY[outputIndex] = curXY[inputIndex];
-				curXY[outputIndex + 1] = curXY[inputIndex + 1];
+function filterPoints(condition) {
+	var outputPointIndex = 0;
+	for (var inputPointIndex = 0; inputPointIndex < pointCount; inputPointIndex++) {
+		if (condition(inputPointIndex)) {
+			if (outputPointIndex < inputPointIndex) {
+				var inputOffset = inputPointIndex * 2;
+				var outputOffset = outputPointIndex * 2;
+				curXY[outputOffset] = curXY[inputOffset];
+				curXY[outputOffset + 1] = curXY[inputOffset + 1];
 			}
-			outputPoint++;
+			outputPointIndex++;
 		}
 	}
-	pointCount = outputPoint;
+	pointCount = outputPointIndex;
+}
+
+function prunePoints() {
+	// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
+	filterPoints((pointIndex)=> pointStatus[pointIndex] == 1);
+
+	// TODO: actively cull points that have collapsed together
+	// filterPoints((pointIndex)=> {
+	// 	var pointOffset = pointIndex * 2;
+	// 	// so I need to interate over the other points here, will that be a problem?
+	// });
 }
 
 function animate() {
@@ -171,8 +182,6 @@ function draw() {
 			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
 			ctrack.draw(canvas, undefined, undefined, true);
 			if (!bad) {
-				// TODO: cull points to those within useful facial region
-				// TODO: actively cull points that have collapsed together
 				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
 				// - fallback to random points or points based on face detection geometry if less than N points
 
@@ -182,6 +191,20 @@ function draw() {
 				// inner eye corners
 				maybeAddPoint(face[25][0], face[25][1]);
 				maybeAddPoint(face[30][0], face[30][1]);
+
+				// TODO: separate threshold for culling?
+
+				// cull points to those within useful facial region
+				filterPoints((pointIndex)=> {
+					var pointOffset = pointIndex * 2;
+					// distance from tip of nose
+					var distance = Math.hypot(face[62][0] - curXY[pointOffset], face[62][1] - curXY[pointOffset + 1]);
+					// TODO: base on head size
+					if (distance > 100) {
+						return false;
+					}
+					return true;
+				});
 			}
 		}
 
