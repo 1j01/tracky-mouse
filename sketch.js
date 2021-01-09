@@ -17,18 +17,52 @@ ctrack.init();
 var trackingStarted = false;
 
 function setup() {
-	capture = createCapture({
+
+	var cameraVideo = document.createElement('video');
+	// required to work in iOS 11 & up:
+	cameraVideo.setAttribute('playsinline', '');
+
+	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+		throw new DOMException('getUserMedia not supported in this browser');
+	}
+
+	navigator.mediaDevices.getUserMedia({
 		audio: false,
 		video: {
 			width: w,
 			height: h
 		}
-	}, function () {
-		console.log('capture ready.')
+	}).then(function (stream) {
+		try {
+			if ('srcObject' in cameraVideo) {
+				cameraVideo.srcObject = stream;
+			} else {
+				cameraVideo.src = window.URL.createObjectURL(stream);
+			}
+		} catch (err) {
+			cameraVideo.src = stream;
+		}
+	}, (error) => {
+		console.log(error);
 	});
-	capture.elt.setAttribute('playsinline', '');
-	capture.elt.addEventListener('canplay', () => {
-		ctrack.start(capture.elt);
+
+	capture = new p5.MediaElement(cameraVideo, p5);
+	capture.loadedmetadata = false;
+	cameraVideo.addEventListener('loadedmetadata', function () {
+		cameraVideo.play();
+		if (cameraVideo.width) {
+			capture.width = cameraVideo.width;
+			capture.height = cameraVideo.height;
+		} else {
+			capture.width = capture.elt.width = cameraVideo.videoWidth;
+			capture.height = capture.elt.height = cameraVideo.videoHeight;
+		}
+		capture.loadedmetadata = true;
+
+		console.log('capture ready.');
+	});
+	cameraVideo.addEventListener('canplay', () => {
+		ctrack.start(cameraVideo);
 		trackingStarted = true;
 	});
 
