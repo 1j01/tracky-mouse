@@ -20,6 +20,7 @@ var mouseY = 0;
 var sensitivityX = 0.02;
 var sensitivityY = 0.03;
 var faceThreshold = 0.5;
+var pointsBasedOnFaceScore = 0;
 
 var ctrack = new clm.tracker();
 ctrack.init();
@@ -188,8 +189,12 @@ function draw() {
 		if (face) {
 			const bad = ctrack.getScore() < faceThreshold;
 			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-			ctrack.draw(canvas, undefined, undefined, true);
-			if (!bad || pointCount === 0) {
+			if (!bad || pointCount < 2 || ctrack.getScore() > pointsBasedOnFaceScore + 0.05) {
+				if (bad) {
+					ctx.strokeStyle = 'rgba(255,0,255)';
+				}
+				pointsBasedOnFaceScore = ctrack.getScore();
+
 				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
 				// - fallback to random points or points based on face detection geometry if less than N points
 
@@ -216,6 +221,7 @@ function draw() {
 					return true;
 				});
 			}
+			ctrack.draw(canvas, undefined, undefined, true);
 		}
 
 		var movementX = 0;
