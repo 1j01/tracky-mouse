@@ -20,8 +20,8 @@ var h = 480;
 var maxPoints = 1000;
 var mouseX = 0;
 var mouseY = 0;
-// var prevMovementX = 0;
-// var prevMovementY = 0;
+var prevMovementX = 0;
+var prevMovementY = 0;
 var sensitivityX;
 var sensitivityY;
 var face;
@@ -311,6 +311,12 @@ function draw(update = true) {
 					return true;
 				});
 			}
+			if (update && useFacemesh) {
+				facemeshPrediction.scaledMesh.forEach((point) => {
+					point[0] += prevMovementX;
+					point[1] += prevMovementY;
+				});
+			}
 			facemeshPrediction.scaledMesh.forEach(([x, y, z]) => {
 				// x += prevMovementX;
 				// y += prevMovementY;
@@ -394,8 +400,8 @@ function draw(update = true) {
 		mouseEl.style.left = `${mouseX}px`;
 		mouseEl.style.top = `${mouseY}px`;
 
-		// prevMovementX = movementX;
-		// prevMovementY = movementY;
+		prevMovementX = movementX;
+		prevMovementY = movementY;
 	}
 	ctx.restore();
 
