@@ -34,23 +34,47 @@ var mirror;
 var useClmtrackr = false;
 var showClmtrackr = useClmtrackr;
 var useFacemesh = true;
+var facemeshOptions = {
+	maxContinuousChecks: 5,
+	detectionConfidence: 0.9,
+	maxFaces: 1,
+	iouThreshold: 0.3,
+	scoreThreshold: 0.75
+};
 
-var facemeshTensorFlowModel;
+var facemeshLoaded = false;
 var facemeshEstimating = false;
 var facemeshPrediction;
+var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
 var pointsBasedOnFaceInViewConfidence = 0;
+
 if (useFacemesh) {
-	facemesh.load({
-		maxContinuousChecks: 5,
-		detectionConfidence: 0.9,
-		maxFaces: 1,
-		iouThreshold: 0.3,
-		scoreThreshold: 0.75
-	}).then((tensorFlowModel)=> {
-		facemeshTensorFlowModel = tensorFlowModel;
-	});
-}
+	facemeshWorker = new Worker("./facemesh.worker.js");
+	facemeshWorker.addEventListener("message", (e)=> {
+		// console.log('Message received from worker', e.data);
+		if (e.data.type === "LOADED") {
+			facemeshLoaded = true;
+			const canvas = document.createElement("canvas");
+			const ctx = canvas.getContext('2d');
+			facemeshEstimateFaces = (videoElement)=> {
+				canvas.width = videoElement.videoWidth;
+				canvas.height = videoElement.videoHeight;
+				ctx.drawImage(videoElement, 0, 0);
+				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				facemeshWorker.postMessage({type: "ESTIMATE_FACES", imageData});
+				return new Promise((resolve, reject)=> {
+					facemeshWorker.addEventListener("message", (e)=> {
+						if (e.data.type === "ESTIMATED_FACES") {
+							resolve(e.data.predictions);
+						}
+					}, {once: true});
+				});
+			};
+		}
+	}, {once: true});
+	facemeshWorker.postMessage({type: "LOAD", options: facemeshOptions});
+};
 
 sensitivityXSlider.onchange = ()=> {
 	sensitivityX = sensitivityXSlider.value / 1000;
@@ -209,16 +233,14 @@ function draw(update=true) {
 			face = ctrack.getCurrentPosition();
 			faceScore = ctrack.getScore();
 
-			if (facemeshTensorFlowModel) {
-				if (!facemeshEstimating) {
-					facemeshEstimating = true;
-					facemeshTensorFlowModel.estimateFaces(cameraVideo).then((predictions)=> {
-						facemeshPrediction = predictions[0]; // may be undefined
-						facemeshEstimating = false;
-					}, ()=> {
-						facemeshEstimating = false;
-					});
-				}
+			if (facemeshLoaded && !facemeshEstimating) {
+				facemeshEstimating = true;
+				facemeshEstimateFaces(cameraVideo).then((predictions)=> {
+					facemeshPrediction = predictions[0]; // may be undefined
+					facemeshEstimating = false;
+				}, ()=> {
+					facemeshEstimating = false;
+				});
 			}
 		}
 

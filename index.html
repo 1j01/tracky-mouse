@@ -3,51 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Head Tracker</title>
-
-	<script type="module">
-		// console.log("HELLO");
-
-		window.facemesh = new Worker("./facemesh.worker.js");
-
-		facemesh.load = function load(...args) {
-			return new Promise((resolve, reject)=> {
-				facemesh.addEventListener("message", (e)=> {
-					// console.log('Message received from worker', e.data);
-					if (e.data.type === "LOADED") {
-						resolve({
-							estimateFaces: (videoElement)=> {
-								const canvas = document.createElement("canvas");
-								const ctx = canvas.getContext('2d');
-								canvas.width = videoElement.videoWidth;
-								canvas.height = videoElement.videoHeight;
-								ctx.drawImage(videoElement, 0, 0);
-								const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-								facemesh.postMessage({type: "ESTIMATE_FACES", imageData});
-								return new Promise((resolve, reject)=> {
-									facemesh.addEventListener("message", (e)=> {
-										if (e.data.type === "ESTIMATED_FACES") {
-											resolve(e.data.predictions);
-										}
-									}, {once: true});
-								});
-							}
-						});
-					}
-				}, {once: true});
-				facemesh.postMessage({type: "LOAD"});
-			});
-		};
-		facemesh.onmessage = (e)=> {
-			// console.log('Message received from worker', e.data);
-		};
-
-		// console.log(facemesh);
-	</script>
-
 	<script src="lib/clmtrackr.js"></script>
-
 	<script src="lib/jsfeat-min.js"></script>
-
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
