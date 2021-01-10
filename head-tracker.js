@@ -51,19 +51,23 @@ var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
 var pointsBasedOnFaceInViewConfidence = 0;
 
+const frameCanvas = document.createElement("canvas");
+const frameCtx = frameCanvas.getContext("2d");
+const getCameraImageData = ()=> {
+	frameCanvas.width = cameraVideo.videoWidth;
+	frameCanvas.height = cameraVideo.videoHeight;
+	frameCtx.drawImage(cameraVideo, 0, 0);
+	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
+};
+
 if (useFacemesh) {
 	facemeshWorker = new Worker("./facemesh.worker.js");
 	facemeshWorker.addEventListener("message", (e) => {
 		// console.log('Message received from worker', e.data);
 		if (e.data.type === "LOADED") {
 			facemeshLoaded = true;
-			const canvas = document.createElement("canvas");
-			const ctx = canvas.getContext('2d');
-			facemeshEstimateFaces = (videoElement) => {
-				canvas.width = videoElement.videoWidth;
-				canvas.height = videoElement.videoHeight;
-				ctx.drawImage(videoElement, 0, 0);
-				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			facemeshEstimateFaces = () => {
+				const imageData = getCameraImageData();
 				facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
 				return new Promise((resolve, reject) => {
 					facemeshWorker.addEventListener("message", (e) => {
@@ -234,7 +238,7 @@ function draw(update = true) {
 				facemeshEstimating = true;
 				movementXSinceFacemeshUpdate = 0;
 				movementYSinceFacemeshUpdate = 0;
-				facemeshEstimateFaces(cameraVideo).then((predictions) => {
+				facemeshEstimateFaces().then((predictions) => {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
 					useClmtrackr = false;
