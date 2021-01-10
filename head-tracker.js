@@ -51,38 +51,38 @@ var pointsBasedOnFaceInViewConfidence = 0;
 
 if (useFacemesh) {
 	facemeshWorker = new Worker("./facemesh.worker.js");
-	facemeshWorker.addEventListener("message", (e)=> {
+	facemeshWorker.addEventListener("message", (e) => {
 		// console.log('Message received from worker', e.data);
 		if (e.data.type === "LOADED") {
 			facemeshLoaded = true;
 			const canvas = document.createElement("canvas");
 			const ctx = canvas.getContext('2d');
-			facemeshEstimateFaces = (videoElement)=> {
+			facemeshEstimateFaces = (videoElement) => {
 				canvas.width = videoElement.videoWidth;
 				canvas.height = videoElement.videoHeight;
 				ctx.drawImage(videoElement, 0, 0);
 				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-				facemeshWorker.postMessage({type: "ESTIMATE_FACES", imageData});
-				return new Promise((resolve, reject)=> {
-					facemeshWorker.addEventListener("message", (e)=> {
+				facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
+				return new Promise((resolve, reject) => {
+					facemeshWorker.addEventListener("message", (e) => {
 						if (e.data.type === "ESTIMATED_FACES") {
 							resolve(e.data.predictions);
 						}
-					}, {once: true});
+					}, { once: true });
 				});
 			};
 		}
-	}, {once: true});
-	facemeshWorker.postMessage({type: "LOAD", options: facemeshOptions});
+	}, { once: true });
+	facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
 };
 
-sensitivityXSlider.onchange = ()=> {
+sensitivityXSlider.onchange = () => {
 	sensitivityX = sensitivityXSlider.value / 1000;
 };
-sensitivityYSlider.onchange = ()=> {
+sensitivityYSlider.onchange = () => {
 	sensitivityY = sensitivityYSlider.value / 1000;
 };
-mirrorCheckbox.onchange = ()=> {
+mirrorCheckbox.onchange = () => {
 	mirror = mirrorCheckbox.checked;
 };
 mirrorCheckbox.onchange();
@@ -103,7 +103,7 @@ navigator.mediaDevices.getUserMedia({
 		width: w,
 		height: h
 	}
-}).then(function (stream) {
+}).then((stream) => {
 	try {
 		if ('srcObject' in cameraVideo) {
 			cameraVideo.srcObject = stream;
@@ -117,7 +117,7 @@ navigator.mediaDevices.getUserMedia({
 	console.log(error);
 });
 
-cameraVideo.addEventListener('loadedmetadata', function () {
+cameraVideo.addEventListener('loadedmetadata', () => {
 	cameraVideo.play();
 	cameraVideo.width = cameraVideo.videoWidth;
 	cameraVideo.height = cameraVideo.videoHeight;
@@ -144,12 +144,6 @@ pointStatus = new Uint8Array(maxPoints);
 prevXY = new Float32Array(maxPoints * 2);
 curXY = new Float32Array(maxPoints * 2);
 
-// function keyPressed(key) {
-// 	for (var i = 0; i < 100; i++) {
-// 		addPoint(random(width), random(height));
-// 	}
-// }
-
 canvas.addEventListener('click', (event) => {
 	if (mirror) {
 		addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
@@ -173,7 +167,7 @@ function maybeAddPoint(x, y) {
 	for (var pointIndex = 0; pointIndex < pointCount; pointIndex++) {
 		var pointOffset = pointIndex * 2;
 		var distance = Math.hypot(x - curXY[pointOffset], y - curXY[pointOffset + 1]);
-		// If its' useful to have this higher, it should probably be based on the size of the face
+		// If it's useful to have this higher, it should probably be based on the size of the face
 		if (distance < 8) {
 			return;
 		}
@@ -201,10 +195,10 @@ function filterPoints(condition) {
 
 function prunePoints() {
 	// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
-	filterPoints((pointIndex)=> pointStatus[pointIndex] == 1);
+	filterPoints((pointIndex) => pointStatus[pointIndex] == 1);
 
 	// TODO: de-duplicate points that have collapsed together
-	// filterPoints((pointIndex)=> {
+	// filterPoints((pointIndex) => {
 	// 	var pointOffset = pointIndex * 2;
 	// 	// so I need to interate over the other points here, will that be a problem?
 	// });
@@ -215,7 +209,7 @@ function animate() {
 	draw(!SLOWMO);
 }
 
-function draw(update=true) {
+function draw(update = true) {
 	ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
 	ctx.save();
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
@@ -236,12 +230,12 @@ function draw(update=true) {
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
-				facemeshEstimateFaces(cameraVideo).then((predictions)=> {
+				facemeshEstimateFaces(cameraVideo).then((predictions) => {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
 					useClmtrackr = false;
 					showClmtrackr = false;
-				}, ()=> {
+				}, () => {
 					facemeshEstimating = false;
 				});
 			}
@@ -271,7 +265,7 @@ function draw(update=true) {
 			epsilon, minEigen);
 		prunePoints();
 	}
-	
+
 	if (facemeshPrediction) {
 		ctx.fillStyle = "red";
 
@@ -284,7 +278,7 @@ function draw(update=true) {
 			if (update && useFacemesh) {
 				pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
-				const {annotations} = facemeshPrediction;
+				const { annotations } = facemeshPrediction;
 				// nostrils
 				maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 				maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
@@ -297,7 +291,7 @@ function draw(update=true) {
 				// TODO: separate threshold for culling?
 
 				// cull points to those within useful facial region
-				filterPoints((pointIndex)=> {
+				filterPoints((pointIndex) => {
 					var pointOffset = pointIndex * 2;
 					// distance from tip of nose (stretched so make an ellipse taller than wide)
 					var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
@@ -317,7 +311,7 @@ function draw(update=true) {
 					return true;
 				});
 			}
-			facemeshPrediction.scaledMesh.forEach(([x, y, z])=> {
+			facemeshPrediction.scaledMesh.forEach(([x, y, z]) => {
 				// x += prevMovementX;
 				// y += prevMovementY;
 				ctx.fillRect(x, y, 1, 1);
@@ -349,7 +343,7 @@ function draw(update=true) {
 				// TODO: separate threshold for culling?
 
 				// cull points to those within useful facial region
-				filterPoints((pointIndex)=> {
+				filterPoints((pointIndex) => {
 					var pointOffset = pointIndex * 2;
 					// distance from tip of nose (stretched so make an ellipse taller than wide)
 					var distance = Math.hypot((face[62][0] - curXY[pointOffset]) * 1.4, face[62][1] - curXY[pointOffset + 1]);
@@ -397,8 +391,6 @@ function draw(update=true) {
 		mouseX = Math.min(Math.max(0, mouseX), innerWidth);
 		mouseY = Math.min(Math.max(0, mouseY), innerHeight);
 
-		// ctx.fillStyle = "red";
-		// circle(mouseX, mouseY, 10);
 		mouseEl.style.left = `${mouseX}px`;
 		mouseEl.style.top = `${mouseY}px`;
 
@@ -428,7 +420,6 @@ function circle(x, y, r) {
 	ctx.beginPath();
 	ctx.arc(x, y, r, 0, Math.PI * 2);
 	ctx.fill();
-	// ctx.stroke();
 }
 
 animate();

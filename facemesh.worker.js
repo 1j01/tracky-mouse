@@ -6,17 +6,17 @@ importScripts('lib/facemesh/facemesh.js');
 
 var facemeshTensorFlowModel;
 
-onmessage = function(e) {
+onmessage = (e) => {
 	// console.log('Message received from main script', e.data);
 	if (e.data.type === "LOAD") {
-		facemesh.load(e.data.options).then((model)=> {
+		facemesh.load(e.data.options).then((model) => {
 			facemeshTensorFlowModel = model;
-			postMessage({type: "LOADED"});
+			postMessage({ type: "LOADED" });
 		});
 	} else if (e.data.type === "ESTIMATE_FACES") {
-		facemeshTensorFlowModel.estimateFaces(e.data.imageData).then((predictions)=> {
-			postMessage({type: "ESTIMATED_FACES", predictions});
-		}, (error)=> {
+		facemeshTensorFlowModel.estimateFaces(e.data.imageData).then((predictions) => {
+			postMessage({ type: "ESTIMATED_FACES", predictions });
+		}, (error) => {
 			console.log(error);
 		});
 	}
