@@ -9,14 +9,12 @@
 </head>
 
 <body>
-	<h2>Point Tracking and Head Tracking (<a href="head-tracker.js">source</a>)</h2>
+	<h2>Head Tracker</h2>
 	<p>
-		This is an experiment in implementing a head tracking system similar to <a href="https://eviacam.crea-si.com/">eViacam</a>,
+		This is a head tracking system similar to <a href="https://eviacam.crea-si.com/">eViacam</a>,
 		using <a href="https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method">Lucas–Kanade optical flow</a> to track points for high accuracy,
-		and face recognition as a coarse input for understanding of where to place tracking points.
-	</p>
-	<p>
-		You can click to track details in the video, but tracking points should be added automatically if your face is detected (in green not yellow).
+		and face detection for understanding of where to place tracking points.
+		It uses two different face detectors, a fast-to-load one and a slower to load but much more accurate one, which it switches to automatically when available.
 	</p>
 	<div id="controls">
 		<label>Horizontal Sensitivity <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
