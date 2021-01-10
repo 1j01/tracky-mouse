@@ -288,9 +288,28 @@ function draw(update = true) {
 					// time travel latency compensation
 					// keep a history of camera frames since the prediciton was requested,
 					// and analyze optical flow of new points over that history
-					cameraFramesSinceFacemeshUpdate.forEach(() => {
 
+					workerSyncedOops.filterPoints(()=> false); // empty points (could probably also just set pointCount = 0;
+
+					const { annotations } = facemeshPrediction;
+					// nostrils
+					workerSyncedOops.addPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+					workerSyncedOops.addPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+					// midway between eyes
+					workerSyncedOops.addPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
+					// inner eye corners
+					// workerSyncedOops.addPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+					// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+
+					cameraFramesSinceFacemeshUpdate.forEach((imageData) => {
+						workerSyncedOops.update(imageData);
 					});
+
+					for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
+						const pointOffset = pointIndex * 2;
+						maybeAddPoint(mainOops, workerSyncedOops.curXY[pointOffset], workerSyncedOops.curXY[pointOffset + 1]);
+					}
+
 					// naive latency compensation
 					// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
 					// Note: This latency compensation only really works if it's already tracking well
@@ -303,19 +322,11 @@ function draw(update = true) {
 
 					pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
-					const { annotations } = facemeshPrediction;
-					// nostrils
-					maybeAddPoint(mainOops, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-					maybeAddPoint(mainOops, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
-					// midway between eyes
-					maybeAddPoint(mainOops, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
-					// inner eye corners
-					// maybeAddPoint(mainOops, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-					// maybeAddPoint(mainOops, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
-
-					// TODO: separate threshold for culling?
+					// TODO: separate confidence threshold for removing vs adding points?
 
 					// cull points to those within useful facial region
+					// TODO: use time travel for this too, probably! with a history of the points
+					// a complexity would be that points can be removed over time and we need to keep them identified
 					mainOops.filterPoints((pointIndex) => {
 						var pointOffset = pointIndex * 2;
 						// distance from tip of nose (stretched so make an ellipse taller than wide)
@@ -365,6 +376,7 @@ function draw(update = true) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
 			if (update && useFacemesh) {
+				// this should just be visual, since we only add/remove points based on the facemesh data when receiving it
 				facemeshPrediction.scaledMesh.forEach((point) => {
 					point[0] += prevMovementX;
 					point[1] += prevMovementY;
@@ -397,7 +409,7 @@ function draw(update = true) {
 				// maybeAddPoint(mainOops, face[25][0], face[25][1]);
 				// maybeAddPoint(mainOops, face[30][0], face[30][1]);
 
-				// TODO: separate threshold for culling?
+				// TODO: separate confidence threshold for removing vs adding points?
 
 				// cull points to those within useful facial region
 				mainOops.filterPoints((pointIndex) => {
