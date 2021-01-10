@@ -22,6 +22,8 @@ var mouseX = 0;
 var mouseY = 0;
 var prevMovementX = 0;
 var prevMovementY = 0;
+var movementXSinceFacemeshUpdate = 0;
+var movementYSinceFacemeshUpdate = 0;
 var sensitivityX;
 var sensitivityY;
 var face;
@@ -235,6 +237,19 @@ function draw(update = true) {
 					facemeshEstimating = false;
 					useClmtrackr = false;
 					showClmtrackr = false;
+
+					facemeshPrediction.scaledMesh.forEach((point) => {
+						point[0] += movementXSinceFacemeshUpdate;
+						point[1] += movementYSinceFacemeshUpdate;
+					});
+					facemeshPrediction.annotations.forEach((points) => {
+						points.forEach((point) => {
+							point[0] += movementXSinceFacemeshUpdate;
+							point[1] += movementYSinceFacemeshUpdate;
+						});
+					});
+					movementXSinceFacemeshUpdate = 0;
+					movementYSinceFacemeshUpdate = 0;
 				}, () => {
 					facemeshEstimating = false;
 				});
@@ -402,6 +417,8 @@ function draw(update = true) {
 
 		prevMovementX = movementX;
 		prevMovementY = movementY;
+		movementXSinceFacemeshUpdate += movementX;
+		movementYSinceFacemeshUpdate += movementY;
 	}
 	ctx.restore();
 
