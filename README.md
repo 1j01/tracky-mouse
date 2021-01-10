@@ -14,6 +14,8 @@
 
 - Project name? :)
 - Pose invariance (smiling etc.)
+	- Simplest might be to just use the bridge of your nose
+		- Points can disappear due to pruning, but we could use other points as a fallback, but just use a nose point as long as it exists?
 - Acceleration (option)
 - Minimum distance to start moving pointer (option)
 - De-duplicate points that end up on top of each other, as they don't improve tracking (bad redudancy), and they weight the average weirdly, which might harm accuracy.
@@ -27,6 +29,8 @@
 		- Try unplugging and plugging it back in
 		- Make sure you can use your camera with another application (but close this application before trying to get it to work in here again)
 	- Disabling camera autofocus maybe
+	- Positioning the camera and yourself
+	- Tilting your head or moving your head both move the pointer
 	- Lighting
 		- Detect bad lighting conditions and report to the user
 	- "Callibration" via simply moving your head to the edges of the screen (it's not like a gesture, it's just implicit in the fact that there are boundaries)
@@ -36,3 +40,4 @@
 	- Is this actually better than basing it on facial geometry?? It seems like using facial geometry is pretty reasonable
 - Integrate with dwell clicking functionality in jspaint
 - Dwell click time / area, beep on click options, etc.
+- Sparkly effect of some kind instead of just green dots?
