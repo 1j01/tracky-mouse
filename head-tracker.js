@@ -203,7 +203,7 @@ function prunePoints() {
 	// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
 	filterPoints((pointIndex)=> pointStatus[pointIndex] == 1);
 
-	// TODO: actively cull points that have collapsed together
+	// TODO: de-duplicate points that have collapsed together
 	// filterPoints((pointIndex)=> {
 	// 	var pointOffset = pointIndex * 2;
 	// 	// so I need to interate over the other points here, will that be a problem?
@@ -283,11 +283,7 @@ function draw(update=true) {
 			if (update && useFacemesh) {
 				pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
-				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
-				// - fallback to random points or points based on face detection geometry if less than N points
-
 				const {annotations} = facemeshPrediction;
-				// console.log(annotations);
 				// nostrils
 				maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 				maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
@@ -331,9 +327,6 @@ function draw(update=true) {
 			if (update && useClmtrackr) {
 				pointsBasedOnFaceScore = faceScore;
 
-				// TODO: use YAPE? https://inspirit.github.io/jsfeat/sample_yape.html
-				// - fallback to random points or points based on face detection geometry if less than N points
-
 				// nostrils
 				maybeAddPoint(face[42][0], face[42][1]);
 				maybeAddPoint(face[43][0], face[43][1]);
@@ -371,7 +364,6 @@ function draw(update=true) {
 	for (var i = 0; i < pointCount; i++) {
 		var pointOffset = i * 2;
 		var distMoved = Math.hypot(prevXY[pointOffset] - curXY[pointOffset], prevXY[pointOffset + 1] - curXY[pointOffset + 1]);
-		// TODO: ignore points that were just initialized
 		if (distMoved >= 1) {
 			ctx.fillStyle = "lime";
 		} else {
