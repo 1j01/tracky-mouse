@@ -53,10 +53,11 @@ var pointsBasedOnFaceInViewConfidence = 0;
 
 const frameCanvas = document.createElement("canvas");
 const frameCtx = frameCanvas.getContext("2d");
+const cameraDataScale = 1/5;
 const getCameraImageData = () => {
-	frameCanvas.width = cameraVideo.videoWidth;
-	frameCanvas.height = cameraVideo.videoHeight;
-	frameCtx.drawImage(cameraVideo, 0, 0);
+	frameCanvas.width = cameraVideo.videoWidth * cameraDataScale;
+	frameCanvas.height = cameraVideo.videoHeight * cameraDataScale;
+	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
 	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
 };
 
@@ -285,6 +286,12 @@ function draw(update = true) {
 					if (!facemeshPrediction) {
 						return;
 					}
+					// this applies to facemeshPrediction.annotations as well, which references the same points
+					facemeshPrediction.scaledMesh.forEach((point) => {
+						point[0] /= cameraDataScale;
+						point[1] /= cameraDataScale;
+					});
+
 					// time travel latency compensation
 					// keep a history of camera frames since the prediciton was requested,
 					// and analyze optical flow of new points over that history
