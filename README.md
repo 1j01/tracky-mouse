@@ -13,9 +13,7 @@
 ## TODO
 
 - Project name? :)
-- Pose invariance
-	- Handle blinking at least
-- Smoothing (option)
+- Pose invariance (smiling etc.)
 - Acceleration (option)
 - Minimum distance to start moving pointer (option)
 - De-duplicate points that end up on top of each other, as they don't improve tracking (bad redudancy), and they weight the average weirdly, which might harm accuracy.

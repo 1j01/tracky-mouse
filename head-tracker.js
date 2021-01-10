@@ -288,6 +288,8 @@ function draw(update=true) {
 				// nostrils
 				maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 				maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+				// midway between eyes
+				maybeAddPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
 				// inner eye corners
 				maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
 				maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
@@ -301,6 +303,15 @@ function draw(update=true) {
 					var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
 					var headSize = Math.hypot(annotations.leftCheek[0][0] - annotations.rightCheek[0][0], annotations.leftCheek[0][1] - annotations.rightCheek[0][1]);
 					if (distance > headSize) {
+						return false;
+					}
+					// Avoid blinking eyes affecting pointer position.
+					// distance to outer corners of eyes
+					distance = Math.min(
+						Math.hypot(annotations.leftEyeLower0[0][0] - curXY[pointOffset], annotations.leftEyeLower0[0][1] - curXY[pointOffset + 1]),
+						Math.hypot(annotations.rightEyeLower0[0][0] - curXY[pointOffset], annotations.rightEyeLower0[0][1] - curXY[pointOffset + 1]),
+					);
+					if (distance < headSize * 0.4) {
 						return false;
 					}
 					return true;
