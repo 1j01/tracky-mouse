@@ -14,6 +14,8 @@
 			importScripts('${location.origin}/lib/tf.js');
 			importScripts('${location.origin}/lib/facemesh/facemesh.js');
 
+			tf.setBackend('cpu');
+			
 			export async function load(...args) {
 				console.log("Hello from WebWorker, recieved load call with arguments:", ...args);
 				return await facemesh.load(...args)
