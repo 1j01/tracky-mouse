@@ -401,8 +401,8 @@ function draw(update=true) {
 	ctx.lineWidth = 3;
 	ctx.font = "20px sans-serif";
 	ctx.beginPath();
-	const text1 = "Face tracking score: " + (useFacemesh ? (facemeshPrediction ? facemeshPrediction.faceInViewConfidence : 0) : faceScore).toFixed(4);
-	const text2 = "Points based on score: " + (useFacemesh ? (facemeshPrediction ? pointsBasedOnFaceInViewConfidence : 0) : pointsBasedOnFaceScore).toFixed(4);
+	const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
+	const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
 	ctx.strokeText(text1, 50, 50);
 	ctx.fillText(text1, 50, 50);
 	ctx.strokeText(text2, 50, 70);
