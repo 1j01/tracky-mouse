@@ -10,6 +10,10 @@
 	- [Apache License 2.0](https://github.com/tensorflow/tfjs-models/blob/master/LICENSE)
 	- [Apache License 2.0](https://github.com/tensorflow/tensorflow/blob/master/LICENSE)
 
+## License
+
+MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
+
 ## TODO
 
 - Project name? :)
