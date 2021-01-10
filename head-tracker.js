@@ -240,11 +240,16 @@ function draw(update = true) {
 					useClmtrackr = false;
 					showClmtrackr = false;
 
+					if (!facemeshPrediction) {
+						return;
+					}
+					// naive latency compensation
+					// TODO: time travel (keep a history of camera frames since the prediciton was requested, and analyze optical flow of new points over that history)
 					facemeshPrediction.scaledMesh.forEach((point) => {
 						point[0] += movementXSinceFacemeshUpdate;
 						point[1] += movementYSinceFacemeshUpdate;
 					});
-					facemeshPrediction.annotations.forEach((points) => {
+					Object.values(facemeshPrediction.annotations).forEach((points) => {
 						points.forEach((point) => {
 							point[0] += movementXSinceFacemeshUpdate;
 							point[1] += movementYSinceFacemeshUpdate;
