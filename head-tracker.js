@@ -45,6 +45,7 @@ var facemeshOptions = {
 var facemeshLoaded = false;
 var facemeshEstimating = false;
 var facemeshPrediction;
+var facemeshPredictionIsFresh = false;
 var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
 var pointsBasedOnFaceInViewConfidence = 0;
@@ -239,6 +240,7 @@ function draw(update=true) {
 				facemeshEstimateFaces(cameraVideo).then((predictions)=> {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
+					facemeshPredictionIsFresh = true;
 					useClmtrackr = false;
 					showClmtrackr = false;
 				}, ()=> {
@@ -281,7 +283,7 @@ function draw(update=true) {
 			if (bad) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
-			if (update && useFacemesh) {
+			if (update && useFacemesh && facemeshPredictionIsFresh) {
 				pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
 				const {annotations} = facemeshPrediction;
@@ -411,6 +413,8 @@ function draw(update=true) {
 	ctx.stroke();
 	ctx.fill();
 	ctx.restore();
+
+	facemeshPredictionIsFresh = false;
 }
 
 function circle(x, y, r) {
