@@ -232,6 +232,8 @@ function draw(update = true) {
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
+				movementXSinceFacemeshUpdate = 0;
+				movementYSinceFacemeshUpdate = 0;
 				facemeshEstimateFaces(cameraVideo).then((predictions) => {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
@@ -248,8 +250,6 @@ function draw(update = true) {
 							point[1] += movementYSinceFacemeshUpdate;
 						});
 					});
-					movementXSinceFacemeshUpdate = 0;
-					movementYSinceFacemeshUpdate = 0;
 				}, () => {
 					facemeshEstimating = false;
 				});
