@@ -255,6 +255,41 @@ function draw(update = true) {
 							point[1] += movementYSinceFacemeshUpdate;
 						});
 					});
+
+					pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
+
+					const { annotations } = facemeshPrediction;
+					// nostrils
+					maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+					maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+					// midway between eyes
+					maybeAddPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
+					// inner eye corners
+					// maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+					// maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+	
+					// TODO: separate threshold for culling?
+	
+					// cull points to those within useful facial region
+					filterPoints((pointIndex) => {
+						var pointOffset = pointIndex * 2;
+						// distance from tip of nose (stretched so make an ellipse taller than wide)
+						var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
+						var headSize = Math.hypot(annotations.leftCheek[0][0] - annotations.rightCheek[0][0], annotations.leftCheek[0][1] - annotations.rightCheek[0][1]);
+						if (distance > headSize) {
+							return false;
+						}
+						// Avoid blinking eyes affecting pointer position.
+						// distance to outer corners of eyes
+						distance = Math.min(
+							Math.hypot(annotations.leftEyeLower0[0][0] - curXY[pointOffset], annotations.leftEyeLower0[0][1] - curXY[pointOffset + 1]),
+							Math.hypot(annotations.rightEyeLower0[0][0] - curXY[pointOffset], annotations.rightEyeLower0[0][1] - curXY[pointOffset + 1]),
+						);
+						if (distance < headSize * 0.42) {
+							return false;
+						}
+						return true;
+					});
 				}, () => {
 					facemeshEstimating = false;
 				});
@@ -296,50 +331,12 @@ function draw(update = true) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
 			if (update && useFacemesh) {
-				pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
-
-				const { annotations } = facemeshPrediction;
-				// nostrils
-				maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-				maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
-				// midway between eyes
-				maybeAddPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
-				// inner eye corners
-				// maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-				// maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
-
-				// TODO: separate threshold for culling?
-
-				// cull points to those within useful facial region
-				filterPoints((pointIndex) => {
-					var pointOffset = pointIndex * 2;
-					// distance from tip of nose (stretched so make an ellipse taller than wide)
-					var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
-					var headSize = Math.hypot(annotations.leftCheek[0][0] - annotations.rightCheek[0][0], annotations.leftCheek[0][1] - annotations.rightCheek[0][1]);
-					if (distance > headSize) {
-						return false;
-					}
-					// Avoid blinking eyes affecting pointer position.
-					// distance to outer corners of eyes
-					distance = Math.min(
-						Math.hypot(annotations.leftEyeLower0[0][0] - curXY[pointOffset], annotations.leftEyeLower0[0][1] - curXY[pointOffset + 1]),
-						Math.hypot(annotations.rightEyeLower0[0][0] - curXY[pointOffset], annotations.rightEyeLower0[0][1] - curXY[pointOffset + 1]),
-					);
-					if (distance < headSize * 0.42) {
-						return false;
-					}
-					return true;
-				});
-			}
-			if (update && useFacemesh) {
 				facemeshPrediction.scaledMesh.forEach((point) => {
 					point[0] += prevMovementX;
 					point[1] += prevMovementY;
 				});
 			}
 			facemeshPrediction.scaledMesh.forEach(([x, y, z]) => {
-				// x += prevMovementX;
-				// y += prevMovementY;
 				ctx.fillRect(x, y, 1, 1);
 			});
 		} else {
