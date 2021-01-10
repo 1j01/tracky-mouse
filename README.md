@@ -34,11 +34,20 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 		- Make sure you can use your camera with another application (but close this application before trying to get it to work in here again)
 	- Disabling camera autofocus maybe
 	- Positioning the camera and yourself
+		- Above or below the screen is fine but you should be centered so the pointer doesn't move left/right too much when you want it to go up or down
+			- In particular, you should be in line with the camera, such that your face appears head-on when looking comfortably at the center of the screen
+				- A guide could show your head rotation
+				- Callibration for an off-center camera should be possible (or explicitly using your head rotation instead of a projected position)
+		- If the camera is above, leaning forward generally moves the pointer down
+		- If the camera is below, leaning forward generally moves the pointer up
 	- Tilting your head or moving your head both move the pointer
 	- Lighting
 		- Detect bad lighting conditions and report to the user
 	- "Callibration" via simply moving your head to the edges of the screen (it's not like a gesture, it's just implicit in the fact that there are boundaries)
-	- Settings (sensitivity)
+	- Choosing settings (sensitivity etc.)
+		- If you move yourself or your camera, you may want to adjust the sensitivity.
+		- If you're further away from the camera, you'll want a higher sensitivity.
+			- Would it make sense to scale this to your head size in the camera? Maybe not with the innacurate face tracker, but with the face tracker... but you probably wouldn't want it to switch setting scaling schemes suddenly
 - Use [YAPE](https://inspirit.github.io/jsfeat/sample_yape.html)? MAYBE?
 	- fallback to random points or points based on face detection geometry if less than N points
 	- Is this actually better than basing it on facial geometry?? It seems like using facial geometry is pretty reasonable
