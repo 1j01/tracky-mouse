@@ -14,7 +14,6 @@ var cameraVideo = document.createElement('video');
 // required to work in iOS 11 & up:
 cameraVideo.setAttribute('playsinline', '');
 
-var curPyramid, prevPyramid, pointCount, pointStatus, prevXY, curXY;
 var w = 640;
 var h = 480;
 var maxPoints = 1000;
@@ -54,7 +53,7 @@ var pointsBasedOnFaceInViewConfidence = 0;
 
 const frameCanvas = document.createElement("canvas");
 const frameCtx = frameCanvas.getContext("2d");
-const getCameraImageData = ()=> {
+const getCameraImageData = () => {
 	frameCanvas.width = cameraVideo.videoWidth;
 	frameCanvas.height = cameraVideo.videoHeight;
 	frameCtx.drawImage(cameraVideo, 0, 0);
@@ -141,74 +140,110 @@ canvas.height = h;
 cameraVideo.width = w;
 cameraVideo.height = h;
 
-curPyramid = new jsfeat.pyramid_t(3);
-prevPyramid = new jsfeat.pyramid_t(3);
-curPyramid.allocate(w, h, jsfeat.U8C1_t);
-prevPyramid.allocate(w, h, jsfeat.U8C1_t);
+// Object Oriented Programming Sucks
+// or Optical flOw Points System
+class OOPS {
+	constructor() {
+		this.curPyramid = new jsfeat.pyramid_t(3);
+		this.prevPyramid = new jsfeat.pyramid_t(3);
+		this.curPyramid.allocate(w, h, jsfeat.U8C1_t);
+		this.prevPyramid.allocate(w, h, jsfeat.U8C1_t);
 
-pointCount = 0;
-pointStatus = new Uint8Array(maxPoints);
-prevXY = new Float32Array(maxPoints * 2);
-curXY = new Float32Array(maxPoints * 2);
-
-canvas.addEventListener('click', (event) => {
-	if (mirror) {
-		addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
-	} else {
-		addPoint(event.offsetX, event.offsetY);
+		this.pointCount = 0;
+		this.pointStatus = new Uint8Array(maxPoints);
+		this.prevXY = new Float32Array(maxPoints * 2);
+		this.curXY = new Float32Array(maxPoints * 2);
 	}
-});
+	addPoint(x, y) {
+		if (this.pointCount < maxPoints) {
+			var pointIndex = this.pointCount * 2;
+			this.curXY[pointIndex] = x;
+			this.curXY[pointIndex + 1] = y;
+			this.prevXY[pointIndex] = x;
+			this.prevXY[pointIndex + 1] = y;
+			this.pointCount++;
+		}
+	}
+	filterPoints(condition) {
+		var outputPointIndex = 0;
+		for (var inputPointIndex = 0; inputPointIndex < this.pointCount; inputPointIndex++) {
+			if (condition(inputPointIndex)) {
+				if (outputPointIndex < inputPointIndex) {
+					var inputOffset = inputPointIndex * 2;
+					var outputOffset = outputPointIndex * 2;
+					this.curXY[outputOffset] = this.curXY[inputOffset];
+					this.curXY[outputOffset + 1] = this.curXY[inputOffset + 1];
+					this.prevXY[outputOffset] = this.prevXY[inputOffset];
+					this.prevXY[outputOffset + 1] = this.prevXY[inputOffset + 1];
+				}
+				outputPointIndex++;
+			}
+		}
+		this.pointCount = outputPointIndex;
+	}
+	prunePoints() {
+		// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
+		this.filterPoints((pointIndex) => this.pointStatus[pointIndex] == 1);
 
-function addPoint(x, y) {
-	if (pointCount < maxPoints) {
-		var pointIndex = pointCount * 2;
-		curXY[pointIndex] = x;
-		curXY[pointIndex + 1] = y;
-		prevXY[pointIndex] = x;
-		prevXY[pointIndex + 1] = y;
-		pointCount++;
+		// TODO: de-duplicate points that have collapsed together
+		// this.filterPoints((pointIndex) => {
+		// 	var pointOffset = pointIndex * 2;
+		// 	// so I need to interate over the other points here, will that be a problem?
+		// });
+	}
+	update(imageData) {
+		var xyswap = this.prevXY;
+		this.prevXY = this.curXY;
+		this.curXY = xyswap;
+		var pyrswap = this.prevPyramid;
+		this.prevPyramid = this.curPyramid;
+		this.curPyramid = pyrswap;
+
+		// these are options worth breaking out and exploring
+		var winSize = 20;
+		var maxIterations = 30;
+		var epsilon = 0.01;
+		var minEigen = 0.001;
+
+		jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, this.curPyramid.data[0]);
+		this.curPyramid.build(this.curPyramid.data[0], true);
+		jsfeat.optical_flow_lk.track(
+			this.prevPyramid, this.curPyramid,
+			this.prevXY, this.curXY,
+			this.pointCount,
+			winSize, maxIterations,
+			this.pointStatus,
+			epsilon, minEigen);
+		this.prunePoints();
 	}
 }
 
-function maybeAddPoint(x, y) {
-	for (var pointIndex = 0; pointIndex < pointCount; pointIndex++) {
+var mainOops = new OOPS();
+if (useFacemesh) {
+	var workerSyncedOops = new OOPS();
+}
+
+canvas.addEventListener('click', (event) => {
+	if (mirror) {
+		mainOops.addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
+	} else {
+		mainOops.addPoint(event.offsetX, event.offsetY);
+	}
+});
+
+function maybeAddPoint(oops, x, y) {
+	for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
 		var pointOffset = pointIndex * 2;
-		var distance = Math.hypot(x - curXY[pointOffset], y - curXY[pointOffset + 1]);
+		var distance = Math.hypot(
+			x - oops.curXY[pointOffset],
+			y - oops.curXY[pointOffset + 1]
+		);
 		// If it's useful to have this higher, it should probably be based on the size of the face
 		if (distance < 8) {
 			return;
 		}
 	}
-	addPoint(x, y);
-}
-
-function filterPoints(condition) {
-	var outputPointIndex = 0;
-	for (var inputPointIndex = 0; inputPointIndex < pointCount; inputPointIndex++) {
-		if (condition(inputPointIndex)) {
-			if (outputPointIndex < inputPointIndex) {
-				var inputOffset = inputPointIndex * 2;
-				var outputOffset = outputPointIndex * 2;
-				curXY[outputOffset] = curXY[inputOffset];
-				curXY[outputOffset + 1] = curXY[inputOffset + 1];
-				prevXY[outputOffset] = prevXY[inputOffset];
-				prevXY[outputOffset + 1] = prevXY[inputOffset + 1];
-			}
-			outputPointIndex++;
-		}
-	}
-	pointCount = outputPointIndex;
-}
-
-function prunePoints() {
-	// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
-	filterPoints((pointIndex) => pointStatus[pointIndex] == 1);
-
-	// TODO: de-duplicate points that have collapsed together
-	// filterPoints((pointIndex) => {
-	// 	var pointOffset = pointIndex * 2;
-	// 	// so I need to interate over the other points here, will that be a problem?
-	// });
+	oops.addPoint(x, y);
 }
 
 function animate() {
@@ -253,7 +288,7 @@ function draw(update = true) {
 					// time travel latency compensation
 					// keep a history of camera frames since the prediciton was requested,
 					// and analyze optical flow of new points over that history
-					cameraFramesSinceFacemeshUpdate.forEach(()=> {
+					cameraFramesSinceFacemeshUpdate.forEach(() => {
 
 					});
 					// naive latency compensation
@@ -270,30 +305,42 @@ function draw(update = true) {
 
 					const { annotations } = facemeshPrediction;
 					// nostrils
-					maybeAddPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-					maybeAddPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+					maybeAddPoint(mainOops, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+					maybeAddPoint(mainOops, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
 					// midway between eyes
-					maybeAddPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
+					maybeAddPoint(mainOops, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
 					// inner eye corners
-					// maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-					// maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
-	
+					// maybeAddPoint(mainOops, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+					// maybeAddPoint(mainOops, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+
 					// TODO: separate threshold for culling?
-	
+
 					// cull points to those within useful facial region
-					filterPoints((pointIndex) => {
+					mainOops.filterPoints((pointIndex) => {
 						var pointOffset = pointIndex * 2;
 						// distance from tip of nose (stretched so make an ellipse taller than wide)
-						var distance = Math.hypot((annotations.noseTip[0][0] - curXY[pointOffset]) * 1.4, annotations.noseTip[0][1] - curXY[pointOffset + 1]);
-						var headSize = Math.hypot(annotations.leftCheek[0][0] - annotations.rightCheek[0][0], annotations.leftCheek[0][1] - annotations.rightCheek[0][1]);
+						var distance = Math.hypot(
+							(annotations.noseTip[0][0] - mainOops.curXY[pointOffset]) * 1.4,
+							annotations.noseTip[0][1] - mainOops.curXY[pointOffset + 1]
+						);
+						var headSize = Math.hypot(
+							annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+							annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+						);
 						if (distance > headSize) {
 							return false;
 						}
 						// Avoid blinking eyes affecting pointer position.
 						// distance to outer corners of eyes
 						distance = Math.min(
-							Math.hypot(annotations.leftEyeLower0[0][0] - curXY[pointOffset], annotations.leftEyeLower0[0][1] - curXY[pointOffset + 1]),
-							Math.hypot(annotations.rightEyeLower0[0][0] - curXY[pointOffset], annotations.rightEyeLower0[0][1] - curXY[pointOffset + 1]),
+							Math.hypot(
+								annotations.leftEyeLower0[0][0] - mainOops.curXY[pointOffset],
+								annotations.leftEyeLower0[0][1] - mainOops.curXY[pointOffset + 1]
+							),
+							Math.hypot(
+								annotations.rightEyeLower0[0][0] - mainOops.curXY[pointOffset],
+								annotations.rightEyeLower0[0][1] - mainOops.curXY[pointOffset + 1]
+							),
 						);
 						if (distance < headSize * 0.42) {
 							return false;
@@ -305,30 +352,7 @@ function draw(update = true) {
 				});
 			}
 		}
-
-		var xyswap = prevXY;
-		prevXY = curXY;
-		curXY = xyswap;
-		var pyrswap = prevPyramid;
-		prevPyramid = curPyramid;
-		curPyramid = pyrswap;
-
-		// these are options worth breaking out and exploring
-		var winSize = 20;
-		var maxIterations = 30;
-		var epsilon = 0.01;
-		var minEigen = 0.001;
-
-		jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, curPyramid.data[0]);
-		curPyramid.build(curPyramid.data[0], true);
-		jsfeat.optical_flow_lk.track(
-			prevPyramid, curPyramid,
-			prevXY, curXY,
-			pointCount,
-			winSize, maxIterations,
-			pointStatus,
-			epsilon, minEigen);
-		prunePoints();
+		mainOops.update(imageData);
 	}
 
 	if (facemeshPrediction) {
@@ -336,7 +360,7 @@ function draw(update = true) {
 
 		const bad = facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold;
 		ctx.fillStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-		if (!bad || pointCount < 3 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
+		if (!bad || mainOops.pointCount < 3 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
 			if (bad) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
@@ -359,7 +383,7 @@ function draw(update = true) {
 	if (face) {
 		const bad = faceScore < faceScoreThreshold;
 		ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-		if (!bad || pointCount < 2 || faceScore > pointsBasedOnFaceScore + 0.05) {
+		if (!bad || mainOops.pointCount < 2 || faceScore > pointsBasedOnFaceScore + 0.05) {
 			if (bad) {
 				ctx.strokeStyle = 'rgba(255,0,255)';
 			}
@@ -367,21 +391,27 @@ function draw(update = true) {
 				pointsBasedOnFaceScore = faceScore;
 
 				// nostrils
-				maybeAddPoint(face[42][0], face[42][1]);
-				maybeAddPoint(face[43][0], face[43][1]);
+				maybeAddPoint(mainOops, face[42][0], face[42][1]);
+				maybeAddPoint(mainOops, face[43][0], face[43][1]);
 				// inner eye corners
-				// maybeAddPoint(face[25][0], face[25][1]);
-				// maybeAddPoint(face[30][0], face[30][1]);
+				// maybeAddPoint(mainOops, face[25][0], face[25][1]);
+				// maybeAddPoint(mainOops, face[30][0], face[30][1]);
 
 				// TODO: separate threshold for culling?
 
 				// cull points to those within useful facial region
-				filterPoints((pointIndex) => {
+				mainOops.filterPoints((pointIndex) => {
 					var pointOffset = pointIndex * 2;
 					// distance from tip of nose (stretched so make an ellipse taller than wide)
-					var distance = Math.hypot((face[62][0] - curXY[pointOffset]) * 1.4, face[62][1] - curXY[pointOffset + 1]);
+					var distance = Math.hypot(
+						(face[62][0] - mainOops.curXY[pointOffset]) * 1.4,
+						face[62][1] - mainOops.curXY[pointOffset + 1]
+					);
 					// distance based on outer eye corners
-					var headSize = Math.hypot(face[23][0] - face[28][0], face[23][1] - face[28][1]);
+					var headSize = Math.hypot(
+						face[23][0] - face[28][0],
+						face[23][1] - face[28][1]
+					);
 					if (distance > headSize) {
 						return false;
 					}
@@ -400,18 +430,21 @@ function draw(update = true) {
 	var movementX = 0;
 	var movementY = 0;
 	var numMovements = 0;
-	for (var i = 0; i < pointCount; i++) {
+	for (var i = 0; i < mainOops.pointCount; i++) {
 		var pointOffset = i * 2;
-		var distMoved = Math.hypot(prevXY[pointOffset] - curXY[pointOffset], prevXY[pointOffset + 1] - curXY[pointOffset + 1]);
+		var distMoved = Math.hypot(
+			mainOops.prevXY[pointOffset] - mainOops.curXY[pointOffset],
+			mainOops.prevXY[pointOffset + 1] - mainOops.curXY[pointOffset + 1]
+		);
 		if (distMoved >= 1) {
 			ctx.fillStyle = "lime";
 		} else {
 			ctx.fillStyle = "gray";
 		}
-		movementX += curXY[pointOffset] - prevXY[pointOffset];
-		movementY += curXY[pointOffset + 1] - prevXY[pointOffset + 1];
+		movementX += mainOops.curXY[pointOffset] - mainOops.prevXY[pointOffset];
+		movementY += mainOops.curXY[pointOffset + 1] - mainOops.prevXY[pointOffset + 1];
 		numMovements += 1;
-		circle(curXY[pointOffset], curXY[pointOffset + 1], 3);
+		circle(mainOops.curXY[pointOffset], mainOops.curXY[pointOffset + 1], 3);
 	}
 	if (numMovements > 0) {
 		movementX /= numMovements;
