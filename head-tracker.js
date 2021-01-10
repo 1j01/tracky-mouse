@@ -229,10 +229,11 @@ function draw(update=true) {
 
 	if (update) {
 		if (trackingStarted) {
-			ctrack.track(cameraVideo);
-			face = ctrack.getCurrentPosition();
-			faceScore = ctrack.getScore();
-
+			if (useClmtrackr || showClmtrackr) {
+				ctrack.track(cameraVideo);
+				face = ctrack.getCurrentPosition();
+				faceScore = ctrack.getScore();
+			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
 				facemeshEstimateFaces(cameraVideo).then((predictions)=> {
