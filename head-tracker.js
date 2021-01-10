@@ -31,7 +31,7 @@ var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
 var mirror;
 
-var useClmtrackr = false;
+var useClmtrackr = true;
 var showClmtrackr = useClmtrackr;
 var useFacemesh = true;
 var facemeshOptions = {
@@ -238,6 +238,8 @@ function draw(update=true) {
 				facemeshEstimateFaces(cameraVideo).then((predictions)=> {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
+					useClmtrackr = false;
+					showClmtrackr = false;
 				}, ()=> {
 					facemeshEstimating = false;
 				});
