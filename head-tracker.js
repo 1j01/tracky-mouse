@@ -22,6 +22,8 @@ var mouseX = 0;
 var mouseY = 0;
 var prevMovementX = 0;
 var prevMovementY = 0;
+var movementXSinceFacemeshUpdate = 0;
+var movementYSinceFacemeshUpdate = 0;
 var sensitivityX;
 var sensitivityY;
 var face;
@@ -230,11 +232,29 @@ function draw(update = true) {
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
+				movementXSinceFacemeshUpdate = 0;
+				movementYSinceFacemeshUpdate = 0;
 				facemeshEstimateFaces(cameraVideo).then((predictions) => {
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
 					useClmtrackr = false;
 					showClmtrackr = false;
+
+					if (!facemeshPrediction) {
+						return;
+					}
+					// naive latency compensation
+					// TODO: time travel (keep a history of camera frames since the prediciton was requested, and analyze optical flow of new points over that history)
+					facemeshPrediction.scaledMesh.forEach((point) => {
+						point[0] += movementXSinceFacemeshUpdate;
+						point[1] += movementYSinceFacemeshUpdate;
+					});
+					Object.values(facemeshPrediction.annotations).forEach((points) => {
+						points.forEach((point) => {
+							point[0] += movementXSinceFacemeshUpdate;
+							point[1] += movementYSinceFacemeshUpdate;
+						});
+					});
 				}, () => {
 					facemeshEstimating = false;
 				});
@@ -402,6 +422,8 @@ function draw(update = true) {
 
 		prevMovementX = movementX;
 		prevMovementY = movementY;
+		movementXSinceFacemeshUpdate += movementX;
+		movementYSinceFacemeshUpdate += movementY;
 	}
 	ctx.restore();
 
