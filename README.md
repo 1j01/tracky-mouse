@@ -15,8 +15,9 @@
 - Project name? :)
 - Pose invariance
 	- Handle blinking at least
-- Smoothing
-	- Option
+- Smoothing (option)
+- Acceleration (option)
+- Minimum distance to start moving pointer (option)
 - De-duplicate points that end up on top of each other, as they don't improve tracking (bad redudancy), and they weight the average weirdly, which might harm accuracy.
 - Handle occluders explicitly by looking for differing optical flow? (most often a hand, e.g. brushing hair out of eyes)
 - Robust error handling
@@ -35,3 +36,5 @@
 - Use [YAPE](https://inspirit.github.io/jsfeat/sample_yape.html)? MAYBE?
 	- fallback to random points or points based on face detection geometry if less than N points
 	- Is this actually better than basing it on facial geometry?? It seems like using facial geometry is pretty reasonable
+- Integrate with dwell clicking functionality in jspaint
+- Dwell click time / area, beep on click options, etc.
