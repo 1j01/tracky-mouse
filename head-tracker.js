@@ -22,8 +22,9 @@ var mouseX = 0;
 var mouseY = 0;
 var prevMovementX = 0;
 var prevMovementY = 0;
-var movementXSinceFacemeshUpdate = 0;
-var movementYSinceFacemeshUpdate = 0;
+// var movementXSinceFacemeshUpdate = 0;
+// var movementYSinceFacemeshUpdate = 0;
+var cameraFramesSinceFacemeshUpdate = [];
 var sensitivityX;
 var sensitivityY;
 var face;
@@ -236,8 +237,9 @@ function draw(update = true) {
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
-				movementXSinceFacemeshUpdate = 0;
-				movementYSinceFacemeshUpdate = 0;
+				// movementXSinceFacemeshUpdate = 0;
+				// movementYSinceFacemeshUpdate = 0;
+				cameraFramesSinceFacemeshUpdate = [];
 				facemeshEstimateFaces().then((predictions) => {
 					const prevFaceInViewConfidence = facemeshPrediction ? facemeshPrediction.faceInViewConfidence : 0;
 					facemeshPrediction = predictions[0]; // may be undefined
@@ -248,16 +250,21 @@ function draw(update = true) {
 					if (!facemeshPrediction) {
 						return;
 					}
+					// time travel latency compensation
+					// keep a history of camera frames since the prediciton was requested,
+					// and analyze optical flow of new points over that history
+					cameraFramesSinceFacemeshUpdate.forEach(()=> {
+
+					});
 					// naive latency compensation
-					// TODO: time travel (keep a history of camera frames since the prediciton was requested, and analyze optical flow of new points over that history)
 					// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
 					// Note: This latency compensation only really works if it's already tracking well
-					if (prevFaceInViewConfidence > 0.99) {
-						facemeshPrediction.scaledMesh.forEach((point) => {
-							point[0] += movementXSinceFacemeshUpdate;
-							point[1] += movementYSinceFacemeshUpdate;
-						});
-					}
+					// if (prevFaceInViewConfidence > 0.99) {
+					// 	facemeshPrediction.scaledMesh.forEach((point) => {
+					// 		point[0] += movementXSinceFacemeshUpdate;
+					// 		point[1] += movementYSinceFacemeshUpdate;
+					// 	});
+					// }
 
 					pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
@@ -422,8 +429,16 @@ function draw(update = true) {
 
 		prevMovementX = movementX;
 		prevMovementY = movementY;
-		movementXSinceFacemeshUpdate += movementX;
-		movementYSinceFacemeshUpdate += movementY;
+		// movementXSinceFacemeshUpdate += movementX;
+		// movementYSinceFacemeshUpdate += movementY;
+		if (facemeshEstimating) {
+			cameraFramesSinceFacemeshUpdate.push(getCameraImageData());
+			// limit this buffer size in case something goes wrong
+			if (cameraFramesSinceFacemeshUpdate.length > 500) {
+				// maybe just clear it entirely, because a partial buffer might not be useful
+				cameraFramesSinceFacemeshUpdate.length = 0;
+			}
+		}
 	}
 	ctx.restore();
 
