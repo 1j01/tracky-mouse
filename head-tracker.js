@@ -277,7 +277,7 @@ function draw(update=true) {
 
 		const bad = facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold;
 		ctx.fillStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-		if (!bad || pointCount < 4 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
+		if (!bad || pointCount < 3 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
 			if (bad) {
 				ctx.fillStyle = 'rgba(255,0,255)';
 			}
@@ -291,8 +291,8 @@ function draw(update=true) {
 				// midway between eyes
 				maybeAddPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
 				// inner eye corners
-				maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-				maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+				// maybeAddPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+				// maybeAddPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
 				// TODO: separate threshold for culling?
 
@@ -311,7 +311,7 @@ function draw(update=true) {
 						Math.hypot(annotations.leftEyeLower0[0][0] - curXY[pointOffset], annotations.leftEyeLower0[0][1] - curXY[pointOffset + 1]),
 						Math.hypot(annotations.rightEyeLower0[0][0] - curXY[pointOffset], annotations.rightEyeLower0[0][1] - curXY[pointOffset + 1]),
 					);
-					if (distance < headSize * 0.4) {
+					if (distance < headSize * 0.42) {
 						return false;
 					}
 					return true;
@@ -332,7 +332,7 @@ function draw(update=true) {
 	if (face) {
 		const bad = faceScore < faceScoreThreshold;
 		ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-		if (!bad || pointCount < 4 || faceScore > pointsBasedOnFaceScore + 0.05) {
+		if (!bad || pointCount < 2 || faceScore > pointsBasedOnFaceScore + 0.05) {
 			if (bad) {
 				ctx.strokeStyle = 'rgba(255,0,255)';
 			}
@@ -343,8 +343,8 @@ function draw(update=true) {
 				maybeAddPoint(face[42][0], face[42][1]);
 				maybeAddPoint(face[43][0], face[43][1]);
 				// inner eye corners
-				maybeAddPoint(face[25][0], face[25][1]);
-				maybeAddPoint(face[30][0], face[30][1]);
+				// maybeAddPoint(face[25][0], face[25][1]);
+				// maybeAddPoint(face[30][0], face[30][1]);
 
 				// TODO: separate threshold for culling?
 
