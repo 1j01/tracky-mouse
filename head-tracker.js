@@ -33,7 +33,7 @@ var faceScore = 0;
 var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
-var debugTimeTravel = false;
+var debugTimeTravel = true;
 var mirror;
 
 var useClmTracking = true;
@@ -282,11 +282,11 @@ class OOPS {
 				this.prevXY[pointOffset] - this.curXY[pointOffset],
 				this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
 			);
-			if (distMoved >= 1) {
-				ctx.fillStyle = "lime";
-			} else {
-				ctx.fillStyle = "gray";
-			}
+			// if (distMoved >= 1) {
+			// 	ctx.fillStyle = "lime";
+			// } else {
+			// 	ctx.fillStyle = "gray";
+			// }
 			circle(ctx, this.curXY[pointOffset], this.curXY[pointOffset + 1], 3);
 		}
 	}
@@ -409,8 +409,8 @@ function draw(update = true) {
 					// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
 					// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
-					// debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
-					// debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
+					debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
+					debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
 					cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
 						if (debugTimeTravel) {
 							debugFramesCtx.save();
@@ -420,6 +420,7 @@ function draw(update = true) {
 							// debugFramesCtx.putImageData(imageData, 0, 0);
 							debugFramesCtx.drawImage(frameCanvas, 0, 0, canvas.width, canvas.height);
 							debugFramesCtx.restore();
+							debugPointsCtx.fillStyle = "aqua";
 							workerSyncedOops.draw(debugPointsCtx);
 						}
 						workerSyncedOops.update(imageData);
@@ -566,7 +567,10 @@ function draw(update = true) {
 		ctx.restore();
 		ctx.drawImage(debugPointsCanvas, 0, 0);
 	}
+	ctx.fillStyle = "lime";
 	mainOops.draw(ctx);
+	debugPointsCtx.fillStyle = "green";
+	mainOops.draw(debugPointsCtx);
 
 	if (update) {
 		var [movementX, movementY] = mainOops.getMovement();
