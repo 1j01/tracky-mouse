@@ -249,15 +249,10 @@ function draw(update = true) {
 					}
 					// naive latency compensation
 					// TODO: time travel (keep a history of camera frames since the prediciton was requested, and analyze optical flow of new points over that history)
+					// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
 					facemeshPrediction.scaledMesh.forEach((point) => {
 						point[0] += movementXSinceFacemeshUpdate;
 						point[1] += movementYSinceFacemeshUpdate;
-					});
-					Object.values(facemeshPrediction.annotations).forEach((points) => {
-						points.forEach((point) => {
-							point[0] += movementXSinceFacemeshUpdate;
-							point[1] += movementYSinceFacemeshUpdate;
-						});
 					});
 
 					pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
