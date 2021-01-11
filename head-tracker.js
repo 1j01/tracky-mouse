@@ -1,6 +1,8 @@
 var mirrorCheckbox = document.getElementById("mirror");
 var sensitivityXSlider = document.getElementById("sensitivity-x");
 var sensitivityYSlider = document.getElementById("sensitivity-y");
+var useCameraButton = document.getElementById("use-camera");
+var useDemoFootageButton = document.getElementById("use-demo");
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
@@ -14,8 +16,8 @@ var cameraVideo = document.createElement('video');
 // required to work in iOS 11 & up:
 cameraVideo.setAttribute('playsinline', '');
 
-var w = 640;
-var h = 480;
+var defaultWidth = 640;
+var defaultHeight = 480;
 var maxPoints = 1000;
 var mouseX = 0;
 var mouseY = 0;
@@ -52,10 +54,16 @@ var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
 var pointsBasedOnFaceInViewConfidence = 0;
 
+var mainOops;
+var workerSyncedOops;
+
 const frameCanvas = document.createElement("canvas");
 const frameCtx = frameCanvas.getContext("2d");
 const cameraDataScale = 1/5;
 const getCameraImageData = () => {
+	if (cameraVideo.videoWidth * cameraDataScale * cameraVideo.videoHeight * cameraDataScale < 1) {
+		return;
+	}
 	frameCanvas.width = cameraVideo.videoWidth * cameraDataScale;
 	frameCanvas.height = cameraVideo.videoHeight * cameraDataScale;
 	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
@@ -70,6 +78,9 @@ if (useFacemesh) {
 			facemeshLoaded = true;
 			facemeshEstimateFaces = () => {
 				const imageData = getCameraImageData();
+				if (!imageData) {
+					return;
+				}
 				facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
 				return new Promise((resolve, reject) => {
 					facemeshWorker.addEventListener("message", (e) => {
@@ -101,46 +112,69 @@ var ctrack = new clm.tracker();
 ctrack.init();
 var trackingStarted = false;
 
+const reset = ()=> {
+	trackingStarted = false;
+	cameraFramesSinceFacemeshUpdate.length = 0;
+	facemeshPrediction = null;
+	pointsBasedOnFaceScore = 0;
+	faceScore = 0;
+};
+
+useCameraButton.onclick = () => {
+	navigator.mediaDevices.getUserMedia({
+		audio: false,
+		video: {
+			width: defaultWidth,
+			height: defaultHeight
+		}
+	}).then((stream) => {
+		reset();
+		try {
+			if ('srcObject' in cameraVideo) {
+				cameraVideo.srcObject = stream;
+			} else {
+				cameraVideo.src = window.URL.createObjectURL(stream);
+			}
+		} catch (err) {
+			cameraVideo.src = stream;
+		}
+	}, (error) => {
+		console.log(error);
+	});
+};
+useDemoFootageButton.onclick = () => {
+	reset();
+	cameraVideo.srcObject = null;
+	cameraVideo.src = "private/demo-input-footage.webm";
+	cameraVideo.loop = true;
+};
+
 if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
 	console.log('getUserMedia not supported in this browser');
 }
 
-navigator.mediaDevices.getUserMedia({
-	audio: false,
-	video: {
-		width: w,
-		height: h
-	}
-}).then((stream) => {
-	try {
-		if ('srcObject' in cameraVideo) {
-			cameraVideo.srcObject = stream;
-		} else {
-			cameraVideo.src = window.URL.createObjectURL(stream);
-		}
-	} catch (err) {
-		cameraVideo.src = stream;
-	}
-}, (error) => {
-	console.log(error);
-});
 
 cameraVideo.addEventListener('loadedmetadata', () => {
 	cameraVideo.play();
 	cameraVideo.width = cameraVideo.videoWidth;
 	cameraVideo.height = cameraVideo.videoHeight;
+	canvas.width = cameraVideo.videoWidth;
+	canvas.height = cameraVideo.videoHeight;
 
-	console.log('capture ready.');
+	mainOops = new OOPS();
+	if (useFacemesh) {
+		workerSyncedOops = new OOPS();
+	}
 });
 cameraVideo.addEventListener('canplay', () => {
 	ctrack.initFaceDetector(cameraVideo);
 	trackingStarted = true;
 });
 
-canvas.width = w;
-canvas.height = h;
-cameraVideo.width = w;
-cameraVideo.height = h;
+canvas.width = defaultWidth;
+canvas.height = defaultHeight;
+cameraVideo.width = defaultWidth;
+cameraVideo.height = defaultHeight;
 
 const debugFramesCanvas = document.createElement("canvas");
 debugFramesCanvas.width = canvas.width;
@@ -159,8 +193,8 @@ class OOPS {
 	constructor() {
 		this.curPyramid = new jsfeat.pyramid_t(3);
 		this.prevPyramid = new jsfeat.pyramid_t(3);
-		this.curPyramid.allocate(w, h, jsfeat.U8C1_t);
-		this.prevPyramid.allocate(w, h, jsfeat.U8C1_t);
+		this.curPyramid.allocate(cameraVideo.videoWidth, cameraVideo.videoHeight, jsfeat.U8C1_t);
+		this.prevPyramid.allocate(cameraVideo.videoWidth, cameraVideo.videoHeight, jsfeat.U8C1_t);
 
 		this.pointCount = 0;
 		this.pointStatus = new Uint8Array(maxPoints);
@@ -262,12 +296,10 @@ class OOPS {
 	}
 }
 
-var mainOops = new OOPS();
-if (useFacemesh) {
-	var workerSyncedOops = new OOPS();
-}
-
 canvas.addEventListener('click', (event) => {
+	if (!mainOops) {
+		return;
+	}
 	if (mirror) {
 		mainOops.addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
 	} else {
@@ -306,6 +338,10 @@ function draw(update = true) {
 		ctx.translate(canvas.width, 0);
 		ctx.scale(-1, 1);
 		ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+	}
+
+	if (!mainOops) {
+		return;
 	}
 
 	if (update) {
@@ -531,7 +567,10 @@ function draw(update = true) {
 		// movementXSinceFacemeshUpdate += movementX;
 		// movementYSinceFacemeshUpdate += movementY;
 		if (facemeshEstimating) {
-			cameraFramesSinceFacemeshUpdate.push(getCameraImageData());
+			const imageData = getCameraImageData();
+			if (imageData) {
+				cameraFramesSinceFacemeshUpdate.push(imageData);
+			}
 			// limit this buffer size in case something goes wrong
 			if (cameraFramesSinceFacemeshUpdate.length > 500) {
 				// maybe just clear it entirely, because a partial buffer might not be useful
