@@ -169,7 +169,9 @@ cameraVideo.addEventListener('loadedmetadata', () => {
 		workerSyncedOops = new OOPS();
 	}
 });
-cameraVideo.addEventListener('canplay', () => {
+cameraVideo.addEventListener('play', () => {
+	ctrack = new clm.tracker();
+	ctrack.init();
 	ctrack.initFaceDetector(cameraVideo);
 	trackingStarted = true;
 });
