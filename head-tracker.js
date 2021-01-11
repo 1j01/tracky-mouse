@@ -170,6 +170,10 @@ cameraVideo.addEventListener('loadedmetadata', () => {
 	cameraVideo.height = cameraVideo.videoHeight;
 	canvas.width = cameraVideo.videoWidth;
 	canvas.height = cameraVideo.videoHeight;
+	debugFramesCanvas.width = cameraVideo.videoWidth;
+	debugFramesCanvas.height = cameraVideo.videoHeight;
+	debugPointsCanvas.width = cameraVideo.videoWidth;
+	debugPointsCanvas.height = cameraVideo.videoHeight;
 
 	mainOops = new OOPS();
 	if (useFacemesh) {
