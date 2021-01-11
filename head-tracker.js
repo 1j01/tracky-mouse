@@ -255,12 +255,8 @@ class OOPS {
 		// });
 	}
 	update(imageData) {
-		var xyswap = this.prevXY;
-		this.prevXY = this.curXY;
-		this.curXY = xyswap;
-		var pyrswap = this.prevPyramid;
-		this.prevPyramid = this.curPyramid;
-		this.curPyramid = pyrswap;
+		[this.prevXY, this.curXY] = [this.curXY, this.prevXY];
+		[this.prevPyramid, this.curPyramid] = [this.curPyramid, this.prevPyramid];
 
 		// these are options worth breaking out and exploring
 		var winSize = 20;
