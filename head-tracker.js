@@ -49,6 +49,7 @@ var facemeshOptions = {
 
 var facemeshLoaded = false;
 var facemeshEstimating = false;
+var facemeshRejectNext = 0;
 var facemeshPrediction;
 var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
@@ -115,6 +116,11 @@ var trackingStarted = false;
 const reset = ()=> {
 	trackingStarted = false;
 	cameraFramesSinceFacemeshUpdate.length = 0;
+	if (facemeshPrediction) {
+		// facemesh has a setting maxContinuousChecks that determines "How many frames to go without running
+		// the bounding box detector. Only relevant if maxFaces > 1. Defaults to 5."
+		facemeshRejectNext = 5;
+	}
 	facemeshPrediction = null;
 	useClmtrackr = true;
 	showClmtrackr = true;
@@ -362,9 +368,15 @@ function draw(update = true) {
 				// movementYSinceFacemeshUpdate = 0;
 				cameraFramesSinceFacemeshUpdate = [];
 				facemeshEstimateFaces().then((predictions) => {
-					const prevFaceInViewConfidence = facemeshPrediction ? facemeshPrediction.faceInViewConfidence : 0;
-					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
+
+					facemeshRejectNext -= 1;
+					if (facemeshRejectNext > 0) {
+						return;
+					}
+
+					facemeshPrediction = predictions[0]; // undefined if no faces found
+
 					useClmtrackr = false;
 					showClmtrackr = false;
 
