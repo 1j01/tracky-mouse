@@ -36,8 +36,8 @@ const SLOWMO = false;
 var debugTimeTravel = false;
 var mirror;
 
-var useClmtrackr = true;
-var showClmtrackr = useClmtrackr;
+var useClmTracking = true;
+var showClmTracking = useClmTracking;
 var useFacemesh = true;
 var facemeshOptions = {
 	maxContinuousChecks: 5,
@@ -109,12 +109,13 @@ mirrorCheckbox.onchange();
 sensitivityXSlider.onchange();
 sensitivityYSlider.onchange();
 
-var ctrack = new clm.tracker();
-ctrack.init();
-var trackingStarted = false;
+// TODO: avoid double init at startup
+var clmTracker = new clm.tracker();
+clmTracker.init();
+var clmTrackingStarted = false;
 
 const reset = ()=> {
-	trackingStarted = false;
+	clmTrackingStarted = false;
 	cameraFramesSinceFacemeshUpdate.length = 0;
 	if (facemeshPrediction) {
 		// facemesh has a setting maxContinuousChecks that determines "How many frames to go without running
@@ -122,8 +123,8 @@ const reset = ()=> {
 		facemeshRejectNext = 5;
 	}
 	facemeshPrediction = null;
-	useClmtrackr = true;
-	showClmtrackr = true;
+	useClmTracking = true;
+	showClmTracking = true;
 	pointsBasedOnFaceScore = 0;
 	faceScore = 0;
 };
@@ -176,10 +177,10 @@ cameraVideo.addEventListener('loadedmetadata', () => {
 	}
 });
 cameraVideo.addEventListener('play', () => {
-	ctrack = new clm.tracker();
-	ctrack.init();
-	ctrack.initFaceDetector(cameraVideo);
-	trackingStarted = true;
+	clmTracker = new clm.tracker();
+	clmTracker.init();
+	clmTracker.initFaceDetector(cameraVideo);
+	clmTrackingStarted = true;
 });
 
 canvas.width = defaultWidth;
@@ -356,11 +357,11 @@ function draw(update = true) {
 	}
 
 	if (update) {
-		if (trackingStarted) {
-			if (useClmtrackr || showClmtrackr) {
-				ctrack.track(cameraVideo);
-				face = ctrack.getCurrentPosition();
-				faceScore = ctrack.getScore();
+		if (clmTrackingStarted) {
+			if (useClmTracking || showClmTracking) {
+				clmTracker.track(cameraVideo);
+				face = clmTracker.getCurrentPosition();
+				faceScore = clmTracker.getScore();
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
@@ -377,8 +378,8 @@ function draw(update = true) {
 
 					facemeshPrediction = predictions[0]; // undefined if no faces found
 
-					useClmtrackr = false;
-					showClmtrackr = false;
+					useClmTracking = false;
+					showClmTracking = false;
 
 					if (!facemeshPrediction) {
 						return;
@@ -518,7 +519,7 @@ function draw(update = true) {
 			if (bad) {
 				ctx.strokeStyle = 'rgba(255,0,255)';
 			}
-			if (update && useClmtrackr) {
+			if (update && useClmTracking) {
 				pointsBasedOnFaceScore = faceScore;
 
 				// nostrils
@@ -550,12 +551,12 @@ function draw(update = true) {
 				});
 			}
 		} else {
-			if (update && useClmtrackr) {
+			if (update && useClmTracking) {
 				pointsBasedOnFaceScore -= 0.001;
 			}
 		}
-		if (showClmtrackr) {
-			ctrack.draw(canvas, undefined, undefined, true);
+		if (showClmTracking) {
+			clmTracker.draw(canvas, undefined, undefined, true);
 		}
 	}
 	if (debugTimeTravel) {
