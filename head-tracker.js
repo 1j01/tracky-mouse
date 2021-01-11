@@ -59,7 +59,7 @@ var workerSyncedOops;
 
 const frameCanvas = document.createElement("canvas");
 const frameCtx = frameCanvas.getContext("2d");
-const cameraDataScale = 1/5;
+const cameraDataScale = 1;
 const getCameraImageData = () => {
 	if (cameraVideo.videoWidth * cameraDataScale * cameraVideo.videoHeight * cameraDataScale < 1) {
 		return;
