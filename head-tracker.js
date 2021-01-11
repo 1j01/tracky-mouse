@@ -217,6 +217,37 @@ class OOPS {
 			epsilon, minEigen);
 		this.prunePoints();
 	}
+	draw() {
+		for (var i = 0; i < this.pointCount; i++) {
+			var pointOffset = i * 2;
+			var distMoved = Math.hypot(
+				this.prevXY[pointOffset] - this.curXY[pointOffset],
+				this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
+			);
+			if (distMoved >= 1) {
+				ctx.fillStyle = "lime";
+			} else {
+				ctx.fillStyle = "gray";
+			}
+			circle(this.curXY[pointOffset], this.curXY[pointOffset + 1], 3);
+		}
+	}
+	getMovement() {
+		var movementX = 0;
+		var movementY = 0;
+		var numMovements = 0;
+		for (var i = 0; i < this.pointCount; i++) {
+			var pointOffset = i * 2;
+			movementX += this.curXY[pointOffset] - this.prevXY[pointOffset];
+			movementY += this.curXY[pointOffset + 1] - this.prevXY[pointOffset + 1];
+			numMovements += 1;
+		}
+		if (numMovements > 0) {
+			movementX /= numMovements;
+			movementY /= numMovements;
+		}
+		return [movementX, movementY];
+	}
 }
 
 var mainOops = new OOPS();
@@ -446,30 +477,10 @@ function draw(update = true) {
 			ctrack.draw(canvas, undefined, undefined, true);
 		}
 	}
-	var movementX = 0;
-	var movementY = 0;
-	var numMovements = 0;
-	for (var i = 0; i < mainOops.pointCount; i++) {
-		var pointOffset = i * 2;
-		var distMoved = Math.hypot(
-			mainOops.prevXY[pointOffset] - mainOops.curXY[pointOffset],
-			mainOops.prevXY[pointOffset + 1] - mainOops.curXY[pointOffset + 1]
-		);
-		if (distMoved >= 1) {
-			ctx.fillStyle = "lime";
-		} else {
-			ctx.fillStyle = "gray";
-		}
-		movementX += mainOops.curXY[pointOffset] - mainOops.prevXY[pointOffset];
-		movementY += mainOops.curXY[pointOffset + 1] - mainOops.prevXY[pointOffset + 1];
-		numMovements += 1;
-		circle(mainOops.curXY[pointOffset], mainOops.curXY[pointOffset + 1], 3);
-	}
-	if (numMovements > 0) {
-		movementX /= numMovements;
-		movementY /= numMovements;
-	}
+	mainOops.draw();
 	if (update) {
+		var [movementX, movementY] = mainOops.getMovement();
+
 		mouseX -= movementX * sensitivityX * innerWidth;
 		mouseY += movementY * sensitivityY * innerHeight;
 
