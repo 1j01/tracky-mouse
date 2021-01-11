@@ -116,6 +116,8 @@ const reset = ()=> {
 	trackingStarted = false;
 	cameraFramesSinceFacemeshUpdate.length = 0;
 	facemeshPrediction = null;
+	useClmtrackr = true;
+	showClmtrackr = true;
 	pointsBasedOnFaceScore = 0;
 	faceScore = 0;
 };
