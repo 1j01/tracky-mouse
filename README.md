@@ -19,7 +19,7 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Project name? :)
 - Get latency compensation for Worker results fully working
 	- No lag
-		- dedupe grayscale() computation
+		- dedupe grayscale() computation...
 	- Adding AND removing points
 - Pose invariance (smiling etc.)
 	- Simplest might be to just use the bridge of your nose

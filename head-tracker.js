@@ -210,6 +210,22 @@ debugPointsCanvas.width = canvas.width;
 debugPointsCanvas.height = canvas.height;
 const debugPointsCtx = debugPointsCanvas.getContext("2d");
 
+// function getPyramidData(pyramid) {
+// 	const array = new Float32Array(pyramid.data.reduce((sum, matrix)=> sum + matrix.buffer.f32.length, 0));
+// 	let offset = 0;
+// 	for (const matrix of pyramid.data) {
+// 		copy matrix.buffer.f32 into array starting at offset;
+// 		offset += matrix.buffer.f32.length;
+// 	}
+// 	return array;
+// }
+// function setPyramidData(pyramid, array) {
+// 	let offset = 0;
+// 	for (const matrix of pyramid.data) {
+// 		copy portion of array starting at offset into matrix.buffer.f32
+// 		offset += matrix.buffer.f32.length;
+// 	}
+// }
 
 // Object Oriented Programming Sucks
 // or Optical flOw Points System
