@@ -125,7 +125,8 @@ useCameraButton.onclick = () => {
 		audio: false,
 		video: {
 			width: defaultWidth,
-			height: defaultHeight
+			height: defaultHeight,
+			facingMode: "user",
 		}
 	}).then((stream) => {
 		reset();
