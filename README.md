@@ -32,6 +32,8 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 		- Another application may be using it
 		- Try unplugging and plugging it back in
 		- Make sure you can use your camera with another application (but close this application before trying to get it to work in here again)
+		- Correct camera
+			- [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
 	- Disabling camera autofocus maybe
 	- Positioning the camera and yourself
 		- Above or below the screen is fine but you should be centered so the pointer doesn't move left/right too much when you want it to go up or down
@@ -48,6 +50,7 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 		- If you move yourself or your camera, you may want to adjust the sensitivity.
 		- If you're further away from the camera, you'll want a higher sensitivity.
 			- Would it make sense to scale this to your head size in the camera? Maybe not with the innacurate face tracker, but with the face tracker... but you probably wouldn't want it to switch setting scaling schemes suddenly
+			- It could detect if your head size significantly changes (and is stable for a period of time) from what it has been (stably for a period of time), and alert you, suggesting changing the setting, maybe even suggesting a value
 - Use [YAPE](https://inspirit.github.io/jsfeat/sample_yape.html)? MAYBE?
 	- fallback to random points or points based on face detection geometry if less than N points
 	- Is this actually better than basing it on facial geometry?? It seems like using facial geometry is pretty reasonable
