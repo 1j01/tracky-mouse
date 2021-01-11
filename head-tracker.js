@@ -55,18 +55,21 @@ var facemeshEstimateFaces;
 var faceInViewConfidenceThreshold = 0.7;
 var pointsBasedOnFaceInViewConfidence = 0;
 
+// scale of size of frames that are passed to worker and then computed several at once when backtracking for latency compensation
+// reducing this makes it much more likely to drop points and thus not work
+const frameScaleForWorker = 1;
+
 var mainOops;
 var workerSyncedOops;
 
 const frameCanvas = document.createElement("canvas");
 const frameCtx = frameCanvas.getContext("2d");
-const cameraDataScale = 1;
 const getCameraImageData = () => {
-	if (cameraVideo.videoWidth * cameraDataScale * cameraVideo.videoHeight * cameraDataScale < 1) {
+	if (cameraVideo.videoWidth * frameScaleForWorker * cameraVideo.videoHeight * frameScaleForWorker < 1) {
 		return;
 	}
-	frameCanvas.width = cameraVideo.videoWidth * cameraDataScale;
-	frameCanvas.height = cameraVideo.videoHeight * cameraDataScale;
+	frameCanvas.width = cameraVideo.videoWidth * frameScaleForWorker;
+	frameCanvas.height = cameraVideo.videoHeight * frameScaleForWorker;
 	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
 	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
 };
@@ -120,7 +123,7 @@ const reset = ()=> {
 	if (facemeshPrediction) {
 		// facemesh has a setting maxContinuousChecks that determines "How many frames to go without running
 		// the bounding box detector. Only relevant if maxFaces > 1. Defaults to 5."
-		facemeshRejectNext = 5;
+		facemeshRejectNext = facemeshOptions.maxContinuousChecks;
 	}
 	facemeshPrediction = null;
 	useClmTracking = true;
@@ -386,8 +389,8 @@ function draw(update = true) {
 					}
 					// this applies to facemeshPrediction.annotations as well, which references the same points
 					facemeshPrediction.scaledMesh.forEach((point) => {
-						point[0] /= cameraDataScale;
-						point[1] /= cameraDataScale;
+						point[0] /= frameScaleForWorker;
+						point[1] /= frameScaleForWorker;
 					});
 
 					// time travel latency compensation
