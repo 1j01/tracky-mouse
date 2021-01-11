@@ -31,6 +31,7 @@ var faceScore = 0;
 var faceScoreThreshold = 0.5;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
+var debugTimeTravel = false;
 var mirror;
 
 var useClmtrackr = true;
@@ -141,6 +142,17 @@ canvas.height = h;
 cameraVideo.width = w;
 cameraVideo.height = h;
 
+const debugFramesCanvas = document.createElement("canvas");
+debugFramesCanvas.width = canvas.width;
+debugFramesCanvas.height = canvas.height;
+const debugFramesCtx = debugFramesCanvas.getContext("2d");
+
+const debugPointsCanvas = document.createElement("canvas");
+debugPointsCanvas.width = canvas.width;
+debugPointsCanvas.height = canvas.height;
+const debugPointsCtx = debugPointsCanvas.getContext("2d");
+
+
 // Object Oriented Programming Sucks
 // or Optical flOw Points System
 class OOPS {
@@ -217,7 +229,7 @@ class OOPS {
 			epsilon, minEigen);
 		this.prunePoints();
 	}
-	draw() {
+	draw(ctx) {
 		for (var i = 0; i < this.pointCount; i++) {
 			var pointOffset = i * 2;
 			var distMoved = Math.hypot(
@@ -229,7 +241,7 @@ class OOPS {
 			} else {
 				ctx.fillStyle = "gray";
 			}
-			circle(this.curXY[pointOffset], this.curXY[pointOffset + 1], 3);
+			circle(ctx, this.curXY[pointOffset], this.curXY[pointOffset + 1], 3);
 		}
 	}
 	getMovement() {
@@ -285,6 +297,7 @@ function animate() {
 
 function draw(update = true) {
 	ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
+	ctx.clearRect(0, 0, canvas.width, canvas.height); // in case there's no footage
 	ctx.save();
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -327,7 +340,9 @@ function draw(update = true) {
 					// keep a history of camera frames since the prediciton was requested,
 					// and analyze optical flow of new points over that history
 
-					workerSyncedOops.filterPoints(()=> false); // empty points (could probably also just set pointCount = 0;
+					// mainOops.filterPoints(() => false); // for DEBUG, empty points (could probably also just set pointCount = 0;
+
+					workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;
 
 					const { annotations } = facemeshPrediction;
 					// nostrils
@@ -339,7 +354,20 @@ function draw(update = true) {
 					// workerSyncedOops.addPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
 					// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
-					cameraFramesSinceFacemeshUpdate.forEach((imageData) => {
+					// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
+					// debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
+					// debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
+					cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
+						if (debugTimeTravel) {
+							debugFramesCtx.save();
+							debugFramesCtx.globalAlpha = 0.1;
+							// debugFramesCtx.globalCompositeOperation = index % 2 === 0 ? "xor" : "xor";
+							frameCtx.putImageData(imageData, 0, 0);
+							// debugFramesCtx.putImageData(imageData, 0, 0);
+							debugFramesCtx.drawImage(frameCanvas, 0, 0, canvas.width, canvas.height);
+							debugFramesCtx.restore();
+							workerSyncedOops.draw(debugPointsCtx);
+						}
 						workerSyncedOops.update(imageData);
 					});
 
@@ -477,7 +505,15 @@ function draw(update = true) {
 			ctrack.draw(canvas, undefined, undefined, true);
 		}
 	}
-	mainOops.draw();
+	if (debugTimeTravel) {
+		ctx.save();
+		ctx.globalAlpha = 0.8;
+		ctx.drawImage(debugFramesCanvas, 0, 0);
+		ctx.restore();
+		ctx.drawImage(debugPointsCanvas, 0, 0);
+	}
+	mainOops.draw(ctx);
+
 	if (update) {
 		var [movementX, movementY] = mainOops.getMovement();
 
@@ -522,7 +558,7 @@ function draw(update = true) {
 	ctx.restore();
 }
 
-function circle(x, y, r) {
+function circle(ctx, x, y, r) {
 	ctx.beginPath();
 	ctx.arc(x, y, r, 0, Math.PI * 2);
 	ctx.fill();
