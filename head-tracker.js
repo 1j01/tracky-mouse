@@ -239,6 +239,7 @@ function draw(update = true) {
 				movementXSinceFacemeshUpdate = 0;
 				movementYSinceFacemeshUpdate = 0;
 				facemeshEstimateFaces().then((predictions) => {
+					const prevFaceInViewConfidence = facemeshPrediction ? facemeshPrediction.faceInViewConfidence : 0;
 					facemeshPrediction = predictions[0]; // may be undefined
 					facemeshEstimating = false;
 					useClmtrackr = false;
@@ -250,10 +251,13 @@ function draw(update = true) {
 					// naive latency compensation
 					// TODO: time travel (keep a history of camera frames since the prediciton was requested, and analyze optical flow of new points over that history)
 					// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
-					facemeshPrediction.scaledMesh.forEach((point) => {
-						point[0] += movementXSinceFacemeshUpdate;
-						point[1] += movementYSinceFacemeshUpdate;
-					});
+					// Note: This latency compensation only really works if it's already tracking well
+					if (prevFaceInViewConfidence > 0.99) {
+						facemeshPrediction.scaledMesh.forEach((point) => {
+							point[0] += movementXSinceFacemeshUpdate;
+							point[1] += movementYSinceFacemeshUpdate;
+						});
+					}
 
 					pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
