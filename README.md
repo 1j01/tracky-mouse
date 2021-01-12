@@ -17,6 +17,10 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 ## TODO
 
 - Project name? :)
+- Get latency compensation for Worker results fully working
+	- No lag
+		- dedupe grayscale() computation
+	- Adding AND removing points
 - Pose invariance (smiling etc.)
 	- Simplest might be to just use the bridge of your nose
 		- Points can disappear due to pruning, but we could use other points as a fallback, but just use a nose point as long as it exists?
