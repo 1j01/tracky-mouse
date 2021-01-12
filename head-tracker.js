@@ -16,6 +16,13 @@ var cameraVideo = document.createElement('video');
 // required to work in iOS 11 & up:
 cameraVideo.setAttribute('playsinline', '');
 
+var stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.top = '0px';
+stats.domElement.style.right = '0px';
+stats.domElement.style.left = '';
+document.body.appendChild(stats.domElement);
+
 var defaultWidth = 640;
 var defaultHeight = 480;
 var maxPoints = 1000;
@@ -636,6 +643,7 @@ function draw(update = true) {
 	ctx.stroke();
 	ctx.fill();
 	ctx.restore();
+	stats.update();
 }
 
 function circle(ctx, x, y, r) {
