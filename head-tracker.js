@@ -243,6 +243,11 @@ class OOPS {
 					this.prevXY[outputOffset + 1] = this.prevXY[inputOffset + 1];
 				}
 				outputPointIndex++;
+			} else {
+				debugPointsCtx.fillStyle = "red";
+				var inputOffset = inputPointIndex * 2;
+				circle(debugPointsCtx, this.curXY[inputPointIndex], this.curXY[inputPointIndex + 1], 2);
+				debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputPointIndex], this.curXY[inputPointIndex + 1]);
 			}
 		}
 		this.pointCount = outputPointIndex;
