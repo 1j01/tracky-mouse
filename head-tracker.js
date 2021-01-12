@@ -112,7 +112,6 @@ mirrorCheckbox.onchange();
 sensitivityXSlider.onchange();
 sensitivityYSlider.onchange();
 
-// TODO: avoid double init at startup
 var clmTracker = new clm.tracker();
 clmTracker.init();
 var clmTrackingStarted = false;
@@ -184,8 +183,7 @@ cameraVideo.addEventListener('loadedmetadata', () => {
 	}
 });
 cameraVideo.addEventListener('play', () => {
-	clmTracker = new clm.tracker();
-	clmTracker.init();
+	clmTracker.reset();
 	clmTracker.initFaceDetector(cameraVideo);
 	clmTrackingStarted = true;
 });
