@@ -116,7 +116,7 @@ var clmTracker = new clm.tracker();
 clmTracker.init();
 var clmTrackingStarted = false;
 
-const reset = ()=> {
+const reset = () => {
 	clmTrackingStarted = false;
 	cameraFramesSinceFacemeshUpdate.length = 0;
 	if (facemeshPrediction) {
