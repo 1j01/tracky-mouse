@@ -246,8 +246,14 @@ class OOPS {
 			} else {
 				debugPointsCtx.fillStyle = "red";
 				var inputOffset = inputPointIndex * 2;
-				circle(debugPointsCtx, this.curXY[inputPointIndex], this.curXY[inputPointIndex + 1], 2);
-				debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputPointIndex], this.curXY[inputPointIndex + 1]);
+				circle(debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
+				debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+				// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+				ctx.strokeStyle = ctx.fillStyle;
+				ctx.beginPath();
+				ctx.moveTo(this.prevXY[inputOffset], this.prevXY[inputOffset + 1]);
+				ctx.lineTo(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+				ctx.stroke();
 			}
 		}
 		this.pointCount = outputPointIndex;
@@ -296,6 +302,11 @@ class OOPS {
 			// 	ctx.fillStyle = "gray";
 			// }
 			circle(ctx, this.curXY[pointOffset], this.curXY[pointOffset + 1], 3);
+			ctx.strokeStyle = ctx.fillStyle;
+			ctx.beginPath();
+			ctx.moveTo(this.prevXY[pointOffset], this.prevXY[pointOffset + 1]);
+			ctx.lineTo(this.curXY[pointOffset], this.curXY[pointOffset + 1]);
+			ctx.stroke();
 		}
 	}
 	getMovement() {
@@ -418,7 +429,9 @@ function draw(update = true) {
 
 					// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
 					debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
-					debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
+					setTimeout(() => {
+						debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
+					}, 900)
 					cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
 						if (debugTimeTravel) {
 							debugFramesCtx.save();
