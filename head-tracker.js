@@ -328,17 +328,17 @@ canvas.addEventListener('click', (event) => {
 });
 
 function maybeAddPoint(oops, x, y) {
-	for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
-		var pointOffset = pointIndex * 2;
-		var distance = Math.hypot(
-			x - oops.curXY[pointOffset],
-			y - oops.curXY[pointOffset + 1]
-		);
-		// If it's useful to have this higher, it should probably be based on the size of the face
-		if (distance < 8) {
-			return;
-		}
-	}
+	// for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
+	// 	var pointOffset = pointIndex * 2;
+	// 	var distance = Math.hypot(
+	// 		x - oops.curXY[pointOffset],
+	// 		y - oops.curXY[pointOffset + 1]
+	// 	);
+	// 	// If it's useful to have this higher, it should probably be based on the size of the face
+	// 	if (distance < 8) {
+	// 		return;
+	// 	}
+	// }
 	oops.addPoint(x, y);
 }
 
