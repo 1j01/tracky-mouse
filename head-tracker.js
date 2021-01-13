@@ -38,9 +38,11 @@ var sensitivityY;
 var face;
 var faceScore = 0;
 var faceScoreThreshold = 0.5;
+var faceConvergence = 0;
+var faceConvergenceThreshold = 50;
 var pointsBasedOnFaceScore = 0;
 const SLOWMO = false;
-var debugTimeTravel = true;
+var debugTimeTravel = false;
 var mirror;
 
 var useClmTracking = true;
@@ -136,6 +138,7 @@ const reset = () => {
 	showClmTracking = true;
 	pointsBasedOnFaceScore = 0;
 	faceScore = 0;
+	faceConvergence = 0;
 };
 
 useCameraButton.onclick = () => {
@@ -402,6 +405,7 @@ function draw(update = true) {
 				clmTracker.track(cameraVideo);
 				face = clmTracker.getCurrentPosition();
 				faceScore = clmTracker.getScore();
+				faceConvergence = Math.pow(clmTracker.getConvergence(), 0.5);
 			}
 			if (facemeshLoaded && !facemeshEstimating) {
 				facemeshEstimating = true;
@@ -650,14 +654,18 @@ function draw(update = true) {
 	ctx.lineWidth = 3;
 	ctx.font = "20px sans-serif";
 	ctx.beginPath();
+	const text3 = "Face convergence score: " + ((useFacemesh && facemeshPrediction) ? "N/A" : faceConvergence.toFixed(4));
 	const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
 	const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
 	ctx.strokeText(text1, 50, 50);
 	ctx.fillText(text1, 50, 50);
 	ctx.strokeText(text2, 50, 70);
 	ctx.fillText(text2, 50, 70);
-	ctx.stroke();
-	ctx.fill();
+	ctx.strokeText(text3, 50, 170);
+	ctx.fillText(text3, 50, 170);
+	ctx.fillStyle = "lime";
+	ctx.fillRect(0, 150, faceConvergence, 5);
+	ctx.fillRect(0, 0, faceScore * canvas.width, 5);
 	ctx.restore();
 	stats.update();
 }
