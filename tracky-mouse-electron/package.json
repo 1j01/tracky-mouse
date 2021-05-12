@@ -1,9 +1,35 @@
 {
   "name": "tracky-mouse-electron",
-  "productName": "tracky-mouse-electron",
+  "productName": "Tracky Mouse",
   "version": "1.0.0",
-  "description": "My Electron application description",
-  "main": "src/index.js",
+  "description": "Control your computer with your head movements",
+  "license": "MIT",
+  "repository": "1j01/tracky-mouse",
+  "author": {
+    "name": "Isaiah Odhner",
+    "email": "isaiahodhner@gmail.com",
+    "url": "https://isaiahodhner.io"
+  },
+  "keywords": [
+    "camera-mouse",
+    "mouse",
+    "camera",
+    "webcam",
+    "head-tracker",
+    "head-tracking",
+    "face-tracker",
+    "face-tracking",
+    "headmouse",
+    "facial-mouse",
+    "accessibility",
+    "cursor",
+    "pointer",
+    "pointing",
+    "input-method",
+    "hands-free",
+    "handsfree",
+    "desktop-automation"
+  ],
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -11,12 +37,6 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": [],
-  "author": {
-    "name": "Isaiah Odhner",
-    "email": "isaiahodhner@gmail.com"
-  },
-  "license": "MIT",
   "config": {
     "forge": {
       "packagerConfig": {},

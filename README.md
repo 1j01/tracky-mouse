@@ -1,4 +1,8 @@
-# Head Tracker
+# Tracky Mouse
+
+Control your computer with your head movements.
+
+Tracky Mouse is intended to be a complete UI for head tracking, similar to eViacam, but embeddable on the web in applications (such as [JS Paint, with its Eye Gaze Mode](https://jspaint.app/#eye-gaze-mode), which I might rename Hands-Free mode), as well as downloadable as an application to use to control your entire computer.
 
 # Libraries Used
 
@@ -16,7 +20,6 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 
 ## TODO
 
-- Project name? :)
 - Get latency compensation for Worker results fully working
 	- No lag
 		- dedupe grayscale() computation...
