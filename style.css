@@ -6,3 +6,19 @@
 	position: fixed;
 	transform: translate(-50%, -50%);
 }
+body {
+	background-color: white;
+	color: black;
+}
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: black;
+		color: white;
+	}
+	a:link {
+		color: aquamarine;
+	}
+	a:visited {
+		color: rgb(197, 127, 255);
+	}
+}
