@@ -6,16 +6,24 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+// Needed for RobotJS native module in renderer process (could be moved to main with IPC)
+app.allowRendererProcessReuse = false;
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      preload: path.join(app.getAppPath(), 'src/preload.js'),
+    },
     // icon: `${__dirname}/icon/tracky-mouse-logo.svg`,
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  // TODO: for build, copy or symlink the resources inside the electron app folder somewhere,
+  // and point to this different location.
+  mainWindow.loadFile(path.join(__dirname, '../../index.html'));
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

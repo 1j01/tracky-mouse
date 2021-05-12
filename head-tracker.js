@@ -621,11 +621,22 @@ function draw(update = true) {
 	if (update) {
 		var [movementX, movementY] = mainOops.getMovement();
 
-		mouseX -= movementX * sensitivityX * innerWidth;
-		mouseY += movementY * sensitivityY * innerHeight;
+		if (window.moveMouse) {
+			mouseX -= movementX * sensitivityX * screen.width;
+			mouseY += movementY * sensitivityY * screen.height;
 
-		mouseX = Math.min(Math.max(0, mouseX), innerWidth);
-		mouseY = Math.min(Math.max(0, mouseY), innerHeight);
+			mouseX = Math.min(Math.max(0, mouseX), screen.width);
+			mouseY = Math.min(Math.max(0, mouseY), screen.height);
+			
+			window.moveMouse(~~mouseX, ~~mouseY);
+
+		} else {
+			mouseX -= movementX * sensitivityX * innerWidth;
+			mouseY += movementY * sensitivityY * innerHeight;
+
+			mouseX = Math.min(Math.max(0, mouseX), innerWidth);
+			mouseY = Math.min(Math.max(0, mouseY), innerHeight);
+		}
 
 		mouseEl.style.left = `${mouseX}px`;
 		mouseEl.style.top = `${mouseY}px`;
