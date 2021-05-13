@@ -173,6 +173,9 @@ useCameraButton.onclick = () => {
 		console.log(error);
 	});
 };
+if (window.moveMouse) {
+	useCameraButton.click();
+}
 useDemoFootageButton.onclick = () => {
 	reset();
 	cameraVideo.srcObject = null;
