@@ -52,17 +52,19 @@ module.exports = {
 						reject(error);
 						return;
 					}
+					const copyPromises = [];
 					for (const file of files) {
 						const newFile = path.join(toFolder, path.relative(fromFolder, file));
 						if (!fs.statSync(file).isDirectory()) {
 							await fs.promises.mkdir(path.dirname(newFile), { recursive: true });
 							logFile.write("Copy: " + file + "\n");
 							logFile.write("To: " + newFile + "\n");
-							await fs.promises.copyFile(file, newFile);
+							copyPromises.push(fs.promises.copyFile(file, newFile));
 						} else {
 							// logFile.write("Dir: " + file + "\n");
 						}
 					}
+					await Promise.all(copyPromises);
 					resolve();
 				});
 			});
