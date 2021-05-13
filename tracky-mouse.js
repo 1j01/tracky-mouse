@@ -43,6 +43,7 @@ var faceScoreThreshold = 0.5;
 var faceConvergence = 0;
 var faceConvergenceThreshold = 50;
 var pointsBasedOnFaceScore = 0;
+var paused = false;
 const SLOWMO = false;
 var debugTimeTravel = false;
 var mirror;
@@ -385,7 +386,7 @@ function maybeAddPoint(oops, x, y) {
 
 function animate() {
 	requestAnimationFrame(animate);
-	draw(!SLOWMO);
+	draw(!SLOWMO && !paused);
 }
 
 function draw(update = true) {
@@ -712,4 +713,13 @@ function circle(ctx, x, y, r) {
 animate();
 if (SLOWMO) {
 	setInterval(draw, 200);
+}
+
+if (typeof onShortcut !== "undefined") {
+	onShortcut((shortcutType) => {
+		// console.log("onShortcut", shortcutType);
+		if (shortcutType === "toggle-tracking") {
+			paused = !paused;
+		}
+	});
 }
