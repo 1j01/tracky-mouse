@@ -44,6 +44,7 @@ var faceConvergence = 0;
 var faceConvergenceThreshold = 50;
 var pointsBasedOnFaceScore = 0;
 var paused = false;
+var mouseNeedsInitPos = true;
 const SLOWMO = false;
 var debugTimeTravel = false;
 var showDebugText = false;
@@ -647,14 +648,17 @@ function draw(update = true) {
 
 		if (!paused) {
 			if (window.moveMouse) {
-				mouseX -= deltaX * screen.width;
-				mouseY += deltaY * screen.height;
+				if (mouseNeedsInitPos) {
+					initMousePos();
+				} else {
+					mouseX -= deltaX * screen.width;
+					mouseY += deltaY * screen.height;
 
-				mouseX = Math.min(Math.max(0, mouseX), screen.width);
-				mouseY = Math.min(Math.max(0, mouseY), screen.height);
+					mouseX = Math.min(Math.max(0, mouseX), screen.width);
+					mouseY = Math.min(Math.max(0, mouseY), screen.height);
 				
-				window.moveMouse(~~mouseX, ~~mouseY);
-
+					window.moveMouse(~~mouseX, ~~mouseY);
+				}
 			} else {
 				mouseX -= deltaX * innerWidth;
 				mouseY += deltaY * innerHeight;
@@ -725,6 +729,18 @@ if (typeof onShortcut !== "undefined") {
 		// console.log("onShortcut", shortcutType);
 		if (shortcutType === "toggle-tracking") {
 			paused = !paused;
+			mouseNeedsInitPos = true;
+			// if (!paused) {
+			// 	initMousePos();
+			// }
 		}
 	});
+}
+
+function initMousePos() {
+	// TODO: option to get initial mouse position instead of set it to center of screen
+	mouseX = screen.width / 2;
+	mouseY = screen.height / 2;
+	window.moveMouse(~~mouseX, ~~mouseY);
+	mouseNeedsInitPos = false;
 }
