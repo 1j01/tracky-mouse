@@ -9,6 +9,12 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // Needed for RobotJS native module in renderer process (could be moved to main with IPC)
 app.allowRendererProcessReuse = false;
 
+// Allow recovering from WebGL crash unlimited times.
+// (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
+// Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
+app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
+
+
 const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
 
 let mainWindow;

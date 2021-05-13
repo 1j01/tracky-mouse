@@ -63,6 +63,7 @@ var facemeshOptions = {
 };
 
 var facemeshLoaded = false;
+var facemeshFirstEstimation = true;
 var facemeshEstimating = false;
 var facemeshRejectNext = 0;
 var facemeshPrediction;
@@ -91,8 +92,15 @@ var workerSyncedOops;
 // 	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
 // };
 
-var currentCameraImageData;
-if (useFacemesh) {
+let currentCameraImageData;
+let facemeshWorker;
+const initFacemeshWorker = () => {
+	if (facemeshWorker) {
+		facemeshWorker.terminate();
+	}
+	facemeshEstimating = false;
+	facemeshFirstEstimation = true;
+	facemeshLoaded = false;
 	facemeshWorker = new Worker("./facemesh.worker.js");
 	facemeshWorker.addEventListener("message", (e) => {
 		// console.log('Message received from worker', e.data);
@@ -117,6 +125,10 @@ if (useFacemesh) {
 	facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
 };
 
+if (useFacemesh) {
+	initFacemeshWorker();
+};
+
 sensitivityXSlider.onchange = () => {
 	sensitivityX = sensitivityXSlider.value / 1000;
 };
@@ -134,7 +146,8 @@ sensitivityXSlider.onchange();
 sensitivityYSlider.onchange();
 accelerationSlider.onchange();
 
-var clmTracker = new clm.tracker();
+// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
+var clmTracker = new clm.tracker({ useWebGL: false });
 clmTracker.init();
 var clmTrackingStarted = false;
 
@@ -440,7 +453,14 @@ function draw(update = true) {
 	if (update) {
 		if (clmTrackingStarted) {
 			if (useClmTracking || showClmTracking) {
-				clmTracker.track(cameraVideo);
+				try {
+					clmTracker.track(cameraVideo);
+				} catch (error) {
+					console.warn("Error in clmTracker.track()", error);
+					if (clmTracker.getCurrentParameters().includes(NaN)) {
+						console.warn("NaNs creeped in.");
+					}
+				}
 				face = clmTracker.getCurrentPosition();
 				faceScore = clmTracker.getScore();
 				faceConvergence = Math.pow(clmTracker.getConvergence(), 0.5);
@@ -450,8 +470,61 @@ function draw(update = true) {
 				// movementXSinceFacemeshUpdate = 0;
 				// movementYSinceFacemeshUpdate = 0;
 				cameraFramesSinceFacemeshUpdate = [];
+				// If I switch virtual console desktop sessions in Ubuntu with Ctrl+Alt+F1 (and back with Ctrl+Alt+F2),
+				// WebGL context is lost, which breaks facemesh (and clmTracker if useWebGL is not false)
+				// Error: Size(8192) must match the product of shape 0, 0, 0
+				//     at inferFromImplicitShape (tf.js:14142)
+				//     at Object.reshape$3 [as kernelFunc] (tf.js:110368)
+				//     at kernelFunc (tf.js:17241)
+				//     at tf.js:17334
+				//     at Engine.scopedRun (tf.js:17094)
+				//     at Engine.runKernelFunc (tf.js:17328)
+				//     at Engine.runKernel (tf.js:17171)
+				//     at reshape_ (tf.js:25875)
+				//     at reshape__op (tf.js:18348)
+				//     at executeOp (tf.js:85396)
+				// WebGL: CONTEXT_LOST_WEBGL: loseContext: context lost
+
+				// Note that the first estimation from facemesh often takes a while,
+				// and we don't want to continuously terminate the worker as it's working on those first results.
+				// And also, for the first estimate it hasn't actually disabled clmtracker yet, so it's fine if it's a long timeout.
+				const fallbackTimeout = setTimeout(() => {
+					if (!useClmTracking) {
+						reset();
+						clmTracker.init();
+						clmTracker.reset();
+						clmTracker.initFaceDetector(cameraVideo);
+						clmTrackingStarted = true;
+						console.warn("Falling back to clmtracker");
+					}
+					// If you've switched desktop sessions, it will presuably fail to get a new webgl context until you've switched back
+					// Is this setInterval useful, vs just starting the worker?
+					// It probably has a faster cycle, with the code as it is now, but maybe not inherently.
+					// TODO: is there a really bad case where this setInterval starts piling up?
+					// TODO: do the extra getContext() calls add to a GPU process crash limit
+					// that makes it only able to recover a couple times (outside the electron app)?
+					// For electron, I set chromium flag --disable-gpu-process-crash-limit so it can recover unlimited times.
+					// TODO: there's still the case of WebGL backend failing to initialize NOT due to the process crash limit,
+					// where it'd be good to have it try again (maybe with exponential falloff?)
+					// (I think I can move my fallbackTimeout code into/around `initFacemeshWorker` and `facemeshEstimateFaces`)
+
+					const iid = setInterval(() => {
+						try {
+							// Once we can create a webgl2 canvas...
+							document.createElement("canvas").getContext("webgl2");
+							clearInterval(iid);
+							// It's worth trying to re-initialize...
+							setTimeout(() => {
+								console.warn("Re-initializing facemesh worker");
+								initFacemeshWorker();
+								facemeshRejectNext = 1; // or more?
+							}, 1000);
+						} catch (e) { }
+					}, 500);
+				}, facemeshFirstEstimation ? 20000 : 2000);
 				facemeshEstimateFaces().then((predictions) => {
 					facemeshEstimating = false;
+					facemeshFirstEstimation = false;
 
 					facemeshRejectNext -= 1;
 					if (facemeshRejectNext > 0) {
@@ -462,6 +535,7 @@ function draw(update = true) {
 
 					useClmTracking = false;
 					showClmTracking = false;
+					clearTimeout(fallbackTimeout);
 
 					if (!facemeshPrediction) {
 						return;
@@ -577,6 +651,7 @@ function draw(update = true) {
 					});
 				}, () => {
 					facemeshEstimating = false;
+					facemeshFirstEstimation = false;
 				});
 			}
 		}
@@ -677,7 +752,7 @@ function draw(update = true) {
 		// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 		// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
 		var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
-		
+
 		var distance = Math.hypot(movementX, movementY);
 		var deltaX = accelerate(movementX * sensitivityX, distance);
 		var deltaY = accelerate(movementY * sensitivityY, distance);
