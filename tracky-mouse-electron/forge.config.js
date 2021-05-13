@@ -45,10 +45,13 @@ module.exports = {
 						"**/private/**",
 					]
 				}, async (error, files) => {
-					logFile.write("glob callback, files:\n" + JSON.stringify(files) + "\n\n");
+					logFile.write(`glob callback, files:\n${JSON.stringify(files)}\n\n`);
+
+					logFile.write(`Deleting ${toFolder}\n\n`);
+					await fs.promises.rmdir(toFolder, { recursive: true });
 
 					if (error) {
-						logFile.write("Failed to copy app files:\n" + error);
+						logFile.write(`Failed to copy app files:\n${error}`);
 						reject(error);
 						return;
 					}
@@ -57,11 +60,9 @@ module.exports = {
 						const newFile = path.join(toFolder, path.relative(fromFolder, file));
 						if (!fs.statSync(file).isDirectory()) {
 							await fs.promises.mkdir(path.dirname(newFile), { recursive: true });
-							logFile.write("Copy: " + file + "\n");
-							logFile.write("To: " + newFile + "\n");
+							logFile.write(`Copy: ${file}\n`);
+							logFile.write(`To: ${newFile}\n`);
 							copyPromises.push(fs.promises.copyFile(file, newFile));
-						} else {
-							// logFile.write("Dir: " + file + "\n");
 						}
 					}
 					await Promise.all(copyPromises);
