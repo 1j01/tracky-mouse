@@ -387,7 +387,7 @@ function maybeAddPoint(oops, x, y) {
 
 function animate() {
 	requestAnimationFrame(animate);
-	draw(!SLOWMO && !paused);
+	draw(!SLOWMO);
 }
 
 function draw(update = true) {
@@ -645,21 +645,23 @@ function draw(update = true) {
 			return;
 		}
 
-		if (window.moveMouse) {
-			mouseX -= deltaX * screen.width;
-			mouseY += deltaY * screen.height;
+		if (!paused) {
+			if (window.moveMouse) {
+				mouseX -= deltaX * screen.width;
+				mouseY += deltaY * screen.height;
 
-			mouseX = Math.min(Math.max(0, mouseX), screen.width);
-			mouseY = Math.min(Math.max(0, mouseY), screen.height);
-			
-			window.moveMouse(~~mouseX, ~~mouseY);
+				mouseX = Math.min(Math.max(0, mouseX), screen.width);
+				mouseY = Math.min(Math.max(0, mouseY), screen.height);
+				
+				window.moveMouse(~~mouseX, ~~mouseY);
 
-		} else {
-			mouseX -= deltaX * innerWidth;
-			mouseY += deltaY * innerHeight;
+			} else {
+				mouseX -= deltaX * innerWidth;
+				mouseY += deltaY * innerHeight;
 
-			mouseX = Math.min(Math.max(0, mouseX), innerWidth);
-			mouseY = Math.min(Math.max(0, mouseY), innerHeight);
+				mouseX = Math.min(Math.max(0, mouseX), innerWidth);
+				mouseY = Math.min(Math.max(0, mouseY), innerHeight);
+			}
 		}
 
 		mouseEl.style.left = `${mouseX}px`;
