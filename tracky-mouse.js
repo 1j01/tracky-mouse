@@ -1,6 +1,7 @@
 var mirrorCheckbox = document.getElementById("mirror");
 var sensitivityXSlider = document.getElementById("sensitivity-x");
 var sensitivityYSlider = document.getElementById("sensitivity-y");
+var accelerationSlider = document.getElementById("acceleration");
 var useCameraButton = document.getElementById("use-camera");
 var useDemoFootageButton = document.getElementById("use-demo");
 
@@ -35,6 +36,7 @@ var prevMovementY = 0;
 var cameraFramesSinceFacemeshUpdate = [];
 var sensitivityX;
 var sensitivityY;
+var acceleration;
 var face;
 var faceScore = 0;
 var faceScoreThreshold = 0.5;
@@ -114,12 +116,16 @@ sensitivityXSlider.onchange = () => {
 sensitivityYSlider.onchange = () => {
 	sensitivityY = sensitivityYSlider.value / 1000;
 };
+accelerationSlider.onchange = () => {
+	acceleration = accelerationSlider.value / 100;
+};
 mirrorCheckbox.onchange = () => {
 	mirror = mirrorCheckbox.checked;
 };
 mirrorCheckbox.onchange();
 sensitivityXSlider.onchange();
 sensitivityYSlider.onchange();
+accelerationSlider.onchange();
 
 var clmTracker = new clm.tracker();
 clmTracker.init();
@@ -625,7 +631,8 @@ function draw(update = true) {
 		// letting you focus on a specific point without jitter, but still move quickly.
 
 		// var accelerate = (x, distance) => (x / 10) * (distance ** 0.8);
-		var accelerate = (x, distance) => (x / 1) * (Math.abs(x) ** 0.8);
+		// var accelerate = (x, distance) => (x / 1) * (Math.abs(x) ** 0.8);
+		var accelerate = (x, distance) => (x / 1) * (Math.abs(x * 5) ** acceleration);
 		
 		var distance = Math.hypot(movementX, movementY);
 		var deltaX = accelerate(movementX * sensitivityX, distance);
