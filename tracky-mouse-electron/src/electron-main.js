@@ -9,6 +9,8 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // Needed for RobotJS native module in renderer process (could be moved to main with IPC)
 app.allowRendererProcessReuse = false;
 
+const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -17,14 +19,12 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(app.getAppPath(), 'src/preload.js'),
     },
-    // icon: `${__dirname}/../../images/tracky-mouse-logo-16.png`,
-    icon: `${__dirname}/../../images/tracky-mouse-logo-512.png`,
+    // icon: `${trackyMouseFolder}/images/tracky-mouse-logo-16.png`,
+    icon: `${trackyMouseFolder}/images/tracky-mouse-logo-512.png`,
   });
 
   // and load the index.html of the app.
-  // TODO: for build, copy or symlink the resources inside the electron app folder somewhere,
-  // and point to this different location.
-  mainWindow.loadFile(path.join(__dirname, '../../index.html'));
+  mainWindow.loadFile(`${trackyMouseFolder}/index.html`);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
