@@ -32,7 +32,6 @@
   ],
   "main": "src/electron-main.js",
   "scripts": {
-    "rebuild": "electron-rebuild -f -w robotjs",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -67,7 +66,6 @@
     }
   },
   "dependencies": {
-    "electron-rebuild": "^2.3.5",
     "electron-squirrel-startup": "^1.0.0",
     "robotjs": "^0.6.0"
   },
