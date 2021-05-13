@@ -1,4 +1,4 @@
-# Tracky Mouse
+# ![](./images/tracky-mouse-logo-32.png) Tracky Mouse
 
 Control your computer with your head movements.
 
