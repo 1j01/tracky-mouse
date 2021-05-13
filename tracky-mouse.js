@@ -621,9 +621,24 @@ function draw(update = true) {
 	if (update) {
 		var [movementX, movementY] = mainOops.getMovement();
 
+		// Acceleration curves add a lot of stability,
+		// letting you focus on a specific point without jitter, but still move quickly.
+
+		// var accelerate = (x, distance) => (x / 10) * (distance ** 0.8);
+		var accelerate = (x, distance) => (x / 1) * (Math.abs(x) ** 0.8);
+		
+		var distance = Math.hypot(movementX, movementY);
+		var deltaX = accelerate(movementX * sensitivityX, distance);
+		var deltaY = accelerate(movementY * sensitivityY, distance);
+
+		// This should never happen
+		if (!isFinite(deltaX) || !isFinite(deltaY)) {
+			return;
+		}
+
 		if (window.moveMouse) {
-			mouseX -= movementX * sensitivityX * screen.width;
-			mouseY += movementY * sensitivityY * screen.height;
+			mouseX -= deltaX * screen.width;
+			mouseY += deltaY * screen.height;
 
 			mouseX = Math.min(Math.max(0, mouseX), screen.width);
 			mouseY = Math.min(Math.max(0, mouseY), screen.height);
@@ -631,8 +646,8 @@ function draw(update = true) {
 			window.moveMouse(~~mouseX, ~~mouseY);
 
 		} else {
-			mouseX -= movementX * sensitivityX * innerWidth;
-			mouseY += movementY * sensitivityY * innerHeight;
+			mouseX -= deltaX * innerWidth;
+			mouseY += deltaY * innerHeight;
 
 			mouseX = Math.min(Math.max(0, mouseX), innerWidth);
 			mouseY = Math.min(Math.max(0, mouseY), innerHeight);

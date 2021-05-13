@@ -27,8 +27,11 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Pose invariance (smiling etc.)
 	- Simplest might be to just use the bridge of your nose
 		- Points can disappear due to pruning, but we could use other points as a fallback, but just use a nose point as long as it exists?
-- Acceleration (option)
+- Acceleration option
 - Minimum distance to start moving pointer (option)
+- Might want a margin outside of the bounds of the screen, in order to reliably point to the edges of the screen
+The mouse would always be clamped to the screen, but the internal notion of the mouse's position would have some legroom.
+It shouldn't be too much, because going to the edge of the screen is also useful for simple on-the-fly "calibration"
 - De-duplicate points that end up on top of each other, as they don't improve tracking (bad redudancy), and they weight the average weirdly, which might harm accuracy.
 - Handle occluders explicitly by looking for differing optical flow? (most often a hand, e.g. brushing hair out of eyes)
 - Robust error handling
