@@ -46,6 +46,7 @@ var pointsBasedOnFaceScore = 0;
 var paused = false;
 const SLOWMO = false;
 var debugTimeTravel = false;
+var showDebugText = false;
 var mirror;
 
 var useClmTracking = true;
@@ -682,25 +683,27 @@ function draw(update = true) {
 	}
 	ctx.restore();
 
-	ctx.save();
-	ctx.fillStyle = "#fff";
-	ctx.strokeStyle = "#000";
-	ctx.lineWidth = 3;
-	ctx.font = "20px sans-serif";
-	ctx.beginPath();
-	const text3 = "Face convergence score: " + ((useFacemesh && facemeshPrediction) ? "N/A" : faceConvergence.toFixed(4));
-	const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
-	const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
-	ctx.strokeText(text1, 50, 50);
-	ctx.fillText(text1, 50, 50);
-	ctx.strokeText(text2, 50, 70);
-	ctx.fillText(text2, 50, 70);
-	ctx.strokeText(text3, 50, 170);
-	ctx.fillText(text3, 50, 170);
-	ctx.fillStyle = "lime";
-	ctx.fillRect(0, 150, faceConvergence, 5);
-	ctx.fillRect(0, 0, faceScore * canvas.width, 5);
-	ctx.restore();
+	if (showDebugText) {
+		ctx.save();
+		ctx.fillStyle = "#fff";
+		ctx.strokeStyle = "#000";
+		ctx.lineWidth = 3;
+		ctx.font = "20px sans-serif";
+		ctx.beginPath();
+		const text3 = "Face convergence score: " + ((useFacemesh && facemeshPrediction) ? "N/A" : faceConvergence.toFixed(4));
+		const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
+		const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
+		ctx.strokeText(text1, 50, 50);
+		ctx.fillText(text1, 50, 50);
+		ctx.strokeText(text2, 50, 70);
+		ctx.fillText(text2, 50, 70);
+		ctx.strokeText(text3, 50, 170);
+		ctx.fillText(text3, 50, 170);
+		ctx.fillStyle = "lime";
+		ctx.fillRect(0, 150, faceConvergence, 5);
+		ctx.fillRect(0, 0, faceScore * canvas.width, 5);
+		ctx.restore();
+	}
 	stats.update();
 }
 
