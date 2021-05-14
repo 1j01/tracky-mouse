@@ -48,6 +48,7 @@ var paused = false;
 var mouseNeedsInitPos = true;
 const SLOWMO = false;
 var debugTimeTravel = false;
+var debugAcceleration = false;
 var showDebugText = false;
 var mirror;
 
@@ -654,13 +655,39 @@ function draw(update = true) {
 		// Acceleration curves add a lot of stability,
 		// letting you focus on a specific point without jitter, but still move quickly.
 
-		// var accelerate = (x, distance) => (x / 10) * (distance ** 0.8);
-		// var accelerate = (x, distance) => (x / 1) * (Math.abs(x) ** 0.8);
-		var accelerate = (x, distance) => (x / 1) * (Math.abs(x * 5) ** acceleration);
+		// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
+		// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
+		var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 		
 		var distance = Math.hypot(movementX, movementY);
 		var deltaX = accelerate(movementX * sensitivityX, distance);
 		var deltaY = accelerate(movementY * sensitivityY, distance);
+
+		if (debugAcceleration) {
+			const graphWidth = 200;
+			const graphHeight = 150;
+			const graphMaxInput = 0.2;
+			const graphMaxOutput = 0.4;
+			const hilightInputRange = 0.01;
+			ctx.save();
+			ctx.fillStyle = "black";
+			ctx.fillRect(0, 0, graphWidth, graphHeight);
+			const hilightInput = movementX * sensitivityX;
+			for (let x = 0; x < graphWidth; x++) {
+				const input = x / graphWidth * graphMaxInput;
+				const output = accelerate(input, input);
+				const y = output / graphMaxOutput * graphHeight;
+				// ctx.fillStyle = Math.abs(y - deltaX) < 1 ? "yellow" : "lime";
+				const hilight = Math.abs(Math.abs(input) - Math.abs(hilightInput)) < hilightInputRange;
+				if (hilight) {
+					ctx.fillStyle = "rgba(255, 255, 0, 0.3)";
+					ctx.fillRect(x, 0, 1, graphHeight);
+				}
+				ctx.fillStyle = hilight ? "yellow" : "lime";
+				ctx.fillRect(x, graphHeight - y, 1, y);
+			}
+			ctx.restore();
+		}
 
 		// This should never happen
 		if (!isFinite(deltaX) || !isFinite(deltaY)) {
