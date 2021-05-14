@@ -173,9 +173,6 @@ useCameraButton.onclick = () => {
 		console.log(error);
 	});
 };
-if (window.moveMouse) {
-	useCameraButton.click();
-}
 useDemoFootageButton.onclick = () => {
 	reset();
 	cameraVideo.srcObject = null;
@@ -725,6 +722,17 @@ function circle(ctx, x, y, r) {
 animate();
 if (SLOWMO) {
 	setInterval(draw, 200);
+}
+
+let autoDemo = false;
+try {
+	autoDemo = localStorage.trackyMouseAutoDemo === "true";
+} catch (error) {
+}
+if (autoDemo) {
+	useDemoFootageButton.click();
+} else if (window.moveMouse) {
+	useCameraButton.click();
 }
 
 if (typeof onShortcut !== "undefined") {
