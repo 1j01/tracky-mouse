@@ -292,14 +292,22 @@ class OOPS {
 		this.pointCount = outputPointIndex;
 	}
 	prunePoints() {
-		// pointStatus is only valid (indices line up) before filtering occurs, so must come first, and be separate
+		// pointStatus is only valid (indices line up) before filtering occurs, so must come first (could be combined though)
 		this.filterPoints((pointIndex) => this.pointStatus[pointIndex] == 1);
 
-		// TODO: de-duplicate points that have collapsed together
-		// this.filterPoints((pointIndex) => {
-		// 	var pointOffset = pointIndex * 2;
-		// 	// so I need to interate over the other points here, will that be a problem?
-		// });
+		// De-duplicate points that are too close together
+		// - Points that have collapsed together are completely useless.
+		// - Points that are too close together are not necessarily helpful,
+		//   and may adversely affect the tracking due to uneven weighting across your face.
+		// - Reducing the number of points improves FPS.
+		const grid = {};
+		const gridSize = 10;
+		for (let pointIndex = 0; pointIndex < this.pointCount; pointIndex++) {
+			const pointOffset = pointIndex * 2;
+			grid[`${~~(this.curXY[pointOffset] / gridSize)},${~~(this.curXY[pointOffset + 1] / gridSize)}`] = pointIndex;
+		}
+		const indexesToKeep = Object.values(grid);
+		this.filterPoints((pointIndex) => indexesToKeep.includes(pointIndex));
 	}
 	update(imageData) {
 		[this.prevXY, this.curXY] = [this.curXY, this.prevXY];
