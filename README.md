@@ -40,6 +40,7 @@ It shouldn't be too much, because going to the edge of the screen is also useful
 		- Another application may be using it
 		- Try unplugging and plugging it back in
 		- Make sure you can use your camera with another application (but close this application before trying to get it to work in here again)
+		- Installing (and maybe running?) `guvcview` can magically fix a webcam not showing up (worked for my Logitech C920 when it wouldn't show up in applications even after restart, but was listed in `lsusb`) ([source](https://forums.linuxmint.com/viewtopic.php?t=131011))
 		- Correct camera
 			- [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
 	- Disabling camera autofocus maybe
