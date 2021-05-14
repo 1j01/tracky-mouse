@@ -31,6 +31,7 @@ var mouseX = 0;
 var mouseY = 0;
 var prevMovementX = 0;
 var prevMovementY = 0;
+var enableTimeTravel = false;
 // var movementXSinceFacemeshUpdate = 0;
 // var movementYSinceFacemeshUpdate = 0;
 var cameraFramesSinceFacemeshUpdate = [];
@@ -333,10 +334,10 @@ class OOPS {
 	draw(ctx) {
 		for (var i = 0; i < this.pointCount; i++) {
 			var pointOffset = i * 2;
-			var distMoved = Math.hypot(
-				this.prevXY[pointOffset] - this.curXY[pointOffset],
-				this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
-			);
+			// var distMoved = Math.hypot(
+			// 	this.prevXY[pointOffset] - this.curXY[pointOffset],
+			// 	this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
+			// );
 			// if (distMoved >= 1) {
 			// 	ctx.fillStyle = "lime";
 			// } else {
@@ -470,29 +471,41 @@ function draw(update = true) {
 					// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
 					// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
-					debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
-					setTimeout(() => {
-						debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
-					}, 900)
-					cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
-						if (debugTimeTravel) {
-							debugFramesCtx.save();
-							debugFramesCtx.globalAlpha = 0.1;
-							// debugFramesCtx.globalCompositeOperation = index % 2 === 0 ? "xor" : "xor";
-							frameCtx.putImageData(imageData, 0, 0);
-							// debugFramesCtx.putImageData(imageData, 0, 0);
-							debugFramesCtx.drawImage(frameCanvas, 0, 0, canvas.width, canvas.height);
-							debugFramesCtx.restore();
-							debugPointsCtx.fillStyle = "aqua";
-							workerSyncedOops.draw(debugPointsCtx);
-						}
-						workerSyncedOops.update(imageData);
-					});
+					if (enableTimeTravel) {
+						debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
+						setTimeout(() => {
+							debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
+						}, 900)
+						cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
+							if (debugTimeTravel) {
+								debugFramesCtx.save();
+								debugFramesCtx.globalAlpha = 0.1;
+								// debugFramesCtx.globalCompositeOperation = index % 2 === 0 ? "xor" : "xor";
+								frameCtx.putImageData(imageData, 0, 0);
+								// debugFramesCtx.putImageData(imageData, 0, 0);
+								debugFramesCtx.drawImage(frameCanvas, 0, 0, canvas.width, canvas.height);
+								debugFramesCtx.restore();
+								debugPointsCtx.fillStyle = "aqua";
+								workerSyncedOops.draw(debugPointsCtx);
+							}
+							workerSyncedOops.update(imageData);
+						});
+					}
 
+					// Bring points from workerSyncedOops to realtime mainOops
 					for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
 						const pointOffset = pointIndex * 2;
 						maybeAddPoint(mainOops, workerSyncedOops.curXY[pointOffset], workerSyncedOops.curXY[pointOffset + 1]);
 					}
+					// Don't do this! It's not how this is supposed to work.
+					// mainOops.pointCount = workerSyncedOops.pointCount;
+					// for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
+					// 	const pointOffset = pointIndex * 2;
+					// 	mainOops.curXY[pointOffset] = workerSyncedOops.curXY[pointOffset];
+					// 	mainOops.curXY[pointOffset+1] = workerSyncedOops.curXY[pointOffset+1];
+					// 	mainOops.prevXY[pointOffset] = workerSyncedOops.prevXY[pointOffset];
+					// 	mainOops.prevXY[pointOffset+1] = workerSyncedOops.prevXY[pointOffset+1];
+					// }
 
 					// naive latency compensation
 					// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
@@ -683,15 +696,17 @@ function draw(update = true) {
 		prevMovementY = movementY;
 		// movementXSinceFacemeshUpdate += movementX;
 		// movementYSinceFacemeshUpdate += movementY;
-		if (facemeshEstimating) {
-			const imageData = getCameraImageData();
-			if (imageData) {
-				cameraFramesSinceFacemeshUpdate.push(imageData);
-			}
-			// limit this buffer size in case something goes wrong
-			if (cameraFramesSinceFacemeshUpdate.length > 500) {
-				// maybe just clear it entirely, because a partial buffer might not be useful
-				cameraFramesSinceFacemeshUpdate.length = 0;
+		if (enableTimeTravel) {
+			if (facemeshEstimating) {
+				const imageData = getCameraImageData();
+				if (imageData) {
+					cameraFramesSinceFacemeshUpdate.push(imageData);
+				}
+				// limit this buffer size in case something goes wrong
+				if (cameraFramesSinceFacemeshUpdate.length > 500) {
+					// maybe just clear it entirely, because a partial buffer might not be useful
+					cameraFramesSinceFacemeshUpdate.length = 0;
+				}
 			}
 		}
 	}
