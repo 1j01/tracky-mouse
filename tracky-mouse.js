@@ -388,7 +388,7 @@ function maybeAddPoint(oops, x, y) {
 
 function animate() {
 	requestAnimationFrame(animate);
-	draw(!SLOWMO);
+	draw(!SLOWMO && (!paused || document.visibilityState === "visible"));
 }
 
 function draw(update = true) {
