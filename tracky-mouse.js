@@ -785,20 +785,19 @@ if (autoDemo) {
 	useCameraButton.click();
 }
 
+const handleShortcut = (shortcutType) => {
+	if (shortcutType === "toggle-tracking") {
+		paused = !paused;
+		mouseNeedsInitPos = true;
+	}
+};
 if (typeof onShortcut !== "undefined") {
-	onShortcut((shortcutType) => {
-		// console.log("onShortcut", shortcutType);
-		if (shortcutType === "toggle-tracking") {
-			paused = !paused;
-			mouseNeedsInitPos = true;
-		}
-	});
+	onShortcut(handleShortcut);
 } else {
 	addEventListener("keydown", (event) => {
 		// Same shortcut as the global shortcut in the electron app (is that gonna be a problem?)
 		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
-			paused = !paused;
-			mouseNeedsInitPos = true;
+			handleShortcut("toggle-tracking");
 		}
 	});
 }
