@@ -302,7 +302,7 @@ class OOPS {
 		//   and may adversely affect the tracking due to uneven weighting across your face.
 		// - Reducing the number of points improves FPS.
 		const grid = {};
-		const gridSize = 10;
+		const gridSize = 10; // also make sure to update maybeAddPoints!
 		for (let pointIndex = 0; pointIndex < this.pointCount; pointIndex++) {
 			const pointOffset = pointIndex * 2;
 			grid[`${~~(this.curXY[pointOffset] / gridSize)},${~~(this.curXY[pointOffset + 1] / gridSize)}`] = pointIndex;
@@ -381,14 +381,20 @@ canvas.addEventListener('click', (event) => {
 });
 
 function maybeAddPoint(oops, x, y) {
+	// In order to prefer points that already exist, since they're already tracking,
+	// in order to keep a smooth overall tracking calculation,
+	// don't add points if they're close to an existing point.
+	// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
 	for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
 		var pointOffset = pointIndex * 2;
 		var distance = Math.hypot(
 			x - oops.curXY[pointOffset],
 			y - oops.curXY[pointOffset + 1]
 		);
-		// If it's useful to have this higher, it should probably be based on the size of the face
-		if (distance < 8) {
+		// It might be good to base this on the size of the face...
+		// Also, this size should be larger than the grid size used to thin out points that are close together
+		// (Maybe it'd be better to base this on the grid...) 
+		if (distance < 10) {
 			return;
 		}
 	}
