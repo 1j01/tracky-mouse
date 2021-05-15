@@ -240,6 +240,10 @@ const debugPointsCtx = debugPointsCanvas.getContext("2d");
 // 	}
 // }
 
+// maybe should be based on size of head in view?
+const pruningGridSize = 5;
+const minDistanceToAddPoint = pruningGridSize * 1.5;
+
 // Object Oriented Programming Sucks
 // or Optical flOw Points System
 class OOPS {
@@ -302,10 +306,9 @@ class OOPS {
 		//   and may adversely affect the tracking due to uneven weighting across your face.
 		// - Reducing the number of points improves FPS.
 		const grid = {};
-		const gridSize = 10; // also make sure to update maybeAddPoints!
 		for (let pointIndex = 0; pointIndex < this.pointCount; pointIndex++) {
 			const pointOffset = pointIndex * 2;
-			grid[`${~~(this.curXY[pointOffset] / gridSize)},${~~(this.curXY[pointOffset + 1] / gridSize)}`] = pointIndex;
+			grid[`${~~(this.curXY[pointOffset] / pruningGridSize)},${~~(this.curXY[pointOffset + 1] / pruningGridSize)}`] = pointIndex;
 		}
 		const indexesToKeep = Object.values(grid);
 		this.filterPoints((pointIndex) => indexesToKeep.includes(pointIndex));
@@ -387,14 +390,21 @@ function maybeAddPoint(oops, x, y) {
 	// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
 	for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
 		var pointOffset = pointIndex * 2;
-		var distance = Math.hypot(
-			x - oops.curXY[pointOffset],
-			y - oops.curXY[pointOffset + 1]
-		);
+		// var distance = Math.hypot(
+		// 	x - oops.curXY[pointOffset],
+		// 	y - oops.curXY[pointOffset + 1]
+		// );
+		// if (distance < 8) {
+		// 	return;
+		// }
 		// It might be good to base this on the size of the face...
-		// Also, this size should be larger than the grid size used to thin out points that are close together
-		// (Maybe it'd be better to base this on the grid...) 
-		if (distance < 10) {
+		// Also, since we're pruning points based on a grid,
+		// there's not much point in using Euclidean distance here,
+		// we can just look at x and y distances.
+		if (
+			Math.abs(x - oops.curXY[pointOffset]) <= minDistanceToAddPoint ||
+			Math.abs(y - oops.curXY[pointOffset + 1]) <= minDistanceToAddPoint
+		) {
 			return;
 		}
 	}
