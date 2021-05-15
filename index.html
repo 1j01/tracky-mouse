@@ -27,12 +27,15 @@
 			<button id="use-camera">Use my camera</button>
 			<button id="use-demo">Use demo footage</button>
 			<br>
-			<label>Horizontal Sensitivity <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
-			<label>Vertical Sensitivity <input type="range" min="0" max="100" value="50" id="sensitivity-y"></label>
-			<!-- <label>Smoothing <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
-			<label>Acceleration <input type="range" min="0" max="100" value="50" id="acceleration"></label>
-			<!-- <label>Easy Stop (min distance to move) <input type="range" min="0" max="100" value="50" id="min-distance"></label> -->
-			<label><input type="checkbox" checked id="mirror"> Mirror</label>
+			<br>
+			<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
+			<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" id="sensitivity-y"></label>
+			<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
+			<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" id="acceleration"></label>
+			<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" id="min-distance"></label> -->
+			<br>
+			<label><span class="label-text"><input type="checkbox" checked id="mirror"> Mirror</label>
+			<br>
 		</div>
 		<canvas class="tracky-mouse-canvas" id="tracky-mouse-canvas"></canvas class="tracky-mouse-canvas">
 	</div>

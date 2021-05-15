@@ -24,6 +24,10 @@ body {
 .tracky-mouse-ui label {
 	display: block;
 }
+.tracky-mouse-ui .label-text {
+	display: inline-block;
+	min-width: 150px;
+}
 @media (prefers-color-scheme: dark) {
 	body {
 		background-color: black;
