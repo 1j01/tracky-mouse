@@ -10,6 +10,20 @@ body {
 	background-color: white;
 	color: black;
 }
+.tracky-mouse-ui {
+	background-color: rgb(195, 173, 230);
+	color: black;
+	padding: 10px;
+	border-radius: 5px;
+	max-width: 600px;
+}
+.tracky-mouse-canvas {
+	width: 100%;
+	background-color: rgba(15, 0, 20, 0.5);
+}
+.tracky-mouse-ui label {
+	display: block;
+}
 @media (prefers-color-scheme: dark) {
 	body {
 		background-color: black;

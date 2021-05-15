@@ -5,9 +5,8 @@ var accelerationSlider = document.getElementById("acceleration");
 var useCameraButton = document.getElementById("use-camera");
 var useDemoFootageButton = document.getElementById("use-demo");
 
-var canvas = document.createElement('canvas');
+var canvas = document.getElementById("tracky-mouse-canvas");
 var ctx = canvas.getContext('2d');
-document.body.appendChild(canvas);
 
 var mouseEl = document.createElement('div');
 mouseEl.className = "mouse";
