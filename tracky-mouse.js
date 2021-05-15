@@ -714,24 +714,25 @@ function draw(update = true) {
 		}
 
 		if (!paused) {
-			if (window.moveMouse) {
-				if (mouseNeedsInitPos) {
-					initMousePos();
-				} else {
-					mouseX -= deltaX * screen.width;
-					mouseY += deltaY * screen.height;
+			const screenWidth = window.moveMouse ? screen.width : innerWidth;
+			const screenHeight = window.moveMouse ? screen.height : innerHeight;
 
-					mouseX = Math.min(Math.max(0, mouseX), screen.width);
-					mouseY = Math.min(Math.max(0, mouseY), screen.height);
-				
+			mouseX -= deltaX * screenWidth;
+			mouseY += deltaY * screenHeight;
+
+			mouseX = Math.min(Math.max(0, mouseX), screenWidth);
+			mouseY = Math.min(Math.max(0, mouseY), screenHeight);
+
+			if (mouseNeedsInitPos) {
+				// TODO: option to get preexisting mouse position instead of set it to center of screen
+				mouseX = screenWidth / 2;
+				mouseY = screenHeight / 2;
+				if (window.moveMouse) {
 					window.moveMouse(~~mouseX, ~~mouseY);
 				}
-			} else {
-				mouseX -= deltaX * innerWidth;
-				mouseY += deltaY * innerHeight;
-
-				mouseX = Math.min(Math.max(0, mouseX), innerWidth);
-				mouseY = Math.min(Math.max(0, mouseY), innerHeight);
+				mouseNeedsInitPos = false;
+			} else if (window.moveMouse) {
+				window.moveMouse(~~mouseX, ~~mouseY);
 			}
 		}
 
@@ -819,12 +820,4 @@ if (typeof onShortcut !== "undefined") {
 			handleShortcut("toggle-tracking");
 		}
 	});
-}
-
-function initMousePos() {
-	// TODO: option to get initial mouse position instead of set it to center of screen
-	mouseX = screen.width / 2;
-	mouseY = screen.height / 2;
-	window.moveMouse(~~mouseX, ~~mouseY);
-	mouseNeedsInitPos = false;
 }
