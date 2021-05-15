@@ -72,23 +72,26 @@ var pointsBasedOnFaceInViewConfidence = 0;
 
 // scale of size of frames that are passed to worker and then computed several at once when backtracking for latency compensation
 // reducing this makes it much more likely to drop points and thus not work
-const frameScaleForWorker = 1;
+// THIS IS DISABLED and using a performance optimization of currentCameraImageData instead of getCameraImageData;
+// (the currentCameraImageData is also scaled differently, to the fixed canvas size instead of using the native camera image size)
+// const frameScaleForWorker = 1;
 
 var mainOops;
 var workerSyncedOops;
 
-const frameCanvas = document.createElement("canvas");
-const frameCtx = frameCanvas.getContext("2d");
-const getCameraImageData = () => {
-	if (cameraVideo.videoWidth * frameScaleForWorker * cameraVideo.videoHeight * frameScaleForWorker < 1) {
-		return;
-	}
-	frameCanvas.width = cameraVideo.videoWidth * frameScaleForWorker;
-	frameCanvas.height = cameraVideo.videoHeight * frameScaleForWorker;
-	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
-	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
-};
+// const frameCanvas = document.createElement("canvas");
+// const frameCtx = frameCanvas.getContext("2d");
+// const getCameraImageData = () => {
+// 	if (cameraVideo.videoWidth * frameScaleForWorker * cameraVideo.videoHeight * frameScaleForWorker < 1) {
+// 		return;
+// 	}
+// 	frameCanvas.width = cameraVideo.videoWidth * frameScaleForWorker;
+// 	frameCanvas.height = cameraVideo.videoHeight * frameScaleForWorker;
+// 	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
+// 	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
+// };
 
+var currentCameraImageData;
 if (useFacemesh) {
 	facemeshWorker = new Worker("./facemesh.worker.js");
 	facemeshWorker.addEventListener("message", (e) => {
@@ -96,7 +99,7 @@ if (useFacemesh) {
 		if (e.data.type === "LOADED") {
 			facemeshLoaded = true;
 			facemeshEstimateFaces = () => {
-				const imageData = getCameraImageData();
+				const imageData = currentCameraImageData;//getCameraImageData();
 				if (!imageData) {
 					return;
 				}
@@ -422,6 +425,7 @@ function draw(update = true) {
 	ctx.save();
 	ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	currentCameraImageData = imageData;
 
 	if (mirror) {
 		ctx.translate(canvas.width, 0);
@@ -463,10 +467,10 @@ function draw(update = true) {
 						return;
 					}
 					// this applies to facemeshPrediction.annotations as well, which references the same points
-					facemeshPrediction.scaledMesh.forEach((point) => {
-						point[0] /= frameScaleForWorker;
-						point[1] /= frameScaleForWorker;
-					});
+					// facemeshPrediction.scaledMesh.forEach((point) => {
+					// 	point[0] /= frameScaleForWorker;
+					// 	point[1] /= frameScaleForWorker;
+					// });
 
 					// time travel latency compensation
 					// keep a history of camera frames since the prediciton was requested,
