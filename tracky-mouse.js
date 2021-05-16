@@ -802,18 +802,12 @@ function draw(update = true) {
 				// TODO: option to get preexisting mouse position instead of set it to center of screen
 				mouseX = screenWidth / 2;
 				mouseY = screenHeight / 2;
-				if (window.moveMouse) {
-					window.moveMouse(~~mouseX, ~~mouseY);
-				}
 				mouseNeedsInitPos = false;
-			} else if (window.moveMouse) {
+			}
+			if (window.moveMouse) {
 				window.moveMouse(~~mouseX, ~~mouseY);
 			}
 		}
-
-		mouseEl.style.left = `${mouseX}px`;
-		mouseEl.style.top = `${mouseY}px`;
-
 		prevMovementX = movementX;
 		prevMovementY = movementY;
 		// movementXSinceFacemeshUpdate += movementX;
