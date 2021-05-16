@@ -806,6 +806,11 @@ function draw(update = true) {
 			}
 			if (window.moveMouse) {
 				window.moveMouse(~~mouseX, ~~mouseY);
+				mouseEl.style.display = "none";
+			} else {
+				mouseEl.style.display = "";
+				mouseEl.style.left = `${mouseX}px`;
+				mouseEl.style.top = `${mouseY}px`;
 			}
 		}
 		prevMovementX = movementX;
