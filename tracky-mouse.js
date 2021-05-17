@@ -8,9 +8,9 @@ var useDemoFootageButton = document.getElementById("use-demo");
 var canvas = document.getElementById("tracky-mouse-canvas");
 var ctx = canvas.getContext('2d');
 
-var mouseEl = document.createElement('div');
-mouseEl.className = "mouse";
-document.body.appendChild(mouseEl);
+var pointerEl = document.createElement('div');
+pointerEl.className = "tracky-mouse-pointer";
+document.body.appendChild(pointerEl);
 
 var cameraVideo = document.createElement('video');
 // required to work in iOS 11 & up:
@@ -806,11 +806,11 @@ function draw(update = true) {
 			}
 			if (window.moveMouse) {
 				window.moveMouse(~~mouseX, ~~mouseY);
-				mouseEl.style.display = "none";
+				pointerEl.style.display = "none";
 			} else {
-				mouseEl.style.display = "";
-				mouseEl.style.left = `${mouseX}px`;
-				mouseEl.style.top = `${mouseY}px`;
+				pointerEl.style.display = "";
+				pointerEl.style.left = `${mouseX}px`;
+				pointerEl.style.top = `${mouseY}px`;
 			}
 		}
 		prevMovementX = movementX;
