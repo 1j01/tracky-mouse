@@ -1,0 +1,54 @@
+{
+	"name": "tracky-mouse",
+	"version": "1.0.0",
+	"description": "Add facial mouse accessibility to JavaScript applications",
+	"license": "MIT",
+	"author": {
+		"name": "Isaiah Odhner",
+		"email": "isaiahodhner@gmail.com",
+		"url": "https://isaiahodhner.io"
+	},
+	"keywords": [
+		"camera-mouse",
+		"mouse",
+		"camera",
+		"webcam",
+		"head-tracker",
+		"head-tracking",
+		"face-tracker",
+		"face-tracking",
+		"headmouse",
+		"facial-mouse",
+		"accessibility",
+		"cursor",
+		"pointer",
+		"pointing",
+		"input-method",
+		"hands-free",
+		"handsfree",
+		"desktop-automation"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/1j01/tracky-mouse.git"
+	},
+	"bugs": {
+		"url": "https://github.com/1j01/tracky-mouse/issues"
+	},
+	"homepage": "https://github.com/1j01/tracky-mouse#readme",
+	"module": "dist/tracky-mouse.esm.min.js",
+	"browser": "dist/tracky-mouse.umd.min.js",
+	"main": "dist/tracky-mouse.esm.min.js",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "rollup -c",
+		"watch": "rollup -c -w"
+	},
+	"devDependencies": {
+		"rollup": "^2.48.0",
+		"rollup-plugin-scss": "^2.6.1",
+		"rollup-plugin-terser": "^7.0.2"
+	}
+}
