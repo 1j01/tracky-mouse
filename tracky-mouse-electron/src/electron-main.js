@@ -14,6 +14,8 @@ app.allowRendererProcessReuse = false;
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
+// Disable throttling of timers so the mouse control can still work when minimized.
+// app.commandLine.appendSwitch("--disable-renderer-backgrounding");
 
 const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
 
@@ -26,6 +28,9 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'src/preload.js'),
+      // Disable throttling of animations and timers so the mouse control can still work when minimized.
+      // Need to upgrade electron to use this! For now, I'm using --disable-renderer-backgrounding and setInterval.
+      // backgroundThrottling: false,
     },
     // icon: `${trackyMouseFolder}/images/tracky-mouse-logo-16.png`,
     icon: `${trackyMouseFolder}/images/tracky-mouse-logo-512.png`,

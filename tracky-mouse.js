@@ -45,7 +45,6 @@ var faceConvergenceThreshold = 50;
 var pointsBasedOnFaceScore = 0;
 var paused = false;
 var mouseNeedsInitPos = true;
-const SLOWMO = false;
 var debugTimeTravel = false;
 var debugAcceleration = false;
 var showDebugText = false;
@@ -425,11 +424,6 @@ function maybeAddPoint(oops, x, y) {
 		}
 	}
 	oops.addPoint(x, y);
-}
-
-function animate() {
-	requestAnimationFrame(animate);
-	draw(!SLOWMO && (!paused || document.visibilityState === "visible"));
 }
 
 function draw(update = true) {
@@ -863,10 +857,10 @@ function circle(ctx, x, y, r) {
 	ctx.fill();
 }
 
-animate();
-if (SLOWMO) {
-	setInterval(draw, 200);
-}
+// Can't use requestAnimationFrame until we update to a version of Electron that supports webPreferences.backgroundThrottling: false
+setInterval(function animationLoop() {
+	draw(!paused || document.visibilityState === "visible");
+}, 15);
 
 let autoDemo = false;
 try {
