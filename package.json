@@ -43,6 +43,8 @@
 		"dist"
 	],
 	"scripts": {
+		"dev": "npm-run-all --parallel start watch",
+		"server": "live-server",
 		"build": "rollup -c",
 		"watch": "rollup -c -w"
 	},

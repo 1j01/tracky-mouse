@@ -8,7 +8,24 @@
 	<script src="lib/stats.js"></script>
 	<script src="lib/clmtrackr.js"></script>
 	<!-- <script src="lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+		body {
+			background-color: white;
+			color: black;
+		}
+		@media (prefers-color-scheme: dark) {
+			body {
+				background-color: black;
+				color: white;
+			}
+			a:link {
+				color: aquamarine;
+			}
+			a:visited {
+				color: rgb(197, 127, 255);
+			}
+		}
+	</style>
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
 </head>
@@ -22,25 +39,8 @@
 		It uses two different face detectors, a fast-to-load one and a slower to load but much more accurate one, which it switches to automatically when available.
 	</p>
 	<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
-	<div class="tracky-mouse-ui">
-		<div class="tracky-mouse-controls">
-			<button id="use-camera">Use my camera</button>
-			<button id="use-demo">Use demo footage</button>
-			<br>
-			<br>
-			<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
-			<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" id="sensitivity-y"></label>
-			<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
-			<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" id="acceleration"></label>
-			<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" id="min-distance"></label> -->
-			<br>
-			<label><span class="label-text"><input type="checkbox" checked id="mirror"> Mirror</label>
-			<br>
-		</div>
-		<canvas class="tracky-mouse-canvas" id="tracky-mouse-canvas"></canvas class="tracky-mouse-canvas">
-	</div>
 	<script type="module">
-		import { initTrackyMouse } from "./tracky-mouse.js";
+		import { initTrackyMouse } from "./dist/tracky-mouse.esm.min.js";
 		initTrackyMouse();
 	</script>
 </body>
