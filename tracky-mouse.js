@@ -1,3 +1,5 @@
+export function initTrackyMouse() {
+
 var mirrorCheckbox = document.getElementById("mirror");
 var sensitivityXSlider = document.getElementById("sensitivity-x");
 var sensitivityYSlider = document.getElementById("sensitivity-y");
@@ -895,3 +897,5 @@ if (typeof onShortcut !== "undefined") {
 		}
 	});
 }
+
+};

@@ -39,7 +39,10 @@
 		</div>
 		<canvas class="tracky-mouse-canvas" id="tracky-mouse-canvas"></canvas class="tracky-mouse-canvas">
 	</div>
-	<script src="tracky-mouse.js" async></script>
+	<script type="module">
+		import { initTrackyMouse } from "./tracky-mouse.js";
+		initTrackyMouse();
+	</script>
 </body>
 
 </html>
