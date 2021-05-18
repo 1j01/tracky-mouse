@@ -1,6 +1,9 @@
 
-import * as tf from './lib/tf.js';
+import * as tf from '@tensorflow/tfjs';
 import * as facemesh from './lib/facemesh/facemesh.js';
+import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+import '@tensorflow/tfjs-backend-webgl';
+
 
 // Don't use CPU backend for facemesh.
 // It's too slow to be useful, without advanced time travel technology. (I have dabbled in time travel, but not cracked it.)
