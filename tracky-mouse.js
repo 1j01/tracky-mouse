@@ -61,6 +61,7 @@ var facemeshOptions = {
 	iouThreshold: 0.3,
 	scoreThreshold: 0.75
 };
+var fallbackTimeoutID;
 
 var facemeshLoaded = false;
 var facemeshFirstEstimation = true;
@@ -488,7 +489,8 @@ function draw(update = true) {
 				// Note that the first estimation from facemesh often takes a while,
 				// and we don't want to continuously terminate the worker as it's working on those first results.
 				// And also, for the first estimate it hasn't actually disabled clmtracker yet, so it's fine if it's a long timeout.
-				const fallbackTimeout = setTimeout(() => {
+				clearTimeout(fallbackTimeoutID);
+				fallbackTimeoutID = setTimeout(() => {
 					if (!useClmTracking) {
 						reset();
 						clmTracker.init();
@@ -500,7 +502,6 @@ function draw(update = true) {
 					// If you've switched desktop sessions, it will presuably fail to get a new webgl context until you've switched back
 					// Is this setInterval useful, vs just starting the worker?
 					// It probably has a faster cycle, with the code as it is now, but maybe not inherently.
-					// TODO: is there a really bad case where this setInterval starts piling up?
 					// TODO: do the extra getContext() calls add to a GPU process crash limit
 					// that makes it only able to recover a couple times (outside the electron app)?
 					// For electron, I set chromium flag --disable-gpu-process-crash-limit so it can recover unlimited times.
@@ -508,11 +509,12 @@ function draw(update = true) {
 					// where it'd be good to have it try again (maybe with exponential falloff?)
 					// (I think I can move my fallbackTimeout code into/around `initFacemeshWorker` and `facemeshEstimateFaces`)
 
-					const iid = setInterval(() => {
+					// Note: clearTimeout/clearInterval work interchangably
+					fallbackTimeoutID = setInterval(() => {
 						try {
 							// Once we can create a webgl2 canvas...
 							document.createElement("canvas").getContext("webgl2");
-							clearInterval(iid);
+							clearInterval(fallbackTimeoutID);
 							// It's worth trying to re-initialize...
 							setTimeout(() => {
 								console.warn("Re-initializing facemesh worker");
@@ -535,7 +537,7 @@ function draw(update = true) {
 
 					useClmTracking = false;
 					showClmTracking = false;
-					clearTimeout(fallbackTimeout);
+					clearTimeout(fallbackTimeoutID);
 
 					if (!facemeshPrediction) {
 						return;
