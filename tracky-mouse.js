@@ -1,4 +1,5 @@
 import "./tracky-mouse.css";
+import FacemeshLoader from "web-worker:./facemesh.worker.js"
 
 export function initTrackyMouse(div) {
 
@@ -128,7 +129,7 @@ export function initTrackyMouse(div) {
 		facemeshEstimating = false;
 		facemeshFirstEstimation = true;
 		facemeshLoaded = false;
-		facemeshWorker = new Worker("./facemesh.worker.js");
+		facemeshWorker = new FacemeshLoader();
 		facemeshWorker.addEventListener("message", (e) => {
 			// console.log('Message received from worker', e.data);
 			if (e.data.type === "LOADED") {
