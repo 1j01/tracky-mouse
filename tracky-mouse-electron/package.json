@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "Control your computer with your head movements",
   "license": "MIT",
-  "repository": "1j01/tracky-mouse",
   "author": {
     "name": "Isaiah Odhner",
     "email": "isaiahodhner@gmail.com",
@@ -30,6 +29,14 @@
     "handsfree",
     "desktop-automation"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1j01/tracky-mouse.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1j01/tracky-mouse/issues"
+  },
+  "homepage": "https://github.com/1j01/tracky-mouse#readme",
   "main": "src/electron-main.js",
   "scripts": {
     "start": "electron-forge start",

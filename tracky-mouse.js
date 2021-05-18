@@ -1,11 +1,35 @@
-var mirrorCheckbox = document.getElementById("mirror");
-var sensitivityXSlider = document.getElementById("sensitivity-x");
-var sensitivityYSlider = document.getElementById("sensitivity-y");
-var accelerationSlider = document.getElementById("acceleration");
-var useCameraButton = document.getElementById("use-camera");
-var useDemoFootageButton = document.getElementById("use-demo");
+function initTrackyMouse(div) {
 
-var canvas = document.getElementById("tracky-mouse-canvas");
+var uiContainer = div || document.createElement("div");
+uiContainer.classList.add("tracky-mouse-ui");
+uiContainer.innerHTML = `
+	<div class="tracky-mouse-controls">
+		<button id="use-camera">Use my camera</button>
+		<button id="use-demo">Use demo footage</button>
+		<br>
+		<br>
+		<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
+		<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" id="sensitivity-y"></label>
+		<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
+		<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" id="acceleration"></label>
+		<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" id="min-distance"></label> -->
+		<br>
+		<label><span class="label-text"><input type="checkbox" checked id="mirror"> Mirror</label>
+		<br>
+	</div>
+	<canvas class="tracky-mouse-canvas" id="tracky-mouse-canvas"></canvas>
+`;
+if (!div) {
+	document.body.appendChild(uiContainer);
+}
+var mirrorCheckbox = uiContainer.querySelector("#mirror");
+var sensitivityXSlider = uiContainer.querySelector("#sensitivity-x");
+var sensitivityYSlider = uiContainer.querySelector("#sensitivity-y");
+var accelerationSlider = uiContainer.querySelector("#acceleration");
+var useCameraButton = uiContainer.querySelector("#use-camera");
+var useDemoFootageButton = uiContainer.querySelector("#use-demo");
+
+var canvas = uiContainer.querySelector("#tracky-mouse-canvas");
 var ctx = canvas.getContext('2d');
 
 var pointerEl = document.createElement('div');
@@ -896,4 +920,6 @@ if (typeof onShortcut !== "undefined") {
 			handleShortcut("toggle-tracking");
 		}
 	});
+}
+
 }
