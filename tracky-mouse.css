@@ -6,10 +6,6 @@
 	position: fixed;
 	transform: translate(-50%, -50%);
 }
-body {
-	background-color: white;
-	color: black;
-}
 .tracky-mouse-ui {
 	background-color: rgb(195, 173, 230);
 	color: black;
@@ -27,16 +23,4 @@ body {
 .tracky-mouse-ui .label-text {
 	display: inline-block;
 	min-width: 150px;
-}
-@media (prefers-color-scheme: dark) {
-	body {
-		background-color: black;
-		color: white;
-	}
-	a:link {
-		color: aquamarine;
-	}
-	a:visited {
-		color: rgb(197, 127, 255);
-	}
 }
