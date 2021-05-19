@@ -944,6 +944,9 @@ TrackyMouse.init = function (div) {
 		if (shortcutType === "toggle-tracking") {
 			paused = !paused;
 			mouseNeedsInitPos = true;
+			if (paused) {
+				pointerEl.style.display = "none";
+			}
 		}
 	};
 	if (typeof onShortcut !== "undefined") {
