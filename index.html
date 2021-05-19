@@ -40,7 +40,11 @@
 		It uses two different face detectors, a fast-to-load one and a slower to load but much more accurate one, which it switches to automatically when available.
 	</p>
 	<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
-	<script src="tracky-mouse.js" async></script>
+	<script src="tracky-mouse.js"></script>
+	<script>
+		TrackyMouse.dependenciesRoot = ".";
+		TrackyMouse.init();
+	</script>
 </body>
 
 </html>
