@@ -224,7 +224,7 @@ TrackyMouse.init = function (div) {
 		faceConvergence = 0;
 	};
 
-	useCameraButton.onclick = () => {
+	useCameraButton.onclick = TrackyMouse.useCamera = () => {
 		navigator.mediaDevices.getUserMedia({
 			audio: false,
 			video: {
@@ -247,7 +247,7 @@ TrackyMouse.init = function (div) {
 			console.log(error);
 		});
 	};
-	useDemoFootageButton.onclick = () => {
+	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
 		reset();
 		cameraVideo.srcObject = null;
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
@@ -932,9 +932,9 @@ TrackyMouse.init = function (div) {
 	} catch (error) {
 	}
 	if (autoDemo) {
-		useDemoFootageButton.click();
+		useDemoFootage();
 	} else if (window.moveMouse) {
-		useCameraButton.click();
+		useCamera();
 	}
 
 	const handleShortcut = (shortcutType) => {
