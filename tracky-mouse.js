@@ -870,6 +870,9 @@ TrackyMouse.init = function (div) {
 					pointerEl.style.left = `${mouseX}px`;
 					pointerEl.style.top = `${mouseY}px`;
 				}
+				if (TrackyMouse.onPointerMove) {
+					TrackyMouse.onPointerMove(mouseX, mouseY);
+				}
 			}
 			prevMovementX = movementX;
 			prevMovementY = movementY;
