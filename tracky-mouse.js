@@ -449,10 +449,17 @@ TrackyMouse.init = function (div) {
 		if (!mainOops) {
 			return;
 		}
+		const rect = canvas.getBoundingClientRect();
 		if (mirror) {
-			mainOops.addPoint(canvas.offsetWidth - event.offsetX, event.offsetY);
+			mainOops.addPoint(
+				(rect.right - event.clientX) / rect.width * canvas.width,
+				(event.clientY - rect.top) / rect.height * canvas.height,
+			);
 		} else {
-			mainOops.addPoint(event.offsetX, event.offsetY);
+			mainOops.addPoint(
+				(event.clientX - rect.left) / rect.width * canvas.width,
+				(event.clientY - rect.top) / rect.height * canvas.height,
+			);
 		}
 	});
 
