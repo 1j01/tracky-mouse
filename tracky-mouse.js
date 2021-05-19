@@ -1,4 +1,36 @@
-function initTrackyMouse(div) {
+const TrackyMouse = {
+	dependenciesRoot: "./tracky-mouse",
+};
+
+TrackyMouse.loadDependencies = function () {
+	TrackyMouse.dependenciesRoot = TrackyMouse.dependenciesRoot.replace(/\/+$/, "");
+	const loadScript = src => {
+		return new Promise((resolve, reject) => {
+			// This wouldn't wait for them to load
+			// for (const script of document.scripts) {
+			// 	if (script.src.includes(src)) {
+			// 		resolve();
+			// 		return;
+			// 	}
+			// }
+			const script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.onload = resolve;
+			script.onerror = reject;
+			script.src = src;
+			document.head.append(script);
+		})
+	};
+	const scriptFiles = [
+		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/stats.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/tf.js`,
+	];
+	return Promise.all(scriptFiles.map(loadScript));
+};
+
+TrackyMouse.init = function (div) {
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
@@ -126,7 +158,7 @@ function initTrackyMouse(div) {
 		facemeshEstimating = false;
 		facemeshFirstEstimation = true;
 		facemeshLoaded = false;
-		facemeshWorker = new Worker("./facemesh.worker.js");
+		facemeshWorker = new Worker(`${TrackyMouse.dependenciesRoot}/facemesh.worker.js`);
 		facemeshWorker.addEventListener("message", (e) => {
 			// console.log('Message received from worker', e.data);
 			if (e.data.type === "LOADED") {
@@ -218,7 +250,7 @@ function initTrackyMouse(div) {
 	useDemoFootageButton.onclick = () => {
 		reset();
 		cameraVideo.srcObject = null;
-		cameraVideo.src = "private/demo-input-footage.webm";
+		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
 	};
 
