@@ -960,9 +960,9 @@ TrackyMouse.init = function (div) {
 	} catch (error) {
 	}
 	if (autoDemo) {
-		useDemoFootage();
+		TrackyMouse.useDemoFootage();
 	} else if (window.moveMouse) {
-		useCamera();
+		TrackyMouse.useCamera();
 	}
 
 	const handleShortcut = (shortcutType) => {

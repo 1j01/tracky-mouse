@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
+	<title>Tracky Mouse</title>
+	<script src="../node_modules/tracky-mouse/lib/stats.js"></script>
+	<script src="../node_modules/tracky-mouse/lib/clmtrackr.js"></script>
+	<!-- <script src="../node_modules/tracky-mouse/lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
+	<style>
+		body {
+			background-color: white;
+			color: black;
+		}
+		@media (prefers-color-scheme: dark) {
+			body {
+				background-color: black;
+				color: white;
+			}
+			a:link {
+				color: aquamarine;
+			}
+			a:visited {
+				color: rgb(197, 127, 255);
+			}
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../node_modules/tracky-mouse/tracky-mouse.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
+</head>
+
+<body>
+	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
+	<script>
+		TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
+		TrackyMouse.init();
+	</script>
+</body>
+
+</html>

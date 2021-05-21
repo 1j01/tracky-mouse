@@ -31,8 +31,8 @@ const createWindow = () => {
     icon: `${trackyMouseFolder}/images/tracky-mouse-logo-512.png`,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(`${trackyMouseFolder}/index.html`);
+  // and load the html page of the app.
+  mainWindow.loadFile(`src/electron-app.html`);
 
   // Toggle the DevTools with F12
   mainWindow.webContents.on("before-input-event", (e, input) => {
