@@ -1,4 +1,4 @@
-const { app, globalShortcut, BrowserWindow } = require('electron');
+const { app, globalShortcut, dialog, BrowserWindow } = require('electron');
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -68,7 +68,10 @@ app.on('ready', () => {
     // console.log('Toggle tracking');
     mainWindow.webContents.send("shortcut", "toggle-tracking");
   });
-
+  if (!success) {
+    dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
+  }
+  mainWindow.webContents.send("shortcut-register-result", success);
 });
 
 // Prevent multiple instances of the app

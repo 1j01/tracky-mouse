@@ -974,8 +974,8 @@ TrackyMouse.init = function (div) {
 			}
 		}
 	};
-	if (typeof onShortcut !== "undefined") {
-		onShortcut(handleShortcut);
+	if (window.onShortcut && window.shortcutRegisterSuccess) {
+		window.onShortcut(handleShortcut);
 	} else {
 		addEventListener("keydown", (event) => {
 			// Same shortcut as the global shortcut in the electron app (is that gonna be a problem?)
