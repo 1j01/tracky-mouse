@@ -36,32 +36,37 @@ TrackyMouse.init = function (div) {
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
-			<button id="use-camera">Use my camera</button>
-			<button id="use-demo">Use demo footage</button>
 			<br>
 			<br>
-			<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" id="sensitivity-x"></label>
-			<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" id="sensitivity-y"></label>
-			<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" id="smoothing"></label> -->
-			<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" id="acceleration"></label>
-			<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" id="min-distance"></label> -->
+			<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x"></label>
+			<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y"></label>
+			<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing"></label> -->
+			<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration"></label>
+			<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance"></label> -->
 			<br>
-			<label><span class="label-text"><input type="checkbox" checked id="mirror"> Mirror</label>
+			<label><span class="label-text"><input type="checkbox" checked class="tracky-mouse-mirror"> Mirror</label>
 			<br>
 		</div>
-		<canvas class="tracky-mouse-canvas" id="tracky-mouse-canvas"></canvas>
+		<div class="tracky-mouse-canvas-container">
+			<div class="tracky-mouse-canvas-overlay">
+				<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
+				<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
+				<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
+			</div>
+			<canvas class="tracky-mouse-canvas"></canvas>
+		</div>
 	`;
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
-	var mirrorCheckbox = uiContainer.querySelector("#mirror");
-	var sensitivityXSlider = uiContainer.querySelector("#sensitivity-x");
-	var sensitivityYSlider = uiContainer.querySelector("#sensitivity-y");
-	var accelerationSlider = uiContainer.querySelector("#acceleration");
-	var useCameraButton = uiContainer.querySelector("#use-camera");
-	var useDemoFootageButton = uiContainer.querySelector("#use-demo");
+	var mirrorCheckbox = uiContainer.querySelector(".tracky-mouse-mirror");
+	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
+	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
+	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
+	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
+	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 
-	var canvas = uiContainer.querySelector("#tracky-mouse-canvas");
+	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
 	var ctx = canvas.getContext('2d');
 
 	var pointerEl = document.createElement('div');
@@ -243,6 +248,7 @@ TrackyMouse.init = function (div) {
 			} catch (err) {
 				cameraVideo.src = stream;
 			}
+			useCameraButton.hidden = true;
 		}, (error) => {
 			console.log(error);
 		});
@@ -279,6 +285,18 @@ TrackyMouse.init = function (div) {
 		clmTracker.reset();
 		clmTracker.initFaceDetector(cameraVideo);
 		clmTrackingStarted = true;
+	});
+	cameraVideo.addEventListener('ended', () => {
+		useCameraButton.hidden = false;
+		if (!paused) {
+			handleShortcut("toggle-tracking");
+		}
+	});
+	cameraVideo.addEventListener('error', () => {
+		useCameraButton.hidden = false;
+		if (!paused) {
+			handleShortcut("toggle-tracking");
+		}
 	});
 
 	canvas.width = defaultWidth;

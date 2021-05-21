@@ -26,3 +26,28 @@
 	display: inline-block;
 	min-width: 150px;
 }
+.tracky-mouse-canvas-container {
+	position: relative;
+}
+.tracky-mouse-canvas-overlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.tracky-mouse-use-camera-button {
+	font-size: 2em;
+	color: white;
+	background-color: rgb(220, 20, 60);
+	border: 0;
+	border-radius: 5px;
+	padding: 10px;
+	cursor: pointer;
+}
+.tracky-mouse-use-camera-button:hover {
+	background-color: rgb(230, 20, 62);
+}
