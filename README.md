@@ -11,6 +11,8 @@ Sharing code between these different facets of the project means a lot of improv
 
 Options could be exported/imported or even synced between the products.
 
+[✨👉 **Try out the Demo!** 👈✨](https://1j01.github.io/tracky-mouse/)
+
 ## Why did I make this?
 
 - eViacam isn't working on my computer
