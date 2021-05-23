@@ -46,7 +46,7 @@ const init_dwell_clicking = (config) => {
 	let inactive_until_time = Date.now();
 	let paused = false;
 	let hover_candidate;
-	let gaze_dragging = null;
+	let dwell_dragging = null;
 
 	const deactivate_for_at_least = (timespan) => {
 		inactive_until_time = Math.max(inactive_until_time, Date.now() + timespan);
@@ -69,7 +69,7 @@ const init_dwell_clicking = (config) => {
 	};
 	const on_pointer_up_or_cancel = (e) => {
 		deactivate_for_at_least(inactive_after_release_timespan);
-		gaze_dragging = null;
+		dwell_dragging = null;
 	};
 
 	let page_focused = document.visibilityState === "visible"; // guess/assumption
@@ -203,7 +203,7 @@ const init_dwell_clicking = (config) => {
 			// or an element occludes the center of an element you're hovering over, in which case it
 			// could be confusing if it showed a dwell click indicator over a different element than it would click
 			// (but TODO: just move the indicator off center in that case)
-			if (hover_candidate && !gaze_dragging) {
+			if (hover_candidate && !dwell_dragging) {
 				const apparent_hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
 				const show_occluder_indicator = (occluder) => {
 					const occluder_indicator = document.createElement("div");
@@ -254,7 +254,7 @@ const init_dwell_clicking = (config) => {
 					(hover_candidate.time - time + hover_timespan) / hover_timespan
 					* circle_radius_max;
 				if (time > hover_candidate.time + hover_timespan) {
-					if (pointer_active || gaze_dragging) {
+					if (pointer_active || dwell_dragging) {
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
@@ -270,7 +270,7 @@ const init_dwell_clicking = (config) => {
 							})
 						));
 						if (config.shouldDrag(hover_candidate.target)) {
-							gaze_dragging = hover_candidate.target;
+							dwell_dragging = hover_candidate.target;
 						} else {
 							hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 								Object.assign(get_event_options(hover_candidate), {
@@ -286,7 +286,7 @@ const init_dwell_clicking = (config) => {
 				}
 			}
 
-			if (gaze_dragging) {
+			if (dwell_dragging) {
 				dwell_indicator.classList.add("for-release");
 			} else {
 				dwell_indicator.classList.remove("for-release");
@@ -298,7 +298,7 @@ const init_dwell_clicking = (config) => {
 			dwell_indicator.style.top = `${circle_position.y - circle_radius_max / 2}px`;
 
 			let halo_target =
-				gaze_dragging ||
+				dwell_dragging ||
 				(hover_candidate || get_hover_candidate(latest_point.x, latest_point.y) || {}).target;
 			
 			if (halo_target && (!paused || config.dwellClickEvenIfPaused(halo_target))) {
@@ -355,9 +355,9 @@ const init_dwell_clicking = (config) => {
 						x: average_point.x,
 						y: average_point.y,
 						time: Date.now(),
-						target: gaze_dragging || null,
+						target: dwell_dragging || null,
 					};
-					if (!gaze_dragging) {
+					if (!dwell_dragging) {
 						hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
 					}
 					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused(hover_candidate.target))) {
@@ -366,7 +366,7 @@ const init_dwell_clicking = (config) => {
 				}
 			}
 			if (recent_movement_amount > 100) {
-				if (gaze_dragging) {
+				if (dwell_dragging) {
 					window.dispatchEvent(new PointerEvent("pointerup",
 						Object.assign(get_event_options(average_point), {
 							button: 0,
