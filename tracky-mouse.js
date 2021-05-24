@@ -960,7 +960,7 @@ TrackyMouse.init = function (div) {
 							clmTrackingStarted = true;
 							console.warn("Falling back to clmtracker");
 						}
-						// If you've switched desktop sessions, it will presuably fail to get a new webgl context until you've switched back
+						// If you've switched desktop sessions, it will presumably fail to get a new webgl context until you've switched back
 						// Is this setInterval useful, vs just starting the worker?
 						// It probably has a faster cycle, with the code as it is now, but maybe not inherently.
 						// TODO: do the extra getContext() calls add to a GPU process crash limit
@@ -970,7 +970,7 @@ TrackyMouse.init = function (div) {
 						// where it'd be good to have it try again (maybe with exponential falloff?)
 						// (I think I can move my fallbackTimeout code into/around `initFacemeshWorker` and `facemeshEstimateFaces`)
 
-						// Note: clearTimeout/clearInterval work interchangably
+						// Note: clearTimeout/clearInterval work interchangeably
 						fallbackTimeoutID = setInterval(() => {
 							try {
 								// Once we can create a webgl2 canvas...
@@ -1010,7 +1010,7 @@ TrackyMouse.init = function (div) {
 						// });
 
 						// time travel latency compensation
-						// keep a history of camera frames since the prediciton was requested,
+						// keep a history of camera frames since the prediction was requested,
 						// and analyze optical flow of new points over that history
 
 						// mainOops.filterPoints(() => false); // for DEBUG, empty points (could probably also just set pointCount = 0;

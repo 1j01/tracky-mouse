@@ -133,13 +133,13 @@ It shouldn't be too much, because going to the edge of the screen is also useful
 		- Above or below the screen is fine but you should be centered so the pointer doesn't move left/right too much when you want it to go up or down
 			- In particular, you should be in line with the camera, such that your face appears head-on when looking comfortably at the center of the screen
 				- A guide could show your head rotation
-				- Callibration for an off-center camera should be possible (or explicitly using your head rotation instead of a projected position)
+				- Calibration for an off-center camera should be possible (or explicitly using your head rotation instead of a projected position)
 		- If the camera is above, leaning forward generally moves the pointer down
 		- If the camera is below, leaning forward generally moves the pointer up
 	- Tilting your head or moving your head both move the pointer
 	- Lighting
 		- Detect bad lighting conditions and report to the user
-	- "Callibration" via simply moving your head to the edges of the screen (it's not like a gesture, it's just implicit in the fact that there are boundaries)
+	- "Calibration" via simply moving your head to the edges of the screen (it's not like a gesture, it's just implicit in the fact that there are boundaries)
 	- Choosing settings (sensitivity etc.)
 		- If you move yourself or your camera, you may want to adjust the sensitivity.
 		- If you're further away from the camera, you'll want a higher sensitivity.
@@ -157,5 +157,5 @@ It shouldn't be too much, because going to the edge of the screen is also useful
 	- WebAssembly for tracking points?
 	- Time travel for adding AND removing points
 - Eye tracker
-	- Hybrid eye tracking + head tracking control, where eye tracking is used for quick movements to any place on the screen, and head tracking is used for fine adjustment. Like [Precision Gaze Mouse](https://precisiongazemouse.org/)
-- Try moving away from electron, to a lighter-weight platform like <https://github.com/webview/webview>
+	- Hybrid eye tracking + head tracking control, where eye tracking is used for quick movements to any place on the screen, and head tracking is used for fine adjustment. Like [Precision Gaze Mouse](https://precisiongazemouse.org/) or [PolyMouse](https://github.com/trishume/PolyMouse)
+- Try moving away from electron, to a lighter-weight platform like [webview](https://github.com/webview/webview)
