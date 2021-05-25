@@ -106,7 +106,6 @@ TrackyMouse.init = function (div) {
 	var pointsBasedOnFaceScore = 0;
 	var paused = false;
 	var mouseNeedsInitPos = true;
-	const SLOWMO = false;
 	var debugTimeTravel = false;
 	var debugAcceleration = false;
 	var showDebugText = false;
@@ -507,11 +506,6 @@ TrackyMouse.init = function (div) {
 			}
 		}
 		oops.addPoint(x, y);
-	}
-
-	function animate() {
-		requestAnimationFrame(animate);
-		draw(!SLOWMO && (!paused || document.visibilityState === "visible"));
 	}
 
 	function draw(update = true) {
@@ -949,10 +943,10 @@ TrackyMouse.init = function (div) {
 		ctx.fill();
 	}
 
-	animate();
-	if (SLOWMO) {
-		setInterval(draw, 200);
-	}
+	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false, in this version of Electron (at least on Ubuntu with XFCE)
+	setInterval(function animationLoop() {
+		draw(!paused || document.visibilityState === "visible");
+	}, 15);
 
 	let autoDemo = false;
 	try {

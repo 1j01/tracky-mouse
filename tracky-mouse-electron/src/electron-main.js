@@ -26,6 +26,8 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'src/preload.js'),
+      // Disable throttling of animations and timers so the mouse control can still work when minimized.
+      backgroundThrottling: false,
     },
     // icon: `${trackyMouseFolder}/images/tracky-mouse-logo-16.png`,
     icon: `${trackyMouseFolder}/images/tracky-mouse-logo-512.png`,
