@@ -1,7 +1,8 @@
-const { moveMouse } = require('robotjs');
 const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld("moveMouse", (...args) => moveMouse(...args));
+contextBridge.exposeInMainWorld("moveMouse", (...args) => {
+	ipcRenderer.send('move-mouse', ...args);
+});
 
 ipcRenderer.on("shortcut-register-result", (event, data) => {
 	// console.log("shortcut-register-result", data);

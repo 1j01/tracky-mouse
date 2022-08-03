@@ -1,6 +1,7 @@
-const { app, globalShortcut, dialog, BrowserWindow } = require('electron');
+const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const debug = require('electron-debug');
+const { setMouseLocation } = require('serenade-driver');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -8,9 +9,6 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 debug({ isEnabled: true });
-
-// Needed for RobotJS native module in renderer process (could be moved to main with IPC)
-app.allowRendererProcessReuse = false;
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -61,6 +59,12 @@ const createWindow = () => {
       });
     }
   });
+
+  // Expose functionality to the renderer process.
+  ipcMain.on('move-mouse', (event, x, y) => {
+    setMouseLocation(x, y);
+  });
+
 };
 
 // This method will be called when Electron has finished
