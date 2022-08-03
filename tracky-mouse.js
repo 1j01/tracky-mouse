@@ -1261,6 +1261,17 @@ TrackyMouse.init = function (div) {
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
+				const pieMenuMode = true; // for Slither.io TBH, not really a pie menu
+				if (pieMenuMode) {
+					const centerX = screenWidth / 2;
+					const centerY = screenHeight / 2;
+					const distance = Math.hypot(mouseX - centerX, mouseY - centerY);
+					const circleRadius = Math.min(screenWidth, screenHeight) * 0.25;
+					if (distance > circleRadius) {
+						mouseX = centerX + (mouseX - centerX) * circleRadius / distance;
+						mouseY = centerY + (mouseY - centerY) * circleRadius / distance;
+					}
+				}
 				if (window.moveMouse) {
 					window.moveMouse(~~mouseX, ~~mouseY);
 					pointerEl.style.display = "none";
