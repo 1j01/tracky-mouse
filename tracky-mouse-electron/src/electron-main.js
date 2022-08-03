@@ -1,10 +1,13 @@
 const { app, globalShortcut, dialog, BrowserWindow } = require('electron');
 const path = require('path');
+const debug = require('electron-debug');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+
+debug({ isEnabled: true });
 
 // Needed for RobotJS native module in renderer process (could be moved to main with IPC)
 app.allowRendererProcessReuse = false;
