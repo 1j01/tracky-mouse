@@ -914,7 +914,7 @@ TrackyMouse.init = function (div) {
 					} catch (error) {
 						console.warn("Error in clmTracker.track()", error);
 						if (clmTracker.getCurrentParameters().includes(NaN)) {
-							console.warn("NaNs creeped in.");
+							console.warn("NaNs crept in.");
 						}
 					}
 					face = clmTracker.getCurrentPosition();
@@ -943,7 +943,7 @@ TrackyMouse.init = function (div) {
 
 					// Note that the first estimation from facemesh often takes a while,
 					// and we don't want to continuously terminate the worker as it's working on those first results.
-					// And also, for the first estimate it hasn't actually disabled clmtracker yet, so it's fine if it's a long timeout.
+					// And also, for the first estimate it hasn't actually disabled clmtrackr yet, so it's fine if it's a long timeout.
 					clearTimeout(fallbackTimeoutID);
 					fallbackTimeoutID = setTimeout(() => {
 						if (!useClmTracking) {
@@ -952,7 +952,7 @@ TrackyMouse.init = function (div) {
 							clmTracker.reset();
 							clmTracker.initFaceDetector(cameraVideo);
 							clmTrackingStarted = true;
-							console.warn("Falling back to clmtracker");
+							console.warn("Falling back to clmtrackr");
 						}
 						// If you've switched desktop sessions, it will presumably fail to get a new webgl context until you've switched back
 						// Is this setInterval useful, vs just starting the worker?
@@ -1219,22 +1219,22 @@ TrackyMouse.init = function (div) {
 				const graphHeight = 150;
 				const graphMaxInput = 0.2;
 				const graphMaxOutput = 0.4;
-				const hilightInputRange = 0.01;
+				const highlightInputRange = 0.01;
 				ctx.save();
 				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, graphWidth, graphHeight);
-				const hilightInput = movementX * sensitivityX;
+				const highlightInput = movementX * sensitivityX;
 				for (let x = 0; x < graphWidth; x++) {
 					const input = x / graphWidth * graphMaxInput;
 					const output = accelerate(input, input);
 					const y = output / graphMaxOutput * graphHeight;
 					// ctx.fillStyle = Math.abs(y - deltaX) < 1 ? "yellow" : "lime";
-					const hilight = Math.abs(Math.abs(input) - Math.abs(hilightInput)) < hilightInputRange;
-					if (hilight) {
+					const highlight = Math.abs(Math.abs(input) - Math.abs(highlightInput)) < highlightInputRange;
+					if (highlight) {
 						ctx.fillStyle = "rgba(255, 255, 0, 0.3)";
 						ctx.fillRect(x, 0, 1, graphHeight);
 					}
-					ctx.fillStyle = hilight ? "yellow" : "lime";
+					ctx.fillStyle = highlight ? "yellow" : "lime";
 					ctx.fillRect(x, graphHeight - y, 1, y);
 				}
 				ctx.restore();

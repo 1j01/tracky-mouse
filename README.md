@@ -142,7 +142,7 @@ It shouldn't be too much, because going to the edge of the screen is also useful
 	- Choosing settings (sensitivity etc.)
 		- If you move yourself or your camera, you may want to adjust the sensitivity.
 		- If you're further away from the camera, you'll want a higher sensitivity.
-			- Would it make sense to scale this to your head size in the camera? Maybe not with the innacurate face tracker, but with the face tracker... but you probably wouldn't want it to switch setting scaling schemes suddenly
+			- Would it make sense to scale this to your head size in the camera? Maybe not with the inaccurate face tracker, but with the face tracker... but you probably wouldn't want it to switch setting scaling schemes suddenly
 			- It could detect if your head size significantly changes (and is stable for a period of time) from what it has been (stably for a period of time), and alert you, suggesting changing the setting, maybe even suggesting a value
 - Integrate with dwell clicking functionality in jspaint...
 - Dwell click time / area, beep on click options, etc.
