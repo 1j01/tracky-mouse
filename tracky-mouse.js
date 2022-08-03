@@ -1348,15 +1348,17 @@ TrackyMouse.init = function (div) {
 			}
 		}
 	};
-	if (window.onShortcut && window.shortcutRegisterSuccess) {
+	// Try to handle both the global and local shortcuts
+	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
+	// I hope there's no cross-platform issue with this.
+	if (window.onShortcut) {
 		window.onShortcut(handleShortcut);
-	} else {
-		addEventListener("keydown", (event) => {
-			// Same shortcut as the global shortcut in the electron app (is that gonna be a problem?)
-			if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
-				handleShortcut("toggle-tracking");
-			}
-		});
 	}
+	addEventListener("keydown", (event) => {
+		// Same shortcut as the global shortcut in the electron app
+		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
+			handleShortcut("toggle-tracking");
+		}
+	});
 
 }

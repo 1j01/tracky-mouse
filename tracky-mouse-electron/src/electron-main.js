@@ -77,7 +77,6 @@ app.on('ready', () => {
   if (!success) {
     dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
   }
-  mainWindow.webContents.send("shortcut-register-result", success);
 });
 
 // Prevent multiple instances of the app
