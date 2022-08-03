@@ -42,7 +42,6 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Run `npm install`
 - Run `npm run dev` to start a web server that will automatically reload when files change.
 - For the electron app:
-	- First install [RobotJS build dependencies](https://robotjs.io/docs/building) (on Ubuntu, `sudo apt-get install libxtst-dev libpng++-dev build-essential python2.7`)
 	- Then `cd tracky-mouse-electron && npm install`
 
 ## Install Desktop App
