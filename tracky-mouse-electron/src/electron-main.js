@@ -1,6 +1,6 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { setMouseLocation } = require('serenade-driver');
+const { setMouseLocation, getMouseLocation } = require('serenade-driver');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -58,8 +58,33 @@ const createWindow = () => {
   });
 
   // Expose functionality to the renderer process.
-  ipcMain.on('move-mouse', (event, x, y) => {
-    setMouseLocation(x, y);
+  
+  // Set the mouse location, but stop if the mouse is moved normally.
+  const thresholdToRegainControl = 10; // in pixels
+  const regainControlForTime = 2000; // in milliseconds
+  let regainControlTimeout = null;
+  let lastXY = [undefined, undefined];
+  ipcMain.on('move-mouse', async (event, x, y, time) => {
+    if (lastXY[0] === undefined || lastXY[1] === undefined) {
+      lastXY = [x, y];
+    }
+    let xy = await getMouseLocation();
+    xy = [xy.x, xy.y]; // TODO: use {x, y} instead of [x, y] for consistency with this API!
+    const distanceMoved = Math.hypot(xy[0] - lastXY[0], xy[1] - lastXY[1]);
+    if (distanceMoved > thresholdToRegainControl) {
+      clearTimeout(regainControlTimeout);
+      regainControlTimeout = setTimeout(() => {
+        regainControlTimeout = null; // used to check if we're pausing
+      }, regainControlForTime);
+      lastXY = [xy[0], xy[1]];
+    } else if (regainControlTimeout === null) {
+      lastXY = [x, y];
+      // lastXY = [xy[0], xy[1]];
+      // no await...
+      setMouseLocation(x, y);
+    }
+    // const latency = performance.now() - time;
+    // console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, xy: ${xy}, lastXY: ${lastXY}`);
   });
 
 };

@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld("moveMouse", (...args) => {
-	ipcRenderer.send('move-mouse', ...args);
+contextBridge.exposeInMainWorld("moveMouse", (x, y) => {
+	ipcRenderer.send('move-mouse', x, y, performance.now());
 });
 
 contextBridge.exposeInMainWorld("onShortcut", (callback) => {
