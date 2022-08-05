@@ -74,7 +74,7 @@ const createWindow = () => {
 
 	// Expose functionality to the renderer process.
 
-	// Set the mouse location, but stop if the mouse is moved normally.
+	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds
 	let regainControlTimeout = null;
