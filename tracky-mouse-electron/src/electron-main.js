@@ -1,6 +1,6 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { setMouseLocation, getMouseLocation } = require('serenade-driver');
+const { setMouseLocation, getMouseLocation, click } = require('serenade-driver');
 const windowStateKeeper = require('electron-window-state');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -109,6 +109,14 @@ const createWindow = () => {
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		lastPos = { x: undefined, y: undefined };
+	});
+
+	ipcMain.on('click', async (event, x, y, time) => {
+		await setMouseLocation(x, y);
+		await click();
+
+		// const latency = performance.now() - time;
+		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
 	});
 
 	// Set up the screen overlay window.
