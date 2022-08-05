@@ -77,7 +77,8 @@ const createWindow = () => {
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds
-	let regainControlTimeout = null;
+	let regainControlTimeout = null; // also used to check if we're pausing temporarily
+	let enabled = true; // for starting/stopping until the user requests otherwise
 	let lastPos = { x: undefined, y: undefined };
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
@@ -90,19 +91,20 @@ const createWindow = () => {
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 			}, regainControlForTime);
 			lastPos = {x: curPos.x, y: curPos.y};
-		} else if (regainControlTimeout === null) {
+		} else if (regainControlTimeout === null && enabled) {
 			lastPos = { x, y };
 			// lastPos = {x: curPos.x, y: curPos.y};
 			// Note: no await here, not for a particular reason.
 			setMouseLocation(x, y);
 		}
-		// const latency = performance.now() - time;
-		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: ${curPos}, lastPos: ${lastPos}`);
+		const latency = performance.now() - time;
+		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		// screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', (event, enabled) => {
+	ipcMain.on('notify-toggle-state', (event, _enabled) => {
+		enabled = _enabled;
 		screenOverlayWindow.webContents.send('toggle', enabled);
 
 		// Start immediately if enabled.
@@ -112,6 +114,15 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('click', async (event, x, y, time) => {
+		if (regainControlTimeout || !enabled) {
+			return;
+		}
+
+		// Translate coords in case of debug (doesn't matter when it's fullscreen).
+		x += screenOverlayWindow.getContentBounds().x;
+		y += screenOverlayWindow.getContentBounds().y;
+
+		lastPos = { x, y }; // probably not enough to work reliably, trying to prevent it from pausing after a dwell click.
 		await setMouseLocation(x, y);
 		await click();
 
@@ -129,34 +140,34 @@ const createWindow = () => {
 		width: primaryDisplay.bounds.width,
 		height: primaryDisplay.bounds.height,
 		frame: false,
-		// transparent: true,
-		// backgroundColor: '#00000000',
-		// hasShadow: false,
-		// roundedCorners: false,
-		// alwaysOnTop: true,
-		// resizable: false,
-		// movable: false,
-		// minimizable: false,
-		// maximizable: false,
-		// closable: false,
-		// fullscreenable: false, // may want this...
-		// // fullscreen: true,
-		// focusable: false,
-		// skipTaskbar: true,
+		transparent: true,
+		backgroundColor: '#00000000',
+		hasShadow: false,
+		roundedCorners: false,
+		alwaysOnTop: true,
+		resizable: false,
+		movable: false,
+		minimizable: false,
+		maximizable: false,
+		closable: false,
+		fullscreenable: false, // may want this...
+		// fullscreen: true,
+		focusable: false,
+		skipTaskbar: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
 		webPreferences: {
 			preload: path.join(app.getAppPath(), 'src/preload-screen-overlay.js'),
 		},
 	});
-	// screenOverlayWindow.setIgnoreMouseEvents(true);
-	// screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
+	screenOverlayWindow.setIgnoreMouseEvents(true);
+	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
 	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
 	screenOverlayWindow.on('closed', () => {
 		screenOverlayWindow = null;
 	});
 
-	screenOverlayWindow.webContents.toggleDevTools();
+	screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
 };
 
 // This method will be called when Electron has finished

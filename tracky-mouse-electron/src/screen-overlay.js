@@ -23,8 +23,28 @@ TrackyMouse.initDwellClicking({
 	shouldDrag: (el) => false, // not optional??
 });
 
-window.dispatchEvent(new Event("focus"));
+electronAPI.onMouseMove((event, x, y) => {
+	// console.log("move-mouse", x, y);
+	document.dispatchEvent(new Event("mouseenter"));
+	const domEvent = new PointerEvent("pointermove", {
+		view: window,
+		clientX: x,
+		clientY: y,
+		pointerId: 1,
+		pointerType: "mouse",
+		isPrimary: true,
+		button: 0,
+		buttons: 1,
+		bubbles: true,
+		cancelable: true,
+	});
+	window.dispatchEvent(domEvent);
+});
 
 electronAPI.onToggle((event, isEnabled) => {
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
+
+	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
+	document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
+	window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
 });
