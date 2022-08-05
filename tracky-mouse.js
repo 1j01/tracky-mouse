@@ -265,7 +265,8 @@ const init_dwell_clicking = (config) => {
 					(hover_candidate.time - time + hover_timespan) / hover_timespan
 					* circle_radius_max;
 				if (time > hover_candidate.time + hover_timespan) {
-					if (pointer_active || dwell_dragging) {
+					// TODO: replace pointer_active (from jspaint) with some formal API
+					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,

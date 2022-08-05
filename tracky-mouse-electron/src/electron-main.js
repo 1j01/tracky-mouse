@@ -1,6 +1,6 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { setMouseLocation, getMouseLocation } = require('serenade-driver');
+const { setMouseLocation, getMouseLocation, click } = require('serenade-driver');
 const windowStateKeeper = require('electron-window-state');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -77,7 +77,8 @@ const createWindow = () => {
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds
-	let regainControlTimeout = null;
+	let regainControlTimeout = null; // also used to check if we're pausing temporarily
+	let enabled = true; // for starting/stopping until the user requests otherwise
 	let lastPos = { x: undefined, y: undefined };
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
@@ -90,25 +91,43 @@ const createWindow = () => {
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 			}, regainControlForTime);
 			lastPos = {x: curPos.x, y: curPos.y};
-		} else if (regainControlTimeout === null) {
+		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			lastPos = { x, y };
 			// lastPos = {x: curPos.x, y: curPos.y};
 			// Note: no await here, not for a particular reason.
 			setMouseLocation(x, y);
 		}
 		// const latency = performance.now() - time;
-		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: ${curPos}, lastPos: ${lastPos}`);
+		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		// screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', (event, enabled) => {
+	ipcMain.on('notify-toggle-state', (event, nowEnabled) => {
+		enabled = nowEnabled;
 		screenOverlayWindow.webContents.send('toggle', enabled);
 
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		lastPos = { x: undefined, y: undefined };
+	});
+
+	ipcMain.on('click', async (event, x, y, time) => {
+		if (regainControlTimeout || !enabled) {
+			return;
+		}
+
+		// Translate coords in case of debug (doesn't matter when it's fullscreen).
+		x += screenOverlayWindow.getContentBounds().x;
+		y += screenOverlayWindow.getContentBounds().y;
+
+		lastPos = { x, y }; // probably not enough to work reliably, trying to prevent it from pausing after a dwell click.
+		await setMouseLocation(x, y);
+		await click();
+
+		// const latency = performance.now() - time;
+		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
 	});
 
 	// Set up the screen overlay window.
@@ -148,6 +167,7 @@ const createWindow = () => {
 		screenOverlayWindow = null;
 	});
 
+	// screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
 };
 
 // This method will be called when Electron has finished
