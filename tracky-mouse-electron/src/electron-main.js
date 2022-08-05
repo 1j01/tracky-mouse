@@ -20,8 +20,8 @@ let mainWindow;
 
 const createWindow = () => {
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 800,
-    defaultHeight: 600,
+    defaultWidth: 750,
+    defaultHeight: 700,
   });
 
   // Create the browser window.
