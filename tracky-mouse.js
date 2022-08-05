@@ -37,11 +37,11 @@ const init_dwell_clicking = (config) => {
 	const circle_radius_max = 50; // dwell indicator size in pixels
 	const hover_timespan = 500; // how long between the dwell indicator appearing and triggering a click
 	const averaging_window_timespan = 500;
-	const inactive_at_startup_timespan = 1500; // (should be at least averaging_window_timespan, but more importantly enough to make it not awkward when enabling dwell clicking)
+	const inactive_at_startup_timespan = 0; // (should be at least averaging_window_timespan, but more importantly enough to make it not awkward when enabling dwell clicking)
 	const inactive_after_release_timespan = 1000; // after click or drag release (from dwell or otherwise)
 	const inactive_after_hovered_timespan = 1000; // after dwell click indicator appears; does not control the time to finish that dwell click, only to click on something else after this is canceled (but it doesn't control that directly)
 	const inactive_after_invalid_timespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
-	const inactive_after_focused_timespan = 1000; // after page becomes focused after being unfocused
+	const inactive_after_focused_timespan = 0; // after page becomes focused after being unfocused
 	let recent_points = [];
 	let inactive_until_time = Date.now();
 	let paused = false;
@@ -56,12 +56,14 @@ const init_dwell_clicking = (config) => {
 	const halo = document.createElement("div");
 	halo.className = "hover-halo";
 	halo.style.display = "none";
+	halo.style.pointerEvents = "none";
 	document.body.appendChild(halo);
 	const dwell_indicator = document.createElement("div");
 	dwell_indicator.className = "tracky-mouse-pointer";
 	dwell_indicator.style.width = `${circle_radius_max}px`;
 	dwell_indicator.style.height = `${circle_radius_max}px`;
 	dwell_indicator.style.display = "none";
+	dwell_indicator.style.pointerEvents = "none";
 	document.body.appendChild(dwell_indicator);
 
 	const on_pointer_move = (e) => {
@@ -368,9 +370,9 @@ const init_dwell_clicking = (config) => {
 						time: Date.now(),
 						target: dwell_dragging || null,
 					};
-					if (!dwell_dragging) {
-						hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
-					}
+					// if (!dwell_dragging) {
+					// 	hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
+					// }
 					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused(hover_candidate.target))) {
 						hover_candidate = null;
 					}
