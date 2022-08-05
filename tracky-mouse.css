@@ -26,6 +26,22 @@
 	display: inline-block;
 	min-width: 150px;
 }
+.tracky-mouse-ui .labeled-slider {
+	display: inline-block;
+	position: relative;
+	margin-bottom: 20px;
+	/* color: gray; */
+}
+.tracky-mouse-ui .labeled-slider .min-label {
+	position: absolute;
+	bottom: -10px;
+	left: 0;
+}
+.tracky-mouse-ui .labeled-slider .max-label {
+	position: absolute;
+	bottom: -10px;
+	right: 0;
+}
 .tracky-mouse-canvas-container {
 	position: relative;
 }

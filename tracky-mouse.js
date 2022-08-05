@@ -418,11 +418,47 @@ TrackyMouse.init = function (div) {
 		<div class="tracky-mouse-controls">
 			<br>
 			<br>
-			<label><span class="label-text">Horizontal Sensitivity</span> <input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x"></label>
-			<label><span class="label-text">Vertical Sensitivity</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y"></label>
-			<!-- <label><span class="label-text">Smoothing</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing"></label> -->
-			<label><span class="label-text">Acceleration</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration"></label>
-			<!-- <label><span class="label-text">Easy Stop (min distance to move)</span> <input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance"></label> -->
+			<label>
+				<span class="label-text">Horizontal Sensitivity</span>
+				<span class="labeled-slider">
+					<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
+					<span class="min-label">Slow</span>
+					<span class="max-label">Fast</span>
+				</span>
+			</label>
+			<label>
+				<span class="label-text">Vertical Sensitivity</span>
+				<span class="labeled-slider">
+					<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
+					<span class="min-label">Slow</span>
+					<span class="max-label">Fast</span>
+				</span>
+			</label>
+			<!-- <label>
+				<span class="label-text">Smoothing</span>
+				<span class="labeled-slider">
+					<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
+					<span class="min-label"></span>
+					<span class="max-label"></span>
+				</span>
+			</label> -->
+			<label>
+				<span class="label-text">Acceleration</span>
+				<span class="labeled-slider">
+					<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
+					<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
+					<span class="min-label">Linear</span>
+					<span class="max-label">Smooth</span>
+				</span>
+			</label>
+			<!-- <label>
+				<span class="label-text">Easy Stop (min distance to move)</span>
+				<span class="labeled-slider">
+					<input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance">
+					<span class="min-label">Jittery</span>
+					<span class="max-label">Steady</span>
+				</span>
+			</label> -->
 			<br>
 			<label><span class="label-text"><input type="checkbox" checked class="tracky-mouse-mirror"> Mirror</label>
 			<br>
