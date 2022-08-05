@@ -20,6 +20,7 @@ TrackyMouse.initDwellClicking({
 	retarget: [], // not optional?
 	targets: "#button-that-takes-up-the-entire-screen",
 	isEquivalentTarget: (el1, el2) => el1 === el2, // not optional??
+	shouldDrag: (el) => false, // not optional??
 });
 
 window.dispatchEvent(new Event("focus"));

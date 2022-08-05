@@ -81,10 +81,10 @@ const init_dwell_clicking = (config) => {
 		deactivate_for_at_least(inactive_after_focused_timespan);
 	};
 	const on_blur = () => {
-		page_focused = false;
+		// page_focused = false;
 	};
 	const on_mouse_leave_page = () => {
-		mouse_inside_page = false;
+		// mouse_inside_page = false;
 	};
 	const on_mouse_enter_page = () => {
 		mouse_inside_page = true;
@@ -267,7 +267,8 @@ const init_dwell_clicking = (config) => {
 					(hover_candidate.time - time + hover_timespan) / hover_timespan
 					* circle_radius_max;
 				if (time > hover_candidate.time + hover_timespan) {
-					if (pointer_active || dwell_dragging) {
+					// TODO: pointer_active -> part of API
+					if (window.pointer_active || dwell_dragging) {
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
@@ -370,9 +371,9 @@ const init_dwell_clicking = (config) => {
 						time: Date.now(),
 						target: dwell_dragging || null,
 					};
-					// if (!dwell_dragging) {
-					// 	hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
-					// }
+					if (!dwell_dragging) {
+						hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
+					}
 					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused(hover_candidate.target))) {
 						hover_candidate = null;
 					}
