@@ -116,7 +116,6 @@ Tracky Mouse is available on npm:
 - Might want a margin outside of the bounds of the screen, in order to reliably point to the edges of the screen
 The mouse would always be clamped to the screen, but the internal notion of the mouse's position would have some legroom.
 It shouldn't be too much, because going to the edge of the screen is also useful for simple on-the-fly "calibration"
-- Robust error handling, for camera access etc.
 - Test differing video aspect ratios
 - Coach user on:
 	- Granting camera access

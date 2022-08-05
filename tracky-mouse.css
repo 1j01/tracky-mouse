@@ -83,3 +83,10 @@
 .tracky-mouse-use-camera-button:hover {
 	background-color: rgb(230, 20, 62);
 }
+.tracky-mouse-error-message {
+	position: absolute;
+	bottom: 20%;
+	font-size: 1.5em;
+	text-align: center;
+	color: white;
+}

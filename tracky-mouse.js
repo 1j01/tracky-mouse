@@ -470,6 +470,7 @@ TrackyMouse.init = function (div) {
 				<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
 			</div>
 			<canvas class="tracky-mouse-canvas"></canvas>
+			<div class="tracky-mouse-error-message" role="alert" hidden></div>
 		</div>
 	`;
 	if (!div) {
@@ -481,7 +482,7 @@ TrackyMouse.init = function (div) {
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
-
+	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
@@ -666,8 +667,30 @@ TrackyMouse.init = function (div) {
 				cameraVideo.src = stream;
 			}
 			useCameraButton.hidden = true;
+			errorMessage.hidden = true;
 		}, (error) => {
 			console.log(error);
+			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
+				// required track is missing
+				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
+			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
+				// webcam is already in use
+				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
+				// constraints can not be satisfied by avb. devices
+				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
+			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
+				// permission denied in browser
+				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
+			} else if (error.name == "TypeError") {
+				// empty constraints object
+				errorMessage.textContent = `Something went wrong accessing the camera. (${error.name}: ${error.message})`;
+			} else {
+				// other errors
+				errorMessage.textContent = `Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`;
+			}
+			errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
+			errorMessage.hidden = false;
 		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
