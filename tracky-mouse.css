@@ -24,6 +24,7 @@
 }
 .tracky-mouse-ui label {
 	display: block;
+	width: fit-content; /* avoid controls being too easy to click (mainly checkboxes) */
 }
 .tracky-mouse-ui .label-text {
 	display: inline-block;
