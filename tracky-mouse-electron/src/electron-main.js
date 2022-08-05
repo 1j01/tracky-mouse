@@ -78,28 +78,27 @@ const createWindow = () => {
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds
 	let regainControlTimeout = null;
-	let lastXY = [undefined, undefined];
+	let lastPos = { x: undefined, y: undefined };
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
-		if (lastXY[0] === undefined || lastXY[1] === undefined) {
-			lastXY = [x, y];
+		if (lastPos.x === undefined || lastPos.y === undefined) {
+			lastPos = { x, y };
 		}
-		let xy = await getMouseLocation();
-		xy = [xy.x, xy.y]; // TODO: use {x, y} instead of [x, y] for consistency with this API!
-		const distanceMoved = Math.hypot(xy[0] - lastXY[0], xy[1] - lastXY[1]);
+		let curPos = await getMouseLocation();
+		const distanceMoved = Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y);
 		if (distanceMoved > thresholdToRegainControl) {
 			clearTimeout(regainControlTimeout);
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
 			}, regainControlForTime);
-			lastXY = [xy[0], xy[1]];
+			lastPos = {x: curPos.x, y: curPos.y};
 		} else if (regainControlTimeout === null) {
-			lastXY = [x, y];
-			// lastXY = [xy[0], xy[1]];
-			// no await...
+			lastPos = { x, y };
+			// lastPos = {x: curPos.x, y: curPos.y};
+			// Note: no await here, not for a particular reason.
 			setMouseLocation(x, y);
 		}
 		// const latency = performance.now() - time;
-		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, xy: ${xy}, lastXY: ${lastXY}`);
+		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: ${curPos}, lastPos: ${lastPos}`);
 
 		// screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
