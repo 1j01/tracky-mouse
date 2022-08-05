@@ -1,6 +1,7 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { setMouseLocation, getMouseLocation } = require('serenade-driver');
+const windowStateKeeper = require('electron-window-state');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -18,10 +19,17 @@ const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__
 let mainWindow;
 
 const createWindow = () => {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 600,
+  });
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'src/preload.js'),
       // Disable throttling of animations and timers so the mouse control can still work when minimized.
@@ -56,6 +64,9 @@ const createWindow = () => {
       });
     }
   });
+
+  // Restore window state, and listen for window state changes.
+  mainWindowState.manage(mainWindow);
 
   // Expose functionality to the renderer process.
   
