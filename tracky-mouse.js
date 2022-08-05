@@ -482,6 +482,8 @@ TrackyMouse.init = function (div) {
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 
+	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
+
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
 	var ctx = canvas.getContext('2d');
 
@@ -690,6 +692,11 @@ TrackyMouse.init = function (div) {
 		debugFramesCanvas.height = cameraVideo.videoHeight;
 		debugPointsCanvas.width = cameraVideo.videoWidth;
 		debugPointsCanvas.height = cameraVideo.videoHeight;
+
+		// .tracky-mouse-canvas-container needs aspect-ratio CSS property
+		// so that the video can be scaled to fit the container.
+		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
+		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
 		mainOops = new OOPS();
 		if (useFacemesh) {
