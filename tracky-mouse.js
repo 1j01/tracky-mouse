@@ -1323,7 +1323,7 @@ TrackyMouse.init = function (div) {
 		ctx.fill();
 	}
 
-	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false, in this version of Electron (at least on Ubuntu with XFCE)
+	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false (at least in some version of Electron (v12 I think, when I tested it), on Ubuntu, with XFCE)
 	setInterval(function animationLoop() {
 		draw(!paused || document.visibilityState === "visible");
 	}, 15);
