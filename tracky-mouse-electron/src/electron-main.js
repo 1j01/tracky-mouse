@@ -17,6 +17,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
 
 let mainWindow;
+let screenOverlayWindow;
 
 const createWindow = () => {
 	const mainWindowState = windowStateKeeper({
@@ -66,6 +67,11 @@ const createWindow = () => {
 	// Restore window state, and listen for window state changes.
 	mainWindowState.manage(mainWindow);
 
+	// Clean up overlay when the app window is closed.
+	mainWindow.on('close', () => {
+		screenOverlayWindow?.close();
+	});
+
 	// Expose functionality to the renderer process.
 
 	// Set the mouse location, but stop if the mouse is moved normally.
@@ -94,6 +100,43 @@ const createWindow = () => {
 		}
 		// const latency = performance.now() - time;
 		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, xy: ${xy}, lastXY: ${lastXY}`);
+	});
+
+	// Set up the screen overlay window.
+	// We cannot require the screen module until the app is ready.
+	const { screen } = require('electron');
+	const primaryDisplay = screen.getPrimaryDisplay();
+	screenOverlayWindow = new BrowserWindow({
+		x: primaryDisplay.bounds.x,
+		y: primaryDisplay.bounds.y,
+		width: primaryDisplay.bounds.width,
+		height: primaryDisplay.bounds.height,
+		frame: false,
+		transparent: true,
+		backgroundColor: '#00000000',
+		hasShadow: false,
+		roundedCorners: false,
+		alwaysOnTop: true,
+		resizable: false,
+		movable: false,
+		minimizable: false,
+		maximizable: false,
+		closable: false,
+		fullscreenable: false, // may want this...
+		// fullscreen: true,
+		focusable: false,
+		skipTaskbar: true,
+		accessibleTitle: 'Tracky Mouse Screen Overlay',
+		webPreferences: {
+			preload: path.join(app.getAppPath(), 'src/preload.js'),
+		},
+	});
+	screenOverlayWindow.setIgnoreMouseEvents(true);
+	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
+
+	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
+	screenOverlayWindow.on('closed', () => {
+		screenOverlayWindow = null;
 	});
 
 };
