@@ -10,3 +10,7 @@ contextBridge.exposeInMainWorld("onShortcut", (callback) => {
 		callback(data);
 	});
 });
+
+contextBridge.exposeInMainWorld("notifyToggleState", (callback) => {
+	ipcRenderer.send('notify-toggle-state', callback);
+});

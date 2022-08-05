@@ -32,7 +32,7 @@ const createWindow = () => {
 		width: mainWindowState.width,
 		height: mainWindowState.height,
 		webPreferences: {
-			preload: path.join(app.getAppPath(), 'src/preload.js'),
+			preload: path.join(app.getAppPath(), 'src/preload-main.js'),
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
 		},
@@ -100,6 +100,12 @@ const createWindow = () => {
 		}
 		// const latency = performance.now() - time;
 		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, xy: ${xy}, lastXY: ${lastXY}`);
+
+		// screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+	});
+
+	ipcMain.on('notify-toggle-state', (event, enabled) => {
+		screenOverlayWindow.webContents.send('toggle', enabled);
 	});
 
 	// Set up the screen overlay window.
@@ -128,7 +134,7 @@ const createWindow = () => {
 		skipTaskbar: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
 		webPreferences: {
-			preload: path.join(app.getAppPath(), 'src/preload.js'),
+			preload: path.join(app.getAppPath(), 'src/preload-screen-overlay.js'),
 		},
 	});
 	screenOverlayWindow.setIgnoreMouseEvents(true);

@@ -1412,6 +1412,9 @@ TrackyMouse.init = function (div) {
 			if (paused) {
 				pointerEl.style.display = "none";
 			}
+			if (window.notifyToggleState) {
+				window.notifyToggleState(!paused);
+			}
 		}
 	};
 	// Try to handle both the global and local shortcuts
