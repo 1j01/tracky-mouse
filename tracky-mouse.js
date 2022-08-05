@@ -388,7 +388,7 @@ const init_dwell_clicking = (config) => {
 	};
 	raf_id = requestAnimationFrame(animate);
 
-	clean_up_dwell_clicking = ()=> {
+	clean_up_dwell_clicking = () => {
 		cancelAnimationFrame(raf_id);
 		halo.remove();
 		dwell_indicator.remove();
@@ -399,7 +399,7 @@ const init_dwell_clicking = (config) => {
 		window.removeEventListener("blur", on_blur);
 		document.removeEventListener("mouseleave", on_mouse_leave_page);
 		document.removeEventListener("mouseenter", on_mouse_enter_page);
-		clean_up_dwell_clicking = ()=> {};
+		clean_up_dwell_clicking = () => { };
 	};
 };
 

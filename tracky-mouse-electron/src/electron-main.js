@@ -47,20 +47,18 @@ const createWindow = () => {
 		if (input.type === "keyDown" && input.key === "F12") {
 			mainWindow.webContents.toggleDevTools();
 
-			mainWindow.webContents.on('devtools-opened', () => {
+			mainWindow.webContents.on('devtools-opened', async () => {
 				// Can't use mainWindow.webContents.devToolsWebContents.on("before-input-event") - it just doesn't intercept any events.
-				mainWindow.webContents.devToolsWebContents.executeJavaScript(`
-						new Promise((resolve)=> {
-							addEventListener("keydown", (event) => {
-								if (event.key === "F12") {
-									resolve();
-								}
-							}, { once: true });
-						})
-					`)
-					.then(() => {
-						mainWindow.webContents.toggleDevTools();
-					});
+				await mainWindow.webContents.devToolsWebContents.executeJavaScript(`
+					new Promise((resolve)=> {
+						addEventListener("keydown", (event) => {
+							if (event.key === "F12") {
+								resolve();
+							}
+						}, { once: true });
+					})
+				`);
+				mainWindow.webContents.toggleDevTools();
 			});
 		}
 	});
