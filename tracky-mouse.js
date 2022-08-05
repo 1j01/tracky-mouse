@@ -104,13 +104,13 @@ const init_dwell_clicking = (config) => {
 		if (!target) {
 			return null;
 		}
-		
+
 		let hover_candidate = {
 			x: clientX,
 			y: clientY,
 			time: Date.now(),
 		};
-		
+
 		let retargeted = false;
 		for (const { from, to, withinMargin = Infinity } of config.retarget) {
 			if (
@@ -243,7 +243,7 @@ const init_dwell_clicking = (config) => {
 					show_occluder_indicator(occluder || document.body);
 				}
 			}
-			
+
 			let circle_position = latest_point;
 			let circle_opacity = 0;
 			let circle_radius = 0;
@@ -300,7 +300,7 @@ const init_dwell_clicking = (config) => {
 			let halo_target =
 				dwell_dragging ||
 				(hover_candidate || get_hover_candidate(latest_point.x, latest_point.y) || {}).target;
-			
+
 			if (halo_target && (!paused || config.dwellClickEvenIfPaused(halo_target))) {
 				let rect = halo_target.getBoundingClientRect();
 				const computed_style = getComputedStyle(halo_target);

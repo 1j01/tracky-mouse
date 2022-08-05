@@ -44,7 +44,7 @@
     "lib/"
   ],
   "scripts": {
-		"dev": "live-server --port=64206"
+    "dev": "live-server --port=64206"
   },
   "devDependencies": {
     "live-server": "^1.2.1"

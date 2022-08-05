@@ -1,6 +1,6 @@
 .tracky-mouse-pointer {
 	z-index: 900000;
-    pointer-events: none;
+	pointer-events: none;
 	border-radius: 50%;
 	background-color: red;
 	width: 20px;
