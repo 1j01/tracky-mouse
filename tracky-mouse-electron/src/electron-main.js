@@ -80,15 +80,14 @@ const createWindow = () => {
 	let regainControlTimeout = null;
 	let lastPos = { x: undefined, y: undefined };
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
-		if (lastPos.x === undefined || lastPos.y === undefined) {
-			lastPos = { x, y };
-		}
-		let curPos = await getMouseLocation();
-		const distanceMoved = Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y);
+		const curPos = await getMouseLocation();
+		const distanceMoved = lastPos.x !== undefined ? Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y) : 0;
 		if (distanceMoved > thresholdToRegainControl) {
+			// console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, { curPos, lastPos, x, y });
 			clearTimeout(regainControlTimeout);
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
+				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 			}, regainControlForTime);
 			lastPos = {x: curPos.x, y: curPos.y};
 		} else if (regainControlTimeout === null) {
@@ -105,6 +104,11 @@ const createWindow = () => {
 
 	ipcMain.on('notify-toggle-state', (event, enabled) => {
 		screenOverlayWindow.webContents.send('toggle', enabled);
+
+		// Start immediately if enabled.
+		clearTimeout(regainControlTimeout);
+		regainControlTimeout = null;
+		lastPos = { x: undefined, y: undefined };
 	});
 
 	// Set up the screen overlay window.
