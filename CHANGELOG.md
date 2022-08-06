@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The webcam view now shrinks to fit the window.
 - Sliders now have labels for their min and max values.
 - Controls are themed purple.
+- All classes are now prefixed with `tracky-mouse-`.
 
 ## [1.0.0] - 2021-05-20
 ### Added
