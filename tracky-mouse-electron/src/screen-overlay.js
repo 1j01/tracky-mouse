@@ -39,7 +39,8 @@ electronAPI.onMouseMove((event, x, y) => {
 	window.dispatchEvent(domEvent);
 });
 
-electronAPI.onToggle((event, isEnabled) => {
+electronAPI.onChangeDwellClicking((event, isEnabled) => {
+	// console.log("onChangeDwellClicking", isEnabled);
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 
 	if (!isEnabled) {

@@ -72,7 +72,7 @@ const createWindow = () => {
 		screenOverlayWindow?.close();
 	});
 
-	// Expose functionality to the renderer process.
+	// Expose functionality to the renderer processes.
 
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
@@ -80,6 +80,9 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let enabled = true; // for starting/stopping until the user requests otherwise
 	let lastPos = { x: undefined, y: undefined };
+	const updateDwellClicking = () => {
+		screenOverlayWindow.webContents.send('change-dwell-clicking', enabled && regainControlTimeout === null);
+	};
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
 		const distanceMoved = lastPos.x !== undefined ? Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y) : 0;
@@ -89,7 +92,9 @@ const createWindow = () => {
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+				updateDwellClicking();
 			}, regainControlForTime);
+			updateDwellClicking();
 			lastPos = {x: curPos.x, y: curPos.y};
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			lastPos = { x, y };
@@ -105,7 +110,7 @@ const createWindow = () => {
 
 	ipcMain.on('notify-toggle-state', (event, nowEnabled) => {
 		enabled = nowEnabled;
-		screenOverlayWindow.webContents.send('toggle', enabled);
+		updateDwellClicking();
 
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
