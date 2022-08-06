@@ -480,9 +480,9 @@ TrackyMouse.init = function (div) {
 				<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
 				<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
 				<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
+				<div class="tracky-mouse-error-message" role="alert" hidden></div>
 			</div>
 			<canvas class="tracky-mouse-canvas"></canvas>
-			<div class="tracky-mouse-error-message" role="alert" hidden></div>
 		</div>
 	`;
 	if (!div) {
