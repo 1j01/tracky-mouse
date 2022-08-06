@@ -203,12 +203,11 @@ const config = {
 				rect.height > rect.width;
 			const min = Number(target.min);
 			const max = Number(target.max);
-			const v = (
+			target.value = (
 				vertical ?
 					(y - rect.top) / rect.height :
 					(x - rect.left) / rect.width
 			) * (max - min) + min;
-			target.value = v;
 			target.dispatchEvent(new Event("input", { bubbles: true }));
 			target.dispatchEvent(new Event("change", { bubbles: true }));
 		} else {
