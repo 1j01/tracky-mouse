@@ -140,34 +140,34 @@ const createWindow = () => {
 		width: primaryDisplay.bounds.width,
 		height: primaryDisplay.bounds.height,
 		frame: false,
-		// transparent: true,
-		// backgroundColor: '#00000000',
-		// hasShadow: false,
-		// roundedCorners: false,
-		// alwaysOnTop: true,
-		// resizable: false,
-		// movable: false,
-		// minimizable: false,
-		// maximizable: false,
-		// closable: false,
-		// fullscreenable: false, // may want this...
-		// // fullscreen: true,
-		// focusable: false,
-		// skipTaskbar: true,
+		transparent: true,
+		backgroundColor: '#00000000',
+		hasShadow: false,
+		roundedCorners: false,
+		alwaysOnTop: true,
+		resizable: false,
+		movable: false,
+		minimizable: false,
+		maximizable: false,
+		closable: false,
+		fullscreenable: false, // may want this...
+		// fullscreen: true,
+		focusable: false,
+		skipTaskbar: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
 		webPreferences: {
 			preload: path.join(app.getAppPath(), 'src/preload-screen-overlay.js'),
 		},
 	});
-	// screenOverlayWindow.setIgnoreMouseEvents(true);
-	// screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
+	screenOverlayWindow.setIgnoreMouseEvents(true);
+	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
 	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
 	screenOverlayWindow.on('closed', () => {
 		screenOverlayWindow = null;
 	});
 
-	screenOverlayWindow.webContents.toggleDevTools();
+	screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
 };
 
 // This method will be called when Electron has finished
