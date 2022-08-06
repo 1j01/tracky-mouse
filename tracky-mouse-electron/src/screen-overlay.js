@@ -25,6 +25,7 @@ TrackyMouse.initDwellClicking({
 
 electronAPI.onMouseMove((event, x, y) => {
 	// console.log("move-mouse", x, y);
+	document.dispatchEvent(new Event("mouseenter"));
 	const domEvent = new PointerEvent("pointermove", {
 		view: window,
 		clientX: x,
