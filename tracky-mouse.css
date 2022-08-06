@@ -101,7 +101,34 @@
 	color: yellow;
 	position: absolute;
 	bottom: 0;
-	left: 0;
-	right: 0;
+	left: 50%;
+	transform: translateX(-50%);
 	text-align: center;
+	padding: 0 5px;
+	white-space: nowrap;
+	--overlay-background-color: rgba(50, 0, 50, 0.5);
+	--height: 25px;
+	height: var(--height);
+	background-color: var(--overlay-background-color);
 }
+/* triangles */
+#tracky-mouse-screen-overlay-message::before,
+#tracky-mouse-screen-overlay-message::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+}
+#tracky-mouse-screen-overlay-message::before {
+	border-width: 0 0 var(--height) var(--height);
+	border-color: transparent transparent var(--overlay-background-color) transparent;
+	left: calc(var(--height) * -1);
+}
+#tracky-mouse-screen-overlay-message::after {
+	border-width: var(--height) 0 0 var(--height);
+	border-color: transparent transparent transparent var(--overlay-background-color);
+	right: calc(var(--height) * -1);
+}
+
