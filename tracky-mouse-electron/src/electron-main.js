@@ -77,7 +77,8 @@ const createWindow = () => {
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds
-	let regainControlTimeout = null;
+	let regainControlTimeout = null; // also used to check if we're pausing temporarily
+	let enabled = true; // for starting/stopping until the user requests otherwise
 	let lastPos = { x: undefined, y: undefined };
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
@@ -90,7 +91,7 @@ const createWindow = () => {
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 			}, regainControlForTime);
 			lastPos = {x: curPos.x, y: curPos.y};
-		} else if (regainControlTimeout === null) {
+		} else if (regainControlTimeout === null && enabled) {
 			lastPos = { x, y };
 			// lastPos = {x: curPos.x, y: curPos.y};
 			// Note: no await here, not for a particular reason.
@@ -102,7 +103,8 @@ const createWindow = () => {
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', (event, enabled) => {
+	ipcMain.on('notify-toggle-state', (event, _enabled) => {
+		enabled = _enabled;
 		screenOverlayWindow.webContents.send('toggle', enabled);
 
 		// Start immediately if enabled.
@@ -112,6 +114,10 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('click', async (event, x, y, time) => {
+		if (regainControlTimeout || !enabled) {
+			return;
+		}
+
 		// Translate coords in case of debug (doesn't matter when it's fullscreen).
 		x -= screenOverlayWindow.getContentBounds().x;
 		y -= screenOverlayWindow.getContentBounds().y;
