@@ -1,4 +1,5 @@
 
+const message = document.getElementById("tracky-mouse-screen-overlay-message");
 const actionSpan = document.getElementById("enable-disable");
 
 const bigButton = document.createElement("button");
@@ -43,6 +44,14 @@ electronAPI.onMouseMove((event, x, y) => {
 
 electronAPI.onToggle((event, isEnabled) => {
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
+
+	if (!isEnabled) {
+		// Fade out the message after a little while so it doesn't get in the way.
+		message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
+	} else {
+		message.style.animation = "";
+		message.style.opacity = "1";
+	}
 
 	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
 	document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));

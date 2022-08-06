@@ -97,6 +97,7 @@
 }
 
 /* Screen overlay in electron app */
+
 #tracky-mouse-screen-overlay-message {
 	color: yellow;
 	position: absolute;
@@ -134,5 +135,14 @@
 	border-width: var(--height) 0 0 var(--height);
 	border-color: transparent transparent transparent var(--overlay-background-color);
 	right: calc(var(--height) * -1);
+}
+
+@keyframes tracky-mouse-screen-overlay-message-fade-out {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
