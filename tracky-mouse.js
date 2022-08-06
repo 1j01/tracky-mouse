@@ -56,12 +56,14 @@ const init_dwell_clicking = (config) => {
 	const halo = document.createElement("div");
 	halo.className = "hover-halo";
 	halo.style.display = "none";
+	halo.style.pointerEvents = "none";
 	document.body.appendChild(halo);
 	const dwell_indicator = document.createElement("div");
 	dwell_indicator.className = "tracky-mouse-pointer";
 	dwell_indicator.style.width = `${circle_radius_max}px`;
 	dwell_indicator.style.height = `${circle_radius_max}px`;
 	dwell_indicator.style.display = "none";
+	dwell_indicator.style.pointerEvents = "none";
 	document.body.appendChild(dwell_indicator);
 
 	const on_pointer_move = (e) => {
