@@ -23,8 +23,6 @@ TrackyMouse.initDwellClicking({
 	shouldDrag: (el) => false, // not optional??
 });
 
-window.dispatchEvent(new Event("focus"));
-
 electronAPI.onToggle((event, isEnabled) => {
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 });
