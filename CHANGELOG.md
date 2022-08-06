@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Desktop app now remembers the window size and position.
 - Desktop app lets you regain manual control by simply moving the mouse, pausing temporarily, and resuming.
 - Friendly error handling for different camera access failure scenarios.
+- API documentation.
 
 ### Fixed
 - Function `average_points` was missing. It existed in JS Paint, the only place I tested the library, since I was extracting the code from JS Paint.

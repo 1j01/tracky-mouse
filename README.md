@@ -57,56 +57,7 @@ If you want to try out the desktop app in the meantime:
 Tracky Mouse is available on npm:
 `npm i tracky-mouse`
 
-```html
-<script src="node_modules/tracky-mouse/tracky-mouse.js"></script>
-<script>
-	TrackyMouse.dependenciesRoot = "node_modules/tracky-mouse";
-	TrackyMouse.loadDependencies().then(function() {
-		TrackyMouse.init();
-
-		// This sort of logic will be built into tracky-mouse in the future.
-		const getEventOptions = ({x, y})=> {
-			return {
-				view: window, // needed for offsetX/Y calculation
-				clientX: x,
-				clientY: y,
-				pointerId: 1234567890,
-				pointerType: "mouse",
-				isPrimary: true,
-			};
-		};
-		TrackyMouse.onPointerMove = (x, y) => {
-			const target = document.elementFromPoint(x, y) || document.body;
-			if (target !== last_el_over) {
-				if (last_el_over) {
-					const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
-						button: 0,
-						buttons: 1,
-						bubbles: false,
-						cancelable: false,
-					}));
-					last_el_over.dispatchEvent(event);
-				}
-				const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
-					button: 0,
-					buttons: 1,
-					bubbles: false,
-					cancelable: false,
-				}));
-				target.dispatchEvent(event);
-				last_el_over = target;
-			}
-			const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
-				button: 0,
-				buttons: 1,
-				bubbles: true,
-				cancelable: true,
-			}));
-			target.dispatchEvent(event);
-		};
-	});
-</script>
-```
+Read the [API documentation](./API.md) for more information.
 
 ## Changelog
 
