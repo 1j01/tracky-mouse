@@ -8,6 +8,11 @@
 	position: fixed;
 	transform: translate(-50%, -50%);
 }
+.tracky-mouse-hover-halo {
+	pointer-events: none;
+	z-index: 1000000;
+	box-shadow: 0 0 10px yellow, 0 0 3px yellow;
+}
 .tracky-mouse-ui {
 	background-color: rgb(195, 173, 230);
 	color: black;

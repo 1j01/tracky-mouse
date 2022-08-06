@@ -54,7 +54,7 @@ const init_dwell_clicking = (config) => {
 	deactivate_for_at_least(inactive_at_startup_timespan);
 
 	const halo = document.createElement("div");
-	halo.className = "hover-halo";
+	halo.className = "tracky-mouse-hover-halo";
 	halo.style.display = "none";
 	document.body.appendChild(halo);
 	const dwell_indicator = document.createElement("div");
