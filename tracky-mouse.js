@@ -81,10 +81,10 @@ const init_dwell_clicking = (config) => {
 		deactivate_for_at_least(inactive_after_focused_timespan);
 	};
 	const on_blur = () => {
-		// page_focused = false;
+		page_focused = false;
 	};
 	const on_mouse_leave_page = () => {
-		// mouse_inside_page = false;
+		mouse_inside_page = false;
 	};
 	const on_mouse_enter_page = () => {
 		mouse_inside_page = true;

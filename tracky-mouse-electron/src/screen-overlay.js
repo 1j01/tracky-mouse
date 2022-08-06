@@ -34,4 +34,8 @@ electronAPI.onMouseMove((event, x, y) => {
 
 electronAPI.onToggle((event, isEnabled) => {
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
+
+	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
+	document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
+	window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
 });
