@@ -1443,3 +1443,9 @@ TrackyMouse.init = function (div) {
 	});
 
 }
+
+// CommonJS export is untested. Script tag usage recommended.
+// Just including this in case it is somehow useful.
+if (typeof module !== "undefined" && module.exports) {
+	module.exports = TrackyMouse;
+}
