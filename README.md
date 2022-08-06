@@ -108,6 +108,10 @@ Tracky Mouse is available on npm:
 </script>
 ```
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for project history and API changes.
+
 ## TODO
 
 - Improve acceleration option (can reference eviacam source code, and play around with different equations)
