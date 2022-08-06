@@ -24,12 +24,12 @@ TrackyMouse.initDwellClicking({
 });
 
 electronAPI.onMouseMove((event, x, y) => {
-	console.log("move-mouse", x, y);
+	// console.log("move-mouse", x, y);
 	const domEvent = new PointerEvent("pointermove", {
 		view: window,
 		clientX: x,
 		clientY: y,
-		pointerId: 1234567890,
+		pointerId: 1,
 		pointerType: "mouse",
 		isPrimary: true,
 		button: 0,
@@ -37,7 +37,7 @@ electronAPI.onMouseMove((event, x, y) => {
 		bubbles: true,
 		cancelable: true,
 	});
-	document.dispatchEvent(domEvent);
+	window.dispatchEvent(domEvent);
 });
 
 electronAPI.onToggle((event, isEnabled) => {
