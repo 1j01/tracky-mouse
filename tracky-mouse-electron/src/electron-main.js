@@ -97,8 +97,8 @@ const createWindow = () => {
 			// Note: no await here, not for a particular reason.
 			setMouseLocation(x, y);
 		}
-		// const latency = performance.now() - time;
-		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: ${curPos}, lastPos: ${lastPos}`);
+		const latency = performance.now() - time;
+		console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
@@ -119,9 +119,10 @@ const createWindow = () => {
 		}
 
 		// Translate coords in case of debug (doesn't matter when it's fullscreen).
-		x -= screenOverlayWindow.getContentBounds().x;
-		y -= screenOverlayWindow.getContentBounds().y;
+		x += screenOverlayWindow.getContentBounds().x;
+		y += screenOverlayWindow.getContentBounds().y;
 
+		lastPos = { x, y }; // probably not enough to work reliably, trying to prevent it from pausing after a dwell click.
 		await setMouseLocation(x, y);
 		await click();
 
