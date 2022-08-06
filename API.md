@@ -133,14 +133,14 @@ This starts up the dwell clicker.
 
 Arguments:
 - `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored.
-- `config.shouldDrag(el)` (required): a function that returns true if the element should be dragged rather than simply clicked.
-- `config.noCenter(el)` (required): a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
-- `config.retarget` (required): an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
+- `config.shouldDrag(el)` (optional): a function that returns true if the element should be dragged rather than simply clicked.
+- `config.noCenter(el)` (optional): a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
+- `config.retarget` (optional): an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
 	- `from` (required): the element to retarget from. Can be a CSS selector, an element, or a function taking the element under the mouse and returning whether it should be retargeted.
 	- `to` (required): the element to retarget to. Can be a CSS selector for an element which is an ancestor or descendant of the `from` element, or an element, or a function taking the element under the mouse and returning an element to retarget to, or null to ignore the element.
 	- `withinMargin` (optional): a number of pixels within which to consider the mouse over the `to` element. Default to infinity.
-- `config.isEquivalentTarget(el1, el2)` (required): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
-- `config.dwellClickEvenIfPaused(el)` (required): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
+- `config.isEquivalentTarget(el1, el2)` (optional): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
+- `config.dwellClickEvenIfPaused(el)` (optional): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
 - `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
 
 Example:

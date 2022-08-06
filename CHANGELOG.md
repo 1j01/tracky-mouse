@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sliders now have labels for their min and max values.
 - Controls are themed purple.
 - All classes are now prefixed with `tracky-mouse-`.
+- `shouldDrag`, `noCenter`, `retarget`, `isEquivalentTarget`, and `dwellClickEvenIfPaused` are now optional for `initDwellClicking`.
 
 ## [1.0.0] - 2021-05-20
 ### Added

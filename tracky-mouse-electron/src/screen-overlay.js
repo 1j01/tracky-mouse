@@ -14,14 +14,11 @@ bigButton.id = "button-that-takes-up-the-entire-screen";
 document.body.appendChild(bigButton);
 
 TrackyMouse.initDwellClicking({
+	targets: "#button-that-takes-up-the-entire-screen",
 	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
 	click: ({ x, y }) => {
 		electronAPI.mouseClick(x, y);
 	},
-	retarget: [], // not optional?
-	targets: "#button-that-takes-up-the-entire-screen",
-	isEquivalentTarget: (el1, el2) => el1 === el2, // not optional??
-	shouldDrag: (el) => false, // not optional??
 });
 
 electronAPI.onMouseMove((event, x, y) => {

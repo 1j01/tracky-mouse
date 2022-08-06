@@ -112,7 +112,7 @@ const init_dwell_clicking = (config) => {
 		};
 
 		let retargeted = false;
-		for (const { from, to, withinMargin = Infinity } of config.retarget) {
+		for (const { from, to, withinMargin = Infinity } of (config.retarget ?? [])) {
 			if (
 				from instanceof Element ? from === target :
 					typeof from === "function" ? from(target) :
@@ -161,7 +161,7 @@ const init_dwell_clicking = (config) => {
 			}
 		}
 
-		if (!config.noCenter(target)) {
+		if (!config.noCenter?.(target)) {
 			// Nudge hover previews to the center of buttons and things
 			const rect = target.getBoundingClientRect();
 			hover_candidate.x = rect.left + rect.width / 2;
@@ -239,7 +239,7 @@ const init_dwell_clicking = (config) => {
 					if (
 						apparent_hover_candidate.target !== hover_candidate.target &&
 						// !retargeted &&
-						!config.isEquivalentTarget(
+						!config.isEquivalentTarget?.(
 							apparent_hover_candidate.target, hover_candidate.target
 						)
 					) {
@@ -281,7 +281,7 @@ const init_dwell_clicking = (config) => {
 								buttons: 1,
 							})
 						));
-						if (config.shouldDrag(hover_candidate.target)) {
+						if (config.shouldDrag?.(hover_candidate.target)) {
 							dwell_dragging = hover_candidate.target;
 						} else {
 							hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
@@ -313,7 +313,7 @@ const init_dwell_clicking = (config) => {
 				dwell_dragging ||
 				(hover_candidate || get_hover_candidate(latest_point.x, latest_point.y) || {}).target;
 
-			if (halo_target && (!paused || config.dwellClickEvenIfPaused(halo_target))) {
+			if (halo_target && (!paused || config.dwellClickEvenIfPaused?.(halo_target))) {
 				let rect = halo_target.getBoundingClientRect();
 				const computed_style = getComputedStyle(halo_target);
 				let ancestor = halo_target;
@@ -372,7 +372,7 @@ const init_dwell_clicking = (config) => {
 					if (!dwell_dragging) {
 						hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
 					}
-					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused(hover_candidate.target))) {
+					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused?.(hover_candidate.target))) {
 						hover_candidate = null;
 					}
 				}
