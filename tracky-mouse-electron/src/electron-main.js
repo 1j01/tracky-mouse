@@ -98,7 +98,7 @@ const createWindow = () => {
 			setMouseLocation(x, y);
 		}
 		const latency = performance.now() - time;
-		console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
+		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
