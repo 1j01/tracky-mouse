@@ -99,7 +99,7 @@ const createWindow = () => {
 		// const latency = performance.now() - time;
 		// console.log(`move-mouse: ${x}, ${y}, latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: ${curPos}, lastPos: ${lastPos}`);
 
-		// screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
 	ipcMain.on('notify-toggle-state', (event, enabled) => {

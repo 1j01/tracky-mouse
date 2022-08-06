@@ -23,6 +23,14 @@ TrackyMouse.initDwellClicking({
 	shouldDrag: (el) => false, // not optional??
 });
 
+electronAPI.onMouseMove((event, x, y) => {
+	const domEvent = new MouseEvent("mousemove", {
+		clientX: x,
+		clientY: y,
+	});
+	document.dispatchEvent(domEvent);
+});
+
 electronAPI.onToggle((event, isEnabled) => {
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 });
