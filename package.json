@@ -44,11 +44,9 @@
     "lib/"
   ],
   "scripts": {
-    "dev": "live-server --port=64206",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
+    "dev": "live-server --port=64206"
   },
   "devDependencies": {
-    "eslint": "^8.21.0",
     "live-server": "^1.2.1"
   }
 }
