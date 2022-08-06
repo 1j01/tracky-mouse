@@ -112,6 +112,10 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('click', async (event, x, y, time) => {
+		// Translate coords in case of debug (doesn't matter when it's fullscreen).
+		x -= screenOverlayWindow.getContentBounds().x;
+		y -= screenOverlayWindow.getContentBounds().y;
+
 		await setMouseLocation(x, y);
 		await click();
 
