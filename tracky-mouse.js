@@ -716,6 +716,8 @@ TrackyMouse.init = function (div) {
 		console.log('getUserMedia not supported in this browser');
 	}
 
+	canvasContainer.style.aspectRatio = `${defaultWidth} / ${defaultHeight}`;
+	canvasContainer.style.setProperty('--aspect-ratio', defaultWidth / defaultHeight);
 
 	cameraVideo.addEventListener('loadedmetadata', () => {
 		cameraVideo.play();
