@@ -121,6 +121,8 @@
 	// OR export eval and Function globally:
 	globalThis.eval = eval;
 	globalThis.Function = Function;
+	// ES modules would need some more consideration,
+	// because you can't wrap import/export statements in a function.
 	// ------------------------------------------------------------
 })();`;
 			const blob = new Blob([code], {type: "text/javascript"});
