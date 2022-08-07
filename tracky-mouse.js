@@ -30,8 +30,90 @@ TrackyMouse.loadDependencies = function () {
 	return Promise.all(scriptFiles.map(loadScript));
 };
 
+const is_selector_valid = ((dummy_element) =>
+	(selector) => {
+		try { dummy_element.querySelector(selector) } catch { return false }
+		return true
+	})(document.createDocumentFragment());
+
 let clean_up_dwell_clicking = () => { };
 const init_dwell_clicking = (config) => {
+	/*
+		Arguments:
+		- `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored.
+		- `config.shouldDrag(el)` (optional): a function that returns true if the element should be dragged rather than simply clicked.
+		- `config.noCenter(el)` (optional): a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
+		- `config.retarget` (optional): an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
+			- `from` (required): the element to retarget from. Can be a CSS selector, an element, or a function taking the element under the mouse and returning whether it should be retargeted.
+			- `to` (required): the element to retarget to. Can be a CSS selector for an element which is an ancestor or descendant of the `from` element, or an element, or a function taking the element under the mouse and returning an element to retarget to, or null to ignore the element.
+			- `withinMargin` (optional): a number of pixels within which to consider the mouse over the `to` element. Default to infinity.
+		- `config.isEquivalentTarget(el1, el2)` (optional): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
+		- `config.dwellClickEvenIfPaused(el)` (optional): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
+		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
+	*/
+	if (typeof config !== "object") {
+		throw new Error("configuration object required for initDwellClicking");
+	}
+	if (config.targets === undefined) {
+		throw new Error("config.targets is required (must be a CSS selector)");
+	}
+	if (typeof config.targets !== "string") {
+		throw new Error("config.targets must be a string (a CSS selector)");
+	}
+	if (!is_selector_valid(config.targets)) {
+		throw new Error("config.targets is not a valid CSS selector");
+	}
+	if (config.click === undefined) {
+		throw new Error("config.click is required");
+	}
+	if (typeof config.click !== "function") {
+		throw new Error("config.click must be a function");
+	}
+	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
+		throw new Error("config.shouldDrag must be a function");
+	}
+	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
+		throw new Error("config.noCenter must be a function");
+	}
+	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
+		throw new Error("config.isEquivalentTarget must be a function");
+	}
+	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
+		throw new Error("config.dwellClickEvenIfPaused must be a function");
+	}
+	if (config.retarget !== undefined) {
+		if (!Array.isArray(config.retarget)) {
+			throw new Error("config.retarget must be an array of objects");
+		}
+		for (let i = 0; i < config.retarget.length; i++) {
+			const rule = config.retarget[i];
+			if (typeof rule !== "object") {
+				throw new Error("config.retarget must be an array of objects");
+			}
+			if (rule.from === undefined) {
+				throw new Error(`config.retarget[${i}].from is required`);
+			}
+			if (rule.to === undefined) {
+				throw new Error(`config.retarget[${i}].to is required (although can be null to ignore the element)`);
+			}
+			if (rule.withinMargin !== undefined && typeof rule.withinMargin !== "number") {
+				throw new Error(`config.retarget[${i}].withinMargin must be a number`);
+			}
+			if (typeof rule.from !== "string" && typeof rule.from !== "function" && !(rule.from instanceof Element)) {
+				throw new Error(`config.retarget[${i}].from must be a CSS selector string, an Element, or a function`);
+			}
+			if (typeof rule.to !== "string" && typeof rule.to !== "function" && !(rule.to instanceof Element) && rule.to !== null) {
+				throw new Error(`config.retarget[${i}].to must be a CSS selector string, an Element, a function, or null`);
+			}
+			if (typeof rule.from === "string" && !is_selector_valid(rule.from)) {
+				throw new Error(`config.retarget[${i}].from is not a valid CSS selector`);
+			}
+			if (typeof rule.to === "string" && !is_selector_valid(rule.to)) {
+				throw new Error(`config.retarget[${i}].to is not a valid CSS selector`);
+			}
+		}
+	}
+
 	// tracky_mouse_container.querySelector(".tracky-mouse-canvas").classList.add("inset-deep");
 
 	const circle_radius_max = 50; // dwell indicator size in pixels
