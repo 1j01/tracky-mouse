@@ -60,6 +60,10 @@ Oh also I made a big, screen-sized, **invisible button**, so that the dwell clic
 
 **Not pictured:** the renderer processes have preload scripts which are more privileged code than the rest of the renderer's code. Access to system functionality passes through the preload scripts.
 
+The architecture for normal usage of the library is much simpler.
+
+Ooh, but the diagram for the desktop app interacting with web pages (including pages using the library) through the browser extension would be interesting. That's all theoretical for now though.
+
 ## License
 
 MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
