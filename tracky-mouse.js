@@ -349,23 +349,28 @@ const init_dwell_clicking = (config) => {
 				if (time > hover_candidate.time + hover_timespan) {
 					// TODO: replace pointer_active (from jspaint) with some formal API
 					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
+						TrackyMouse.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
 								buttons: 0,
 							})
 						));
+						TrackyMouse.afterDispatch?.();
 					} else {
 						pointers = []; // prevent multi-touch panning
+						TrackyMouse.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerdown",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
 								buttons: 1,
 							})
 						));
+						TrackyMouse.afterDispatch?.();
 						if (config.shouldDrag?.(hover_candidate.target)) {
 							dwell_dragging = hover_candidate.target;
 						} else {
+							TrackyMouse.beforeDispatch?.();
 							hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 								Object.assign(get_event_options(hover_candidate), {
 									button: 0,
@@ -373,6 +378,7 @@ const init_dwell_clicking = (config) => {
 								})
 							));
 							config.click(hover_candidate);
+							TrackyMouse.afterDispatch?.();
 						}
 					}
 					hover_candidate = null;
@@ -461,12 +467,14 @@ const init_dwell_clicking = (config) => {
 			}
 			if (recent_movement_amount > 100) {
 				if (dwell_dragging) {
+					TrackyMouse.beforeDispatch?.();
 					window.dispatchEvent(new PointerEvent("pointerup",
 						Object.assign(get_event_options(average_point), {
 							button: 0,
 							buttons: 0,
 						})
 					));
+					TrackyMouse.afterDispatch?.();
 					pointers = []; // prevent multi-touch panning
 				}
 			}

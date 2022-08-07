@@ -242,6 +242,27 @@ function getCurrentRotation(el) {
 
 This stops the dwell clicker.
 
+### `TrackyMouse.beforeDispatch()`/`TrackyMouse.afterDispatch()`
+
+These hooks are called before/after the library dispatches a pointer event.
+
+It's just for a use case of detecting untrusted pointer events,
+and avoiding using APIs that require trusted input.
+
+```javascript
+window.untrusted_gesture = false;
+TrackyMouse.beforeDispatch = () => { window.untrusted_gesture = true; };
+TrackyMouse.afterDispatch = () => { window.untrusted_gesture = false; };
+// somewhere else, for example, you might do something like:
+if (window.untrusted_gesture) {
+	// show download window
+} else {
+	// show save file dialog with FS Access API
+}
+```
+
+Recommended: use `event.isTrusted` instead, where possible.
+
 ## Changelog
 
 For release notes, see [CHANGELOG.md](CHANGELOG.md)
