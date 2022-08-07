@@ -95,14 +95,26 @@
 // This is a wrapper for the library that instruments eval and Function,
 // so that they do not use the real eval and Function,
 // and only run code known ahead of time.
-(function() {
+(()=> {
 	${mapCode}
-	const eval = (code) => evalMap.get(code)();
+	const eval = (code) => {
+		const fn = evalMap.get(code);
+		if (fn) {
+			return fn();
+		} else {
+			throw new Error("Prevented eval of code not seen ahead-of-time on De-eval()-er page: " + code);
+		}
+	};
 	const Function = (...args) => {
 		const argNames = args.slice(0, -1);
 		const code = args.slice(-1)[0];
 		const key = JSON.stringify({argNames, code});
-		return functionMap.get(key);
+		const fn = functionMap.get(key);
+		if (fn) {
+			return fn;
+		} else {
+			throw new Error("Prevented Function constructor called with arguments not seen ahead-of-time on De-eval()-er page: " + JSON.stringify(args);
+		}
 	};
 	// ------------------------------------------------------------
 	// Insert original code here,
