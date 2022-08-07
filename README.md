@@ -30,6 +30,36 @@ Options could be exported/imported or even synced between the products.
 	- [Apache License 2.0](https://github.com/tensorflow/tfjs-models/blob/master/LICENSE)
 	- [Apache License 2.0](https://github.com/tensorflow/tensorflow/blob/master/LICENSE)
 
+## Software Architecture
+
+The desktop application's architecture is kind of *amusing*, which is the only reason I mention it.
+
+I will explain. Electron apps are multi-process programs. They have a main process, which creates browser windows, and renderer processes, which render the content of the browser windows.
+
+In this app, there are two renderer processes, one for the main application window, and one for a screen overlay window.
+
+The overlay window is transparent, always-on-top, and intangible. It's used to preview dwell clicks with a shrinking circle.
+
+In a "sane" architecture, the overlay window, which can't receive any input directly, would be purely a visual output. The state would be kept in either the main process or the main renderer process, and it would only send messages to the overlay to draw the circle.
+
+But I already had code for the dwell clicker, you see. I want it to behave similarly between the library and the desktop app, so I want the same timing logic and circle drawing to work in both.
+
+Keeping the state in a separate process from where the circle is rendered would be tearing apart and rewriting my code for the dwell clicker.
+
+So instead I simply embed the dwell clicker into the screen overlay window, business logic and all.
+It was already going to be an entire webpage just to render the circle, since this is Electron.
+It was never going to be efficient.
+
+So I ended up with an architecture where the **application window controls mouse movement**, and the **screen overlay window controls mouse clicking**, which I think is *pretty epic*. 😎
+
+It genuinely was a good way to reuse the code for the dwell clicker.
+
+Oh also I made a big, screen-sized, **invisible button**, so that the dwell clicker thinks there's something to click on. Pretty silly, but also pretty simple. 🆒
+
+![](./images/software-architecture.svg)
+
+**Not pictured:** the renderer processes have preload scripts which are more privileged code than the rest of the renderer's code. Access to system functionality passes through the preload scripts.
+
 ## License
 
 MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
