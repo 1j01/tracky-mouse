@@ -83,13 +83,45 @@
 
 		function generateWrapper() {
 			let mapCode = "const evalMap = new Map();";
-			for (const code of evalCodes) {
-				mapCode += `evalMap.set(${JSON.stringify(code)}, function() { return ${code}; });`;
+			for (const evalCode of evalCodes) {
+				// eval supports both expressions and statements.
+				// eval("1")
+				// eval("var foo=1; foo;")
+				// We need to detect the last expression, and turn it into a return statement.
+				// eval("var foo=1; foo;") -> function() { var foo=1; return foo; }
+				// eval("var foo=1;") -> function() { var foo=1; }
+				// eval("1;") -> function() { return 1; }
+
+				// We can't use a regex to find the last expression, because it might be inside a string.
+				// Instead, split on semicolons, and try expanding from the end until we find valid expression.
+				// I'm ignoring semicolon insertion for now, only supporting single-line eval code.
+				const codeLines = evalCode.split(";");
+				let fnCode = "";
+				let parsed = false;
+				for (let i = codeLines.length - 1; i >= 0; i--) {
+					fnCode = codeLines.slice(0, i).join(";") + "; return " + codeLines.slice(i).join(";");
+					try {
+						new Function(fnCode);
+						parsed = true;
+						break;
+					} catch (e) {
+						// Try again.
+					}
+				}
+				if (!parsed) {
+					// May be just statements, no return value expression.
+					fnCode = evalCode;
+					console.warn("Could not parse eval code:", evalCode);
+				} else {
+					console.log("Parsed code:", evalCode, fnCode);
+				}
+				
+				mapCode += `evalMap.set(${JSON.stringify(evalCode)}, function() { ${fnCode}; });`;
 			}
 			mapCode += "const functionMap = new Map();";
 			for (const {argNames, code} of functionConstructions) {
 				const key = JSON.stringify({argNames, code});
-				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { return ${code}; });`;
+				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code}; });`;
 			}
 			const code = `
 // This is a wrapper for the library that instruments eval and Function,
