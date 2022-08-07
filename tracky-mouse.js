@@ -22,6 +22,7 @@ TrackyMouse.loadDependencies = function () {
 		})
 	};
 	const scriptFiles = [
+		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/stats.js`,
