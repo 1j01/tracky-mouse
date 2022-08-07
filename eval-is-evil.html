@@ -130,8 +130,20 @@
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = "no-eval.js";
-			a.textContent = "Download";
+			a.textContent = "Download no-eval.js";
 			document.body.appendChild(a);
+			a.style.position = "fixed";
+			a.style.bottom = "10px";
+			a.style.right = "10px";
+			a.style.fontSize = "2em";
+			a.style.color = "white";
+			a.style.backgroundColor = "#07a";
+			a.style.padding = "0.5em";
+			a.style.borderRadius = "0.5em";
+			a.style.border = "1px outset rgba(255,255,255,0.5)";
+			a.style.zIndex = "1000000";
+			a.style.textDecoration = "none";
+			a.style.boxShadow = "0 0 0.5em 0.5em #07a2, 5px 5px 5px rgba(0,0,0,0.5)";
 		}
 
 		setTimeout(generateWrapper, 1000);
