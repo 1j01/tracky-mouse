@@ -511,10 +511,20 @@ const init_dwell_clicking = (config) => {
 		document.removeEventListener("mouseenter", on_mouse_enter_page);
 		clean_up_dwell_clicking = () => { };
 	};
+
+	const dwellClicker = {
+		get paused() {
+			return paused;
+		},
+		set paused(value) {
+			paused = value;
+		}
+	};
+	return dwellClicker;
 };
 
 TrackyMouse.initDwellClicking = function (config) {
-	init_dwell_clicking(config);
+	return init_dwell_clicking(config);
 };
 TrackyMouse.cleanupDwellClicking = function () {
 	clean_up_dwell_clicking();

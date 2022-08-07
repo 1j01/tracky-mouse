@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter validation.
 - `tracky-mouse.js` includes a CommonJS export, untested. I'm only testing script tag usage. I hope to switch to ES modules soon.
 - `beforeDispatch()`/`afterDispatch()` callbacks for detecting untrusted gestures, outside of an event where you could use `event.isTrusted`.
+- `initDwellClicking` returns an object `{paused}` which lets you pause and resume dwell clicking.
 
 ### Fixed
 - Function `average_points` was missing. It existed in JS Paint, the only place I tested the library, since I was extracting the code from JS Paint.

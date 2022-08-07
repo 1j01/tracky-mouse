@@ -145,6 +145,10 @@ Arguments:
 - `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 - `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 
+Returns an object with the following properties:
+- `paused`: a getter/setter for whether dwell clicking is paused. Use this to implement a pause/resume button, in conjunction with `config.dwellClickEvenIfPaused`.
+- (that's all for now)
+
 
 Example:
 ```javascript
