@@ -50,6 +50,8 @@ const init_dwell_clicking = (config) => {
 		- `config.isEquivalentTarget(el1, el2)` (optional): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
 		- `config.dwellClickEvenIfPaused(el)` (optional): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
 		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
+		- `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+		- `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 	*/
 	if (typeof config !== "object") {
 		throw new Error("configuration object required for initDwellClicking");
@@ -80,6 +82,12 @@ const init_dwell_clicking = (config) => {
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
 		throw new Error("config.dwellClickEvenIfPaused must be a function");
+	}
+	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
+		throw new Error("config.beforeDispatch must be a function");
+	}
+	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
+		throw new Error("config.afterDispatch must be a function");
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
@@ -349,28 +357,28 @@ const init_dwell_clicking = (config) => {
 				if (time > hover_candidate.time + hover_timespan) {
 					// TODO: replace pointer_active (from jspaint) with some formal API
 					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
-						TrackyMouse.beforeDispatch?.();
+						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
 								buttons: 0,
 							})
 						));
-						TrackyMouse.afterDispatch?.();
+						config.afterDispatch?.();
 					} else {
 						pointers = []; // prevent multi-touch panning
-						TrackyMouse.beforeDispatch?.();
+						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerdown",
 							Object.assign(get_event_options(hover_candidate), {
 								button: 0,
 								buttons: 1,
 							})
 						));
-						TrackyMouse.afterDispatch?.();
+						config.afterDispatch?.();
 						if (config.shouldDrag?.(hover_candidate.target)) {
 							dwell_dragging = hover_candidate.target;
 						} else {
-							TrackyMouse.beforeDispatch?.();
+							config.beforeDispatch?.();
 							hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 								Object.assign(get_event_options(hover_candidate), {
 									button: 0,
@@ -378,7 +386,7 @@ const init_dwell_clicking = (config) => {
 								})
 							));
 							config.click(hover_candidate);
-							TrackyMouse.afterDispatch?.();
+							config.afterDispatch?.();
 						}
 					}
 					hover_candidate = null;
@@ -467,14 +475,14 @@ const init_dwell_clicking = (config) => {
 			}
 			if (recent_movement_amount > 100) {
 				if (dwell_dragging) {
-					TrackyMouse.beforeDispatch?.();
+					config.beforeDispatch?.();
 					window.dispatchEvent(new PointerEvent("pointerup",
 						Object.assign(get_event_options(average_point), {
 							button: 0,
 							buttons: 0,
 						})
 					));
-					TrackyMouse.afterDispatch?.();
+					config.afterDispatch?.();
 					pointers = []; // prevent multi-touch panning
 				}
 			}
