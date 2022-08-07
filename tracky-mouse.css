@@ -61,9 +61,9 @@
 	TODO: please find a less finicky way to do this! This will be insane to maintain.
 	The property object-fit would be a perfect fit, but it only works for replaced elements. */
 	/* Also TODO: add min size, or better maybe, handle small window by hiding options and making webcam view big. */
-	--outside-height: 230px;
-	--outside-width: 20px;
-	height: min(calc(100vh - var(--outside-height)), calc(min(100vw, var(--max-ui-width)) / var(--aspect-ratio) - var(--outside-width)));
+	--external-height: 230px;
+	--external-width: 20px;
+	height: min(calc(100vh - var(--external-height)), calc(min(100vw, var(--max-ui-width)) / var(--aspect-ratio) - var(--external-width)));
 	margin: auto;
 }
 .tracky-mouse-canvas-overlay {
