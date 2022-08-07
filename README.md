@@ -122,7 +122,7 @@ It shouldn't be too much, because going to the edge of the screen is also useful
 	- Tilting your head or moving your head both move the pointer
 	- Lighting
 		- Detect bad lighting conditions and report to the user
-	- "Calibration" via simply moving your head to the edges of the screen (it's not like a gesture, it's just implicit in the fact that there are boundaries)
+	- "Calibration" via simply moving your head to the edges of the screen (it's not a specially defined gesture, it's just implicit in the fact that there are boundaries)
 	- Choosing settings (sensitivity etc.)
 		- If you move yourself or your camera, you may want to adjust the sensitivity.
 		- If you're further away from the camera, you'll want a higher sensitivity.
