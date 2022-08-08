@@ -65,7 +65,7 @@
 			const argNames = args.slice(0, -1);
 			const code = args.slice(-1)[0];
 			functionConstructions.push({ argNames, code });
-			return oldFunction(...args);
+			return new oldFunction(...args);
 		};
 	</script>
 	<!-- Scripts to convert: -->
@@ -126,7 +126,12 @@
 			mapCode += "const functionMap = new Map();\n\t";
 			for (const {argNames, code} of functionConstructions) {
 				const key = JSON.stringify({argNames, code});
-				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code} });\n\t`;
+				try {
+					new oldFunction(...argNames, code);
+					mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code} });\n\t`;
+				} catch (e) {
+					console.warn("Failed to parse function:", {argNames, code});
+				}
 			}
 			const code = `
 // This is a wrapper for the library that instruments eval and Function,
@@ -142,7 +147,7 @@
 			throw new Error("Prevented eval of code not seen ahead-of-time on De-eval()-er page: " + code);
 		}
 	};
-	const Function = (...args) => {
+	const Function = function (...args) {
 		const argNames = args.slice(0, -1);
 		const code = args.slice(-1)[0];
 		const key = JSON.stringify({argNames, code});
@@ -150,7 +155,7 @@
 		if (fn) {
 			return fn;
 		} else {
-			throw new Error("Prevented Function constructor called with arguments not seen ahead-of-time on De-eval()-er page: " + JSON.stringify(args);
+			throw new Error("Prevented Function constructor called with arguments not seen ahead-of-time on De-eval()-er page: " + JSON.stringify(args));
 		}
 	};
 	// ------------------------------------------------------------
