@@ -151,6 +151,7 @@
 				// We need to detect the last expression, and turn it into a return statement.
 				// eval("var foo=1; foo;") -> function() { var foo=1; return foo; }
 				// eval("var foo=1;") -> function() { var foo=1; }
+				// eval("foo=1;") -> function() { return foo=1; }
 				// eval("1;") -> function() { return 1; }
 
 				// We can't use a regex to find the last expression, because it might be inside a string.
