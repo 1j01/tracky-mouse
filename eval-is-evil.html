@@ -82,7 +82,7 @@
 	<script>
 
 		function generateWrapper() {
-			let mapCode = "const evalMap = new Map();\n";
+			let mapCode = "const evalMap = new Map();\n\t";
 			for (const evalCode of evalCodes) {
 				// eval supports both expressions and statements.
 				// eval("1")
@@ -98,7 +98,7 @@
 				const codeLines = evalCode.split(";");
 				let fnCode = "";
 				let parsed = false;
-				for (let i = codeLines.length - 2; i >= 0; i--) {
+				for (let i = codeLines.length - 1; i >= 0; i--) {
 					fnCode = codeLines.slice(0, i).join(";") + "; return " + codeLines.slice(i).join(";");
 					try {
 						new oldFunction(fnCode);
@@ -116,12 +116,12 @@
 					console.log("Parsed eval code into function body:", {evalCode, fnCode});
 				}
 				
-				mapCode += `evalMap.set(${JSON.stringify(evalCode)}, function() { ${fnCode}; });\n`;
+				mapCode += `evalMap.set(${JSON.stringify(evalCode)}, function() { ${fnCode}; });\n\t`;
 			}
-			mapCode += "const functionMap = new Map();\n";
+			mapCode += "const functionMap = new Map();\n\t";
 			for (const {argNames, code} of functionConstructions) {
 				const key = JSON.stringify({argNames, code});
-				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code}; });\n`;
+				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code}; });\n\t`;
 			}
 			const code = `
 // This is a wrapper for the library that instruments eval and Function,
