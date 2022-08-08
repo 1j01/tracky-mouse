@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Most CSS classes are now prefixed with `tracky-mouse-`.
 - `shouldDrag`, `noCenter`, `retarget`, `isEquivalentTarget`, and `dwellClickEvenIfPaused` are now optional for `initDwellClicking`.
 - You must include a new script `no-eval.js` if you are including Tracky Mouse's dependencies manually. If you are using `loadDependencies()`, it is included automatically.
+- Tracky Mouse no longer requires `unsafe-eval` in the Content Security Policy! This is great, because now I can feel better about the Electron app.
 
 ## [1.0.0] - 2021-05-20
 ### Added
