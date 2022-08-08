@@ -43,45 +43,106 @@
 	<p>
 		This doesn't work for all libraries, but it works for the ones I use.
 		Libraries that use <code>eval</code> and <code>Function</code> for performance reasons only are more likely to work.
-		But something that uses it for a command-line (like on-page dev tools) will not.
+		But something that uses it for a JavaScript command prompt (like on-page dev tools) will not.
 	</p>
 	<p>
 		This tool doesn't detect when the code evaluation is dynamic or not.
-		It simply wraps the library in a function that overwrites <code>eval</code> and <code>Function</code>
-		with a version that only allows snippets of code it already saw.
+		It simply generates code to replace <code>eval</code> and <code>Function</code>
+		with versions that only allows snippets of code already seen while running on this page.
 	</p>
-	<p>Part of <a href="https://github.com/1j01/tracky-mouse">Tracky Mouse</a>. MIT-licensed.</p>
+	<p>
+		The output is a monkey patch to be loaded before any code that uses <code>eval</code> and <code>Function</code>.
+		The monkey patch can be included in the library itself, or in a separate file.
+	</p>
+	<h2>Won't this miss certain cases?</h2>
+	<p>
+		There are other ways of accessing <code>eval</code> and <code>Function</code>,
+		such as <code>(function(){}).constructor("alert('hey')")()</code>;
+		but the intent of this tool is not to catch all possible cases in order to directly prevent access to eval,
+		but rather to allow you to prevent access with Content-Security-Policy's <code>script-src</code>.
+	</p>
+	<h2>Won't this generate huge amounts of code?</h2>
+	<p>
+		For code that evaluates code using templates, as a way of metaprogramming,
+		to may lead to a huge amount of code.
+		However, it should compress well, as it is very repetitive.
+	</p>
+	<p>
+		Parsing performance may still be an issue.
+	</p>
+	<p>
+		It will be interesting to test this.
+		I would expect it to work better if you include the monkey patch as a wrapper around the library,
+		so that it can compress together with the library.
+	</p>
+	<h2>Can this work without first running the code using <code>eval</code>?</h2>
+	<p>
+		It would be possible to generate combinatorially all possibilities of code to be generated,
+		<em>in some cases</em>, however in general it is undecidable.
+	</p>
+	<p>
+		It may be worthwhile to attempt, but in this project,
+		it wasn't necessary to statically analyze the code.
+	</p>
+	<p>
+		Executing it with instrumentation was actually quite simple and effective.
+	</p>
+	<h2>How does this behave differently from native <code>eval</code>?</h2>
+	<p>
+		The generated functions do not run in the same context as the original code.
+		So this makes <code>eval</code> more like how <code>Function</code> works.
+		You may get <code>ReferenceError</code>s if <code>eval</code> accesses variables in the surrounding code.
+	</p>
+	<h2>Will you make this into a reusable tool?</h2>
+	<!-- <p>
+		I'm thinking about it, <em>as you can tell from this heading.</em> Cough.
+	</p> -->
+	<p>
+		I'd like to, yes. I think it would be very valuable for tightening security in various projects.
+	</p>
+	<p>
+		For now, this is part of <a href="https://github.com/1j01/tracky-mouse">Tracky Mouse</a>.
+		MIT-licensed.
+	</p>
+	<p>
+		That said, if you need this, you can copy this HTML file and change the code it loads.
+	</p>
+
+	<hr>
+
 	<!-- Record code evaluations -->
 	<script>
-		const oldEval = eval;
-		const oldFunction = Function;
+		const originalEval = eval;
+		const OriginalFunction = Function;
 		const evalCodes = [];
 		const functionConstructions = [];
 		window.eval = function(code) {
 			evalCodes.push(code);
-			return oldEval(code);
+			return originalEval(code);
 		};
 		window.Function = function(...args) {
 			const argNames = args.slice(0, -1);
 			const code = args.slice(-1)[0];
 			functionConstructions.push({ argNames, code });
-			return new oldFunction(...args);
+			return new OriginalFunction(...args);
 		};
 	</script>
+
 	<!-- Scripts to convert: -->
 	<script src="lib/stats.js"></script>
 	<script src="lib/clmtrackr.js"></script>
-	<!-- <script src="lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
+	
 	<!-- Something to run the scripts in a similar way to how they're used. -->
 	<script src="tracky-mouse.js"></script>
 	<script>
 		TrackyMouse.dependenciesRoot = ".";
 		TrackyMouse.init();
 	</script>
-	<!-- Get the results and generate wrapper -->
+
+	<!-- Generate code for eval and Function replacements -->
 	<script>
 
-		function generateWrapper() {
+		function generateMonkeyPatch() {
 			let mapCode = "const evalMap = new Map();\n\t";
 			for (const evalCode of evalCodes) {
 				// eval supports both expressions and statements.
@@ -102,7 +163,7 @@
 				for (let i = potentialStatements.length - 1; i >= 0; i--) {
 					fnCode = potentialStatements.slice(0, i).join(";") + (i?"; ":"") + "return (" + potentialStatements.slice(i).join(";") + ");";
 					try {
-						new oldFunction(fnCode);
+						new OriginalFunction(fnCode);
 						parsed = true;
 						break;
 					} catch (e) {
@@ -127,16 +188,18 @@
 			for (const {argNames, code} of functionConstructions) {
 				const key = JSON.stringify({argNames, code});
 				try {
-					new oldFunction(...argNames, code);
+					new OriginalFunction(...argNames, code);
 					mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code} });\n\t`;
 				} catch (e) {
 					console.warn("Failed to parse function:", {argNames, code});
 				}
 			}
-			const code = `
-// This is a wrapper for the library that instruments eval and Function,
-// so that they do not use the real eval and Function,
-// and only run code known ahead of time.
+			const code = `// @generated by eval-is-evil.html
+// 
+// This is a monkey patch that replaces eval and Function
+// with versions that and only run code known ahead of time.
+// They do not use the real eval and Function, and thus
+// the Content Security Policy (CSP) can be tightened.
 (()=> {
 	${mapCode}
 	const eval = (code) => {
@@ -159,12 +222,13 @@
 		}
 	};
 	// ------------------------------------------------------------
-	// Insert original code here,
+	// Insert original library code here,
 	// OR export eval and Function globally:
 	globalThis.eval = eval;
 	globalThis.Function = Function;
-	// ES modules would need some more consideration,
-	// because you can't wrap import/export statements in a function.
+	// If the original library uses ES modules, you would need to ensure
+	// import/export statements remain at the top level,
+	// as they're not allowed within a function.
 	// ------------------------------------------------------------
 })();`;
 			const blob = new Blob([code], {type: "text/javascript"});
@@ -188,7 +252,7 @@
 			a.style.boxShadow = "0 0 0.5em 0.5em #07a2, 5px 5px 5px rgba(0,0,0,0.5)";
 		}
 
-		setTimeout(generateWrapper, 1000);
+		setTimeout(generateMonkeyPatch, 1000);
 
 	</script>
 </body>
