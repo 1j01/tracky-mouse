@@ -95,34 +95,38 @@
 				// We can't use a regex to find the last expression, because it might be inside a string.
 				// Instead, split on semicolons, and try expanding from the end until we find valid expression.
 				// I'm ignoring semicolon insertion for now, only supporting single-line eval code.
-				const codeLines = evalCode.replace(/(;|\s)+$/, "").split(";");
-				console.log(codeLines);
+				const potentialStatements = evalCode.replace(/(;|\s)+$/, "").split(";");
+				console.log(potentialStatements);
 				let fnCode = "";
 				let parsed = false;
-				for (let i = codeLines.length - 1; i >= 0; i--) {
-					fnCode = codeLines.slice(0, i).join(";") + "; return (" + codeLines.slice(i).join(";") + ");";
+				for (let i = potentialStatements.length - 1; i >= 0; i--) {
+					fnCode = potentialStatements.slice(0, i).join(";") + (i?"; ":"") + "return (" + potentialStatements.slice(i).join(";") + ");";
 					try {
 						new oldFunction(fnCode);
 						parsed = true;
 						break;
 					} catch (e) {
-						// Try again.
+						if (e instanceof SyntaxError) {
+							// Continue.
+						} else {
+							throw e;
+						}
 					}
 				}
 				if (!parsed) {
-					// May be just statements, no return value expression.
+					// The code may be just statements (i.e. with side-effects), with no return value expression.
 					fnCode = evalCode;
 					console.log("Leaving code as-is for function body:", evalCode);
 				} else {
 					console.log("Parsed eval code into function body:", {evalCode, fnCode});
 				}
 				
-				mapCode += `evalMap.set(${JSON.stringify(evalCode)}, function() { ${fnCode}; });\n\t`;
+				mapCode += `evalMap.set(${JSON.stringify(evalCode)}, function() { ${fnCode} });\n\t`;
 			}
 			mapCode += "const functionMap = new Map();\n\t";
 			for (const {argNames, code} of functionConstructions) {
 				const key = JSON.stringify({argNames, code});
-				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code}; });\n\t`;
+				mapCode += `functionMap.set(${JSON.stringify(key)}, function(${argNames}) { ${code} });\n\t`;
 			}
 			const code = `
 // This is a wrapper for the library that instruments eval and Function,
