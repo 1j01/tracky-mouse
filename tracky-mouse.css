@@ -1,9 +1,19 @@
 .tracky-mouse-pointer {
+	z-index: 900000;
+	pointer-events: none;
+	border-radius: 50%;
+	background-color: red;
+	width: 20px;
+	height: 20px;
+	position: fixed;
+	transform: translate(-50%, -50%);
+}
+.tracky-mouse-dwell-indicator {
 	position: fixed;
 	pointer-events: none;
 	z-index: 1000000;
 }
-.tracky-mouse-pointer::after {
+.tracky-mouse-dwell-indicator::after {
 	content: "";
 	display: block;
 	position: absolute;
@@ -13,18 +23,18 @@
 	right: 2px;
 	bottom: 2px;
 }
-.tracky-mouse-pointer:not(.for-release) {
+.tracky-mouse-dwell-indicator:not(.for-release) {
 	background: yellow;
 }
-.tracky-mouse-pointer.for-release {
+.tracky-mouse-dwell-indicator.for-release {
 	background: white;
 }
-.tracky-mouse-pointer:not(.for-release),
-.tracky-mouse-pointer:not(.for-release)::after {
+.tracky-mouse-dwell-indicator:not(.for-release),
+.tracky-mouse-dwell-indicator:not(.for-release)::after {
 	border-radius: 50%;
 }
-.tracky-mouse-pointer.for-release,
-.tracky-mouse-pointer.for-release::after {
+.tracky-mouse-dwell-indicator.for-release,
+.tracky-mouse-dwell-indicator.for-release::after {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
 .tracky-mouse-hover-halo {
