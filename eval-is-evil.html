@@ -129,15 +129,23 @@
 		};
 	</script>
 
-	<!-- Scripts to convert: -->
+	<!-- Run code that uses eval, in a similar way to how it's normally used: -->
 	<script src="lib/stats.js"></script>
 	<script src="lib/clmtrackr.js"></script>
-	
-	<!-- Something to run the scripts in a similar way to how they're used. -->
 	<script src="tracky-mouse.js"></script>
 	<script>
 		TrackyMouse.dependenciesRoot = ".";
 		TrackyMouse.init();
+	</script>
+	<!--
+		There's a Function construction that happens in tf.js which I'm loading in a worker.
+		I'm manually triggering a similar construction here because
+		I don't want to get it to load a camera/video stream just for this.
+		(TrackyMouse.useCamera() could be used, but it can fail if the camera is not available.)
+		(Undocumented TrackyMouse.useDemoFootage could work, but the demo video is currently gitignored.)
+	-->
+	<script>
+		Function("r", "regeneratorRuntime = r");
 	</script>
 
 	<!-- Generate code for eval and Function replacements -->
