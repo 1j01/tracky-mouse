@@ -162,6 +162,7 @@ const config = {
 		textarea,
 		label,
 		a,
+		details summary,
 		.radio-or-checkbox-wrapper,
 		.drawing-canvas,
 		.window:not(.maximized) .window-titlebar
