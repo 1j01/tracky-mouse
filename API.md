@@ -24,7 +24,7 @@ The library is currently script tag-based, so you'll need to add it to your HTML
 ```
 
 Then you have to tell it where it can load related files from.
-(I know, it's not very smart.)
+Make sure not to include a trailing slash.
 
 ```javascript
 TrackyMouse.dependenciesRoot = "path/to/tracky-mouse";
@@ -95,7 +95,7 @@ TrackyMouse.loadDependencies().then(function() {
 
 ### `TrackyMouse.dependenciesRoot`
 
-Set this to the path to the folder where you installed tracky-mouse.
+Set this to the path to the folder where you installed tracky-mouse, without a trailing slash.
 
 ### `TrackyMouse.loadDependencies()`
 
