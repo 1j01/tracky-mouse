@@ -93,6 +93,13 @@
 		So this makes <code>eval</code> more like how <code>Function</code> works.
 		You may get <code>ReferenceError</code>s if <code>eval</code> accesses variables in the surrounding code.
 	</p>
+	<p>
+		This could be fixed by passing a function to get/set variables from the surrounding code into each <code>eval</code> call site (that needs it).
+		This would need some static analysis to determine which variables are accessed... or, to do it lazily,
+		perhaps every valid JS literal within the eval code could be assumed as possibly accessing a variable outside,
+		and getters/setters generated for it, and the functions generated for recorded eval calls could be wrapped in <code>with (contextGettersAndSetters) {}</code>
+		and the <code>contextGettersAndSetters</code> is passed in to each <code>eval</code> call site, so that the inner code does not need to be modified into function calls.
+	</p>
 	<h2>Will you make this into a reusable tool?</h2>
 	<!-- <p>
 		I'm thinking about it, <em>as you can tell from this heading.</em> Cough.
