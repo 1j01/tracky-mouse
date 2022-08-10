@@ -23,18 +23,18 @@
 	right: 2px;
 	bottom: 2px;
 }
-.tracky-mouse-dwell-indicator:not(.for-release) {
+.tracky-mouse-dwell-indicator:not(.tracky-mouse-for-release) {
 	background: yellow;
 }
-.tracky-mouse-dwell-indicator.for-release {
+.tracky-mouse-dwell-indicator.tracky-mouse-for-release {
 	background: white;
 }
-.tracky-mouse-dwell-indicator:not(.for-release),
-.tracky-mouse-dwell-indicator:not(.for-release)::after {
+.tracky-mouse-dwell-indicator:not(.tracky-mouse-for-release),
+.tracky-mouse-dwell-indicator:not(.tracky-mouse-for-release)::after {
 	border-radius: 50%;
 }
-.tracky-mouse-dwell-indicator.for-release,
-.tracky-mouse-dwell-indicator.for-release::after {
+.tracky-mouse-dwell-indicator.tracky-mouse-for-release,
+.tracky-mouse-dwell-indicator.tracky-mouse-for-release::after {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
 .tracky-mouse-hover-halo {
@@ -63,26 +63,26 @@
 	display: block;
 	width: fit-content; /* avoid controls being too easy to click (mainly checkboxes) */
 }
-.tracky-mouse-ui .label-text {
+.tracky-mouse-ui .tracky-mouse-label-text {
 	display: inline-block;
 	min-width: 150px;
 }
-.tracky-mouse-ui .labeled-slider {
+.tracky-mouse-ui .tracky-mouse-labeled-slider {
 	display: inline-block;
 	position: relative;
 	margin-bottom: 20px;
 }
-.tracky-mouse-ui .labeled-slider .min-label,
-.tracky-mouse-ui .labeled-slider .max-label {
+.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label,
+.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
 	opacity: 0.6;
 	position: absolute;
 	bottom: -10px;
 	pointer-events: none;
 }
-.tracky-mouse-ui .labeled-slider .min-label {
+.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label {
 	left: 0;
 }
-.tracky-mouse-ui .labeled-slider .max-label {
+.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
 	right: 0;
 }
 .tracky-mouse-canvas-container {
