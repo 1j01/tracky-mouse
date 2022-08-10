@@ -71,6 +71,17 @@
 	background-color: rgba(15, 0, 20, 0.5);
 }
 
+.tracky-mouse-start-stop-button {
+	background-color: rgb(191, 36, 234);
+	color: white;
+	font-size: 20px;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	width: 100px;
+	cursor: pointer;
+}
+
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
 }

@@ -563,6 +563,7 @@ TrackyMouse.init = function (div) {
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false">Start</button>
 			<br>
 			<br>
 			<label class="tracky-mouse-control-row">
@@ -649,6 +650,7 @@ TrackyMouse.init = function (div) {
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
+	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
@@ -976,6 +978,9 @@ TrackyMouse.init = function (div) {
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
+
+		startStopButton.textContent = "Start";
+		startStopButton.setAttribute("aria-pressed", "false");
 	};
 
 	useCameraButton.onclick = TrackyMouse.useCamera = () => {
@@ -999,6 +1004,10 @@ TrackyMouse.init = function (div) {
 			}
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
+			if (!paused) {
+				startStopButton.textContent = "Stop";
+				startStopButton.setAttribute("aria-pressed", "true");
+			}
 		}, (error) => {
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
@@ -1029,6 +1038,16 @@ TrackyMouse.init = function (div) {
 		cameraVideo.srcObject = null;
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
+	};
+
+	startStopButton.onclick = () => {
+		if (!useCameraButton.hidden) {
+			TrackyMouse.useCamera();
+			if (!paused) {
+				return;
+			}
+		}
+		handleShortcut("toggle-tracking");
 	};
 
 	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
@@ -1751,6 +1770,13 @@ TrackyMouse.init = function (div) {
 			mouseNeedsInitPos = true;
 			if (paused) {
 				pointerEl.style.display = "none";
+			}
+			if (paused) {
+				startStopButton.textContent = "Start";
+				startStopButton.setAttribute("aria-pressed", "false");
+			} else {
+				startStopButton.textContent = "Stop";
+				startStopButton.setAttribute("aria-pressed", "true");
 			}
 			if (window.electronAPI) {
 				window.electronAPI.notifyToggleState(!paused);
