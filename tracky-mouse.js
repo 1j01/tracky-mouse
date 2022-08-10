@@ -539,7 +539,7 @@ TrackyMouse.init = function (div) {
 		<div class="tracky-mouse-controls">
 			<br>
 			<br>
-			<label>
+			<label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Horizontal Sensitivity</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
@@ -547,7 +547,7 @@ TrackyMouse.init = function (div) {
 					<span class="tracky-mouse-max-label">Fast</span>
 				</span>
 			</label>
-			<label>
+			<label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Vertical Sensitivity</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
@@ -555,7 +555,7 @@ TrackyMouse.init = function (div) {
 					<span class="tracky-mouse-max-label">Fast</span>
 				</span>
 			</label>
-			<!-- <label>
+			<!-- <label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Smoothing</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
@@ -563,7 +563,7 @@ TrackyMouse.init = function (div) {
 					<span class="tracky-mouse-max-label"></span>
 				</span>
 			</label> -->
-			<label>
+			<label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Acceleration</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
@@ -572,7 +572,7 @@ TrackyMouse.init = function (div) {
 					<span class="tracky-mouse-max-label">Smooth</span>
 				</span>
 			</label>
-			<!-- <label>
+			<!-- <label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Easy Stop (min distance to move)</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance">
@@ -581,7 +581,11 @@ TrackyMouse.init = function (div) {
 				</span>
 			</label> -->
 			<br>
-			<label><span class="tracky-mouse-label-text"><input type="checkbox" checked class="tracky-mouse-mirror"> Mirror</label>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" checked id="tracky-mouse-mirror"/>
+				<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
+			</div>
 			<br>
 		</div>
 		<div class="tracky-mouse-canvas-container">
@@ -597,7 +601,7 @@ TrackyMouse.init = function (div) {
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
-	var mirrorCheckbox = uiContainer.querySelector(".tracky-mouse-mirror");
+	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");

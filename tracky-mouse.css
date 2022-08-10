@@ -59,9 +59,9 @@
 	object-fit: scale-down;
 	background-color: rgba(15, 0, 20, 0.5);
 }
-.tracky-mouse-ui label {
+.tracky-mouse-ui .tracky-mouse-control-row {
 	display: block;
-	width: fit-content; /* avoid controls being too easy to click (mainly checkboxes) */
+	width: fit-content; /* avoid controls being too easy to click */
 }
 .tracky-mouse-ui .tracky-mouse-label-text {
 	display: inline-block;
