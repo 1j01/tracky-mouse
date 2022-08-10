@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Function `average_points` was missing. It existed in JS Paint, the only place I tested the library, since I was extracting the code from JS Paint.
 - Similarly, styles for the dwell click indicator and hover halo were missing or not applying. (Provided by CSS in JS Paint, I didn't notice, in my rushed testing.)
 - And the JS referenced a global `pointer_active` from JS Paint. Now it checks if that exists first. Eventually this should be replaced with some less "nepotistic" API, so to speak.
+- Missing `facemesh.worker.js` file.
 - "Mirror" checkbox was too easy to accidentally click due to a large `<label>` (which acts as a hit region).
 
 ### Changed
