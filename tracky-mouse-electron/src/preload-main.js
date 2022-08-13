@@ -14,3 +14,5 @@ contextBridge.exposeInMainWorld("onShortcut", (callback) => {
 contextBridge.exposeInMainWorld("notifyToggleState", (callback) => {
 	ipcRenderer.send('notify-toggle-state', callback);
 });
+
+contextBridge.exposeInMainWorld("IS_ELECTRON_APP", true);

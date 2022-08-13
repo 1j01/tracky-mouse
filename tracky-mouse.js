@@ -607,6 +607,9 @@ TrackyMouse.init = function (div) {
 			</div>
 			<canvas class="tracky-mouse-canvas"></canvas>
 		</div>
+		<p class="tracky-mouse-desktop-app-download-message">
+			You can control your entire computer with the <a href="https://github.com/1j01/tracky-mouse">TrackyMouse</a> desktop app.
+		</p>
 	`;
 	if (!div) {
 		document.body.appendChild(uiContainer);
@@ -619,6 +622,13 @@ TrackyMouse.init = function (div) {
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
+	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
+
+	// Hide the desktop app download message if we're in the desktop app
+	// Might be good to also hide it, or change it, when on a mobile device
+	if (window.IS_ELECTRON_APP) {
+		desktopAppDownloadMessage.hidden = true;
+	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
 	var ctx = canvas.getContext('2d');
