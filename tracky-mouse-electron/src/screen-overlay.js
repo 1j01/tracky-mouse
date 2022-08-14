@@ -1,4 +1,4 @@
-
+/* global TrackyMouse, electronAPI */
 const message = document.getElementById("tracky-mouse-screen-overlay-message");
 const actionSpan = document.getElementById("enable-disable");
 

@@ -1,3 +1,4 @@
+/* global jsfeat, Stats, clm */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
