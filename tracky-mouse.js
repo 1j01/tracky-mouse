@@ -1169,7 +1169,13 @@ TrackyMouse.init = function (div) {
 									initFacemeshWorker();
 									facemeshRejectNext = 1; // or more?
 								}, 1000);
-							} catch (e) { }
+							} catch (error) {
+								if (error.name !== "InvalidStateError") {
+									throw error;
+								} else {
+									console.warn("Trying to recover; can't create webgl2 canvas yet...");
+								}
+							}
 						}, 500);
 					}, facemeshFirstEstimation ? 20000 : 2000);
 					facemeshEstimateFaces().then((predictions) => {
@@ -1525,6 +1531,7 @@ TrackyMouse.init = function (div) {
 	try {
 		autoDemo = localStorage.trackyMouseAutoDemo === "true";
 	} catch (error) {
+		// ignore; this is just for development
 	}
 	if (autoDemo) {
 		TrackyMouse.useDemoFootage();
