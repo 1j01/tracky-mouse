@@ -19,7 +19,7 @@ TrackyMouse.loadDependencies = function () {
 			script.onerror = reject;
 			script.src = src;
 			document.head.append(script);
-		})
+		});
 	};
 	const scriptFiles = [
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
@@ -33,8 +33,8 @@ TrackyMouse.loadDependencies = function () {
 
 const is_selector_valid = ((dummy_element) =>
 	(selector) => {
-		try { dummy_element.querySelector(selector) } catch { return false }
-		return true
+		try { dummy_element.querySelector(selector); } catch { return false; }
+		return true;
 	})(document.createDocumentFragment());
 
 let clean_up_dwell_clicking = () => { };
@@ -732,7 +732,7 @@ TrackyMouse.init = function (div) {
 
 	if (useFacemesh) {
 		initFacemeshWorker();
-	};
+	}
 
 	sensitivityXSlider.onchange = () => {
 		sensitivityX = sensitivityXSlider.value / 1000;
@@ -1219,7 +1219,7 @@ TrackyMouse.init = function (div) {
 							debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
 							setTimeout(() => {
 								debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
-							}, 900)
+							}, 900);
 							cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
 								if (debugTimeTravel) {
 									debugFramesCtx.save();
@@ -1557,7 +1557,7 @@ TrackyMouse.init = function (div) {
 		}
 	});
 
-}
+};
 
 // CommonJS export is untested. Script tag usage recommended.
 // Just including this in case it is somehow useful.

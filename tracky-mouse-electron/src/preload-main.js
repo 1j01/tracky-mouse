@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld("moveMouse", (x, y) => {
 	ipcRenderer.send('move-mouse', x, y, performance.now());
