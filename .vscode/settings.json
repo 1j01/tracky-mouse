@@ -33,5 +33,6 @@
 		"titlebar",
 		"tracky",
 		"XFCE"
-	]
+	],
+	"workbench.colorTheme": "fairyfloss",
 }
