@@ -159,7 +159,7 @@ const init_dwell_clicking = (config) => {
 	const on_pointer_move = (e) => {
 		recent_points.push({ x: e.clientX, y: e.clientY, time: Date.now() });
 	};
-	const on_pointer_up_or_cancel = (e) => {
+	const on_pointer_up_or_cancel = () => {
 		deactivate_for_at_least(inactive_after_release_timespan);
 		dwell_dragging = null;
 	};
@@ -359,6 +359,7 @@ const init_dwell_clicking = (config) => {
 				if (time > hover_candidate.time + hover_timespan) {
 					// TODO: replace pointer_active (holdover from jspaint) with some formal API
 					// Note: window.pointer_active doesn't work because it's declared with let
+					// eslint-disable-next-line no-undef
 					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
 						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
@@ -372,6 +373,7 @@ const init_dwell_clicking = (config) => {
 						// TODO: replace pointers (holdover from jspaint) with some formal API
 						// Note: window.pointers doesn't work because it's declared with let
 						if (typeof pointers === "object") {
+							// eslint-disable-next-line no-undef
 							pointers = []; // prevent multi-touch panning
 						}
 						config.beforeDispatch?.();
@@ -493,6 +495,7 @@ const init_dwell_clicking = (config) => {
 					// TODO: replace pointers (holdover from jspaint) with some formal API
 					// Note: window.pointers doesn't work because it's declared with let
 					if (typeof pointers === "object") {
+						// eslint-disable-next-line no-undef
 						pointers = []; // prevent multi-touch panning
 					}
 				}
@@ -647,7 +650,7 @@ TrackyMouse.init = function (div) {
 	var mouseY = 0;
 	var prevMovementX = 0;
 	var prevMovementY = 0;
-	var enableTimeTravel = false;
+	// var enableTimeTravel = false;
 	// var movementXSinceFacemeshUpdate = 0;
 	// var movementYSinceFacemeshUpdate = 0;
 	var cameraFramesSinceFacemeshUpdate = [];
@@ -658,7 +661,7 @@ TrackyMouse.init = function (div) {
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
 	var faceConvergence = 0;
-	var faceConvergenceThreshold = 50;
+	// var faceConvergenceThreshold = 50;
 	var pointsBasedOnFaceScore = 0;
 	var paused = false;
 	var mouseNeedsInitPos = true;
@@ -729,7 +732,7 @@ TrackyMouse.init = function (div) {
 						return;
 					}
 					facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-					return new Promise((resolve, reject) => {
+					return new Promise((resolve) => {
 						facemeshWorker.addEventListener("message", (e) => {
 							if (e.data.type === "ESTIMATED_FACES") {
 								resolve(e.data.predictions);
@@ -1233,6 +1236,7 @@ TrackyMouse.init = function (div) {
 						// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
 						// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
+						/*
 						if (enableTimeTravel) {
 							debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
 							setTimeout(() => {
@@ -1253,6 +1257,7 @@ TrackyMouse.init = function (div) {
 								workerSyncedOops.update(imageData);
 							});
 						}
+						*/
 
 						// Bring points from workerSyncedOops to realtime mainOops
 						for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
@@ -1488,6 +1493,7 @@ TrackyMouse.init = function (div) {
 			prevMovementY = movementY;
 			// movementXSinceFacemeshUpdate += movementX;
 			// movementYSinceFacemeshUpdate += movementY;
+			/*
 			if (enableTimeTravel) {
 				if (facemeshEstimating) {
 					const imageData = getCameraImageData();
@@ -1501,6 +1507,7 @@ TrackyMouse.init = function (div) {
 					}
 				}
 			}
+			*/
 		}
 		ctx.restore();
 
