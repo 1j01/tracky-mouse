@@ -158,6 +158,7 @@ const createWindow = () => {
 		closable: false,
 		focusable: false,
 		skipTaskbar: true,
+		hiddenInMissionControl: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
 		webPreferences: {
 			preload: path.join(app.getAppPath(), 'src/preload-screen-overlay.js'),
