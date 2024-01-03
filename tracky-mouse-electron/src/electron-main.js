@@ -140,6 +140,7 @@ const createWindow = () => {
 	const { screen } = require('electron');
 	const primaryDisplay = screen.getPrimaryDisplay();
 	screenOverlayWindow = new BrowserWindow({
+		fullscreen: true, // needed on Windows 11, since it seems to constrain the size to the work area otherwise
 		x: primaryDisplay.bounds.x,
 		y: primaryDisplay.bounds.y,
 		width: primaryDisplay.bounds.width,
@@ -155,8 +156,6 @@ const createWindow = () => {
 		minimizable: false,
 		maximizable: false,
 		closable: false,
-		fullscreenable: false, // may want this...
-		// fullscreen: true,
 		focusable: false,
 		skipTaskbar: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
