@@ -1,3 +1,7 @@
+// This script is injected into the screen overlay window, before other scripts,
+// with privileged access to the electron API, which it should expose in a limited way.
+// That said, mouse control is pretty powerful, so it's important to keep it secure.
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {

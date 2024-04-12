@@ -592,6 +592,17 @@ TrackyMouse.init = function (div) {
 			</label> -->
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
+			<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
+			<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
+			<!-- TODO: handle right click on this control, so it doesn't leave users stranded right-clicking -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" checked id="tracky-mouse-swap-mouse-buttons"/>
+				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
+			</div>
+			<br>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 			<div class="tracky-mouse-control-row">
 				<input type="checkbox" checked id="tracky-mouse-mirror"/>
 				<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
@@ -615,6 +626,7 @@ TrackyMouse.init = function (div) {
 		document.body.appendChild(uiContainer);
 	}
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
+	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
@@ -624,10 +636,17 @@ TrackyMouse.init = function (div) {
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
-	// Hide the desktop app download message if we're in the desktop app
-	// Might be good to also hide it, or change it, when on a mobile device
 	if (window.IS_ELECTRON_APP) {
+		// Hide the desktop app download message if we're in the desktop app
+		// Might be good to also hide it, or change it, when on a mobile device
 		desktopAppDownloadMessage.hidden = true;
+	} else {
+		// Hide the mouse button swapping option if we're not in the desktop app,
+		// since the system-level mouse button setting doesn't apply,
+		// and the feature isn't implemented for the web version.
+		// It could be implemented for the web version, but if you're designing an app for facial mouse users,
+		// you might want to avoid right-clicking altogether.
+		swapMouseButtonsCheckbox.parentElement.hidden = true;
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
@@ -676,6 +695,7 @@ TrackyMouse.init = function (div) {
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var mirror;
+	var swapMouseButtons;
 
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -768,7 +788,14 @@ TrackyMouse.init = function (div) {
 	mirrorCheckbox.onchange = () => {
 		mirror = mirrorCheckbox.checked;
 	};
+	swapMouseButtonsCheckbox.onchange = () => {
+		swapMouseButtons = swapMouseButtonsCheckbox.checked;
+		if (window.setOptions) {
+			window.setOptions({ swapMouseButtons });
+		}
+	};
 	mirrorCheckbox.onchange();
+	swapMouseButtonsCheckbox.onchange();
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();

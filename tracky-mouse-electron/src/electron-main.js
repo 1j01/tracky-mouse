@@ -79,6 +79,7 @@ const createWindow = () => {
 	const regainControlForTime = 2000; // in milliseconds
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let enabled = true; // for starting/stopping until the user requests otherwise
+	let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
 	let lastPos = { x: undefined, y: undefined };
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send('change-dwell-clicking', enabled && regainControlTimeout === null);
@@ -118,6 +119,12 @@ const createWindow = () => {
 		lastPos = { x: undefined, y: undefined };
 	});
 
+	ipcMain.on('set-options', (event, newOptions) => {
+		if ("swapMouseButtons" in newOptions) {
+			swapMouseButtons = newOptions.swapMouseButtons;
+		}
+	});
+
 	ipcMain.on('click', async (event, x, y, time) => {
 		if (regainControlTimeout || !enabled) {
 			return;
@@ -127,9 +134,12 @@ const createWindow = () => {
 		x += screenOverlayWindow.getContentBounds().x;
 		y += screenOverlayWindow.getContentBounds().y;
 
-		lastPos = { x, y }; // probably not enough to work reliably, trying to prevent it from pausing after a dwell click.
+		// Trying to prevent a false positive of mouse hardware mouse movement detection,
+		// so that it doesn't pause after a dwell click. This might not be enough to work reliably.
+		lastPos = { x, y };
+
 		await setMouseLocation(x, y);
-		await click();
+		await click(swapMouseButtons ? "right" : "left");
 
 		// const latency = performance.now() - time;
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
