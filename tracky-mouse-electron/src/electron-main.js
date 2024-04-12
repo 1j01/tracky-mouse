@@ -86,6 +86,22 @@ const createWindow = () => {
 	};
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
+		// TODO: fix false positives of mouse movement detection.
+		// - Maybe await the setMouseLocation and disable the mouse movement detection until it's done?
+		//   Might not work if outstanding promises overlap. If so, there wouldn't be a period of time
+		//   where the mouse movement detection is enabled, or it would be enabled even though a later request
+		//   to move the mouse is already in progress, making it sporadic.
+		// - Maybe store a queue of mouse movement, and compare the current mouse position
+		//   against each point in the queue. I think that should be robust.
+		//   How long should the queue be? Points could be removed when setMouseLocation resolves,
+		//   if and only if it's guaranteed that getMouseLocation will return the new position at that point.
+		//   However, a simple time or count limit should be fine.
+		// - Might want to use a history of mouse movement, rather than just the latest position,
+		//   in order to require more travel without requiring significantly higher speed.
+		//   This would have to be a separate queue of getMouseLocation results,
+		//   rather than the queue of setMouseLocation requests.
+		//   Should consider framerate independence, and ideally define the threshold in terms of travel within a period of time.
+		//   (Should distance be measured in pixels, inches/cm, or screen percentage? probably pixels, to keep it simple.)
 		const distanceMoved = lastPos.x !== undefined ? Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y) : 0;
 		if (distanceMoved > thresholdToRegainControl) {
 			// console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, { curPos, lastPos, x, y });
