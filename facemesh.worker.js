@@ -1,5 +1,4 @@
-/* eslint-env worker */
-/* global tf, facemesh */
+/* global tf, facemesh, importScripts */
 importScripts('lib/tf.js');
 importScripts('lib/facemesh/facemesh.js');
 
