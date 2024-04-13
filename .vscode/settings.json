@@ -7,6 +7,7 @@
 		"eviacam",
 		"facemesh",
 		"fullscreenable",
+		"Gameface",
 		"grayscale",
 		"guvcview",
 		"handsfree",
@@ -33,6 +34,7 @@
 		"timespan",
 		"titlebar",
 		"tracky",
+		"Viacam",
 		"XFCE"
 	],
 	"workbench.colorTheme": "fairyfloss",
