@@ -52,5 +52,8 @@
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "live-server": "^1.2.1"
+  },
+  "dependencies": {
+    "@types/eslint": "^8.56.9"
   }
 }

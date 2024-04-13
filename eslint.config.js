@@ -1,6 +1,7 @@
 const globals = require("globals");
 const js = require("@eslint/js");
 
+/** @type {import('@types/eslint').Linter.FlatConfig[]} */
 module.exports = [
 	{
 		"ignores": [
