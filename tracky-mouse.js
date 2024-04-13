@@ -609,14 +609,16 @@ TrackyMouse.init = function (div) {
 			</div>
 			<br>
 		</div>
-		<div class="tracky-mouse-canvas-container">
-			<div class="tracky-mouse-canvas-overlay">
-				<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
-				<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
-				<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
-				<div class="tracky-mouse-error-message" role="alert" hidden></div>
+		<div class="tracky-mouse-canvas-container-container">
+			<div class="tracky-mouse-canvas-container">
+				<div class="tracky-mouse-canvas-overlay">
+					<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
+					<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
+					<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
+					<div class="tracky-mouse-error-message" role="alert" hidden></div>
+				</div>
+				<canvas class="tracky-mouse-canvas"></canvas>
 			</div>
-			<canvas class="tracky-mouse-canvas"></canvas>
 		</div>
 		<p class="tracky-mouse-desktop-app-download-message">
 			You can control your entire computer with the <a href="https://github.com/1j01/tracky-mouse">TrackyMouse</a> desktop app.

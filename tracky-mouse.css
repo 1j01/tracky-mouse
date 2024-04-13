@@ -43,6 +43,8 @@
 	box-shadow: 0 0 10px yellow, 0 0 3px yellow;
 }
 .tracky-mouse-ui {
+	display: flex;
+	flex-direction: column;
 	background-color: rgb(195, 173, 230);
 	color: black;
 	padding: 10px;
@@ -85,15 +87,17 @@
 .tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
 	right: 0;
 }
+.tracky-mouse-canvas-container-container {
+	flex: 1;
+	flex-basis: 0;
+	min-width: 0;
+	min-height: 0;
+}
 .tracky-mouse-canvas-container {
 	position: relative;
-	/* This depends on the dimensions of the layout outside of this element.
-	TODO: please find a less finicky way to do this! This will be insane to maintain.
-	The property object-fit would be a perfect fit, but it only works for replaced elements. */
-	/* Also TODO: add min size, or better maybe, handle small window by hiding options and making webcam view big. */
-	--external-height: 230px;
-	--external-width: 20px;
-	height: min(calc(100vh - var(--external-height)), calc(min(100vw, var(--max-ui-width)) / var(--aspect-ratio) - var(--external-width)));
+	/* Note: aspect-ratio is set from JS, which determines the width implicitly. */
+	/* TODO: add min size, or better maybe, handle small window by hiding options and making webcam view big. */
+	max-height: 100%;
 	margin: auto;
 }
 .tracky-mouse-canvas-overlay {
