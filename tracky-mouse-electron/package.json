@@ -43,7 +43,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint .."
+    "lint": "cd .. && npm run lint"
   },
   "config": {
     "forge": {
