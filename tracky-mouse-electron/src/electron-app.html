@@ -34,6 +34,25 @@
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
+			/* Don't need min height when height of the container is 100%,
+			and don't want it because it can make the camera view get pushed
+			off-screen, making the media query's breakpoint highly dependent
+			on the UI. Without a min height, it's flexible, it's just a matter
+			of how small the camera view gets. If the settings take up a lot of
+			height, it might shrink to nothing, but it'll never get cut off. */
+			--tracky-mouse-camera-view-min-height: 0;
+		}
+		@media screen and (max-height: 500px) {
+			/* TODO: provide modal access to settings when window is small,
+			i.e. a button that shows the settings over/replacing the camera feed.
+			right now, this hides the settings and there's no indication that they exist */
+			.tracky-mouse-controls {
+				display: none;
+			}
+			.tracky-mouse-ui.tracky-mouse-ui {
+				padding: 0;
+				--tracky-mouse-camera-view-min-height: 0;
+			}
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="../node_modules/tracky-mouse/tracky-mouse.css">

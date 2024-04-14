@@ -91,12 +91,18 @@
 	flex: 1;
 	flex-basis: 0;
 	min-width: 0;
-	min-height: 0;
+	/* I might be able to simplify this or let it have an intrinsic height
+	based on the width, for the web demo, by leaving min-height unset (auto),
+	and only setting it	to 0 for the desktop app.
+	Well, really the difference is whether the height of the .tracky-mouse-ui
+	is fixed or not, not whether it's a web demo or desktop app.
+	So I might differentiate based on a .constrained-height class or something,
+	if not detect it automatically. */
+	min-height: var(--tracky-mouse-camera-view-min-height, 300px);
 }
 .tracky-mouse-canvas-container {
 	position: relative;
 	/* Note: aspect-ratio is set from JS, which determines the width implicitly. */
-	/* TODO: add min size, or better maybe, handle small window by hiding options and making webcam view big. */
 	max-height: 100%;
 	margin: auto;
 }
