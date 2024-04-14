@@ -88,6 +88,10 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - For the electron app:
 	- Then `cd tracky-mouse-electron && npm install`
 
+### VS Code
+
+Launch configurations are provided to debug the web version in Chrome, and to debug the Electron main process.
+
 ## Install Desktop App
 
 The app is not yet distributed as precompiled binaries.
