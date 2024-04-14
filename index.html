@@ -33,6 +33,7 @@
 		}
 		header {
 			text-align: center;
+			margin-top: 2em;
 		}
 		header h1 {
 			font-size: 2.6em;
@@ -55,6 +56,14 @@
 		.comparison-left-right p {
 			flex: 1;
 			max-width: 45%;
+		}
+		@media (max-width: 30em) {
+			.comparison-left-right {
+				flex-direction: column;
+			}
+			.comparison-left-right p {
+				max-width: 100%;
+			}
 		}
 		.comparison-left-right img {
 			display: block;
