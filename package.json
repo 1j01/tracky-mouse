@@ -35,7 +35,7 @@
   "bugs": {
     "url": "https://github.com/1j01/tracky-mouse/issues"
   },
-  "homepage": "https://github.com/1j01/tracky-mouse#readme",
+  "homepage": "https://trackymouse.js.org/",
   "main": "tracky-mouse.js",
   "browser": "tracky-mouse.js",
   "files": [

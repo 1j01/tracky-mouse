@@ -621,7 +621,7 @@ TrackyMouse.init = function (div) {
 			</div>
 		</div>
 		<p class="tracky-mouse-desktop-app-download-message">
-			You can control your entire computer with the <a href="https://github.com/1j01/tracky-mouse">TrackyMouse</a> desktop app.
+			You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.
 		</p>
 	`;
 	if (!div) {

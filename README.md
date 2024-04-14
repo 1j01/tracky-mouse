@@ -14,7 +14,7 @@ Sharing code between these different facets of the project means a lot of improv
 
 Options could be exported/imported or even synced between the products.
 
-[✨👉 **Try out the Demo!** 👈✨](https://1j01.github.io/tracky-mouse/)
+[✨👉 **Try out the Demo!** 👈✨](https://trackymouse.js.org/)
 
 ## Why did I make this?
 
