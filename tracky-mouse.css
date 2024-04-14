@@ -61,7 +61,7 @@
 	object-fit: scale-down;
 	background-color: rgba(15, 0, 20, 0.5);
 }
-.tracky-mouse-ui .tracky-mouse-control-row {
+.tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: block;
 	width: fit-content; /* avoid controls being too easy to click */
 }
