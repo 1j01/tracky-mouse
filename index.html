@@ -86,6 +86,23 @@
 			text-decoration: none;
 			border-radius: 0.5em;
 		}
+
+		.cursors-background {
+			/*background-image: url(images/cursor-tesselation-ceramic-random-colors.svg);*/
+			/*background-image: url(images/cursor-tesselation-curved-random-colors.svg);*/
+			background-image: url(images/cursor-tesselation-melted-rainbow.svg);
+			background-size: 100%;
+			background-color: rgb(234, 215, 255);
+			background-blend-mode: overlay;
+			background-attachment: fixed;
+			padding: 1em;
+			border-radius: 1em / 10em;
+		}
+		@media (prefers-color-scheme: dark) {
+			.cursors-background {
+				background-color: rgb(86, 39, 124);
+			}
+		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="tracky-mouse.css">
 	<!-- <link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css"> -->
@@ -131,6 +148,7 @@
 			The result is a system that's <b>more accurate than either.</b>
 		</p>
 	</div>
+	<div class="cursors-background">
 	<h2>Who is this for?</h2>
 	<p>
 		People who have limited mobility, due to motor neuron diseases like ALS,
@@ -147,6 +165,7 @@
 		Ever wanted to use your computer while playing guitar, or while eating a sandwich?
 		Maybe Tracky Mouse is for you!
 	</p>
+	</div>
 	<h2>Try it out</h2>
 	<p>
 		<!-- TODO: write about what is and isn't part of the demo -->
