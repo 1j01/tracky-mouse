@@ -656,6 +656,7 @@ TrackyMouse.init = function (div) {
 
 	var pointerEl = document.createElement('div');
 	pointerEl.className = "tracky-mouse-pointer";
+	pointerEl.style.display = "none";
 	document.body.appendChild(pointerEl);
 
 	var cameraVideo = document.createElement('video');
