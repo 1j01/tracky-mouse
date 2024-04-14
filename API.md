@@ -51,7 +51,9 @@ TrackyMouse.loadDependencies().then(function() {
 	TrackyMouse.init();
 
 	// Pointer event simulation logic should be built into tracky-mouse in the future.
-	const getEventOptions = ({x, y})=> {
+	// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
+	// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
+	const getEventOptions = ({ x, y }) => {
 		return {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
 			clientX: x,
@@ -61,6 +63,7 @@ TrackyMouse.loadDependencies().then(function() {
 			isPrimary: true,
 		};
 	};
+	let last_el_over = null;
 	TrackyMouse.onPointerMove = (x, y) => {
 		const target = document.elementFromPoint(x, y) || document.body;
 		if (target !== last_el_over) {
@@ -237,7 +240,7 @@ const config = {
 	beforeDispatch: () => { window.untrusted_gesture = true; },
 	afterDispatch: () => { window.untrusted_gesture = false; },
 };
-initDwellClicking(config);
+TrackyMouse.initDwellClicking(config);
 
 // Source: https://stackoverflow.com/a/54492696/2624876
 function getCurrentRotation(el) {
