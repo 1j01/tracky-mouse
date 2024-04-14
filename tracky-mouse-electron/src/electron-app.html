@@ -14,18 +14,22 @@
 			background-color: white;
 			color: black;
 		}
+
 		@media (prefers-color-scheme: dark) {
 			body {
 				background-color: black;
 				color: white;
 			}
+
 			a:link {
 				color: aquamarine;
 			}
+
 			a:visited {
 				color: rgb(197, 127, 255);
 			}
 		}
+
 		html,
 		body,
 		.tracky-mouse-ui {
@@ -42,13 +46,16 @@
 			height, it might shrink to nothing, but it'll never get cut off. */
 			--tracky-mouse-camera-view-min-height: 0;
 		}
+
 		@media screen and (max-height: 500px) {
+
 			/* TODO: provide modal access to settings when window is small,
 			i.e. a button that shows the settings over/replacing the camera feed.
 			right now, this hides the settings and there's no indication that they exist */
 			.tracky-mouse-controls {
 				display: none;
 			}
+
 			.tracky-mouse-ui.tracky-mouse-ui {
 				padding: 0;
 				--tracky-mouse-camera-view-min-height: 0;

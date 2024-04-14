@@ -112,7 +112,7 @@ const createWindow = () => {
 				updateDwellClicking();
 			}, regainControlForTime);
 			updateDwellClicking();
-			lastPos = {x: curPos.x, y: curPos.y};
+			lastPos = { x: curPos.x, y: curPos.y };
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			lastPos = { x, y };
 			// lastPos = {x: curPos.x, y: curPos.y};
