@@ -25,10 +25,10 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="8.242308"
-     inkscape:cx="23.233784"
-     inkscape:cy="36.458235"
-     inkscape:current-layer="layer1"
+     inkscape:zoom="11.656384"
+     inkscape:cx="26.637764"
+     inkscape:cy="30.15515"
+     inkscape:current-layer="g3699"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -57,7 +57,7 @@
        inkscape:label="head/face">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stop-color:#000000"
-         d="m 30.141868,12.978181 c 13.742246,-0.984845 11.881941,12.077711 12.398736,17.726188 0.649795,7.102142 -2.445405,9.221421 -5.420201,12.306626 -2.974795,3.085204 -8.05182,3.3052 -11.960571,-0.887797 -2.62864,-2.819797 -5.781943,-6.265826 -5.408668,-11.006628 0.660174,-8.384586 0.208993,-17.408711 10.390704,-18.138389 z"
+         d="m 30.141868,12.978181 c 14.494394,-1.150235 14.279704,11.10915 12.398736,17.726188 -1.811897,6.374057 -1.014423,8.596418 -3.989219,11.681623 C 35.57659,45.471196 28.068583,46.316195 24.159832,42.123198 21.531192,39.303401 21.197535,35.865302 19.751164,31.11657 17.067937,22.306985 19.888772,13.791838 30.141868,12.978181 Z"
          id="path1660"
          sodipodi:nodetypes="ssssss"
          inkscape:label="head outline" />
@@ -102,7 +102,7 @@
     </g>
     <g
        id="g3604"
-       transform="translate(-0.79021277,1.7529011)"
+       transform="translate(-1.2902128,1.7529011)"
        style="stroke-width:1"
        inkscape:label="arrow left">
       <path
@@ -131,7 +131,7 @@
        y="0"
        xlink:href="#g3604"
        id="use3606-7"
-       transform="matrix(0,1,1,0,0.26118063,-3.9097407)"
+       transform="matrix(0,1,1,0,0.26118063,-3.4097407)"
        style="stroke-width:1"
        inkscape:label="arrow up" />
     <use
@@ -139,7 +139,7 @@
        y="0"
        xlink:href="#g3604"
        id="use3606-7-5"
-       transform="rotate(-90,34.567638,33.77309)"
+       transform="rotate(-90,34.317638,33.52309)"
        style="stroke-width:1"
        inkscape:label="arrow down" />
     <path
