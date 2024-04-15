@@ -1,0 +1,198 @@
+body {
+	background-color: white;
+	color: black;
+	font-family: sans-serif;
+	max-width: 70em;
+	max-width: min(70em, calc(100% - 2em));
+	margin: 0 auto;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: black;
+		color: white;
+	}
+
+	a:link {
+		color: aquamarine;
+	}
+
+	a:visited {
+		color: rgb(197, 127, 255);
+	}
+}
+
+header {
+	text-align: center;
+	margin-top: 2em;
+}
+
+header h1 {
+	font-size: 2.6em;
+	margin-bottom: 0;
+}
+
+header .tagline {
+	font-size: 1.5em;
+	margin-top: 0.3em;
+}
+
+header .logo {
+	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
+}
+
+.comparison-left-right {
+	display: flex;
+	justify-content: space-around;
+	text-align: center;
+	max-width: 50em;
+	margin: 0 auto;
+}
+
+.comparison-left-right p {
+	flex: 1;
+	max-width: 45%;
+}
+
+@media (max-width: 30em) {
+	.comparison-left-right {
+		flex-direction: column;
+	}
+
+	.comparison-left-right p {
+		max-width: 100%;
+	}
+}
+
+.comparison-left-right img {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 0.8em;
+	width: 50%;
+	height: auto;
+}
+
+.comparison-middle {
+	max-width: 40em;
+	margin: 0 auto;
+	text-align: center;
+}
+
+a.big-download-button {
+	display: inline-block;
+	padding: 0.8em 1em;
+	background-color: rgb(0, 162, 255);
+	color: white;
+	text-decoration: none;
+	border-radius: 0.5em;
+}
+
+.cursors-background {
+	/*background-image: url(images/cursor-tesselation-ceramic-random-colors.svg);*/
+	/*background-image: url(images/cursor-tesselation-curved-random-colors.svg);*/
+	background-image: url(images/cursor-tesselation-melted-rainbow.svg);
+	background-size: 100%;
+	background-color: rgb(234, 215, 255);
+	background-blend-mode: overlay;
+	background-attachment: fixed;
+	padding: 1em;
+	border-radius: 1em / 10em;
+}
+
+@media (prefers-color-scheme: dark) {
+	.cursors-background {
+		background-color: rgb(86, 39, 124);
+	}
+}
+
+/* could use a radial gradient to simplify this and do more concentric circles */
+.archery-target {
+	background-color: white;
+	border-radius: 50%;
+	width: var(--diameter, 100px);
+	height: var(--diameter, 100px);
+	position: absolute;
+	transform: translate(-50%, -50%);
+	/* `center` for basic hit animation, `center bottom` for hinge hit animation */
+	transform-origin: center bottom;
+}
+
+.archery-target::before {
+	content: "";
+	display: block;
+	width: 64%;
+	height: 64%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: red;
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.archery-target::after {
+	content: "";
+	display: block;
+	width: 25%;
+	height: 25%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+/*@keyframes archery-target-hit-basic {
+	0% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	50% {
+		transform: translate(-50%, -50%) scale(1.2);
+	}
+
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+	}
+}*/
+/*@keyframes archery-target-spin {
+	0% {
+		transform: translate(-50%, -50%) rotateY(0deg);
+	}
+
+	100% {
+		transform: translate(-50%, -50%) rotateY(3600deg);
+	}
+}*/
+/*@keyframes archery-target-hit {
+	0% {
+		transform: translate(-50%, -50%) rotateX(0deg);
+	}
+
+	50% {
+		transform: translate(-50%, -50%) rotateX(200deg);
+	}
+
+	60% {
+		transform: translate(-50%, -50%) rotateX(160deg);
+	}
+
+	70% {
+		transform: translate(-50%, -50%) rotateX(190deg);
+	}
+
+	80% {
+		transform: translate(-50%, -50%) rotateX(176deg);
+	}
+
+	90% {
+		transform: translate(-50%, -50%) rotateX(183deg);
+	}
+
+	100% {
+		transform: translate(-50%, -50%) rotateX(180deg);
+	}
+}*/
