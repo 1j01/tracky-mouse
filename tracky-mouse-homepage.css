@@ -141,6 +141,7 @@ a.big-download-button {
 .archery-target {
 	background-color: white;
 	border-radius: 50%;
+	border: 2px solid #222;
 	width: var(--diameter, 100px);
 	height: var(--diameter, 100px);
 	position: absolute;
