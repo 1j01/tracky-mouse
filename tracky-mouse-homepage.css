@@ -41,6 +41,38 @@ header .logo {
 	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
 }
 
+.features-list {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	list-style-type: none;
+}
+
+.features-list>li {
+	flex: 1;
+	max-width: 20em;
+	min-width: 20%;
+
+	margin: 1em;
+	padding: 1em;
+	background-color: rgb(73, 77, 80);
+	color: white;
+	border-radius: 0.5em;
+}
+
+.features-list>li>h3 {
+	text-align: center;
+}
+
+.features-list>li>img {
+	display: block;
+	margin: 0 auto;
+	width: 75%;
+	height: auto;
+	min-height: 100px;
+}
+
+
 .comparison-left-right {
 	display: flex;
 	justify-content: space-around;
