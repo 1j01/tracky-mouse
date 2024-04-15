@@ -42,17 +42,16 @@ header .logo {
 }
 
 .features-list {
-	display: flex;
-	justify-content: space-around;
-	flex-wrap: wrap;
+	max-width: 50em;
+	margin: 0 auto;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	grid-gap: 1rem;
 	list-style-type: none;
 }
 
 .features-list>li {
-	flex: 1;
-	max-width: 20em;
-	min-width: 20%;
-
 	margin: 1em;
 	padding: 1em;
 	background-color: rgb(73, 77, 80);
@@ -70,6 +69,7 @@ header .logo {
 	width: 75%;
 	height: auto;
 	min-height: 100px;
+	max-height: 220px;
 }
 
 
