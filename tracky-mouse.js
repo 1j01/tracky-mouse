@@ -453,10 +453,22 @@ const init_dwell_clicking = (config) => {
 				halo.style.height = `${rect.height}px`;
 				// shorthand properties might not work in all browsers (not tested)
 				// this is so overkill...
-				halo.style.borderTopRightRadius = `${parseFloat(computed_style.borderTopRightRadius) * border_radius_scale}px`;
-				halo.style.borderTopLeftRadius = `${parseFloat(computed_style.borderTopLeftRadius) * border_radius_scale}px`;
-				halo.style.borderBottomRightRadius = `${parseFloat(computed_style.borderBottomRightRadius) * border_radius_scale}px`;
-				halo.style.borderBottomLeftRadius = `${parseFloat(computed_style.borderBottomLeftRadius) * border_radius_scale}px`;
+				// Maybe instead of collecting scale transforms and applying them to the border radii specifically,
+				// just collect transforms in general and apply them to the halo element?
+				// But of course getBoundingClientRect() includes transforms...
+				for (const prop of [
+					"borderTopRightRadius",
+					"borderTopLeftRadius",
+					"borderBottomRightRadius",
+					"borderBottomLeftRadius",
+				]) {
+					// Unfortunately, getComputedStyle can return percentages, probably other units, probably also "auto"
+					if (computed_style[prop].endsWith("px")) {
+						halo.style[prop] = `${parseFloat(computed_style[prop]) * border_radius_scale}px`;
+					} else {
+						halo.style[prop] = computed_style[prop];
+					}
+				}
 			} else {
 				halo.style.display = "none";
 			}
