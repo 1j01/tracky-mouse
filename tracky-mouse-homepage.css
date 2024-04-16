@@ -138,8 +138,7 @@ a.big-download-button {
 }
 
 .archery-target {
-	/* background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 66%, rgba(255, 0, 0, 1) 67%, rgba(255, 0, 0, 1) 100%); */
-	background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 100%);
+	background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 66%, rgba(255, 0, 0, 1) 67%, rgba(255, 0, 0, 1) 100%);
 	border-radius: 50%;
 	border: 2px solid #222;
 	width: var(--diameter, 100px);
