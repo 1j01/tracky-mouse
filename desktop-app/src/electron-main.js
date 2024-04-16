@@ -146,6 +146,17 @@ const createWindow = () => {
 			return;
 		}
 
+		// Failsafe: don't click if the window(s) are closed.
+		// This helps with debugging the closing/quitting behavior.
+		// It would also help to have a heartbeat to avoid clicking while paused in the debugger in other scenarios,
+		// and avoid the dwell clicking indicator from repeatedly showing while there's no connectivity between the processes.
+		if (
+			(!screenOverlayWindow || screenOverlayWindow.isDestroyed()) ||
+			(!mainWindow || mainWindow.isDestroyed())
+		) {
+			return;
+		}
+
 		// Translate coords in case of debug (doesn't matter when it's fullscreen).
 		x += screenOverlayWindow.getContentBounds().x;
 		y += screenOverlayWindow.getContentBounds().y;
