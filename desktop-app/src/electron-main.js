@@ -16,7 +16,9 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
 const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
 
+/** @type {BrowserWindow} */
 let mainWindow;
+/** @type {BrowserWindow} */
 let screenOverlayWindow;
 
 const createWindow = () => {
