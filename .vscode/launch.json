@@ -32,12 +32,12 @@
 			"type": "node",
 			"request": "launch",
 			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "${workspaceFolder}/tracky-mouse-electron/node_modules/.bin/electron",
+			"runtimeExecutable": "${workspaceFolder}/desktop-app/node_modules/.bin/electron",
 			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/tracky-mouse-electron/node_modules/.bin/electron.cmd"
+				"runtimeExecutable": "${workspaceFolder}/desktop-app/node_modules/.bin/electron.cmd"
 			},
 			"args": [
-				"tracky-mouse-electron"
+				"desktop-app"
 			],
 			"outputCapture": "std"
 		}

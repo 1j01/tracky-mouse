@@ -86,7 +86,7 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Run `npm install`
 - Run `npm run dev` to start a web server that will automatically reload when files change.
 - For the electron app:
-	- Then `cd tracky-mouse-electron && npm install`
+	- Then `cd desktop-app && npm install`
 
 ### VS Code
 
@@ -98,7 +98,7 @@ The app is not yet distributed as precompiled binaries.
 If you want to try out the desktop app in the meantime:
 
 - See Development Setup
-- In folder `tracky-mouse-electron`, run `npm start`
+- In folder `desktop-app`, run `npm start`
 
 ## Add to your project
 
