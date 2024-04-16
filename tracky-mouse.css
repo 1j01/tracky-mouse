@@ -72,8 +72,12 @@
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
-	display: block;
-	/* avoid controls being too easy to click */
+	display: flex;
+}
+
+.tracky-mouse-ui .tracky-mouse-control-row label {
+	/* Avoid accidental clicks on controls by their labels, when otherwise 100% width. */
+	/* This may not be needed in the current layout. */
 	width: fit-content;
 }
 
@@ -83,9 +87,15 @@
 }
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider {
-	display: inline-block;
+	display: inline-flex;
 	position: relative;
 	margin-bottom: 20px;
+	flex: 1;
+	max-width: 400px;
+}
+
+.tracky-mouse-ui .tracky-mouse-labeled-slider input {
+	flex: 1;
 }
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label,
