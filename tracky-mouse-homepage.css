@@ -137,9 +137,9 @@ a.big-download-button {
 	}
 }
 
-/* could use a radial gradient to simplify this and do more concentric circles */
 .archery-target {
-	background-color: white;
+	/* background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 66%, rgba(255, 0, 0, 1) 67%, rgba(255, 0, 0, 1) 100%); */
+	background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 100%);
 	border-radius: 50%;
 	border: 2px solid #222;
 	width: var(--diameter, 100px);
@@ -148,34 +148,6 @@ a.big-download-button {
 	transform: translate(-50%, -50%);
 	/* `center` for basic hit animation, `center bottom` for hinge hit animation */
 	transform-origin: center bottom;
-}
-
-.archery-target::before {
-	content: "";
-	display: block;
-	width: 64%;
-	height: 64%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: red;
-	border-radius: 50%;
-	pointer-events: none;
-}
-
-.archery-target::after {
-	content: "";
-	display: block;
-	width: 25%;
-	height: 25%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: white;
-	border-radius: 50%;
-	pointer-events: none;
 }
 
 /*@keyframes archery-target-hit-basic {
