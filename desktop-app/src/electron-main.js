@@ -70,8 +70,12 @@ const createWindow = () => {
 	mainWindowState.manage(mainWindow);
 
 	// Clean up overlay when the app window is closed.
-	mainWindow.on('close', () => {
-		screenOverlayWindow?.close();
+	mainWindow.on('closed', () => {
+		mainWindow = null; // not needed if calling app.exit(), which exits immediately, but useful if calling other methods to quit
+		// screenOverlayWindow?.close(); // doesn't work because screenOverlayWindow.closable is false
+		// app.quit(); // doesn't work either, because screenOverlayWindow.closable is false
+		app.exit(); // doesn't call beforeunload and unload listeners, or before-quit or will-quit
+		// Note: if re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 	});
 
 	// Expose functionality to the renderer processes.
@@ -246,6 +250,8 @@ app.on('second-instance', () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
+// NOTE: currently exiting with app.exit()
+// If re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		app.quit();
