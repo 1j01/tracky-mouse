@@ -40,11 +40,9 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 
 ## Software Architecture
 
-This is a monorepo containing npm workspaces for the library (`core`) and the desktop app (`desktop-app`).
+This is a monorepo containing npm workspaces for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
 
-The website is currently served from the root of the repository, but it should be moved to its own workspace.
-There's just the matter of the dependency on the library, which I don't want to duplicate within the repository.
-It's possible a symlink might work, but otherwise I might need to use the `gh-pages` tool to deploy the website.
+The website uses symlinks to reference the library and shared resources (`images`).
 
 ### Desktop App
 
@@ -88,12 +86,13 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 
 ## Development Setup
 
+- Before cloning on Windows, make sure you have `git config --global core.symlinks true` set, or you may have issues with symbolic links.
 - [Clone the repo.](https://help.github.com/articles/cloning-a-repository/)
 - Install [Node.js](https://nodejs.org/) if you don't have it
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install`
 - Run `npm -w core install` (`-w` is short for `--workspace`, and can be used with many npm commands to target a workspace)
-- Run `npm run dev` to start a web server that will automatically reload when files change.
+- Run `npm -w website start` to start a web server that will automatically reload when files change.
 - For the electron app:
 	- Then `npm -w desktop-app install`
 

@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "tracky-mouse-website",
+  "version": "1.0.0",
+  "description": "Website for Tracky Mouse",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "scripts": {
+    "start": "live-server --port=64206"
+  },
+  "license": "MIT"
+}
