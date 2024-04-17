@@ -43,16 +43,5 @@
     "tracky-mouse.css",
     "facemesh.worker.js",
     "lib/"
-  ],
-  "scripts": {
-    "dev": "live-server --port=64206",
-    "lint": "cspell-cli lint . && eslint"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "@types/eslint": "^8.56.9",
-    "cspell-cli": "^8.7.0",
-    "eslint": "^9.0.0",
-    "live-server": "^1.2.1"
-  }
+  ]
 }
