@@ -210,6 +210,23 @@ const createWindow = () => {
 	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
 	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
+	screenOverlayWindow.on('close', (event) => {
+		// If Windows Explorer is restarted while the app is running,
+		// the Screen Overlay Window can appear in the taskbar, and become closable.
+		// Various window attributes are forgotten, so we need to reset them.
+		// See: https://github.com/1j01/tracky-mouse/issues/47
+		// And: https://github.com/electron/electron/issues/29526
+		event.preventDefault();
+		screenOverlayWindow.setSkipTaskbar(true);
+		screenOverlayWindow.setClosable(false);
+		screenOverlayWindow.setFullScreen(true);
+		screenOverlayWindow.setIgnoreMouseEvents(true);
+		// I can't seem to get the window to show on top of the taskbar after it's closed,
+		// although it does show on top before it's closed, after Windows Explorer is restarted.
+		// So a more proactive approach of restoring skipTaskbar (and maybe closable) is needed.
+		screenOverlayWindow.setAlwaysOnTop(false);
+		screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
+	});
 	screenOverlayWindow.on('closed', () => {
 		screenOverlayWindow = null;
 	});
