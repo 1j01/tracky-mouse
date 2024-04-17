@@ -27,7 +27,7 @@
 			}
 		}
 	</style>
-	<link rel="stylesheet" type="text/css" href="tracky-mouse.css">
+	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
 </head>
@@ -144,11 +144,11 @@
 	</script>
 
 	<!-- Run code that uses eval, in a similar way to how it's normally used: -->
-	<script src="lib/stats.js"></script>
-	<script src="lib/clmtrackr.js"></script>
-	<script src="tracky-mouse.js"></script>
+	<script src="core/lib/stats.js"></script>
+	<script src="core/lib/clmtrackr.js"></script>
+	<script src="core/tracky-mouse.js"></script>
 	<script>
-		TrackyMouse.dependenciesRoot = ".";
+		TrackyMouse.dependenciesRoot = "./core";
 		TrackyMouse.init();
 	</script>
 	<!--

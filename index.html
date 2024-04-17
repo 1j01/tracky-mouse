@@ -6,11 +6,11 @@
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
-	<script src="lib/stats.js"></script>
-	<script src="lib/no-eval.js"></script>
-	<script src="lib/clmtrackr.js"></script>
-	<!-- <script src="lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
-	<link rel="stylesheet" type="text/css" href="tracky-mouse.css">
+	<script src="core/lib/stats.js"></script>
+	<script src="core/lib/no-eval.js"></script>
+	<script src="core/lib/clmtrackr.js"></script>
+	<!-- <script src="core/lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
+	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
@@ -209,9 +209,9 @@
 	</p>
 	<h2>Source Code</h2>
 	<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
-	<script src="tracky-mouse.js"></script>
+	<script src="core/tracky-mouse.js"></script>
 	<script>
-		TrackyMouse.dependenciesRoot = ".";
+		TrackyMouse.dependenciesRoot = "./core";
 		// Note: init currently extends the passed element,
 		// rather than replacing it or adding a child to it.
 		// That is technically the most flexible, I suppose,
