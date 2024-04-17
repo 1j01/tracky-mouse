@@ -40,9 +40,11 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 
 ## Software Architecture
 
-This is a monorepo containing npm workspaces for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
+This is a monorepo containing npm workspaces for the library (`core`), the desktop app (`desktop-app`), and the website (`docs`).
 
 The website uses symlinks to reference the library and shared resources (`images`).
+It has to be named `docs` because GitHub Pages only serves from the `docs` or root directory of a repository.
+(It's not *not* docs, but it's not *not* annoying.)
 
 ### Desktop App
 
@@ -92,7 +94,7 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install`
 - Run `npm -w core install` (`-w` is short for `--workspace`, and can be used with many npm commands to target a workspace)
-- Run `npm -w website start` to start a web server that will automatically reload when files change.
+- Run `npm -w docs start` to start a web server that will automatically reload when files change.
 - For the electron app:
 	- Then `npm -w desktop-app install`
 
