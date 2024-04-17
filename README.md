@@ -40,6 +40,14 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 
 ## Software Architecture
 
+This is a monorepo containing npm workspaces for the library (`core`) and the desktop app (`desktop-app`).
+
+The website is currently served from the root of the repository, but it should be moved to its own workspace.
+There's just the matter of the dependency on the library, which I don't want to duplicate within the repository.
+It's possible a symlink might work, but otherwise I might need to use the `gh-pages` tool to deploy the website.
+
+### Desktop App
+
 The desktop application's architecture is kind of *amusing*...
 
 I will explain. First, some groundwork. Electron apps are multi-process programs. They have a main process, which creates browser windows, and renderer processes, which render the content of the browser windows.
@@ -84,9 +92,10 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Install [Node.js](https://nodejs.org/) if you don't have it
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install`
+- Run `npm -w core install` (`-w` is short for `--workspace`, and can be used with many npm commands to target a workspace)
 - Run `npm run dev` to start a web server that will automatically reload when files change.
 - For the electron app:
-	- Then `cd desktop-app && npm install`
+	- Then `npm -w desktop-app install`
 
 ### VS Code
 
@@ -98,7 +107,7 @@ The app is not yet distributed as precompiled binaries.
 If you want to try out the desktop app in the meantime:
 
 - See Development Setup
-- In folder `desktop-app`, run `npm start`
+- `npm -w desktop-app start`
 
 ## Add to your project
 
