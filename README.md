@@ -101,6 +101,11 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 
 Launch configurations are provided to debug the web version in Chrome, and to debug the Electron main process.
 
+## Quality Assurance
+
+- Run `npm run lint` to check for spelling and code issues.
+- There are no tests yet.
+
 ## Install Desktop App
 
 The app is not yet distributed as precompiled binaries.
