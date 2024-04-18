@@ -104,10 +104,17 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Install [Node.js](https://nodejs.org/) if you don't have it
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
+
+For the website:
 - Run `npm run website:npm -- install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run `npm`  within the directory of the package.)
 - Run `npm run website` to start a web server that will automatically reload when files change.
-- For the electron app:
-  - Run `npm run desktop-app:npm -- install`
+
+For the desktop app:
+- Run `npm run desktop-app:npm -- install` to install dependencies.
+- Run `npm run desktop-app` to start the app.
+- Run `npm run desktop-app:npm -- run make` to build the app for distribution. Look in the `desktop-app/out/` directory for build artifacts.
+
+(The core library doesn't currently use `npm` for dependencies. It has dependencies stored in the `core/lib` directory. And it doesn't have any npm scripts.)
 
 ### VS Code
 
@@ -123,13 +130,14 @@ Launch configurations are provided to debug the web version in Chrome, and to de
 The app is not yet distributed as precompiled binaries.
 If you want to try out the desktop app in the meantime:
 
-- See Development Setup
-- `npm run desktop-app`
+See [Development Setup](#development-setup).
 
 ## Add to your project
 
 Tracky Mouse is available on npm:
-`npm i tracky-mouse`
+```sh
+npm install tracky-mouse
+```
 
 Read the [API documentation](./API.md) for more information.
 
