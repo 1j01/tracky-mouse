@@ -42,9 +42,19 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 
 This is a monorepo containing npm workspaces for the library (`core`), the desktop app (`desktop-app`), and the website (`docs`).
 
-The website uses symlinks to reference the library and shared resources (`images`).
-It has to be named `docs` because GitHub Pages only serves from the `docs` or root directory of a repository.
-(It's not *not* docs, but it's not *not* annoying.)
+### Website
+
+The website uses symlinks to reference the library (`core`) and shared resources (`images`) during development.
+
+When deploying with `npm run deploy -w docs`, the symlinks are dereferenced using `cp -rL`.
+
+The website is deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
+
+GitHub Pages supports symlinks, but not to paths outside of `docs` when deploying `docs` as the site root, unfortunately,
+hence I can't use symlinks to reference the library and avoid a deployment script, while keeping a clean repository structure.
+I would have to have the website files at the root of the repository, which I don't want.
+
+Since I'm using `gh-pages`, I no longer need to name the folder `docs` at least though... I can change it back to `website`...
 
 ### Desktop App
 
