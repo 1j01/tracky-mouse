@@ -14,6 +14,8 @@
 		"**/images": true,
 		"**/lib": true,
 		"**/out": true,
+		// Symbolic link to the core library, causes duplicate/non-canonical search results.
+		"website/core": true,
 		// The package lock files contain a lot of repetition, and are usually noise in search results.
 		// You can often search with `npm ls` if you want to check if a package is installed,
 		// and what depends on what.
