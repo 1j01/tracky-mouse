@@ -1,12 +1,16 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { setMouseLocation, getMouseLocation, click } = require('serenade-driver');
-const windowStateKeeper = require('electron-window-state');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-	app.quit();
+	app.quit(); // does not exit immediately!
+	return; // important!
 }
+
+// Don't require any third-party modules until after squirrel events are handled.
+// If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
+const windowStateKeeper = require('electron-window-state');
+const { setMouseLocation, getMouseLocation, click } = require('serenade-driver');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
