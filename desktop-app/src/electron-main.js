@@ -14,8 +14,6 @@ if (require('electron-squirrel-startup')) {
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
 
-const trackyMouseFolder = app.isPackaged ? `${app.getAppPath()}/copied/` : `${__dirname}/../../`;
-
 /** @type {BrowserWindow} */
 let mainWindow;
 /** @type {BrowserWindow} */
@@ -38,8 +36,7 @@ const createWindow = () => {
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
 		},
-		// icon: `${trackyMouseFolder}/images/tracky-mouse-logo-16.png`,
-		icon: `${trackyMouseFolder}/images/tracky-mouse-logo-512.png`,
+		icon: `${__dirname}/../images/tracky-mouse-logo-512.png`,
 	});
 
 	// and load the html page of the app.
