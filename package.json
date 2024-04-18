@@ -1,14 +1,19 @@
 {
 	"private": true,
 	"name": "tracky-mouse-monorepo",
-	"description": "This package contains scripts shared between packages, and references the packages as npm workspaces.",
+	"description": "This package contains scripts shared between packages.",
 	"version": "1.0.0",
-	"workspaces": [
+	"CAN'T USE NPM WORKSPACES, see: https://github.com/1j01/tracky-mouse/issues/53": [
 		"core",
 		"desktop-app",
 		"website"
 	],
 	"scripts": {
+		"website": "cd website && npm run start",
+		"website:npm": "cd website && npm",
+		"desktop-app": "cd desktop-app && npm run start",
+		"desktop-app:npm": "cd desktop-app && npm",
+		"core:npm": "cd core && npm",
 		"lint": "cspell-cli lint . && eslint"
 	},
 	"devDependencies": {

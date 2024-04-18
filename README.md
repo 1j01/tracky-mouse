@@ -40,13 +40,16 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 
 ## Software Architecture
 
-This is a monorepo containing npm workspaces for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
+This is a monorepo containing packages for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
+
+
+I tried npm workspaces, but it doesn't work with Electron Forge packaging. See [electron/forge#2306](https://github.com/electron/forge/issues/2306).
 
 ### Website
 
 The website uses symlinks to reference the library (`core`) and shared resources (`images`) during development.
 
-When deploying with `npm run deploy -w website`, the symlinks are dereferenced using `cp -rL`.
+When deploying with `npm run website:npm -- run deploy`, the symlinks are dereferenced using `cp -rL`.
 
 The website is deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
 
@@ -100,11 +103,11 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - [Clone the repo.](https://help.github.com/articles/cloning-a-repository/)
 - Install [Node.js](https://nodejs.org/) if you don't have it
 - Open up a command prompt / terminal in the project directory.
-- Run `npm install`
-- Run `npm -w core install` (`-w` is short for `--workspace`, and can be used with many npm commands to target a workspace)
-- Run `npm -w website start` to start a web server that will automatically reload when files change.
+- Run `npm install` to install project-wide dependencies.
+- Run `npm run website:npm -- install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run `npm`  within the directory of the package.)
+- Run `npm run website` to start a web server that will automatically reload when files change.
 - For the electron app:
-	- Then `npm -w desktop-app install`
+  - Run `npm run desktop-app:npm -- install`
 
 ### VS Code
 
@@ -121,7 +124,7 @@ The app is not yet distributed as precompiled binaries.
 If you want to try out the desktop app in the meantime:
 
 - See Development Setup
-- `npm -w desktop-app start`
+- `npm run desktop-app`
 
 ## Add to your project
 
