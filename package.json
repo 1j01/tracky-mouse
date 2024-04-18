@@ -6,7 +6,7 @@
 	"workspaces": [
 		"core",
 		"desktop-app",
-		"docs"
+		"website"
 	],
 	"scripts": {
 		"lint": "cspell-cli lint . && eslint"
