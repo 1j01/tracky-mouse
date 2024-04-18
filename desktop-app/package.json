@@ -44,33 +44,6 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "tracky_mouse_electron"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
-  },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "electron-window-state": "^5.0.3",
@@ -78,11 +51,11 @@
     "tracky-mouse": "file:../core"
   },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.65",
-    "@electron-forge/maker-deb": "6.0.0-beta.65",
-    "@electron-forge/maker-rpm": "6.0.0-beta.65",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.65",
-    "@electron-forge/maker-zip": "6.0.0-beta.65",
+    "@electron-forge/cli": "6.0.0-beta.71",
+    "@electron-forge/maker-deb": "6.0.0-beta.71",
+    "@electron-forge/maker-rpm": "6.0.0-beta.71",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.71",
+    "@electron-forge/maker-zip": "6.0.0-beta.71",
     "@electron-forge/publisher-github": "^7.4.0",
     "electron": "20.0.1"
   }
