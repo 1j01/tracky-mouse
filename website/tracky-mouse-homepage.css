@@ -1,14 +1,17 @@
-body {
+html {
 	background-color: white;
 	color: black;
 	font-family: sans-serif;
+}
+
+body {
 	max-width: 70em;
 	max-width: min(70em, calc(100% - 2em));
 	margin: 0 auto;
 }
 
 @media (prefers-color-scheme: dark) {
-	body {
+	html {
 		background-color: black;
 		color: white;
 	}
