@@ -57,6 +57,7 @@
     "@electron-forge/maker-squirrel": "7.4.0",
     "@electron-forge/maker-zip": "7.4.0",
     "@electron-forge/publisher-github": "7.4.0",
-    "electron": "20.0.1"
+    "electron": "20.0.1",
+    "glob": "^7.2.3"
   }
 }

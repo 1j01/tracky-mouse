@@ -1,3 +1,11 @@
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
+
+const logFile = fs.createWriteStream(path.join(__dirname, "forge-hook.log"));
+logFile.write(`Hello from ${__filename}\n\n`);
+
+
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",
 	productName: "Tracky Mouse",
@@ -85,4 +93,49 @@ module.exports = {
 			}
 		}
 	],
+	hooks: {
+		packageAfterPrune: (config, buildPath, electronVersion, platform, arch) => {
+			logFile.write("packageAfterPrune hook\n\n");
+			if (platform === "win32") {
+				logFile.write("packageAfterPrune hook: skipping linked module workaround, not needed on Windows\n\n");
+				return;
+			}
+			logFile.write("packageAfterPrune hook: copying linked module to workaround broken link on macOS and Linux\n\n");
+			return new Promise((resolve, reject) => {
+				const fromFolder = path.dirname(require.resolve("tracky-mouse"));
+				const toFolder = `${buildPath}/node_modules/tracky-mouse`;
+				const fromGlob = `${fromFolder}/**`;
+				logFile.write(`fromFolder: ${fromFolder}\n\n`);
+				logFile.write(`toFolder: ${toFolder}\n\n`);
+				logFile.write(`fromGlob: ${fromGlob}\n\n`);
+				glob(fromGlob, {
+					ignore: [
+						".*/**",
+						"**/node_modules/**",
+						"**/private/**",
+					]
+				}, async (error, files) => {
+					logFile.write("glob callback, files:\n" + JSON.stringify(files) + "\n\n");
+
+					if (error) {
+						logFile.write("Failed to copy files:\n" + error);
+						reject(error);
+						return;
+					}
+					for (const file of files) {
+						const newFile = path.join(toFolder, path.relative(fromFolder, file));
+						if (!fs.statSync(file).isDirectory()) {
+							await fs.promises.mkdir(path.dirname(newFile), { recursive: true });
+							logFile.write("Copy: " + file + "\n");
+							logFile.write("To: " + newFile + "\n");
+							await fs.promises.copyFile(file, newFile);
+						} else {
+							// logFile.write("Dir: " + file + "\n");
+						}
+					}
+					resolve();
+				});
+			});
+		}
+	}
 };
