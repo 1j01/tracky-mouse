@@ -49,7 +49,7 @@ I tried npm workspaces, but it doesn't work with Electron Forge packaging. See [
 
 The website uses symlinks to reference the library (`core`) and shared resources (`images`) during development.
 
-When deploying with `npm run website:npm -- run deploy`, the symlinks are dereferenced using `cp -rL`.
+When deploying with `npm run in-website -- npm run deploy`, the symlinks are dereferenced using `cp -rL`.
 
 The website is deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
 
@@ -106,13 +106,13 @@ MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 - Run `npm install` to install project-wide dependencies.
 
 For the website:
-- Run `npm run website:npm -- install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run `npm`  within the directory of the package.)
+- Run `npm run in-website -- npm install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run a command within the directory of the package.)
 - Run `npm run website` to start a web server that will automatically reload when files change.
 
 For the desktop app:
-- Run `npm run desktop-app:npm -- install` to install dependencies.
+- Run `npm run in-desktop-app -- npm install` to install dependencies.
 - Run `npm run desktop-app` to start the app.
-- Run `npm run desktop-app:npm -- run make` to build the app for distribution. Look in the `desktop-app/out/` directory for build artifacts.
+- Run `npm run in-desktop-app -- npm run make` to build the app for distribution. Look in the `desktop-app/out/` directory for build artifacts.
 
 (The core library doesn't currently use `npm` for dependencies. It has dependencies stored in the `core/lib` directory. And it doesn't have any npm scripts.)
 

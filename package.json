@@ -10,10 +10,10 @@
 	],
 	"scripts": {
 		"website": "cd website && npm run start",
-		"website:npm": "cd website && npm",
+		"in-website": "cd website &&",
 		"desktop-app": "cd desktop-app && npm run start",
-		"desktop-app:npm": "cd desktop-app && npm",
-		"core:npm": "cd core && npm",
+		"in-desktop-app": "cd desktop-app &&",
+		"in-core": "cd core &&",
 		"lint": "cspell-cli lint . && eslint"
 	},
 	"devDependencies": {
