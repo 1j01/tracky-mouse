@@ -44,6 +44,11 @@ header .logo {
 	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
 }
 
+.page-section {
+	margin-top: 3em;
+	margin-bottom: 3em;
+}
+
 .features-list {
 	max-width: 50em;
 	margin: 0 auto;
