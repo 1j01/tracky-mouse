@@ -10,8 +10,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 	onMouseMove: (callback) => ipcRenderer.on('move-mouse', callback),
 
 	// This is pretty weird but I'm giving the overlay window control over clicking,
-	// whereas the main window has control over moving the mouse.
-	// The main window has the head tracker, which moves the mouse,
+	// whereas the app window has control over moving the mouse.
+	// The app window has the head tracker, which moves the mouse,
 	// and the overlay window handles the dwell clicking (rendering, and, in this case, clicking).
 	// It's quite the hacky architecture.
 	// A more sane architecture might have the overlay window, which can't receive any input directly,

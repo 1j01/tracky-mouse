@@ -19,24 +19,24 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
 
 /** @type {BrowserWindow} */
-let mainWindow;
+let appWindow;
 /** @type {BrowserWindow} */
 let screenOverlayWindow;
 
 const createWindow = () => {
-	const mainWindowState = windowStateKeeper({
+	const appWindowState = windowStateKeeper({
 		defaultWidth: 750,
 		defaultHeight: 700,
 	});
 
 	// Create the browser window.
-	mainWindow = new BrowserWindow({
-		x: mainWindowState.x,
-		y: mainWindowState.y,
-		width: mainWindowState.width,
-		height: mainWindowState.height,
+	appWindow = new BrowserWindow({
+		x: appWindowState.x,
+		y: appWindowState.y,
+		width: appWindowState.width,
+		height: appWindowState.height,
 		webPreferences: {
-			preload: path.join(app.getAppPath(), 'src/preload-main.js'),
+			preload: path.join(app.getAppPath(), 'src/preload-app-window.js'),
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
 		},
@@ -44,16 +44,16 @@ const createWindow = () => {
 	});
 
 	// and load the html page of the app.
-	mainWindow.loadFile(`src/electron-app.html`);
+	appWindow.loadFile(`src/electron-app.html`);
 
 	// Toggle the DevTools with F12
-	mainWindow.webContents.on("before-input-event", (e, input) => {
+	appWindow.webContents.on("before-input-event", (e, input) => {
 		if (input.type === "keyDown" && input.key === "F12") {
-			mainWindow.webContents.toggleDevTools();
+			appWindow.webContents.toggleDevTools();
 
-			mainWindow.webContents.on('devtools-opened', async () => {
-				// Can't use mainWindow.webContents.devToolsWebContents.on("before-input-event") - it just doesn't intercept any events.
-				await mainWindow.webContents.devToolsWebContents.executeJavaScript(`
+			appWindow.webContents.on('devtools-opened', async () => {
+				// Can't use appWindow.webContents.devToolsWebContents.on("before-input-event") - it just doesn't intercept any events.
+				await appWindow.webContents.devToolsWebContents.executeJavaScript(`
 					new Promise((resolve)=> {
 						addEventListener("keydown", (event) => {
 							if (event.key === "F12") {
@@ -62,17 +62,17 @@ const createWindow = () => {
 						}, { once: true });
 					})
 				`);
-				mainWindow.webContents.toggleDevTools();
+				appWindow.webContents.toggleDevTools();
 			});
 		}
 	});
 
 	// Restore window state, and listen for window state changes.
-	mainWindowState.manage(mainWindow);
+	appWindowState.manage(appWindow);
 
 	// Clean up overlay when the app window is closed.
-	mainWindow.on('closed', () => {
-		mainWindow = null; // not needed if calling app.exit(), which exits immediately, but useful if calling other methods to quit
+	appWindow.on('closed', () => {
+		appWindow = null; // not needed if calling app.exit(), which exits immediately, but useful if calling other methods to quit
 		// screenOverlayWindow?.close(); // doesn't work because screenOverlayWindow.closable is false
 		// app.quit(); // doesn't work either, because screenOverlayWindow.closable is false
 		app.exit(); // doesn't call beforeunload and unload listeners, or before-quit or will-quit
@@ -159,7 +159,7 @@ const createWindow = () => {
 		// and avoid the dwell clicking indicator from repeatedly showing while there's no connectivity between the processes.
 		if (
 			(!screenOverlayWindow || screenOverlayWindow.isDestroyed()) ||
-			(!mainWindow || mainWindow.isDestroyed())
+			(!appWindow || appWindow.isDestroyed())
 		) {
 			return;
 		}
@@ -244,7 +244,7 @@ app.on('ready', () => {
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');
-		mainWindow.webContents.send("shortcut", "toggle-tracking");
+		appWindow.webContents.send("shortcut", "toggle-tracking");
 	});
 	if (!success) {
 		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
@@ -257,12 +257,12 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 app.on('second-instance', () => {
-	if (mainWindow) {
-		if (mainWindow.isMinimized()) {
-			mainWindow.restore();
+	if (appWindow) {
+		if (appWindow.isMinimized()) {
+			appWindow.restore();
 		}
 
-		mainWindow.show();
+		appWindow.show();
 	}
 });
 
