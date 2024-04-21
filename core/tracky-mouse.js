@@ -609,7 +609,7 @@ TrackyMouse.init = function (div) {
 			<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
 			<!-- TODO: handle right click on this control, so it doesn't leave users stranded right-clicking -->
 			<div class="tracky-mouse-control-row">
-				<input type="checkbox" checked id="tracky-mouse-swap-mouse-buttons"/>
+				<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
 				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 			</div>
 			<br>
