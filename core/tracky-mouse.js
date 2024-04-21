@@ -1646,6 +1646,8 @@ TrackyMouse.init = function (div) {
 
 // CommonJS export is untested. Script tag usage recommended.
 // Just including this in case it is somehow useful.
+// eslint-disable-next-line no-undef
 if (typeof module !== "undefined" && module.exports) {
+	// eslint-disable-next-line no-undef
 	module.exports = TrackyMouse;
 }

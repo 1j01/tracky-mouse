@@ -17,9 +17,7 @@ module.exports = [
 		"languageOptions": {
 			"globals": {
 				...globals.browser,
-				...globals.commonjs,
-				...globals.es2021,
-				...globals.node
+				// ...globals.es2021,
 			},
 			"ecmaVersion": "latest"
 		},
@@ -38,4 +36,20 @@ module.exports = [
 			]
 		},
 	},
+	{
+		"files": [
+			"desktop-app/src/electron-main.js",
+			"desktop-app/src/preload-main.js",
+			"desktop-app/src/preload-screen-overlay.js",
+			"desktop-app/forge.config.js",
+			"eslint.config.js",
+		],
+		"languageOptions": {
+			"globals": {
+				// ...globals.commonjs,
+				...globals.node
+			},
+			"sourceType": "commonjs"
+		},
+	}
 ];
