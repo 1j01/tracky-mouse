@@ -30,50 +30,50 @@
 	<h2>Features</h2>
 	<ul class="features-list">
 		<li>
-			<img src="images/input-head.svg" alt="Head with horizontal and vertical arrows">
+			<img width="64" height="64" src="images/input-head.svg" alt="Head with horizontal and vertical arrows">
 			<div>
 				<h3>Head Tracking</h3>
 				<p>Precisely control the mouse cursor by moving your head.</p>
 			</div>
 		</li>
 		<li>
-			<img src="images/dwell-clicking.svg" alt="Mouse cursor with timer">
+			<img width="64" height="64" src="images/dwell-clicking.svg" alt="Mouse cursor with timer">
 			<div>
 				<h3>Dwell Clicking</h3>
 				<p>Click by hovering over a control for a set amount of time. Cancel by moving away.</p>
 			</div>
 		</li>
 		<li>
-			<img src="images/manual-takeback.svg" alt="Mouse with hand grabbing it">
-			<!-- <img src="images/input-mouse.svg" alt="Mouse with horizontal and vertical arrows"> -->
+			<img width="64" height="64" src="images/manual-takeback.svg" alt="Mouse with hand grabbing it">
+			<!-- <img width="64" height="64" src="images/input-mouse.svg" alt="Mouse with horizontal and vertical arrows"> -->
 			<div>
 				<h3>Manual Takeback</h3>
 				<p>Regain control of the mouse by simply moving it. Head tracking will pause temporarily.</p>
 			</div>
 		</li>
 		<!-- <li>
-			<img src="images/keyboard-shortcuts.svg" alt="Keyboard with keys highlighted">
+			<img width="64" height="64" src="images/keyboard-shortcuts.svg" alt="Keyboard with keys highlighted">
 			<div>
 				<h3>Keyboard Shortcuts</h3>
 				<p>Use the keyboard to toggle head tracking, dwell clicking, and more.</p>
 			</div>
 		</li> -->
 		<li>
-			<img src="images/sliders.svg" alt="Sliders">
+			<img width="64" height="64" src="images/sliders.svg" alt="Sliders">
 			<div>
 				<h3>Settings</h3>
 				<p>Adjust the sensitivity and smoothing of head tracking.</p>
 			</div>
 		</li>
 		<!-- <li>
-			<img src="images/gestures.svg" alt="Facial gestures">
+			<img width="64" height="64" src="images/gestures.svg" alt="Facial gestures">
 			<div>
 				<h3>Gestures</h3>
 				<p>Blink, smile, or raise your eyebrows to trigger actions.</p>
 			</div>
 		</li> -->
 		<!-- <li>
-			<img src="images/open-source.svg" alt="Open source logo">
+			<img width="64" height="64" src="images/open-source.svg" alt="Open source logo">
 			<div>
 				<h3>Free and Open Source</h3>
 				<p>The software is yours forever.</p>
@@ -138,7 +138,34 @@
 		<!-- TODO: add dwell clicking to the demo, maybe with a little archery game or something -->
 		<!-- TODO: maybe expose "Use Demo Footage" option I've used for testing (I'm not so much camera shy as worried about bloating the repo size...) -->
 	</p>
-	<div id="tracky-mouse-demo"></div>
+	<div id="tracky-mouse-demo">
+		<p id="tracky-mouse-demo-placeholder">
+			A demo of Tracky Mouse should appear here.
+		</p>
+		<p id="tracky-mouse-demo-error">
+		</p>
+		<noscript>
+			<p>
+				Tracky Mouse requires JavaScript to run.
+			</p>
+		</noscript>
+		<script>
+			window.onerror = function (message, source, lineno, colno, error) {
+				var isIE = /Trident|MSIE/.test(window.navigator.userAgent);
+				var errorElement = document.getElementById("tracky-mouse-demo-error");
+				if (isIE) {
+					errorElement.textContent = "Internet Explorer is not supported. Please use a modern browser like Chrome, Firefox, or Edge.";
+					return;
+				}
+				errorElement.textContent = message;
+				var location = source + ":" + lineno + ":" + colno;
+				var locationElement = document.createElement("code");
+				locationElement.textContent = location;
+				errorElement.appendChild(document.createElement("br"));
+				errorElement.appendChild(locationElement);
+			};
+		</script>
+	</div>
 	<h3 style="font-weight: normal; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
 		Archery Practice Area
 		<!-- 🏹 -->
@@ -209,6 +236,22 @@
 	</p>
 	<h2>Source Code</h2>
 	<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
+	<h2>Privacy Policy</h2>
+	<p>
+		All processing is done locally on your computer.
+	</p>
+	<p>
+		Tracky Mouse does not store any personally identifiable information.
+	</p>
+	<p>
+		Tracky Mouse may use a third-party service to report errors,
+		including some context about how you've configured the software.
+	</p>
+	<h2>Feedback</h2>
+	<p>
+		Please <a href="mailto:isaiahodhner@gmail.com">email me</a> with any feedback or questions,
+		or <a href="https://github.com/1j01/tracky-mouse/issues">open an issue on GitHub</a>.
+	</p>
 	<script src="core/tracky-mouse.js"></script>
 	<script>
 		TrackyMouse.dependenciesRoot = "./core";
