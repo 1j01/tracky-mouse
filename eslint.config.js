@@ -7,6 +7,7 @@ module.exports = [
 		"ignores": [
 			"**/node_modules",
 			"**/out",
+			"**/dist",
 			"**/lib",
 			"**/.*",
 		],
