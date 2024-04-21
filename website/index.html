@@ -138,7 +138,34 @@
 		<!-- TODO: add dwell clicking to the demo, maybe with a little archery game or something -->
 		<!-- TODO: maybe expose "Use Demo Footage" option I've used for testing (I'm not so much camera shy as worried about bloating the repo size...) -->
 	</p>
-	<div id="tracky-mouse-demo"></div>
+	<div id="tracky-mouse-demo">
+		<p id="tracky-mouse-demo-placeholder">
+			A demo of Tracky Mouse should appear here.
+		</p>
+		<p id="tracky-mouse-demo-error">
+		</p>
+		<noscript>
+			<p>
+				Tracky Mouse requires JavaScript to run.
+			</p>
+		</noscript>
+		<script>
+			window.onerror = function (message, source, lineno, colno, error) {
+				var isIE = /Trident|MSIE/.test(window.navigator.userAgent);
+				var errorElement = document.getElementById("tracky-mouse-demo-error");
+				if (isIE) {
+					errorElement.textContent = "Internet Explorer is not supported. Please use a modern browser like Chrome, Firefox, or Edge.";
+					return;
+				}
+				errorElement.textContent = message;
+				var location = source + ":" + lineno + ":" + colno;
+				var locationElement = document.createElement("code");
+				locationElement.textContent = location;
+				errorElement.appendChild(document.createElement("br"));
+				errorElement.appendChild(locationElement);
+			};
+		</script>
+	</div>
 	<h3 style="font-weight: normal; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
 		Archery Practice Area
 		<!-- 🏹 -->

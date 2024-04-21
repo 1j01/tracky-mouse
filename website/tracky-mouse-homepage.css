@@ -75,6 +75,13 @@ header .logo {
 	max-height: 220px;
 }
 
+/* Applies to IE10-11; fixes image aspect ratio; not important, feel free to remove this */
+@media all and (-ms-high-contrast: none),
+(-ms-high-contrast: active) {
+	.features-list>li>img {
+		width: auto;
+	}
+}
 
 .comparison-left-right {
 	display: flex;
@@ -140,10 +147,35 @@ a.big-download-button {
 	}
 }
 
+.tracky-mouse-ui #tracky-mouse-demo-placeholder {
+	display: none;
+}
+
+#tracky-mouse-demo:not(.tracky-mouse-ui) {
+	text-align: center;
+	min-height: 300px;
+	/* WET: styles copied from .tracky-mouse-ui */
+	background-color: rgb(195, 173, 230);
+	color: black;
+	padding: 10px;
+	border-radius: 5px;
+	max-width: 600px;
+	box-sizing: border-box;
+}
+
+#tracky-mouse-demo-error {
+	color: rgb(255, 182, 182);
+	background-color: rgb(136, 0, 0);
+	padding: 1em;
+	border-radius: 0.2em;
+}
+
 .archery-target {
 	background: radial-gradient(circle, rgba(255, 255, 255, 1) 24%, rgba(255, 0, 0, 1) 25%, rgba(255, 0, 0, 1) 48%, rgba(255, 255, 255, 1) 49%, rgba(255, 255, 255, 1) 66%, rgba(255, 0, 0, 1) 67%, rgba(255, 0, 0, 1) 100%);
 	border-radius: 50%;
 	border: 2px solid #222;
+	width: 100px;
+	height: 100px;
 	width: var(--diameter, 100px);
 	height: var(--diameter, 100px);
 	position: absolute;
