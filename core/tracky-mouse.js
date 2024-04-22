@@ -26,14 +26,17 @@ TrackyMouse.loadDependencies = function () {
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/stats.js`,
-		// TODO: maybe add preloading for worker script dependencies at runtime:
-		// <link rel="preload" href="core/lib/tf.js" as="worker">
-		// <link rel="preload" href="core/lib/facemesh/facemesh.js" as="worker">
-		// You can of course define preloads in the HTML, which is better,
-		// and for the main thread scripts, it only makes sense to preload from the HTML,
-		// but for the worker dependencies, it may help to inject them at runtime,
-		// since the worker script would have to load before the browser would see the importScripts calls.
 	];
+	// TODO: figure out how to preload worker-context dependencies that use `importScripts`.
+	// `<link rel="preload">` can be injected at runtime,
+	// which wouldn't make sense for the main thread's dependencies, since we're injecting all the scripts at once anyway,
+	// but it could make sense for the worker's dependencies, since the worker is loaded lazily.
+	// However... with `<link rel="preload" as="script">`, it seems to load things twice, making performance worse!
+	// It seems like the worker isn't using the same cache as the main thread. I'm not sure.
+	// Maybe this will be easier if I use module versions of the libraries, with `<link rel="modulepreload">`?
+	// Maybe it would use a shared cache in that case? That's a big if, though.
+	// `${TrackyMouse.dependenciesRoot}/lib/tf.js`
+	// `${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`
 	return Promise.all(scriptFiles.map(loadScript));
 };
 
