@@ -25,9 +25,14 @@ TrackyMouse.loadDependencies = function () {
 	const scriptFiles = [
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
-		`${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/stats.js`,
-		`${TrackyMouse.dependenciesRoot}/lib/tf.js`,
+		// TODO: maybe add preloading for worker script dependencies at runtime:
+		// <link rel="preload" href="core/lib/tf.js" as="worker">
+		// <link rel="preload" href="core/lib/facemesh/facemesh.js" as="worker">
+		// You can of course define preloads in the HTML, which is better,
+		// and for the main thread scripts, it only makes sense to preload from the HTML,
+		// but for the worker dependencies, it may help to inject them at runtime,
+		// since the worker script would have to load before the browser would see the importScripts calls.
 	];
 	return Promise.all(scriptFiles.map(loadScript));
 };
