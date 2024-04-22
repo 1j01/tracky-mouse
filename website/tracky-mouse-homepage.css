@@ -97,7 +97,7 @@ header .logo {
 }
 
 .comparison-left-right p {
-	flex: 1;
+	flex: 1 1 auto;
 	max-width: 45%;
 }
 
