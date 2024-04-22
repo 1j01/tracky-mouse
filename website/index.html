@@ -172,9 +172,16 @@
 				</p>
 			</noscript>
 			<script>
+				// Only ES5 syntax here please
 				window.onerror = function (message, source, lineno, colno, error) {
 					var isIE = /Trident|MSIE/.test(window.navigator.userAgent);
 					var errorElement = document.getElementById("tracky-mouse-demo-error");
+					if (!errorElement) {
+						// Tracky Mouse UI already loaded
+						// Might still be good to show the error, but it also might not be a showstopper.
+						// For now, just ignore it, to avoid an additional error during error handling.
+						return;
+					}
 					if (isIE) {
 						errorElement.textContent = "Internet Explorer is not supported. Please use a modern browser like Chrome, Firefox, or Edge.";
 						return;
