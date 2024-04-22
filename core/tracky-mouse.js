@@ -135,13 +135,13 @@ const init_dwell_clicking = (config) => {
 	const inactive_after_invalid_timespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
 	const inactive_after_focused_timespan = 1000; // after page becomes focused after being unfocused
 	let recent_points = [];
-	let inactive_until_time = Date.now();
+	let inactive_until_time = performance.now();
 	let paused = false;
 	let hover_candidate;
 	let dwell_dragging = null;
 
 	const deactivate_for_at_least = (timespan) => {
-		inactive_until_time = Math.max(inactive_until_time, Date.now() + timespan);
+		inactive_until_time = Math.max(inactive_until_time, performance.now() + timespan);
 	};
 	deactivate_for_at_least(inactive_at_startup_timespan);
 
@@ -157,7 +157,7 @@ const init_dwell_clicking = (config) => {
 	document.body.appendChild(dwell_indicator);
 
 	const on_pointer_move = (e) => {
-		recent_points.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+		recent_points.push({ x: e.clientX, y: e.clientY, time: performance.now() });
 	};
 	const on_pointer_up_or_cancel = (e) => {
 		deactivate_for_at_least(inactive_after_release_timespan);
@@ -200,7 +200,7 @@ const init_dwell_clicking = (config) => {
 		let hover_candidate = {
 			x: clientX,
 			y: clientY,
-			time: Date.now(),
+			time: performance.now(),
 		};
 
 		let retargeted = false;
@@ -288,7 +288,7 @@ const init_dwell_clicking = (config) => {
 	};
 
 	const update = () => {
-		const time = Date.now();
+		const time = performance.now();
 		recent_points = recent_points.filter((point_record) => time < point_record.time + averaging_window_timespan);
 		if (recent_points.length) {
 			const latest_point = recent_points[recent_points.length - 1];
@@ -481,7 +481,7 @@ const init_dwell_clicking = (config) => {
 					hover_candidate = {
 						x: average_point.x,
 						y: average_point.y,
-						time: Date.now(),
+						time: performance.now(),
 						target: dwell_dragging || null,
 					};
 					if (!dwell_dragging) {
