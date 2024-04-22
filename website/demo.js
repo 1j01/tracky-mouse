@@ -166,25 +166,29 @@ TrackyMouse.onPointerMove = (x, y) => {
 const archery_targets = document.querySelectorAll(".archery-target");
 for (const archery_target of archery_targets) {
 	archery_target.addEventListener("pointerdown", () => {
-		// archery_target.style.animation = "archery-target-hit 0.5s ease-in-out";
-		// archery_target.addEventListener("animationend", () => {
-		// 	archery_target.style.animation = "";
-		// }, { once: true });
-		const frames = [];
-		let angle = 0;
-		let angularVelocity = 2 + Math.random() * 0.2;
-		for (let t = 0; t < 100; t++) {
-			angularVelocity *= 0.92;
-			angle += angularVelocity;
-			angularVelocity += (Math.sin(angle)) * 0.1;
-			frames.push({
-				transform: `translate(-50%, -50%) rotateX(${angle}rad)`,
-				opacity: Math.min(1, Math.max(0.2, 1 - t / 100 * 4.123456) - Math.cos(angle) * 0.1),
-			});
-		}
-		archery_target.animate(frames, {
-			duration: 10000,
-			easing: "linear",
+		animateTargetHit(archery_target);
+	});
+}
+
+function animateTargetHit(archery_target) {
+	// archery_target.style.animation = "archery-target-hit 0.5s ease-in-out";
+	// archery_target.addEventListener("animationend", () => {
+	// 	archery_target.style.animation = "";
+	// }, { once: true });
+	const frames = [];
+	let angle = 0;
+	let angularVelocity = 2 + Math.random() * 0.2;
+	for (let t = 0; t < 100; t++) {
+		angularVelocity *= 0.92;
+		angle += angularVelocity;
+		angularVelocity += (Math.sin(angle)) * 0.1;
+		frames.push({
+			transform: `translate(-50%, -50%) rotateX(${angle}rad)`,
+			opacity: Math.min(1, Math.max(0.2, 1 - t / 100 * 4.123456) - Math.cos(angle) * 0.1),
 		});
+	}
+	archery_target.animate(frames, {
+		duration: 10000,
+		easing: "linear",
 	});
 }
