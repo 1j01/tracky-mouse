@@ -164,7 +164,7 @@
 			<p id="tracky-mouse-demo-placeholder">
 				A demo of Tracky Mouse should appear here.
 			</p>
-			<p id="tracky-mouse-demo-error">
+			<p id="tracky-mouse-demo-error" hidden>
 			</p>
 			<noscript>
 				<p>
@@ -182,6 +182,7 @@
 						// For now, just ignore it, to avoid an additional error during error handling.
 						return;
 					}
+					errorElement.hidden = false;
 					if (isIE) {
 						errorElement.textContent = "Internet Explorer is not supported. Please use a modern browser like Chrome, Firefox, or Edge.";
 						return;
