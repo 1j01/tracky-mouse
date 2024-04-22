@@ -53,7 +53,7 @@
 .tracky-mouse-ui {
 	display: flex;
 	flex-direction: column;
-	background-color: rgb(195, 173, 230);
+	background-color: rgb(223, 204, 255);
 	color: black;
 	padding: 10px;
 	border-radius: 5px;
@@ -100,7 +100,7 @@
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label,
 .tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
-	opacity: 0.6;
+	opacity: 0.8;
 	position: absolute;
 	bottom: -10px;
 	pointer-events: none;
@@ -220,4 +220,9 @@
 	100% {
 		opacity: 0;
 	}
+}
+
+.tracky-mouse-ui a:link,
+.tracky-mouse-ui a:visited {
+	color: rgb(135 0 191);
 }

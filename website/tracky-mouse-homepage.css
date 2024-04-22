@@ -128,7 +128,7 @@ header .logo {
 a.big-download-button {
 	display: inline-block;
 	padding: 0.8em 1em;
-	background-color: rgb(0, 162, 255);
+	background-color: rgb(0, 96, 206);
 	color: white;
 	text-decoration: none;
 	border-radius: 0.5em;
@@ -160,7 +160,7 @@ a.big-download-button {
 	text-align: center;
 	min-height: 300px;
 	/* WET: styles copied from .tracky-mouse-ui */
-	background-color: rgb(195, 173, 230);
+	background-color: rgb(223, 204, 255);
 	color: black;
 	padding: 10px;
 	border-radius: 5px;
