@@ -31,10 +31,10 @@ const config = {
 	// 	.window:not(.maximized) .window-titlebar
 	// `,
 	// Filter for elements to drag. They must be included in the targets first.
-	shouldDrag: (target) => (
-		target.matches(".window-titlebar") ||
-		(target.matches(".drawing-canvas") && current_tool.supports_drag)
-	),
+	// shouldDrag: (target) => (
+	// 	target.matches(".window-titlebar") ||
+	// 	(target.matches(".drawing-canvas") && current_tool.supports_drag)
+	// ),
 	// Instead of clicking in the center of these elements, click at any point within the element.
 	// This is useful for drag offsets, like for a window titlebar,
 	// and position-based inputs like sliders or color pickers, or a drawing canvas.
