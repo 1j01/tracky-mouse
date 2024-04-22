@@ -6,10 +6,12 @@
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
-	<script src="core/lib/stats.js"></script>
-	<script src="core/lib/no-eval.js"></script>
-	<script src="core/lib/clmtrackr.js"></script>
-	<!-- <script src="core/lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
+	<link rel="preload" href="core/lib/stats.js" as="script">
+	<link rel="preload" href="core/lib/no-eval.js" as="script">
+	<link rel="preload" href="core/lib/clmtrackr.js" as="script">
+	<!-- <link rel="preload" href="core/lib/jsfeat-min.js" as="script"> exported from patched clmtrackr.js -->
+	<!-- TODO: defer loading tracky-mouse.css -->
+	<!-- <link rel="preload" href="core/tracky-mouse.css" as="style"> -->
 	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
@@ -282,8 +284,8 @@
 			or <a href="https://github.com/1j01/tracky-mouse/issues">open an issue on GitHub</a>.
 		</p>
 	</section>
-	<script src="core/tracky-mouse.js"></script>
-	<script src="demo.js"></script>
+	<script defer src="core/tracky-mouse.js"></script>
+	<script defer type="module" src="demo.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,9 @@
 /* global TrackyMouse */
 
 TrackyMouse.dependenciesRoot = "./core";
+
+await TrackyMouse.loadDependencies();
+
 // Note: init currently extends the passed element,
 // rather than replacing it or adding a child to it.
 // That is technically the most flexible, I suppose,
