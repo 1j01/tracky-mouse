@@ -135,13 +135,13 @@ const init_dwell_clicking = (config) => {
 	const inactive_after_invalid_timespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
 	const inactive_after_focused_timespan = 1000; // after page becomes focused after being unfocused
 	let recent_points = [];
-	let inactive_until_time = Date.now();
+	let inactive_until_time = performance.now();
 	let paused = false;
 	let hover_candidate;
 	let dwell_dragging = null;
 
 	const deactivate_for_at_least = (timespan) => {
-		inactive_until_time = Math.max(inactive_until_time, Date.now() + timespan);
+		inactive_until_time = Math.max(inactive_until_time, performance.now() + timespan);
 	};
 	deactivate_for_at_least(inactive_at_startup_timespan);
 
@@ -157,7 +157,7 @@ const init_dwell_clicking = (config) => {
 	document.body.appendChild(dwell_indicator);
 
 	const on_pointer_move = (e) => {
-		recent_points.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+		recent_points.push({ x: e.clientX, y: e.clientY, time: performance.now() });
 	};
 	const on_pointer_up_or_cancel = (e) => {
 		deactivate_for_at_least(inactive_after_release_timespan);
@@ -200,7 +200,7 @@ const init_dwell_clicking = (config) => {
 		let hover_candidate = {
 			x: clientX,
 			y: clientY,
-			time: Date.now(),
+			time: performance.now(),
 		};
 
 		let retargeted = false;
@@ -288,7 +288,7 @@ const init_dwell_clicking = (config) => {
 	};
 
 	const update = () => {
-		const time = Date.now();
+		const time = performance.now();
 		recent_points = recent_points.filter((point_record) => time < point_record.time + averaging_window_timespan);
 		if (recent_points.length) {
 			const latest_point = recent_points[recent_points.length - 1];
@@ -481,7 +481,7 @@ const init_dwell_clicking = (config) => {
 					hover_candidate = {
 						x: average_point.x,
 						y: average_point.y,
-						time: Date.now(),
+						time: performance.now(),
 						target: dwell_dragging || null,
 					};
 					if (!dwell_dragging) {
@@ -607,9 +607,9 @@ TrackyMouse.init = function (div) {
 			<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
 			<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
 			<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-			<!-- TODO: handle right click on this control, so it doesn't leave users stranded right-clicking -->
+			<!-- btw: label is selected based on 'for' attribute -->
 			<div class="tracky-mouse-control-row">
-				<input type="checkbox" checked id="tracky-mouse-swap-mouse-buttons"/>
+				<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
 				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 			</div>
 			<br>
@@ -641,6 +641,7 @@ TrackyMouse.init = function (div) {
 	}
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
+	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
@@ -814,6 +815,19 @@ TrackyMouse.init = function (div) {
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();
+
+	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
+	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
+	// you can still be left in a tricky situation.
+	// A more general safety net would be a "revert changes?" timer (https://github.com/1j01/tracky-mouse/issues/43)
+	// But this is good to have in any case, since you don't want to have to wait for a timeout if you don't have to.
+	for (const el of [swapMouseButtonsLabel, swapMouseButtonsCheckbox]) {
+		el.addEventListener("contextmenu", (e) => {
+			e.preventDefault();
+			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
+			swapMouseButtonsCheckbox.onchange();
+		});
+	}
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });
@@ -1632,6 +1646,8 @@ TrackyMouse.init = function (div) {
 
 // CommonJS export is untested. Script tag usage recommended.
 // Just including this in case it is somehow useful.
+// eslint-disable-next-line no-undef
 if (typeof module !== "undefined" && module.exports) {
+	// eslint-disable-next-line no-undef
 	module.exports = TrackyMouse;
 }
