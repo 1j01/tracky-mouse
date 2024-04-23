@@ -182,6 +182,9 @@ function initRound() {
 		used_unknown_input: false, // click event despite preventing via keydown/pointerdown
 		start_time: undefined, // set when the first target is hit
 	};
+	for (const archery_target of archery_targets) {
+		archery_target.classList.remove("hit");
+	}
 }
 initRound();
 let last_pointerdown_time = -Infinity;
@@ -255,15 +258,16 @@ function handleTargetHit(event) {
 		return;
 	}
 	const archery_target = event.target;
-	archery_target.classList.add("hit");
-	animateTargetHit(archery_target).then(() => {
-		archery_target.classList.remove("hit");
-	});
 	if (!round.start_time) {
 		initRound(); // reset input detection to ignore spurious hovering before the round starts
 		round.start_time = performance.now();
 		archery_scoreboard.hidden = true;
 	}
+	// after initRound since initRound removes the .hit class
+	archery_target.classList.add("hit");
+	animateTargetHit(archery_target).then(() => {
+		// archery_target.classList.remove("hit");
+	});
 	if (document.querySelectorAll(".archery-target:not(.hit)").length === 0) {
 		const time = (performance.now() - round.start_time) / 1000;
 		archery_scoreboard.hidden = false;
@@ -339,6 +343,7 @@ async function animateTargetHit(archery_target) {
 		await archery_target.animate(frames, {
 			duration: 10000,
 			easing: "linear",
+			fill: "both",
 		}).finished;
 	} catch (error) {
 		// ignore cancelation
