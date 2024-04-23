@@ -204,6 +204,7 @@
 		</h3>
 		<!-- margin is radius of largest target -->
 		<div id="archery-demo" style="position: relative; height: 400px; margin: 100px;">
+			<div id="archery-scoreboard"></div>
 			<button class="archery-target" style="--diameter: 200px; top: 50%; left: 50%"
 				aria-label="archery target"></button>
 			<button class="archery-target" style="--diameter: 100px; top: 0%; left: 0%"
@@ -302,7 +303,8 @@
 		</p>
 	</section>
 	<script defer src="core/tracky-mouse.js"></script>
-	<script defer type="module" src="demo.js"></script>
+	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
+	<script type="module" src="demo.js"></script>
 </body>
 
 </html>
