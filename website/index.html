@@ -302,7 +302,8 @@
 		</p>
 	</section>
 	<script defer src="core/tracky-mouse.js"></script>
-	<script defer type="module" src="demo.js"></script>
+	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
+	<script type="module" src="demo.js"></script>
 </body>
 
 </html>
