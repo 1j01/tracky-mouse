@@ -202,7 +202,14 @@ a.big-download-button {
 	font-size: 2rem;
 }
 
-#archery-scoreboard p {
+#archery-scoreboard .slot-indicator {
+	font-size: 1.2rem;
+	color: gray;
+	margin-top: 0;
+	margin-bottom: 0.5rem;
+}
+
+#archery-scoreboard .best-times-label {
 	font-size: 1rem;
 	margin-bottom: 0.5rem;
 }

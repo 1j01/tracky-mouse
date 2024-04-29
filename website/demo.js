@@ -285,6 +285,18 @@ function get_scoreboard_slot() {
 	}
 }
 
+const slot_labels = {
+	with_head_tracker: "With Head Tracking",
+	with_dwell_clicker: "With Dwell Clicking", // may be pen, undetectable in some cases
+	with_dwell_clicker_touch: "With Dwell Clicking (Touch)",
+	with_dwell_clicker_pen: "With Dwell Clicking (Pen)",
+	with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"
+	with_touch: "With Touch",
+	with_pen: "With Pen",
+	with_keyboard: "With Keyboard",
+	with_unknown_input: "With Unknown Input",
+};
+
 /**
  * @param {PointerEvent | KeyboardEvent} event 
  */
@@ -315,27 +327,21 @@ function handleTargetHit(event) {
 		if (new_best) {
 			best_times[slot] = time;
 		}
-		archery_scoreboard.append(document.createElement("br"));
-		const p = document.createElement("p");
-		p.textContent = `Best times:`;
-		archery_scoreboard.append(p);
+		const slot_indicator = document.createElement("p");
+		slot_indicator.textContent = slot_labels[slot];
+		slot_indicator.classList.add("slot-indicator");
+		archery_scoreboard.append(slot_indicator);
+		const best_times_label = document.createElement("p");
+		best_times_label.textContent = `Best times:`;
+		best_times_label.classList.add("best-times-label");
+		archery_scoreboard.append(best_times_label);
 		const ul = document.createElement("ul");
 		archery_scoreboard.append(ul);
 		for (const [id, time] of Object.entries(best_times)) {
 			if (time === Infinity) {
 				continue;
 			}
-			const label = {
-				with_head_tracker: "With Head Tracking",
-				with_dwell_clicker: "With Dwell Clicking", // may be pen, undetectable in some cases
-				with_dwell_clicker_touch: "With Dwell Clicking (Touch)",
-				with_dwell_clicker_pen: "With Dwell Clicking (Pen)",
-				with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"
-				with_touch: "With Touch",
-				with_pen: "With Pen",
-				with_keyboard: "With Keyboard",
-				with_unknown_input: "With Unknown Input",
-			}[id];
+			const label = slot_labels[id];
 			const li = document.createElement("li");
 			li.textContent = `${label}: ${time.toFixed(2)}s`;
 			if (slot === id && new_best) {
