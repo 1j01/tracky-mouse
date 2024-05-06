@@ -44,7 +44,7 @@ electronAPI.onChangeDwellClicking((event, isEnabled, isManualTakeback) => {
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 
-	if (!isEnabled) {
+	if (!isEnabled && !isManualTakeback) {
 		// Fade out the message after a little while so it doesn't get in the way.
 		message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
 	} else {
