@@ -21,23 +21,24 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // which means we have to be smart about detecting manual mouse movement.
 // We don't want to pause the mouse control due to head tracker based movement.
 // So instead of detecting a distance from the last mouse position,
-// we'll check against a history of positions that we requested to move the mouse to.
+// we'll check against a history of positions that we requested to move the mouse to.*
+// *(In one case, we add the mouse position retrieved with getMouseLocation to the history.)
 // How long should the queue be? Points could be removed when setMouseLocation resolves,
 // if and only if it's guaranteed that getMouseLocation will return the new position at that point.
 // However, a simple time limit should be fine.
-const mouseMoveRequestHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (I think)
-const mouseMoveRequestHistory = [];
+const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
+const mousePosHistory = [];
 async function setMouseLocationTracky(x, y) {
 	const time = performance.now();
-	mouseMoveRequestHistory.push({ point: { x, y }, time });
-	// TODO: make robust against latency using this artificial delay
+	mousePosHistory.push({ point: { x, y }, time });
+	// Test robustness using this artificial delay:
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 	await setMouseLocationWithoutTracking(x, y);
 }
-function pruneMouseMoveRequestHistory() {
+function pruneMousePosHistory() {
 	const now = performance.now();
-	while (mouseMoveRequestHistory[0] && now - mouseMoveRequestHistory[0].time > mouseMoveRequestHistoryDuration) {
-		mouseMoveRequestHistory.shift();
+	while (mousePosHistory[0] && now - mousePosHistory[0].time > mousePosHistoryDuration) {
+		mousePosHistory.shift();
 	}
 }
 
@@ -124,8 +125,8 @@ const createWindow = () => {
 		// since setMouseLocation is asynchronous,
 		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
 		// since getMouseLocation is asynchronous.
-		pruneMouseMoveRequestHistory();
-		const distances = mouseMoveRequestHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+		pruneMousePosHistory();
+		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
 		// console.log("distanceMoved", distanceMoved);
 		if (distanceMoved > thresholdToRegainControl) {
@@ -137,9 +138,14 @@ const createWindow = () => {
 				updateDwellClicking();
 			}, regainControlForTime);
 			updateDwellClicking();
-			// Previously this did `lastPos = { x: curPos.x, y: curPos.y };` but I've replaced `lastPos` with `mouseMoveRequestHistory`
-			// and I'm not sure if any equivalent is needed here. `mouseMoveRequestHistory` is designed (and so-named) to exclude
-			// positions retrieved from `getMouseLocation`.
+			// Prevent immediately returning to manual control after switching to camera control
+			// based on head movement while in manual control mode.
+			// This is the one place where we add the RETRIEVED mouse position to `mousePosHistory`.
+			// It may be a good idea to split `mousePosHistory` into two arrays,
+			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
+			// in order to handle maintaining manual control differently from switching to manual control,
+			// and/or for clarity of intent.
+			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now() });
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			// Note: there's no await here, not necessarily for a particular reason,
 			// although maybe it's better to send the 'move-mouse' event as soon as possible?
@@ -158,7 +164,7 @@ const createWindow = () => {
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
-		mouseMoveRequestHistory.length = 0;
+		mousePosHistory.length = 0;
 	});
 
 	ipcMain.on('set-options', (event, newOptions) => {
