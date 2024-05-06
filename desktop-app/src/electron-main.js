@@ -10,12 +10,36 @@ if (require('electron-squirrel-startup')) {
 // Don't require any third-party modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 const windowStateKeeper = require('electron-window-state');
-const { setMouseLocation, getMouseLocation, click } = require('serenade-driver');
+const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
+
+// setMouseLocation/getMouseLocation are asynchronous,
+// which means we have to be smart about detecting manual mouse movement.
+// We don't want to pause the mouse control due to head tracker based movement.
+// So instead of detecting a distance from the last mouse position,
+// we'll check against a history of positions that we requested to move the mouse to.
+// How long should the queue be? Points could be removed when setMouseLocation resolves,
+// if and only if it's guaranteed that getMouseLocation will return the new position at that point.
+// However, a simple time limit should be fine.
+const mouseMoveRequestHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (I think)
+const mouseMoveRequestHistory = [];
+async function setMouseLocationTracky(x, y) {
+	const time = performance.now();
+	mouseMoveRequestHistory.push({ point: { x, y }, time });
+	// TODO: make robust against latency using this artificial delay
+	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
+	await setMouseLocationWithoutTracking(x, y);
+}
+function pruneMouseMoveRequestHistory() {
+	const now = performance.now();
+	while (mouseMoveRequestHistory[0] && now - mouseMoveRequestHistory[0].time > mouseMoveRequestHistoryDuration) {
+		mouseMoveRequestHistory.shift();
+	}
+}
 
 
 /** @type {BrowserWindow} */
@@ -83,11 +107,10 @@ const createWindow = () => {
 
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
 	const thresholdToRegainControl = 10; // in pixels
-	const regainControlForTime = 2000; // in milliseconds
+	const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let enabled = true; // for starting/stopping until the user requests otherwise
 	let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
-	let lastPos = { x: undefined, y: undefined };
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
 			'change-dwell-clicking',
@@ -97,23 +120,14 @@ const createWindow = () => {
 	};
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
-		// TODO: fix false positives of mouse movement detection.
-		// - Maybe await the setMouseLocation and disable the mouse movement detection until it's done?
-		//   Might not work if outstanding promises overlap. If so, there wouldn't be a period of time
-		//   where the mouse movement detection is enabled, or it would be enabled even though a later request
-		//   to move the mouse is already in progress, making it sporadic.
-		// - Maybe store a queue of mouse movement, and compare the current mouse position
-		//   against each point in the queue. I think that should be robust.
-		//   How long should the queue be? Points could be removed when setMouseLocation resolves,
-		//   if and only if it's guaranteed that getMouseLocation will return the new position at that point.
-		//   However, a simple time or count limit should be fine.
-		// - Might want to use a history of mouse movement, rather than just the latest position,
-		//   in order to require more travel without requiring significantly higher speed.
-		//   This would have to be a separate queue of getMouseLocation results,
-		//   rather than the queue of setMouseLocation requests.
-		//   Should consider framerate independence, and ideally define the threshold in terms of travel within a period of time.
-		//   (Should distance be measured in pixels, inches/cm, or screen percentage? probably pixels, to keep it simple.)
-		const distanceMoved = lastPos.x !== undefined ? Math.hypot(curPos.x - lastPos.x, curPos.y - lastPos.y) : 0;
+		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
+		// since setMouseLocation is asynchronous,
+		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
+		// since getMouseLocation is asynchronous.
+		pruneMouseMoveRequestHistory();
+		const distances = mouseMoveRequestHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+		const distanceMoved = distances.length ? Math.min(...distances) : 0;
+		// console.log("distanceMoved", distanceMoved);
 		if (distanceMoved > thresholdToRegainControl) {
 			// console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, { curPos, lastPos, x, y });
 			clearTimeout(regainControlTimeout);
@@ -123,12 +137,13 @@ const createWindow = () => {
 				updateDwellClicking();
 			}, regainControlForTime);
 			updateDwellClicking();
-			lastPos = { x: curPos.x, y: curPos.y };
+			// Previously this did `lastPos = { x: curPos.x, y: curPos.y };` but I've replaced `lastPos` with `mouseMoveRequestHistory`
+			// and I'm not sure if any equivalent is needed here. `mouseMoveRequestHistory` is designed (and so-named) to exclude
+			// positions retrieved from `getMouseLocation`.
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
-			lastPos = { x, y };
-			// lastPos = {x: curPos.x, y: curPos.y};
-			// Note: no await here, not for a particular reason.
-			setMouseLocation(x, y);
+			// Note: there's no await here, not necessarily for a particular reason,
+			// although maybe it's better to send the 'move-mouse' event as soon as possible?
+			setMouseLocationTracky(x, y);
 		}
 		// const latency = performance.now() - time;
 		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
@@ -143,7 +158,7 @@ const createWindow = () => {
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
-		lastPos = { x: undefined, y: undefined };
+		mouseMoveRequestHistory.length = 0;
 	});
 
 	ipcMain.on('set-options', (event, newOptions) => {
@@ -172,11 +187,7 @@ const createWindow = () => {
 		x += screenOverlayWindow.getContentBounds().x;
 		y += screenOverlayWindow.getContentBounds().y;
 
-		// Trying to prevent a false positive of mouse hardware mouse movement detection,
-		// so that it doesn't pause after a dwell click. This might not be enough to work reliably.
-		lastPos = { x, y };
-
-		await setMouseLocation(x, y);
+		await setMouseLocationTracky(x, y);
 		await click(swapMouseButtons ? "right" : "left");
 
 		// const latency = performance.now() - time;
