@@ -222,6 +222,21 @@
 	}
 }
 
+.tracky-mouse-absolute-center {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator {
+	display: none;
+}
+
+.tracky-mouse-manual-takeback .tracky-mouse-no-takeback-indicator {
+	display: none;
+}
+
 .tracky-mouse-ui a:link,
 .tracky-mouse-ui a:visited {
 	color: rgb(135 0 191);

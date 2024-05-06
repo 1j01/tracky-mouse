@@ -89,7 +89,11 @@ const createWindow = () => {
 	let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
 	let lastPos = { x: undefined, y: undefined };
 	const updateDwellClicking = () => {
-		screenOverlayWindow.webContents.send('change-dwell-clicking', enabled && regainControlTimeout === null);
+		screenOverlayWindow.webContents.send(
+			'change-dwell-clicking',
+			enabled && regainControlTimeout === null,
+			enabled && regainControlTimeout !== null
+		);
 	};
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
 		const curPos = await getMouseLocation();
