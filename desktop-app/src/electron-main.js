@@ -21,8 +21,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // which means we have to be smart about detecting manual mouse movement.
 // We don't want to pause the mouse control due to head tracker based movement.
 // So instead of detecting a distance from the last mouse position,
-// we'll check against a history of positions that we requested to move the mouse to.*
-// *(In one case, we add the mouse position retrieved with getMouseLocation to the history.)
+// we'll check against a history of positions.
 // How long should the queue be? Points could be removed when setMouseLocation resolves,
 // if and only if it's guaranteed that getMouseLocation will return the new position at that point.
 // However, a simple time limit should be fine.
@@ -120,6 +119,8 @@ const createWindow = () => {
 		);
 	};
 	ipcMain.on('move-mouse', async (event, x, y, time) => {
+		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
+		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		const curPos = await getMouseLocation();
 		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
 		// since setMouseLocation is asynchronous,
@@ -130,7 +131,10 @@ const createWindow = () => {
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
 		// console.log("distanceMoved", distanceMoved);
 		if (distanceMoved > thresholdToRegainControl) {
-			// console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, { curPos, lastPos, x, y });
+			// if (regainControlTimeout === null) {
+			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+			// 	console.log("Pausing camera control due to manual mouse movement.");
+			// }
 			clearTimeout(regainControlTimeout);
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
@@ -140,7 +144,7 @@ const createWindow = () => {
 			updateDwellClicking();
 			// Prevent immediately returning to manual control after switching to camera control
 			// based on head movement while in manual control mode.
-			// This is the one place where we add the RETRIEVED mouse position to `mousePosHistory`.
+			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
 			// It may be a good idea to split `mousePosHistory` into two arrays,
 			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
 			// in order to handle maintaining manual control differently from switching to manual control,
@@ -157,7 +161,11 @@ const createWindow = () => {
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', (event, nowEnabled) => {
+	ipcMain.on('notify-toggle-state', async (event, nowEnabled) => {
+		let initialPos;
+		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
+			initialPos = await getMouseLocation();
+		}
 		enabled = nowEnabled;
 		updateDwellClicking();
 
@@ -165,6 +173,10 @@ const createWindow = () => {
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		mousePosHistory.length = 0;
+		if (nowEnabled) {
+			// Avoid false positive for manual takeback.
+			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now() });
+		}
 	});
 
 	ipcMain.on('set-options', (event, newOptions) => {
