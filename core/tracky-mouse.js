@@ -659,7 +659,7 @@ TrackyMouse.init = function (div) {
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
-	if (window.IS_ELECTRON_APP) {
+	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
 		// Might be good to also hide it, or change it, when on a mobile device
 		desktopAppDownloadMessage.hidden = true;
@@ -814,8 +814,8 @@ TrackyMouse.init = function (div) {
 	};
 	swapMouseButtonsCheckbox.onchange = () => {
 		swapMouseButtons = swapMouseButtonsCheckbox.checked;
-		if (window.setOptions) {
-			window.setOptions({ swapMouseButtons });
+		if (window.electronAPI) {
+			window.electronAPI.setOptions({ swapMouseButtons });
 		}
 	};
 	mirrorCheckbox.onchange();
@@ -1531,8 +1531,8 @@ TrackyMouse.init = function (div) {
 			}
 
 			if (!paused) {
-				const screenWidth = window.moveMouse ? screen.width : innerWidth;
-				const screenHeight = window.moveMouse ? screen.height : innerHeight;
+				const screenWidth = window.electronAPI ? screen.width : innerWidth;
+				const screenHeight = window.electronAPI ? screen.height : innerHeight;
 
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
@@ -1546,8 +1546,8 @@ TrackyMouse.init = function (div) {
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
-				if (window.moveMouse) {
-					window.moveMouse(~~mouseX, ~~mouseY);
+				if (window.electronAPI) {
+					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
@@ -1621,7 +1621,7 @@ TrackyMouse.init = function (div) {
 	}
 	if (autoDemo) {
 		TrackyMouse.useDemoFootage();
-	} else if (window.moveMouse) {
+	} else if (window.electronAPI) {
 		TrackyMouse.useCamera();
 	}
 
@@ -1632,16 +1632,16 @@ TrackyMouse.init = function (div) {
 			if (paused) {
 				pointerEl.style.display = "none";
 			}
-			if (window.notifyToggleState) {
-				window.notifyToggleState(!paused);
+			if (window.electronAPI) {
+				window.electronAPI.notifyToggleState(!paused);
 			}
 		}
 	};
 	// Try to handle both the global and local shortcuts
 	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
 	// I hope there's no cross-platform issue with this.
-	if (window.onShortcut) {
-		window.onShortcut(handleShortcut);
+	if (window.electronAPI) {
+		window.electronAPI.onShortcut(handleShortcut);
 	}
 	addEventListener("keydown", (event) => {
 		// Same shortcut as the global shortcut in the electron app

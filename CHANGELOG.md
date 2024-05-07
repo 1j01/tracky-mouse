@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `shouldDrag`, `noCenter`, `retarget`, `isEquivalentTarget`, and `dwellClickEvenIfPaused` are now optional for `initDwellClicking`.
 - You must include a new script `no-eval.js` if you are including Tracky Mouse's dependencies manually. If you are using `loadDependencies()`, it is included automatically.
 - Tracky Mouse no longer requires `unsafe-eval` in the Content Security Policy! This is great, because now I can feel better about the Electron app.
+- Globals used by the Electron app (`moveMouse`, `onShortcut`, etc.) are now namespaced under `window.electronAPI`. For `moveMouse`, use `TrackyMouse.onPointerMove` instead.
 
 ## [1.0.0] - 2021-05-20
 ### Added
