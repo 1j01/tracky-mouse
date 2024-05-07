@@ -1,6 +1,9 @@
 private/
 dist/
 
+# Blender
+*.blend[0-9]
+
 #################
 # Node.js
 #################
