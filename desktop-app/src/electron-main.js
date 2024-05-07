@@ -132,6 +132,8 @@ const createWindow = () => {
 		// console.log("distanceMoved", distanceMoved);
 		if (distanceMoved > thresholdToRegainControl) {
 			// if (regainControlTimeout === null) {
+			// 	console.log("mousePosHistory", mousePosHistory);
+			// 	console.log("distances", distances);
 			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
 			// 	console.log("Pausing camera control due to manual mouse movement.");
 			// }
@@ -149,7 +151,7 @@ const createWindow = () => {
 			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
 			// in order to handle maintaining manual control differently from switching to manual control,
 			// and/or for clarity of intent.
-			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now() });
+			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "move-mouse" });
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			// Note: there's no await here, not necessarily for a particular reason,
 			// although maybe it's better to send the 'move-mouse' event as soon as possible?
@@ -175,7 +177,7 @@ const createWindow = () => {
 		mousePosHistory.length = 0;
 		if (nowEnabled) {
 			// Avoid false positive for manual takeback.
-			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now() });
+			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notify-toggle-state" });
 		}
 	});
 
