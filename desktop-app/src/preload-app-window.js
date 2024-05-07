@@ -24,4 +24,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	setOptions: (optionsPatch) => {
 		ipcRenderer.send('set-options', optionsPatch);
 	},
+
+	getOptions: () => {
+		return ipcRenderer.invoke('get-options');
+	},
 });

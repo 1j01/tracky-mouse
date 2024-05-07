@@ -1,5 +1,6 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs/promises');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -16,6 +17,76 @@ const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, cli
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
+
+// Settings
+let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
+
+const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
+const formatName = "tracky-mouse-settings";
+const formatVersion = 1;
+
+async function loadSettings() {
+	let data;
+	try {
+		data = await fs.readFile(settingsFile, 'utf8');
+	} catch (error) {
+		if (error.code === 'ENOENT') {
+			return;
+		}
+		throw error;
+	}
+	const settings = JSON.parse(data);
+	if (settings.formatName !== formatName) {
+		throw new Error("Settings file format name doesn't match");
+	}
+	// Upgrade settings here
+	// e.g.:
+	// if (settings.formatVersion === 0) {
+	// 	settings.formatVersion++;
+	// 	settings.newSettingName = settings.someOldSettingName;
+	// 	delete settings.someOldSettingName;
+	// }
+	if (settings.formatVersion < formatVersion) {
+		throw new Error(`Unsupported settings file format version. There is no upgrade path from ${settings.formatVersion} to ${formatVersion}.`);
+	}
+	if (settings.formatVersion > formatVersion) {
+		throw new Error(`Unsupported settings file format version (${settings.formatVersion}). This version of the app only supports up to format version ${formatVersion}.`);
+	}
+	deserializeSettings(settings);
+}
+async function saveSettings() {
+	await fs.writeFile(settingsFile, JSON.stringify(serializeSettings(), null, '\t'));
+}
+function serializeSettings() {
+	return {
+		formatVersion,
+		formatName,
+		globalSettings: {
+			swapMouseButtons,
+			// TODO:
+			// mirrorCameraView,
+			// headTrackingSensitivityX,
+			// headTrackingSensitivityY,
+			// headTrackingAcceleration,
+			// eyeTrackingSensitivityX,
+			// eyeTrackingSensitivityY,
+			// eyeTrackingAcceleration,
+			// runOnStartup,
+			// startEnabled,
+		},
+		// profiles: [],
+	};
+};
+function deserializeSettings(settings) {
+	// Handles partial settings objects,
+	// to allow manually editing the settings file, removing settings to reset them to their defaults,
+	// as well as accepting settings updates over IPC from the UI.
+	if ("globalSettings" in settings) {
+		if ("swapMouseButtons" in settings.globalSettings) {
+			swapMouseButtons = settings.globalSettings.swapMouseButtons;
+		}
+	}
+}
 
 // setMouseLocation/getMouseLocation are asynchronous,
 // which means we have to be smart about detecting manual mouse movement.
@@ -110,7 +181,6 @@ const createWindow = () => {
 	const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let enabled = true; // for starting/stopping until the user requests otherwise
-	let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
 			'change-dwell-clicking',
@@ -182,9 +252,12 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('set-options', (event, newOptions) => {
-		if ("swapMouseButtons" in newOptions) {
-			swapMouseButtons = newOptions.swapMouseButtons;
-		}
+		deserializeSettings(newOptions);
+		saveSettings();
+	});
+
+	ipcMain.handle('get-options', async () => {
+		return serializeSettings();
 	});
 
 	ipcMain.on('click', async (event, x, y, time) => {
@@ -274,7 +347,16 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.on('ready', async () => {
+	try {
+		await loadSettings();
+	} catch (error) {
+		// TODO: copy file to a backup location, and continue with default settings
+		console.error("Failed to load settings:", error);
+		dialog.showErrorBox("Failed to load settings", `Failed to load settings. The app will now quit.\n\n${error.message}`);
+		app.quit();
+		return;
+	}
 	createWindow();
 
 	const success = globalShortcut.register('F9', () => {

@@ -796,6 +796,63 @@ TrackyMouse.init = function (div) {
 		initFacemeshWorker();
 	}
 
+	function deserializeSettings(settings) {
+		// TODO: DRY with deserializeSettings in electron-main.js
+		if ("globalSettings" in settings) {
+			if ("swapMouseButtons" in settings.globalSettings) {
+				swapMouseButtons = settings.globalSettings.swapMouseButtons;
+				swapMouseButtonsCheckbox.checked = swapMouseButtons;
+			}
+		}
+	}
+	const formatVersion = 1;
+	const formatName = "tracky-mouse-settings";
+	function serializeSettings() {
+		// TODO: DRY with serializeSettings in electron-main.js
+		return {
+			formatVersion,
+			formatName,
+			globalSettings: {
+				swapMouseButtons,
+				// TODO:
+				// mirrorCameraView,
+				// headTrackingSensitivityX,
+				// headTrackingSensitivityY,
+				// headTrackingAcceleration,
+				// eyeTrackingSensitivityX,
+				// eyeTrackingSensitivityY,
+				// eyeTrackingAcceleration,
+				// runOnStartup,
+				// startEnabled,
+			},
+			// profiles: [],
+		};
+	};
+	const setOptions = (options) => {
+		if (window.electronAPI) {
+			window.electronAPI.setOptions(options);
+		} else {
+			try {
+				localStorage.setItem("tracky-mouse-settings", JSON.stringify(serializeSettings(), null, "\t"));
+			} catch (e) {
+				console.error(e);
+			}
+		}
+	};
+	const loadOptions = async () => {
+		if (window.electronAPI) {
+			deserializeSettings(await window.electronAPI.getOptions());
+		} else {
+			try {
+				if (localStorage.getItem("tracky-mouse-settings")) {
+					deserializeSettings(JSON.parse(localStorage.getItem("tracky-mouse-settings")));
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		}
+	};
+
 	sensitivityXSlider.onchange = () => {
 		sensitivityX = sensitivityXSlider.value / 1000;
 	};
@@ -808,10 +865,12 @@ TrackyMouse.init = function (div) {
 	mirrorCheckbox.onchange = () => {
 		mirror = mirrorCheckbox.checked;
 	};
-	swapMouseButtonsCheckbox.onchange = () => {
+	swapMouseButtonsCheckbox.onchange = (event) => {
 		swapMouseButtons = swapMouseButtonsCheckbox.checked;
-		if (window.electronAPI) {
-			window.electronAPI.setOptions({ swapMouseButtons });
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
 	mirrorCheckbox.onchange();
@@ -829,9 +888,11 @@ TrackyMouse.init = function (div) {
 		el.addEventListener("contextmenu", (e) => {
 			e.preventDefault();
 			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
-			swapMouseButtonsCheckbox.onchange();
+			swapMouseButtonsCheckbox.onchange(e);
 		});
 	}
+
+	loadOptions();
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });
