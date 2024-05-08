@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Desktop app now supports dwell clicking. This means you can use Tracky Mouse with lots of software not designed with head tracking in mind. I just played a game of Mahjongg, and it worked well.
+- Settings are now persisted, both in the desktop app and in the browser.
 - Desktop app now remembers the window size and position.
 - Desktop app lets you regain manual control by simply moving the mouse, pausing temporarily, and resuming when you stop moving the mouse.
 - Friendly error handling for different camera access failure scenarios.
