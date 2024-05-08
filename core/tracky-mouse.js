@@ -624,6 +624,13 @@ TrackyMouse.init = function (div) {
 				<input type="checkbox" id="tracky-mouse-start-enabled"/>
 				<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
 			</div>
+			<br>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" id="tracky-mouse-run-at-login"/>
+				<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
+			</div>
+			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 			<div class="tracky-mouse-control-row">
@@ -654,6 +661,7 @@ TrackyMouse.init = function (div) {
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
+	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
@@ -668,6 +676,12 @@ TrackyMouse.init = function (div) {
 		// Hide the desktop app download message if we're in the desktop app
 		// Might be good to also hide it, or change it, when on a mobile device
 		desktopAppDownloadMessage.hidden = true;
+
+		// Disable the "run at login" option if the app isn't packaged,
+		// as it's not set up to work in development mode.
+		window.electronAPI.getIsPackaged().then((isPackaged) => {
+			runAtLoginCheckbox.disabled = !isPackaged;
+		});
 	} else {
 		// Hide the mouse button swapping option if we're not in the desktop app,
 		// since the system-level mouse button setting doesn't apply,
@@ -675,6 +689,9 @@ TrackyMouse.init = function (div) {
 		// It could be implemented for the web version, but if you're designing an app for facial mouse users,
 		// you might want to avoid right-clicking altogether.
 		swapMouseButtonsCheckbox.parentElement.hidden = true;
+
+		// Hide the "run at login" option if we're not in the desktop app.
+		runAtLoginCheckbox.parentElement.hidden = true;
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
@@ -725,6 +742,7 @@ TrackyMouse.init = function (div) {
 	var showDebugText = false;
 	var mirror;
 	var startEnabled;
+	var runAtLogin;
 	var swapMouseButtons;
 
 	var useClmTracking = true;
@@ -837,6 +855,10 @@ TrackyMouse.init = function (div) {
 					paused = !startEnabled;
 				}
 			}
+			if (settings.globalSettings.runAtLogin !== undefined) {
+				runAtLogin = settings.globalSettings.runAtLogin;
+				runAtLoginCheckbox.checked = runAtLogin;
+			}
 		}
 	}
 	const formatVersion = 1;
@@ -848,6 +870,7 @@ TrackyMouse.init = function (div) {
 			formatName,
 			globalSettings: {
 				startEnabled,
+				runAtLogin,
 				swapMouseButtons,
 				mirrorCameraView: mirror,
 				headTrackingSensitivityX: sensitivityX,
@@ -857,7 +880,6 @@ TrackyMouse.init = function (div) {
 				// eyeTrackingSensitivityX,
 				// eyeTrackingSensitivityY,
 				// eyeTrackingAcceleration,
-				// runOnStartup,
 			},
 			// profiles: [],
 		};
@@ -935,10 +957,20 @@ TrackyMouse.init = function (div) {
 			setOptions({ globalSettings: { startEnabled } });
 		}
 	};
+	runAtLoginCheckbox.onchange = (event) => {
+		runAtLogin = runAtLoginCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { runAtLogin } });
+		}
+	};
+
 	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
 	startEnabledCheckbox.onchange();
+	runAtLoginCheckbox.onchange();
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();

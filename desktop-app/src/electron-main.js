@@ -18,6 +18,9 @@ const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, cli
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
+// Needed for run-at-login on Windows. This is used as the registry key name.
+app.setAppUserModelId("io.isaiahodhner.tracky-mouse");
+
 // Settings
 // (actual defaults come from the HTML template)
 let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
@@ -26,6 +29,7 @@ let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
 let startEnabled = undefined;
+let runAtLogin = undefined;
 
 const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
 const formatName = "tracky-mouse-settings";
@@ -70,6 +74,7 @@ function serializeSettings() {
 		formatName,
 		globalSettings: {
 			startEnabled,
+			runAtLogin,
 			swapMouseButtons,
 			mirrorCameraView: mirror,
 			headTrackingSensitivityX: sensitivityX,
@@ -79,7 +84,6 @@ function serializeSettings() {
 			// eyeTrackingSensitivityX,
 			// eyeTrackingSensitivityY,
 			// eyeTrackingAcceleration,
-			// runOnStartup,
 		},
 		// profiles: [],
 	};
@@ -108,6 +112,34 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.startEnabled !== undefined) {
 			startEnabled = settings.globalSettings.startEnabled;
+		}
+		if (settings.globalSettings.runAtLogin !== undefined) {
+			runAtLogin = settings.globalSettings.runAtLogin;
+			if (app.isPackaged) {
+				if (process.platform === 'win32') {
+					// Handle Squirrel installer on Windows.
+					// It places the app in a subdirectory, with a version number, but Update.exe can be used to launch the app.
+					const appFolder = path.dirname(process.execPath);
+					const updateExe = path.resolve(appFolder, '..', 'Update.exe');
+					const exeName = path.basename(process.execPath);
+
+					app.setLoginItemSettings({
+						openAtLogin: runAtLogin,
+						path: updateExe,
+						args: [
+							'--processStart', `"${exeName}"`,
+							'--process-start-args', '"--hidden"',
+						]
+					});
+				} else {
+					app.setLoginItemSettings({
+						openAtLogin: runAtLogin,
+					});
+				}
+			} else {
+				// console.log("Ignoring runAtLogin setting because the app is not packaged.");
+				// Could maybe try to pass it arguments to run the app in development mode, but it might not be worth it.
+			}
 		}
 	}
 }
@@ -282,6 +314,10 @@ const createWindow = () => {
 
 	ipcMain.handle('get-options', async () => {
 		return serializeSettings();
+	});
+
+	ipcMain.handle('get-is-packaged', async () => {
+		return app.isPackaged;
 	});
 
 	ipcMain.on('click', async (_event, x, y, _time) => {

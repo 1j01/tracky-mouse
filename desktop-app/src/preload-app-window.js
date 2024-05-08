@@ -28,4 +28,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	getOptions: () => {
 		return ipcRenderer.invoke('get-options');
 	},
+
+	// isPackaged: app.isPackaged, // can't require electron's app module here
+	// isPackaged: !!process.defaultApp, // nope, doesn't exist
+	getIsPackaged: () => ipcRenderer.invoke('get-is-packaged'),
 });
