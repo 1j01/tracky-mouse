@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Mirror" checkbox was too easy to accidentally click due to a large `<label>` (which acts as a hit region).
 
 ### Changed
+- The software now starts disabled (by default), to avoid clicking on things before you're ready. This is especially important for the desktop app. The installer on Windows actually installs and launches the app without any interaction, so it would be *very surprising* if it started clicking right away.
 - The webcam view now shrinks to fit the window.
 - Sliders now have labels for their min and max values, and are widened to make it easier to click precisely.
 - Controls are themed purple.

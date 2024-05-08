@@ -618,6 +618,12 @@ TrackyMouse.init = function (div) {
 			</div>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" id="tracky-mouse-start-enabled"/>
+				<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
+			</div>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 			<div class="tracky-mouse-control-row">
 				<input type="checkbox" checked id="tracky-mouse-mirror"/>
@@ -645,6 +651,7 @@ TrackyMouse.init = function (div) {
 	}
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
+	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
@@ -709,12 +716,13 @@ TrackyMouse.init = function (div) {
 	var faceConvergence = 0;
 	var faceConvergenceThreshold = 50;
 	var pointsBasedOnFaceScore = 0;
-	var paused = false;
+	var paused = true;
 	var mouseNeedsInitPos = true;
 	var debugTimeTravel = false;
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var mirror;
+	var startEnabled;
 	var swapMouseButtons;
 
 	var useClmTracking = true;
@@ -796,7 +804,7 @@ TrackyMouse.init = function (div) {
 		initFacemeshWorker();
 	}
 
-	function deserializeSettings(settings) {
+	function deserializeSettings(settings, initialLoad = false) {
 		// TODO: DRY with deserializeSettings in electron-main.js
 		if ("globalSettings" in settings) {
 			// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
@@ -820,6 +828,13 @@ TrackyMouse.init = function (div) {
 				acceleration = settings.globalSettings.headTrackingAcceleration;
 				accelerationSlider.value = acceleration * 100;
 			}
+			if (settings.globalSettings.startEnabled !== undefined) {
+				startEnabled = settings.globalSettings.startEnabled;
+				startEnabledCheckbox.checked = startEnabled;
+				if (initialLoad) {
+					paused = !startEnabled;
+				}
+			}
 		}
 	}
 	const formatVersion = 1;
@@ -830,6 +845,7 @@ TrackyMouse.init = function (div) {
 			formatVersion,
 			formatName,
 			globalSettings: {
+				startEnabled,
 				swapMouseButtons,
 				mirrorCameraView: mirror,
 				headTrackingSensitivityX: sensitivityX,
@@ -840,7 +856,6 @@ TrackyMouse.init = function (div) {
 				// eyeTrackingSensitivityY,
 				// eyeTrackingAcceleration,
 				// runOnStartup,
-				// startEnabled,
 			},
 			// profiles: [],
 		};
@@ -856,13 +871,13 @@ TrackyMouse.init = function (div) {
 			}
 		}
 	};
-	const loadOptions = async () => {
+	const loadOptions = async (initialLoad = false) => {
 		if (window.electronAPI) {
-			deserializeSettings(await window.electronAPI.getOptions());
+			deserializeSettings(await window.electronAPI.getOptions(), initialLoad);
 		} else {
 			try {
 				if (localStorage.getItem("tracky-mouse-settings")) {
-					deserializeSettings(JSON.parse(localStorage.getItem("tracky-mouse-settings")));
+					deserializeSettings(JSON.parse(localStorage.getItem("tracky-mouse-settings")), initialLoad);
 				}
 			} catch (e) {
 				console.error(e);
@@ -910,12 +925,22 @@ TrackyMouse.init = function (div) {
 			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
+	startEnabledCheckbox.onchange = (event) => {
+		startEnabled = startEnabledCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { startEnabled } });
+		}
+	};
 	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
+	startEnabledCheckbox.onchange();
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();
+	paused = !startEnabled;
 
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
 	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
@@ -930,7 +955,7 @@ TrackyMouse.init = function (div) {
 		});
 	}
 
-	loadOptions();
+	loadOptions(true);
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });

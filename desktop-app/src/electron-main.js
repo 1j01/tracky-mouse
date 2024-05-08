@@ -25,6 +25,7 @@ let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
+let startEnabled = undefined;
 
 const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
 const formatName = "tracky-mouse-settings";
@@ -68,6 +69,7 @@ function serializeSettings() {
 		formatVersion,
 		formatName,
 		globalSettings: {
+			startEnabled,
 			swapMouseButtons,
 			mirrorCameraView: mirror,
 			headTrackingSensitivityX: sensitivityX,
@@ -78,7 +80,6 @@ function serializeSettings() {
 			// eyeTrackingSensitivityY,
 			// eyeTrackingAcceleration,
 			// runOnStartup,
-			// startEnabled,
 		},
 		// profiles: [],
 	};
@@ -104,6 +105,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.headTrackingAcceleration !== undefined) {
 			acceleration = settings.globalSettings.headTrackingAcceleration;
+		}
+		if (settings.globalSettings.startEnabled !== undefined) {
+			startEnabled = settings.globalSettings.startEnabled;
 		}
 	}
 }
