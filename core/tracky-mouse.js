@@ -563,7 +563,7 @@ TrackyMouse.init = function (div) {
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
-			<button class="tracky-mouse-start-stop-button" aria-pressed="false">Start</button>
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
 			<br>
 			<br>
 			<label class="tracky-mouse-control-row">

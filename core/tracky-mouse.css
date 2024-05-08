@@ -78,8 +78,14 @@
 	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
-	width: 100px;
+	width: 120px;
 	cursor: pointer;
+}
+
+.tracky-mouse-start-stop-button::after {
+	content: "(" attr(aria-keyshortcuts) ")";
+	opacity: 0.6;
+	margin-left: 0.5em;
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
