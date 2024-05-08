@@ -173,7 +173,7 @@ const init_dwell_clicking = (config) => {
 	const on_pointer_move = (e) => {
 		recent_points.push({ x: e.clientX, y: e.clientY, time: performance.now() });
 	};
-	const on_pointer_up_or_cancel = (e) => {
+	const on_pointer_up_or_cancel = (_e) => {
 		deactivate_for_at_least(inactive_after_release_timespan);
 		dwell_dragging = null;
 	};
@@ -716,7 +716,7 @@ TrackyMouse.init = function (div) {
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
 	var faceConvergence = 0;
-	var faceConvergenceThreshold = 50;
+	// var faceConvergenceThreshold = 50;
 	var pointsBasedOnFaceScore = 0;
 	var paused = true;
 	var mouseNeedsInitPos = true;
@@ -789,7 +789,7 @@ TrackyMouse.init = function (div) {
 						return;
 					}
 					facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-					return new Promise((resolve, reject) => {
+					return new Promise((resolve, _reject) => {
 						facemeshWorker.addEventListener("message", (e) => {
 							if (e.data.type === "ESTIMATED_FACES") {
 								resolve(e.data.predictions);
@@ -999,7 +999,7 @@ TrackyMouse.init = function (div) {
 				} else {
 					cameraVideo.src = window.URL.createObjectURL(stream);
 				}
-			} catch (err) {
+			} catch (_err) {
 				cameraVideo.src = stream;
 			}
 			useCameraButton.hidden = true;
@@ -1161,8 +1161,8 @@ TrackyMouse.init = function (div) {
 			for (var inputPointIndex = 0; inputPointIndex < this.pointCount; inputPointIndex++) {
 				if (condition(inputPointIndex)) {
 					if (outputPointIndex < inputPointIndex) {
-						var inputOffset = inputPointIndex * 2;
-						var outputOffset = outputPointIndex * 2;
+						const inputOffset = inputPointIndex * 2;
+						const outputOffset = outputPointIndex * 2;
 						this.curXY[outputOffset] = this.curXY[inputOffset];
 						this.curXY[outputOffset + 1] = this.curXY[inputOffset + 1];
 						this.prevXY[outputOffset] = this.prevXY[inputOffset];
@@ -1171,7 +1171,7 @@ TrackyMouse.init = function (div) {
 					outputPointIndex++;
 				} else {
 					debugPointsCtx.fillStyle = "red";
-					var inputOffset = inputPointIndex * 2;
+					const inputOffset = inputPointIndex * 2;
 					circle(debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
 					debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
 					// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
@@ -1451,7 +1451,8 @@ TrackyMouse.init = function (div) {
 							setTimeout(() => {
 								debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
 							}, 900);
-							cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
+							cameraFramesSinceFacemeshUpdate.forEach((imageData, _index) => {
+								/*
 								if (debugTimeTravel) {
 									debugFramesCtx.save();
 									debugFramesCtx.globalAlpha = 0.1;
@@ -1463,6 +1464,7 @@ TrackyMouse.init = function (div) {
 									debugPointsCtx.fillStyle = "aqua";
 									workerSyncedOops.draw(debugPointsCtx);
 								}
+								*/
 								workerSyncedOops.update(imageData);
 							});
 						}
@@ -1555,7 +1557,7 @@ TrackyMouse.init = function (div) {
 						point[1] += prevMovementY;
 					});
 				}
-				facemeshPrediction.scaledMesh.forEach(([x, y, z]) => {
+				facemeshPrediction.scaledMesh.forEach(([x, y, _z]) => {
 					ctx.fillRect(x, y, 1, 1);
 				});
 			} else {
@@ -1632,7 +1634,7 @@ TrackyMouse.init = function (div) {
 
 			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
+			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 
 			var distance = Math.hypot(movementX, movementY);
 			var deltaX = accelerate(movementX * sensitivityX, distance);
@@ -1701,6 +1703,7 @@ TrackyMouse.init = function (div) {
 			prevMovementY = movementY;
 			// movementXSinceFacemeshUpdate += movementX;
 			// movementYSinceFacemeshUpdate += movementY;
+			/*
 			if (enableTimeTravel) {
 				if (facemeshEstimating) {
 					const imageData = getCameraImageData();
@@ -1714,6 +1717,7 @@ TrackyMouse.init = function (div) {
 					}
 				}
 			}
+			*/
 		}
 		ctx.restore();
 
@@ -1755,7 +1759,7 @@ TrackyMouse.init = function (div) {
 	let autoDemo = false;
 	try {
 		autoDemo = localStorage.trackyMouseAutoDemo === "true";
-	} catch (error) {
+	} catch (_error) {
 		// ignore; this is just for development
 	}
 	if (autoDemo) {

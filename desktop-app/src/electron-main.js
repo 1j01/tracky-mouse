@@ -166,7 +166,7 @@ const createWindow = () => {
 	appWindow.loadFile(`src/electron-app.html`);
 
 	// Toggle the DevTools with F12
-	appWindow.webContents.on("before-input-event", (e, input) => {
+	appWindow.webContents.on("before-input-event", (_e, input) => {
 		if (input.type === "keyDown" && input.key === "F12") {
 			appWindow.webContents.toggleDevTools();
 
@@ -212,7 +212,7 @@ const createWindow = () => {
 			enabled && regainControlTimeout !== null
 		);
 	};
-	ipcMain.on('move-mouse', async (event, x, y, time) => {
+	ipcMain.on('move-mouse', async (_event, x, y, time) => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		const curPos = await getMouseLocation();
@@ -257,7 +257,7 @@ const createWindow = () => {
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', async (event, nowEnabled) => {
+	ipcMain.on('notify-toggle-state', async (_event, nowEnabled) => {
 		let initialPos;
 		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
 			initialPos = await getMouseLocation();
@@ -275,7 +275,7 @@ const createWindow = () => {
 		}
 	});
 
-	ipcMain.on('set-options', (event, newOptions) => {
+	ipcMain.on('set-options', (_event, newOptions) => {
 		deserializeSettings(newOptions);
 		saveSettings();
 	});
@@ -284,7 +284,7 @@ const createWindow = () => {
 		return serializeSettings();
 	});
 
-	ipcMain.on('click', async (event, x, y, time) => {
+	ipcMain.on('click', async (_event, x, y, _time) => {
 		if (regainControlTimeout || !enabled) {
 			return;
 		}

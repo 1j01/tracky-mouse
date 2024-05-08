@@ -21,7 +21,7 @@ TrackyMouse.initDwellClicking({
 	},
 });
 
-electronAPI.onMouseMove((event, x, y) => {
+electronAPI.onMouseMove((_event, x, y) => {
 	// console.log("move-mouse", x, y);
 	document.dispatchEvent(new Event("mouseenter"));
 	const domEvent = new PointerEvent("pointermove", {
@@ -39,7 +39,7 @@ electronAPI.onMouseMove((event, x, y) => {
 	window.dispatchEvent(domEvent);
 });
 
-electronAPI.onChangeDwellClicking((event, isEnabled, isManualTakeback) => {
+electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback) => {
 	// console.log("onChangeDwellClicking", isEnabled);
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 	actionSpan.innerText = isEnabled ? "disable" : "enable";

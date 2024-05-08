@@ -33,13 +33,28 @@ module.exports = [
 			"semi": [
 				"error",
 				"always"
-			]
+			],
+			// "no-unused-vars": "off",
+			// "@typescript-eslint/no-unused-vars": [
+			// 	"warn", // or "error"
+			// 	{
+			// 		"argsIgnorePattern": "^_",
+			// 		"varsIgnorePattern": "^_",
+			// 		"caughtErrorsIgnorePattern": "^_"
+			// 	}
+			// ]
+			"no-unused-vars": ["warn", {
+				"args": "all",
+				"argsIgnorePattern": "^_",
+				"caughtErrorsIgnorePattern": "^_",
+				// "varsIgnorePattern": "^_",
+			}],
 		},
 	},
 	{
 		"files": [
 			"desktop-app/src/electron-main.js",
-			"desktop-app/src/preload-main.js",
+			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",
 			"desktop-app/forge.config.js",
 			"eslint.config.js",
