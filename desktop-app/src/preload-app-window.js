@@ -17,11 +17,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		});
 	},
 
-	notifyToggleState: (callback) => {
-		ipcRenderer.send('notify-toggle-state', callback);
+	notifyToggleState: (nowEnabled) => {
+		ipcRenderer.send('notify-toggle-state', nowEnabled);
 	},
 
-	setOptions: (callback) => {
-		ipcRenderer.send('set-options', callback);
+	setOptions: (optionsPatch) => {
+		ipcRenderer.send('set-options', optionsPatch);
 	},
 });
