@@ -799,9 +799,26 @@ TrackyMouse.init = function (div) {
 	function deserializeSettings(settings) {
 		// TODO: DRY with deserializeSettings in electron-main.js
 		if ("globalSettings" in settings) {
-			if ("swapMouseButtons" in settings.globalSettings) {
+			// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
+			if (settings.globalSettings.swapMouseButtons !== undefined) {
 				swapMouseButtons = settings.globalSettings.swapMouseButtons;
 				swapMouseButtonsCheckbox.checked = swapMouseButtons;
+			}
+			if (settings.globalSettings.mirrorCameraView !== undefined) {
+				mirror = settings.globalSettings.mirrorCameraView;
+				mirrorCheckbox.checked = mirror;
+			}
+			if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
+				sensitivityX = settings.globalSettings.headTrackingSensitivityX;
+				sensitivityXSlider.value = sensitivityX * 1000;
+			}
+			if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
+				sensitivityY = settings.globalSettings.headTrackingSensitivityY;
+				sensitivityYSlider.value = sensitivityY * 1000;
+			}
+			if (settings.globalSettings.headTrackingAcceleration !== undefined) {
+				acceleration = settings.globalSettings.headTrackingAcceleration;
+				accelerationSlider.value = acceleration * 100;
 			}
 		}
 	}
@@ -814,11 +831,11 @@ TrackyMouse.init = function (div) {
 			formatName,
 			globalSettings: {
 				swapMouseButtons,
+				mirrorCameraView: mirror,
+				headTrackingSensitivityX: sensitivityX,
+				headTrackingSensitivityY: sensitivityY,
+				headTrackingAcceleration: acceleration,
 				// TODO:
-				// mirrorCameraView,
-				// headTrackingSensitivityX,
-				// headTrackingSensitivityY,
-				// headTrackingAcceleration,
 				// eyeTrackingSensitivityX,
 				// eyeTrackingSensitivityY,
 				// eyeTrackingAcceleration,
@@ -853,17 +870,37 @@ TrackyMouse.init = function (div) {
 		}
 	};
 
-	sensitivityXSlider.onchange = () => {
+	sensitivityXSlider.onchange = (event) => {
 		sensitivityX = sensitivityXSlider.value / 1000;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
+		}
 	};
-	sensitivityYSlider.onchange = () => {
+	sensitivityYSlider.onchange = (event) => {
 		sensitivityY = sensitivityYSlider.value / 1000;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
+		}
 	};
-	accelerationSlider.onchange = () => {
+	accelerationSlider.onchange = (event) => {
 		acceleration = accelerationSlider.value / 100;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
+		}
 	};
-	mirrorCheckbox.onchange = () => {
+	mirrorCheckbox.onchange = (event) => {
 		mirror = mirrorCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { mirrorCameraView: mirror } });
+		}
 	};
 	swapMouseButtonsCheckbox.onchange = (event) => {
 		swapMouseButtons = swapMouseButtonsCheckbox.checked;
@@ -873,6 +910,7 @@ TrackyMouse.init = function (div) {
 			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
+	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
 	sensitivityXSlider.onchange();

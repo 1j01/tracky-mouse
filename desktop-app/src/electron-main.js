@@ -19,7 +19,12 @@ const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, cli
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
 // Settings
-let swapMouseButtons = false; // for left-handed users on Windows, where serenade-driver is affected by the system setting
+// (actual defaults come from the HTML template)
+let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
+let mirror = undefined;
+let sensitivityX = undefined;
+let sensitivityY = undefined;
+let acceleration = undefined;
 
 const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
 const formatName = "tracky-mouse-settings";
@@ -58,16 +63,17 @@ async function saveSettings() {
 	await fs.writeFile(settingsFile, JSON.stringify(serializeSettings(), null, '\t'));
 }
 function serializeSettings() {
+	// TODO: DRY with serializeSettings in tracky-mouse.js
 	return {
 		formatVersion,
 		formatName,
 		globalSettings: {
 			swapMouseButtons,
+			mirrorCameraView: mirror,
+			headTrackingSensitivityX: sensitivityX,
+			headTrackingSensitivityY: sensitivityY,
+			headTrackingAcceleration: acceleration,
 			// TODO:
-			// mirrorCameraView,
-			// headTrackingSensitivityX,
-			// headTrackingSensitivityY,
-			// headTrackingAcceleration,
 			// eyeTrackingSensitivityX,
 			// eyeTrackingSensitivityY,
 			// eyeTrackingAcceleration,
@@ -78,12 +84,26 @@ function serializeSettings() {
 	};
 };
 function deserializeSettings(settings) {
+	// TODO: DRY with deserializeSettings in tracky-mouse.js
 	// Handles partial settings objects,
 	// to allow manually editing the settings file, removing settings to reset them to their defaults,
 	// as well as accepting settings updates over IPC from the UI.
 	if ("globalSettings" in settings) {
-		if ("swapMouseButtons" in settings.globalSettings) {
+		// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
+		if (settings.globalSettings.swapMouseButtons !== undefined) {
 			swapMouseButtons = settings.globalSettings.swapMouseButtons;
+		}
+		if (settings.globalSettings.mirrorCameraView !== undefined) {
+			mirror = settings.globalSettings.mirrorCameraView;
+		}
+		if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
+			sensitivityX = settings.globalSettings.headTrackingSensitivityX;
+		}
+		if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
+			sensitivityY = settings.globalSettings.headTrackingSensitivityY;
+		}
+		if (settings.globalSettings.headTrackingAcceleration !== undefined) {
+			acceleration = settings.globalSettings.headTrackingAcceleration;
 		}
 	}
 }
