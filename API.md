@@ -147,6 +147,8 @@ Arguments:
 - `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
 - `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 - `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
+- `config.afterReleaseDrag()` (optional): a function to call after a drag is released. May be merged with `config.afterDispatch()` in the future.
 
 Returns an object with the following properties:
 - `paused`: a getter/setter for whether dwell clicking is paused. Use this to implement a pause/resume button, in conjunction with `config.dwellClickEvenIfPaused`.
@@ -239,6 +241,10 @@ const config = {
 	// Recommended: use `event.isTrusted` instead, where possible.
 	beforeDispatch: () => { window.untrusted_gesture = true; },
 	afterDispatch: () => { window.untrusted_gesture = false; },
+	// Some extra hooks for JS Paint, likely to be generalized in the future,
+	// especially `beforePointerDownDispatch` which could be supplanted by passing an `Event` to `beforeDispatch`.
+	beforePointerDownDispatch: () => { window.pointers = []; },
+	afterReleaseDrag: () => { window.pointers = []; },
 };
 TrackyMouse.initDwellClicking(config);
 

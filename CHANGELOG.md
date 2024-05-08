@@ -16,12 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter validation.
 - `tracky-mouse.js` includes a CommonJS export, untested. I'm only testing script tag usage. I hope to switch to ES modules soon.
 - `beforeDispatch()`/`afterDispatch()` callbacks for detecting untrusted gestures, outside of an event where you could use `event.isTrusted`.
+- `beforePointerDownDispatch()`/`afterReleaseDrag()` callbacks for JS Paint to replace accessing global `pointers` array.
 - `initDwellClicking` returns an object `{paused}` which lets you pause and resume dwell clicking.
 
 ### Fixed
 - Function `average_points` was missing. It existed in JS Paint, the only place I had tested the library, since I was extracting the code from JS Paint.
 - Similarly, styles for the dwell click indicator and hover halo were missing or not applying. (Since they were provided by CSS in JS Paint, I didn't notice, in my rushed testing.)
-- And the JS referenced a global `pointer_active` from JS Paint. Now it checks if that exists first. Eventually this should be replaced with some less "nepotistic" API, so to speak.
+- The JS assumed the existence of a global `pointer_active` from JS Paint. This has been replaced with `config.isHeld()`.
 - Missing `facemesh.worker.js` file.
 - "Mirror" checkbox was too easy to accidentally click due to a large `<label>` (which acts as a hit region).
 
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You must include a new script `no-eval.js` if you are including Tracky Mouse's dependencies manually. If you are using `loadDependencies()`, it is included automatically.
 - Tracky Mouse no longer requires `unsafe-eval` in the Content Security Policy! This is great, because now I can feel better about usage in Electron, both for the Tracky Mouse desktop app and for JS Paint.
 - Globals used by the Electron app (`moveMouse`, `onShortcut`, etc.) are now namespaced under `window.electronAPI`. For `moveMouse`, use `TrackyMouse.onPointerMove` instead.
+- Will no longer set global `pointers` to an empty array before dispatching `pointerdown` or after releasing a drag. Replaced with `config.beforePointerDownDispatch()` and `config.afterReleaseDrag()`
 
 ## [1.0.0] - 2021-05-20
 ### Added

@@ -99,6 +99,12 @@ const init_dwell_clicking = (config) => {
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
 		throw new Error("config.afterDispatch must be a function");
 	}
+	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
+		throw new Error("config.beforePointerDownDispatch must be a function");
+	}
+	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
+		throw new Error("config.isHeld must be a function");
+	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
 			throw new Error("config.retarget must be an array of objects");
@@ -365,9 +371,7 @@ const init_dwell_clicking = (config) => {
 					(hover_candidate.time - time + hover_timespan) / hover_timespan
 					* circle_radius_max;
 				if (time > hover_candidate.time + hover_timespan) {
-					// TODO: replace pointer_active (holdover from jspaint) with some formal API
-					// Note: window.pointer_active doesn't work because it's declared with let
-					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
+					if (config.isHeld?.() || dwell_dragging) {
 						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
@@ -377,11 +381,7 @@ const init_dwell_clicking = (config) => {
 						));
 						config.afterDispatch?.();
 					} else {
-						// TODO: replace pointers (holdover from jspaint) with some formal API
-						// Note: window.pointers doesn't work because it's declared with let
-						if (typeof pointers === "object") {
-							pointers = []; // prevent multi-touch panning
-						}
+						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerdown",
 							Object.assign(get_event_options(hover_candidate), {
@@ -510,11 +510,7 @@ const init_dwell_clicking = (config) => {
 						})
 					));
 					config.afterDispatch?.();
-					// TODO: replace pointers (holdover from jspaint) with some formal API
-					// Note: window.pointers doesn't work because it's declared with let
-					if (typeof pointers === "object") {
-						pointers = []; // prevent multi-touch panning
-					}
+					config.afterReleaseDrag?.();
 				}
 			}
 			if (recent_movement_amount > 60) {
