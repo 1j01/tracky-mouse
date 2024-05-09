@@ -13,7 +13,7 @@ if (require('electron-squirrel-startup')) {
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
 
-require("./menus.js");
+require("./menus.js"); //({ loadSettings });
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.

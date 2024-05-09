@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Start/stop button. This toggles head tracking, and, in the desktop app, dwell clicking as well. In the web library, dwell clicking is set up separately, and is not currently controlled by this button (or the keyboard shortcut F9).
 - Desktop app now supports dwell clicking. This means you can use Tracky Mouse with lots of software not designed with head tracking in mind. I just played a game of Mahjongg, and it worked well.
 - Settings are now persisted, both in the desktop app and in the browser.
+- Desktop app includes menu items for exporting and importing settings.
 - Desktop app now remembers the window size and position.
 - Desktop app lets you regain manual control by simply moving the mouse, pausing temporarily, and resuming when you stop moving the mouse.
 - Friendly error handling for different camera access failure scenarios.
