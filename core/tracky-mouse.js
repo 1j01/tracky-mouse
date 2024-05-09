@@ -1574,7 +1574,7 @@ TrackyMouse.init = function (div) {
 		}
 
 		if (window.electronAPI) {
-			window.electronAPI.notifyCameraFeedDiagnostics({ headNotFound: !face && !facemeshPrediction });
+			window.electronAPI.notifyCameraFeedDiagnostics({ headNotFound: useClmTracking ? (!face) : (!facemeshPrediction || facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold) });
 		}
 
 		if (facemeshPrediction) {

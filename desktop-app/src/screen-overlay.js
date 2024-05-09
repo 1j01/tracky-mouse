@@ -52,8 +52,9 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 	// - bad lighting conditions
 	// see: https://github.com/1j01/tracky-mouse/issues/26
 
-	if (cameraFeedDiagnostics.headFound) {
+	if (!cameraFeedDiagnostics.headNotFound) {
 		foundFaceRecently = true;
+		clearTimeout(faceFoundTimeoutId);
 		faceFoundTimeoutId = setTimeout(() => {
 			foundFaceRecently = false;
 		}, faceFoundTimeoutPeriod);
