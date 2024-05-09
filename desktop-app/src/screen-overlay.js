@@ -39,13 +39,21 @@ electronAPI.onMouseMove((_event, x, y) => {
 	window.dispatchEvent(domEvent);
 });
 
-electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback) => {
+electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFeedDiagnostics) => {
 	// console.log("onChangeDwellClicking", isEnabled);
+
+	// Other diagnostics in the future would be stuff like:
+	// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
+	// - bad lighting conditions
+	// see: https://github.com/1j01/tracky-mouse/issues/26
+
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
+	document.body.classList.toggle("tracky-mouse-head-not-found", cameraFeedDiagnostics.headNotFound);
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 
 	if (!isEnabled && !isManualTakeback) {
 		// Fade out the message after a little while so it doesn't get in the way.
+		// TODO: make sure animation isn't interrupted by cameraFeedDiagnostics updates.
 		message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
 	} else {
 		message.style.animation = "";

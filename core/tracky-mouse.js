@@ -1573,6 +1573,10 @@ TrackyMouse.init = function (div) {
 			mainOops.update(imageData);
 		}
 
+		if (window.electronAPI) {
+			window.electronAPI.notifyCameraFeedDiagnostics({ headNotFound: !face && !facemeshPrediction });
+		}
+
 		if (facemeshPrediction) {
 			ctx.fillStyle = "red";
 

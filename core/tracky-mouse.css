@@ -246,6 +246,12 @@
 	transform: translate(-50%, -50%);
 }
 
+/* prefer manual takeback indicator, rather than showing both at once */
+body.tracky-mouse-manual-takeback .tracky-mouse-head-not-found-indicator,
+body:not(.tracky-mouse-head-not-found) .tracky-mouse-head-not-found-indicator {
+	display: none;
+}
+
 body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator {
 	display: none;
 }
@@ -254,7 +260,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	display: none;
 }
 
-.tracky-mouse-manual-takeback-indicator img {
+.tracky-mouse-screen-overlay-status-indicator img {
 	filter: drop-shadow(0 0 4px #000) drop-shadow(2px 2px 2px #000);
 	opacity: 0.5;
 }

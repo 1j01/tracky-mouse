@@ -237,11 +237,13 @@ const createWindow = () => {
 	const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let enabled = true; // for starting/stopping until the user requests otherwise
+	let cameraFeedDiagnostics = {};
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
 			'change-dwell-clicking',
 			enabled && regainControlTimeout === null,
-			enabled && regainControlTimeout !== null
+			enabled && regainControlTimeout !== null,
+			cameraFeedDiagnostics,
 		);
 	};
 	ipcMain.on('move-mouse', async (_event, x, y, time) => {
@@ -306,6 +308,11 @@ const createWindow = () => {
 			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notify-toggle-state" });
 		}
 	});
+	ipcMain.on('notify-camera-feed-diagnostics', (_event, data) => {
+		cameraFeedDiagnostics = data;
+		updateDwellClicking();
+	});
+
 
 	ipcMain.on('set-options', (_event, newOptions) => {
 		deserializeSettings(newOptions);
