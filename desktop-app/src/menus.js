@@ -9,13 +9,28 @@ const isMac = process.platform === 'darwin';
 // 	loadSettings = dependencies.loadSettings;
 // };
 
+const aboutItem = {
+	label: 'About Tracky Mouse',
+	click: async () => {
+		const openAboutWindow = require('about-window').default;
+		openAboutWindow({
+			icon_path: join(__dirname, '../images/tracky-mouse-logo-512.png'),
+			bug_report_url: 'https://github.com/1j01/tracky-mouse/issues',
+			homepage: 'https://trackymouse.js.org',
+			description: 'Control your computer with your webcam.',
+			license: 'MIT',
+		});
+	},
+};
+setTimeout(aboutItem.click, 1000);
+
 const template = [
 	// { role: 'appMenu' }
 	...(isMac
 		? [{
 			label: app.name,
 			submenu: [
-				{ role: 'about' },
+				aboutItem,
 				{ type: 'separator' },
 				{ role: 'services' },
 				{ type: 'separator' },
@@ -174,10 +189,7 @@ const template = [
 			},
 			...(isMac
 				? [] : [
-					{
-						// label: 'About Tracky Mouse',
-						role: 'about',
-					},
+					aboutItem,
 				]
 			),
 		],
