@@ -116,9 +116,11 @@ For the desktop app:
 
 (The core library doesn't currently use `npm` for dependencies. It has dependencies stored in the `core/lib` directory. And it doesn't have any npm scripts.)
 
-### VS Code
+### Debugging
 
-Launch configurations are provided to debug the web version in Chrome, and to debug the Electron main process.
+VS Code launch configurations are provided to debug the web version in Chrome, and to debug the Electron main process.
+
+For the screen overlay window, you can use **View > Toggle Developer Tools (Screen Overlay)** from the main window's menu bar.
 
 ## Quality Assurance
 

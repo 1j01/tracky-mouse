@@ -8,10 +8,12 @@ if (require('electron-squirrel-startup')) {
 	return; // important!
 }
 
-// Don't require any third-party modules until after squirrel events are handled.
+// Don't require any third-party (or own) modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
+
+require("./menus.js");
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.

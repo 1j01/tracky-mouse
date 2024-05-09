@@ -56,6 +56,7 @@ module.exports = [
 			"desktop-app/src/electron-main.js",
 			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",
+			"desktop-app/src/menus.js",
 			"desktop-app/forge.config.js",
 			"eslint.config.js",
 		],
