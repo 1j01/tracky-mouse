@@ -40,6 +40,10 @@ electronAPI.onMouseMove((_event, x, y) => {
 });
 
 let wasEnabled = false;
+// TODO: make all timings configurable in the settings file, if not the UI
+const faceFoundTimeoutPeriod = 5000; // face trace grace pace
+let foundFaceRecently = false;
+let faceFoundTimeoutId = -1;
 electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFeedDiagnostics) => {
 	console.log("onChangeDwellClicking", isEnabled, isManualTakeback, cameraFeedDiagnostics);
 
@@ -48,8 +52,16 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 	// - bad lighting conditions
 	// see: https://github.com/1j01/tracky-mouse/issues/26
 
+	if (cameraFeedDiagnostics.headFound) {
+		foundFaceRecently = true;
+		faceFoundTimeoutId = setTimeout(() => {
+			foundFaceRecently = false;
+		}, faceFoundTimeoutPeriod);
+	}
+
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 	document.body.classList.toggle("tracky-mouse-head-not-found", cameraFeedDiagnostics.headNotFound);
+	document.body.classList.toggle("tracky-mouse-head-not-found-recently", !foundFaceRecently);
 	actionSpan.innerText = isEnabled ? "disable" : "enable";
 
 	if (!isEnabled && !isManualTakeback) {

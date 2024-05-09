@@ -246,6 +246,10 @@
 	transform: translate(-50%, -50%);
 }
 
+/* This is not turning out to be maintainable.
+TODO: change to a scheme where one message/icon will clearly win
+(whether entirely in JS or with a data attribute selector or what) */
+
 /* prefer manual takeback indicator, rather than showing both at once */
 body.tracky-mouse-manual-takeback .tracky-mouse-head-not-found-indicator,
 body:not(.tracky-mouse-head-not-found) .tracky-mouse-head-not-found-indicator {
@@ -256,7 +260,15 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	display: none;
 }
 
+body:not(.tracky-mouse-head-not-found-recently) .tracky-mouse-head-not-found-recently-indicator {
+	display: none;
+}
+
 .tracky-mouse-manual-takeback .tracky-mouse-no-takeback-indicator {
+	display: none;
+}
+
+.tracky-mouse-head-not-found-recently .tracky-mouse-no-head-not-found-recently-indicator {
 	display: none;
 }
 
