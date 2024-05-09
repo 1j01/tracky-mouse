@@ -39,8 +39,9 @@ electronAPI.onMouseMove((_event, x, y) => {
 	window.dispatchEvent(domEvent);
 });
 
+let wasEnabled = false;
 electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFeedDiagnostics) => {
-	// console.log("onChangeDwellClicking", isEnabled);
+	console.log("onChangeDwellClicking", isEnabled, isManualTakeback, cameraFeedDiagnostics);
 
 	// Other diagnostics in the future would be stuff like:
 	// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
@@ -61,6 +62,10 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 	}
 
 	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
-	document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
-	window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
+	// (TODO: can I use the return value of initDwellClicking instead? Or otherwise formalize this?)
+	if (wasEnabled !== isEnabled) {
+		document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
+		window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
+	}
+	wasEnabled = isEnabled;
 });
