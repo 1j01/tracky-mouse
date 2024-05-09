@@ -989,7 +989,7 @@ TrackyMouse.init = function (div) {
 		});
 	}
 
-	loadOptions(true);
+	const settingsLoadedPromise = loadOptions(true);
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });
@@ -1800,25 +1800,30 @@ TrackyMouse.init = function (div) {
 		TrackyMouse.useCamera();
 	}
 
+	const updatePaused = () => {
+		mouseNeedsInitPos = true;
+		if (paused) {
+			pointerEl.style.display = "none";
+		}
+		if (paused) {
+			startStopButton.textContent = "Start";
+			startStopButton.setAttribute("aria-pressed", "false");
+		} else {
+			startStopButton.textContent = "Stop";
+			startStopButton.setAttribute("aria-pressed", "true");
+		}
+		if (window.electronAPI) {
+			window.electronAPI.notifyToggleState(!paused);
+		}
+	};
 	const handleShortcut = (shortcutType) => {
 		if (shortcutType === "toggle-tracking") {
 			paused = !paused;
-			mouseNeedsInitPos = true;
-			if (paused) {
-				pointerEl.style.display = "none";
-			}
-			if (paused) {
-				startStopButton.textContent = "Start";
-				startStopButton.setAttribute("aria-pressed", "false");
-			} else {
-				startStopButton.textContent = "Stop";
-				startStopButton.setAttribute("aria-pressed", "true");
-			}
-			if (window.electronAPI) {
-				window.electronAPI.notifyToggleState(!paused);
-			}
+			updatePaused();
 		}
 	};
+	settingsLoadedPromise.then(updatePaused);
+
 	// Try to handle both the global and local shortcuts
 	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
 	// I hope there's no cross-platform issue with this.
