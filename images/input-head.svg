@@ -99,6 +99,20 @@
          cy="26.602921"
          r="0.75630671"
          inkscape:label="pupil" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stop-color:#000000"
+         d="m 23.975227,24.831052 c 2.776779,-1.22921 3.865192,-0.537986 5.217286,-0.146685"
+         id="path3942"
+         sodipodi:nodetypes="cc"
+         inkscape:label="eye brow"
+         transform="translate(-0.44861459,-3.114008)" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stop-color:#000000"
+         d="m 34.747591,24.816768 c 2.776779,-1.22921 3.865192,-0.537986 5.217286,-0.146685"
+         id="path3942-6"
+         sodipodi:nodetypes="cc"
+         inkscape:label="eye brow"
+         transform="translate(-0.44861459,-3.114008)" />
     </g>
     <g
        id="g3604"
@@ -142,17 +156,5 @@
        transform="rotate(-90,34.317638,33.52309)"
        style="stroke-width:1"
        inkscape:label="arrow down" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stop-color:#000000"
-       d="m 23.975227,24.831052 c 2.776779,-1.22921 3.865192,-0.537986 5.217286,-0.146685"
-       id="path3942"
-       sodipodi:nodetypes="cc"
-       inkscape:label="eye brow" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stop-color:#000000"
-       d="m 34.747591,24.816768 c 2.776779,-1.22921 3.865192,-0.537986 5.217286,-0.146685"
-       id="path3942-6"
-       sodipodi:nodetypes="cc"
-       inkscape:label="eye brow" />
   </g>
 </svg>

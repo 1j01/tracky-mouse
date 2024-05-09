@@ -71,6 +71,23 @@
 	background-color: rgba(15, 0, 20, 0.5);
 }
 
+.tracky-mouse-start-stop-button {
+	background-color: rgb(191, 36, 234);
+	color: white;
+	font-size: 20px;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	width: 120px;
+	cursor: pointer;
+}
+
+.tracky-mouse-start-stop-button::after {
+	content: "(" attr(aria-keyshortcuts) ")";
+	opacity: 0.6;
+	margin-left: 0.5em;
+}
+
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
 }
@@ -229,6 +246,12 @@
 	transform: translate(-50%, -50%);
 }
 
+/* prefer manual takeback indicator, rather than showing both at once */
+body.tracky-mouse-manual-takeback .tracky-mouse-head-not-found-indicator,
+body:not(.tracky-mouse-head-not-found) .tracky-mouse-head-not-found-indicator {
+	display: none;
+}
+
 body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator {
 	display: none;
 }
@@ -237,7 +260,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	display: none;
 }
 
-.tracky-mouse-manual-takeback-indicator img {
+.tracky-mouse-screen-overlay-status-indicator img {
 	filter: drop-shadow(0 0 4px #000) drop-shadow(2px 2px 2px #000);
 	opacity: 0.5;
 }

@@ -393,7 +393,7 @@ async function animateTargetHit(archery_target) {
 			easing: "linear",
 			fill: "both",
 		}).finished;
-	} catch (error) {
+	} catch (_error) {
 		// ignore cancelation
 	}
 }

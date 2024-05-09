@@ -99,6 +99,12 @@ const init_dwell_clicking = (config) => {
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
 		throw new Error("config.afterDispatch must be a function");
 	}
+	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
+		throw new Error("config.beforePointerDownDispatch must be a function");
+	}
+	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
+		throw new Error("config.isHeld must be a function");
+	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
 			throw new Error("config.retarget must be an array of objects");
@@ -167,7 +173,7 @@ const init_dwell_clicking = (config) => {
 	const on_pointer_move = (e) => {
 		recent_points.push({ x: e.clientX, y: e.clientY, time: performance.now() });
 	};
-	const on_pointer_up_or_cancel = (e) => {
+	const on_pointer_up_or_cancel = (_e) => {
 		deactivate_for_at_least(inactive_after_release_timespan);
 		dwell_dragging = null;
 	};
@@ -365,9 +371,7 @@ const init_dwell_clicking = (config) => {
 					(hover_candidate.time - time + hover_timespan) / hover_timespan
 					* circle_radius_max;
 				if (time > hover_candidate.time + hover_timespan) {
-					// TODO: replace pointer_active (holdover from jspaint) with some formal API
-					// Note: window.pointer_active doesn't work because it's declared with let
-					if ((typeof pointer_active !== "undefined" && pointer_active) || dwell_dragging) {
+					if (config.isHeld?.() || dwell_dragging) {
 						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
 							Object.assign(get_event_options(hover_candidate), {
@@ -377,11 +381,7 @@ const init_dwell_clicking = (config) => {
 						));
 						config.afterDispatch?.();
 					} else {
-						// TODO: replace pointers (holdover from jspaint) with some formal API
-						// Note: window.pointers doesn't work because it's declared with let
-						if (typeof pointers === "object") {
-							pointers = []; // prevent multi-touch panning
-						}
+						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
 						hover_candidate.target.dispatchEvent(new PointerEvent("pointerdown",
 							Object.assign(get_event_options(hover_candidate), {
@@ -510,11 +510,7 @@ const init_dwell_clicking = (config) => {
 						})
 					));
 					config.afterDispatch?.();
-					// TODO: replace pointers (holdover from jspaint) with some formal API
-					// Note: window.pointers doesn't work because it's declared with let
-					if (typeof pointers === "object") {
-						pointers = []; // prevent multi-touch panning
-					}
+					config.afterReleaseDrag?.();
 				}
 			}
 			if (recent_movement_amount > 60) {
@@ -567,6 +563,7 @@ TrackyMouse.init = function (div) {
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
 			<br>
 			<br>
 			<label class="tracky-mouse-control-row">
@@ -622,6 +619,19 @@ TrackyMouse.init = function (div) {
 			</div>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" id="tracky-mouse-start-enabled"/>
+				<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
+			</div>
+			<br>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" id="tracky-mouse-run-at-login"/>
+				<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
+			</div>
+			<br>
+			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 			<div class="tracky-mouse-control-row">
 				<input type="checkbox" checked id="tracky-mouse-mirror"/>
@@ -647,8 +657,11 @@ TrackyMouse.init = function (div) {
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
+	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
+	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
+	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
@@ -659,10 +672,16 @@ TrackyMouse.init = function (div) {
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
-	if (window.IS_ELECTRON_APP) {
+	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
 		// Might be good to also hide it, or change it, when on a mobile device
 		desktopAppDownloadMessage.hidden = true;
+
+		// Disable the "run at login" option if the app isn't packaged,
+		// as it's not set up to work in development mode.
+		window.electronAPI.getIsPackaged().then((isPackaged) => {
+			runAtLoginCheckbox.disabled = !isPackaged;
+		});
 	} else {
 		// Hide the mouse button swapping option if we're not in the desktop app,
 		// since the system-level mouse button setting doesn't apply,
@@ -670,6 +689,9 @@ TrackyMouse.init = function (div) {
 		// It could be implemented for the web version, but if you're designing an app for facial mouse users,
 		// you might want to avoid right-clicking altogether.
 		swapMouseButtonsCheckbox.parentElement.hidden = true;
+
+		// Hide the "run at login" option if we're not in the desktop app.
+		runAtLoginCheckbox.parentElement.hidden = true;
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
@@ -711,14 +733,16 @@ TrackyMouse.init = function (div) {
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
 	var faceConvergence = 0;
-	var faceConvergenceThreshold = 50;
+	// var faceConvergenceThreshold = 50;
 	var pointsBasedOnFaceScore = 0;
-	var paused = false;
+	var paused = true;
 	var mouseNeedsInitPos = true;
 	var debugTimeTravel = false;
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var mirror;
+	var startEnabled;
+	var runAtLogin;
 	var swapMouseButtons;
 
 	var useClmTracking = true;
@@ -783,7 +807,7 @@ TrackyMouse.init = function (div) {
 						return;
 					}
 					facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-					return new Promise((resolve, reject) => {
+					return new Promise((resolve, _reject) => {
 						facemeshWorker.addEventListener("message", (e) => {
 							if (e.data.type === "ESTIMATED_FACES") {
 								resolve(e.data.predictions);
@@ -800,29 +824,157 @@ TrackyMouse.init = function (div) {
 		initFacemeshWorker();
 	}
 
-	sensitivityXSlider.onchange = () => {
-		sensitivityX = sensitivityXSlider.value / 1000;
+	function deserializeSettings(settings, initialLoad = false) {
+		// TODO: DRY with deserializeSettings in electron-main.js
+		if ("globalSettings" in settings) {
+			// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
+			if (settings.globalSettings.swapMouseButtons !== undefined) {
+				swapMouseButtons = settings.globalSettings.swapMouseButtons;
+				swapMouseButtonsCheckbox.checked = swapMouseButtons;
+			}
+			if (settings.globalSettings.mirrorCameraView !== undefined) {
+				mirror = settings.globalSettings.mirrorCameraView;
+				mirrorCheckbox.checked = mirror;
+			}
+			if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
+				sensitivityX = settings.globalSettings.headTrackingSensitivityX;
+				sensitivityXSlider.value = sensitivityX * 1000;
+			}
+			if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
+				sensitivityY = settings.globalSettings.headTrackingSensitivityY;
+				sensitivityYSlider.value = sensitivityY * 1000;
+			}
+			if (settings.globalSettings.headTrackingAcceleration !== undefined) {
+				acceleration = settings.globalSettings.headTrackingAcceleration;
+				accelerationSlider.value = acceleration * 100;
+			}
+			if (settings.globalSettings.startEnabled !== undefined) {
+				startEnabled = settings.globalSettings.startEnabled;
+				startEnabledCheckbox.checked = startEnabled;
+				if (initialLoad) {
+					paused = !startEnabled;
+				}
+			}
+			if (settings.globalSettings.runAtLogin !== undefined) {
+				runAtLogin = settings.globalSettings.runAtLogin;
+				runAtLoginCheckbox.checked = runAtLogin;
+			}
+		}
+	}
+	const formatVersion = 1;
+	const formatName = "tracky-mouse-settings";
+	function serializeSettings() {
+		// TODO: DRY with serializeSettings in electron-main.js
+		return {
+			formatVersion,
+			formatName,
+			globalSettings: {
+				startEnabled,
+				runAtLogin,
+				swapMouseButtons,
+				mirrorCameraView: mirror,
+				headTrackingSensitivityX: sensitivityX,
+				headTrackingSensitivityY: sensitivityY,
+				headTrackingAcceleration: acceleration,
+				// TODO:
+				// eyeTrackingSensitivityX,
+				// eyeTrackingSensitivityY,
+				// eyeTrackingAcceleration,
+			},
+			// profiles: [],
+		};
 	};
-	sensitivityYSlider.onchange = () => {
-		sensitivityY = sensitivityYSlider.value / 1000;
-	};
-	accelerationSlider.onchange = () => {
-		acceleration = accelerationSlider.value / 100;
-	};
-	mirrorCheckbox.onchange = () => {
-		mirror = mirrorCheckbox.checked;
-	};
-	swapMouseButtonsCheckbox.onchange = () => {
-		swapMouseButtons = swapMouseButtonsCheckbox.checked;
-		if (window.setOptions) {
-			window.setOptions({ swapMouseButtons });
+	const setOptions = (options) => {
+		if (window.electronAPI) {
+			window.electronAPI.setOptions(options);
+		} else {
+			try {
+				localStorage.setItem("tracky-mouse-settings", JSON.stringify(serializeSettings(), null, "\t"));
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	};
+	const loadOptions = async (initialLoad = false) => {
+		if (window.electronAPI) {
+			deserializeSettings(await window.electronAPI.getOptions(), initialLoad);
+		} else {
+			try {
+				if (localStorage.getItem("tracky-mouse-settings")) {
+					deserializeSettings(JSON.parse(localStorage.getItem("tracky-mouse-settings")), initialLoad);
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		}
+	};
+
+	sensitivityXSlider.onchange = (event) => {
+		sensitivityX = sensitivityXSlider.value / 1000;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
+		}
+	};
+	sensitivityYSlider.onchange = (event) => {
+		sensitivityY = sensitivityYSlider.value / 1000;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
+		}
+	};
+	accelerationSlider.onchange = (event) => {
+		acceleration = accelerationSlider.value / 100;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
+		}
+	};
+	mirrorCheckbox.onchange = (event) => {
+		mirror = mirrorCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { mirrorCameraView: mirror } });
+		}
+	};
+	swapMouseButtonsCheckbox.onchange = (event) => {
+		swapMouseButtons = swapMouseButtonsCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { swapMouseButtons } });
+		}
+	};
+	startEnabledCheckbox.onchange = (event) => {
+		startEnabled = startEnabledCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { startEnabled } });
+		}
+	};
+	runAtLoginCheckbox.onchange = (event) => {
+		runAtLogin = runAtLoginCheckbox.checked;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { runAtLogin } });
+		}
+	};
+
+	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
+	startEnabledCheckbox.onchange();
+	runAtLoginCheckbox.onchange();
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();
+	paused = !startEnabled;
 
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
 	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
@@ -833,9 +985,11 @@ TrackyMouse.init = function (div) {
 		el.addEventListener("contextmenu", (e) => {
 			e.preventDefault();
 			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
-			swapMouseButtonsCheckbox.onchange();
+			swapMouseButtonsCheckbox.onchange(e);
 		});
 	}
+
+	const settingsLoadedPromise = loadOptions(true);
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });
@@ -856,6 +1010,9 @@ TrackyMouse.init = function (div) {
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
+
+		startStopButton.textContent = "Start";
+		startStopButton.setAttribute("aria-pressed", "false");
 	};
 
 	useCameraButton.onclick = TrackyMouse.useCamera = () => {
@@ -874,11 +1031,15 @@ TrackyMouse.init = function (div) {
 				} else {
 					cameraVideo.src = window.URL.createObjectURL(stream);
 				}
-			} catch (err) {
+			} catch (_err) {
 				cameraVideo.src = stream;
 			}
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
+			if (!paused) {
+				startStopButton.textContent = "Stop";
+				startStopButton.setAttribute("aria-pressed", "true");
+			}
 		}, (error) => {
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
@@ -909,6 +1070,16 @@ TrackyMouse.init = function (div) {
 		cameraVideo.srcObject = null;
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
+	};
+
+	startStopButton.onclick = () => {
+		if (!useCameraButton.hidden) {
+			TrackyMouse.useCamera();
+			if (!paused) {
+				return;
+			}
+		}
+		handleShortcut("toggle-tracking");
 	};
 
 	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
@@ -1022,8 +1193,8 @@ TrackyMouse.init = function (div) {
 			for (var inputPointIndex = 0; inputPointIndex < this.pointCount; inputPointIndex++) {
 				if (condition(inputPointIndex)) {
 					if (outputPointIndex < inputPointIndex) {
-						var inputOffset = inputPointIndex * 2;
-						var outputOffset = outputPointIndex * 2;
+						const inputOffset = inputPointIndex * 2;
+						const outputOffset = outputPointIndex * 2;
 						this.curXY[outputOffset] = this.curXY[inputOffset];
 						this.curXY[outputOffset + 1] = this.curXY[inputOffset + 1];
 						this.prevXY[outputOffset] = this.prevXY[inputOffset];
@@ -1032,7 +1203,7 @@ TrackyMouse.init = function (div) {
 					outputPointIndex++;
 				} else {
 					debugPointsCtx.fillStyle = "red";
-					var inputOffset = inputPointIndex * 2;
+					const inputOffset = inputPointIndex * 2;
 					circle(debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
 					debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
 					// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
@@ -1312,7 +1483,8 @@ TrackyMouse.init = function (div) {
 							setTimeout(() => {
 								debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
 							}, 900);
-							cameraFramesSinceFacemeshUpdate.forEach((imageData, index) => {
+							cameraFramesSinceFacemeshUpdate.forEach((imageData, _index) => {
+								/*
 								if (debugTimeTravel) {
 									debugFramesCtx.save();
 									debugFramesCtx.globalAlpha = 0.1;
@@ -1324,6 +1496,7 @@ TrackyMouse.init = function (div) {
 									debugPointsCtx.fillStyle = "aqua";
 									workerSyncedOops.draw(debugPointsCtx);
 								}
+								*/
 								workerSyncedOops.update(imageData);
 							});
 						}
@@ -1400,6 +1573,10 @@ TrackyMouse.init = function (div) {
 			mainOops.update(imageData);
 		}
 
+		if (window.electronAPI) {
+			window.electronAPI.notifyCameraFeedDiagnostics({ headNotFound: !face && !facemeshPrediction });
+		}
+
 		if (facemeshPrediction) {
 			ctx.fillStyle = "red";
 
@@ -1416,7 +1593,7 @@ TrackyMouse.init = function (div) {
 						point[1] += prevMovementY;
 					});
 				}
-				facemeshPrediction.scaledMesh.forEach(([x, y, z]) => {
+				facemeshPrediction.scaledMesh.forEach(([x, y, _z]) => {
 					ctx.fillRect(x, y, 1, 1);
 				});
 			} else {
@@ -1493,7 +1670,7 @@ TrackyMouse.init = function (div) {
 
 			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
+			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 
 			var distance = Math.hypot(movementX, movementY);
 			var deltaX = accelerate(movementX * sensitivityX, distance);
@@ -1531,8 +1708,8 @@ TrackyMouse.init = function (div) {
 			}
 
 			if (!paused) {
-				const screenWidth = window.moveMouse ? screen.width : innerWidth;
-				const screenHeight = window.moveMouse ? screen.height : innerHeight;
+				const screenWidth = window.electronAPI ? screen.width : innerWidth;
+				const screenHeight = window.electronAPI ? screen.height : innerHeight;
 
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
@@ -1546,8 +1723,8 @@ TrackyMouse.init = function (div) {
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
-				if (window.moveMouse) {
-					window.moveMouse(~~mouseX, ~~mouseY);
+				if (window.electronAPI) {
+					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
@@ -1562,6 +1739,7 @@ TrackyMouse.init = function (div) {
 			prevMovementY = movementY;
 			// movementXSinceFacemeshUpdate += movementX;
 			// movementYSinceFacemeshUpdate += movementY;
+			/*
 			if (enableTimeTravel) {
 				if (facemeshEstimating) {
 					const imageData = getCameraImageData();
@@ -1575,6 +1753,7 @@ TrackyMouse.init = function (div) {
 					}
 				}
 			}
+			*/
 		}
 		ctx.restore();
 
@@ -1616,32 +1795,44 @@ TrackyMouse.init = function (div) {
 	let autoDemo = false;
 	try {
 		autoDemo = localStorage.trackyMouseAutoDemo === "true";
-	} catch (error) {
+	} catch (_error) {
 		// ignore; this is just for development
 	}
 	if (autoDemo) {
 		TrackyMouse.useDemoFootage();
-	} else if (window.moveMouse) {
+	} else if (window.electronAPI) {
 		TrackyMouse.useCamera();
 	}
 
+	const updatePaused = () => {
+		mouseNeedsInitPos = true;
+		if (paused) {
+			pointerEl.style.display = "none";
+		}
+		if (paused) {
+			startStopButton.textContent = "Start";
+			startStopButton.setAttribute("aria-pressed", "false");
+		} else {
+			startStopButton.textContent = "Stop";
+			startStopButton.setAttribute("aria-pressed", "true");
+		}
+		if (window.electronAPI) {
+			window.electronAPI.notifyToggleState(!paused);
+		}
+	};
 	const handleShortcut = (shortcutType) => {
 		if (shortcutType === "toggle-tracking") {
 			paused = !paused;
-			mouseNeedsInitPos = true;
-			if (paused) {
-				pointerEl.style.display = "none";
-			}
-			if (window.notifyToggleState) {
-				window.notifyToggleState(!paused);
-			}
+			updatePaused();
 		}
 	};
+	settingsLoadedPromise.then(updatePaused);
+
 	// Try to handle both the global and local shortcuts
 	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
 	// I hope there's no cross-platform issue with this.
-	if (window.onShortcut) {
-		window.onShortcut(handleShortcut);
+	if (window.electronAPI) {
+		window.electronAPI.onShortcut(handleShortcut);
 	}
 	addEventListener("keydown", (event) => {
 		// Same shortcut as the global shortcut in the electron app
