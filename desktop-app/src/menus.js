@@ -22,7 +22,9 @@ const aboutItem = {
 		});
 	},
 };
-setTimeout(aboutItem.click, 1000);
+// Open about window automatically for development
+// (Normally I would use a localStorage flag for this, but localStorage isn't available in the main process.)
+// setTimeout(aboutItem.click, 1000);
 
 const template = [
 	// { role: 'appMenu' }
