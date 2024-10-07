@@ -71,13 +71,24 @@ header .logo {
 	text-align: center;
 }
 
-.features-list>li>img {
+.features-list>li>img,
+.features-list>li>.feature-icon {
 	display: block;
 	margin: 0 auto;
 	width: 75%;
 	height: auto;
 	min-height: 100px;
 	max-height: 220px;
+}
+
+.features-list>li>.feature-icon {
+	aspect-ratio: 1 / 1;
+	background-size: 100%;
+	background-repeat: no-repeat;
+}
+
+.features-list>li:hover>.feature-icon {
+	background-image: var(--animated-image) !important;
 }
 
 /* Applies to IE10-11; fixes image aspect ratio; not important, feel free to remove this */
