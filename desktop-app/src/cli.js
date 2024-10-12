@@ -63,12 +63,33 @@ parser.add_argument("-v", "--version", {
 });
 
 // Squirrel.Windows passes "--squirrel-firstrun" when the app is first run after being installed.
-// Other Squirrel.Windows event argument are handled by `electron-squirrel-startup`, which returns whether it handled an event.
 // This could be used to show a "Thanks for installing" message or similar, but it needs to at least be handled so that it doesn't cause an error.
 // We can hide it from the help since it's not a useful option.
-parser.add_argument("-s", "--squirrel-firstrun", {
+parser.add_argument("--squirrel-firstrun", {
 	help: SUPPRESS,
 	action: "store_true",
 });
+
+// Other Squirrel.Windows event argument are CURRENTLY handled separately in electron-main.js, but could make use of the argparse CLI...
+
+// parser.add_argument("--squirrel-uninstall", {
+// 	help: SUPPRESS,
+// 	action: "store_true",
+// });
+
+// parser.add_argument("--squirrel-install", {
+// 	help: SUPPRESS,
+// 	action: "store_true",
+// });
+
+// parser.add_argument("--squirrel-updated", {
+// 	help: SUPPRESS,
+// 	action: "store_true",
+// });
+
+// parser.add_argument("--squirrel-obsolete", {
+// 	help: SUPPRESS,
+// 	action: "store_true",
+// });
 
 module.exports.parser = parser;
