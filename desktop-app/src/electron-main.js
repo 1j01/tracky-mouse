@@ -73,6 +73,7 @@ if (!gotSingleInstanceLock) {
 		const stream = require('fs').createReadStream(tempFilePath);
 		stream.pipe(process.stdout);
 		stream.on('close', () => {
+			console.log(""); // newline
 			// TODO: clean up temp file (here would be fine if everything went well, but only if.)
 			// Might want to clean up all temp files on startup once the single instance lock is acquired.
 			// Alternatively (and preferably), could switch to a more inherently ephemeral communication method.
