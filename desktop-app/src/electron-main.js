@@ -31,6 +31,10 @@ const args = parser.parse_args(argsArray);
 // (If it quit because there was an existing instance before handling `--help`,
 // you wouldn't get any help at the command line if the app was running.)
 
+// This is used to communicate the output of a CLI command from the existing instance to the new instance.
+// Could use an in-memory pipe, or HTTP, but this may be the simplest way.
+const tempFilePath = path.join(app.getPath('temp'), `tracky-mouse-cli-output-${Date.now()}.txt`);
+
 // Note: The "second-instance" event has an `argv` argument but it's unusably broken,
 // and the documented workaround is to pass the arguments as `additionalData` here.
 // https://www.electronjs.org/docs/api/app#event-second-instance
@@ -38,13 +42,42 @@ const gotSingleInstanceLock = app.requestSingleInstanceLock({
 	// WARNING: key order and key length can cause this bug to crop up: https://github.com/electron/electron/issues/40615
 	// For instance, naming this key "argv" instead of "arguments" can cause `additionalData` to be null when no arguments are passed.
 	arguments: argsArray,
+	tempFilePath,
 });
 
 // Note: If the main process crashes during the "second-instance" event, the second instance will get the lock,
 // even if the first instance is still showing an error dialog.
 if (!gotSingleInstanceLock) {
-	console.log("Already running. Opening in existing instance.");
-	app.quit();
+	// console.log("Already running. Opening in existing instance.");
+
+	// Proxy the output from the existing instance to the CLI command.
+	(async () => {
+		// This didn't work (probably using fs.watch wrong), but streaming is better anyway.
+		// console.log("Watching file for changes:", tempFilePath);
+		// for await (const _firstChange of fs.watch(tempFilePath)) {
+		// 	console.log("_firstChange", _firstChange);
+		// 	const data = await fs.readFile(tempFilePath, 'utf8');
+		// 	console.log(data);
+		// 	app.quit();
+		// 	break;
+		// }
+
+		// Stream the file to the new instance.
+		const stream = require('fs').createReadStream(tempFilePath);
+		stream.pipe(process.stdout);
+		stream.on('close', () => {
+			// TODO: clean up temp file (here would be fine if everything went well, but only if.)
+			// Might want to clean up all temp files on startup once the single instance lock is acquired.
+			// Alternatively (and preferably), could switch to a more inherently ephemeral communication method.
+			app.quit();
+		});
+		stream.on('error', (error) => {
+			console.error("file stream error:", error);
+			app.quit();
+		});
+	})();
+
+	// app.quit();
 	// `app.quit` does not immediately exit the process.
 	// Return to avoid errors / main window briefly appearing.
 	//   [52128:0304/194956.188:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
@@ -521,14 +554,24 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 		return;
 	}
 
+	function outputToCLI(output) {
+		console.log("second-instance: Outputting to CLI:", output);
+		fs.writeFile(additionalData.tempFilePath, output)
+			.then(() => {
+				console.log("second-instance: Wrote output to", additionalData.tempFilePath);
+			}, (error) => {
+				console.error(`second-instance: Failed to write output to ${additionalData.tempFilePath}:`, error);
+			});
+	}
+
 	const argv = additionalData.arguments;
 	if (argv.length === 0) {
 		// TODO: DRY with `activate` event handler?
 		if (BrowserWindow.getAllWindows().length === 0) {
-			console.log("second-instance opened with no arguments. Creating the app window.");
+			outputToCLI("Opening new app window in already-running application.");
 			createWindow();
 		} else if (appWindow) {
-			console.log("second-instance opened with no arguments. Focusing the app window.");
+			outputToCLI("Focusing the existing app window.");
 			if (appWindow.isMinimized()) {
 				appWindow.restore();
 			}
@@ -544,7 +587,7 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 	// 	console.log("second-instance: Opening settings profile:", filePath);
 	// }
 	if (args.set || args.adjust || args.get || args.start || args.stop || args.profile) {
-		console.log("Arguments not supported yet. CLI is a work in progress.");
+		outputToCLI("Arguments not supported yet. CLI is a work in progress.");
 	}
 });
 
