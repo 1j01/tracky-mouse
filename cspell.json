@@ -8,12 +8,14 @@
 		"CNAME"
 	],
 	"words": [
+		"argparse",
 		"clmtrackr",
 		"combinatorially",
 		"Eigen",
 		"embeddable",
 		"eviacam",
 		"facemesh",
+		"firstrun",
 		"fullscreenable",
 		"Gameface",
 		"grayscale",
@@ -29,8 +31,10 @@
 		"lsusb",
 		"maximizable",
 		"metaprogramming",
+		"metavar",
 		"minimizable",
 		"MSIE",
+		"nargs",
 		"occluder",
 		"occluders",
 		"Odhner",
@@ -49,6 +53,7 @@
 		"togglefullscreen",
 		"tracky",
 		"uninstallation",
+		"unpackaged",
 		"Viacam",
 		"XFCE"
 	]

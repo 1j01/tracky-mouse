@@ -1,3 +1,6 @@
+
+// Note: Don't require any third-party (or own) modules until after squirrel events are handled.
+// If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
@@ -8,8 +11,72 @@ if (require('electron-squirrel-startup')) {
 	return; // important!
 }
 
-// Don't require any third-party (or own) modules until after squirrel events are handled.
-// If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
+// From this point on, third party modules can be required now without risking interfering with the installer.
+
+const { parser } = require('./cli.js');
+
+// Compare command line arguments:
+// - unpackaged (in development):      "path/to/electron.exe" "." "maybe/a/file.png"
+// - packaged (usually in production): "path/to/jspaint.exe" "maybe/a/file.png"
+const { isPackaged } = app;
+const argsArray = process.argv.slice(isPackaged ? 1 : 2);
+// Note: this may exit the app, if the user runs `tracky-mouse --help`.
+const args = parser.parse_args(argsArray);
+
+// After argument parsing that may have exited the app, handle single instance behavior.
+// In other words, the priority is:
+// - Squirrel event arguments (other than `--squirrel-firstrun`) which exit the app
+// - `--help` or `--version` which print a message and exit the app
+// - Opening an existing instance and exiting the app, forwarding arguments to the existing instance
+// (If it quit because there was an existing instance before handling `--help`,
+// you wouldn't get any help at the command line if the app was running.)
+
+// Note: The "second-instance" event has an `argv` argument but it's unusably broken,
+// and the documented workaround is to pass the arguments as `additionalData` here.
+// https://www.electronjs.org/docs/api/app#event-second-instance
+const gotSingleInstanceLock = app.requestSingleInstanceLock({
+	// WARNING: key order and key length can cause this bug to crop up: https://github.com/electron/electron/issues/40615
+	// For instance, naming this key "argv" instead of "arguments" can cause `additionalData` to be null when no arguments are passed.
+	arguments: argsArray,
+});
+
+// Note: If the main process crashes during the "second-instance" event, the second instance will get the lock,
+// even if the first instance is still showing an error dialog.
+if (!gotSingleInstanceLock) {
+	console.log("Already running. Opening in existing instance.");
+	app.quit();
+	// `app.quit` does not immediately exit the process.
+	// Return to avoid errors / main window briefly appearing.
+	//   [52128:0304/194956.188:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
+	//   [52128:0304/194956.189:ERROR:cache_util.cc(145)] Unable to move cache folder C:\Users\Isaiah\AppData\Roaming\Electron\GPUCache to C:\Users\Isaiah\AppData\Roaming\Electron\old_GPUCache_000
+	//   [52128:0304/194956.189:ERROR:disk_cache.cc(196)] Unable to create cache
+	//   [52128:0304/194956.189:ERROR:shader_disk_cache.cc(613)] Shader Cache Creation failed: -2
+	return;
+} else {
+	console.log("Got single instance lock.");
+	// When a second instance is opened, the "second-instance" event will be emitted in the this instance.
+	// See handler below.
+}
+
+// Exit for arguments that are not supported when the app is not already running.
+// Some or all of these could be supported in the future.
+// `--profile` seems useful; `--adjust` not so much.
+const secondInstanceOnlyArgs = ["profile", "adjust", "set", "get", "start", "stop"];
+if (secondInstanceOnlyArgs.some(arg => args[arg])) {
+	const badArgs = secondInstanceOnlyArgs.filter(arg => args[arg]);
+	const badArgsString = badArgs.map(arg => `--${arg}`).join(", ");
+	if (badArgs.length === 1) {
+		console.log(`The argument ${badArgsString} is only supported when the app is already running.`);
+	} else {
+		console.log(`These arguments are only supported when the app is already running: ${badArgsString}.`);
+	}
+	console.log("If you have a use case, please let me know by opening an issue at https://github.com/1j01/tracky-mouse/issues/new or sending an email to isaiahodhner@gmail.com");
+	app.quit();
+	return;
+}
+
+// Normal app behavior continues here.
+
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
 
@@ -437,18 +504,47 @@ app.on('ready', async () => {
 	}
 });
 
-// Prevent multiple instances of the app
-if (!app.requestSingleInstanceLock()) {
-	app.quit();
-}
+app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, additionalData) => {
+	// Someone tried to run a second instance, or is trying to use the tracky-mouse CLI.
+	// If there are no arguments, we should focus the app's main window.
+	// If there are arguments, we should handle adjusting settings for the running app.
 
-app.on('second-instance', () => {
-	if (appWindow) {
-		if (appWindow.isMinimized()) {
-			appWindow.restore();
+	// Note: the "second-instance" event sends a broken argv which may rearrange and add extra arguments,
+	// so we have to use the `additionalData` object, passed from `requestSingleInstanceLock`.
+	// This hack is recommended in the docs: https://www.electronjs.org/docs/api/app#event-second-instance
+	console.log("second-instance", { uselessCorruptedArgv, workingDirectory, additionalData });
+
+	// Unfortunately, it turns out `additionalData` is buggy too, and becomes null under some obscure conditions.
+	// See https://github.com/electron/electron/issues/40615
+	if (!additionalData) {
+		console.log(`second-instance: additionalData === ${additionalData}. See https://github.com/electron/electron/issues/40615`);
+		return;
+	}
+
+	const argv = additionalData.arguments;
+	if (argv.length === 0) {
+		// TODO: DRY with `activate` event handler?
+		if (BrowserWindow.getAllWindows().length === 0) {
+			console.log("second-instance opened with no arguments. Creating the app window.");
+			createWindow();
+		} else if (appWindow) {
+			console.log("second-instance opened with no arguments. Focusing the app window.");
+			if (appWindow.isMinimized()) {
+				appWindow.restore();
+			}
+			appWindow.show();
 		}
+		return;
+	}
 
-		appWindow.show();
+	const args = parser.parse_args(argv);
+	console.log("second-instance: parsed args:", args);
+	// if (args.profile) {
+	// 	const filePath = path.resolve(workingDirectory, args.profile[0]);
+	// 	console.log("second-instance: Opening settings profile:", filePath);
+	// }
+	if (args.set || args.adjust || args.get || args.start || args.stop || args.profile) {
+		console.log("Arguments not supported yet. CLI is a work in progress.");
 	}
 });
 
@@ -470,6 +566,3 @@ app.on('activate', () => {
 		createWindow();
 	}
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
