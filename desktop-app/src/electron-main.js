@@ -52,7 +52,12 @@ if (!gotSingleInstanceLock) {
 
 	// Proxy the output from the existing instance to the CLI command.
 	(async () => {
-		// TODO: add timeout in case the file is never written to (or never closed). Can use one timeout for both phases.
+		setTimeout(() => {
+			console.error("Timed out waiting for file to exist:", tempFilePath);
+			console.error("The already-running app is meant to write to this file with the output for the CLI command.");
+			console.error("However, the app may have crashed or hung, or there may be a bug in the communication code.");
+			app.exit(1);
+		}, 10000);
 
 		// Wait for file to exist.
 		// (It may exist already, but we can't assume that.)
@@ -591,6 +596,8 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 		// });
 
 		// Rename the file after fully writing it to avoid race conditions.
+		// Can use setTimeout to test the file polling behavior and timeout error message.
+		// setTimeout(() => {
 		const tempTempFilePath = additionalData.tempFilePath + ".tmp";
 		fs.writeFile(tempTempFilePath, output)
 			.then(() => {
@@ -604,6 +611,7 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 			}, (error) => {
 				console.error(`second-instance: Failed to write output to ${tempTempFilePath}:`, error);
 			});
+		// }, 20000);
 	}
 
 	const argv = additionalData.arguments;
