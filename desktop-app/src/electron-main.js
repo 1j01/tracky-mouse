@@ -146,6 +146,8 @@ let acceleration = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
 
+let enabled = true;
+
 const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
 const formatName = "tracky-mouse-settings";
 const formatVersion = 1;
@@ -351,7 +353,6 @@ const createWindow = () => {
 	const thresholdToRegainControl = 10; // in pixels
 	const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
-	let enabled = true; // for starting/stopping until the user requests otherwise
 	let cameraFeedDiagnostics = {};
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
@@ -636,7 +637,28 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 	// 	const filePath = path.resolve(workingDirectory, args.profile[0]);
 	// 	console.log("second-instance: Opening settings profile:", filePath);
 	// }
-	if (args.set || args.adjust || args.get || args.start || args.stop || args.profile) {
+	if (args.start || args.stop) {
+		if (!!args.start === !!args.stop) {
+			outputToCLI("Exactly one of --start or --stop must be provided.");
+			return;
+		}
+		if (!appWindow) {
+			// TODO: create window if it doesn't exist (like `activate`) and make sure to start enabled
+			// (but don't need to open the app for --stop)
+			// (and don't focus the window if it's already open)
+			outputToCLI("The app window is not open.");
+			return;
+		}
+		// TODO: differentiate between --start and --stop
+		if (enabled !== !!args.start) {
+			appWindow.webContents.send("shortcut", "toggle-tracking");
+			outputToCLI(`Toggled head tracking to ${enabled ? "off" : "on"}.`);
+			return;
+		}
+		outputToCLI(`Head tracking is already ${enabled ? "on" : "off"}.`);
+		return;
+	}
+	if (args.set || args.adjust || args.get || args.profile) {
 		outputToCLI("Arguments not supported yet. CLI is a work in progress.");
 	}
 });
