@@ -62,6 +62,20 @@ if (!gotSingleInstanceLock) {
 		// 	break;
 		// }
 
+		// TODO: add timeout in case the file is never written to (or never closed). Can use one timeout for both phases.
+
+		// Wait for file to exist. This avoids a race condition which you can test
+		// by adding a setTimeout around the `fs.writeFile` in the primary instance.
+		const waitFor = (fn) => new Promise((resolve) => {
+			const interval = setInterval(async () => {
+				const result = await fn();
+				if (result) {
+					clearInterval(interval);
+					resolve(result);
+				}
+			}, 100);
+		});
+		await waitFor(async () => fs.stat(tempFilePath).catch(() => null));
 		// Stream the file to the new instance.
 		const stream = require('fs').createReadStream(tempFilePath);
 		stream.pipe(process.stdout);
@@ -556,12 +570,16 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 
 	function outputToCLI(output) {
 		console.log("second-instance: Outputting to CLI:", output);
+
+		// The setTimeout here can be used to test for race conditions.
+		// setTimeout(() => {
 		fs.writeFile(additionalData.tempFilePath, output)
 			.then(() => {
 				console.log("second-instance: Wrote output to", additionalData.tempFilePath);
 			}, (error) => {
 				console.error(`second-instance: Failed to write output to ${additionalData.tempFilePath}:`, error);
 			});
+		// }, 3000);
 	}
 
 	const argv = additionalData.arguments;
