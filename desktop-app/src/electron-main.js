@@ -52,20 +52,10 @@ if (!gotSingleInstanceLock) {
 
 	// Proxy the output from the existing instance to the CLI command.
 	(async () => {
-		// This didn't work (probably using fs.watch wrong), but streaming is better anyway.
-		// console.log("Watching file for changes:", tempFilePath);
-		// for await (const _firstChange of fs.watch(tempFilePath)) {
-		// 	console.log("_firstChange", _firstChange);
-		// 	const data = await fs.readFile(tempFilePath, 'utf8');
-		// 	console.log(data);
-		// 	app.quit();
-		// 	break;
-		// }
-
 		// TODO: add timeout in case the file is never written to (or never closed). Can use one timeout for both phases.
 
-		// Wait for file to exist. This avoids a race condition which you can test
-		// by adding a setTimeout around the `fs.writeFile` in the primary instance.
+		// Wait for file to exist.
+		// (It may exist already, but we can't assume that.)
 		const waitFor = (fn) => new Promise((resolve) => {
 			const interval = setInterval(async () => {
 				const result = await fn();
@@ -77,6 +67,9 @@ if (!gotSingleInstanceLock) {
 		});
 		await waitFor(async () => fs.stat(tempFilePath).catch(() => null));
 		// Stream the file to the new instance.
+		// Note that this only avoids race conditions because the file is fully written before it's renamed and seen.
+		// So using streaming here is not super meaningful.
+		// (One could tail the file, but that would be more complex and I'm not sure you'd be able to tell when the file is closed without a sentinel value to mark the end of the stream.)
 		const stream = require('fs').createReadStream(tempFilePath);
 		stream.pipe(process.stdout);
 		stream.on('close', () => {
@@ -571,15 +564,45 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 	function outputToCLI(output) {
 		console.log("second-instance: Outputting to CLI:", output);
 
-		// The setTimeout here can be used to test for race conditions.
+		// Basic implementation
+		// fs.writeFile(additionalData.tempFilePath, output)
+		// 	.then(() => {
+		// 		console.log("second-instance: Wrote output to", additionalData.tempFilePath);
+		// 	}, (error) => {
+		// 		console.error(`second-instance: Failed to write output to ${additionalData.tempFilePath}:`, error);
+		// 	});
+
+		// Write the file in chunks to test for race conditions.
+		// const stream = require('fs').createWriteStream(additionalData.tempFilePath);
 		// setTimeout(() => {
-		fs.writeFile(additionalData.tempFilePath, output)
+		// 	stream.write(output.slice(0, Math.floor(output.length / 2)), 'utf8', () => {
+		// 		console.log("second-instance: Wrote first chunk to", additionalData.tempFilePath);
+		// 		setTimeout(() => {
+		// 			stream.write(output.slice(Math.floor(output.length / 2)), 'utf8', () => {
+		// 				console.log("second-instance: Wrote second chunk to", additionalData.tempFilePath);
+		// 				stream.end();
+		// 			});
+		// 		}, 2000); // Delay before writing the second chunk
+		// 	});
+		// }, 2000); // Delay before writing the first chunk
+		// stream.on('error', (error) => {
+		// 	console.error(`second-instance: Failed to write output to ${additionalData.tempFilePath}:`, error);
+		// });
+
+		// Rename the file after fully writing it to avoid race conditions.
+		const tempTempFilePath = additionalData.tempFilePath + ".tmp";
+		fs.writeFile(tempTempFilePath, output)
 			.then(() => {
-				console.log("second-instance: Wrote output to", additionalData.tempFilePath);
+				console.log("second-instance: Wrote output to", tempTempFilePath);
+				fs.rename(tempTempFilePath, additionalData.tempFilePath)
+					.then(() => {
+						console.log("second-instance: Renamed output file to", additionalData.tempFilePath);
+					}, (error) => {
+						console.error(`second-instance: Failed to rename output file to ${additionalData.tempFilePath}:`, error);
+					});
 			}, (error) => {
-				console.error(`second-instance: Failed to write output to ${additionalData.tempFilePath}:`, error);
+				console.error(`second-instance: Failed to write output to ${tempTempFilePath}:`, error);
 			});
-		// }, 3000);
 	}
 
 	const argv = additionalData.arguments;
