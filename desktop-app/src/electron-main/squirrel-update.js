@@ -22,16 +22,15 @@
 let setxPath;
 const { app } = require('electron');
 const fs = require('fs-plus');
-const getAppName = require('../get-app-name');
 const path = require('path');
 const Spawner = require('./spawner');
-const WinShell = require('./win-shell');
+// const WinShell = require('./win-shell');
 const WinPowerShell = require('./win-powershell');
 
 const appFolder = path.resolve(process.execPath, '..');
-const rootAtomFolder = path.resolve(appFolder, '..');
-const binFolder = path.join(rootAtomFolder, 'bin');
-const updateDotExe = path.join(rootAtomFolder, 'Update.exe');
+const rootTrackyMouseFolder = path.resolve(appFolder, '..');
+const binFolder = path.join(rootTrackyMouseFolder, 'bin');
+const updateDotExe = path.join(rootTrackyMouseFolder, 'Update.exe');
 const execName = path.basename(app.getPath('exe'));
 
 if (process.env.SystemRoot) {
@@ -49,58 +48,44 @@ const spawnSetx = (args, callback) => Spawner.spawn(setxPath, args, callback);
 const spawnUpdate = (args, callback) =>
 	Spawner.spawn(updateDotExe, args, callback);
 
-// Add atom and apm to the PATH
+// Add `tracky-mouse` to the `PATH`
 //
-// This is done by adding .cmd shims to the root bin folder in the Atom
+// This is done by adding .cmd shims to the root bin folder in the Tracky Mouse
 // install directory that point to the newly installed versions inside
 // the versioned app directories.
 const addCommandsToPath = callback => {
-	const atomCmdName = execName.replace('.exe', '.cmd');
-	const apmCmdName = atomCmdName.replace('atom', 'apm');
-	const atomShName = execName.replace('.exe', '');
-	const apmShName = atomShName.replace('atom', 'apm');
+	const cmdName = execName.replace('.exe', '.cmd');
+	const shName = execName.replace('.exe', '');
 
 	const installCommands = callback => {
-		const atomCommandPath = path.join(binFolder, atomCmdName);
-		const relativeAtomPath = path.relative(
+		const cmdPath = path.join(binFolder, cmdName);
+		// const relativeCmdPath = path.relative(
+		// 	binFolder,
+		// 	path.join(appFolder, 'resources', 'cli', 'tracky-mouse.cmd')
+		// );
+		// const command = `@echo off\r\n"%~dp0\\${relativeCmdPath}" %*`;
+		const relativeExePath = path.relative(
 			binFolder,
-			path.join(appFolder, 'resources', 'cli', 'atom.cmd')
+			path.join(appFolder, 'tracky-mouse.exe')
 		);
-		const atomCommand = `@echo off\r\n"%~dp0\\${relativeAtomPath}" %*`;
+		const command = `@echo off\r\n"%~dp0\\${relativeExePath}" %*`;
 
-		const atomShCommandPath = path.join(binFolder, atomShName);
-		const relativeAtomShPath = path.relative(
-			binFolder,
-			path.join(appFolder, 'resources', 'cli', 'atom.sh')
-		);
-		const atomShCommand = `#!/bin/sh\r\n"$(dirname "$0")/${relativeAtomShPath.replace(
+		const shCommandPath = path.join(binFolder, shName);
+		// const relativeShPath = path.relative(
+		// 	binFolder,
+		// 	path.join(appFolder, 'resources', 'cli', 'tracky-mouse.sh')
+		// );
+		// const shCommand = `#!/bin/sh\r\n"$(dirname "$0")/${relativeShPath.replace(
+		// 	/\\/g,
+		// 	'/'
+		// )}" "$@"\r\necho`;
+		const shCommand = `#!/bin/sh\r\n"$(dirname "$0")/${relativeExePath.replace(
 			/\\/g,
 			'/'
 		)}" "$@"\r\necho`;
 
-		const apmCommandPath = path.join(binFolder, apmCmdName);
-		const relativeApmPath = path.relative(
-			binFolder,
-			path.join(process.resourcesPath, 'app', 'apm', 'bin', 'apm.cmd')
-		);
-		const apmCommand = `@echo off\r\n"%~dp0\\${relativeApmPath}" %*`;
-
-		const apmShCommandPath = path.join(binFolder, apmShName);
-		const relativeApmShPath = path.relative(
-			binFolder,
-			path.join(appFolder, 'resources', 'cli', 'apm.sh')
-		);
-		const apmShCommand = `#!/bin/sh\r\n"$(dirname "$0")/${relativeApmShPath.replace(
-			/\\/g,
-			'/'
-		)}" "$@"`;
-
-		fs.writeFile(atomCommandPath, atomCommand, () =>
-			fs.writeFile(atomShCommandPath, atomShCommand, () =>
-				fs.writeFile(apmCommandPath, apmCommand, () =>
-					fs.writeFile(apmShCommandPath, apmShCommand, () => callback())
-				)
-			)
+		fs.writeFile(cmdPath, command, () =>
+			fs.writeFile(shCommandPath, shCommand, () => callback())
 		);
 	};
 
@@ -128,7 +113,7 @@ const addCommandsToPath = callback => {
 	});
 };
 
-// Remove atom and apm from the PATH
+// Remove `tracky-mouse` from the `PATH`
 const removeCommandsFromPath = callback =>
 	WinPowerShell.getPath((error, pathEnv) => {
 		if (error != null) {
@@ -163,7 +148,7 @@ const updateShortcuts = callback => {
 		const desktopShortcutPath = path.join(
 			homeDirectory,
 			'Desktop',
-			`${getAppName()}.lnk`
+			`${app.getName()}.lnk`
 		);
 		// Check if the desktop shortcut has been previously deleted and
 		// and keep it deleted if it was
@@ -187,28 +172,28 @@ const removeShortcuts = callback =>
 
 exports.spawn = spawnUpdate;
 
-// Is the Update.exe installed with Atom?
+// Is the Update.exe installed with Tracky Mouse?
 exports.existsSync = () => fs.existsSync(updateDotExe);
 
-// Restart Atom using the version pointed to by the atom.cmd shim
-exports.restartAtom = () => {
+// Restart Tracky Mouse using the version pointed to by the tracky-mouse.cmd shim
+exports.restartTrackyMouse = () => {
 	let args;
-	const atomCmdName = execName.replace('.exe', '.cmd');
+	const cmdName = execName.replace('.exe', '.cmd');
 
-	if (global.atomApplication && global.atomApplication.lastFocusedWindow) {
-		const { projectPath } = global.atomApplication.lastFocusedWindow;
-		if (projectPath) args = [projectPath];
-	}
-	Spawner.spawn(path.join(binFolder, atomCmdName), args);
+	// if (global.atomApplication && global.atomApplication.lastFocusedWindow) {
+	// 	const { projectPath } = global.atomApplication.lastFocusedWindow;
+	// 	if (projectPath) args = [projectPath];
+	// }
+	Spawner.spawn(path.join(binFolder, cmdName), args);
 	app.quit();
 };
 
-const updateContextMenus = callback =>
-	WinShell.fileContextMenu.update(() =>
-		WinShell.folderContextMenu.update(() =>
-			WinShell.folderBackgroundContextMenu.update(() => callback())
-		)
-	);
+// const updateContextMenus = callback =>
+// 	WinShell.fileContextMenu.update(() =>
+// 		WinShell.folderContextMenu.update(() =>
+// 			WinShell.folderBackgroundContextMenu.update(() => callback())
+// 		)
+// 	);
 
 // Handle squirrel events denoted by --squirrel-* command line arguments.
 exports.handleStartupEvent = squirrelCommand => {
@@ -216,33 +201,36 @@ exports.handleStartupEvent = squirrelCommand => {
 		case '--squirrel-install':
 			createShortcuts(['Desktop', 'StartMenu'], () =>
 				addCommandsToPath(() =>
-					WinShell.fileHandler.register(() =>
-						updateContextMenus(() => app.quit())
-					)
+					app.quit()
+					// WinShell.fileHandler.register(() =>
+					// 	updateContextMenus(() => app.quit())
+					// )
 				)
 			);
 			return true;
 		case '--squirrel-updated':
 			updateShortcuts(() =>
 				addCommandsToPath(() =>
-					WinShell.fileHandler.update(() =>
-						updateContextMenus(() => app.quit())
-					)
+					app.quit()
+					// WinShell.fileHandler.update(() =>
+					// 	updateContextMenus(() => app.quit())
+					// )
 				)
 			);
 			return true;
 		case '--squirrel-uninstall':
 			removeShortcuts(() =>
 				removeCommandsFromPath(() =>
-					WinShell.fileHandler.deregister(() =>
-						WinShell.fileContextMenu.deregister(() =>
-							WinShell.folderContextMenu.deregister(() =>
-								WinShell.folderBackgroundContextMenu.deregister(() =>
-									app.quit()
-								)
-							)
-						)
-					)
+					app.quit()
+					// WinShell.fileHandler.deregister(() =>
+					// 	WinShell.fileContextMenu.deregister(() =>
+					// 		WinShell.folderContextMenu.deregister(() =>
+					// 			WinShell.folderBackgroundContextMenu.deregister(() =>
+					// 				app.quit()
+					// 			)
+					// 		)
+					// 	)
+					// )
 				)
 			);
 			return true;

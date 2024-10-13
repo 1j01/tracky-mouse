@@ -70,7 +70,7 @@ parser.add_argument("--squirrel-firstrun", {
 	action: "store_true",
 });
 
-// Other Squirrel.Windows event argument are CURRENTLY handled separately in electron-main.js, but could make use of the argparse CLI...
+// Other Squirrel.Windows event arguments are currently handled separately in squirrel-update.js, but could make use of the argparse CLI, alternatively.
 
 // parser.add_argument("--squirrel-uninstall", {
 // 	help: SUPPRESS,

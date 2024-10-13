@@ -4,37 +4,14 @@
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
-const { spawn } = require('child_process');
+const { handleStartupEvent } = require('./squirrel-update.js');
 
 // TODO: is there any merit to app.quit when there are no windows open?
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-
-function runUpdateExe(args, done) {
-	const updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe');
-	// console.log(`Spawning "${updateExe}" with args`, args);
-	spawn(updateExe, args, {
-		detached: true
-	}).on('close', done);
-};
-
+// Handle installing/uninstalling shortcuts and the CLI's PATH modification on Windows.
 if (process.platform === 'win32') {
-	const flag = process.argv[1];
-	// console.log(`processing squirrel command: "${cmd}"`);
-	const target = path.basename(process.execPath);
-
-	if (flag === '--squirrel-install' || flag === '--squirrel-updated') {
-		runUpdateExe([`--createShortcut=${target}`], app.quit);
-		// TODO: add exe to PATH
-		return;
-	}
-	if (flag === '--squirrel-uninstall') {
-		runUpdateExe([`--removeShortcut=${target}`], app.quit);
-		// TODO: remove exe from PATH
-		return;
-	}
-	if (flag === '--squirrel-obsolete') {
-		app.quit();
+	const possibleSquirrelEventFlag = process.argv[1];
+	if (handleStartupEvent(possibleSquirrelEventFlag)) {
 		return;
 	}
 }
