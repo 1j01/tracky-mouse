@@ -30,12 +30,11 @@ const argsArray = process.argv.slice(isPackaged ? 1 : 2);
 const args = parser.parse_args(argsArray);
 
 // After argument parsing that may have exited the app, handle single instance behavior.
-// In other words, the priority is:
-// - Squirrel event arguments (other than `--squirrel-firstrun`) which exit the app
-// - `--help` or `--version` which print a message and exit the app
-// - Opening an existing instance and exiting the app, forwarding arguments to the existing instance
-// (If it quit because there was an existing instance before handling `--help`,
-// you wouldn't get any help at the command line if the app was running.)
+// Electron provides a way to communicate between instances of the app,
+// using a lock file to determine if the process is the primary instance.
+// However, it only provides communication in one direction
+// (from the second instance to the primary instance, via the "second-instance" event),
+// so we have to implement communication the other way ourselves.
 
 // This is used to communicate the output of a CLI command from the existing instance to the new instance.
 // Could use an in-memory pipe, or HTTP, but this may be the simplest way.
