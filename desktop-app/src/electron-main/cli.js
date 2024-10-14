@@ -4,14 +4,19 @@ const parser = new ArgumentParser({
 	prog: "tracky-mouse",
 	description: "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly.",
 	// 	epilog: `Configuration Options (for use with --set, --adjust, and --get):
-	// - "startEnabled" controls whether head tracking is enabled when the app starts. default: false
-	// - "runAtLogin" controls whether the app starts when you log in. default: false
-	// - "swapMouseButtons" swaps the left and right mouse buttons. Should be synced with the system setting in order for the dwell clicker to trigger primary clicks. default: false
-	// - "mirrorCameraView" mirrors the camera view horizontally. default: true
-	// - "headTrackingSensitivityX" controls how much the mouse moves horizontally in response to head movement. default: ?
-	// - "headTrackingSensitivityY" controls how much the mouse moves vertically in response to head movement. default: ?
-	// - "headTrackingAcceleration" controls smoothness of mouse movement; 0 is linear, 1 is smoothest. default: ?
-	// - "dwellTime" controls how long the mouse must be over a point before a click is registered. default: ?
+	// - "startEnabled"              default: false  controls whether head tracking is enabled when the app starts.
+	// - "runAtLogin"                default: false  controls whether the app starts when you log in.
+	// - "swapMouseButtons"          default: false  swaps the left and right mouse buttons. Should be synced with the system setting in order for the dwell clicker to trigger primary clicks.
+	// - "mirrorCameraView"          default: true   mirrors the camera view horizontally.
+	// - "headTrackingSensitivityX"  default: 0.025  controls how much the mouse moves horizontally in response to head movement.
+	// - "headTrackingSensitivityY"  default: 0.050  controls how much the mouse moves vertically in response to head movement.
+	// - "headTrackingAcceleration"  default: 0.5    controls smoothness of mouse movement; 0 is linear, 1 is smoothest.
+	// - "dwellTime"                 default: 0.5    controls how long the mouse must be over a point before a click is registered.
+	// - "restOnStartup"             default: 1500   non-clicking period after starting the app
+	// - "restOnRelease"             default: 1000   non-clicking period after click or release of a drag (from dwell clicker or otherwise)
+	// - "restOnWithdrawal"          default: ?      non-clicking period after dwell click is canceled by moving away from the target
+	// - "restOnOcclusion"           default: 1000   non-clicking period after a dwell click is canceled due something popping up in front, or existing in front at the center of, the target
+	// - "restOnAppSwitch"           default: 1000   non-clicking period after switching to a different app
 	// `,
 	// Without this, the epilog's line breaks are ignored!
 	// However, this might not be a good general solution, since it could break the formatting of other help text.
