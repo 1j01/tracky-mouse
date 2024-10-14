@@ -14,7 +14,7 @@ const aboutItem = {
 	click: async () => {
 		const openAboutWindow = require('about-window').default;
 		openAboutWindow({
-			icon_path: join(__dirname, '../images/tracky-mouse-logo-512.png'),
+			icon_path: join(__dirname, '../../images/tracky-mouse-logo-512.png'),
 			bug_report_url: 'https://github.com/1j01/tracky-mouse/issues',
 			homepage: 'https://trackymouse.js.org',
 			description: 'Control your computer with your webcam.',

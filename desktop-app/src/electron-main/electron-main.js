@@ -353,7 +353,7 @@ const createWindow = () => {
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
 		},
-		icon: `${__dirname}/../images/tracky-mouse-logo-512.png`,
+		icon: `${__dirname}/../../images/tracky-mouse-logo-512.png`,
 	});
 
 	// and load the html page of the app.
