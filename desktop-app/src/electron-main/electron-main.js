@@ -56,9 +56,24 @@ const gotSingleInstanceLock = app.requestSingleInstanceLock({
 if (!gotSingleInstanceLock) {
 	// console.log("Already running. Opening in existing instance.");
 
+	if (args.version) {
+		// Special handling for --version: show versions of both instances.
+		// TODO: might want to ditch the streaming below and read the whole file in order to COMPARE the versions,
+		// and only show the version of the existing instance if it's different.
+		// Or to format it differently. Right now it's constrained to outputting the existing instance as the last line.
+		// Alternatively, I could pass the version into requestSingleInstanceLock (only if --version is passed, since it requires executing a git command),
+		// and format the output in the existing instance's "second-instance" handler.
+		// That would probably be cleaner, although it would be worse for error handling.
+		console.log("CLI version:", getVersion());
+		process.stdout.write("Running app's version: "); // avoid newline which would be added by console.log
+	}
+
 	// Proxy the output from the existing instance to the CLI command.
 	(async () => {
 		setTimeout(() => {
+			if (args.version) {
+				console.log("unknown");
+			}
 			console.error("Timed out waiting for file to exist:", tempFilePath);
 			console.error("The already-running app is meant to write to this file with the output for the CLI command.");
 			console.error("However, the app may have crashed or hung, or there may be a bug in the communication code.");
@@ -109,7 +124,7 @@ if (!gotSingleInstanceLock) {
 	// See handler below.
 }
 
-// Special handling for --version
+// Handle --version in the basic case where the app is not already running.
 if (args.version) {
 	console.log(getVersion());
 	app.quit();
@@ -685,6 +700,12 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 		}
 		if (args.set || args.adjust || args.get || args.profile) {
 			logToCLI("Arguments not supported yet. CLI is a work in progress.");
+			return;
+		}
+		if (args.version) {
+			// This is special-cased to show both the CLI and running app versions.
+			// The output from here is combined on the CLI's side.
+			logToCLI(getVersion());
 			return;
 		}
 		// logToCLI("No arguments recognized.");
