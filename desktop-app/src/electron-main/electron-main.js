@@ -103,9 +103,34 @@ if (!gotSingleInstanceLock) {
 	//   [52128:0304/194956.189:ERROR:shader_disk_cache.cc(613)] Shader Cache Creation failed: -2
 	return;
 } else {
-	console.log("Got single instance lock.");
+	// console.log("Got single instance lock.");
 	// When a second instance is opened, the "second-instance" event will be emitted in the this instance.
 	// See handler below.
+}
+
+// Special handling for --version
+if (args.version) {
+
+	const isGitRepo = require('fs').existsSync(__dirname + "/../../../.git");
+
+	let version = require("../../package.json").version;
+	if (isGitRepo) {
+		const { execSync } = require('child_process');
+		try {
+			const describeOutput = execSync('git describe --tags', { cwd: __dirname }).toString().trim();
+			version = "development " + describeOutput;
+		} catch (_error) {
+			// Stderr is already printed to the console by default (configurable with `stdio` option).
+			// The error object might give a little more info, like the exit code, but it also gives a lot of noise.
+			// Could refine this by silencing stderr and printing a nicer error message containing the stderr output, the command, and maybe the exit code.
+			// (error.stderr.toString() and error.status can be used for that)
+			// console.error("Failed to get `git describe --tags` output:", error);
+		}
+	}
+
+	console.log(version);
+	app.quit();
+	return;
 }
 
 // Exit for arguments that are not supported when the app is not already running.

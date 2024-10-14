@@ -58,8 +58,10 @@ parser.add_argument("--stop", {
 });
 
 parser.add_argument("-v", "--version", {
-	action: "version",
-	version: require("../../package.json").version,
+	// action: "version",
+	// version: require("../../package.json").version,
+	help: "Show the version number.",
+	action: "store_true",
 });
 
 // Squirrel.Windows passes "--squirrel-firstrun" when the app is first run after being installed.
