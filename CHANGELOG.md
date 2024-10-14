@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Desktop app now remembers the window size and position.
 - Desktop app lets you regain manual control by simply moving the mouse, pausing temporarily, and resuming when you stop moving the mouse.
 - Friendly error handling for different camera access failure scenarios.
+- Command line interface to control the desktop app, supporting `--start` and `--stop` to toggle head tracking.
 - API documentation.
 - Website at [TrackyMouse.js.org](https://trackymouse.js.org/).
 - Parameter validation.
