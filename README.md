@@ -112,7 +112,9 @@ For the website:
 For the desktop app:
 - Run `npm run in-desktop-app -- npm install` to install dependencies.
 - Run `npm run desktop-app` to start the app.
-- Run `npm run desktop-app -- -- -- --help` to test the `tracky-mouse` CLI. (Yes it's a lot of dashes. It's going through npm, then npm within a subfolder, and then Electron Forge. Each tool has its own `--help` flag, but supports `--` to pass flags on to the next tool. Could simplify this using npm's `bin` field in `package.json`...)
+- To test the CLI, run `npx tracky-mouse --help`.
+  - Alternatively, run `npm link` to make `tracky-mouse` available globally, but note that it may conflict with the installed app.
+  - Those options skip Electron Forge currently. To test the CLI through Electron Forge, run `npm run desktop-app -- -- -- --help` (Yes it's a lot of dashes. It's going through npm, then npm within a subfolder, and then Electron Forge. Each tool has its own `--help` flag, but supports `--` to pass on any following arguments as-is.)
 - Run `npm run in-desktop-app -- npm run make` to build the app for distribution. Look in the `desktop-app/out/` directory for build artifacts.
 
 (The core library doesn't currently use `npm` for dependencies. It has dependencies stored in the `core/lib` directory. And it doesn't have any npm scripts.)

@@ -54,6 +54,7 @@ module.exports = [
 	},
 	{
 		"files": [
+			"desktop-app/src/tracky-mouse-bin.js",
 			"desktop-app/src/electron-main/*",
 			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",

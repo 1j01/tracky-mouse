@@ -18,6 +18,9 @@
 		"lint-eslint": "eslint .",
 		"lint": "npm-run-all --continue-on-error --serial lint-*"
 	},
+	"bin": {
+		"tracky-mouse": "desktop-app/src/tracky-mouse-bin.js"
+	},
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
 		"@types/eslint": "^8.56.9",
