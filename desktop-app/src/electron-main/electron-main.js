@@ -665,7 +665,16 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 	}
 	if (args.set || args.adjust || args.get || args.profile) {
 		outputToCLI("Arguments not supported yet. CLI is a work in progress.");
+		return;
 	}
+	// outputToCLI("No arguments recognized.");
+	outputToCLI("Happy birthday!"); // just in case
+
+	// Note: outputToCLI has to be called exactly once.
+	// If it's not called, the CLI command will show a timeout error message.
+	// If it's called multiple times, only one output will be shown, or there might be an error renaming the file.
+	// TODO: structure the code in a safer way, perhaps with a function that appends to a string outside its scope,
+	// so it can support multiple outputs, and return in multiple places. Then outputToCLI can be called after the new function.
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
