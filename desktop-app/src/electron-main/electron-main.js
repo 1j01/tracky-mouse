@@ -99,10 +99,12 @@ if (!gotSingleInstanceLock) {
 		const stream = require('fs').createReadStream(tempFilePath);
 		stream.pipe(process.stdout);
 		stream.on('close', () => {
-			// TODO: clean up temp file (here would be fine if everything went well, but only if.)
-			// Might want to clean up all temp files on startup once the single instance lock is acquired.
-			// Alternatively (and preferably), could switch to a more inherently ephemeral communication method.
-			app.quit();
+			// Extra temp files will also be cleaned up on app startup, in case something goes wrong here.
+			fs.unlink(tempFilePath).catch((error) => {
+				console.error("Error deleting temp file:", error);
+			}).finally(() => {
+				app.quit();
+			});
 		});
 		stream.on('error', (error) => {
 			console.error("file stream error:", error);
@@ -123,6 +125,22 @@ if (!gotSingleInstanceLock) {
 	// When a second instance is opened, the "second-instance" event will be emitted in the this instance.
 	// See handler below.
 }
+
+// Clean up temp files from previous runs.
+// Only do this if the lock is acquired, so that multiple "second instances" can be handled in parallel, theoretically.
+// (Otherwise one instance could delete the file before another instance reads it.)
+// TODO: switch to a more inherently ephemeral communication method, like a pipe or a socket.
+(async () => {
+	try {
+		for (const file of await fs.readdir(app.getPath('temp'))) {
+			if (file.startsWith("tracky-mouse-cli-output-")) {
+				await fs.unlink(path.join(app.getPath('temp'), file));
+			}
+		}
+	} catch (error) {
+		console.error("Error during temp file cleanup:", error);
+	}
+})();
 
 // Handle --version in the basic case where the app is not already running.
 if (args.version) {
