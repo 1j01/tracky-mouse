@@ -83,7 +83,6 @@ if (!gotSingleInstanceLock) {
 		const stream = require('fs').createReadStream(tempFilePath);
 		stream.pipe(process.stdout);
 		stream.on('close', () => {
-			console.log(""); // newline
 			// TODO: clean up temp file (here would be fine if everything went well, but only if.)
 			// Might want to clean up all temp files on startup once the single instance lock is acquired.
 			// Alternatively (and preferably), could switch to a more inherently ephemeral communication method.
@@ -569,11 +568,13 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 	// Unfortunately, it turns out `additionalData` is buggy too, and becomes null under some obscure conditions.
 	// See https://github.com/electron/electron/issues/40615
 	if (!additionalData) {
+		// I would move this into `handleSecondInstance` and use `logToCLI`, but it won't work because `additionalData` is null.
+		// logToCLI(`Command line arguments were not received by the already-running application. They are meant to be passed via additionalData, however due to a bug in Electron, additionalData === ${additionalData}. See https://github.com/electron/electron/issues/40615`);
 		console.log(`second-instance: additionalData === ${additionalData}. See https://github.com/electron/electron/issues/40615`);
 		return;
 	}
 
-	function outputToCLI(output) {
+	function deliverOutputToCLI(output) {
 		console.log("second-instance: Outputting to CLI:", output);
 
 		// Basic implementation
@@ -620,61 +621,70 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 		// }, 20000);
 	}
 
-	const argv = additionalData.arguments;
-	if (argv.length === 0) {
-		// TODO: DRY with `activate` event handler?
-		if (BrowserWindow.getAllWindows().length === 0) {
-			outputToCLI("Opening new app window in already-running application.");
-			createWindow();
-		} else if (appWindow) {
-			outputToCLI("Focusing the existing app window.");
-			if (appWindow.isMinimized()) {
-				appWindow.restore();
-			}
-			appWindow.show();
-		}
-		return;
-	}
-
-	const args = parser.parse_args(argv);
-	console.log("second-instance: parsed args:", args);
-	// if (args.profile) {
-	// 	const filePath = path.resolve(workingDirectory, args.profile[0]);
-	// 	console.log("second-instance: Opening settings profile:", filePath);
-	// }
-	if (args.start || args.stop) {
-		if (!!args.start === !!args.stop) {
-			outputToCLI("Exactly one of --start or --stop must be provided.");
-			return;
-		}
-		if (!appWindow) {
-			// TODO: create window if it doesn't exist (like `activate`) and make sure to start enabled
-			// (but don't need to open the app for --stop)
-			// (and don't focus the window if it's already open)
-			outputToCLI("The app window is not open.");
-			return;
-		}
-		// TODO: differentiate between --start and --stop
-		if (enabled !== !!args.start) {
-			appWindow.webContents.send("shortcut", "toggle-tracking");
-			outputToCLI(`Toggled head tracking to ${enabled ? "off" : "on"}.`);
-			return;
-		}
-		outputToCLI(`Head tracking is already ${enabled ? "on" : "off"}.`);
-		return;
-	}
-	if (args.set || args.adjust || args.get || args.profile) {
-		outputToCLI("Arguments not supported yet. CLI is a work in progress.");
-		return;
-	}
-	// outputToCLI("No arguments recognized.");
-	outputToCLI("Happy birthday!"); // just in case
-
-	// Note: outputToCLI has to be called exactly once.
+	// `deliverOutputToCLI` has to be called exactly once.
 	// If it's not called, the CLI command will show a timeout error message.
 	// If it's called multiple times, only one output will be shown, or there might be an error renaming the file.
-	// TODO: structure the code in a safer way, perhaps with a function that appends to a string outside its scope,
-	// so it can support multiple outputs, and return in multiple places. Then outputToCLI can be called after the new function.
+	// In order to allow many return paths in this logic, without requiring a function call before each return,
+	// use an inner function (`handleSecondInstance`), and call `deliverOutputToCLI` at the end of the outer function.
+	let output = "";
+	function logToCLI(message) {
+		output += message + "\n";
+		// console.log(message);
+	}
+	function handleSecondInstance() {
+		const argv = additionalData.arguments;
+		if (argv.length === 0) {
+			// TODO: DRY with `activate` event handler?
+			if (BrowserWindow.getAllWindows().length === 0) {
+				logToCLI("Opening new app window in already-running application.");
+				createWindow();
+			} else if (appWindow) {
+				logToCLI("Focusing the existing app window.");
+				if (appWindow.isMinimized()) {
+					appWindow.restore();
+				}
+				appWindow.show();
+			}
+			return;
+		}
+
+		const args = parser.parse_args(argv);
+		console.log("second-instance: parsed args:", args);
+		// if (args.profile) {
+		// 	const filePath = path.resolve(workingDirectory, args.profile[0]);
+		// 	console.log("second-instance: Opening settings profile:", filePath);
+		// }
+		if (args.start || args.stop) {
+			if (!!args.start === !!args.stop) {
+				logToCLI("Exactly one of --start or --stop must be provided.");
+				return;
+			}
+			if (!appWindow) {
+				// TODO: create window if it doesn't exist (like `activate`) and make sure to start enabled
+				// (but don't need to open the app for --stop)
+				// (and don't focus the window if it's already open)
+				logToCLI("The app window is not open.");
+				return;
+			}
+			// TODO: differentiate between --start and --stop
+			if (enabled !== !!args.start) {
+				appWindow.webContents.send("shortcut", "toggle-tracking");
+				logToCLI(`Toggled head tracking to ${enabled ? "off" : "on"}.`);
+				return;
+			}
+			logToCLI(`Head tracking is already ${enabled ? "on" : "off"}.`);
+			return;
+		}
+		if (args.set || args.adjust || args.get || args.profile) {
+			logToCLI("Arguments not supported yet. CLI is a work in progress.");
+			return;
+		}
+		// logToCLI("No arguments recognized.");
+		logToCLI("Happy birthday!"); // just in case
+	}
+
+	handleSecondInstance();
+	deliverOutputToCLI(output);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
