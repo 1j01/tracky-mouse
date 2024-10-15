@@ -144,7 +144,7 @@ Tracky Mouse is available on npm:
 npm install tracky-mouse
 ```
 
-Read the [API documentation](./API.md) for more information.
+Read the [API documentation](./core/README.md) for more information.
 
 ## Changelog
 

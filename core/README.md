@@ -9,6 +9,8 @@ It includes a full user interface with a webcam view and settings, and the API l
 The dwell clicker can also work independently of the head tracking, for use with external pointing devices, including eye trackers (which require similar UI concerns), and the Tracky Mouse desktop app, which can control your computer's mouse.
 With the desktop app (also open source), users will be able to seamlessly upgrade to full computer control, without learning a new UI.
 
+[✨👉 **Demo and more information on the Tracky Mouse website** 👈✨](https://trackymouse.js.org/)
+
 ## Installation
 
 ```bash
@@ -271,4 +273,12 @@ This stops the dwell clicker.
 
 ## Changelog
 
-For release notes, see [CHANGELOG.md](CHANGELOG.md)
+For release notes, see [CHANGELOG.md](https://github.com/1j01/tracky-mouse/blob/main/CHANGELOG.md)
+
+## License
+
+[MIT License](https://github.com/1j01/tracky-mouse/blob/main/LICENSE.txt)
+
+## Development
+
+See [Development Setup](https://github.com/1j01/tracky-mouse#development-setup) in the main README.
