@@ -130,6 +130,69 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 - Run `npm run lint` to check for spelling and code issues.
 - There are no tests yet.
 
+## Release Process
+
+This is a first draft of a release process.
+
+> Hm, the version numbers need to be updated for the desktop app build (for the about window and `--version` flag to make sense), but it seems a little awkward to have to bump the version numbers on all the operating systems. Should I separate committing the bump from pushing, and push to a branch first, in order to pull on the other systems with the bump? Is that even easier?  
+> I guess it comes down to wanting to test the desktop app on all systems.  
+> But maybe I should just hope for the best, and rely on patch releases if there are issues.  
+
+Run quality assurance checks:
+```sh
+npm run lint
+```
+
+Bump package versions.
+```sh
+# Assuming bash or similar shell syntax
+# TODO: automate this in a cross-platform way
+VERSION=1.1.0
+npm run in-core -- npm version $VERSION --no-git-tag-version
+npm run in-website -- npm version $VERSION --no-git-tag-version
+npm run in-desktop-app -- npm version $VERSION --no-git-tag-version
+npm version $VERSION --no-git-tag-version
+```
+
+Update the changelog.  
+In CHANGELOG.md, first make sure all important changes are noted.  
+Then add a new heading below "Unreleased" with the new version number and date, and update links defined at the bottom which are used for version comparison.  
+Add "No changes here yet." below the "Unreleased" heading so that it doesn't appear to apply to the new version.
+
+Build the desktop app (this must be done after updating the version number, but should be done before publishing the library to npm in case any issues come up):
+```sh
+# This step should be run on all supported platforms
+npm run in-desktop-app -- npm run make
+```
+
+Install and test the installed desktop app.
+
+Then commit the changes, tag the commit, and push:
+```sh
+git add .
+git commit -m "Release $VERSION"
+git tag v$VERSION
+git push
+git push origin tag v$VERSION
+```
+
+Publish the library to npm:
+```sh
+npm run in-core -- npm publish
+```
+
+Deploy the website (this may be done at any time, but it's good to do it with a release):
+```sh
+npm run in-website -- npm run deploy
+```
+
+Create a GitHub release, automatically uploading the desktop app distributable files:
+```sh
+# This step should be run on all supported platforms
+npm run in-desktop-app -- npm run publish
+```
+
+
 ## Install Desktop App
 
 The app is not yet distributed as precompiled binaries.
