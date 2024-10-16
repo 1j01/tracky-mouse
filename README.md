@@ -16,6 +16,30 @@ Options could be exported/imported or even synced between the products.
 
 [✨👉 **Try out the Demo!** 👈✨](https://trackymouse.js.org/)
 
+## Install Desktop App
+
+The app is not yet distributed as precompiled binaries.
+If you want to try out the desktop app in the meantime:
+
+See [Development Setup](#development-setup).
+
+## Add to your project
+
+Tracky Mouse is available on npm:
+```sh
+npm install tracky-mouse
+```
+
+Read the [API documentation](./core/README.md) for more information.
+
+## License
+
+MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for project history and API changes.
+
 ## Why did I make this?
 
 Someone emailed me asking about how they might adjust the UI of [JS Paint](https://jspaint.app/) to work with eye tracking (enlarging the color palette, hiding other UI elements, etc.)
@@ -28,7 +52,16 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 - I want people to be able to try JS Paint's Eye Gaze Mode out easily, and an embeddable facial mouse GUI would be great for that.
 - Sometimes my joints hurt a lot and I'd like to relieve strain by switching to an alternative input method, such as head movement. Although I also have serious neck problems, so I don't know what I was thinking. Working on this project I have to use it very sparingly, using a demo video instead of camera input whenever possible for testing.
 
-## Libraries Used
+## Software Architecture
+
+This is a monorepo containing packages for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
+
+
+I tried npm workspaces, but it doesn't work with Electron Forge packaging. See [electron/forge#2306](https://github.com/electron/forge/issues/2306).
+
+### Core
+
+The core library uses the following third-party libraries:
 
 - [jsfeat](https://github.com/inspirit/jsfeat) for point tracking
 	- [MIT License](https://github.com/inspirit/jsfeat/blob/master/LICENSE)
@@ -38,12 +71,12 @@ To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers ar
 	- [tfjs-models: Apache License 2.0](https://github.com/tensorflow/tfjs-models/blob/master/LICENSE)
 	- [TensorFlow: Apache License 2.0](https://github.com/tensorflow/tensorflow/blob/master/LICENSE)
 
-## Software Architecture
 
-This is a monorepo containing packages for the library (`core`), the desktop app (`desktop-app`), and the website (`website`).
+To avoid the need for `unsafe-eval` in the Content Security Policy, I had to eliminate the use of `eval` (and `Function` construction) in `clmtrackr.js`.
 
-
-I tried npm workspaces, but it doesn't work with Electron Forge packaging. See [electron/forge#2306](https://github.com/electron/forge/issues/2306).
+The file [no-eval.js](./core/lib/no-eval.js) overrides `eval` with a function that handles the specific cases of `eval` usage in `clmtrackr.js`.
+I made a tool to generate this file by running `clmtrackr.js` while instrumenting `eval` to collect the code it tries to evaluate.
+This tool is located in [eval-is-evil.html](./website/eval-is-evil.html).
 
 ### Website
 
@@ -92,10 +125,6 @@ Oh also I made a big, screen-sized, **invisible button**, so that the dwell clic
 The architecture for normal usage of the library is much simpler.
 
 Ooh, but the diagram for the desktop app interacting with web pages (including pages using the library) through the browser extension would be interesting. That's all theoretical for now though.
-
-## License
-
-MIT-licensed, see [LICENSE.txt](./LICENSE.txt)
 
 ## Development Setup
 
@@ -191,25 +220,4 @@ Create a GitHub release, automatically uploading the desktop app distributable f
 # This step should be run on all supported platforms
 npm run in-desktop-app -- npm run publish
 ```
-
-
-## Install Desktop App
-
-The app is not yet distributed as precompiled binaries.
-If you want to try out the desktop app in the meantime:
-
-See [Development Setup](#development-setup).
-
-## Add to your project
-
-Tracky Mouse is available on npm:
-```sh
-npm install tracky-mouse
-```
-
-Read the [API documentation](./core/README.md) for more information.
-
-## Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for project history and API changes.
 
