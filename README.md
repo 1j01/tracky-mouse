@@ -172,6 +172,11 @@ Run quality assurance checks:
 npm run lint
 ```
 
+Update CLI docs:
+```sh
+npm run update-cli-docs
+```
+
 Bump package versions.
 ```sh
 # Assuming bash or similar shell syntax

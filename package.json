@@ -16,7 +16,8 @@
 		"in-core": "cd core &&",
 		"lint-cspell": "cspell-cli lint .",
 		"lint-eslint": "eslint .",
-		"lint": "npm-run-all --continue-on-error --serial lint-*"
+		"lint": "npm-run-all --continue-on-error --serial lint-*",
+		"update-cli-docs": "node -e \"const fs = require('fs'); fs.writeFileSync('CLI.md', fs.readFileSync('CLI.md', 'utf8').replace(/```HELP_OUTPUT.+```/s, '```HELP_OUTPUT\\n' + require('child_process').execSync('tracky-mouse --help').toString().trim() + '\\n```'))\""
 	},
 	"bin": {
 		"tracky-mouse": "desktop-app/src/tracky-mouse-bin.js"
