@@ -6,7 +6,18 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global.clm = factory());
-}(this, (function () { 'use strict';
+}(this, (function () {
+
+// PATCHED IN (or, rather, PATCHED OUT)
+// Can't use strict mode because the identifier `eval` is assigned to.
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#syntax_errors
+// 'use strict';
+
+// PATCHED IN
+// See eval-is-evil.html which generates no-eval.js
+// These replacements allow the code to work without eval.
+const { eval, Function } = globalThis.ClmtrackrAntiEval ?? globalThis;
+
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
