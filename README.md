@@ -23,6 +23,36 @@ If you want to try out the desktop app in the meantime:
 
 See [Development Setup](#development-setup).
 
+## Usage Guide
+
+These instructions apply to using the desktop app or the web UI.
+
+### Set up your camera and environment:
+- Make sure to have good lighting on your face. Placing a lamp beside your monitor can help a lot!
+- Back-lighting can be problematic, especially if your head moves in and out from occluding the light during use.
+- Your webcam should be centered in front of your head, with your head fully visible when sitting comfortably.
+
+### Start using Tracky Mouse:
+- Press the "Start" button to start moving the mouse and clicking. You can also use the keyboard shortcut <kbd>F9</kbd>. When using the desktop app, this shortcut works even when the app is not in focus.
+- Dwell in one spot to click. To avoid clicking, you have to keep moving your head, or pause the app with <kbd>F9</kbd>.
+
+### General usage tips:
+- Adjust the settings until you can comfortably move the mouse to the edges of the screen with some accuracy.
+- If the mouse cursor feels off-center, you can recalibrate by simply moving your head past where the cursor meets the edge of the screen.
+- Note that not only rotating your head, but translating your head (moving it left/right, up/down, or forward/backward) moves the mouse.
+  - One nuance to this is, if the camera is positioned above your head, leaning forward generally moves the pointer down, whereas if the camera is below your head, leaning forward generally moves the pointer up.
+
+### Troubleshooting:
+- If the camera feed appears black, make sure there is no privacy/dust cover on the camera, and ensure there's enough light. Check the camera in another application to make sure it's working.
+- If the camera can't be accessed at all, make sure it's not being used by another application, then click "Allow Camera Access" in the app. Also try unplugging the camera and plugging it in again (if it's an external camera), or restarting your computer.
+  - On Linux: Installing (and maybe running?) `guvcview` can magically fix a webcam not showing up. ([source](https://forums.linuxmint.com/viewtopic.php?t=131011))
+- Auto-focus and auto-brightness can cause head tracking disruptions. Consider disabling auto-focus on your camera, and adjusting focus manually. If you disable auto-brightness, you will have to adjust the brightness regularly as the lighting changes, at least assuming you have any natural light in the room.
+- If you have multiple cameras, the app does not yet support selecting a camera, so you'll have to disable the other cameras in your system settings (or unplug them, if they're external) in order to target the desired camera.
+
+### Integrating with external software
+There is also a command-line interface (CLI) for controlling the desktop app, which can be used to control Tracky Mouse with a voice command system or other external program. See [CLI docs](./CLI.md) for usage.
+
+
 ## Add to your project
 
 Tracky Mouse is available on npm:
