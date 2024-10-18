@@ -50,7 +50,7 @@ These instructions apply to using the desktop app or the web UI.
 - If you have multiple cameras, the app does not yet support selecting a camera, so you'll have to disable the other cameras in your system settings (or unplug them, if they're external) in order to target the desired camera.
 
 ### Integrating with external software
-There is also a command-line interface (CLI) for controlling the desktop app, which can be used to control Tracky Mouse with a voice command system or other external program. See [CLI docs](./CLI.md) for usage.
+Track Mouse comes with a command-line interface (CLI) which can be used to control the desktop app with a voice command system or other external programs. See [CLI documentation](./CLI.md) for usage.
 
 
 ## Add to your project
