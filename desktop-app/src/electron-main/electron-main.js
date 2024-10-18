@@ -8,6 +8,10 @@ const { handleStartupEvent } = require('./squirrel-update.js');
 
 // TODO: is there any merit to app.quit when there are no windows open?
 
+// Needed for run-at-login on Windows. This is used as the registry key name.
+// Needs to be set early since `setLoginItemSettings` is used in the `--squirrel-uninstall` handler.
+app.setAppUserModelId("io.isaiahodhner.tracky-mouse");
+
 // Handle installing/uninstalling shortcuts and the CLI's PATH modification on Windows.
 if (process.platform === 'win32') {
 	const possibleSquirrelEventFlag = process.argv[1];
@@ -176,9 +180,6 @@ require("./menus.js"); //({ loadSettings });
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
-
-// Needed for run-at-login on Windows. This is used as the registry key name.
-app.setAppUserModelId("io.isaiahodhner.tracky-mouse");
 
 // Settings
 // (actual defaults come from the HTML template)

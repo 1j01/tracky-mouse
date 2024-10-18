@@ -219,6 +219,7 @@ exports.handleStartupEvent = squirrelCommand => {
 			);
 			return true;
 		case '--squirrel-uninstall':
+			app.setLoginItemSettings({ openAtLogin: false });
 			removeShortcuts(() =>
 				removeCommandsFromPath(() =>
 					app.quit()
