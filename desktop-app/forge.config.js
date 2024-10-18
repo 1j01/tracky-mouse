@@ -80,7 +80,7 @@ module.exports = {
 					owner: '1j01',
 					name: 'tracky-mouse'
 				},
-				prerelease: true,
+				prerelease: false,
 				draft: true,
 			}
 		}

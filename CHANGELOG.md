@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [1.1.0] - 2024-10-20
+
 ### Added
 - Start/stop button. This toggles head tracking, and, in the desktop app, dwell clicking as well. In the web library, dwell clicking is set up separately, and is not currently controlled by this button (or the keyboard shortcut F9).
 - Desktop app now supports dwell clicking. This means you can use Tracky Mouse with lots of software not designed with head tracking in mind. I just played a game of Mahjongg, and it worked well.
@@ -49,6 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v1.0.0...HEAD
-<!-- [1.1.0]: https://github.com/1j01/tracky-mouse/compare/v1.0.0...v1.1.0 -->
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/1j01/tracky-mouse/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/1j01/tracky-mouse/releases/tag/v1.0.0
