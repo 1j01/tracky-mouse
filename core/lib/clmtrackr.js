@@ -8,6 +8,18 @@
 	(global.clm = factory());
 }(this, (function () { 'use strict';
 
+// PATCHED IN
+// See eval-is-evil.html which generates no-eval.js
+// These replacements allow the code to work without eval.
+// Have to rename `eval` because in strict mode it's a syntax error to assign to the name "eval"
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#syntax_errors
+// (I would call it "evalSafe" except it's falling back to the regular `eval`.)
+// (Or I might remove 'use strict' except for the fact that strict mode
+// affects semantics of `this` and other things in subtle ways,
+// and may cause bugs that are hard to track down if the whole library was
+// built and tested using strict mode.)
+const { eval: evalFn, Function } = globalThis.ClmtrackrAntiEval ?? globalThis;
+
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 
@@ -2034,11 +2046,12 @@ numeric.ccsbinop = function ccsbinop(body,setup) {
 (function() {
     var k,A,B,C;
     for(k in numeric.ops2) {
-        if(isFinite(eval('1'+numeric.ops2[k]+'0'))) A = '[Y[0],Y[1],numeric.'+k+'(X,Y[2])]';
+        // PATCHED IN: changed "eval" to "evalFn" (renamed to avoid needing to remove 'use strict'; see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#syntax_errors)
+        if(isFinite(evalFn('1'+numeric.ops2[k]+'0'))) A = '[Y[0],Y[1],numeric.'+k+'(X,Y[2])]';
         else A = 'NaN';
-        if(isFinite(eval('0'+numeric.ops2[k]+'1'))) B = '[X[0],X[1],numeric.'+k+'(X[2],Y)]';
+        if(isFinite(evalFn('0'+numeric.ops2[k]+'1'))) B = '[X[0],X[1],numeric.'+k+'(X[2],Y)]';
         else B = 'NaN';
-        if(isFinite(eval('1'+numeric.ops2[k]+'0')) && isFinite(eval('0'+numeric.ops2[k]+'1'))) C = 'numeric.ccs'+k+'MM(X,Y)';
+        if(isFinite(evalFn('1'+numeric.ops2[k]+'0')) && isFinite(evalFn('0'+numeric.ops2[k]+'1'))) C = 'numeric.ccs'+k+'MM(X,Y)';
         else C = 'NaN';
         numeric['ccs'+k+'MM'] = numeric.ccsbinop('zk = xk '+numeric.ops2[k]+'yk;');
         numeric['ccs'+k] = Function('X','Y',

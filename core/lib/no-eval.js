@@ -3195,12 +3195,27 @@ return numeric.ccsrrshiftMM(X,Y);
 		}
 	};
 	// ------------------------------------------------------------
-	// Insert original library code here,
-	// OR export eval and Function globally:
-	globalThis.eval = eval;
-	globalThis.Function = Function;
+	// Option 1. Insert original library code here.
 	// If the original library uses ES modules, you would need to ensure
 	// import/export statements remain at the top level,
 	// as they're not allowed within a function.
+	// This is the cleanest option, as it requires no globals to be added or modified.
+	/*__ORIGINAL_LIBRARY_CODE__*/;
+
+	// Option 2. Export eval and Function globally:
+	// globalThis.eval = eval;
+	// globalThis.Function = Function;
+	// This is the simplest option, but it may conflict with other code.
+	
+	// Option 3. Export eval and Function to a namespace:
+	globalThis.ClmtrackrAntiEval = { eval, Function };
+	// This requires patching the library to use the namespace,
+	// e.g. with const { eval, Function } = globalThis.ClmtrackrAntiEval ?? globalThis;
+	// The fallback to globalThis allows to run without the generated monkey patch loaded,
+	// which makes possible running the code collection process on the modified library,
+	// which may or may not be useful.
+	// (If you're updating the library, you'll likely have an unpatched version to run against anyway,
+	// but if you're using an automated patching solution, it may be patched as soon as you update it,
+	// and, another reason to re-run the code collection process is to trigger new code paths that weren't previously run.)
 	// ------------------------------------------------------------
 })();
