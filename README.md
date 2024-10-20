@@ -258,6 +258,7 @@ git push origin tag v$VERSION
 
 Publish the library to npm:
 ```sh
+npm run in-core -- npm publish --dry-run
 npm run in-core -- npm publish
 ```
 
