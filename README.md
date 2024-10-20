@@ -230,6 +230,8 @@ Build the desktop app (this must be done after updating the version number, but 
 npm run in-desktop-app -- npm run make
 ```
 
+Create `desktop-app/.env` file if it doesn't exist, and inside it, set `GITHUB_TOKEN=...` with a GitHub personal access token with content permissions for creating a release.
+
 Create a GitHub release draft, automatically uploading the desktop app distributable files:
 ```sh
 # This step should be run on all supported platforms
