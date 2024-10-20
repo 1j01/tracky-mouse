@@ -191,11 +191,12 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 ## Release Process
 
-This is a first draft of a release process.
+This is a draft of a release process.
 
 > Hm, the version numbers need to be updated for the desktop app build (for the about window and `--version` flag to make sense), but it seems a little awkward to have to bump the version numbers on all the operating systems. Should I separate committing the bump from pushing, and push to a branch first, in order to pull on the other systems with the bump? Is that even easier?  
 > I guess it comes down to wanting to test the desktop app on all systems.  
 > But maybe I should just hope for the best, and rely on patch releases if there are issues.  
+> I guess ideally I should set up GitHub Actions to build the desktop app for all platforms, on a branch, on then test by downloading the artifacts, then merge to main and tag the commit.  
 
 Run quality assurance checks:
 ```sh
@@ -229,6 +230,12 @@ Build the desktop app (this must be done after updating the version number, but 
 npm run in-desktop-app -- npm run make
 ```
 
+Create a GitHub release draft, automatically uploading the desktop app distributable files:
+```sh
+# This step should be run on all supported platforms
+npm run in-desktop-app -- npm run publish
+```
+
 Install and test the installed desktop app.
 
 Then commit the changes, tag the commit, and push:
@@ -248,11 +255,5 @@ npm run in-core -- npm publish
 Deploy the website (this may be done at any time, but it's good to do it with a release):
 ```sh
 npm run in-website -- npm run deploy
-```
-
-Create a GitHub release, automatically uploading the desktop app distributable files:
-```sh
-# This step should be run on all supported platforms
-npm run in-desktop-app -- npm run publish
 ```
 
