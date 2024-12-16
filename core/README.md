@@ -118,6 +118,10 @@ or using, and modifying, and existing element.
 If you pass an element, it should be an empty `<div>` element.
 It will add `class="tracky-mouse-ui"` directly to the element if it doesn't already have it.
 
+Returns an object with a `dispose` method that you can call to remove the UI and clean up the web worker and camera stream.
+
+(Search keywords: disposal, teardown, cleanup, clean-up, clean up, destroy, remove, stop, end, deinitialize, de-initialize; see return value)
+
 ### `TrackyMouse.useCamera()`
 
 This requests permission to use the camera, and starts the camera stream.
@@ -270,6 +274,8 @@ function getCurrentRotation(el) {
 ### `TrackyMouse.cleanupDwellClicking()`
 
 This stops the dwell clicker.
+
+(Search keywords: disposal, teardown, cleanup, clean-up, clean up, destroy, remove, stop, end, deinitialize, de-initialize)
 
 ## Changelog
 

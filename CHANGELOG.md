@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Added
+- `TrackyMouse.init()` now returns an object with a `dispose()` method, which you can call to stop head tracking and remove the UI.
 
 ## [1.1.0] - 2024-10-20
 

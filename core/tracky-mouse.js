@@ -525,6 +525,7 @@ const init_dwell_clicking = (config) => {
 	};
 	raf_id = requestAnimationFrame(animate);
 
+	// TODO: handle cleaning up multiple dwell clickers (just in case)
 	clean_up_dwell_clicking = () => {
 		cancelAnimationFrame(raf_id);
 		halo.remove();
@@ -546,6 +547,8 @@ const init_dwell_clicking = (config) => {
 		set paused(value) {
 			paused = value;
 		}
+		// TODO: dispose method? TrackyMouse.cleanupDwellClicking provides this for now
+		// but could make it a class DwellClicker (or TrackyMouseDwellClicker) with a dispose method
 	};
 	return dwellClicker;
 };
@@ -1834,13 +1837,60 @@ TrackyMouse.init = function (div) {
 	if (window.electronAPI) {
 		window.electronAPI.onShortcut(handleShortcut);
 	}
-	addEventListener("keydown", (event) => {
+	const handleKeydown = (event) => {
 		// Same shortcut as the global shortcut in the electron app
 		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
 			handleShortcut("toggle-tracking");
 		}
-	});
+	};
+	addEventListener("keydown", handleKeydown);
 
+	return {
+		dispose() {
+			// TODO: re-structure so that cleanup can succeed even if initialization fails
+			// OOP would help with this, by storing references in an object, but it doesn't necessarily
+			// need to be converted to a class, it could just be an object, with a try-finally used for returning the API with a `dispose` method.
+			// Wouldn't need to change the API that way.
+			// (Would also be easy to maintain backwards compatibility while switching to using a class,
+			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
+
+			// clean up camera stream
+			if (cameraVideo.srcObject) {
+				for (const track of cameraVideo.srcObject.getTracks()) {
+					track.stop();
+				}
+			}
+			cameraVideo.srcObject = null; // probably pointless
+
+			// not sure this helps
+			reset();
+			// just in case there's any async code looking at whether it's paused
+			paused = true;
+
+			if (facemeshWorker) {
+				facemeshWorker.terminate();
+			}
+			if (clmTracker) {
+				// not sure this helps clean up any resources
+				clmTracker.reset();
+			}
+
+			pointerEl.remove();
+
+			stats?.domElement.remove(); // there is no dispose method but this may be all that it would need to do https://github.com/mrdoob/stats.js/pull/96
+
+			removeEventListener("keydown", handleKeydown);
+
+			// This is a little awkward, reversing the initialization based on a possibly-preexisting element
+			// Could save and restore innerHTML but that won't restore event listeners, references, etc.
+			// and may not even be desired if the HTML was placeholder text mentioning it not yet being initialized for example.
+			uiContainer.classList.remove("tracky-mouse-ui");
+			uiContainer.innerHTML = "";
+			if (!div) {
+				uiContainer.remove();
+			}
+		},
+	};
 };
 
 // CommonJS export is untested. Script tag usage recommended.
