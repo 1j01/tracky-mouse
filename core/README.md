@@ -120,7 +120,7 @@ It will add `class="tracky-mouse-ui"` directly to the element if it doesn't alre
 
 Returns an object with a `dispose` method that you can call to remove the UI and clean up the web worker and camera stream.
 
-(Search keywords: disposal, teardown, cleanup, clean-up, clean up, destroy, remove, stop, end, deinitialize, de-initialize; see return value)
+*(Search keywords: disposal, destroy, teardown, cleanup, clean-up, clean up, deinitialize, de-initialize, remove, stop, end)* - see return value
 
 ### `TrackyMouse.useCamera()`
 
@@ -158,8 +158,8 @@ Arguments:
 
 Returns an object with the following properties:
 - `paused`: a getter/setter for whether dwell clicking is paused. Use this to implement a pause/resume button, in conjunction with `config.dwellClickEvenIfPaused`.
-- (that's all for now)
-
+- `dispose`: a method to clean up the dwell clicker.  
+  *(Search keywords: disposal, destroy, teardown, cleanup, clean-up, clean up, deinitialize, de-initialize, remove, stop, end)*
 
 Example:
 ```javascript
@@ -252,7 +252,9 @@ const config = {
 	beforePointerDownDispatch: () => { window.pointers = []; },
 	afterReleaseDrag: () => { window.pointers = []; },
 };
-TrackyMouse.initDwellClicking(config);
+const dwellClicker = TrackyMouse.initDwellClicking(config);
+// dwellClicker.paused = !dwellClicker.paused; // toggle
+// dwellClicker.dispose(); // clean up
 
 // Source: https://stackoverflow.com/a/54492696/2624876
 function getCurrentRotation(el) {
@@ -273,9 +275,9 @@ function getCurrentRotation(el) {
 
 ### `TrackyMouse.cleanupDwellClicking()`
 
-This stops the dwell clicker.
+**Deprecated**: instead call `dispose()` on the object returned from `initDwellClicking()`.
 
-(Search keywords: disposal, teardown, cleanup, clean-up, clean up, destroy, remove, stop, end, deinitialize, de-initialize)
+This stops the dwell clicker.
 
 ## Changelog
 

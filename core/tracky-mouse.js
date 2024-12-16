@@ -46,7 +46,9 @@ const is_selector_valid = ((dummy_element) =>
 		return true;
 	})(document.createDocumentFragment());
 
-let clean_up_dwell_clicking = () => { };
+
+const dwell_clickers = [];
+
 const init_dwell_clicking = (config) => {
 	/*
 		Arguments:
@@ -525,8 +527,7 @@ const init_dwell_clicking = (config) => {
 	};
 	raf_id = requestAnimationFrame(animate);
 
-	// TODO: handle cleaning up multiple dwell clickers (just in case)
-	clean_up_dwell_clicking = () => {
+	const dispose = () => {
 		cancelAnimationFrame(raf_id);
 		halo.remove();
 		dwell_indicator.remove();
@@ -537,7 +538,6 @@ const init_dwell_clicking = (config) => {
 		window.removeEventListener("blur", on_blur);
 		document.removeEventListener("mouseleave", on_mouse_leave_page);
 		document.removeEventListener("mouseenter", on_mouse_enter_page);
-		clean_up_dwell_clicking = () => { };
 	};
 
 	const dwellClicker = {
@@ -546,10 +546,10 @@ const init_dwell_clicking = (config) => {
 		},
 		set paused(value) {
 			paused = value;
-		}
-		// TODO: dispose method? TrackyMouse.cleanupDwellClicking provides this for now
-		// but could make it a class DwellClicker (or TrackyMouseDwellClicker) with a dispose method
+		},
+		dispose,
 	};
+	dwell_clickers.push(dwellClicker);
 	return dwellClicker;
 };
 
@@ -557,7 +557,9 @@ TrackyMouse.initDwellClicking = function (config) {
 	return init_dwell_clicking(config);
 };
 TrackyMouse.cleanupDwellClicking = function () {
-	clean_up_dwell_clicking();
+	for (const dwell_clicker of dwell_clickers) {
+		dwell_clicker.dispose();
+	}
 };
 
 TrackyMouse.init = function (div) {

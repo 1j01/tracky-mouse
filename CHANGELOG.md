@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Deprecated
+- `TrackyMouse.cleanupDwellClicking()` is deprecated in favor of calling `dispose()` on the object returned by `TrackyMouse.initDwellClicking()`.
+
 ### Added
 - `TrackyMouse.init()` now returns an object with a `dispose()` method, which you can call to stop head tracking and remove the UI.
+- The object returned by `TrackyMouse.initDwellClicking()` now has a `dispose()` method as well, which you can use instead of `TrackyMouse.cleanupDwellClicking()`.
+
+### Fixed
+- `TrackyMouse.cleanupDwellClicking()` now handles multiple dwell clickers, not that I know of any use case for that.
 
 ## [1.1.0] - 2024-10-20
 
