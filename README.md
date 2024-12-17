@@ -191,7 +191,7 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 ## Release Process
 
-This is a draft of a release process.
+This section outlines the steps for releasing a new version of Tracky Mouse.
 
 > Hm, the version numbers need to be updated for the desktop app build (for the about window and `--version` flag to make sense), but it seems a little awkward to have to bump the version numbers on all the operating systems. Should I separate committing the bump from pushing, and push to a branch first, in order to pull on the other systems with the bump? Is that even easier?  
 > I guess it comes down to wanting to test the desktop app on all systems.  
@@ -237,13 +237,15 @@ Build the desktop app (this must be done after updating the version number, but 
 npm run in-desktop-app -- npm run make
 ```
 
-Create `desktop-app/.env` file if it doesn't exist, and inside it, set `GITHUB_TOKEN=...` with a GitHub personal access token with content permissions for creating a release.
+Create `desktop-app/.env` file if it doesn't exist, and inside it, set `GITHUB_TOKEN=...` with a [GitHub personal access token](https://github.com/settings/tokens?page=1&type=beta) with content permissions for creating a release.
 
 Create a GitHub release draft, automatically uploading the desktop app distributable files:
 ```sh
 # This step should be run on all supported platforms
 npm run in-desktop-app -- npm run publish
 ```
+
+Copy and paste the changelog entry into the GitHub release draft's notes.
 
 Install and test the installed desktop app.
 
@@ -261,6 +263,8 @@ Publish the library to npm:
 npm run in-core -- npm publish --dry-run
 npm run in-core -- npm publish
 ```
+
+Publish the GitHub release draft.
 
 Deploy the website (this may be done at any time, but it's good to do it with a release):
 ```sh
