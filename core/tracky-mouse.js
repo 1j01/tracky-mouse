@@ -3,7 +3,7 @@ const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
 
-TrackyMouse.loadDependencies = function () {
+TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	TrackyMouse.dependenciesRoot = TrackyMouse.dependenciesRoot.replace(/\/+$/, "");
 	const loadScript = src => {
 		return new Promise((resolve, reject) => {
@@ -25,8 +25,10 @@ TrackyMouse.loadDependencies = function () {
 	const scriptFiles = [
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
-		`${TrackyMouse.dependenciesRoot}/lib/stats.js`,
 	];
+	if (statsJs) {
+		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
+	}
 	// TODO: figure out how to preload worker-context dependencies that use `importScripts`.
 	// `<link rel="preload">` can be injected at runtime,
 	// which wouldn't make sense for the main thread's dependencies, since we're injecting all the scripts at once anyway,
@@ -562,7 +564,7 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse.init = function (div) {
+TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
@@ -711,7 +713,7 @@ TrackyMouse.init = function (div) {
 	// required to work in iOS 11 & up:
 	cameraVideo.setAttribute('playsinline', '');
 
-	if (typeof Stats !== 'undefined') {
+	if (statsJs) {
 		var stats = new Stats();
 		stats.domElement.style.position = 'absolute';
 		stats.domElement.style.top = '0px';

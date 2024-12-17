@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - `TrackyMouse.cleanupDwellClicking()` is deprecated in favor of calling `dispose()` on the object returned by `TrackyMouse.initDwellClicking()`.
 
+### Changed
+- The Tracky Mouse UI no longer includes a stats.js performance monitor by default. You can still enable it by passing `{statsJs: true}` to `TrackyMouse.init()` and, if needed, also to `TrackyMouse.loadDependencies()`.
+
 ### Added
 - `TrackyMouse.init()` now returns an object with a `dispose()` method, which you can call to stop head tracking and remove the UI.
 - The object returned by `TrackyMouse.initDwellClicking()` now has a `dispose()` method as well, which you can use instead of `TrackyMouse.cleanupDwellClicking()`.

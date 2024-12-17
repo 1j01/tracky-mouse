@@ -102,13 +102,16 @@ TrackyMouse.loadDependencies().then(function() {
 
 Set this to the path to the folder where you installed tracky-mouse, without a trailing slash.
 
-### `TrackyMouse.loadDependencies()`
+### `TrackyMouse.loadDependencies([options])`
 
 This loads dependencies needed *for head tracking*. (It is not needed for dwell clicking.)
 
+If you pass an options object, it can have the following properties:
+- `statsJs` (optional): a boolean, whether to load stats.js for performance monitoring. Default is `false`.
+
 Returns a promise that resolves when the dependencies are loaded.
 
-### `TrackyMouse.init([element])`
+### `TrackyMouse.init([element, options])`
 
 `TrackyMouse.init` initializes the library *for head tracking*. (It is not needed for dwell clicking.)
 
@@ -117,6 +120,9 @@ or using, and modifying, and existing element.
 
 If you pass an element, it should be an empty `<div>` element.
 It will add `class="tracky-mouse-ui"` directly to the element if it doesn't already have it.
+
+If you pass an options object, it can have the following properties:
+- `statsJs` (optional): a boolean, whether to include the stats.js performance monitor. Default is `false`.
 
 Returns an object with a `dispose` method that you can call to remove the UI and clean up the web worker and camera stream.
 
