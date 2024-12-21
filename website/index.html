@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
+	<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
 	<meta name="description" content="Control your computer with just a webcam.">
@@ -20,6 +20,17 @@
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
+
+	<!-- TODO: bundle / avoid CDNs -->
+	<!-- Require the peer dependencies of face-landmarks-detection. -->
+	<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+
+	<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+
 </head>
 
 <body>
