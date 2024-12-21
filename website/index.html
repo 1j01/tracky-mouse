@@ -20,23 +20,15 @@
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
-	<!-- TODO: bundle / avoid CDNs -->
-	<!-- Require the peer dependencies of face-landmarks-detection. -->
 
-	<!-- // `${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
-	// `${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
-	// `${TrackyMouse.dependenciesRoot}/lib/tf-backend-webgl.min.js`,
-	// `${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`, -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script> -->
+	<!-- Include the peer dependencies of face-landmarks-detection. -->
+	<!-- TODO: move into loadDependencies (+preload) -->
 	<script src="core/lib/face_mesh/face_mesh.js"></script>
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script> -->
 	<script src="core/lib/tf-core.min.js"></script>
 
 	<!-- You must explicitly require a TF.js backend if you're not using the TF.js union bundle. -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script> -->
 	<script src="core/lib/tf-backend-webgl.min.js"></script>
 
-	<!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script> -->
 	<script src="core/lib/face-landmarks-detection.min.js"></script>
 
 
