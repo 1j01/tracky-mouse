@@ -1486,7 +1486,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 
 						facemeshPrediction = predictions[0]; // undefined if no faces found
-						facemeshPrediction.faceInViewConfidence = 0.5; // TODO: any equivalent in new API?
 
 						useClmTracking = false;
 						showClmTracking = false;
@@ -1495,6 +1494,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						if (!facemeshPrediction) {
 							return;
 						}
+						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
+
 						// this applies to facemeshPrediction.annotations as well, which references the same points
 						// facemeshPrediction.scaledMesh.forEach((point) => {
 						// 	point[0] /= frameScaleForWorker;
