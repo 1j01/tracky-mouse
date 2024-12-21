@@ -1486,6 +1486,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 
 						facemeshPrediction = predictions[0]; // undefined if no faces found
+						facemeshPrediction.faceInViewConfidence = 0.5; // TODO: any equivalent in new API?
 
 						useClmTracking = false;
 						showClmTracking = false;
@@ -1918,8 +1919,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// just in case there's any async code looking at whether it's paused
 			paused = true;
 
-			if (facemeshWorker) {
-				facemeshWorker.terminate();
+			// if (facemeshWorker) {
+			// 	facemeshWorker.terminate();
+			// }
+			if (detector) {
+				detector.dispose();
+				detector = null;
 			}
 			if (clmTracker) {
 				// not sure this helps clean up any resources
