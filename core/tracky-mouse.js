@@ -852,16 +852,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		facemeshEstimateFaces = async () => {
 			const imageData = currentCameraImageData;//getCameraImageData();
 			if (!imageData) {
-				return;
+				return [];
 			}
 			try {
 				// return await detector.estimateFaces(imageData, { flipHorizontal: false });
-				return await detector.estimateFaces(cameraVideo, { flipHorizontal: false });
+				const faces = await detector.estimateFaces(cameraVideo, { flipHorizontal: false });
+				if (!faces) {
+					console.warn("faces ===", faces);
+					return [];
+				}
+				return faces;
 			} catch (error) {
 				detector.dispose();
 				detector = null;
+				// TODO: avoid alert
 				alert(error);
 			}
+			return [];
 		};
 
 	};
