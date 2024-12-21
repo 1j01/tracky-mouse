@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- Tracky Mouse once again requires `unsafe-eval` in the Content Security Policy in Chrome, due to usage of WebAssembly. See [this Chromium issue](https://issues.chromium.org/issues/41457889).
+- Updated facemesh pipeline, improving performance significantly, and opening the door to implementing blink detection.
 
 ## [1.2.0] - 2024-12-17
 
