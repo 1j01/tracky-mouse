@@ -1,4 +1,4 @@
-/* global jsfeat, Stats, clm */
+/* global jsfeat, Stats, clm, faceLandmarksDetection */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -795,36 +795,70 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// };
 
 	let currentCameraImageData;
-	let facemeshWorker;
-	const initFacemeshWorker = () => {
-		if (facemeshWorker) {
-			facemeshWorker.terminate();
+	// let facemeshWorker;
+	let detector;
+	const initFacemeshWorker = async () => {
+		// if (facemeshWorker) {
+		// 	facemeshWorker.terminate();
+		// }
+		if (detector) {
+			detector.dispose();
 		}
 		facemeshEstimating = false;
 		facemeshFirstEstimation = true;
 		facemeshLoaded = false;
-		facemeshWorker = new Worker(`${TrackyMouse.dependenciesRoot}/facemesh.worker.js`);
-		facemeshWorker.addEventListener("message", (e) => {
-			// console.log('Message received from worker', e.data);
-			if (e.data.type === "LOADED") {
-				facemeshLoaded = true;
-				facemeshEstimateFaces = () => {
-					const imageData = currentCameraImageData;//getCameraImageData();
-					if (!imageData) {
-						return;
-					}
-					facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-					return new Promise((resolve, _reject) => {
-						facemeshWorker.addEventListener("message", (e) => {
-							if (e.data.type === "ESTIMATED_FACES") {
-								resolve(e.data.predictions);
-							}
-						}, { once: true });
-					});
-				};
+		// facemeshWorker = new Worker(`${TrackyMouse.dependenciesRoot}/facemesh.worker.js`);
+		// facemeshWorker.addEventListener("message", (e) => {
+		// 	// console.log('Message received from worker', e.data);
+		// 	if (e.data.type === "LOADED") {
+		// 		facemeshLoaded = true;
+		// 		facemeshEstimateFaces = () => {
+		// 			const imageData = currentCameraImageData;//getCameraImageData();
+		// 			if (!imageData) {
+		// 				return;
+		// 			}
+		// 			facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
+		// 			return new Promise((resolve, _reject) => {
+		// 				facemeshWorker.addEventListener("message", (e) => {
+		// 					if (e.data.type === "ESTIMATED_FACES") {
+		// 						resolve(e.data.predictions);
+		// 					}
+		// 				}, { once: true });
+		// 			});
+		// 		};
+		// 	}
+		// }, { once: true });
+		// facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
+		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+		const detectorConfig = {
+			runtime: 'mediapipe',
+			solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+			// or 'base/node_modules/@mediapipe/face_mesh' in npm.
+		};
+
+		try {
+			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+		} catch (error) {
+			detector = null;
+			alert(error);
+		}
+
+		facemeshLoaded = true;
+		facemeshEstimateFaces = async () => {
+			const imageData = currentCameraImageData;//getCameraImageData();
+			if (!imageData) {
+				return;
 			}
-		}, { once: true });
-		facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
+			try {
+				// return await detector.estimateFaces(imageData, { flipHorizontal: false });
+				return await detector.estimateFaces(cameraVideo, { flipHorizontal: false });
+			} catch (error) {
+				detector.dispose();
+				detector = null;
+				alert(error);
+			}
+		};
+
 	};
 
 	if (useFacemesh) {
@@ -1474,7 +1508,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;
 
-						const { annotations } = facemeshPrediction;
+						// const { annotations } = facemeshPrediction;
+						const getPoint = (index) => [[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y]];
+						const annotations = {
+							// loose mapping to newer API's keypoints
+							// TODO: match exact previous behavior or improve it
+							noseLeftCorner: getPoint(372),
+							noseRightCorner: getPoint(98),
+							noseTip: getPoint(4),
+							midwayBetweenEyes: getPoint(6),
+							leftEyeLower0: getPoint(253),
+							rightEyeLower0: getPoint(23),
+							leftCheek: getPoint(411),
+							rightCheek: getPoint(187),
+						};
 						// nostrils
 						workerSyncedOops.addPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 						workerSyncedOops.addPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
@@ -1527,9 +1574,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
 						// Note: This latency compensation only really works if it's already tracking well
 						// if (prevFaceInViewConfidence > 0.99) {
-						// 	facemeshPrediction.scaledMesh.forEach((point) => {
-						// 		point[0] += movementXSinceFacemeshUpdate;
-						// 		point[1] += movementYSinceFacemeshUpdate;
+						// 	facemeshPrediction.keypoints.forEach((point) => {
+						// 		point.x += movementXSinceFacemeshUpdate;
+						// 		point.y += movementYSinceFacemeshUpdate;
 						// 	});
 						// }
 
@@ -1595,12 +1642,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				}
 				if (update && useFacemesh) {
 					// this should just be visual, since we only add/remove points based on the facemesh data when receiving it
-					facemeshPrediction.scaledMesh.forEach((point) => {
-						point[0] += prevMovementX;
-						point[1] += prevMovementY;
+					facemeshPrediction.keypoints.forEach((point) => {
+						point.x += prevMovementX;
+						point.y += prevMovementY;
 					});
 				}
-				facemeshPrediction.scaledMesh.forEach(([x, y, _z]) => {
+				facemeshPrediction.keypoints.forEach(({ x, y }) => {
 					ctx.fillRect(x, y, 1, 1);
 				});
 			} else {
