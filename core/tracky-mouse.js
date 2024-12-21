@@ -26,7 +26,10 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
-		// `${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
+	];
+	const moreScriptFiles = [
+		// These depend on tf-core.min.js
 		`${TrackyMouse.dependenciesRoot}/lib/tf-backend-webgl.min.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 	];
@@ -43,7 +46,9 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	// Maybe it would use a shared cache in that case? That's a big if, though.
 	// `${TrackyMouse.dependenciesRoot}/lib/tf.js`
 	// `${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`
-	return Promise.all(scriptFiles.map(loadScript));
+	return Promise.all(scriptFiles.map(loadScript)).then(() => {
+		return Promise.all(moreScriptFiles.map(loadScript));
+	});
 };
 
 const is_selector_valid = ((dummy_element) =>
