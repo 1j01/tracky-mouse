@@ -55,6 +55,6 @@
     "@tensorflow/tfjs-core": "^4.22.0"
   },
   "scripts": {
-    "copy-deps": "cp node_modules/@mediapipe/face_mesh/face_mesh.js lib/face_mesh.js && cp node_modules/@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.min.js lib/face-landmarks-detection.min.js && cp node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js lib/tf-core.min.js && cp node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js lib/tf-backend-webgl.min.js"
+    "copy-deps": "mkdir -p lib/face_mesh && cp node_modules/@mediapipe/face_mesh/face_mesh.js lib/face_mesh/face_mesh.js && cp node_modules/@mediapipe/face_mesh/face_mesh_solution_packed_assets_loader.js lib/face_mesh/face_mesh_solution_packed_assets_loader.js && cp node_modules/@mediapipe/face_mesh/face_mesh_solution_simd_wasm_bin.js lib/face_mesh/face_mesh_solution_simd_wasm_bin.js && cp node_modules/@mediapipe/face_mesh/face_mesh.binarypb lib/face_mesh/face_mesh.binarypb && cp node_modules/@mediapipe/face_mesh/face_mesh_solution_packed_assets.data lib/face_mesh/face_mesh_solution_packed_assets.data && cp node_modules/@mediapipe/face_mesh/face_mesh_solution_simd_wasm_bin.wasm lib/face_mesh/face_mesh_solution_simd_wasm_bin.wasm && cp node_modules/@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.min.js lib/face-landmarks-detection.min.js && cp node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js lib/tf-core.min.js && cp node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js lib/tf-backend-webgl.min.js"
   }
 }

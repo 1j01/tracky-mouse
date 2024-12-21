@@ -837,7 +837,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const detectorConfig = {
 			runtime: 'mediapipe',
 			// TODO: avoid CDN
-			solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+			solutionPath: 'lib/face_mesh',
 			// or 'base/node_modules/@mediapipe/face_mesh' in npm.
 		};
 
