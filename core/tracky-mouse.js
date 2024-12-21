@@ -25,6 +25,10 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	const scriptFiles = [
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/tf-backend-webgl.min.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/face_mesh.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 	];
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
@@ -832,6 +836,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
 		const detectorConfig = {
 			runtime: 'mediapipe',
+			// TODO: avoid CDN
 			solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
 			// or 'base/node_modules/@mediapipe/face_mesh' in npm.
 		};

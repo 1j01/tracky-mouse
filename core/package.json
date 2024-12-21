@@ -47,5 +47,14 @@
     "tracky-mouse.css",
     "facemesh.worker.js",
     "lib/"
-  ]
+  ],
+  "devDependencies": {
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@tensorflow-models/face-landmarks-detection": "^1.0.6",
+    "@tensorflow/tfjs-backend-webgl": "^4.22.0",
+    "@tensorflow/tfjs-core": "^4.22.0"
+  },
+  "scripts": {
+    "copy-deps": "cp node_modules/@mediapipe/face_mesh/face_mesh.js lib/face_mesh.js && cp node_modules/@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.min.js lib/face-landmarks-detection.min.js && cp node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js lib/tf-core.min.js && cp node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js lib/tf-backend-webgl.min.js"
+  }
 }
