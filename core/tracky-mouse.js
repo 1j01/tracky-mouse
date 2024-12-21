@@ -27,7 +27,7 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/tf-backend-webgl.min.js`,
-		`${TrackyMouse.dependenciesRoot}/lib/face_mesh.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 	];
 	if (statsJs) {
