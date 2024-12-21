@@ -841,15 +841,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
 		const detectorConfig = {
 			runtime: 'mediapipe',
-			// TODO: avoid CDN
 			solutionPath: 'core/lib/face_mesh',
-			// or 'base/node_modules/@mediapipe/face_mesh' in npm.
 		};
 
 		try {
 			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
 		} catch (error) {
 			detector = null;
+			// TODO: avoid alert
 			alert(error);
 		}
 
@@ -860,7 +859,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				return [];
 			}
 			try {
-				// return await detector.estimateFaces(imageData, { flipHorizontal: false });
 				const faces = await detector.estimateFaces(cameraVideo, { flipHorizontal: false });
 				if (!faces) {
 					console.warn("faces ===", faces);
