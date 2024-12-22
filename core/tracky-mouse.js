@@ -805,7 +805,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
 		const detectorConfig = {
 			runtime: 'mediapipe',
-			solutionPath: 'core/lib/face_mesh',
+			solutionPath: `${TrackyMouse.dependenciesRoot}/lib/face_mesh`,
 		};
 
 		try {
