@@ -3,7 +3,11 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
+	<!-- TODO: tighten CSP; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
+	<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:"> -->
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' 'unsafe-inline' blob:; script-src * 'unsafe-inline' 'unsafe-eval'; worker-src blob:;">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
 	<meta name="description" content="Control your computer with just a webcam.">
