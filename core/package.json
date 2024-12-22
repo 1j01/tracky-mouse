@@ -45,7 +45,6 @@
   "files": [
     "tracky-mouse.js",
     "tracky-mouse.css",
-    "facemesh.worker.js",
     "lib/"
   ],
   "devDependencies": {

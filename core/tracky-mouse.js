@@ -36,16 +36,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
 	}
-	// TODO: figure out how to preload worker-context dependencies that use `importScripts`.
-	// `<link rel="preload">` can be injected at runtime,
-	// which wouldn't make sense for the main thread's dependencies, since we're injecting all the scripts at once anyway,
-	// but it could make sense for the worker's dependencies, since the worker is loaded lazily.
-	// However... with `<link rel="preload" as="script">`, it seems to load things twice, making performance worse!
-	// It seems like the worker isn't using the same cache as the main thread. I'm not sure.
-	// Maybe this will be easier if I use module versions of the libraries, with `<link rel="modulepreload">`?
-	// Maybe it would use a shared cache in that case? That's a big if, though.
-	// `${TrackyMouse.dependenciesRoot}/lib/tf.js`
-	// `${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`
 	return Promise.all(scriptFiles.map(loadScript)).then(() => {
 		return Promise.all(moreScriptFiles.map(loadScript));
 	});
@@ -804,40 +794,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// };
 
 	let currentCameraImageData;
-	// let facemeshWorker;
 	let detector;
 	const initFacemeshWorker = async () => {
-		// if (facemeshWorker) {
-		// 	facemeshWorker.terminate();
-		// }
 		if (detector) {
 			detector.dispose();
 		}
 		facemeshEstimating = false;
 		facemeshFirstEstimation = true;
 		facemeshLoaded = false;
-		// facemeshWorker = new Worker(`${TrackyMouse.dependenciesRoot}/facemesh.worker.js`);
-		// facemeshWorker.addEventListener("message", (e) => {
-		// 	// console.log('Message received from worker', e.data);
-		// 	if (e.data.type === "LOADED") {
-		// 		facemeshLoaded = true;
-		// 		facemeshEstimateFaces = () => {
-		// 			const imageData = currentCameraImageData;//getCameraImageData();
-		// 			if (!imageData) {
-		// 				return;
-		// 			}
-		// 			facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-		// 			return new Promise((resolve, _reject) => {
-		// 				facemeshWorker.addEventListener("message", (e) => {
-		// 					if (e.data.type === "ESTIMATED_FACES") {
-		// 						resolve(e.data.predictions);
-		// 					}
-		// 				}, { once: true });
-		// 			});
-		// 		};
-		// 	}
-		// }, { once: true });
-		// facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
 		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
 		const detectorConfig = {
 			runtime: 'mediapipe',
@@ -1979,9 +1943,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// just in case there's any async code looking at whether it's paused
 			paused = true;
 
-			// if (facemeshWorker) {
-			// 	facemeshWorker.terminate();
-			// }
 			if (detector) {
 				detector.dispose();
 				detector = null;
