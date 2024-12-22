@@ -714,7 +714,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	if (statsJs) {
 		var stats = new Stats();
-		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.position = 'fixed';
 		stats.domElement.style.top = '0px';
 		stats.domElement.style.right = '0px';
 		stats.domElement.style.left = '';
