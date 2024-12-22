@@ -795,7 +795,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	let currentCameraImageData;
 	let detector;
-	const initFacemeshWorker = async () => {
+	const initFacemesh = async () => {
 		if (detector) {
 			detector.dispose();
 		}
@@ -841,7 +841,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 
 	if (useFacemesh) {
-		initFacemeshWorker();
+		initFacemesh();
 	}
 
 	function deserializeSettings(settings, initialLoad = false) {
@@ -1411,9 +1411,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					//     at executeOp (tf.js:85396)
 					// WebGL: CONTEXT_LOST_WEBGL: loseContext: context lost
 
-					// Note that the first estimation from facemesh often takes a while,
-					// and we don't want to continuously terminate the worker as it's working on those first results.
+					// Note that the first estimation from facemesh often takes a while*,
+					// and we don't want to continuously terminate the worker** as it's working on those first results.
 					// And also, for the first estimate it hasn't actually disabled clmtrackr yet, so it's fine if it's a long timeout.
+					// *Or it did, before updating the facemesh pipeline.
+					// **Not using a worker for facemesh anymore...
 					clearTimeout(fallbackTimeoutID);
 					fallbackTimeoutID = setTimeout(() => {
 						if (!useClmTracking) {
@@ -1437,13 +1439,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Note: clearTimeout/clearInterval work interchangeably
 						fallbackTimeoutID = setInterval(() => {
 							try {
+								// TODO: attempting webgl context creation beforehand doesn't make sense without a worker
+								// If it's running in the same thread, we can just try creating the detector.
+
 								// Once we can create a webgl2 canvas...
 								document.createElement("canvas").getContext("webgl2");
 								clearInterval(fallbackTimeoutID);
-								// It's worth trying to re-initialize...
+								// It's worth trying to re-initialize [a web worker for facemesh]...
 								setTimeout(() => {
-									console.warn("Re-initializing facemesh worker");
-									initFacemeshWorker();
+									console.warn("Re-initializing facemesh");
+									initFacemesh();
 									facemeshRejectNext = 1; // or more?
 								}, 1000);
 							} catch (error) {
