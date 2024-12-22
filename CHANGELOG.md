@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Tracky Mouse once again requires `unsafe-eval` in the Content Security Policy in Chrome, due to usage of WebAssembly. See [this Chromium issue](https://issues.chromium.org/issues/41457889).
 - Updated facemesh pipeline, improving performance significantly, and opening the door to implementing blink detection.
+  - A web worker is no longer used for facemesh, however one is still used for clmtrackr.
 - stats.js performance monitor, if enabled, now scrolls with the page, using `fixed` positioning instead of `absolute`.
 - A friendly "webcam may already be in use" message is now shown also for `AbortError` in Firefox.
 
