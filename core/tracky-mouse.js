@@ -823,7 +823,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				return [];
 			}
 			try {
-				const faces = await detector.estimateFaces(cameraVideo, { flipHorizontal: false });
+				const faces = await detector.estimateFaces(imageData, { flipHorizontal: false });
 				if (!faces) {
 					console.warn("faces ===", faces);
 					return [];
