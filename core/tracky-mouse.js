@@ -1068,6 +1068,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
 				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+			} else if (error.name === "AbortError") {
+				// webcam is likely already in use
+				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
+				errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
 				// constraints can not be satisfied by avb. devices
 				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
