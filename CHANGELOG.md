@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Tracky Mouse once again requires `unsafe-eval` in the Content Security Policy in Chrome, due to usage of WebAssembly. See [this Chromium issue](https://issues.chromium.org/issues/41457889).
+- New dependencies must be included as script tags if not using `loadDependencies()`:
+  ```html
+  <script src="node_modules/tracky-mouse/lib/face_mesh/face_mesh.js"></script>
+  <script src="node_modules/tracky-mouse/lib/tf-core.min.js"></script>
+  <script src="node_modules/tracky-mouse/lib/tf-backend-webgl.min.js"></script>
+  <script src="node_modules/tracky-mouse/lib/face-landmarks-detection.min.js"></script>
+  ```
 - Updated facemesh pipeline, improving performance significantly, and opening the door to implementing blink detection.
   - A web worker is no longer used for facemesh, however one is still used for clmtrackr.
 - stats.js performance monitor, if enabled, now scrolls with the page, using `fixed` positioning instead of `absolute`.

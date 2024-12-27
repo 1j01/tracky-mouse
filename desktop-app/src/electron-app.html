@@ -3,11 +3,18 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
+	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
+	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
+	<!-- Looks like in Electron there's 'wasm-eval' behind flag enableBlinkFeatures: 'WebAssemblyCSP'... -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
 	<title>Tracky Mouse</title>
 	<script src="../node_modules/tracky-mouse/lib/stats.js"></script>
 	<script src="../node_modules/tracky-mouse/lib/no-eval.js"></script>
 	<script src="../node_modules/tracky-mouse/lib/clmtrackr.js"></script>
+	<script src="../node_modules/tracky-mouse/lib/face_mesh/face_mesh.js"></script>
+	<script src="../node_modules/tracky-mouse/lib/tf-core.min.js"></script>
+	<script src="../node_modules/tracky-mouse/lib/tf-backend-webgl.min.js"></script>
+	<script src="../node_modules/tracky-mouse/lib/face-landmarks-detection.min.js"></script>
 	<!-- <script src="../node_modules/tracky-mouse/lib/jsfeat-min.js"></script> exported from patched clmtrackr.js -->
 	<style>
 		body {
