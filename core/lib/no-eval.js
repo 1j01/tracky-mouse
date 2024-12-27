@@ -3174,6 +3174,766 @@ if(typeof Y === "number") return [X[0],X[1],numeric.rrshift(X[2],Y)];
 return numeric.ccsrrshiftMM(X,Y);
  });
 	functionMap.set("{\"argNames\":[\"r\"],\"code\":\"regeneratorRuntime = r\"}", function(r) { regeneratorRuntime = r });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function PureVirtualError() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function PureVirtualError() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function BindingError() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function BindingError() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function InternalError() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function InternalError() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function UnboundTypeError() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function UnboundTypeError() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FloatList() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FloatList() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$FloatList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor FloatList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$FloatList() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor FloatList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function StringList() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function StringList() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$StringList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor StringList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$StringList() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor StringList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function Uint8BlobList() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function Uint8BlobList() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$Uint8BlobList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor Uint8BlobList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$Uint8BlobList() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor Uint8BlobList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function PacketDataList() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function PacketDataList() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$PacketDataList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor PacketDataList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$PacketDataList() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor PacketDataList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function Texture2dDataOut() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function Texture2dDataOut() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function DetectionResults() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function DetectionResults() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function DetectionResults$getLandmarksList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function DetectionResults.getLandmarksList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function DetectionResults$getLandmarksList() {
+if (arguments.length !== 0) {
+throwBindingError('function DetectionResults.getLandmarksList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function DetectionResults$getClassificationsList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function DetectionResults.getClassificationsList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function DetectionResults$getClassificationsList() {
+if (arguments.length !== 0) {
+throwBindingError('function DetectionResults.getClassificationsList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function DetectionResults$getRectList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function DetectionResults.getRectList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function DetectionResults$getRectList() {
+if (arguments.length !== 0) {
+throwBindingError('function DetectionResults.getRectList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function DetectionListData() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function DetectionListData() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$DetectionListData() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor DetectionListData called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$DetectionListData() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor DetectionListData called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function SolutionWasm() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function SolutionWasm() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$SolutionWasm() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor SolutionWasm called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$SolutionWasm() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor SolutionWasm called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function GraphOptionChangeRequestList() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function GraphOptionChangeRequestList() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function constructor$GraphOptionChangeRequestList() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function constructor GraphOptionChangeRequestList called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function constructor$GraphOptionChangeRequestList() {
+if (arguments.length !== 0) {
+throwBindingError('function constructor GraphOptionChangeRequestList called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function PacketListener() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function PacketListener() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function PacketListenerWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function PacketListenerWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function PacketDataList$pushDetectionList(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function PacketDataList.pushDetectionList called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // DetectionListData*\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function PacketDataList$pushDetectionList(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function PacketDataList.pushDetectionList called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // DetectionListData*
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function SolutionWasm$reset() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function SolutionWasm.reset called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\ninvoker(fn, thisWired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function SolutionWasm$reset() {
+if (arguments.length !== 0) {
+throwBindingError('function SolutionWasm.reset called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+invoker(fn, thisWired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function SolutionWasm$send(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function SolutionWasm.send called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // PacketDataList\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function SolutionWasm$send(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function SolutionWasm.send called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // PacketDataList
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\"],\"code\":\"return function SolutionWasm$attachMultiListener(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function SolutionWasm.attachMultiListener called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // StringList\\nvar arg1Wired = argType1.toWireType(null, arg1); // PacketListener\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1) { return function SolutionWasm$attachMultiListener(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function SolutionWasm.attachMultiListener called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // StringList
+var arg1Wired = argType1.toWireType(null, arg1); // PacketListener
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function SolutionWasm$changeOptions(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function SolutionWasm.changeOptions called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // GraphOptionChangeRequestList\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function SolutionWasm$changeOptions(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function SolutionWasm.changeOptions called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // GraphOptionChangeRequestList
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function SolutionWasm$clearOverriddenFiles() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function SolutionWasm.clearOverriddenFiles called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\ninvoker(fn, thisWired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function SolutionWasm$clearOverriddenFiles() {
+if (arguments.length !== 0) {
+throwBindingError('function SolutionWasm.clearOverriddenFiles called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+invoker(fn, thisWired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function PacketListenerWrapper$notifyOnDestruction() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function PacketListenerWrapper.notifyOnDestruction called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar destructors = [];\\nvar thisWired = classParam.toWireType(destructors, this);\\ninvoker(fn, thisWired);\\nrunDestructors(destructors);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function PacketListenerWrapper$notifyOnDestruction() {
+if (arguments.length !== 0) {
+throwBindingError('function PacketListenerWrapper.notifyOnDestruction called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var destructors = [];
+var thisWired = classParam.toWireType(destructors, this);
+invoker(fn, thisWired);
+runDestructors(destructors);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function PacketListener$onResults(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function PacketListener.onResults called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // Uint8BlobList\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function PacketListener$onResults(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function PacketListener.onResults called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // Uint8BlobList
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function createTexture() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function createTexture called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar rv = invoker(fn);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function createTexture() {
+if (arguments.length !== 0) {
+throwBindingError('function createTexture called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var rv = invoker(fn);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function bindTexture2d(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function bindTexture2d called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\ninvoker(fn, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function bindTexture2d(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function bindTexture2d called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var arg0Wired = argType0.toWireType(null, arg0); // int
+invoker(fn, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function deleteTexture(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function deleteTexture called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\ninvoker(fn, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function deleteTexture(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function deleteTexture called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var arg0Wired = argType0.toWireType(null, arg0); // int
+invoker(fn, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function DetectionListData$reset(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function DetectionListData.reset called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function DetectionListData$reset(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function DetectionListData.reset called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // int
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function FloatList$size() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function FloatList.size called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function FloatList$size() {
+if (arguments.length !== 0) {
+throwBindingError('function FloatList.size called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function StringList$size() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function StringList.size called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function StringList$size() {
+if (arguments.length !== 0) {
+throwBindingError('function StringList.size called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function Uint8BlobList$size() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function Uint8BlobList.size called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function Uint8BlobList$size() {
+if (arguments.length !== 0) {
+throwBindingError('function Uint8BlobList.size called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\"],\"code\":\"return function GraphOptionChangeRequestList$size() {\\nif (arguments.length !== 0) {\\nthrowBindingError('function GraphOptionChangeRequestList.size called with ' + arguments.length + ' arguments, expected 0 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar rv = invoker(fn, thisWired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam) { return function GraphOptionChangeRequestList$size() {
+if (arguments.length !== 0) {
+throwBindingError('function GraphOptionChangeRequestList.size called with ' + arguments.length + ' arguments, expected 0 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var rv = invoker(fn, thisWired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function FloatList$push_back(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function FloatList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // float\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function FloatList$push_back(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function FloatList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // float
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\"],\"code\":\"return function FloatList$resize(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function FloatList.resize called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // float\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1) { return function FloatList$resize(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function FloatList.resize called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // float
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\"],\"code\":\"return function FloatList$set(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function FloatList.set called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // float\\nvar rv = invoker(fn, thisWired, arg0Wired, arg1Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1) { return function FloatList$set(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function FloatList.set called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // float
+var rv = invoker(fn, thisWired, arg0Wired, arg1Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"arg0Wired_dtor\"],\"code\":\"return function StringList$push_back(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function StringList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // std::string\\ninvoker(fn, thisWired, arg0Wired);\\narg0Wired_dtor(arg0Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,arg0Wired_dtor) { return function StringList$push_back(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function StringList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // std::string
+invoker(fn, thisWired, arg0Wired);
+arg0Wired_dtor(arg0Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function StringList$resize(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function StringList.resize called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function StringList$resize(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function StringList.resize called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function StringList$set(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function StringList.set called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\nvar rv = invoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // std::string\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function StringList$set(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function StringList.set called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+var rv = invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // std::string
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"arg0Wired_dtor\"],\"code\":\"return function PacketDataList$pushTexture2d(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function PacketDataList.pushTexture2d called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // Texture2dDataIn\\ninvoker(fn, thisWired, arg0Wired);\\narg0Wired_dtor(arg0Wired); // Texture2dDataIn\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,arg0Wired_dtor) { return function PacketDataList$pushTexture2d(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function PacketDataList.pushTexture2d called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // Texture2dDataIn
+invoker(fn, thisWired, arg0Wired);
+arg0Wired_dtor(arg0Wired); // Texture2dDataIn
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function DetectionListData$setBoundingBox(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function DetectionListData.setBoundingBox called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function DetectionListData$setBoundingBox(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function DetectionListData.setBoundingBox called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // int
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function DetectionListData$addNormalizedLandmark(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function DetectionListData.addNormalizedLandmark called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function DetectionListData$addNormalizedLandmark(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function DetectionListData.addNormalizedLandmark called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // int
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function DetectionListData$addClassification(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function DetectionListData.addClassification called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // int\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function DetectionListData$addClassification(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function DetectionListData.addClassification called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // int
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"arg0Wired_dtor\"],\"code\":\"return function SolutionWasm$loadGraph(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function SolutionWasm.loadGraph called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // std::string\\ninvoker(fn, thisWired, arg0Wired);\\narg0Wired_dtor(arg0Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,arg0Wired_dtor) { return function SolutionWasm$loadGraph(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function SolutionWasm.loadGraph called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // std::string
+invoker(fn, thisWired, arg0Wired);
+arg0Wired_dtor(arg0Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg0Wired_dtor\",\"arg1Wired_dtor\"],\"code\":\"return function SolutionWasm$overrideFile(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function SolutionWasm.overrideFile called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // std::string\\nvar arg1Wired = argType1.toWireType(null, arg1); // std::string\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg0Wired_dtor(arg0Wired); // std::string\\narg1Wired_dtor(arg1Wired); // std::string\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg0Wired_dtor,arg1Wired_dtor) { return function SolutionWasm$overrideFile(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function SolutionWasm.overrideFile called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // std::string
+var arg1Wired = argType1.toWireType(null, arg1); // std::string
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg0Wired_dtor(arg0Wired); // std::string
+arg1Wired_dtor(arg1Wired); // std::string
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"arg0Wired_dtor\"],\"code\":\"return function GraphOptionChangeRequestList$push_back(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function GraphOptionChangeRequestList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // GraphOptionChangeRequest\\ninvoker(fn, thisWired, arg0Wired);\\narg0Wired_dtor(arg0Wired); // GraphOptionChangeRequest\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,arg0Wired_dtor) { return function GraphOptionChangeRequestList$push_back(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function GraphOptionChangeRequestList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // GraphOptionChangeRequest
+invoker(fn, thisWired, arg0Wired);
+arg0Wired_dtor(arg0Wired); // GraphOptionChangeRequest
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function GraphOptionChangeRequestList$resize(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function GraphOptionChangeRequestList.resize called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // GraphOptionChangeRequest\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // GraphOptionChangeRequest\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function GraphOptionChangeRequestList$resize(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function GraphOptionChangeRequestList.resize called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // GraphOptionChangeRequest
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // GraphOptionChangeRequest
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg1Wired_dtor\"],\"code\":\"return function GraphOptionChangeRequestList$set(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function GraphOptionChangeRequestList.set called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // GraphOptionChangeRequest\\nvar rv = invoker(fn, thisWired, arg0Wired, arg1Wired);\\narg1Wired_dtor(arg1Wired); // GraphOptionChangeRequest\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg1Wired_dtor) { return function GraphOptionChangeRequestList$set(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function GraphOptionChangeRequestList.set called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // GraphOptionChangeRequest
+var rv = invoker(fn, thisWired, arg0Wired, arg1Wired);
+arg1Wired_dtor(arg1Wired); // GraphOptionChangeRequest
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function FloatList$get(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function FloatList.get called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar rv = invoker(fn, thisWired, arg0Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function FloatList$get(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function FloatList.get called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var rv = invoker(fn, thisWired, arg0Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function StringList$get(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function StringList.get called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar rv = invoker(fn, thisWired, arg0Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function StringList$get(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function StringList.get called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var rv = invoker(fn, thisWired, arg0Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function Uint8BlobList$push_back(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function Uint8BlobList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // emscripten::val\\ninvoker(fn, thisWired, arg0Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function Uint8BlobList$push_back(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function Uint8BlobList.push_back called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // emscripten::val
+invoker(fn, thisWired, arg0Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\"],\"code\":\"return function Uint8BlobList$resize(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function Uint8BlobList.resize called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // emscripten::val\\ninvoker(fn, thisWired, arg0Wired, arg1Wired);\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1) { return function Uint8BlobList$resize(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function Uint8BlobList.resize called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // emscripten::val
+invoker(fn, thisWired, arg0Wired, arg1Wired);
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function Uint8BlobList$get(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function Uint8BlobList.get called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar rv = invoker(fn, thisWired, arg0Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function Uint8BlobList$get(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function Uint8BlobList.get called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var rv = invoker(fn, thisWired, arg0Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\"],\"code\":\"return function Uint8BlobList$set(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function Uint8BlobList.set called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar arg1Wired = argType1.toWireType(null, arg1); // emscripten::val\\nvar rv = invoker(fn, thisWired, arg0Wired, arg1Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1) { return function Uint8BlobList$set(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function Uint8BlobList.set called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var arg1Wired = argType1.toWireType(null, arg1); // emscripten::val
+var rv = invoker(fn, thisWired, arg0Wired, arg1Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function GraphOptionChangeRequestList$get(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function GraphOptionChangeRequestList.get called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar thisWired = classParam.toWireType(null, this);\\nvar arg0Wired = argType0.toWireType(null, arg0); // unsigned long\\nvar rv = invoker(fn, thisWired, arg0Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function GraphOptionChangeRequestList$get(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function GraphOptionChangeRequestList.get called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var thisWired = classParam.toWireType(null, this);
+var arg0Wired = argType0.toWireType(null, arg0); // unsigned long
+var rv = invoker(fn, thisWired, arg0Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\"],\"code\":\"return function PacketListener$implement(arg0) {\\nif (arguments.length !== 1) {\\nthrowBindingError('function PacketListener.implement called with ' + arguments.length + ' arguments, expected 1 args!');\\n}\\nvar arg0Wired = argType0.toWireType(null, arg0); // emscripten::val\\nvar rv = invoker(fn, arg0Wired);\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0) { return function PacketListener$implement(arg0) {
+if (arguments.length !== 1) {
+throwBindingError('function PacketListener.implement called with ' + arguments.length + ' arguments, expected 1 args!');
+}
+var arg0Wired = argType0.toWireType(null, arg0); // emscripten::val
+var rv = invoker(fn, arg0Wired);
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function FunctionWrapper() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function FunctionWrapper() {
+    "use strict";    return body.apply(this, arguments);
+};
+ });
+	functionMap.set("{\"argNames\":[\"throwBindingError\",\"invoker\",\"fn\",\"runDestructors\",\"retType\",\"classParam\",\"argType0\",\"argType1\",\"arg0Wired_dtor\"],\"code\":\"return function PacketListener$extend(arg0, arg1) {\\nif (arguments.length !== 2) {\\nthrowBindingError('function PacketListener.extend called with ' + arguments.length + ' arguments, expected 2 args!');\\n}\\nvar arg0Wired = argType0.toWireType(null, arg0); // std::string\\nvar arg1Wired = argType1.toWireType(null, arg1); // emscripten::val\\nvar rv = invoker(fn, arg0Wired, arg1Wired);\\narg0Wired_dtor(arg0Wired); // std::string\\nvar ret = retType.fromWireType(rv);\\nreturn ret;\\n}\\n\"}", function(throwBindingError,invoker,fn,runDestructors,retType,classParam,argType0,argType1,arg0Wired_dtor) { return function PacketListener$extend(arg0, arg1) {
+if (arguments.length !== 2) {
+throwBindingError('function PacketListener.extend called with ' + arguments.length + ' arguments, expected 2 args!');
+}
+var arg0Wired = argType0.toWireType(null, arg0); // std::string
+var arg1Wired = argType1.toWireType(null, arg1); // emscripten::val
+var rv = invoker(fn, arg0Wired, arg1Wired);
+arg0Wired_dtor(arg0Wired); // std::string
+var ret = retType.fromWireType(rv);
+return ret;
+}
+ });
 	
 	const eval = (code) => {
 		const fn = evalMap.get(code);

@@ -135,12 +135,32 @@
 			evalCodes.push(code);
 			return originalEval(code);
 		};
-		window.Function = function (...args) {
+		/*window.Function = class FunctionWrapper {
+			constructor(...args) {
+				const argNames = args.slice(0, -1);
+				const code = args.slice(-1)[0];
+				functionConstructions.push({ argNames, code });
+				return new OriginalFunction(...args);
+			}
+			static [Symbol.hasInstance](instance) {
+				return instance instanceof OriginalFunction;
+			}
+		};*/
+
+		function FunctionWrapper(...args) {
 			const argNames = args.slice(0, -1);
 			const code = args.slice(-1)[0];
 			functionConstructions.push({ argNames, code });
 			return new OriginalFunction(...args);
-		};
+		}
+		// Try to make `instanceof Function` work.
+		// `Symbol.hasInstance` seems to only work on classes (as a static method),
+		// but classes can't be constructed without `new`, unless there's another symbol or hack for that.
+		// We need to support `new Function(...)` and `Function(...)` syntax.
+		Object.setPrototypeOf(FunctionWrapper, OriginalFunction);
+		FunctionWrapper.prototype = OriginalFunction.prototype;
+
+		window.Function = FunctionWrapper;
 	</script>
 
 	<!-- Run code that uses eval, in a similar way to how it's normally used: -->
