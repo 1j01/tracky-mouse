@@ -3194,7 +3194,7 @@ return numeric.ccsrrshiftMM(X,Y);
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3211,7 +3211,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3228,7 +3228,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3245,7 +3245,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3266,7 +3266,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3280,7 +3280,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3294,7 +3294,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3312,7 +3312,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3329,7 +3329,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3346,7 +3346,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3367,7 +3367,7 @@ return ret;
     "use strict";    return body.apply(this, arguments);
 };
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3380,7 +3380,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // DetectionListData*
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3392,7 +3392,7 @@ var thisWired = classParam.toWireType(null, this);
 invoker(fn, thisWired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3405,7 +3405,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // PacketDataList
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3419,7 +3419,7 @@ var arg1Wired = argType1.toWireType(null, arg1); // PacketListener
 invoker(fn, thisWired, arg0Wired, arg1Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3432,7 +3432,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // GraphOptionChangeRequestList
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3444,7 +3444,7 @@ var thisWired = classParam.toWireType(null, this);
 invoker(fn, thisWired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3458,7 +3458,7 @@ invoker(fn, thisWired);
 runDestructors(destructors);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3471,7 +3471,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // Uint8BlobList
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3484,7 +3484,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3496,7 +3496,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // int
 invoker(fn, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3508,7 +3508,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // int
 invoker(fn, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3521,7 +3521,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // int
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3535,7 +3535,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3549,7 +3549,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3563,7 +3563,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3577,7 +3577,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3590,7 +3590,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // float
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3604,7 +3604,7 @@ var arg1Wired = argType1.toWireType(null, arg1); // float
 invoker(fn, thisWired, arg0Wired, arg1Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3620,7 +3620,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3634,7 +3634,7 @@ invoker(fn, thisWired, arg0Wired);
 arg0Wired_dtor(arg0Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3649,7 +3649,7 @@ invoker(fn, thisWired, arg0Wired, arg1Wired);
 arg1Wired_dtor(arg1Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3666,7 +3666,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3680,7 +3680,7 @@ invoker(fn, thisWired, arg0Wired);
 arg0Wired_dtor(arg0Wired); // Texture2dDataIn
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3695,7 +3695,7 @@ invoker(fn, thisWired, arg0Wired, arg1Wired);
 arg1Wired_dtor(arg1Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3710,7 +3710,7 @@ invoker(fn, thisWired, arg0Wired, arg1Wired);
 arg1Wired_dtor(arg1Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3725,7 +3725,7 @@ invoker(fn, thisWired, arg0Wired, arg1Wired);
 arg1Wired_dtor(arg1Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3739,7 +3739,7 @@ invoker(fn, thisWired, arg0Wired);
 arg0Wired_dtor(arg0Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3755,7 +3755,7 @@ arg0Wired_dtor(arg0Wired); // std::string
 arg1Wired_dtor(arg1Wired); // std::string
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3769,7 +3769,7 @@ invoker(fn, thisWired, arg0Wired);
 arg0Wired_dtor(arg0Wired); // GraphOptionChangeRequest
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3784,7 +3784,7 @@ invoker(fn, thisWired, arg0Wired, arg1Wired);
 arg1Wired_dtor(arg1Wired); // GraphOptionChangeRequest
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3801,7 +3801,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3816,7 +3816,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3831,7 +3831,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3844,7 +3844,7 @@ var arg0Wired = argType0.toWireType(null, arg0); // emscripten::val
 invoker(fn, thisWired, arg0Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3858,7 +3858,7 @@ var arg1Wired = argType1.toWireType(null, arg1); // emscripten::val
 invoker(fn, thisWired, arg0Wired, arg1Wired);
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3873,7 +3873,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3889,7 +3889,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3904,7 +3904,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
@@ -3918,7 +3918,7 @@ var ret = retType.fromWireType(rv);
 return ret;
 }
  });
-	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() {
+	functionMap.set("{\"argNames\":[\"body\"],\"code\":\"return function TrackedFunctionConstructor() {\\n    \\\"use strict\\\";    return body.apply(this, arguments);\\n};\\n\"}", function(body) { return function TrackedFunctionConstructor() { console.log('whatever');
     "use strict";    return body.apply(this, arguments);
 };
  });
