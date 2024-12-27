@@ -3,10 +3,8 @@
 
 <head>
 	<meta charset="UTF-8">
-	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
-	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
-	<!-- Looks like in Electron there's 'wasm-eval' behind flag enableBlinkFeatures: 'WebAssemblyCSP'... -->
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
+	<!-- 'wasm-eval' is enabled through enableBlinkFeatures: 'WebAssemblyCSP' -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'wasm-eval' blob:">
 	<title>Tracky Mouse</title>
 	<script src="../node_modules/tracky-mouse/lib/stats.js"></script>
 	<script src="../node_modules/tracky-mouse/lib/no-eval.js"></script>

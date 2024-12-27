@@ -352,6 +352,8 @@ const createWindow = () => {
 			preload: path.join(app.getAppPath(), 'src/preload-app-window.js'),
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
+			// Enable 'wasm-eval' in Content Security Policy, to avoid 'unsafe-eval'.
+			enableBlinkFeatures: 'WebAssemblyCSP',
 		},
 		icon: `${__dirname}/../../images/tracky-mouse-logo-512.png`,
 	});
