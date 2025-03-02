@@ -341,20 +341,24 @@ const { createServer } = require('http');
 const WebSocket = require('ws');
 
 // Start a websocket server to receive mouse position data from the laser pointer app.
-const server = createServer();
-const wss = new WebSocket.Server({ server });
 const expressApp = express();
+const server = createServer(expressApp);
+const wss = new WebSocket.Server({ server });
 // let onPointerMove = null;
 
-expressApp.use(express.static('public'));
+const publicDir = path.join(__dirname, '../../public');
+
+expressApp.use(express.static(publicDir));
 
 expressApp.get('/', (req, res) => {
-	res.sendFile(__dirname + '/index.html');
+	res.sendFile(path.join(publicDir, 'index.html'));
 });
 
 wss.on('connection', (ws) => {
+	console.log('Client connected');
 	ws.on('message', (message) => {
 		const { x, y } = JSON.parse(message);
+		console.log('Received message:', x, y);
 		// if (onPointerMove) {
 		// onPointerMove(x, y);
 		// }
