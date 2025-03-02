@@ -336,6 +336,41 @@ let appWindow;
 /** @type {BrowserWindow} */
 let screenOverlayWindow;
 
+const express = require('express');
+const { createServer } = require('http');
+const WebSocket = require('ws');
+
+// Start a websocket server to receive mouse position data from the laser pointer app.
+const server = createServer();
+const wss = new WebSocket.Server({ server });
+const expressApp = express();
+// let onPointerMove = null;
+
+expressApp.use(express.static('public'));
+
+expressApp.get('/', (req, res) => {
+	res.sendFile(__dirname + '/index.html');
+});
+
+wss.on('connection', (ws) => {
+	ws.on('message', (message) => {
+		const { x, y } = JSON.parse(message);
+		// if (onPointerMove) {
+		// onPointerMove(x, y);
+		// }
+		// setMouseLocationTracky(x, y);
+		const time = performance.now();
+		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+
+	});
+});
+
+server.listen(8080, () => {
+	console.log('WebSocket server started on port 8080');
+});
+
+
+
 const createWindow = () => {
 	const appWindowState = windowStateKeeper({
 		defaultWidth: 750,
@@ -407,50 +442,50 @@ const createWindow = () => {
 			cameraFeedDiagnostics,
 		);
 	};
-	ipcMain.on('move-mouse', async (_event, x, y, time) => {
-		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
-		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
-		const curPos = await getMouseLocation();
-		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
-		// since setMouseLocation is asynchronous,
-		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
-		// since getMouseLocation is asynchronous.
-		pruneMousePosHistory();
-		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
-		const distanceMoved = distances.length ? Math.min(...distances) : 0;
-		// console.log("distanceMoved", distanceMoved);
-		if (distanceMoved > thresholdToRegainControl) {
-			// if (regainControlTimeout === null) {
-			// 	console.log("mousePosHistory", mousePosHistory);
-			// 	console.log("distances", distances);
-			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
-			// 	console.log("Pausing camera control due to manual mouse movement.");
-			// }
-			clearTimeout(regainControlTimeout);
-			regainControlTimeout = setTimeout(() => {
-				regainControlTimeout = null; // used to check if we're pausing
-				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
-				updateDwellClicking();
-			}, regainControlForTime);
-			updateDwellClicking();
-			// Prevent immediately returning to manual control after switching to camera control
-			// based on head movement while in manual control mode.
-			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
-			// It may be a good idea to split `mousePosHistory` into two arrays,
-			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
-			// in order to handle maintaining manual control differently from switching to manual control,
-			// and/or for clarity of intent.
-			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "move-mouse" });
-		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
-			// Note: there's no await here, not necessarily for a particular reason,
-			// although maybe it's better to send the 'move-mouse' event as soon as possible?
-			setMouseLocationTracky(x, y);
-		}
-		// const latency = performance.now() - time;
-		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
+	// ipcMain.on('move-mouse', async (_event, x, y, time) => {
+	// 	// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
+	// 	// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
+	// 	const curPos = await getMouseLocation();
+	// 	// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
+	// 	// since setMouseLocation is asynchronous,
+	// 	// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
+	// 	// since getMouseLocation is asynchronous.
+	// 	pruneMousePosHistory();
+	// 	const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+	// 	const distanceMoved = distances.length ? Math.min(...distances) : 0;
+	// 	// console.log("distanceMoved", distanceMoved);
+	// 	if (distanceMoved > thresholdToRegainControl) {
+	// 		// if (regainControlTimeout === null) {
+	// 		// 	console.log("mousePosHistory", mousePosHistory);
+	// 		// 	console.log("distances", distances);
+	// 		// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+	// 		// 	console.log("Pausing camera control due to manual mouse movement.");
+	// 		// }
+	// 		clearTimeout(regainControlTimeout);
+	// 		regainControlTimeout = setTimeout(() => {
+	// 			regainControlTimeout = null; // used to check if we're pausing
+	// 			// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+	// 			updateDwellClicking();
+	// 		}, regainControlForTime);
+	// 		updateDwellClicking();
+	// 		// Prevent immediately returning to manual control after switching to camera control
+	// 		// based on head movement while in manual control mode.
+	// 		// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
+	// 		// It may be a good idea to split `mousePosHistory` into two arrays,
+	// 		// say `setMouseLocationHistory` and `getMouseLocationHistory`,
+	// 		// in order to handle maintaining manual control differently from switching to manual control,
+	// 		// and/or for clarity of intent.
+	// 		mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "move-mouse" });
+	// 	} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
+	// 		// Note: there's no await here, not necessarily for a particular reason,
+	// 		// although maybe it's better to send the 'move-mouse' event as soon as possible?
+	// 		setMouseLocationTracky(x, y);
+	// 	}
+	// 	// const latency = performance.now() - time;
+	// 	// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
-	});
+	// 	screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+	// });
 
 	ipcMain.on('notify-toggle-state', async (_event, nowEnabled) => {
 		let initialPos;
