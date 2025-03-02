@@ -9,7 +9,7 @@
 
 <body>
 	<script>
-		const socket = new WebSocket('ws://' + window.location.hostname);
+		const socket = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.hostname);
 
 		socket.onopen = function (event) {
 			console.log('WebSocket is connected.');
