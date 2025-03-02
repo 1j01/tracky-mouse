@@ -23,15 +23,17 @@
 			console.error('WebSocket error:', error);
 		};
 
-		document.addEventListener('mousemove', function (event) {
+		document.addEventListener('pointermove', function (event) {
 			const normalizedX = event.clientX / window.innerWidth;
 			const normalizedY = event.clientY / window.innerHeight;
 			const mousePosition = { x: normalizedX, y: normalizedY };
 
 			if (socket.readyState === WebSocket.OPEN) {
-				socket.send(JSON.stringify(mousePosition));
+				socket.send(JSON.stringify({ type: "mouseMove", ...mousePosition }));
+				socket.send(JSON.stringify({ type: "mouseState", visible: event.buttons === 1 }));
 			}
 		});
+
 	</script>
 </body>
 

@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 	onChangeDwellClicking: (callback) => ipcRenderer.on('change-dwell-clicking', callback),
 	// Note terrible naming inconsistency.
 	onMouseMove: (callback) => ipcRenderer.on('move-mouse', callback),
+	onMouseState: (callback) => ipcRenderer.on('sync-mouse-state', callback),
 
 	// This is pretty weird but I'm giving the overlay window control over clicking,
 	// whereas the app window has control over moving the mouse.

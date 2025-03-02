@@ -357,12 +357,17 @@ expressApp.get('/', (req, res) => {
 wss.on('connection', (ws) => {
 	console.log('Client connected');
 	ws.on('message', (message) => {
-		let { x, y } = JSON.parse(message);
-		x *= screenOverlayWindow.getContentBounds().width;
-		y *= screenOverlayWindow.getContentBounds().height;
-		const time = performance.now();
-		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
-
+		let parsed = JSON.parse(message);
+		if (parsed.type === "mouseMove") {
+			let { x, y } = parsed;
+			x *= screenOverlayWindow.getContentBounds().width;
+			y *= screenOverlayWindow.getContentBounds().height;
+			const time = performance.now();
+			screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+		} else if (parsed.type === "mouseState") {
+			let { state } = parsed;
+			screenOverlayWindow.webContents.send('sync-mouse-state', state);
+		}
 	});
 	ws.on('close', () => {
 		console.log('Client disconnected');

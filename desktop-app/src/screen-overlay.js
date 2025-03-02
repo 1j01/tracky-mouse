@@ -28,22 +28,9 @@ document.body.appendChild(cursorElement);
 electronAPI.onMouseMove((_event, x, y) => {
 	cursorElement.style.left = `${x}px`;
 	cursorElement.style.top = `${y}px`;
-
-	// console.log("move-mouse", x, y);
-	// document.dispatchEvent(new Event("mouseenter"));
-	// const domEvent = new PointerEvent("pointermove", {
-	// 	view: window,
-	// 	clientX: x,
-	// 	clientY: y,
-	// 	pointerId: 1,
-	// 	pointerType: "mouse",
-	// 	isPrimary: true,
-	// 	button: 0,
-	// 	buttons: 1,
-	// 	bubbles: true,
-	// 	cancelable: true,
-	// });
-	// window.dispatchEvent(domEvent);
+});
+electronAPI.onMouseState((_event, state) => {
+	cursorElement.style.display = state.visible ? "block" : "none";
 });
 
 // let wasEnabled = false;
