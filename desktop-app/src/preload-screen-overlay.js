@@ -1,13 +1,43 @@
-// This script is injected into the screen overlay window, before other scripts,
-// with privileged access to the electron API, which it should expose in a limited way.
-// That said, mouse control is pretty powerful, so it's important to keep it secure.
+// import express from 'express';
+// import { createServer } from 'http';
+// import WebSocket from 'ws';
+
+// const __dirname = import.meta.dirname;
+const express = require('express');
+const { createServer } = require('http');
+const WebSocket = require('ws');
+
+// Start a websocket server to receive mouse position data from the laser pointer app.
+const server = createServer();
+const wss = new WebSocket.Server({ server });
+const app = express();
+let onPointerMove = null;
+
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + '/index.html');
+});
+
+wss.on('connection', (ws) => {
+	ws.on('message', (message) => {
+		const { x, y } = JSON.parse(message);
+		if (onPointerMove) {
+			onPointerMove(x, y);
+		}
+	});
+});
+
+server.listen(8080, () => {
+	console.log('WebSocket server started on port 8080');
+});
 
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
 	onChangeDwellClicking: (callback) => ipcRenderer.on('change-dwell-clicking', callback),
 	// Note terrible naming inconsistency.
-	onMouseMove: (callback) => ipcRenderer.on('move-mouse', callback),
+	onMouseMove: (callback) => { onPointerMove = callback },
 
 	// This is pretty weird but I'm giving the overlay window control over clicking,
 	// whereas the app window has control over moving the mouse.

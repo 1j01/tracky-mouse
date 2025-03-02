@@ -1,13 +1,3 @@
-// import express from 'express';
-// import { createServer } from 'http';
-// import WebSocket from 'ws';
-
-// const __dirname = import.meta.dirname;
-/*global require*/
-const express = require('express');
-const { createServer } = require('http');
-const WebSocket = require('ws');
-
 /* global jsfeat, Stats, clm */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
@@ -1083,34 +1073,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// 	});
 	// };
 	useCameraButton.onclick = TrackyMouse.useCamera = () => {
-		// Start a websocket server to receive mouse position data from the laser pointer app.
-		const server = createServer();
-		const wss = new WebSocket.Server({ server });
-		const app = express();
-
-		app.use(express.static('public'));
-
-		app.get('/', (req, res) => {
-			res.sendFile(__dirname + '/index.html');
-		});
-
-		wss.on('connection', (ws) => {
-			ws.on('message', (message) => {
-				const { x, y } = JSON.parse(message);
-				// Update the mouse position based on the received data
-				mouseX = x;
-				mouseY = y;
-				pointerEl.style.left = `${mouseX}px`;
-				pointerEl.style.top = `${mouseY}px`;
-				if (TrackyMouse.onPointerMove) {
-					TrackyMouse.onPointerMove(mouseX, mouseY);
-				}
-			});
-		});
-
-		server.listen(8080, () => {
-			console.log('WebSocket server started on port 8080');
-		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
 		reset();
