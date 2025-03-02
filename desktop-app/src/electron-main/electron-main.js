@@ -357,15 +357,15 @@ expressApp.get('/', (req, res) => {
 wss.on('connection', (ws) => {
 	console.log('Client connected');
 	ws.on('message', (message) => {
-		const { x, y } = JSON.parse(message);
-		console.log('Received message:', x, y);
-		// if (onPointerMove) {
-		// onPointerMove(x, y);
-		// }
-		// setMouseLocationTracky(x, y);
+		let { x, y } = JSON.parse(message);
+		x *= screenOverlayWindow.getContentBounds().width;
+		y *= screenOverlayWindow.getContentBounds().height;
 		const time = performance.now();
 		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
 
+	});
+	ws.on('close', () => {
+		console.log('Client disconnected');
 	});
 });
 
