@@ -2,24 +2,24 @@
 // const message = document.getElementById("tracky-mouse-screen-overlay-message");
 // const actionSpan = document.getElementById("enable-disable");
 
-// const bigButton = document.createElement("button");
-// bigButton.style.position = "absolute";
-// bigButton.style.top = "0";
-// bigButton.style.left = "0";
-// bigButton.style.width = "100%";
-// bigButton.style.height = "100%";
-// bigButton.style.backgroundColor = "transparent";
-// bigButton.style.border = "none";
-// bigButton.id = "button-that-takes-up-the-entire-screen";
-// document.body.appendChild(bigButton);
+const bigButton = document.createElement("button");
+bigButton.style.position = "absolute";
+bigButton.style.top = "0";
+bigButton.style.left = "0";
+bigButton.style.width = "100%";
+bigButton.style.height = "100%";
+bigButton.style.backgroundColor = "transparent";
+bigButton.style.border = "none";
+bigButton.id = "button-that-takes-up-the-entire-screen";
+document.body.appendChild(bigButton);
 
-// TrackyMouse.initDwellClicking({
-// 	targets: "#button-that-takes-up-the-entire-screen",
-// 	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
-// 	click: ({ x, y }) => {
-// 		electronAPI.mouseClick(x, y);
-// 	},
-// });
+TrackyMouse.initDwellClicking({
+	targets: "#button-that-takes-up-the-entire-screen",
+	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
+	click: ({ x, y }) => {
+		electronAPI.mouseClick(x, y);
+	},
+});
 
 electronAPI.onMouseMove((_event, x, y) => {
 	// console.log("move-mouse", x, y);
