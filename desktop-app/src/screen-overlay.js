@@ -34,6 +34,69 @@ electronAPI.onMouseState((_event, state) => {
 	cursorElement.style.display = state.visible ? "block" : "none";
 });
 
+const svgNS = "http://www.w3.org/2000/svg";
+const svg = document.createElementNS(svgNS, "svg");
+svg.setAttribute("width", "100%");
+svg.setAttribute("height", "100%");
+svg.style.position = "fixed";
+svg.style.top = "0";
+svg.style.left = "0";
+svg.style.pointerEvents = "none";
+document.body.appendChild(svg);
+
+let isDrawing = false;
+let lastX = null, lastY = null;
+const trails = [];
+
+function createTrail(x1, y1, x2, y2) {
+	const line = document.createElementNS(svgNS, "line");
+	line.setAttribute("x1", x1);
+	line.setAttribute("y1", y1);
+	line.setAttribute("x2", x2);
+	line.setAttribute("y2", y2);
+	line.setAttribute("stroke", "red");
+	line.setAttribute("stroke-width", "2");
+	line.setAttribute("stroke-opacity", "1");
+	svg.appendChild(line);
+
+	const trail = { element: line, opacity: 1, createdAt: Date.now() };
+	trails.push(trail);
+}
+
+function fadeTrails() {
+	const now = Date.now();
+	trails.forEach((trail, index) => {
+		const elapsed = now - trail.createdAt;
+		if (elapsed > 2000) {
+			trail.opacity -= 0.02;
+			trail.element.setAttribute("stroke-opacity", trail.opacity);
+			if (trail.opacity <= 0) {
+				svg.removeChild(trail.element);
+				trails.splice(index, 1);
+			}
+		}
+	});
+	requestAnimationFrame(fadeTrails);
+}
+fadeTrails();
+
+electronAPI.onMouseMove((_event, x, y) => {
+	if (isDrawing && lastX !== null && lastY !== null) {
+		createTrail(lastX, lastY, x, y);
+	}
+	lastX = x;
+	lastY = y;
+});
+
+electronAPI.onMouseState((_event, state) => {
+	isDrawing = state.visible;
+	if (!isDrawing) {
+		lastX = null;
+		lastY = null;
+	}
+});
+
+
 // let wasEnabled = false;
 // electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFeedDiagnostics) => {
 // 	console.log("onChangeDwellClicking", isEnabled, isManualTakeback, cameraFeedDiagnostics);
