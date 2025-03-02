@@ -1,3 +1,13 @@
+// import express from 'express';
+// import { createServer } from 'http';
+// import WebSocket from 'ws';
+
+// const __dirname = import.meta.dirname;
+/*global require*/
+const express = require('express');
+const { createServer } = require('http');
+const WebSocket = require('ws');
+
 /* global jsfeat, Stats, clm */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
@@ -752,9 +762,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var runAtLogin;
 	var swapMouseButtons;
 
-	var useClmTracking = true;
+	var useClmTracking = false;
 	var showClmTracking = useClmTracking;
-	var useFacemesh = true;
+	var useFacemesh = false;
 	var facemeshOptions = {
 		maxContinuousChecks: 5,
 		detectionConfidence: 0.9,
@@ -1000,7 +1010,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
 	var clmTracker = new clm.tracker({ useWebGL: false });
-	clmTracker.init();
+	// clmTracker.init();
 	var clmTrackingStarted = false;
 
 	const reset = () => {
@@ -1012,8 +1022,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			facemeshRejectNext = facemeshOptions.maxContinuousChecks;
 		}
 		facemeshPrediction = null;
-		useClmTracking = true;
-		showClmTracking = true;
+		useClmTracking = false;
+		showClmTracking = false;
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
@@ -1022,54 +1032,84 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		startStopButton.setAttribute("aria-pressed", "false");
 	};
 
+	// useCameraButton.onclick = TrackyMouse.useCamera = () => {
+	// 	navigator.mediaDevices.getUserMedia({
+	// 		audio: false,
+	// 		video: {
+	// 			width: defaultWidth,
+	// 			height: defaultHeight,
+	// 			facingMode: "user",
+	// 		}
+	// 	}).then((stream) => {
+	// 		reset();
+	// 		try {
+	// 			if ('srcObject' in cameraVideo) {
+	// 				cameraVideo.srcObject = stream;
+	// 			} else {
+	// 				cameraVideo.src = window.URL.createObjectURL(stream);
+	// 			}
+	// 		} catch (_err) {
+	// 			cameraVideo.src = stream;
+	// 		}
+	// 		useCameraButton.hidden = true;
+	// 		errorMessage.hidden = true;
+	// 		if (!paused) {
+	// 			startStopButton.textContent = "Stop";
+	// 			startStopButton.setAttribute("aria-pressed", "true");
+	// 		}
+	// 	}, (error) => {
+	// 		console.log(error);
+	// 		if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
+	// 			// required track is missing
+	// 			errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
+	// 		} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
+	// 			// webcam is already in use
+	// 			errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+	// 		} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
+	// 			// constraints can not be satisfied by avb. devices
+	// 			errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
+	// 		} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
+	// 			// permission denied in browser
+	// 			errorMessage.textContent = "Permission denied. Please enable access to the camera.";
+	// 		} else if (error.name == "TypeError") {
+	// 			// empty constraints object
+	// 			errorMessage.textContent = `Something went wrong accessing the camera. (${error.name}: ${error.message})`;
+	// 		} else {
+	// 			// other errors
+	// 			errorMessage.textContent = `Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`;
+	// 		}
+	// 		errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
+	// 		errorMessage.hidden = false;
+	// 	});
+	// };
 	useCameraButton.onclick = TrackyMouse.useCamera = () => {
-		navigator.mediaDevices.getUserMedia({
-			audio: false,
-			video: {
-				width: defaultWidth,
-				height: defaultHeight,
-				facingMode: "user",
-			}
-		}).then((stream) => {
-			reset();
-			try {
-				if ('srcObject' in cameraVideo) {
-					cameraVideo.srcObject = stream;
-				} else {
-					cameraVideo.src = window.URL.createObjectURL(stream);
+		// Start a websocket server to receive mouse position data from the laser pointer app.
+		const server = createServer();
+		const wss = new WebSocket.Server({ server });
+		const app = express();
+
+		app.use(express.static('public'));
+
+		app.get('/', (req, res) => {
+			res.sendFile(__dirname + '/index.html');
+		});
+
+		wss.on('connection', (ws) => {
+			ws.on('message', (message) => {
+				const { x, y } = JSON.parse(message);
+				// Update the mouse position based on the received data
+				mouseX = x;
+				mouseY = y;
+				pointerEl.style.left = `${mouseX}px`;
+				pointerEl.style.top = `${mouseY}px`;
+				if (TrackyMouse.onPointerMove) {
+					TrackyMouse.onPointerMove(mouseX, mouseY);
 				}
-			} catch (_err) {
-				cameraVideo.src = stream;
-			}
-			useCameraButton.hidden = true;
-			errorMessage.hidden = true;
-			if (!paused) {
-				startStopButton.textContent = "Stop";
-				startStopButton.setAttribute("aria-pressed", "true");
-			}
-		}, (error) => {
-			console.log(error);
-			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
-				// required track is missing
-				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
-			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
-				// webcam is already in use
-				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
-			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
-				// constraints can not be satisfied by avb. devices
-				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
-			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
-				// permission denied in browser
-				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
-			} else if (error.name == "TypeError") {
-				// empty constraints object
-				errorMessage.textContent = `Something went wrong accessing the camera. (${error.name}: ${error.message})`;
-			} else {
-				// other errors
-				errorMessage.textContent = `Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`;
-			}
-			errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
-			errorMessage.hidden = false;
+			});
+		});
+
+		server.listen(8080, () => {
+			console.log('WebSocket server started on port 8080');
 		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
@@ -1730,14 +1770,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
-				if (window.electronAPI) {
-					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
-					pointerEl.style.display = "none";
-				} else {
-					pointerEl.style.display = "";
-					pointerEl.style.left = `${mouseX}px`;
-					pointerEl.style.top = `${mouseY}px`;
-				}
+				// if (window.electronAPI) {
+				// 	window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
+				// 	pointerEl.style.display = "none";
+				// } else {
+				pointerEl.style.display = "";
+				pointerEl.style.left = `${mouseX}px`;
+				pointerEl.style.top = `${mouseY}px`;
+				// }
 				if (TrackyMouse.onPointerMove) {
 					TrackyMouse.onPointerMove(mouseX, mouseY);
 				}

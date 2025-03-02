@@ -48,6 +48,7 @@
     "about-window": "^1.15.2",
     "argparse": "^2.0.1",
     "electron-window-state": "^5.0.3",
+    "express": "^4.21.2",
     "fs-plus": "^3.1.1",
     "serenade-driver": "^1.1.13",
     "tracky-mouse": "file:../core"
