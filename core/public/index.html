@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tracky Mouse Laser Pointer Input</title>
+</head>
+
+<body>
+	<script>
+		const socket = new WebSocket('ws://localhost:8080');
+
+		socket.onopen = function (event) {
+			console.log('WebSocket is connected.');
+		};
+
+		socket.onclose = function (event) {
+			console.log('WebSocket is closed.');
+		};
+
+		socket.onerror = function (error) {
+			console.error('WebSocket error:', error);
+		};
+
+		document.addEventListener('mousemove', function (event) {
+			const normalizedX = event.clientX / window.innerWidth;
+			const normalizedY = event.clientY / window.innerHeight;
+			const mousePosition = { x: normalizedX, y: normalizedY };
+
+			if (socket.readyState === WebSocket.OPEN) {
+				socket.send(JSON.stringify(mousePosition));
+			}
+		});
+	</script>
+</body>
+
+</html>
