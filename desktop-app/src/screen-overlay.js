@@ -30,6 +30,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 	cursorElement.style.top = `${y}px`;
 });
 electronAPI.onMouseState((_event, state) => {
+	console.log("onMouseState", state);
 	cursorElement.style.display = state.visible ? "block" : "none";
 });
 

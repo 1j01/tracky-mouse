@@ -30,7 +30,7 @@
 
 			if (socket.readyState === WebSocket.OPEN) {
 				socket.send(JSON.stringify({ type: "mouseMove", ...mousePosition }));
-				socket.send(JSON.stringify({ type: "mouseState", visible: event.buttons === 1 }));
+				socket.send(JSON.stringify({ type: "mouseState", state: { visible: event.buttons === 1 } }));
 			}
 		});
 
