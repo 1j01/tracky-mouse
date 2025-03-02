@@ -51,7 +51,8 @@
     "express": "^4.21.2",
     "fs-plus": "^3.1.1",
     "serenade-driver": "^1.1.13",
-    "tracky-mouse": "file:../core"
+    "tracky-mouse": "file:../core",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "7.4.0",
