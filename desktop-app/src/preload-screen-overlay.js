@@ -5,6 +5,8 @@
 const Sentry = require("@sentry/electron/renderer");
 Sentry.init();
 
+OH_NO.EMIT(); // testing Sentry in preload script
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
