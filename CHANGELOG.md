@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - stats.js performance monitor, if enabled, now scrolls with the page, using `fixed` positioning instead of `absolute`.
 - A friendly "webcam may already be in use" message is now shown also for `AbortError` in Firefox.
 
+### Added
+- You can now disable dwell clicking in the desktop app without disabling mouse movement, by unchecking "Dwell to click".
+- [Sentry](https://sentry.io/) is now used for error reporting in the desktop app.
+  - No personally identifiable information is collected, only stack traces and environment details.
+  - (Only the main process is monitored for now, due to the technical hurdles of sandboxing.)
+
 ## [1.2.0] - 2024-12-17
 
 ### Deprecated
