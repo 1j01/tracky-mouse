@@ -2,6 +2,9 @@
 // with privileged access to the electron API, which it should expose in a limited way.
 // That said, mouse control is pretty powerful, so it's important to keep it secure.
 
+const Sentry = require("@sentry/electron/renderer");
+Sentry.init();
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {

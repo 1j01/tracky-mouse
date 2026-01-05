@@ -1,6 +1,12 @@
 
 // Note: Don't require any third-party (or own) modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
+// I'm making an exception for Sentry, since it could help track down installation issues.
+const Sentry = require("@sentry/electron/main");
+Sentry.init({
+	dsn: "https://d02619b2adf1ec1ea0c6219e5cbb6f0d@o4507120033660928.ingest.us.sentry.io/4510658749202432",
+});
+
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');

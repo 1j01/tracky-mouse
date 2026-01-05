@@ -45,6 +45,7 @@
     "publish": "env-cmd electron-forge publish"
   },
   "dependencies": {
+    "@sentry/electron": "^5.11.0",
     "about-window": "^1.15.2",
     "argparse": "^2.0.1",
     "electron-window-state": "^5.0.3",
