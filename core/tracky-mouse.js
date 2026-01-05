@@ -1060,6 +1060,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
+				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
+				// TODO: enumerateDevices and give more specific message for OBS Virtual Camera case
+				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
+				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
+				// or "1 camera source detected" preceding it)
 				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
