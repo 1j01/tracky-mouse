@@ -9,6 +9,7 @@
 		"website"
 	],
 	"scripts": {
+		"install-all": "npm install && cd core && npm install && cd .. && cd website && npm install && cd .. && cd desktop-app && npm install && cd ..",
 		"website": "cd website && npm run start",
 		"in-website": "cd website &&",
 		"desktop-app": "cd desktop-app && npm run start",
