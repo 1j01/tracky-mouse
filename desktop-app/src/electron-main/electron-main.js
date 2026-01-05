@@ -190,6 +190,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // Settings
 // (actual defaults come from the HTML template)
 let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
+let clickingMode = 'dwell'; // 'off', 'dwell', and in the future: 'blink', 'mouth-open'
 let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
@@ -244,6 +245,7 @@ function serializeSettings() {
 			startEnabled,
 			runAtLogin,
 			swapMouseButtons,
+			clickingMode,
 			mirrorCameraView: mirror,
 			headTrackingSensitivityX: sensitivityX,
 			headTrackingSensitivityY: sensitivityY,
@@ -265,6 +267,9 @@ function deserializeSettings(settings) {
 		// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
 		if (settings.globalSettings.swapMouseButtons !== undefined) {
 			swapMouseButtons = settings.globalSettings.swapMouseButtons;
+		}
+		if (settings.globalSettings.clickingMode !== undefined) {
+			clickingMode = settings.globalSettings.clickingMode;
 		}
 		if (settings.globalSettings.mirrorCameraView !== undefined) {
 			mirror = settings.globalSettings.mirrorCameraView;
@@ -408,8 +413,8 @@ const createWindow = () => {
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
 			'change-dwell-clicking',
-			enabled && regainControlTimeout === null,
-			enabled && regainControlTimeout !== null,
+			enabled && clickingMode === 'dwell' && regainControlTimeout === null,
+			enabled && clickingMode === 'dwell' && regainControlTimeout !== null,
 			cameraFeedDiagnostics,
 		);
 	};
@@ -495,7 +500,7 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('click', async (_event, x, y, _time) => {
-		if (regainControlTimeout || !enabled) {
+		if (regainControlTimeout || !enabled || clickingMode === 'off') {
 			return;
 		}
 

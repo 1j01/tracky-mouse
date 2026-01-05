@@ -616,6 +616,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
 				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 			</div>
+			<div class="tracky-mouse-control-row">
+				<input type="checkbox" id="tracky-mouse-clicking-mode"/>
+				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Dwell to click</span></label>
+			</div>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
@@ -659,6 +663,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
+	var clickingModeCheckbox = uiContainer.querySelector("#tracky-mouse-clicking-mode");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
 	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
@@ -688,6 +693,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		// It could be implemented for the web version, but if you're designing an app for facial mouse users,
 		// you might want to avoid right-clicking altogether.
 		swapMouseButtonsCheckbox.parentElement.hidden = true;
+
+		// Hide clicking mode option if not in desktop app,
+		// since dwell clicking in the web version is a separate API (TrackyMouse.initDwellClicking)
+		// and wouldn't automatically be controlled by this UI.
+		// TODO: bring more of desktop app functionality into core
+		clickingModeCheckbox.parentElement.hidden = true;
 
 		// Hide the "run at login" option if we're not in the desktop app.
 		runAtLoginCheckbox.parentElement.hidden = true;
@@ -743,6 +754,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var startEnabled;
 	var runAtLogin;
 	var swapMouseButtons;
+	var clickingMode = 'dwell';
 
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -845,6 +857,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				swapMouseButtons = settings.globalSettings.swapMouseButtons;
 				swapMouseButtonsCheckbox.checked = swapMouseButtons;
 			}
+			if (settings.globalSettings.clickingMode !== undefined) {
+				clickingMode = settings.globalSettings.clickingMode;
+				clickingModeCheckbox.checked = clickingMode === 'dwell';
+			}
 			if (settings.globalSettings.mirrorCameraView !== undefined) {
 				mirror = settings.globalSettings.mirrorCameraView;
 				mirrorCheckbox.checked = mirror;
@@ -885,6 +901,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				startEnabled,
 				runAtLogin,
 				swapMouseButtons,
+				clickingMode,
 				mirrorCameraView: mirror,
 				headTrackingSensitivityX: sensitivityX,
 				headTrackingSensitivityY: sensitivityY,
@@ -962,6 +979,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
+	clickingModeCheckbox.onchange = (event) => {
+		clickingMode = clickingModeCheckbox.checked ? 'dwell' : 'off';
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { clickingMode } });
+		}
+	};
 	startEnabledCheckbox.onchange = (event) => {
 		startEnabled = startEnabledCheckbox.checked;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
@@ -982,6 +1007,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
+	clickingModeCheckbox.onchange();
 	startEnabledCheckbox.onchange();
 	runAtLoginCheckbox.onchange();
 	sensitivityXSlider.onchange();
