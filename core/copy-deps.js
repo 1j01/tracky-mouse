@@ -3,10 +3,10 @@ const fs = require("fs");
 
 fs.mkdirSync("lib/face_mesh", { recursive: true });
 
-fs.copyFileSync("node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js", "lib/tf-core.min.js");
-fs.copyFileSync("node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js.map", "lib/tf-core.min.js.map");
-fs.copyFileSync("node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js", "lib/tf-backend-webgl.min.js");
-fs.copyFileSync("node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js.map", "lib/tf-backend-webgl.min.js.map");
+// fs.copyFileSync("node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js", "lib/tf-core.min.js");
+// fs.copyFileSync("node_modules/@tensorflow/tfjs-core/dist/tf-core.min.js.map", "lib/tf-core.min.js.map");
+// fs.copyFileSync("node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js", "lib/tf-backend-webgl.min.js");
+// fs.copyFileSync("node_modules/@tensorflow/tfjs-backend-webgl/dist/tf-backend-webgl.min.js.map", "lib/tf-backend-webgl.min.js.map");
 // fs.copyFileSync("node_modules/@tensorflow-models/face-landmarks-detection/dist/face-landmarks-detection.min.js", "lib/face-landmarks-detection.min.js");
 
 // When using `runtime: 'mediapipe'`, tf.js is not needed, except for some `instanceof Tensor` checks.

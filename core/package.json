@@ -49,9 +49,7 @@
   ],
   "devDependencies": {
     "@mediapipe/face_mesh": "^0.4.1633559619",
-    "@tensorflow-models/face-landmarks-detection": "^1.0.6",
-    "@tensorflow/tfjs-backend-webgl": "^4.22.0",
-    "@tensorflow/tfjs-core": "^4.22.0"
+    "@tensorflow-models/face-landmarks-detection": "^1.0.6"
   },
   "scripts": {
     "copy-deps": "node copy-deps.js"
