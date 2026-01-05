@@ -28,9 +28,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
 		// `${TrackyMouse.dependenciesRoot}/lib/tf-core.min.js`,
 	];
-	window.tf ??= {
-		Tensor: function () { }
-	};
 	const moreScriptFiles = [
 		// These depend on tf-core.min.js
 		// `${TrackyMouse.dependenciesRoot}/lib/tf-backend-webgl.min.js`,
