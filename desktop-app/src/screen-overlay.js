@@ -2,6 +2,7 @@
 const message = document.getElementById("tracky-mouse-screen-overlay-message");
 const actionSpan = document.getElementById("enable-disable");
 
+// I like bigButton and I cannot lie
 const bigButton = document.createElement("button");
 bigButton.style.position = "absolute";
 bigButton.style.top = "0";
