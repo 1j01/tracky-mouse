@@ -14,7 +14,7 @@ bigButton.style.border = "none";
 bigButton.id = "button-that-takes-up-the-entire-screen";
 document.body.appendChild(bigButton);
 
-TrackyMouse.initDwellClicking({
+const dwellClicker = TrackyMouse.initDwellClicking({
 	targets: "#button-that-takes-up-the-entire-screen",
 	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
 	click: ({ x, y }) => {
@@ -63,10 +63,13 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 	}
 
 	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
-	// (TODO: can I use the return value of initDwellClicking instead? Or otherwise formalize this?)
+	// Update: I'm now setting `dwellClicker.paused`, just keeping the event dispatching
+	// in case it's needed to cancel a dwell click in progress.
+	// TODO: ensure settings `paused` to `true` cancels any in-progress dwell click.
 	if (wasEnabled !== isEnabled) {
 		document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
 		window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
 	}
+	dwellClicker.paused = !isEnabled;
 	wasEnabled = isEnabled;
 });

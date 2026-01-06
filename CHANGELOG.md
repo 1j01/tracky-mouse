@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - No personally identifiable information is collected, only stack traces and environment details.
   - (Only the main process is monitored for now, due to the technical hurdles of sandboxing.)
 
+### Fixed
+- The dwell clicking indicator (shrinking red circle) should no longer show while disabled.
+
 ## [1.2.0] - 2024-12-17
 
 ### Deprecated
