@@ -179,6 +179,13 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
+const screen = require('electron').screen;
+
+let screenScaleFactor = 1;
+function updateScreenScaleFactor() {
+	// Must wait for ready event before calling this
+	screenScaleFactor = screen.getPrimaryDisplay().scaleFactor;
+}
 
 require("./menus.js"); //({ loadSettings });
 
@@ -332,7 +339,7 @@ async function setMouseLocationTracky(x, y) {
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
-	await setMouseLocationWithoutTracking(x, y);
+	await setMouseLocationWithoutTracking(x * screenScaleFactor, y * screenScaleFactor);
 }
 function pruneMousePosHistory() {
 	const now = performance.now();
@@ -422,6 +429,8 @@ const createWindow = () => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		const curPos = await getMouseLocation();
+		curPos.x /= screenScaleFactor;
+		curPos.y /= screenScaleFactor;
 		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
 		// since setMouseLocation is asynchronous,
 		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
@@ -467,6 +476,8 @@ const createWindow = () => {
 		let initialPos;
 		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
 			initialPos = await getMouseLocation();
+			initialPos.x /= screenScaleFactor;
+			initialPos.y /= screenScaleFactor;
 		}
 		enabled = nowEnabled;
 		updateDwellClicking();
@@ -597,6 +608,11 @@ app.on('ready', async () => {
 		return;
 	}
 	createWindow();
+
+	updateScreenScaleFactor();
+	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {
+		updateScreenScaleFactor();
+	});
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');
