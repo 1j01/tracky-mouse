@@ -1,0 +1,6 @@
+
+node.js 21.5.0: node-gyp fails by specifying a minimum mac version of 11
+node.js 18.7.0: installs but crashes on startup:
+
+2026-01-07 18:26:38.230 Electron[62603:2062787] *** Assertion failure in -[ElectronNSWindow titlebarAccessoryViewControllers], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.60.112/AppKit.subproj/NSWindow.m:3439
+[0107/182638.289732:WARNING:process_memory_mac.cc(93)] mach_vm_read(0x7ffee660f000, 0x2000): (os/kern) invalid address (1)
