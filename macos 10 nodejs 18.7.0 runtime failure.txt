@@ -1,6 +1,100 @@
 
 node.js 21.5.0: node-gyp fails by specifying a minimum mac version of 11
+          'MACOSX_DEPLOYMENT_TARGET': '11.0',       # -mmacosx-version-min=11.0
+
 node.js 18.7.0: installs but crashes on startup:
 
 2026-01-07 18:26:38.230 Electron[62603:2062787] *** Assertion failure in -[ElectronNSWindow titlebarAccessoryViewControllers], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.60.112/AppKit.subproj/NSWindow.m:3439
 [0107/182638.289732:WARNING:process_memory_mac.cc(93)] mach_vm_read(0x7ffee660f000, 0x2000): (os/kern) invalid address (1)
+
+---------
+
+&& npm install && cd ..
+
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@3. I'll try to do my best with it!
+npm WARN deprecated @humanwhocodes/config-array@0.12.3: Use @eslint/config-array instead
+npm WARN deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+npm WARN deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm WARN deprecated @npmcli/move-file@1.1.2: This functionality has been moved to @npmcli/fs
+npm WARN deprecated npmlog@4.1.2: This package is no longer supported.
+npm WARN deprecated are-we-there-yet@1.1.7: This package is no longer supported.
+npm WARN deprecated gauge@2.7.4: This package is no longer supported.
+added 42 packages from 20 contributors, removed 118 packages, updated 284 packages and audited 326 packages in 62.612s
+found 0 vulnerabilities
+
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+removed 18 packages, updated 14 packages and audited 14 packages in 6.801s
+found 1 low severity vulnerability
+  run `npm audit fix` to fix them, or `npm audit` for details
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@3. I'll try to do my best with it!
+npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm WARN deprecated opn@6.0.0: The package has been renamed to `open`
+npm WARN deprecated fsevents@1.2.13: Upgrade to fsevents v2 to mitigate potential security issues
+npm WARN deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+npm WARN deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+npm WARN deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+npm WARN deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+npm WARN deprecated uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+
+> fsevents@1.2.13 install /Users/io/Projects/tracky-mouse/website/node_modules/fsevents
+> node install.js
+
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+
+  SOLINK_MODULE(target) Release/.node
+  CXX(target) Release/obj.target/fse/fsevents.o
+  SOLINK_MODULE(target) Release/fse.node
+added 31 packages from 23 contributors, removed 29 packages, updated 201 packages and audited 232 packages in 33.922s
+found 3 vulnerabilities (1 moderate, 2 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
+npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+npm WARN rm not removing /Users/io/Projects/tracky-mouse/desktop-app/node_modules/.bin/asar as it wasn't installed by /Users/io/Projects/tracky-mouse/desktop-app/node_modules/asar
+
+> electron-winstaller@5.3.0 install /Users/io/Projects/tracky-mouse/desktop-app/node_modules/electron-winstaller
+> node ./script/select-7z-arch.js
+
+Selecting 7-Zip for arch x64
+
+> serenade-driver@1.1.13 install /Users/io/Projects/tracky-mouse/desktop-app/node_modules/serenade-driver
+> node-gyp rebuild
+
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+
+  CXX(target) Release/obj.target/serenade-driver/src/driver.o
+  CXX(target) Release/obj.target/serenade-driver/src/mac.o
+  SOLINK_MODULE(target) Release/serenade-driver.node
+
+> electron@20.0.1 postinstall /Users/io/Projects/tracky-mouse/desktop-app/node_modules/electron
+> node install.js
+
+(node:65115) ExperimentalWarning: The fs.promises API is experimental
+Error: EEXIST: file already exists, mkdir '/Users/io/Projects/tracky-mouse/desktop-app/node_modules/electron/dist'
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! electron@20.0.1 postinstall: `node install.js`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the electron@20.0.1 postinstall script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/io/.npm/_logs/2026-01-07T23_44_32_152Z-debug.log
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! tracky-mouse-monorepo@1.2.0 install-all: `npm install && cd core && npm install && cd .. && cd website && npm install && cd .. && cd desktop-app && npm install && cd ..`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the tracky-mouse-monorepo@1.2.0 install-all script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/io/.npm/_logs/2026-01-07T23_44_32_424Z-debug.log
+
+ 2026-01-07 18:44:33 ⌚  MostlyNitrogen in ~/Projects/tracky-mouse
