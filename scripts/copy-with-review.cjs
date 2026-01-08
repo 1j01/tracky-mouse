@@ -5,10 +5,19 @@ ChatGPT prompt:
 
 Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder.
 
-(+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability)
+(+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability, generally improved output)
 (+ fixes: followSymbolicLinks: true, dot: true, onlyFiles: true, path.sep -> "/"*, exit on SIGINT (Ctrl+C) or when canceling (N))
 (*the AI did this one, I haven't audited it)
 
+TODO:
+- Clean up the code
+  - Is a separate module fast-glob really needed just for walking the directory tree?
+- Refresh output in-place and avoid the user scrolling up to earlier, outdated output,
+  perhaps by using the alternate screen buffer, making it more of a TUI application
+- Handle copying empty directories (if this is to be a reusable tool)
+- Don't prompt if everything matches initially (optionally, if this is to be a reusable tool)
+- Show exact globs that are causing conflicts, with clickable "file line:col" links (in supported IDEs)
+- Help debug non-matching globs
 */
 
 const fs = require("fs");
@@ -145,7 +154,7 @@ function print(entries, indent = "") {
 				console.log(`${indent}${emoji} ${e.name}`);
 			}
 		} else {
-			console.log(`${indent}📂${e.name}`);
+			console.log(`${indent}📂 ${e.name}`);
 			print(e.children, indent + "  ");
 		}
 	}
@@ -196,27 +205,34 @@ function evaluate() {
 		.map(([p]) => p);
 
 	console.clear();
+	console.log(`Source: ${SRC}`);
+	console.log(`Destination: ${DEST}`);
+	console.log(`Patterns file: ${PATTERN_FILE}`);
+	console.log(`Dry run: ${DRY_RUN ? "Yes" : "No"}`);
+	console.log("\nFiles to be copied:");
 	const tree = buildTree(visible);
 	const compressed = compress(tree, statuses);
 	print(compressed);
 
 	if (hasInvalid(statuses)) {
 		awaitingConfirmation = false;
-		console.log("\nWaiting for patterns.js to become valid…");
+		// console.log("\nWaiting for patterns.js to become valid…");
+		// console.log(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
+		process.stdout.write(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		return;
 	}
 
 	if (awaitingConfirmation) return;
 	awaitingConfirmation = true;
 
-	rl.question("\nAll files resolved. Proceed with copy? (y/n) ", ans => {
+	rl.question("\nAll files sorted. Proceed with copy? (y/n) ", ans => {
 		if (ans.toLowerCase() === "y") {
 			copy(statuses);
 			console.log("Copy complete.");
 			process.exit(0);
 		} else {
 			console.log("Aborted.");
-			process.exit(0);
+			process.exit(1);
 		}
 	});
 }

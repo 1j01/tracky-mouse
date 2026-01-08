@@ -1,15 +1,15 @@
 exports.exclude = [
 	"**/node_modules/**",
 	"**/dist/**",
-	"*.log",
-	".**",
+	"**/*.log",
+	"**/.**",
 	"**/package-lock.json",
 	"**/package.json",
+	"**/README.md",
 	"deploy-patterns.js",
 	"core/copy-deps.js",
 	"images/*.blend",
 	"images/*.icns",
-	"**/README.md",
 ];
 
 exports.include = [
