@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 
 /*
-ChatGPT prompt:
-
-"Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder."
-(+ followup prompt: "> Re-evaluates automatically on Enter
-That's not automatic. It should watch the file.")
-
-(+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability, generally improved output)
-(+ fixes: followSymbolicLinks: true, dot: true, onlyFiles: true, path.sep -> "/"*, exit on SIGINT (Ctrl+C) or when canceling (N), conflicts not showing in tree)
-(*an AI agent did this one, I haven't audited it)
+Script to copy files between directories, using an include list and exclude list of globs.
+If something is matched by neither (unknown) or both (conflict), the script waits
+for the user to change the patterns, and refreshes automatically,
+prompting for confirmation to proceed with copying once it becomes valid.
+It shows a tree view of included, unknown, and conflicted files, hiding excluded files/folders.
 
 TODO:
 - Clean up the code
+  - Multiple tree representations (with/without status - compressTree converts from one to the other)
+  - Awkward main orchestration relying heavily on process.exit
   - Is a separate module fast-glob really needed just for walking the directory tree?
 - Refresh output in-place and avoid the user scrolling up to earlier, outdated output,
   perhaps by using the alternate screen buffer, making it more of a TUI application
@@ -25,6 +23,7 @@ TODO:
   "files in one deploy that are missing in the next", in which case the solution
   might involve storing the files previously included in a deploy? But you'd still want
   to be able to have some notion of files that can exist or not, that don't require review.
+- --help option
 */
 
 const fs = require("fs");
@@ -52,7 +51,7 @@ const rl = readline.createInterface({
 	output: process.stdout
 });
 
-// why is this needed? readline?
+// why is this needed? readline blocks Ctrl+C from exiting the process
 rl.on("SIGINT", () => {
 	process.exit(0);
 });
@@ -79,7 +78,7 @@ function loadPatterns() {
 	return patterns;
 }
 
-function walkAll(root) {
+function scanDirectoryTree(root) {
 	return fg.sync(["**/*"], {
 		cwd: root,
 		dot: true,
@@ -88,7 +87,7 @@ function walkAll(root) {
 	});
 }
 
-function classify(paths, includePatterns, excludePatterns) {
+function classifyPaths(paths, includePatterns, excludePatterns) {
 	const isIncluded = picomatch(includePatterns, { dot: true });
 	const isExcluded = picomatch(excludePatterns, { dot: true });
 
@@ -97,14 +96,12 @@ function classify(paths, includePatterns, excludePatterns) {
 	for (const filePath of paths) {
 		const included = isIncluded(filePath);
 		const excluded = isExcluded(filePath);
-
-		statusMap.set(
-			filePath,
+		const status =
 			included && excluded ? "conflict" :
 				included ? "included" :
 					excluded ? "excluded" :
-						"unknown"
-		);
+						"unknown";
+		statusMap.set(filePath, status);
 	}
 
 	return statusMap;
@@ -114,6 +111,7 @@ function buildTree(paths) {
 	const root = {};
 	for (const filePath of paths) {
 		const parts = filePath.split('/');
+		// Start at root and traverse down the tree, creating nodes as needed
 		let node = root;
 		for (const part of parts) {
 			node.children ||= {};
@@ -124,32 +122,30 @@ function buildTree(paths) {
 	return root;
 }
 
-function compress(tree, statusMap, prefix = "") {
+function compressTree(tree, statusMap, prefix = "") {
 	const compressedNodes = [];
 
 	for (const [name, node] of Object.entries(tree.children || {})) {
 		const fullPath = prefix ? prefix + "/" + name : name;
 
 		// Find all statuses for files under this node
-		const statusesInSubtree = [];
+		const statusesInSubtree = new Set();
 		for (const [filePath, status] of statusMap) {
 			if (filePath === fullPath || filePath.startsWith(fullPath + "/")) {
-				statusesInSubtree.push(status);
+				statusesInSubtree.add(status);
 			}
 		}
 
-		const uniqueStatuses = new Set(statusesInSubtree);
-
-		// If all files in this subtree have the same status, path collapse it
-		if (uniqueStatuses.size === 1) {
+		// If all files in this subtree have the same status, collapse it
+		if (statusesInSubtree.size === 1) {
 			compressedNodes.push({
 				name: node.children ? name + "/" : name,
-				status: [...uniqueStatuses][0]
+				status: [...statusesInSubtree][0]
 			});
 		} else {
 			compressedNodes.push({
 				name: name + "/",
-				children: compress(node, statusMap, fullPath)
+				children: compressTree(node, statusMap, fullPath)
 			});
 		}
 	}
@@ -171,14 +167,14 @@ function printTree(nodes, indent = "") {
 	}
 }
 
-function hasInvalid(statusMap) {
+function anyProblems(statusMap) {
 	for (const status of statusMap.values()) {
 		if (status === "unknown" || status === "conflict") return true;
 	}
 	return false;
 }
 
-function copy(statusMap) {
+function copyFiles(statusMap) {
 	for (const [filePath, status] of statusMap) {
 		if (status !== "included") continue;
 
@@ -196,7 +192,7 @@ function copy(statusMap) {
 	}
 }
 
-function evaluate() {
+function validateAndMaybePromptToCopy() {
 	let patterns;
 	try {
 		patterns = loadPatterns();
@@ -208,8 +204,8 @@ function evaluate() {
 		return;
 	}
 
-	const allFiles = walkAll(SRC);
-	const statusMap = classify(allFiles, patterns.include, patterns.exclude);
+	const allFiles = scanDirectoryTree(SRC);
+	const statusMap = classifyPaths(allFiles, patterns.include, patterns.exclude);
 
 	const visibleFiles = [...statusMap.entries()]
 		.filter(([, status]) => status === "included" || status === "unknown" || status === "conflict")
@@ -222,21 +218,24 @@ function evaluate() {
 	console.log(`Dry run: ${DRY_RUN ? "Yes" : "No"}`);
 	console.log("\nFiles to be copied:");
 	const tree = buildTree(visibleFiles);
-	const compressedTree = compress(tree, statusMap);
+	const compressedTree = compressTree(tree, statusMap);
 	printTree(compressedTree);
 
-	if (hasInvalid(statusMap)) {
+	if (anyProblems(statusMap)) {
 		awaitingConfirmation = false;
 		process.stdout.write(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		return;
 	}
 
+	// FIXME: need to cancel question if the user changes the patterns file while we're waiting for confirmation
+	// Right now if you get the file in a valid state, then invalidate it, you can press enter and it will proceed to copy files.
+	// rl.question supports AbortSignal https://nodejs.org/api/readline.html#rlquestionquery-options
 	if (awaitingConfirmation) return;
 	awaitingConfirmation = true;
 
 	rl.question("\nAll files sorted. Proceed with copy? (Y/n) ", ans => {
 		if (!ans.toLowerCase().startsWith("n")) {
-			copy(statusMap);
+			copyFiles(statusMap);
 			console.log("Copy complete.");
 			process.exit(0);
 		} else {
@@ -249,9 +248,9 @@ function evaluate() {
 function watchPatterns() {
 	fs.watch(PATTERN_FILE, () => {
 		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(evaluate, 100);
+		debounceTimer = setTimeout(validateAndMaybePromptToCopy, 100);
 	});
 }
 
-evaluate();
+validateAndMaybePromptToCopy();
 watchPatterns();
