@@ -4,6 +4,8 @@
 ChatGPT prompt:
 
 "Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder."
+(+ followup prompt: "> Re-evaluates automatically on Enter
+That's not automatic. It should watch the file.")
 */
 
 const fs = require("fs");
@@ -21,12 +23,15 @@ const rl = readline.createInterface({
 	output: process.stdout
 });
 
+let awaitingConfirmation = false;
+let debounceTimer = null;
+
 function loadPatterns() {
 	delete require.cache[require.resolve(PATTERN_FILE)];
 	return require(PATTERN_FILE);
 }
 
-function walkAllFiles(root) {
+function walkAll(root) {
 	return fg.sync(["**/*"], {
 		cwd: root,
 		dot: true,
@@ -35,75 +40,74 @@ function walkAllFiles(root) {
 	});
 }
 
-function classify(allPaths, include, exclude) {
-	const isInclude = picomatch(include);
-	const isExclude = picomatch(exclude);
+function classify(paths, include, exclude) {
+	const inc = picomatch(include);
+	const exc = picomatch(exclude);
 
-	const result = new Map();
+	const map = new Map();
 
-	for (const p of allPaths) {
-		const inc = isInclude(p);
-		const exc = isExclude(p);
+	for (const p of paths) {
+		const i = inc(p);
+		const e = exc(p);
 
-		let status;
-		if (inc && exc) status = "conflict";
-		else if (inc) status = "included";
-		else if (exc) status = "excluded";
-		else status = "unknown";
-
-		result.set(p, status);
+		map.set(
+			p,
+			i && e ? "conflict" :
+				i ? "included" :
+					e ? "excluded" :
+						"unknown"
+		);
 	}
 
-	return result;
+	return map;
 }
 
 function buildTree(paths) {
-	const tree = {};
-
+	const root = {};
 	for (const p of paths) {
 		const parts = p.split(path.sep);
-		let node = tree;
+		let n = root;
 		for (const part of parts) {
-			node.children ||= {};
-			node.children[part] ||= {};
-			node = node.children[part];
+			n.children ||= {};
+			n.children[part] ||= {};
+			n = n.children[part];
 		}
 	}
-
-	return tree;
+	return root;
 }
 
-function compressTree(tree, statuses, prefix = "") {
-	const entries = [];
+function compress(tree, statuses, prefix = "") {
+	const out = [];
 
 	for (const [name, node] of Object.entries(tree.children || {})) {
 		const full = prefix ? path.join(prefix, name) : name;
 
-		const childStatuses = [];
-		for (const [p, s] of statuses) {
+		const s = [];
+		for (const [p, st] of statuses) {
 			if (p === full || p.startsWith(full + path.sep)) {
-				childStatuses.push(s);
+				s.push(st);
 			}
 		}
 
-		const unique = new Set(childStatuses);
+		const uniq = new Set(s);
 
-		if (unique.size === 1 && !node.children) {
-			entries.push({ name, status: [...unique][0] });
-		} else if (unique.size === 1) {
-			entries.push({ name: name + "/", status: [...unique][0] });
+		if (uniq.size === 1) {
+			out.push({
+				name: node.children ? name + "/" : name,
+				status: [...uniq][0]
+			});
 		} else {
-			entries.push({
+			out.push({
 				name: name + "/",
-				children: compressTree(node, statuses, full)
+				children: compress(node, statuses, full)
 			});
 		}
 	}
 
-	return entries;
+	return out;
 }
 
-function printTree(entries, indent = "") {
+function print(entries, indent = "") {
 	for (const e of entries) {
 		if (e.status) {
 			if (e.status !== "excluded") {
@@ -111,7 +115,7 @@ function printTree(entries, indent = "") {
 			}
 		} else {
 			console.log(`${indent}${e.name}`);
-			printTree(e.children, indent + "  ");
+			print(e.children, indent + "  ");
 		}
 	}
 }
@@ -123,64 +127,69 @@ function hasInvalid(statuses) {
 	return false;
 }
 
-function copyIncluded(statuses) {
+function copy(statuses) {
 	for (const [p, s] of statuses) {
 		if (s !== "included") continue;
 
 		const src = path.join(SRC, p);
-		const dest = path.join(DEST, p);
+		const dst = path.join(DEST, p);
 
-		fs.mkdirSync(path.dirname(dest), { recursive: true });
-
+		fs.mkdirSync(path.dirname(dst), { recursive: true });
 		if (fs.statSync(src).isFile()) {
-			fs.copyFileSync(src, dest);
+			fs.copyFileSync(src, dst);
 		}
 	}
 }
 
-async function main() {
-	while (true) {
-		const { include, exclude } = loadPatterns();
-
-		const all = walkAllFiles(SRC);
-		const statuses = classify(all, include, exclude);
-
-		const visible = [...statuses.entries()].filter(
-			([, s]) => s === "included" || s === "unknown"
-		);
-
-		const tree = buildTree(visible.map(([p]) => p));
-		const compressed = compressTree(tree, statuses);
-
+function evaluate() {
+	let patterns;
+	try {
+		patterns = loadPatterns();
+	} catch (e) {
 		console.clear();
-		printTree(compressed);
-
-		if (hasInvalid(statuses)) {
-			await new Promise(res =>
-				rl.question(
-					"\nResolve patterns (unknown/conflict present). Edit patterns.js, then press Enter.",
-					res
-				)
-			);
-			continue;
-		}
-
-		const answer = await new Promise(res =>
-			rl.question("\nAll files resolved. Proceed with copy? (y/n) ", res)
-		);
-
-		if (answer.toLowerCase() === "y") {
-			copyIncluded(statuses);
-			console.log("Copy complete.");
-		}
-
-		break;
+		console.log("Failed to load patterns.js");
+		console.log(e.message);
+		return;
 	}
 
-	rl.close();
+	const all = walkAll(SRC);
+	const statuses = classify(all, patterns.include, patterns.exclude);
+
+	const visible = [...statuses.entries()]
+		.filter(([, s]) => s === "included" || s === "unknown")
+		.map(([p]) => p);
+
+	console.clear();
+	const tree = buildTree(visible);
+	const compressed = compress(tree, statuses);
+	print(compressed);
+
+	if (hasInvalid(statuses)) {
+		awaitingConfirmation = false;
+		console.log("\nWaiting for patterns.js to become valid…");
+		return;
+	}
+
+	if (awaitingConfirmation) return;
+	awaitingConfirmation = true;
+
+	rl.question("\nAll files resolved. Proceed with copy? (y/n) ", ans => {
+		if (ans.toLowerCase() === "y") {
+			copy(statuses);
+			console.log("Copy complete.");
+			process.exit(0);
+		} else {
+			awaitingConfirmation = false;
+		}
+	});
 }
 
-main().catch(err => {
-	console.error(err);
-	process.exit(1);
-});
+function watchPatterns() {
+	fs.watch(PATTERN_FILE, () => {
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(evaluate, 100);
+	});
+}
+
+evaluate();
+watchPatterns();
