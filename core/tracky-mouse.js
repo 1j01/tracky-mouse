@@ -735,9 +735,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var maxPoints = 1000;
 	var mouseX = 0;
 	var mouseY = 0;
-	var enableTimeTravel = false;
-	// var movementXSinceFacemeshUpdate = 0;
-	// var movementYSinceFacemeshUpdate = 0;
 	var cameraFramesSinceFacemeshUpdate = [];
 	var sensitivityX;
 	var sensitivityY;
@@ -750,7 +747,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var pointsBasedOnFaceScore = 0;
 	var paused = true;
 	var mouseNeedsInitPos = true;
-	var debugTimeTravel = false;
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var mirror;
@@ -1147,8 +1143,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		cameraVideo.height = cameraVideo.videoHeight;
 		canvas.width = cameraVideo.videoWidth;
 		canvas.height = cameraVideo.videoHeight;
-		debugFramesCanvas.width = cameraVideo.videoWidth;
-		debugFramesCanvas.height = cameraVideo.videoHeight;
 		debugPointsCanvas.width = cameraVideo.videoWidth;
 		debugPointsCanvas.height = cameraVideo.videoHeight;
 
@@ -1184,11 +1178,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	canvas.height = defaultHeight;
 	cameraVideo.width = defaultWidth;
 	cameraVideo.height = defaultHeight;
-
-	const debugFramesCanvas = document.createElement("canvas");
-	debugFramesCanvas.width = canvas.width;
-	debugFramesCanvas.height = canvas.height;
-	const debugFramesCtx = debugFramesCanvas.getContext("2d");
 
 	const debugPointsCanvas = document.createElement("canvas");
 	debugPointsCanvas.width = canvas.width;
@@ -1518,15 +1507,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// 	point[1] /= frameScaleForWorker;
 						// });
 
-						// time travel latency compensation
-						// keep a history of camera frames since the prediction was requested,
-						// and analyze optical flow of new points over that history
+						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;)
 
-						// mainOops.filterPoints(() => false); // for DEBUG, empty points (could probably also just set pointCount = 0;
-
-						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;
-
-						// const { annotations } = facemeshPrediction;
 						const getPoint = (index) =>
 							facemeshPrediction.keypoints[index] ?
 								[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y] :
@@ -1594,28 +1576,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
 						// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
-						if (enableTimeTravel) {
-							debugFramesCtx.clearRect(0, 0, debugFramesCanvas.width, debugFramesCanvas.height);
-							setTimeout(() => {
-								debugPointsCtx.clearRect(0, 0, debugPointsCanvas.width, debugPointsCanvas.height);
-							}, 900);
-							cameraFramesSinceFacemeshUpdate.forEach((imageData, _index) => {
-								/*
-								if (debugTimeTravel) {
-									debugFramesCtx.save();
-									debugFramesCtx.globalAlpha = 0.1;
-									// debugFramesCtx.globalCompositeOperation = index % 2 === 0 ? "xor" : "xor";
-									frameCtx.putImageData(imageData, 0, 0);
-									// debugFramesCtx.putImageData(imageData, 0, 0);
-									debugFramesCtx.drawImage(frameCanvas, 0, 0, canvas.width, canvas.height);
-									debugFramesCtx.restore();
-									debugPointsCtx.fillStyle = "aqua";
-									workerSyncedOops.draw(debugPointsCtx);
-								}
-								*/
-								workerSyncedOops.update(imageData);
-							});
-						}
 
 						// Bring points from workerSyncedOops to realtime mainOops
 						for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
@@ -1647,8 +1607,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// TODO: separate confidence threshold for removing vs adding points?
 
 						// cull points to those within useful facial region
-						// TODO: use time travel for this too, probably! with a history of the points
-						// a complexity would be that points can be removed over time and we need to keep them identified
 						mainOops.filterPoints((pointIndex) => {
 							var pointOffset = pointIndex * 2;
 							// distance from tip of nose (stretched so make an ellipse taller than wide)
@@ -1845,13 +1803,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				clmTracker.draw(canvas, undefined, undefined, true);
 			}
 		}
-		if (debugTimeTravel) {
-			ctx.save();
-			ctx.globalAlpha = 0.8;
-			ctx.drawImage(debugFramesCanvas, 0, 0);
-			ctx.restore();
-			ctx.drawImage(debugPointsCanvas, 0, 0);
-		}
 		ctx.fillStyle = "lime";
 		mainOops.draw(ctx);
 		debugPointsCtx.fillStyle = "green";
@@ -1930,23 +1881,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					TrackyMouse.onPointerMove(mouseX, mouseY);
 				}
 			}
-			// movementXSinceFacemeshUpdate += movementX;
-			// movementYSinceFacemeshUpdate += movementY;
-			/*
-			if (enableTimeTravel) {
-				if (facemeshEstimating) {
-					const imageData = getCameraImageData();
-					if (imageData) {
-						cameraFramesSinceFacemeshUpdate.push(imageData);
-					}
-					// limit this buffer size in case something goes wrong
-					if (cameraFramesSinceFacemeshUpdate.length > 500) {
-						// maybe just clear it entirely, because a partial buffer might not be useful
-						cameraFramesSinceFacemeshUpdate.length = 0;
-					}
-				}
-			}
-			*/
 		}
 		ctx.restore();
 
