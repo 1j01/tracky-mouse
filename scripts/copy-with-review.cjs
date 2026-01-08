@@ -63,7 +63,7 @@ const statusToEmoji = {
 	conflict: "⚠️"
 };
 
-let awaitingConfirmation = false;
+let confirmationAbortController = null;
 let debounceTimer = null;
 
 function loadPatterns() {
@@ -193,6 +193,11 @@ function copyFiles(statusMap) {
 }
 
 function validateAndMaybePromptToCopy() {
+	if (confirmationAbortController) {
+		confirmationAbortController.abort();
+		confirmationAbortController = null;
+	}
+
 	let patterns;
 	try {
 		patterns = loadPatterns();
@@ -222,18 +227,12 @@ function validateAndMaybePromptToCopy() {
 	printTree(compressedTree);
 
 	if (anyProblems(statusMap)) {
-		awaitingConfirmation = false;
 		process.stdout.write(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		return;
 	}
 
-	// FIXME: need to cancel question if the user changes the patterns file while we're waiting for confirmation
-	// Right now if you get the file in a valid state, then invalidate it, you can press enter and it will proceed to copy files.
-	// rl.question supports AbortSignal https://nodejs.org/api/readline.html#rlquestionquery-options
-	if (awaitingConfirmation) return;
-	awaitingConfirmation = true;
-
-	rl.question("\nAll files sorted. Proceed with copy? (Y/n) ", ans => {
+	confirmationAbortController = new AbortController();
+	rl.question("\nAll files sorted. Proceed with copy? (Y/n) ", { signal: confirmationAbortController.signal }, ans => {
 		if (!ans.toLowerCase().startsWith("n")) {
 			copyFiles(statusMap);
 			console.log("Copy complete.");
