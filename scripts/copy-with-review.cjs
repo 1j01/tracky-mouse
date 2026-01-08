@@ -18,6 +18,11 @@ TODO:
 - Don't prompt if everything matches initially (optionally, if this is to be a reusable tool)
 - Show exact globs that are causing conflicts, with clickable "file line:col" links (in supported IDEs)
 - Help debug non-matching globs
+- Require review for any patterns that don't match anything, unless marked specially,
+  or at least for include patterns. Or I guess, really, the problem to solve there is
+  "files in one deploy that are missing in the next", in which case the solution
+  might involve storing the files previously included in a deploy? But you'd still want
+  to be able to have some notion of files that can exist or not, that don't require review.
 */
 
 const fs = require("fs");
