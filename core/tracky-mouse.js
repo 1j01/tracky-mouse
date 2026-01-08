@@ -776,26 +776,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
 
-	// scale of size of frames that are passed to worker and then computed several at once when backtracking for latency compensation
-	// reducing this makes it much more likely to drop points and thus not work
-	// THIS IS DISABLED and using a performance optimization of currentCameraImageData instead of getCameraImageData;
-	// (the currentCameraImageData is also scaled differently, to the fixed canvas size instead of using the native camera image size)
-	// const frameScaleForWorker = 1;
-
+	// NOTE: NO LONGER USING A WORKER for facemesh
+	// TODO: try merging with mainOops and workerSyncedOops
 	var mainOops;
 	var workerSyncedOops;
-
-	// const frameCanvas = document.createElement("canvas");
-	// const frameCtx = frameCanvas.getContext("2d");
-	// const getCameraImageData = () => {
-	// 	if (cameraVideo.videoWidth * frameScaleForWorker * cameraVideo.videoHeight * frameScaleForWorker < 1) {
-	// 		return;
-	// 	}
-	// 	frameCanvas.width = cameraVideo.videoWidth * frameScaleForWorker;
-	// 	frameCanvas.height = cameraVideo.videoHeight * frameScaleForWorker;
-	// 	frameCtx.drawImage(cameraVideo, 0, 0, frameCanvas.width, frameCanvas.height);
-	// 	return frameCtx.getImageData(0, 0, frameCanvas.width, frameCanvas.height);
-	// };
 
 	let currentCameraImageData;
 	let detector;
@@ -1448,7 +1432,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							console.warn("Falling back to clmtrackr");
 						}
 						// If you've switched desktop sessions, it will presumably fail to get a new webgl context until you've switched back
-						// Is this setInterval useful, vs just starting the worker?
+						// Is this setInterval useful, vs just starting the worker?**
 						// It probably has a faster cycle, with the code as it is now, but maybe not inherently.
 						// TODO: do the extra getContext() calls add to a GPU process crash limit
 						// that makes it only able to recover a couple times (outside the electron app)?
@@ -1466,7 +1450,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								// Once we can create a webgl2 canvas...
 								document.createElement("canvas").getContext("webgl2");
 								clearInterval(fallbackTimeoutID);
-								// It's worth trying to re-initialize [a web worker for facemesh]...
+								// It's worth trying to re-initialize [a web worker** for facemesh]...
 								setTimeout(() => {
 									console.warn("Re-initializing facemesh");
 									initFacemesh();
@@ -1500,12 +1484,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return;
 						}
 						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
-
-						// this applies to facemeshPrediction.annotations as well, which references the same points
-						// facemeshPrediction.scaledMesh.forEach((point) => {
-						// 	point[0] /= frameScaleForWorker;
-						// 	point[1] /= frameScaleForWorker;
-						// });
 
 						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;)
 
@@ -1590,16 +1568,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// 	mainOops.curXY[pointOffset+1] = workerSyncedOops.curXY[pointOffset+1];
 						// 	mainOops.prevXY[pointOffset] = workerSyncedOops.prevXY[pointOffset];
 						// 	mainOops.prevXY[pointOffset+1] = workerSyncedOops.prevXY[pointOffset+1];
-						// }
-
-						// naive latency compensation
-						// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
-						// Note: This latency compensation only really works if it's already tracking well
-						// if (prevFaceInViewConfidence > 0.99) {
-						// 	facemeshPrediction.keypoints.forEach((point) => {
-						// 		point.x += movementXSinceFacemeshUpdate;
-						// 		point.y += movementYSinceFacemeshUpdate;
-						// 	});
 						// }
 
 						pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
