@@ -59,6 +59,8 @@ module.exports = [
 			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",
 			"desktop-app/forge.config.js",
+			"scripts/copy-with-review.cjs",
+			"website/deploy-patterns.js",
 			"eslint.config.js",
 		],
 		"languageOptions": {
