@@ -735,8 +735,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var maxPoints = 1000;
 	var mouseX = 0;
 	var mouseY = 0;
-	var prevMovementX = 0;
-	var prevMovementY = 0;
 	var enableTimeTravel = false;
 	// var movementXSinceFacemeshUpdate = 0;
 	// var movementYSinceFacemeshUpdate = 0;
@@ -1932,8 +1930,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					TrackyMouse.onPointerMove(mouseX, mouseY);
 				}
 			}
-			prevMovementX = movementX;
-			prevMovementY = movementY;
 			// movementXSinceFacemeshUpdate += movementX;
 			// movementYSinceFacemeshUpdate += movementY;
 			/*
