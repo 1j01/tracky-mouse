@@ -197,7 +197,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // Settings
 // (actual defaults come from the HTML template)
 let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
-let clickingMode = 'dwell'; // 'off', 'dwell', 'blink', future: 'mouth-open' or 'open-mouth', 'smile', 'eyebrow-raise' or 'raise-eyebrows'
+let clickingMode = 'dwell'; // 'off', 'dwell', 'blink', 'open-mouth' (future: 'smile', 'raise-eyebrows')
 let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;

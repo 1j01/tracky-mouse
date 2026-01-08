@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - This needs refinement to avoid false positives (likely including a threshold setting). Expect undesired clicks for now.
   - You can't click and drag with this method yet, only perform single clicks.
   - I found there to be significant latency in my testing.
+- A first version of open mouth detection for clicking is now available in the desktop app (under the "Clicking mode" setting).
+  - It takes some skill to open your mouth without moving the cursor.
+  - You can't click and drag with this method yet, only perform single clicks.
+  - I found there to be significant latency in my testing.
 - [Sentry](https://sentry.io/) is now used for error reporting in the desktop app.
   - No personally identifiable information is collected, only stack traces and environment details.
   - (Only the main process is monitored for now, due to the technical hurdles of sandboxing.)

@@ -621,6 +621,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<select id="tracky-mouse-clicking-mode">
 					<option value="dwell">Dwell to click</option>
 					<option value="blink">Wink to click (Experimental)</option>
+					<option value="open-mouth">Open mouth to click (Experimental)</option>
 					<option value="off">Off</option>
 				</select>
 			</div>
@@ -1694,6 +1695,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
 							//   I think this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
 							const mid = Math.round(annotations.leftEyeUpper0.length / 2);
+							// TODO: rename these variables to be clearly distances not openness
 							const leftEyeOpenness = Math.hypot(
 								annotations.leftEyeUpper0[mid][0] - annotations.leftEyeLower0[mid][0],
 								annotations.leftEyeUpper0[mid][1] - annotations.leftEyeLower0[mid][1]
@@ -1702,7 +1704,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								annotations.rightEyeUpper0[mid][0] - annotations.rightEyeLower0[mid][0],
 								annotations.rightEyeUpper0[mid][1] - annotations.rightEyeLower0[mid][1]
 							);
-							var headSize = Math.hypot(
+							const headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
@@ -1718,6 +1720,41 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								clickButton = 0;
 							} else if (!leftEyeOpen && rightEyeOpen) {
 								clickButton = 2;
+							}
+							if (window._debouncedClick) {
+								return;
+							}
+							window._debouncedClick = true;
+							setTimeout(() => {
+								window._debouncedClick = false;
+							}, 1500);
+							if (clickButton !== -1) {
+								// console.log("Would click button", clickButton);
+								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
+							}
+						}
+						if (clickingMode === "open-mouth") {
+							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
+							// TODO: DRY and refactor and move this code (it's too nested)
+							const mid = Math.round(annotations.lipsLowerInner.length / 2);
+							// TODO: rename these variables to be clearly distances not openness
+							const mouthOpenness = Math.hypot(
+								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
+								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
+							);
+							const headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							const threshold = headSize * 0.1;
+							// console.log("mouthOpenness", mouthOpenness, "threshold", threshold);
+							const mouthOpen = mouthOpenness > threshold;
+							// TODO: remove global debounce hack
+							// and prevent clicking until both eyes are open again
+							// ideally keeping the mouse button held
+							let clickButton = -1;
+							if (mouthOpen) {
+								clickButton = 0;
 							}
 							if (window._debouncedClick) {
 								return;
