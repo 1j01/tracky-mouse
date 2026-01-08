@@ -6,7 +6,7 @@ ChatGPT prompt:
 Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder.
 
 (+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability, generally improved output)
-(+ fixes: followSymbolicLinks: true, dot: true, onlyFiles: true, path.sep -> "/"*, exit on SIGINT (Ctrl+C) or when canceling (N))
+(+ fixes: followSymbolicLinks: true, dot: true, onlyFiles: true, path.sep -> "/"*, exit on SIGINT (Ctrl+C) or when canceling (N), conflicts not showing in tree)
 (*the AI did this one, I haven't audited it)
 
 TODO:
@@ -201,7 +201,7 @@ function evaluate() {
 	const statuses = classify(all, patterns.include, patterns.exclude);
 
 	const visible = [...statuses.entries()]
-		.filter(([, s]) => s === "included" || s === "unknown")
+		.filter(([, s]) => s === "included" || s === "unknown" || s === "conflict")
 		.map(([p]) => p);
 
 	console.clear();
