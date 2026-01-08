@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - The dwell clicking indicator (shrinking red circle) should no longer show while disabled.
 - The desktop app now handles the screen scale factor (including changes at runtime) when positioning the mouse, so it should reach the edges of the screen correctly on high-DPI displays. ([issue #64](https://github.com/1j01/tracky-mouse/issues/64))
+  - Tested only on Windows. Hopefully this is also a fix for macOS and Linux, but it may have the opposite effect. I am currently unable to test on those platforms due to hardware and software issues.
 
 ## [1.2.0] - 2024-12-17
 
