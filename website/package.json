@@ -9,8 +9,8 @@
   },
   "scripts": {
     "start": "live-server --port=64206",
-    "deploy:@TODO": "echo 'Please make the deploy script efficient with rsync or something.'",
-    "deploy": "cp -rL . ../dist && rm -rf ../dist/node_modules && rm ../dist/package-lock.json && rm ../dist/package.json && gh-pages -d ../dist"
+    "test": "node ../scripts/copy-with-review.cjs . ../dist deploy-patterns.js --dry-run",
+    "deploy": "rm -rf ../dist && node ../scripts/copy-with-review.cjs . ../dist deploy-patterns.js && gh-pages -d ../dist"
   },
   "license": "MIT"
 }
