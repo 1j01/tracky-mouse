@@ -18,7 +18,7 @@ Options could be exported/imported or even synced between the products.
 
 ## Install Desktop App
 
-[⬇️ Download for Windows](https://github.com/1j01/tracky-mouse/releases/download/v1.2.0/Tracky.Mouse-1.2.0.Setup.exe) and run the installer.
+[⬇️ Download for Windows](https://github.com/1j01/tracky-mouse/releases/download/v/Tracky.Mouse-.Setup.exe) and run the installer.
 
 Pre-built binaries are not yet available for macOS or Linux, due to an [Electron Forge issue](https://github.com/electron/forge/issues/3238#issuecomment-2067577947), however you can run the app from source on those platforms.
 See [Development Setup](#development-setup).

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.2.0] - 2026-01-07
+
 ### Changed
 
 - Tracky Mouse once again requires `unsafe-eval` in the Content Security Policy in Chrome, due to usage of WebAssembly. See [this Chromium issue](https://issues.chromium.org/issues/41457889).
@@ -98,7 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/1j01/tracky-mouse/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/1j01/tracky-mouse/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/1j01/tracky-mouse/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/1j01/tracky-mouse/releases/tag/v1.0.0
