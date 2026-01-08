@@ -776,10 +776,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
 
-	// NOTE: NO LONGER USING A WORKER for facemesh
-	// TODO: try merging with mainOops and workerSyncedOops
+	// Previously there was a "workerSyncedOops"; there is no more worker; TODO: rename this
+	// pointTracker could be a good name, with PointTracker for the class
 	var mainOops;
-	var workerSyncedOops;
 
 	let currentCameraImageData;
 	let detector;
@@ -1136,9 +1135,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
 		mainOops = new OOPS();
-		if (useFacemesh) {
-			workerSyncedOops = new OOPS();
-		}
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -1317,6 +1313,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	}
 
+	// FIXME: can't click to add points because canvas is covered by .tracky-mouse-canvas-overlay
 	canvas.addEventListener('click', (event) => {
 		if (!mainOops) {
 			return;
@@ -1485,8 +1482,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
 
-						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;)
-
 						const getPoint = (index) =>
 							facemeshPrediction.keypoints[index] ?
 								[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y] :
@@ -1545,30 +1540,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return [key, indices.map(getPoint)];
 						}));
 						// nostrils
-						workerSyncedOops.addPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-						workerSyncedOops.addPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+						maybeAddPoint(mainOops, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+						maybeAddPoint(mainOops, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
 						// midway between eyes
-						workerSyncedOops.addPoint(annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
+						maybeAddPoint(mainOops, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
 						// inner eye corners
-						// workerSyncedOops.addPoint(annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-						// workerSyncedOops.addPoint(annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+						// maybeAddPoint(mainOops, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+						// maybeAddPoint(mainOops, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
-						// console.log(workerSyncedOops.pointCount, cameraFramesSinceFacemeshUpdate.length, workerSyncedOops.curXY);
-
-						// Bring points from workerSyncedOops to realtime mainOops
-						for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
-							const pointOffset = pointIndex * 2;
-							maybeAddPoint(mainOops, workerSyncedOops.curXY[pointOffset], workerSyncedOops.curXY[pointOffset + 1]);
-						}
-						// Don't do this! It's not how this is supposed to work.
-						// mainOops.pointCount = workerSyncedOops.pointCount;
-						// for (var pointIndex = 0; pointIndex < workerSyncedOops.pointCount; pointIndex++) {
-						// 	const pointOffset = pointIndex * 2;
-						// 	mainOops.curXY[pointOffset] = workerSyncedOops.curXY[pointOffset];
-						// 	mainOops.curXY[pointOffset+1] = workerSyncedOops.curXY[pointOffset+1];
-						// 	mainOops.prevXY[pointOffset] = workerSyncedOops.prevXY[pointOffset];
-						// 	mainOops.prevXY[pointOffset+1] = workerSyncedOops.prevXY[pointOffset+1];
-						// }
+						// console.log(mainOops.pointCount, cameraFramesSinceFacemeshUpdate.length, mainOops.curXY);
 
 						pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
