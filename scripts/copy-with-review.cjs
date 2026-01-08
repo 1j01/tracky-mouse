@@ -88,109 +88,109 @@ function walkAll(root) {
 	});
 }
 
-function classify(paths, include, exclude) {
-	const inc = picomatch(include, { dot: true });
-	const exc = picomatch(exclude, { dot: true });
+function classify(paths, includePatterns, excludePatterns) {
+	const isIncluded = picomatch(includePatterns, { dot: true });
+	const isExcluded = picomatch(excludePatterns, { dot: true });
 
+	const statusMap = new Map();
 
-	const map = new Map();
+	for (const filePath of paths) {
+		const included = isIncluded(filePath);
+		const excluded = isExcluded(filePath);
 
-	for (const p of paths) {
-		const i = inc(p);
-		const e = exc(p);
-
-		map.set(
-			p,
-			i && e ? "conflict" :
-				i ? "included" :
-					e ? "excluded" :
+		statusMap.set(
+			filePath,
+			included && excluded ? "conflict" :
+				included ? "included" :
+					excluded ? "excluded" :
 						"unknown"
 		);
 	}
 
-	return map;
+	return statusMap;
 }
 
 function buildTree(paths) {
 	const root = {};
-	for (const p of paths) {
-		const parts = p.split('/');
-		let n = root;
+	for (const filePath of paths) {
+		const parts = filePath.split('/');
+		let node = root;
 		for (const part of parts) {
-			n.children ||= {};
-			n.children[part] ||= {};
-			n = n.children[part];
+			node.children ||= {};
+			node.children[part] ||= {};
+			node = node.children[part];
 		}
 	}
 	return root;
 }
 
-function compress(tree, statuses, prefix = "") {
-	const out = [];
+function compress(tree, statusMap, prefix = "") {
+	const compressedNodes = [];
 
 	for (const [name, node] of Object.entries(tree.children || {})) {
-		const full = prefix ? prefix + "/" + name : name;
+		const fullPath = prefix ? prefix + "/" + name : name;
 
-		const s = [];
-		for (const [p, st] of statuses) {
-			if (p === full || p.startsWith(full + "/")) {
-				s.push(st);
+		// Find all statuses for files under this node
+		const statusesInSubtree = [];
+		for (const [filePath, status] of statusMap) {
+			if (filePath === fullPath || filePath.startsWith(fullPath + "/")) {
+				statusesInSubtree.push(status);
 			}
 		}
 
-		const uniq = new Set(s);
+		const uniqueStatuses = new Set(statusesInSubtree);
 
-		if (uniq.size === 1) {
-			out.push({
+		// If all files in this subtree have the same status, path collapse it
+		if (uniqueStatuses.size === 1) {
+			compressedNodes.push({
 				name: node.children ? name + "/" : name,
-				status: [...uniq][0]
+				status: [...uniqueStatuses][0]
 			});
 		} else {
-			out.push({
+			compressedNodes.push({
 				name: name + "/",
-				children: compress(node, statuses, full)
+				children: compress(node, statusMap, fullPath)
 			});
 		}
 	}
 
-	return out;
+	return compressedNodes;
 }
 
-function print(entries, indent = "") {
-	for (const e of entries) {
-		if (e.status) {
-			if (e.status !== "excluded") {
-				// console.log(`${indent}${e.name} (${e.status})`);
-				const emoji = statusToEmoji[e.status] || `[UNKNOWN STATUS: ${e.status}]`;
-				console.log(`${indent}${emoji} ${e.name}`);
+function printTree(nodes, indent = "") {
+	for (const node of nodes) {
+		if (node.status) {
+			if (node.status !== "excluded") {
+				const emoji = statusToEmoji[node.status] || `[UNKNOWN STATUS: ${node.status}]`;
+				console.log(`${indent}${emoji} ${node.name}`);
 			}
 		} else {
-			console.log(`${indent}📂 ${e.name}`);
-			print(e.children, indent + "  ");
+			console.log(`${indent}📂 ${node.name}`);
+			printTree(node.children, indent + "  ");
 		}
 	}
 }
 
-function hasInvalid(statuses) {
-	for (const s of statuses.values()) {
-		if (s === "unknown" || s === "conflict") return true;
+function hasInvalid(statusMap) {
+	for (const status of statusMap.values()) {
+		if (status === "unknown" || status === "conflict") return true;
 	}
 	return false;
 }
 
-function copy(statuses) {
-	for (const [p, s] of statuses) {
-		if (s !== "included") continue;
+function copy(statusMap) {
+	for (const [filePath, status] of statusMap) {
+		if (status !== "included") continue;
 
-		const src = path.join(SRC, p);
-		const dst = path.join(DEST, p);
+		const srcPath = path.join(SRC, filePath);
+		const dstPath = path.join(DEST, filePath);
 
-		fs.mkdirSync(path.dirname(dst), { recursive: true });
-		if (fs.statSync(src).isFile()) {
+		fs.mkdirSync(path.dirname(dstPath), { recursive: true });
+		if (fs.statSync(srcPath).isFile()) {
 			if (!DRY_RUN) {
-				fs.copyFileSync(src, dst);
+				fs.copyFileSync(srcPath, dstPath);
 			} else {
-				console.log(`[DRY RUN] Would copy ${src} to ${dst}`);
+				console.log(`[DRY RUN] Would copy ${srcPath} to ${dstPath}`);
 			}
 		}
 	}
@@ -208,12 +208,12 @@ function evaluate() {
 		return;
 	}
 
-	const all = walkAll(SRC);
-	const statuses = classify(all, patterns.include, patterns.exclude);
+	const allFiles = walkAll(SRC);
+	const statusMap = classify(allFiles, patterns.include, patterns.exclude);
 
-	const visible = [...statuses.entries()]
-		.filter(([, s]) => s === "included" || s === "unknown" || s === "conflict")
-		.map(([p]) => p);
+	const visibleFiles = [...statusMap.entries()]
+		.filter(([, status]) => status === "included" || status === "unknown" || status === "conflict")
+		.map(([filePath]) => filePath);
 
 	console.clear();
 	console.log(`Source: ${SRC}`);
@@ -221,11 +221,11 @@ function evaluate() {
 	console.log(`Patterns file: ${PATTERN_FILE}`);
 	console.log(`Dry run: ${DRY_RUN ? "Yes" : "No"}`);
 	console.log("\nFiles to be copied:");
-	const tree = buildTree(visible);
-	const compressed = compress(tree, statuses);
-	print(compressed);
+	const tree = buildTree(visibleFiles);
+	const compressedTree = compress(tree, statusMap);
+	printTree(compressedTree);
 
-	if (hasInvalid(statuses)) {
+	if (hasInvalid(statusMap)) {
 		awaitingConfirmation = false;
 		process.stdout.write(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		return;
@@ -236,7 +236,7 @@ function evaluate() {
 
 	rl.question("\nAll files sorted. Proceed with copy? (Y/n) ", ans => {
 		if (!ans.toLowerCase().startsWith("n")) {
-			copy(statuses);
+			copy(statusMap);
 			console.log("Copy complete.");
 			process.exit(0);
 		} else {
