@@ -1586,10 +1586,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return true;
 						});
 
+						let clickButton = -1;
 						if (clickingMode === "blink") {
 							// TODO: try variations, e.g.
 							// - is mid the best point to use? maybe floor or ceil would give a different point that might be better?
 							// - would using the eye size instead of head size be different? can compare to see how much variation there is in eye size : head size ratio
+							//   - when moving closer or further from the camera, this ratio changes theoretically due to perspective,
+							//     and theoretically the eye size should be better suited
+							//     (you can test by holding your eye still and moving nearer to / further from the camera (or moving the camera); the openness should be constant)
 							// - as I noted here https://github.com/1j01/tracky-mouse/issues/1#issuecomment-2053931136
 							//   sometimes a fully closed eye isn't detected as fully closed, and an eye can be open and detected at a
 							//   similar squinty level, however, if one eye is detected as fully closed, and the other eye is at that squinty level,
@@ -1615,30 +1619,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// console.log("leftEyeOpenness", leftEyeOpenness, "rightEyeOpenness", rightEyeOpenness, "threshold", threshold);
 							const leftEyeOpen = leftEyeOpenness > threshold;
 							const rightEyeOpen = rightEyeOpenness > threshold;
-							// TODO: remove global debounce hack
-							// and prevent clicking until both eyes are open again
-							// ideally keeping the mouse button held
-							let clickButton = -1;
 							if (leftEyeOpen && !rightEyeOpen) {
 								clickButton = 0;
 							} else if (!leftEyeOpen && rightEyeOpen) {
 								clickButton = 2;
 							}
-							if (window._debouncedClick) {
-								return;
-							}
-							window._debouncedClick = true;
-							setTimeout(() => {
-								window._debouncedClick = false;
-							}, 1500);
-							if (clickButton !== -1) {
-								// console.log("Would click button", clickButton);
-								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
-							}
 						}
 						if (clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
-							// TODO: DRY and refactor and move this code (it's too nested)
+							// TODO: refactor and move this code (it's too nested)
 							const mid = Math.round(annotations.lipsLowerInner.length / 2);
 							// TODO: rename these variables to be clearly distances not openness
 							const mouthOpenness = Math.hypot(
@@ -1652,24 +1641,24 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							const threshold = headSize * 0.1;
 							// console.log("mouthOpenness", mouthOpenness, "threshold", threshold);
 							const mouthOpen = mouthOpenness > threshold;
-							// TODO: remove global debounce hack
-							// and prevent clicking until both eyes are open again
-							// ideally keeping the mouse button held
-							let clickButton = -1;
 							if (mouthOpen) {
 								clickButton = 0;
 							}
-							if (window._debouncedClick) {
-								return;
-							}
-							window._debouncedClick = true;
-							setTimeout(() => {
-								window._debouncedClick = false;
-							}, 1500);
-							if (clickButton !== -1) {
-								// console.log("Would click button", clickButton);
-								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
-							}
+						}
+
+						// TODO: remove global debounce hack
+						// and prevent clicking until gesture is ended
+						// ideally keeping the mouse button held https://github.com/1j01/tracky-mouse/issues/66
+						if (window._debouncedClick) {
+							return;
+						}
+						window._debouncedClick = true;
+						setTimeout(() => {
+							window._debouncedClick = false;
+						}, 1500);
+						if (clickButton !== -1) {
+							// console.log("Would click button", clickButton);
+							window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
 						}
 					}, () => {
 						facemeshEstimating = false;
