@@ -1790,13 +1790,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				if (bad) {
 					ctx.fillStyle = 'rgba(255,0,255)';
 				}
-				if (update && useFacemesh) {
-					// this should just be visual, since we only add/remove points based on the facemesh data when receiving it
-					facemeshPrediction.keypoints.forEach((point) => {
-						point.x += prevMovementX;
-						point.y += prevMovementY;
-					});
-				}
 				facemeshPrediction.keypoints.forEach(({ x, y }) => {
 					ctx.fillRect(x, y, 1, 1);
 				});
