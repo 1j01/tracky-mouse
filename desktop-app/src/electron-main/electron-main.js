@@ -197,7 +197,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // Settings
 // (actual defaults come from the HTML template)
 let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
-let clickingMode = 'dwell'; // 'off', 'dwell', and in the future: 'blink', 'mouth-open'
+let clickingMode = 'dwell'; // 'off', 'dwell', 'blink', future: 'mouth-open' or 'open-mouth', 'smile', 'eyebrow-raise' or 'raise-eyebrows'
 let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
@@ -532,6 +532,29 @@ const createWindow = () => {
 
 		await setMouseLocationTracky(x, y);
 		await click(swapMouseButtons ? "right" : "left");
+
+		// const latency = performance.now() - time;
+		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
+	});
+
+	ipcMain.on('click-at-current-mouse-position', async (_event, secondaryButton) => {
+		// TODO: deduplicate code copy-pasted from the 'click' handler above.
+		if (regainControlTimeout || !enabled || clickingMode === 'off') {
+			return;
+		}
+
+		// Failsafe: don't click if the window(s) are closed.
+		// This helps with debugging the closing/quitting behavior.
+		// It would also help to have a heartbeat to avoid clicking while paused in the debugger in other scenarios,
+		// and avoid the dwell clicking indicator from repeatedly showing while there's no connectivity between the processes.
+		if (
+			(!screenOverlayWindow || screenOverlayWindow.isDestroyed()) ||
+			(!appWindow || appWindow.isDestroyed())
+		) {
+			return;
+		}
+
+		await click((swapMouseButtons !== secondaryButton) ? "right" : "left");
 
 		// const latency = performance.now() - time;
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);

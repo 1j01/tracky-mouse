@@ -20,15 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A friendly "webcam may already be in use" message is now shown also for `AbortError` in Firefox.
 
 ### Added
-- You can now disable dwell clicking in the desktop app without disabling mouse movement, by unchecking "Dwell to click". ([issue #63](https://github.com/1j01/tracky-mouse/issues/63))
+- You can now disable dwell clicking in the desktop app without disabling mouse movement, by setting "Clicking mode" to "Off". ([issue #63](https://github.com/1j01/tracky-mouse/issues/63))
+- A first version of blink detection for clicking is now available in the desktop app (under the "Clicking mode" setting).
+  - This needs refinement to avoid false positives (likely including a threshold setting). Expect undesired clicks for now.
+  - You can't click and drag with this method yet, only perform single clicks.
+  - I found there to be significant latency in my testing.
 - [Sentry](https://sentry.io/) is now used for error reporting in the desktop app.
   - No personally identifiable information is collected, only stack traces and environment details.
   - (Only the main process is monitored for now, due to the technical hurdles of sandboxing.)
 
 ### Fixed
 - The dwell clicking indicator (shrinking red circle) should no longer show while disabled.
-- The desktop app now handles the screen scale factor (including changes at runtime) when positioning the mouse, so it should reach the edges of the screen correctly on high-DPI displays. ([issue #64](https://github.com/1j01/tracky-mouse/issues/64))
-  - Tested only on Windows. Hopefully this is also a fix for macOS and Linux, but it may have the opposite effect. I am currently unable to test on those platforms due to hardware and software issues.
+- The desktop app now takes into account the screen scale factor (including changes at runtime) when positioning the mouse, so it should reach the edges of the screen correctly on high-DPI displays. ([issue #64](https://github.com/1j01/tracky-mouse/issues/64))
+  - Tested only on Windows. Hopefully this is also a fix for macOS and Linux, but it COULD have the opposite effect. I am currently unable to test on those platforms due to hardware and software issues.
 
 ## [1.2.0] - 2024-12-17
 

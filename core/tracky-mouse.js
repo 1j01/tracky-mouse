@@ -617,8 +617,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 			</div>
 			<div class="tracky-mouse-control-row">
-				<input type="checkbox" id="tracky-mouse-clicking-mode"/>
-				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Dwell to click</span></label>
+				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
+				<select id="tracky-mouse-clicking-mode">
+					<option value="dwell">Dwell to click</option>
+					<option value="blink">Wink to click (Experimental)</option>
+					<option value="off">Off</option>
+				</select>
 			</div>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
@@ -663,7 +667,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
-	var clickingModeCheckbox = uiContainer.querySelector("#tracky-mouse-clicking-mode");
+	var clickingModeDropdown = uiContainer.querySelector("#tracky-mouse-clicking-mode");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
 	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
@@ -698,7 +702,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		// since dwell clicking in the web version is a separate API (TrackyMouse.initDwellClicking)
 		// and wouldn't automatically be controlled by this UI.
 		// TODO: bring more of desktop app functionality into core
-		clickingModeCheckbox.parentElement.hidden = true;
+		clickingModeDropdown.parentElement.hidden = true;
 
 		// Hide the "run at login" option if we're not in the desktop app.
 		runAtLoginCheckbox.parentElement.hidden = true;
@@ -811,6 +815,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const detectorConfig = {
 			runtime: 'mediapipe',
 			solutionPath: `${TrackyMouse.dependenciesRoot}/lib/face_mesh`,
+			refineLandmarks: true,
 		};
 
 		try {
@@ -859,7 +864,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 			if (settings.globalSettings.clickingMode !== undefined) {
 				clickingMode = settings.globalSettings.clickingMode;
-				clickingModeCheckbox.checked = clickingMode === 'dwell';
+				clickingModeDropdown.value = clickingMode;
 			}
 			if (settings.globalSettings.mirrorCameraView !== undefined) {
 				mirror = settings.globalSettings.mirrorCameraView;
@@ -979,8 +984,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
-	clickingModeCheckbox.onchange = (event) => {
-		clickingMode = clickingModeCheckbox.checked ? 'dwell' : 'off';
+	clickingModeDropdown.onchange = (event) => {
+		clickingMode = clickingModeDropdown.value;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
 		// to avoid saving the default settings before the actual preferences are loaded.
 		if (event) {
@@ -1007,7 +1012,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
-	clickingModeCheckbox.onchange();
+	clickingModeDropdown.onchange();
 	startEnabledCheckbox.onchange();
 	runAtLoginCheckbox.onchange();
 	sensitivityXSlider.onchange();
@@ -1676,6 +1681,56 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							}
 							return true;
 						});
+
+						if (clickingMode === "blink") {
+							// TODO: try variations, e.g.
+							// - is mid the best point to use? maybe floor or ceil would give a different point that might be better?
+							// - would using the eye size instead of head size be different? can compare to see how much variation there is in eye size : head size ratio
+							// - as I noted here https://github.com/1j01/tracky-mouse/issues/1#issuecomment-2053931136
+							//   sometimes a fully closed eye isn't detected as fully closed, and an eye can be open and detected at a
+							//   similar squinty level, however, if one eye is detected as fully closed, and the other eye is at that squinty level,
+							//   I think it can be assumed that the squinty eye is open, and otherwise, if neither eye is detected as fully closed,
+							//   then a squinty level can be assumed to be closed. So it might make sense to bias the blink detection, taking into account both eyes.
+							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
+							//   I think this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
+							const mid = Math.round(annotations.leftEyeUpper0.length / 2);
+							const leftEyeOpenness = Math.hypot(
+								annotations.leftEyeUpper0[mid][0] - annotations.leftEyeLower0[mid][0],
+								annotations.leftEyeUpper0[mid][1] - annotations.leftEyeLower0[mid][1]
+							);
+							const rightEyeOpenness = Math.hypot(
+								annotations.rightEyeUpper0[mid][0] - annotations.rightEyeLower0[mid][0],
+								annotations.rightEyeUpper0[mid][1] - annotations.rightEyeLower0[mid][1]
+							);
+							var headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							const threshold = headSize * 0.1;
+							// console.log("leftEyeOpenness", leftEyeOpenness, "rightEyeOpenness", rightEyeOpenness, "threshold", threshold);
+							const leftEyeOpen = leftEyeOpenness > threshold;
+							const rightEyeOpen = rightEyeOpenness > threshold;
+							// TODO: remove global debounce hack
+							// and prevent clicking until both eyes are open again
+							// ideally keeping the mouse button held
+							let clickButton = -1;
+							if (leftEyeOpen && !rightEyeOpen) {
+								clickButton = 0;
+							} else if (!leftEyeOpen && rightEyeOpen) {
+								clickButton = 2;
+							}
+							if (window._debouncedClick) {
+								return;
+							}
+							window._debouncedClick = true;
+							setTimeout(() => {
+								window._debouncedClick = false;
+							}, 1500);
+							if (clickButton !== -1) {
+								// console.log("Would click button", clickButton);
+								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
+							}
+						}
 					}, () => {
 						facemeshEstimating = false;
 						facemeshFirstEstimation = false;

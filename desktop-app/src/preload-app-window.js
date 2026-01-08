@@ -15,6 +15,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.send('move-mouse', x, y, performance.now());
 	},
 
+	clickAtCurrentMousePosition: (secondaryButton) => {
+		ipcRenderer.send('click-at-current-mouse-position', secondaryButton);
+	},
+
 	onShortcut: (callback) => {
 		ipcRenderer.on("shortcut", (_event, data) => {
 			// console.log("shortcut", data);
