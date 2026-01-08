@@ -5,7 +5,7 @@ ChatGPT prompt:
 
 Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder.
 
-(+ added args parsing, and a --dry-run option, and validation of the patterns file)
+(+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability)
 
 */
 
@@ -30,6 +30,13 @@ const rl = readline.createInterface({
 	output: process.stdout
 });
 
+const statusToEmoji = {
+	included: "✅",
+	excluded: "❌",
+	unknown: "❓",
+	conflict: "⚠️"
+};
+
 let awaitingConfirmation = false;
 let debounceTimer = null;
 
@@ -50,7 +57,7 @@ function walkAll(root) {
 		cwd: root,
 		dot: true,
 		onlyFiles: false,
-		followSymbolicLinks: false
+		followSymbolicLinks: true
 	});
 }
 
@@ -80,7 +87,7 @@ function classify(paths, include, exclude) {
 function buildTree(paths) {
 	const root = {};
 	for (const p of paths) {
-		const parts = p.split(path.sep);
+		const parts = p.split('/');
 		let n = root;
 		for (const part of parts) {
 			n.children ||= {};
@@ -95,11 +102,11 @@ function compress(tree, statuses, prefix = "") {
 	const out = [];
 
 	for (const [name, node] of Object.entries(tree.children || {})) {
-		const full = prefix ? path.join(prefix, name) : name;
+		const full = prefix ? prefix + "/" + name : name;
 
 		const s = [];
 		for (const [p, st] of statuses) {
-			if (p === full || p.startsWith(full + path.sep)) {
+			if (p === full || p.startsWith(full + "/")) {
 				s.push(st);
 			}
 		}
@@ -126,7 +133,9 @@ function print(entries, indent = "") {
 	for (const e of entries) {
 		if (e.status) {
 			if (e.status !== "excluded") {
-				console.log(`${indent}${e.name} (${e.status})`);
+				// console.log(`${indent}${e.name} (${e.status})`);
+				const emoji = statusToEmoji[e.status] || `[UNKNOWN STATUS: ${e.status}]`;
+				console.log(`${indent}${emoji} ${e.name}`);
 			}
 		} else {
 			console.log(`${indent}${e.name}`);
