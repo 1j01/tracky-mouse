@@ -9,8 +9,8 @@
   },
   "scripts": {
     "start": "live-server --port=64206",
-    "test": "node ../scripts/copy-with-review.cjs . ../dist deploy-patterns.js --dry-run",
-    "deploy": "rm -rf ../dist && node ../scripts/copy-with-review.cjs . ../dist deploy-patterns.js && gh-pages -d ../dist"
+    "test": "node ../scripts/copy-with-review.cjs . ../dist globs-for-deploy.js --dry-run",
+    "deploy": "rm -rf ../dist && node ../scripts/copy-with-review.cjs . ../dist globs-for-deploy.js && gh-pages -d ../dist"
   },
   "license": "MIT"
 }

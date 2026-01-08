@@ -6,7 +6,7 @@ exports.exclude = [
 	"**/package-lock.json",
 	"**/package.json",
 	"**/README.md",
-	"deploy-patterns.js",
+	"globs-for-deploy.js",
 	"core/copy-deps.js",
 	"images/*.blend",
 	"images/*.icns",
