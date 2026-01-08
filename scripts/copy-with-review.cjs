@@ -25,7 +25,6 @@ TODO:
   "files in one deploy that are missing in the next", in which case the solution
   might involve storing the files previously included in a deploy? But you'd still want
   to be able to have some notion of files that can exist or not, that don't require review.
-- FIXME: it still refers to the patterns file as "patterns.js" in some places instead of the real file name
 */
 
 const fs = require("fs");
@@ -41,6 +40,10 @@ const PATTERN_FILE = path.resolve(process.argv[4]);
 const DRY_RUN = process.argv.includes("--dry-run");
 if (!SRC || !DEST || !PATTERN_FILE) {
 	console.error("Usage: node copy-with-review.cjs <src> <dest> <patterns.js> [--dry-run]");
+	process.exit(1);
+}
+if (!fs.existsSync(PATTERN_FILE)) {
+	console.error(`Patterns file does not exist at ${PATTERN_FILE}`);
 	process.exit(1);
 }
 
@@ -199,9 +202,9 @@ function evaluate() {
 		patterns = loadPatterns();
 	} catch (e) {
 		console.clear();
-		console.log("Failed to load patterns.js");
+		console.log(`Failed to load patterns file ${path.basename(PATTERN_FILE)}`);
 		console.log(e.message);
-		console.log("\nWaiting for patterns.js to become valid…");
+		process.stdout.write(`\nWaiting for ${path.basename(PATTERN_FILE)} to become valid…`);
 		return;
 	}
 
@@ -224,8 +227,6 @@ function evaluate() {
 
 	if (hasInvalid(statuses)) {
 		awaitingConfirmation = false;
-		// console.log("\nWaiting for patterns.js to become valid…");
-		// console.log(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		process.stdout.write(`\nNot all files are sorted into excluded and included categories.\nWaiting for changes to ${path.basename(PATTERN_FILE)}…`);
 		return;
 	}
