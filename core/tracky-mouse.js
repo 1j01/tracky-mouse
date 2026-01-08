@@ -776,9 +776,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
 
-	// Previously there was a "workerSyncedOops"; there is no more worker; TODO: rename this
-	// pointTracker could be a good name, with PointTracker for the class
-	var mainOops;
+	var pointTracker;
 
 	let currentCameraImageData;
 	let detector;
@@ -1134,7 +1132,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		mainOops = new OOPS();
+		pointTracker = new OOPS();
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -1315,17 +1313,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	// FIXME: can't click to add points because canvas is covered by .tracky-mouse-canvas-overlay
 	canvas.addEventListener('click', (event) => {
-		if (!mainOops) {
+		if (!pointTracker) {
 			return;
 		}
 		const rect = canvas.getBoundingClientRect();
 		if (mirror) {
-			mainOops.addPoint(
+			pointTracker.addPoint(
 				(rect.right - event.clientX) / rect.width * canvas.width,
 				(event.clientY - rect.top) / rect.height * canvas.height,
 			);
 		} else {
-			mainOops.addPoint(
+			pointTracker.addPoint(
 				(event.clientX - rect.left) / rect.width * canvas.width,
 				(event.clientY - rect.top) / rect.height * canvas.height,
 			);
@@ -1374,7 +1372,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
-		if (!mainOops) {
+		if (!pointTracker) {
 			return;
 		}
 
@@ -1540,27 +1538,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return [key, indices.map(getPoint)];
 						}));
 						// nostrils
-						maybeAddPoint(mainOops, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-						maybeAddPoint(mainOops, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
+						maybeAddPoint(pointTracker, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
+						maybeAddPoint(pointTracker, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
 						// midway between eyes
-						maybeAddPoint(mainOops, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
+						maybeAddPoint(pointTracker, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
 						// inner eye corners
-						// maybeAddPoint(mainOops, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-						// maybeAddPoint(mainOops, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
+						// maybeAddPoint(pointTracker, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
+						// maybeAddPoint(pointTracker, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
 
-						// console.log(mainOops.pointCount, cameraFramesSinceFacemeshUpdate.length, mainOops.curXY);
+
+						// console.log(pointTracker.pointCount, cameraFramesSinceFacemeshUpdate.length, pointTracker.curXY);
 
 						pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
 
 						// TODO: separate confidence threshold for removing vs adding points?
 
 						// cull points to those within useful facial region
-						mainOops.filterPoints((pointIndex) => {
+						pointTracker.filterPoints((pointIndex) => {
 							var pointOffset = pointIndex * 2;
 							// distance from tip of nose (stretched so make an ellipse taller than wide)
 							var distance = Math.hypot(
-								(annotations.noseTip[0][0] - mainOops.curXY[pointOffset]) * 1.4,
-								annotations.noseTip[0][1] - mainOops.curXY[pointOffset + 1]
+								(annotations.noseTip[0][0] - pointTracker.curXY[pointOffset]) * 1.4,
+								annotations.noseTip[0][1] - pointTracker.curXY[pointOffset + 1]
 							);
 							var headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
@@ -1573,12 +1572,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// distance to outer corners of eyes
 							distance = Math.min(
 								Math.hypot(
-									annotations.leftEyeLower0[0][0] - mainOops.curXY[pointOffset],
-									annotations.leftEyeLower0[0][1] - mainOops.curXY[pointOffset + 1]
+									annotations.leftEyeLower0[0][0] - pointTracker.curXY[pointOffset],
+									annotations.leftEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
 								),
 								Math.hypot(
-									annotations.rightEyeLower0[0][0] - mainOops.curXY[pointOffset],
-									annotations.rightEyeLower0[0][1] - mainOops.curXY[pointOffset + 1]
+									annotations.rightEyeLower0[0][0] - pointTracker.curXY[pointOffset],
+									annotations.rightEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
 								),
 							);
 							if (distance < headSize * 0.42) {
@@ -1678,7 +1677,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					});
 				}
 			}
-			mainOops.update(imageData);
+			pointTracker.update(imageData);
 		}
 
 		if (window.electronAPI) {
@@ -1690,7 +1689,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			const bad = facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold;
 			ctx.fillStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-			if (!bad || mainOops.pointCount < 3 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
+			if (!bad || pointTracker.pointCount < 3 || facemeshPrediction.faceInViewConfidence > pointsBasedOnFaceInViewConfidence + 0.05) {
 				if (bad) {
 					ctx.fillStyle = 'rgba(255,0,255)';
 				}
@@ -1707,7 +1706,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		if (face) {
 			const bad = faceScore < faceScoreThreshold;
 			ctx.strokeStyle = bad ? 'rgb(255,255,0)' : 'rgb(130,255,50)';
-			if (!bad || mainOops.pointCount < 2 || faceScore > pointsBasedOnFaceScore + 0.05) {
+			if (!bad || pointTracker.pointCount < 2 || faceScore > pointsBasedOnFaceScore + 0.05) {
 				if (bad) {
 					ctx.strokeStyle = 'rgba(255,0,255)';
 				}
@@ -1715,21 +1714,21 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					pointsBasedOnFaceScore = faceScore;
 
 					// nostrils
-					maybeAddPoint(mainOops, face[42][0], face[42][1]);
-					maybeAddPoint(mainOops, face[43][0], face[43][1]);
+					maybeAddPoint(pointTracker, face[42][0], face[42][1]);
+					maybeAddPoint(pointTracker, face[43][0], face[43][1]);
 					// inner eye corners
-					// maybeAddPoint(mainOops, face[25][0], face[25][1]);
-					// maybeAddPoint(mainOops, face[30][0], face[30][1]);
+					// maybeAddPoint(pointTracker, face[25][0], face[25][1]);
+					// maybeAddPoint(pointTracker, face[30][0], face[30][1]);
 
 					// TODO: separate confidence threshold for removing vs adding points?
 
 					// cull points to those within useful facial region
-					mainOops.filterPoints((pointIndex) => {
+					pointTracker.filterPoints((pointIndex) => {
 						var pointOffset = pointIndex * 2;
 						// distance from tip of nose (stretched so make an ellipse taller than wide)
 						var distance = Math.hypot(
-							(face[62][0] - mainOops.curXY[pointOffset]) * 1.4,
-							face[62][1] - mainOops.curXY[pointOffset + 1]
+							(face[62][0] - pointTracker.curXY[pointOffset]) * 1.4,
+							face[62][1] - pointTracker.curXY[pointOffset + 1]
 						);
 						// distance based on outer eye corners
 						var headSize = Math.hypot(
@@ -1752,12 +1751,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 		}
 		ctx.fillStyle = "lime";
-		mainOops.draw(ctx);
+		pointTracker.draw(ctx);
 		debugPointsCtx.fillStyle = "green";
-		mainOops.draw(debugPointsCtx);
+		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
-			var [movementX, movementY] = mainOops.getMovement();
+			var [movementX, movementY] = pointTracker.getMovement();
 
 			// Acceleration curves add a lot of stability,
 			// letting you focus on a specific point without jitter, but still move quickly.
