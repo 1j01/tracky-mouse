@@ -6,7 +6,8 @@ ChatGPT prompt:
 Node.js script to copy files between directories, using an include list and exclude list of globs. If something is matched by neither (unknown) or both (conflict), the script should wait for the user to change the patterns, and refresh the result interactively, prompting for confirmation to continue once it becomes valid. It should show a minimal tree view of included and unknown files/folders, without showing excluded files/folders or traversing into folders when the contents are all marked the same as the parent folder.
 
 (+ added args parsing, and a --dry-run option, validation of the patterns file, emojis for readability)
-(+ fixes: followSymbolicLinks: true, dot: true, and path.sep vs "/")
+(+ fixes: followSymbolicLinks: true, dot: true, onlyFiles: true, path.sep -> "/"*, exit on SIGINT (Ctrl+C) or when canceling (N))
+(*the AI did this one, I haven't audited it)
 
 */
 
@@ -29,6 +30,11 @@ if (!SRC || !DEST || !PATTERN_FILE) {
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout
+});
+
+// why is this needed? readline?
+rl.on("SIGINT", () => {
+	process.exit(0);
 });
 
 const statusToEmoji = {
@@ -57,7 +63,7 @@ function walkAll(root) {
 	return fg.sync(["**/*"], {
 		cwd: root,
 		dot: true,
-		onlyFiles: false,
+		onlyFiles: true,
 		followSymbolicLinks: true
 	});
 }
@@ -139,7 +145,7 @@ function print(entries, indent = "") {
 				console.log(`${indent}${emoji} ${e.name}`);
 			}
 		} else {
-			console.log(`${indent}${e.name}`);
+			console.log(`${indent}📂${e.name}`);
 			print(e.children, indent + "  ");
 		}
 	}
@@ -209,7 +215,8 @@ function evaluate() {
 			console.log("Copy complete.");
 			process.exit(0);
 		} else {
-			awaitingConfirmation = false;
+			console.log("Aborted.");
+			process.exit(0);
 		}
 	});
 }
