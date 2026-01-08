@@ -3,6 +3,9 @@ exports.exclude = [
 	"**/dist/**",
 	"*.log",
 	".**",
+	"package-lock.json",
+	"package.json",
+	"deploy-patterns.js",
 ];
 
 exports.include = [
@@ -11,6 +14,7 @@ exports.include = [
 	"images",
 	"CNAME",
 	"tracky-mouse-homepage.css",
+	"demo.js",
 	"core/tracky-mouse.css",
 	"core/tracky-mouse.js",
 	"core/lib/face-landmarks-detection.min.js",
@@ -21,5 +25,4 @@ exports.include = [
 	"core/lib/face_mesh/face_mesh_solution_simd_wasm_bin.wasm",
 	"core/lib/face_mesh/face_mesh_solution_wasm_bin.js",
 	"core/lib/face_mesh/face_mesh_solution_wasm_bin.wasm",
-
 ];

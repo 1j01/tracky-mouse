@@ -55,8 +55,9 @@ function walkAll(root) {
 }
 
 function classify(paths, include, exclude) {
-	const inc = picomatch(include);
-	const exc = picomatch(exclude);
+	const inc = picomatch(include, { dot: true });
+	const exc = picomatch(exclude, { dot: true });
+
 
 	const map = new Map();
 
