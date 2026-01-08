@@ -3,7 +3,10 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:">
+	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
+	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
 	<meta name="description" content="Control your computer with just a webcam.">
@@ -37,7 +40,7 @@
 		</p>
 		<p>
 			<!-- TODO: download links for multiple platforms; detect platform, present download with dropdown similar to VS Code homepage, near top of page -->
-			<a href="https://github.com/1j01/tracky-mouse/releases/download/v1.2.0/Tracky.Mouse-1.2.0.Setup.exe"
+			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.0.0/Tracky.Mouse-2.0.0.Setup.exe"
 				class="big-download-button">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.7, 1.5) perspective(9px) rotateY(-10deg) translateY(-1px)">
@@ -322,8 +325,12 @@
 			Tracky Mouse does not store any personally identifiable information.
 		</p>
 		<p>
-			Tracky Mouse may use a third-party service to report errors,
-			including some context about how you've configured the software.
+			When an error occurs, the Tracky Mouse desktop app
+			may send error reports to a third-party service (<a href="https://sentry.io/">Sentry</a>)
+			to help with improving the software.
+			No personally identifiable information is collected,
+			only stack traces and environment details,
+			such as CPU type, operating system version, and app version.
 		</p>
 	</section>
 	<section class="page-section">

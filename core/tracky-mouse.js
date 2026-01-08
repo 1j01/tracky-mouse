@@ -1,4 +1,4 @@
-/* global jsfeat, Stats, clm */
+/* global jsfeat, Stats, clm, faceLandmarksDetection */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -25,20 +25,12 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	const scriptFiles = [
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 	];
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
 	}
-	// TODO: figure out how to preload worker-context dependencies that use `importScripts`.
-	// `<link rel="preload">` can be injected at runtime,
-	// which wouldn't make sense for the main thread's dependencies, since we're injecting all the scripts at once anyway,
-	// but it could make sense for the worker's dependencies, since the worker is loaded lazily.
-	// However... with `<link rel="preload" as="script">`, it seems to load things twice, making performance worse!
-	// It seems like the worker isn't using the same cache as the main thread. I'm not sure.
-	// Maybe this will be easier if I use module versions of the libraries, with `<link rel="modulepreload">`?
-	// Maybe it would use a shared cache in that case? That's a big if, though.
-	// `${TrackyMouse.dependenciesRoot}/lib/tf.js`
-	// `${TrackyMouse.dependenciesRoot}/lib/facemesh/facemesh.js`
 	return Promise.all(scriptFiles.map(loadScript));
 };
 
@@ -624,6 +616,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
 				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 			</div>
+			<div class="tracky-mouse-control-row">
+				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
+				<select id="tracky-mouse-clicking-mode">
+					<option value="dwell">Dwell to click</option>
+					<option value="blink">Wink to click (Experimental)</option>
+					<option value="open-mouth">Open mouth to click (Experimental)</option>
+					<option value="off">Off</option>
+				</select>
+			</div>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
@@ -667,6 +668,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
+	var clickingModeDropdown = uiContainer.querySelector("#tracky-mouse-clicking-mode");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
 	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
 	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
@@ -697,6 +699,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		// you might want to avoid right-clicking altogether.
 		swapMouseButtonsCheckbox.parentElement.hidden = true;
 
+		// Hide clicking mode option if not in desktop app,
+		// since dwell clicking in the web version is a separate API (TrackyMouse.initDwellClicking)
+		// and wouldn't automatically be controlled by this UI.
+		// TODO: bring more of desktop app functionality into core
+		clickingModeDropdown.parentElement.hidden = true;
+
 		// Hide the "run at login" option if we're not in the desktop app.
 		runAtLoginCheckbox.parentElement.hidden = true;
 	}
@@ -715,7 +723,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	if (statsJs) {
 		var stats = new Stats();
-		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.position = 'fixed';
 		stats.domElement.style.top = '0px';
 		stats.domElement.style.right = '0px';
 		stats.domElement.style.left = '';
@@ -751,6 +759,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var startEnabled;
 	var runAtLogin;
 	var swapMouseButtons;
+	var clickingMode = 'dwell';
 
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -795,40 +804,55 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// };
 
 	let currentCameraImageData;
-	let facemeshWorker;
-	const initFacemeshWorker = () => {
-		if (facemeshWorker) {
-			facemeshWorker.terminate();
+	let detector;
+	const initFacemesh = async () => {
+		if (detector) {
+			detector.dispose();
 		}
 		facemeshEstimating = false;
 		facemeshFirstEstimation = true;
 		facemeshLoaded = false;
-		facemeshWorker = new Worker(`${TrackyMouse.dependenciesRoot}/facemesh.worker.js`);
-		facemeshWorker.addEventListener("message", (e) => {
-			// console.log('Message received from worker', e.data);
-			if (e.data.type === "LOADED") {
-				facemeshLoaded = true;
-				facemeshEstimateFaces = () => {
-					const imageData = currentCameraImageData;//getCameraImageData();
-					if (!imageData) {
-						return;
-					}
-					facemeshWorker.postMessage({ type: "ESTIMATE_FACES", imageData });
-					return new Promise((resolve, _reject) => {
-						facemeshWorker.addEventListener("message", (e) => {
-							if (e.data.type === "ESTIMATED_FACES") {
-								resolve(e.data.predictions);
-							}
-						}, { once: true });
-					});
-				};
+		const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+		const detectorConfig = {
+			runtime: 'mediapipe',
+			solutionPath: `${TrackyMouse.dependenciesRoot}/lib/face_mesh`,
+			refineLandmarks: true,
+		};
+
+		try {
+			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+		} catch (error) {
+			detector = null;
+			// TODO: avoid alert
+			alert(error);
+		}
+
+		facemeshLoaded = true;
+		facemeshEstimateFaces = async () => {
+			const imageData = currentCameraImageData;//getCameraImageData();
+			if (!imageData) {
+				return [];
 			}
-		}, { once: true });
-		facemeshWorker.postMessage({ type: "LOAD", options: facemeshOptions });
+			try {
+				const faces = await detector.estimateFaces(imageData, { flipHorizontal: false });
+				if (!faces) {
+					console.warn("faces ===", faces);
+					return [];
+				}
+				return faces;
+			} catch (error) {
+				detector.dispose();
+				detector = null;
+				// TODO: avoid alert
+				alert(error);
+			}
+			return [];
+		};
+
 	};
 
 	if (useFacemesh) {
-		initFacemeshWorker();
+		initFacemesh();
 	}
 
 	function deserializeSettings(settings, initialLoad = false) {
@@ -838,6 +862,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			if (settings.globalSettings.swapMouseButtons !== undefined) {
 				swapMouseButtons = settings.globalSettings.swapMouseButtons;
 				swapMouseButtonsCheckbox.checked = swapMouseButtons;
+			}
+			if (settings.globalSettings.clickingMode !== undefined) {
+				clickingMode = settings.globalSettings.clickingMode;
+				clickingModeDropdown.value = clickingMode;
 			}
 			if (settings.globalSettings.mirrorCameraView !== undefined) {
 				mirror = settings.globalSettings.mirrorCameraView;
@@ -879,6 +907,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				startEnabled,
 				runAtLogin,
 				swapMouseButtons,
+				clickingMode,
 				mirrorCameraView: mirror,
 				headTrackingSensitivityX: sensitivityX,
 				headTrackingSensitivityY: sensitivityY,
@@ -956,6 +985,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { swapMouseButtons } });
 		}
 	};
+	clickingModeDropdown.onchange = (event) => {
+		clickingMode = clickingModeDropdown.value;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { clickingMode } });
+		}
+	};
 	startEnabledCheckbox.onchange = (event) => {
 		startEnabled = startEnabledCheckbox.checked;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
@@ -976,6 +1013,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Load defaults from HTML
 	mirrorCheckbox.onchange();
 	swapMouseButtonsCheckbox.onchange();
+	clickingModeDropdown.onchange();
 	startEnabledCheckbox.onchange();
 	runAtLoginCheckbox.onchange();
 	sensitivityXSlider.onchange();
@@ -1054,7 +1092,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
+				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
+				// TODO: enumerateDevices and give more specific message for OBS Virtual Camera case
+				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
+				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
+				// or "1 camera source detected" preceding it)
 				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+			} else if (error.name === "AbortError") {
+				// webcam is likely already in use
+				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
+				errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
 				// constraints can not be satisfied by avb. devices
 				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
@@ -1398,9 +1445,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					//     at executeOp (tf.js:85396)
 					// WebGL: CONTEXT_LOST_WEBGL: loseContext: context lost
 
-					// Note that the first estimation from facemesh often takes a while,
-					// and we don't want to continuously terminate the worker as it's working on those first results.
+					// Note that the first estimation from facemesh often takes a while*,
+					// and we don't want to continuously terminate the worker** as it's working on those first results.
 					// And also, for the first estimate it hasn't actually disabled clmtrackr yet, so it's fine if it's a long timeout.
+					// *Or it did, before updating the facemesh pipeline.
+					// **Not using a worker for facemesh anymore...
 					clearTimeout(fallbackTimeoutID);
 					fallbackTimeoutID = setTimeout(() => {
 						if (!useClmTracking) {
@@ -1424,13 +1473,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Note: clearTimeout/clearInterval work interchangeably
 						fallbackTimeoutID = setInterval(() => {
 							try {
+								// TODO: attempting webgl context creation beforehand doesn't make sense without a worker
+								// If it's running in the same thread, we can just try creating the detector.
+
 								// Once we can create a webgl2 canvas...
 								document.createElement("canvas").getContext("webgl2");
 								clearInterval(fallbackTimeoutID);
-								// It's worth trying to re-initialize...
+								// It's worth trying to re-initialize [a web worker for facemesh]...
 								setTimeout(() => {
-									console.warn("Re-initializing facemesh worker");
-									initFacemeshWorker();
+									console.warn("Re-initializing facemesh");
+									initFacemesh();
 									facemeshRejectNext = 1; // or more?
 								}, 1000);
 							} catch (error) {
@@ -1460,6 +1512,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						if (!facemeshPrediction) {
 							return;
 						}
+						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
+
 						// this applies to facemeshPrediction.annotations as well, which references the same points
 						// facemeshPrediction.scaledMesh.forEach((point) => {
 						// 	point[0] /= frameScaleForWorker;
@@ -1474,7 +1528,64 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						workerSyncedOops.filterPoints(() => false); // empty points (could probably also just set pointCount = 0;
 
-						const { annotations } = facemeshPrediction;
+						// const { annotations } = facemeshPrediction;
+						const getPoint = (index) =>
+							facemeshPrediction.keypoints[index] ?
+								[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y] :
+								undefined;
+
+						const MESH_ANNOTATIONS = {
+							silhouette: [
+								10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288,
+								397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136,
+								172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109
+							],
+
+							lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
+							lipsLowerOuter: [146, 91, 181, 84, 17, 314, 405, 321, 375, 291],
+							lipsUpperInner: [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308],
+							lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
+
+							rightEyeUpper0: [246, 161, 160, 159, 158, 157, 173],
+							rightEyeLower0: [33, 7, 163, 144, 145, 153, 154, 155, 133],
+							rightEyeUpper1: [247, 30, 29, 27, 28, 56, 190],
+							rightEyeLower1: [130, 25, 110, 24, 23, 22, 26, 112, 243],
+							rightEyeUpper2: [113, 225, 224, 223, 222, 221, 189],
+							rightEyeLower2: [226, 31, 228, 229, 230, 231, 232, 233, 244],
+							rightEyeLower3: [143, 111, 117, 118, 119, 120, 121, 128, 245],
+
+							rightEyebrowUpper: [156, 70, 63, 105, 66, 107, 55, 193],
+							rightEyebrowLower: [35, 124, 46, 53, 52, 65],
+
+							rightEyeIris: [473, 474, 475, 476, 477],
+
+							leftEyeUpper0: [466, 388, 387, 386, 385, 384, 398],
+							leftEyeLower0: [263, 249, 390, 373, 374, 380, 381, 382, 362],
+							leftEyeUpper1: [467, 260, 259, 257, 258, 286, 414],
+							leftEyeLower1: [359, 255, 339, 254, 253, 252, 256, 341, 463],
+							leftEyeUpper2: [342, 445, 444, 443, 442, 441, 413],
+							leftEyeLower2: [446, 261, 448, 449, 450, 451, 452, 453, 464],
+							leftEyeLower3: [372, 340, 346, 347, 348, 349, 350, 357, 465],
+
+							leftEyebrowUpper: [383, 300, 293, 334, 296, 336, 285, 417],
+							leftEyebrowLower: [265, 353, 276, 283, 282, 295],
+
+							leftEyeIris: [468, 469, 470, 471, 472],
+
+							midwayBetweenEyes: [168],
+
+							noseTip: [1],
+							noseBottom: [2],
+							noseRightCorner: [98],
+							noseLeftCorner: [327],
+
+							rightCheek: [205],
+							leftCheek: [425]
+						};
+
+						const annotations = Object.fromEntries(Object.entries(MESH_ANNOTATIONS).map(([key, indices]) => {
+							return [key, indices.map(getPoint)];
+						}));
 						// nostrils
 						workerSyncedOops.addPoint(annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 						workerSyncedOops.addPoint(annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
@@ -1527,9 +1638,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Note: this applies to facemeshPrediction.annotations as well which references the same point objects
 						// Note: This latency compensation only really works if it's already tracking well
 						// if (prevFaceInViewConfidence > 0.99) {
-						// 	facemeshPrediction.scaledMesh.forEach((point) => {
-						// 		point[0] += movementXSinceFacemeshUpdate;
-						// 		point[1] += movementYSinceFacemeshUpdate;
+						// 	facemeshPrediction.keypoints.forEach((point) => {
+						// 		point.x += movementXSinceFacemeshUpdate;
+						// 		point.y += movementYSinceFacemeshUpdate;
 						// 	});
 						// }
 
@@ -1571,6 +1682,92 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							}
 							return true;
 						});
+
+						if (clickingMode === "blink") {
+							// TODO: try variations, e.g.
+							// - is mid the best point to use? maybe floor or ceil would give a different point that might be better?
+							// - would using the eye size instead of head size be different? can compare to see how much variation there is in eye size : head size ratio
+							// - as I noted here https://github.com/1j01/tracky-mouse/issues/1#issuecomment-2053931136
+							//   sometimes a fully closed eye isn't detected as fully closed, and an eye can be open and detected at a
+							//   similar squinty level, however, if one eye is detected as fully closed, and the other eye is at that squinty level,
+							//   I think it can be assumed that the squinty eye is open, and otherwise, if neither eye is detected as fully closed,
+							//   then a squinty level can be assumed to be closed. So it might make sense to bias the blink detection, taking into account both eyes.
+							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
+							//   I think this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
+							const mid = Math.round(annotations.leftEyeUpper0.length / 2);
+							// TODO: rename these variables to be clearly distances not openness
+							const leftEyeOpenness = Math.hypot(
+								annotations.leftEyeUpper0[mid][0] - annotations.leftEyeLower0[mid][0],
+								annotations.leftEyeUpper0[mid][1] - annotations.leftEyeLower0[mid][1]
+							);
+							const rightEyeOpenness = Math.hypot(
+								annotations.rightEyeUpper0[mid][0] - annotations.rightEyeLower0[mid][0],
+								annotations.rightEyeUpper0[mid][1] - annotations.rightEyeLower0[mid][1]
+							);
+							const headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							const threshold = headSize * 0.1;
+							// console.log("leftEyeOpenness", leftEyeOpenness, "rightEyeOpenness", rightEyeOpenness, "threshold", threshold);
+							const leftEyeOpen = leftEyeOpenness > threshold;
+							const rightEyeOpen = rightEyeOpenness > threshold;
+							// TODO: remove global debounce hack
+							// and prevent clicking until both eyes are open again
+							// ideally keeping the mouse button held
+							let clickButton = -1;
+							if (leftEyeOpen && !rightEyeOpen) {
+								clickButton = 0;
+							} else if (!leftEyeOpen && rightEyeOpen) {
+								clickButton = 2;
+							}
+							if (window._debouncedClick) {
+								return;
+							}
+							window._debouncedClick = true;
+							setTimeout(() => {
+								window._debouncedClick = false;
+							}, 1500);
+							if (clickButton !== -1) {
+								// console.log("Would click button", clickButton);
+								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
+							}
+						}
+						if (clickingMode === "open-mouth") {
+							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
+							// TODO: DRY and refactor and move this code (it's too nested)
+							const mid = Math.round(annotations.lipsLowerInner.length / 2);
+							// TODO: rename these variables to be clearly distances not openness
+							const mouthOpenness = Math.hypot(
+								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
+								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
+							);
+							const headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							const threshold = headSize * 0.1;
+							// console.log("mouthOpenness", mouthOpenness, "threshold", threshold);
+							const mouthOpen = mouthOpenness > threshold;
+							// TODO: remove global debounce hack
+							// and prevent clicking until both eyes are open again
+							// ideally keeping the mouse button held
+							let clickButton = -1;
+							if (mouthOpen) {
+								clickButton = 0;
+							}
+							if (window._debouncedClick) {
+								return;
+							}
+							window._debouncedClick = true;
+							setTimeout(() => {
+								window._debouncedClick = false;
+							}, 1500);
+							if (clickButton !== -1) {
+								// console.log("Would click button", clickButton);
+								window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
+							}
+						}
 					}, () => {
 						facemeshEstimating = false;
 						facemeshFirstEstimation = false;
@@ -1595,12 +1792,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				}
 				if (update && useFacemesh) {
 					// this should just be visual, since we only add/remove points based on the facemesh data when receiving it
-					facemeshPrediction.scaledMesh.forEach((point) => {
-						point[0] += prevMovementX;
-						point[1] += prevMovementY;
+					facemeshPrediction.keypoints.forEach((point) => {
+						point.x += prevMovementX;
+						point.y += prevMovementY;
 					});
 				}
-				facemeshPrediction.scaledMesh.forEach(([x, y, _z]) => {
+				facemeshPrediction.keypoints.forEach(({ x, y }) => {
 					ctx.fillRect(x, y, 1, 1);
 				});
 			} else {
@@ -1871,8 +2068,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// just in case there's any async code looking at whether it's paused
 			paused = true;
 
-			if (facemeshWorker) {
-				facemeshWorker.terminate();
+			if (detector) {
+				detector.dispose();
+				detector = null;
 			}
 			if (clmTracker) {
 				// not sure this helps clean up any resources
