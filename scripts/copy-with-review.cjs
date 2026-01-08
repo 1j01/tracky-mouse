@@ -234,8 +234,8 @@ function evaluate() {
 	if (awaitingConfirmation) return;
 	awaitingConfirmation = true;
 
-	rl.question("\nAll files sorted. Proceed with copy? (y/n) ", ans => {
-		if (ans.toLowerCase() === "y") {
+	rl.question("\nAll files sorted. Proceed with copy? (Y/n) ", ans => {
+		if (!ans.toLowerCase().startsWith("n")) {
 			copy(statuses);
 			console.log("Copy complete.");
 			process.exit(0);
