@@ -62,6 +62,7 @@ module.exports = [
 			"scripts/copy-with-review.cjs",
 			"scripts/list-ipc-events.js",
 			"scripts/update-cli-docs.js",
+			"scripts/update-dl-links.js",
 			"website/globs-for-deploy.js",
 			"eslint.config.js",
 		],

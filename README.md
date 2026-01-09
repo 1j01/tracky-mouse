@@ -226,8 +226,7 @@ Add "No changes here yet." below the "Unreleased" heading so that it doesn't app
 
 Update download links to point to the new version:
 ```sh
-FILES_WITH_DL_LINKS="README.md website/index.html"
-node -e "const fs = require('fs'); const version = '$VERSION'; if (version == '') throw new Error('VERSION is not set'); if ((version == require('./package.json').version) == false) throw new Error('VERSION does not match package.json version'); const files = '$FILES_WITH_DL_LINKS'.split(' '); files.forEach(file => { fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/(https:\/\/github.com\/1j01\/tracky-mouse\/releases\/download\/)[^/]*(\/Tracky.Mouse.)[^/)'\"]*(.Setup.exe)/g, '\$1v' + version + '\$2' + version + '\$3')); });"
+npm run update-dl-links
 ```
 
 Build the desktop app (this must be done after updating the version number, but should be done before publishing the library to npm in case any issues come up):
