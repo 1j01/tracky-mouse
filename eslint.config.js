@@ -60,6 +60,7 @@ module.exports = [
 			"desktop-app/src/preload-screen-overlay.js",
 			"desktop-app/forge.config.js",
 			"scripts/copy-with-review.cjs",
+			"scripts/list-ipc-events.js",
 			"website/globs-for-deploy.js",
 			"eslint.config.js",
 		],
