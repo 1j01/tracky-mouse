@@ -1612,14 +1612,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//   That might be the most important improvement...
 							const midUpper = Math.floor(annotations.leftEyeUpper0.length / 2);
 							const midLower = Math.floor(annotations.leftEyeLower0.length / 2);
-							// TODO: rename these variables to be clearly distances not openness
 							const leftEyeTopBottomPoints = [annotations.leftEyeUpper0[midUpper], annotations.leftEyeLower0[midLower]];
 							const rightEyeTopBottomPoints = [annotations.rightEyeUpper0[midUpper], annotations.rightEyeLower0[midLower]];
-							const leftEyeOpenness = Math.hypot(
+							const leftEyeTopBottomDistance = Math.hypot(
 								leftEyeTopBottomPoints[0][0] - leftEyeTopBottomPoints[1][0],
 								leftEyeTopBottomPoints[0][1] - leftEyeTopBottomPoints[1][1]
 							);
-							const rightEyeOpenness = Math.hypot(
+							const rightEyeTopBottomDistance = Math.hypot(
 								rightEyeTopBottomPoints[0][0] - rightEyeTopBottomPoints[1][0],
 								rightEyeTopBottomPoints[0][1] - rightEyeTopBottomPoints[1][1]
 							);
@@ -1628,9 +1627,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
 							const threshold = headSize * 0.04;
-							// console.log("leftEyeOpenness", leftEyeOpenness, "rightEyeOpenness", rightEyeOpenness, "threshold", threshold);
-							const leftEyeOpen = leftEyeOpenness > threshold;
-							const rightEyeOpen = rightEyeOpenness > threshold;
+							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
+							const leftEyeOpen = leftEyeTopBottomDistance > threshold;
+							const rightEyeOpen = rightEyeTopBottomDistance > threshold;
 							if (leftEyeOpen && !rightEyeOpen) {
 								clickButton = 0;
 							} else if (!leftEyeOpen && rightEyeOpen) {
@@ -1648,9 +1647,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						if (clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
 							// TODO: refactor and move this code (it's too nested)
+							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
+							// - mouth width (implies making an "O" mouth shape would be favored over a wide open mouth shape)
 							const mid = Math.round(annotations.lipsLowerInner.length / 2);
-							// TODO: rename these variables to be clearly distances not openness
-							const mouthOpenness = Math.hypot(
+							const mouthTopBottomDistance = Math.hypot(
 								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
 								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
 							);
@@ -1659,8 +1659,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
 							const threshold = headSize * 0.1;
-							// console.log("mouthOpenness", mouthOpenness, "threshold", threshold);
-							const mouthOpen = mouthOpenness > threshold;
+							// console.log("mouthTopBottomDistance", mouthTopBottomDistance, "threshold", threshold);
+							const mouthOpen = mouthTopBottomDistance > threshold;
 							if (mouthOpen) {
 								clickButton = 0;
 							}
