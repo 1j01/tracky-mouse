@@ -1591,55 +1591,108 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						let clickButton = -1;
 						if (clickingMode === "blink") {
 							// Note: currently head tilt matters a lot, but ideally it should be not a factor
+							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
+							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
+							// - When tilting your head left or right, the contour of one closed eyelid becomes more curved (as it wraps around your head),
+							//   while the other stays near center of the visual region of your head and thus stays relatively straight (experiencing less projection distortion).
+							// - When tilting your head down, the contour of a closed eyelid becomes more curved, which can lead to false negatives.
+							// - When tilting your head up, the contour of an open eyelid becomes more straight, which can lead to false positives.
 							// TODO: try variations, e.g.
-							// - is mid the best point to use? maybe floor or ceil would give a different point that might be better?
-							// - would using the eye size instead of head size be different? can compare to see how much variation there is in eye size : head size ratio
-							//   - when moving closer or further from the camera, this ratio changes theoretically due to perspective,
-							//     and theoretically the eye size should be better suited
-							//     (you can test by holding your eye still and moving nearer to / further from the camera (or moving the camera); the openness should be constant)
 							// - as I noted here https://github.com/1j01/tracky-mouse/issues/1#issuecomment-2053931136
 							//   sometimes a fully closed eye isn't detected as fully closed, and an eye can be open and detected at a
 							//   similar squinty level, however, if one eye is detected as fully closed, and the other eye is at that squinty level,
 							//   I think it can be assumed that the squinty eye is open, and otherwise, if neither eye is detected as fully closed,
 							//   then a squinty level can be assumed to be closed. So it might make sense to bias the blink detection, taking into account both eyes.
 							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
-							//   I think this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
+							//   I suspect this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
 							// - stabilize with a separate threshold for opening vs closing, so that it doesn't rapidly switch between open and closed when the eye is near the threshold
-							// - maybe measure distance only perpendicular to the eye's corner-to-corner line, so that when closed,
-							//   as points twist / don't quite line up, the lateral distance doesn't affect the measurement
-							// - maybe measure several points instead of just the middle
+							// - maybe measure several points instead of just the middle or extreme points
 							// - Can we use a 3D version of the facemesh instead of 2D, to help with ignoring head tilt??
 							//   That might be the most important improvement...
-							const midUpper = Math.floor(annotations.leftEyeUpper0.length / 2);
-							const midLower = Math.floor(annotations.leftEyeLower0.length / 2);
-							const leftEyeTopBottomPoints = [annotations.leftEyeUpper0[midUpper], annotations.leftEyeLower0[midLower]];
-							const rightEyeTopBottomPoints = [annotations.rightEyeUpper0[midUpper], annotations.rightEyeLower0[midLower]];
-							const leftEyeTopBottomDistance = Math.hypot(
-								leftEyeTopBottomPoints[0][0] - leftEyeTopBottomPoints[1][0],
-								leftEyeTopBottomPoints[0][1] - leftEyeTopBottomPoints[1][1]
-							);
-							const rightEyeTopBottomDistance = Math.hypot(
-								rightEyeTopBottomPoints[0][0] - rightEyeTopBottomPoints[1][0],
-								rightEyeTopBottomPoints[0][1] - rightEyeTopBottomPoints[1][1]
-							);
-							const headSize = Math.hypot(
-								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
-							);
-							const threshold = headSize * 0.04;
+
+							// Old code measuring middle points of upper and lower eyelids:
+							// const midUpper = Math.floor(annotations.leftEyeUpper0.length / 2);
+							// const midLower = Math.floor(annotations.leftEyeLower0.length / 2);
+							// const leftEyeTopBottomPoints = [annotations.leftEyeUpper0[midUpper], annotations.leftEyeLower0[midLower]];
+							// const rightEyeTopBottomPoints = [annotations.rightEyeUpper0[midUpper], annotations.rightEyeLower0[midLower]];
+							// const leftEyeTopBottomDistance = Math.hypot(
+							// 	leftEyeTopBottomPoints[0][0] - leftEyeTopBottomPoints[1][0],
+							// 	leftEyeTopBottomPoints[0][1] - leftEyeTopBottomPoints[1][1]
+							// );
+							// const rightEyeTopBottomDistance = Math.hypot(
+							// 	rightEyeTopBottomPoints[0][0] - rightEyeTopBottomPoints[1][0],
+							// 	rightEyeTopBottomPoints[0][1] - rightEyeTopBottomPoints[1][1]
+							// );
+							// const headSize = Math.hypot(
+							// 	annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+							// 	annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							// );
+							// const threshold = headSize * 0.04;
+							// const leftEyeOpen = leftEyeTopBottomDistance > threshold;
+							// const rightEyeOpen = rightEyeTopBottomDistance > threshold;
+
+							/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
+							function signedDistancePointLine(point, a, b) {
+								const [px, py] = point;
+								const [x1, y1] = a;
+								const [x2, y2] = b;
+
+								const dx = x2 - x1;
+								const dy = y2 - y1;
+
+								// Perpendicular (normal) vector
+								const nx = dy;
+								const ny = -dx;
+
+								return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
+							}
+
+							function detectBlink(eyeUpper, eyeLower, threshold) {
+								// The lower eye keypoints have the corners
+								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
+								// Excluding the corners isn't really important since their measures will be 0.
+								const otherPoints = eyeUpper.concat(eyeLower).filter(point => !corners.includes(point));
+								let highest = 0;
+								let lowest = 0;
+								for (const point of otherPoints) {
+									const distance = signedDistancePointLine(point, corners[0], corners[1]);
+									if (distance < lowest) {
+										lowest = distance;
+									}
+									if (distance > highest) {
+										highest = distance;
+									}
+								}
+
+								const eyeWidth = Math.hypot(
+									corners[0][0] - corners[1][0],
+									corners[0][1] - corners[1][1]
+								);
+								const eyeHeight = highest - lowest;
+								const eyeAspectRatio = eyeHeight / eyeWidth;
+								// console.log("corners", corners, "eyeWidth", eyeWidth, "eyeHeight", eyeHeight, "aspectRatio", eyeAspectRatio);
+								return {
+									corners,
+									highest,
+									lowest,
+									eyeAspectRatio,
+									open: eyeAspectRatio > threshold,
+								};
+							}
+
+							const threshold = 0.16;
+							const leftEye = detectBlink(annotations.leftEyeUpper0, annotations.leftEyeLower0, threshold);
+							const rightEye = detectBlink(annotations.rightEyeUpper0, annotations.rightEyeLower0, threshold);
+
 							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
-							const leftEyeOpen = leftEyeTopBottomDistance > threshold;
-							const rightEyeOpen = rightEyeTopBottomDistance > threshold;
-							if (leftEyeOpen && !rightEyeOpen) {
+							if (leftEye.open && !rightEye.open) {
 								clickButton = 0;
-							} else if (!leftEyeOpen && rightEyeOpen) {
+							} else if (!leftEye.open && rightEye.open) {
 								clickButton = 2;
 							}
 							blinkDebugInfo = {
-								leftEyeOpen,
-								rightEyeOpen,
-								leftEyePoints: leftEyeTopBottomPoints,
-								rightEyePoints: rightEyeTopBottomPoints,
+								leftEye,
+								rightEye
 							};
 						} else {
 							blinkDebugInfo = null;
@@ -1715,19 +1768,24 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		if (clickingMode === "blink" && blinkDebugInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
-			const drawEye = (open, points) => {
-				ctx.strokeStyle = open ? "cyan" : "red";
+			const drawEye = (eye) => {
+				ctx.strokeStyle = eye.open ? "cyan" : "red";
 				ctx.beginPath();
-				ctx.moveTo(points[0][0], points[0][1]);
-				ctx.lineTo(points[1][0], points[1][1]);
+				ctx.moveTo(eye.corners[0][0], eye.corners[0][1]);
+				ctx.lineTo(eye.corners[1][0], eye.corners[1][1]);
 				ctx.stroke();
-				ctx.fillStyle = open ? "cyan" : "red";
-				ctx.fillRect(points[0][0] - 2, points[0][1] - 2, 4, 4);
-				ctx.fillStyle = open ? "cyan" : "red";
-				ctx.fillRect(points[1][0] - 2, points[1][1] - 2, 4, 4);
+				// draw extents as a rectangle
+				ctx.save();
+				ctx.translate(eye.corners[0][0], eye.corners[0][1]);
+				ctx.rotate(Math.atan2(eye.corners[1][1] - eye.corners[0][1], eye.corners[1][0] - eye.corners[0][0]));
+				ctx.strokeStyle = eye.open ? "cyan" : "red";
+				ctx.beginPath();
+				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
+				ctx.stroke();
+				ctx.restore();
 			};
-			drawEye(blinkDebugInfo.leftEyeOpen, blinkDebugInfo.leftEyePoints);
-			drawEye(blinkDebugInfo.rightEyeOpen, blinkDebugInfo.rightEyePoints);
+			drawEye(blinkDebugInfo.leftEye);
+			drawEye(blinkDebugInfo.rightEye);
 			ctx.restore();
 		}
 
