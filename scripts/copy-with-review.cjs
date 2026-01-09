@@ -11,7 +11,6 @@ TODO:
 - Clean up the code
   - Multiple tree representations (with/without status - compressTree converts from one to the other)
   - Awkward main orchestration relying heavily on process.exit
-  - Is a separate module fast-glob really needed just for walking the directory tree?
 - Refresh output in-place and avoid the user scrolling up to earlier, outdated output,
   perhaps by using the alternate screen buffer, making it more of a TUI application
 - Handle copying empty directories (if this is to be a reusable tool)

@@ -5,28 +5,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const glob = require('fast-glob');
 
 const projectRoot = path.join(__dirname, '../desktop-app');
 
-function getAllFiles(dirPath, arrayOfFiles) {
-	const files = fs.readdirSync(dirPath);
-
-	arrayOfFiles = arrayOfFiles || [];
-
-	files.forEach(function (file) {
-		if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-			if (file !== 'node_modules' && file !== '.git' && file !== 'dist' && file !== 'out') {
-				arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
-			}
-		} else {
-			arrayOfFiles.push(path.join(dirPath, "/", file));
-		}
-	});
-
-	return arrayOfFiles;
-}
-
-const files = getAllFiles(projectRoot);
+const files = glob.sync(['**/*.{js,ts,html}'], {
+	cwd: projectRoot,
+	absolute: true,
+	ignore: ['**/node_modules/**', '**/dist/**', '**/out/**']
+});
 
 const ipcPatterns = [
 	/ipcMain\.on\(\s*['"`](.+?)['"`]/g,
@@ -47,10 +34,6 @@ const foundEvents = new Set();
 const eventLocations = {}; // eventName -> [file:line]
 
 files.forEach(file => {
-	if (!file.endsWith('.js') && !file.endsWith('.ts') && !file.endsWith('.html')) {
-		return;
-	}
-
 	const content = fs.readFileSync(file, 'utf8');
 
 	ipcPatterns.forEach(pattern => {
@@ -86,10 +69,6 @@ if (foundEvents.size > 0) {
 	});
 
 	files.forEach(file => {
-		if (!file.endsWith('.js') && !file.endsWith('.ts') && !file.endsWith('.html')) {
-			return;
-		}
-
 		const content = fs.readFileSync(file, 'utf8');
 
 		foundEvents.forEach(eventName => {
