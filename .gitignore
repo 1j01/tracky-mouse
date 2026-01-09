@@ -1,5 +1,6 @@
 private/
 dist/
+localazy.keys.json
 
 # Blender
 *.blend[0-9]
