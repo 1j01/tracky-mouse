@@ -16,3 +16,23 @@ for (const file of filesWithDownloadLinks) {
 		.replace(releaseDownloadLinkRegex, '$1v' + version + '$2' + version + '$3')
 	);
 }
+
+console.log(`Updated download links in ${filesWithDownloadLinks.join(', ')} to version ${version}.`);
+
+// Check for any other files with download links that might have been missed
+const glob = require('fast-glob');
+const path = require('path');
+const files = glob.sync(['**/*.*'], {
+	cwd: process.cwd(),
+	absolute: true,
+	ignore: ['**/node_modules/**', '**/dist/**', '**/out/**']
+});
+for (const file of files) {
+	if (filesWithDownloadLinks.some(f => path.resolve(f) === path.resolve(file))) {
+		continue;
+	}
+	const content = fs.readFileSync(file, 'utf8');
+	if (content.match(releaseDownloadLinkRegex)) {
+		console.warn(`Warning: Found download link in ${file} that is not in the list of files to update.`);
+	}
+}
