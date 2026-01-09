@@ -1706,14 +1706,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			const drawEye = (open, points) => {
-				ctx.strokeStyle = open ? "lime" : "red";
+				ctx.strokeStyle = open ? "cyan" : "red";
 				ctx.beginPath();
 				ctx.moveTo(points[0][0], points[0][1]);
 				ctx.lineTo(points[1][0], points[1][1]);
 				ctx.stroke();
-				ctx.fillStyle = "blue";
+				ctx.fillStyle = open ? "cyan" : "red";
 				ctx.fillRect(points[0][0] - 2, points[0][1] - 2, 4, 4);
-				ctx.fillStyle = "cyan";
+				ctx.fillStyle = open ? "cyan" : "red";
 				ctx.fillRect(points[1][0] - 2, points[1][1] - 2, 4, 4);
 			};
 			drawEye(blinkDebugInfo.leftEyeOpen, blinkDebugInfo.leftEyePoints);
