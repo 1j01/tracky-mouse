@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed visual offsetting of facemesh dots overlay by the previous movement from the point tracking, which should no longer provide any smoothing benefit since the facemesh pipeline has been updated in the last release and now runs within one frame.
+- Improved blink detection by using more appropriate points from the facemesh.
+- Blink detection includes a visualization. It may make you look like a weird cat.
+- Tons of cleanup of the codebase, and development process improvements.
 
 ## [2.0.0] - 2026-01-07
 

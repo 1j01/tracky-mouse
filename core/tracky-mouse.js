@@ -1590,6 +1590,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						let clickButton = -1;
 						if (clickingMode === "blink") {
+							// Note: currently head tilt matters a lot, but ideally it should be not a factor
 							// TODO: try variations, e.g.
 							// - is mid the best point to use? maybe floor or ceil would give a different point that might be better?
 							// - would using the eye size instead of head size be different? can compare to see how much variation there is in eye size : head size ratio
@@ -1603,21 +1604,30 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//   then a squinty level can be assumed to be closed. So it might make sense to bias the blink detection, taking into account both eyes.
 							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
 							//   I think this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
-							const mid = Math.round(annotations.leftEyeUpper0.length / 2);
+							// - stabilize with a separate threshold for opening vs closing, so that it doesn't rapidly switch between open and closed when the eye is near the threshold
+							// - maybe measure distance only perpendicular to the eye's corner-to-corner line, so that when closed,
+							//   as points twist / don't quite line up, the lateral distance doesn't affect the measurement
+							// - maybe measure several points instead of just the middle
+							// - Can we use a 3D version of the facemesh instead of 2D, to help with ignoring head tilt??
+							//   That might be the most important improvement...
+							const midUpper = Math.floor(annotations.leftEyeUpper0.length / 2);
+							const midLower = Math.floor(annotations.leftEyeLower0.length / 2);
 							// TODO: rename these variables to be clearly distances not openness
+							const leftEyeTopBottomPoints = [annotations.leftEyeUpper0[midUpper], annotations.leftEyeLower0[midLower]];
+							const rightEyeTopBottomPoints = [annotations.rightEyeUpper0[midUpper], annotations.rightEyeLower0[midLower]];
 							const leftEyeOpenness = Math.hypot(
-								annotations.leftEyeUpper0[mid][0] - annotations.leftEyeLower0[mid][0],
-								annotations.leftEyeUpper0[mid][1] - annotations.leftEyeLower0[mid][1]
+								leftEyeTopBottomPoints[0][0] - leftEyeTopBottomPoints[1][0],
+								leftEyeTopBottomPoints[0][1] - leftEyeTopBottomPoints[1][1]
 							);
 							const rightEyeOpenness = Math.hypot(
-								annotations.rightEyeUpper0[mid][0] - annotations.rightEyeLower0[mid][0],
-								annotations.rightEyeUpper0[mid][1] - annotations.rightEyeLower0[mid][1]
+								rightEyeTopBottomPoints[0][0] - rightEyeTopBottomPoints[1][0],
+								rightEyeTopBottomPoints[0][1] - rightEyeTopBottomPoints[1][1]
 							);
 							const headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
-							const threshold = headSize * 0.1;
+							const threshold = headSize * 0.04;
 							// console.log("leftEyeOpenness", leftEyeOpenness, "rightEyeOpenness", rightEyeOpenness, "threshold", threshold);
 							const leftEyeOpen = leftEyeOpenness > threshold;
 							const rightEyeOpen = rightEyeOpenness > threshold;
@@ -1629,8 +1639,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							blinkDebugInfo = {
 								leftEyeOpen,
 								rightEyeOpen,
-								leftEyePoints: [annotations.leftEyeUpper0[mid], annotations.leftEyeLower0[mid]],
-								rightEyePoints: [annotations.rightEyeUpper0[mid], annotations.rightEyeLower0[mid]],
+								leftEyePoints: leftEyeTopBottomPoints,
+								rightEyePoints: rightEyeTopBottomPoints,
 							};
 						} else {
 							blinkDebugInfo = null;
