@@ -37,7 +37,7 @@ const DEST = path.resolve(process.argv[3]);
 const PATTERN_FILE = path.resolve(process.argv[4]);
 const DRY_RUN = process.argv.includes("--dry-run");
 if (!SRC || !DEST || !PATTERN_FILE) {
-	console.error("Usage: node copy-with-review.cjs <src> <dest> <patterns.js> [--dry-run]");
+	console.error("Usage: node copy-with-review.js <src> <dest> <patterns.js> [--dry-run]");
 	process.exit(1);
 }
 if (!fs.existsSync(PATTERN_FILE)) {
