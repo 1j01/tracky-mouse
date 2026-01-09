@@ -775,6 +775,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var facemeshEstimateFaces;
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
+	var blinkDebugInfo;
 
 	var pointTracker;
 
@@ -1476,6 +1477,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						clearTimeout(fallbackTimeoutID);
 
 						if (!facemeshPrediction) {
+							blinkDebugInfo = null;
 							return;
 						}
 						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
@@ -1624,6 +1626,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							} else if (!leftEyeOpen && rightEyeOpen) {
 								clickButton = 2;
 							}
+							blinkDebugInfo = {
+								leftEyeOpen,
+								rightEyeOpen,
+								leftEyePoints: [annotations.leftEyeUpper0[mid], annotations.leftEyeLower0[mid]],
+								rightEyePoints: [annotations.rightEyeUpper0[mid], annotations.rightEyeLower0[mid]],
+							};
+						} else {
+							blinkDebugInfo = null;
 						}
 						if (clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
@@ -1690,6 +1700,25 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					pointsBasedOnFaceInViewConfidence -= 0.001;
 				}
 			}
+		}
+
+		if (clickingMode === "blink" && blinkDebugInfo) {
+			ctx.save();
+			ctx.lineWidth = 2;
+			const drawEye = (open, points) => {
+				ctx.strokeStyle = open ? "lime" : "red";
+				ctx.beginPath();
+				ctx.moveTo(points[0][0], points[0][1]);
+				ctx.lineTo(points[1][0], points[1][1]);
+				ctx.stroke();
+				ctx.fillStyle = "blue";
+				ctx.fillRect(points[0][0] - 2, points[0][1] - 2, 4, 4);
+				ctx.fillStyle = "cyan";
+				ctx.fillRect(points[1][0] - 2, points[1][1] - 2, 4, 4);
+			};
+			drawEye(blinkDebugInfo.leftEyeOpen, blinkDebugInfo.leftEyePoints);
+			drawEye(blinkDebugInfo.rightEyeOpen, blinkDebugInfo.rightEyePoints);
+			ctx.restore();
 		}
 
 		if (face) {
