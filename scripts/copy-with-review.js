@@ -22,7 +22,6 @@ TODO:
   "files in one deploy that are missing in the next", in which case the solution
   might involve storing the files previously included in a deploy? But you'd still want
   to be able to have some notion of files that can exist or not, that don't require review.
-- --help option
 */
 
 const fs = require("fs");
@@ -36,8 +35,10 @@ const SRC = path.resolve(process.argv[2]);
 const DEST = path.resolve(process.argv[3]);
 const PATTERN_FILE = path.resolve(process.argv[4]);
 const DRY_RUN = process.argv.includes("--dry-run");
-if (!SRC || !DEST || !PATTERN_FILE) {
+const HELP = process.argv.includes("--help") || process.argv.includes("-h");
+if (!SRC || !DEST || !PATTERN_FILE || HELP) {
 	console.error("Usage: node copy-with-review.js <src> <dest> <patterns.js> [--dry-run]");
+	console.error("where patterns.js is a CommonJS module exporting `include` and `exclude` arrays of glob patterns");
 	process.exit(1);
 }
 if (!fs.existsSync(PATTERN_FILE)) {
