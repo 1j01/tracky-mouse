@@ -5,7 +5,7 @@ const { join } = require('path');
 const isMac = process.platform === 'darwin';
 
 // let loadSettings;
-// module.exports = (dependencies) => {
+module.exports = ({ reloadSettings }) => {
 // 	loadSettings = dependencies.loadSettings;
 // };
 
@@ -96,9 +96,17 @@ const template = [
 					console.log('Writing settings:', settingsPath);
 					await writeFile(settingsPath, json);
 					// Reload settings
-					// loadSettings(); // doesn't actually reload the settings in the app window
-					app.relaunch(); // overkill! TODO: apply the settings without restarting the app
-					app.quit(); // required for the app to actually restart
+					if (reloadSettings) {
+						try {
+							await reloadSettings();
+						} catch (e) {
+							dialog.showErrorBox("Error reloading settings", e.message);
+						}
+					} else {
+						// loadSettings(); // doesn't actually reload the settings in the app window
+						app.relaunch(); // overkill! TODO: apply the settings without restarting the app
+						app.quit(); // required for the app to actually restart
+					}
 				},
 			},
 			{ type: 'separator' },
@@ -210,3 +218,4 @@ const template = [
 
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
+};

@@ -187,7 +187,15 @@ function updateScreenScaleFactor() {
 	screenScaleFactor = screen.getPrimaryDisplay().scaleFactor;
 }
 
-require("./menus.js"); //({ loadSettings });
+const installMenu = require("./menus.js");
+installMenu({ reloadSettings });
+
+async function reloadSettings() {
+	await loadSettings();
+	if (appWindow && !appWindow.isDestroyed()) {
+		appWindow.webContents.send('set-options', serializeSettings());
+	}
+}
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
