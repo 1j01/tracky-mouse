@@ -61,6 +61,7 @@ module.exports = [
 			"desktop-app/forge.config.js",
 			"scripts/copy-with-review.cjs",
 			"scripts/list-ipc-events.js",
+			"scripts/update-cli-docs.js",
 			"website/globs-for-deploy.js",
 			"eslint.config.js",
 		],
