@@ -510,9 +510,9 @@ const createWindow = () => {
 		return app.isPackaged;
 	});
 
-	ipcMain.on('click', async (_event, x, y, _time) => {
+	function clickingAllowed() {
 		if (regainControlTimeout || !enabled || clickingMode === 'off') {
-			return;
+			return false;
 		}
 
 		// Failsafe: don't click if the window(s) are closed.
@@ -523,6 +523,13 @@ const createWindow = () => {
 			(!screenOverlayWindow || screenOverlayWindow.isDestroyed()) ||
 			(!appWindow || appWindow.isDestroyed())
 		) {
+			return false;
+		}
+		return true;
+	}
+
+	ipcMain.on('click', async (_event, x, y, _time) => {
+		if (!clickingAllowed()) {
 			return;
 		}
 
@@ -538,19 +545,7 @@ const createWindow = () => {
 	});
 
 	ipcMain.on('clickAtCurrentMousePosition', async (_event, secondaryButton) => {
-		// TODO: deduplicate code copy-pasted from the 'click' handler above.
-		if (regainControlTimeout || !enabled || clickingMode === 'off') {
-			return;
-		}
-
-		// Failsafe: don't click if the window(s) are closed.
-		// This helps with debugging the closing/quitting behavior.
-		// It would also help to have a heartbeat to avoid clicking while paused in the debugger in other scenarios,
-		// and avoid the dwell clicking indicator from repeatedly showing while there's no connectivity between the processes.
-		if (
-			(!screenOverlayWindow || screenOverlayWindow.isDestroyed()) ||
-			(!appWindow || appWindow.isDestroyed())
-		) {
+		if (!clickingAllowed()) {
 			return;
 		}
 
