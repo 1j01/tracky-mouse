@@ -1667,8 +1667,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
 							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
 
-							leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
-							rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							leftEye.open = leftEye.eyeAspectRatio - threshold - Math.min(0, (rightEye.eyeAspectRatio - threshold) * bias) > 0;
+							rightEye.open = rightEye.eyeAspectRatio - threshold - Math.min(0, (leftEye.eyeAspectRatio - threshold) * bias) > 0;
 
 							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
 							if (leftEye.open && !rightEye.open) {
