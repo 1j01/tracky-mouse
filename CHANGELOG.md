@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Involuntary blinks should now be ignored in most cases.
 - Tons of cleanup of the codebase, and development process improvements.
 
+### Fixed
+
+- Manual takeback indicator (hand on mouse) now shows regardless of clicking mode.
+
 ## [2.0.0] - 2026-01-07
 
 ### Changed

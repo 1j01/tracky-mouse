@@ -421,7 +421,7 @@ const createWindow = () => {
 		screenOverlayWindow.webContents.send(
 			'changeDwellClicking',
 			enabled && clickingMode === 'dwell' && regainControlTimeout === null,
-			enabled && clickingMode === 'dwell' && regainControlTimeout !== null,
+			enabled && regainControlTimeout !== null,
 			cameraFeedDiagnostics,
 		);
 	};
