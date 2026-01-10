@@ -178,7 +178,7 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 // Normal app behavior continues here.
 
 const windowStateKeeper = require('electron-window-state');
-const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click } = require('serenade-driver');
+const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
 const screen = require('electron').screen;
 
 let screenScaleFactor = 1;
@@ -544,12 +544,29 @@ const createWindow = () => {
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
 	});
 
-	ipcMain.on('clickAtCurrentMousePosition', async (_event, secondaryButton) => {
+	let buttonStates = {
+		left: false,
+		right: false,
+	};
+	ipcMain.on('setMouseButtonState', async (_event, secondaryButton, down) => {
+		// TODO: make sure the mouse button is released when disabling clicking ability
+		// (including exiting the app, I suppose!)
 		if (!clickingAllowed()) {
 			return;
 		}
 
-		await click((swapMouseButtons !== secondaryButton) ? "right" : "left");
+		const button = (swapMouseButtons !== secondaryButton) ? "right" : "left";
+		if (down) {
+			if (!buttonStates[button]) {
+				buttonStates[button] = true;
+				await mouseDown(button);
+			}
+		} else {
+			if (buttonStates[button]) {
+				buttonStates[button] = false;
+				await mouseUp(button);
+			}
+		}
 
 		// const latency = performance.now() - time;
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);

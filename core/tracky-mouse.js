@@ -1741,20 +1741,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							}
 						}
 
-						// TODO: remove global debounce hack
-						// and prevent clicking until gesture is ended
-						// ideally keeping the mouse button held https://github.com/1j01/tracky-mouse/issues/66
-						if (window._debouncedClick) {
-							return;
-						}
-						window._debouncedClick = true;
-						setTimeout(() => {
-							window._debouncedClick = false;
-						}, 1500);
-						if (clickButton !== -1) {
-							// console.log("Would click button", clickButton);
-							window.electronAPI.clickAtCurrentMousePosition(clickButton === 2);
-						}
+						window.electronAPI.setMouseButtonState(false, clickButton === 0);
+						window.electronAPI.setMouseButtonState(true, clickButton === 2);
 					}, () => {
 						facemeshEstimating = false;
 						facemeshFirstEstimation = false;
