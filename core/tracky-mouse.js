@@ -1635,6 +1635,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								const otherPoints = eyeUpper.concat(eyeLower).filter(point => !corners.includes(point));
 								let highest = 0;
 								let lowest = 0;
+								let variance = 0;
 								for (const point of otherPoints) {
 									const distance = signedDistancePointLine(point, corners[0], corners[1]);
 									if (distance < lowest) {
@@ -1643,7 +1644,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									if (distance > highest) {
 										highest = distance;
 									}
+									// variance += distance * distance;
+									variance += Math.abs(distance);
 								}
+								variance /= otherPoints.length;
 
 								const eyeWidth = Math.hypot(
 									corners[0][0] - corners[1][0],
@@ -1651,6 +1655,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								);
 								const eyeHeight = highest - lowest;
 								const eyeAspectRatio = eyeHeight / eyeWidth;
+								const varianceRatio = variance / eyeWidth;
 								// console.log("corners", corners, "eyeWidth", eyeWidth, "eyeHeight", eyeHeight, "aspectRatio", eyeAspectRatio);
 								return {
 									corners,
@@ -1658,19 +1663,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									lowerContour: eyeLower,
 									highest,
 									lowest,
+									variance,
+									varianceRatio,
+									eyeWidth,
+									eyeHeight,
 									eyeAspectRatio,
 								};
 							}
 
-							const threshold = 0.16;
 							const bias = 0.3;
 							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
 							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
 
-							leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
-							rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							// const threshold = 0.16;
+							// leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
+							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							const threshold = 0.05;
+							leftEye.open = leftEye.varianceRatio - threshold - ((rightEye.varianceRatio - threshold) * bias) > 0;
+							rightEye.open = rightEye.varianceRatio - threshold - ((leftEye.varianceRatio - threshold) * bias) > 0;
 
-							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
+							// console.log("leftEye", leftEye, "rightEye", rightEye);
+							// console.log("leftEye.varianceRatio", leftEye.varianceRatio, "rightEye.varianceRatio", rightEye.varianceRatio);
+
 							if (leftEye.open && !rightEye.open) {
 								clickButton = 0;
 							} else if (!leftEye.open && rightEye.open) {
