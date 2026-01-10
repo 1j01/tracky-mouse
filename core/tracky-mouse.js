@@ -1660,7 +1660,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 							}
 
-							function detectBlink(eyeUpper, eyeLower, threshold) {
+							function getEyeMetrics(eyeUpper, eyeLower) {
 								// The lower eye keypoints have the corners
 								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
 								// Excluding the corners isn't really important since their measures will be 0.
@@ -1684,7 +1684,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								const eyeHeight = highest - lowest;
 								// TODO: flip width/height to match the typical definition of aspect ratio (unless this is typical for eye aspect ratio by any chance)
 								const eyeAspectRatio = eyeHeight / eyeWidth;
-								// console.log("corners", corners, "eyeWidth", eyeWidth, "eyeHeight", eyeHeight, "aspectRatio", eyeAspectRatio);
 								return {
 									corners,
 									upperContour: eyeUpper,
@@ -1692,15 +1691,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									highest,
 									lowest,
 									eyeAspectRatio,
-									open: eyeAspectRatio > threshold,
 								};
 							}
 
-							const threshold = 0.16;
-							const leftEye = detectBlink(annotations.leftEyeUpper0, annotations.leftEyeLower0, threshold);
-							const rightEye = detectBlink(annotations.rightEyeUpper0, annotations.rightEyeLower0, threshold);
+							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
+							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
 
-							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
+							const threshold = 0.16;
+							leftEye.open = leftEye.eyeAspectRatio > threshold;
+							rightEye.open = rightEye.eyeAspectRatio > threshold;
+
+							// An attempt at biasing the blink detection based on the other eye's state
+							// (I'm not sure if this is the same as the idea I had noted above)
+							// const threshold = 0.16;
+							// const bias = 0.3;
+							// leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
+							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+
 							if (leftEye.open && !rightEye.open) {
 								clickButton = 0;
 							} else if (!leftEye.open && rightEye.open) {
