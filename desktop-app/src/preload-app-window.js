@@ -12,11 +12,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld("electronAPI", {
 	moveMouse: (x, y) => {
-		ipcRenderer.send('move-mouse', x, y, performance.now());
+		ipcRenderer.send('moveMouse', x, y, performance.now());
 	},
 
 	clickAtCurrentMousePosition: (secondaryButton) => {
-		ipcRenderer.send('click-at-current-mouse-position', secondaryButton);
+		ipcRenderer.send('clickAtCurrentMousePosition', secondaryButton);
 	},
 
 	onShortcut: (callback) => {
@@ -27,22 +27,22 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	},
 
 	notifyToggleState: (nowEnabled) => {
-		ipcRenderer.send('notify-toggle-state', nowEnabled);
+		ipcRenderer.send('notifyToggleState', nowEnabled);
 	},
 
 	notifyCameraFeedDiagnostics: (data) => {
-		ipcRenderer.send('notify-camera-feed-diagnostics', data);
+		ipcRenderer.send('notifyCameraFeedDiagnostics', data);
 	},
 
 	setOptions: (optionsPatch) => {
-		ipcRenderer.send('set-options', optionsPatch);
+		ipcRenderer.send('setOptions', optionsPatch);
 	},
 
 	getOptions: () => {
-		return ipcRenderer.invoke('get-options');
+		return ipcRenderer.invoke('getOptions');
 	},
 
 	// isPackaged: app.isPackaged, // can't require electron's app module here
 	// isPackaged: !!process.defaultApp, // nope, doesn't exist
-	getIsPackaged: () => ipcRenderer.invoke('get-is-packaged'),
+	getIsPackaged: () => ipcRenderer.invoke('getIsPackaged'),
 });

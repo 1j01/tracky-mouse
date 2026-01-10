@@ -419,13 +419,13 @@ const createWindow = () => {
 	let cameraFeedDiagnostics = {};
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send(
-			'change-dwell-clicking',
+			'changeDwellClicking',
 			enabled && clickingMode === 'dwell' && regainControlTimeout === null,
 			enabled && clickingMode === 'dwell' && regainControlTimeout !== null,
 			cameraFeedDiagnostics,
 		);
 	};
-	ipcMain.on('move-mouse', async (_event, x, y, time) => {
+	ipcMain.on('moveMouse', async (_event, x, y, time) => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		const curPos = await getMouseLocation();
@@ -460,19 +460,19 @@ const createWindow = () => {
 			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
 			// in order to handle maintaining manual control differently from switching to manual control,
 			// and/or for clarity of intent.
-			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "move-mouse" });
+			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			// Note: there's no await here, not necessarily for a particular reason,
-			// although maybe it's better to send the 'move-mouse' event as soon as possible?
+			// although maybe it's better to send the 'moveMouse' event as soon as possible?
 			setMouseLocationTracky(x, y);
 		}
 		// const latency = performance.now() - time;
-		// console.log(`move-mouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
+		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		screenOverlayWindow.webContents.send('move-mouse', x, y, time);
+		screenOverlayWindow.webContents.send('moveMouse', x, y, time);
 	});
 
-	ipcMain.on('notify-toggle-state', async (_event, nowEnabled) => {
+	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
 		let initialPos;
 		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
 			initialPos = await getMouseLocation();
@@ -488,25 +488,25 @@ const createWindow = () => {
 		mousePosHistory.length = 0;
 		if (nowEnabled) {
 			// Avoid false positive for manual takeback.
-			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notify-toggle-state" });
+			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		}
 	});
-	ipcMain.on('notify-camera-feed-diagnostics', (_event, data) => {
+	ipcMain.on('notifyCameraFeedDiagnostics', (_event, data) => {
 		cameraFeedDiagnostics = data;
 		updateDwellClicking();
 	});
 
 
-	ipcMain.on('set-options', (_event, newOptions) => {
+	ipcMain.on('setOptions', (_event, newOptions) => {
 		deserializeSettings(newOptions);
 		saveSettings();
 	});
 
-	ipcMain.handle('get-options', async () => {
+	ipcMain.handle('getOptions', async () => {
 		return serializeSettings();
 	});
 
-	ipcMain.handle('get-is-packaged', async () => {
+	ipcMain.handle('getIsPackaged', async () => {
 		return app.isPackaged;
 	});
 
@@ -537,7 +537,7 @@ const createWindow = () => {
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
 	});
 
-	ipcMain.on('click-at-current-mouse-position', async (_event, secondaryButton) => {
+	ipcMain.on('clickAtCurrentMousePosition', async (_event, secondaryButton) => {
 		// TODO: deduplicate code copy-pasted from the 'click' handler above.
 		if (regainControlTimeout || !enabled || clickingMode === 'off') {
 			return;
