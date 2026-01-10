@@ -776,7 +776,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var facemeshEstimateFaces;
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
-	var blinkDebugInfo;
+	var blinkInfo;
 
 	var pointTracker;
 
@@ -1478,7 +1478,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						clearTimeout(fallbackTimeoutID);
 
 						if (!facemeshPrediction) {
-							blinkDebugInfo = null;
+							blinkInfo = null;
 							return;
 						}
 						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
@@ -1613,7 +1613,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//   then a squinty level can be assumed to be closed. So it might make sense to bias the blink detection, taking into account both eyes.
 							//   (When you blink one eye, you naturally squint with the other a bit, but not necessarily as much as the model reports.
 							//   I suspect this physical phenomenon may have biased the model since eye blinking and opposite eye squinting are correlated.)
-							// - Stabilize with a separate threshold for opening vs closing, so that it doesn't rapidly switch between open and closed when the eye is near the threshold
 							// - Maybe measure several points instead of just the middle or extreme points
 							// - Can we use a 3D version of the facemesh instead of 2D, to help with ignoring head tilt??
 							//   That might be the most important improvement...
@@ -1696,9 +1695,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
 							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
 
-							const threshold = 0.16;
-							leftEye.open = leftEye.eyeAspectRatio > threshold;
-							rightEye.open = rightEye.eyeAspectRatio > threshold;
+							const thresholdHigh = 0.2;
+							const thresholdLow = 0.16;
+							leftEye.open = leftEye.eyeAspectRatio > (blinkInfo?.leftEye.open ? thresholdLow : thresholdHigh);
+							rightEye.open = rightEye.eyeAspectRatio > (blinkInfo?.rightEye.open ? thresholdLow : thresholdHigh);
 
 							// An attempt at biasing the blink detection based on the other eye's state
 							// (I'm not sure if this is the same as the idea I had noted above)
@@ -1712,12 +1712,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							} else if (!leftEye.open && rightEye.open) {
 								clickButton = 2;
 							}
-							blinkDebugInfo = {
+							blinkInfo = {
 								leftEye,
 								rightEye
 							};
 						} else {
-							blinkDebugInfo = null;
+							blinkInfo = null;
 						}
 						if (clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
@@ -1775,7 +1775,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 		}
 
-		if (clickingMode === "blink" && blinkDebugInfo) {
+		if (clickingMode === "blink" && blinkInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			const drawEye = (eye) => {
@@ -1821,8 +1821,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					ctx.restore();
 				}
 			};
-			drawEye(blinkDebugInfo.leftEye);
-			drawEye(blinkDebugInfo.rightEye);
+			drawEye(blinkInfo.leftEye);
+			drawEye(blinkInfo.rightEye);
 			ctx.restore();
 		}
 
