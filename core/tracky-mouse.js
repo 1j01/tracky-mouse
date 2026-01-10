@@ -749,6 +749,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var mouseNeedsInitPos = true;
 	var debugAcceleration = false;
 	var showDebugText = false;
+	var showDebugEyelidContours = false;
 	var mirror;
 	var startEnabled;
 	var runAtLogin;
@@ -1673,6 +1674,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								// console.log("corners", corners, "eyeWidth", eyeWidth, "eyeHeight", eyeHeight, "aspectRatio", eyeAspectRatio);
 								return {
 									corners,
+									upperContour: eyeUpper,
+									lowerContour: eyeLower,
 									highest,
 									lowest,
 									eyeAspectRatio,
@@ -1783,6 +1786,33 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
 				ctx.stroke();
 				ctx.restore();
+				// Zoom in and show the eyelid contour SHAPE, for qualitative debugging
+				// This helps to show that the facemesh model doesn't really know whether your eye is open or closed beyond a certain head angle.
+				// Therefore there's not much we can do using the eyelid contour to improve blink detection.
+				// We might be able to tease a little more accuracy out of it using surrounding points in some clever way, 3D information, etc.
+				// but fundamentally, garbage in, garbage out.
+				if (showDebugEyelidContours) {
+					const eyeCenter = [(eye.corners[0][0] + eye.corners[1][0]) / 2, (eye.corners[0][1] + eye.corners[1][1]) / 2];
+					ctx.save();
+					ctx.translate(eyeCenter[0], eyeCenter[1]);
+					ctx.scale(5, 5);
+					ctx.translate(-eyeCenter[0], -eyeCenter[1]);
+					ctx.strokeStyle = "green";
+					ctx.beginPath();
+					for (const contour of [eye.upperContour, eye.lowerContour]) {
+						for (let i = 0; i < contour.length; i++) {
+							const [x, y] = contour[i];
+							if (i === 0) {
+								ctx.moveTo(x, y);
+							} else {
+								ctx.lineTo(x, y);
+							}
+						}
+					}
+					ctx.lineWidth = 2 / 5;
+					ctx.stroke();
+					ctx.restore();
+				}
 			};
 			drawEye(blinkDebugInfo.leftEye);
 			drawEye(blinkDebugInfo.rightEye);
