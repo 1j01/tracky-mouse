@@ -8,19 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Removed visual offsetting of facemesh dots overlay by the previous movement from the point tracking, which should no longer provide any smoothing benefit since the facemesh pipeline has been updated in the last release and now runs within one frame.
-- Improved blink detection by using eye aspect ratio instead of a simple distance between two eyelid points.
-- Blink detection includes a visualization. It may make it look like you're wearing glasses. 😎
-- Open mouth detection includes a visualization. This is just a line for now.
-- You can now click and drag with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
-- Removed minimum time between clicks for the "Wink to click" and "Open mouth to click" modes. You can now double click effectively.
+
+- **Improved blink detection** by using eye aspect ratio instead of a simple distance between two eyelid points.
+- Removed minimum time between clicks for the "Wink to click" and "Open mouth to click" modes. You can now double click naturally, if you can keep the cursor still.
 - Stabilized blink and open mouth detection by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
 - Involuntary blinks should now be ignored in most cases.
 - Tons of cleanup of the codebase, and development process improvements.
 
+### Added
+
+- **You can now click and drag** with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
+- Blink detection includes a visualization. It may make it look like you're wearing glasses. 😎
+- Open mouth detection includes a visualization. This is just a line for now.
+
 ### Fixed
 
-- Manual takeback indicator (hand on mouse) now shows regardless of clicking mode.
+![manual takeback indicator](https://private-user-images.githubusercontent.com/3630663/534166454-d3ef5957-1d64-463f-91af-7ba73be45cdd.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjgwODU5MDgsIm5iZiI6MTc2ODA4NTYwOCwicGF0aCI6Ii8zNjMwNjYzLzUzNDE2NjQ1NC1kM2VmNTk1Ny0xZDY0LTQ2M2YtOTFhZi03YmE3M2JlNDVjZGQuc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MDExMCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjAxMTBUMjI1MzI4WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NzBmOTMwMmJiY2JlY2U2NDE1MjcyZmY3MjIxZGRkOThkZDZkYjE4NDgyNjYzMGNmYjZlNzc2NWRmMWZlYTJhNiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.fIVs27-zJmFr9gewuaamJlM_-Y8imGZj0H9lCzbROE8)
+
+- Manual takeback indicator (hand on mouse with arrows) now shows regardless of clicking mode.
+- Removed visual offsetting of facemesh dots overlay by the previous movement from the point tracking, which should no longer provide any smoothing benefit since the facemesh pipeline has been updated in the last release and now runs within one frame.
 
 ## [2.0.0] - 2026-01-07
 
