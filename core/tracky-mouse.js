@@ -1540,6 +1540,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						const annotations = Object.fromEntries(Object.entries(MESH_ANNOTATIONS).map(([key, indices]) => {
 							return [key, indices.map(getPoint)];
 						}));
+
 						// nostrils
 						maybeAddPoint(pointTracker, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
 						maybeAddPoint(pointTracker, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
@@ -1610,27 +1611,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// - maybe measure several points instead of just the middle or extreme points
 							// - Can we use a 3D version of the facemesh instead of 2D, to help with ignoring head tilt??
 							//   That might be the most important improvement...
-
-							// Old code measuring middle points of upper and lower eyelids:
-							// const midUpper = Math.floor(annotations.leftEyeUpper0.length / 2);
-							// const midLower = Math.floor(annotations.leftEyeLower0.length / 2);
-							// const leftEyeTopBottomPoints = [annotations.leftEyeUpper0[midUpper], annotations.leftEyeLower0[midLower]];
-							// const rightEyeTopBottomPoints = [annotations.rightEyeUpper0[midUpper], annotations.rightEyeLower0[midLower]];
-							// const leftEyeTopBottomDistance = Math.hypot(
-							// 	leftEyeTopBottomPoints[0][0] - leftEyeTopBottomPoints[1][0],
-							// 	leftEyeTopBottomPoints[0][1] - leftEyeTopBottomPoints[1][1]
-							// );
-							// const rightEyeTopBottomDistance = Math.hypot(
-							// 	rightEyeTopBottomPoints[0][0] - rightEyeTopBottomPoints[1][0],
-							// 	rightEyeTopBottomPoints[0][1] - rightEyeTopBottomPoints[1][1]
-							// );
-							// const headSize = Math.hypot(
-							// 	annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-							// 	annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
-							// );
-							// const threshold = headSize * 0.04;
-							// const leftEyeOpen = leftEyeTopBottomDistance > threshold;
-							// const rightEyeOpen = rightEyeTopBottomDistance > threshold;
 
 							/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
 							function signedDistancePointLine(point, a, b) {
