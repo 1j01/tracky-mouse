@@ -1644,8 +1644,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									if (distance > highest) {
 										highest = distance;
 									}
-									// variance += distance * distance;
-									variance += Math.abs(distance);
+									variance += distance * distance;
+									// variance += Math.abs(distance);
 								}
 								variance /= otherPoints.length;
 
