@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved blink detection by using eye aspect ratio instead of a simple distance between two eyelid points.
 - Blink detection includes a visualization. It may make it look like you're wearing glasses. 😎
 - Open mouth detection includes a visualization. This is just a line for now.
-- You can now click and drag with the "Wink to click" and "Open mouth to click" modes. For now, the limitation on the speed of clicking is removed, and you may find it harder to perform simple clicks due to the mouse button being held down, but this will be addressed before the next release.
+- You can now click and drag with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
+- Removed minimum time between clicks for the "Wink to click" and "Open mouth to click" modes. You can now double click effectively.
 - Stabilized blink and open mouth detection by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
 - Tons of cleanup of the codebase, and development process improvements.
 
