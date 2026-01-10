@@ -1726,7 +1726,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// TODO: refactor and move this code (it's too nested)
 							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
 							// - mouth width (implies making an "O" mouth shape would be favored over a wide open mouth shape)
-							const mid = Math.round(annotations.lipsLowerInner.length / 2);
+							const mid = Math.floor(annotations.lipsLowerInner.length / 2);
 							const mouthTopBottomPoints = [
 								annotations.lipsUpperInner[mid],
 								annotations.lipsLowerInner[mid]
