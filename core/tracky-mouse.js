@@ -1682,7 +1682,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									corners[0][1] - corners[1][1]
 								);
 								const eyeHeight = highest - lowest;
-								// TODO: flip width/height to match the typical definition of aspect ratio (unless this is typical for eye aspect ratio by any chance)
 								const eyeAspectRatio = eyeHeight / eyeWidth;
 								return {
 									corners,
