@@ -1628,7 +1628,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 							}
 
-							function detectBlink(eyeUpper, eyeLower, threshold) {
+							function getEyeMetrics(eyeUpper, eyeLower) {
 								// The lower eye keypoints have the corners
 								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
 								// Excluding the corners isn't really important since their measures will be 0.
@@ -1659,13 +1659,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									highest,
 									lowest,
 									eyeAspectRatio,
-									open: eyeAspectRatio > threshold,
 								};
 							}
 
 							const threshold = 0.16;
-							const leftEye = detectBlink(annotations.leftEyeUpper0, annotations.leftEyeLower0, threshold);
-							const rightEye = detectBlink(annotations.rightEyeUpper0, annotations.rightEyeLower0, threshold);
+							const bias = 0.3;
+							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
+							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
+
+							leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
+							rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
 
 							// console.log("leftEyeTopBottomDistance", leftEyeTopBottomDistance, "rightEyeTopBottomDistance", rightEyeTopBottomDistance, "threshold", threshold);
 							if (leftEye.open && !rightEye.open) {
