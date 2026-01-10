@@ -1709,9 +1709,26 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
 							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
 
-							if (leftEye.open && !rightEye.open) {
+							// Involuntary blink rejection
+							const blinkRejectFrames = 6;
+							// TODO: DRY
+							if (leftEye.open === blinkInfo?.leftEye.open) {
+								leftEye.framesSinceChange = (blinkInfo?.leftEye.framesSinceChange || 0) + 1;
+							} else {
+								leftEye.framesSinceChange = 0;
+							}
+							if (rightEye.open === blinkInfo?.rightEye.open) {
+								rightEye.framesSinceChange = (blinkInfo?.rightEye.framesSinceChange || 0) + 1;
+							} else {
+								rightEye.framesSinceChange = 0;
+							}
+							const framesSinceChange = Math.min(leftEye.framesSinceChange, rightEye.framesSinceChange);
+							leftEye.winking = framesSinceChange > blinkRejectFrames && rightEye.open && !leftEye.open;
+							rightEye.winking = framesSinceChange > blinkRejectFrames && leftEye.open && !rightEye.open;
+
+							if (rightEye.winking) {
 								clickButton = 0;
-							} else if (!leftEye.open && rightEye.open) {
+							} else if (leftEye.winking) {
 								clickButton = 2;
 							}
 							blinkInfo = {
@@ -1792,7 +1809,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			const drawEye = (eye) => {
-				ctx.strokeStyle = eye.open ? "cyan" : "red";
+				ctx.strokeStyle = eye.winking ? "red" : eye.open ? "cyan" : "yellow";
 				ctx.beginPath();
 				ctx.moveTo(eye.corners[0][0], eye.corners[0][1]);
 				ctx.lineTo(eye.corners[1][0], eye.corners[1][1]);
@@ -1801,7 +1818,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.save();
 				ctx.translate(eye.corners[0][0], eye.corners[0][1]);
 				ctx.rotate(Math.atan2(eye.corners[1][1] - eye.corners[0][1], eye.corners[1][0] - eye.corners[0][0]));
-				ctx.strokeStyle = eye.open ? "cyan" : "red";
 				ctx.beginPath();
 				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
 				ctx.stroke();

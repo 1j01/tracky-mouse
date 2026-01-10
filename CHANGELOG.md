@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You can now click and drag with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
 - Removed minimum time between clicks for the "Wink to click" and "Open mouth to click" modes. You can now double click effectively.
 - Stabilized blink and open mouth detection by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
+- Involuntary blinks should now be ignored in most cases.
 - Tons of cleanup of the codebase, and development process improvements.
 
 ## [2.0.0] - 2026-01-07
