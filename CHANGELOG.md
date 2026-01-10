@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed visual offsetting of facemesh dots overlay by the previous movement from the point tracking, which should no longer provide any smoothing benefit since the facemesh pipeline has been updated in the last release and now runs within one frame.
 - Improved blink detection by using eye aspect ratio instead of a simple distance between two eyelid points.
 - Blink detection includes a visualization. It may make it look like you're wearing glasses. 😎
+- Open mouth detection includes a visualization. This is just a line for now.
 - You can now click and drag with the "Wink to click" and "Open mouth to click" modes. For now, the limitation on the speed of clicking is removed, and you may find it harder to perform simple clicks due to the mouse button being held down, but this will be addressed before the next release.
+- Stabilized blink and open mouth detection by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
 - Tons of cleanup of the codebase, and development process improvements.
 
 ## [2.0.0] - 2026-01-07

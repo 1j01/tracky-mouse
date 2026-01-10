@@ -777,6 +777,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
 	var blinkInfo;
+	var mouthInfo;
 
 	var pointTracker;
 
@@ -1479,6 +1480,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						if (!facemeshPrediction) {
 							blinkInfo = null;
+							mouthInfo = null;
 							return;
 						}
 						facemeshPrediction.faceInViewConfidence = 0.9999; // TODO: any equivalent in new API?
@@ -1725,6 +1727,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
 							// - mouth width (implies making an "O" mouth shape would be favored over a wide open mouth shape)
 							const mid = Math.round(annotations.lipsLowerInner.length / 2);
+							const mouthTopBottomPoints = [
+								annotations.lipsUpperInner[mid],
+								annotations.lipsLowerInner[mid]
+							];
 							const mouthTopBottomDistance = Math.hypot(
 								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
 								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
@@ -1733,12 +1739,19 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
-							const threshold = headSize * 0.1;
+							const thresholdHigh = headSize * 0.15;
+							const thresholdLow = headSize * 0.1;
 							// console.log("mouthTopBottomDistance", mouthTopBottomDistance, "threshold", threshold);
-							const mouthOpen = mouthTopBottomDistance > threshold;
+							const mouthOpen = mouthTopBottomDistance > (mouthInfo?.mouthOpen ? thresholdLow : thresholdHigh);
 							if (mouthOpen) {
 								clickButton = 0;
 							}
+							mouthInfo = {
+								mouthOpen,
+								mouthTopBottomPoints,
+							};
+						} else {
+							mouthInfo = null;
 						}
 
 						window.electronAPI.setMouseButtonState(false, clickButton === 0);
@@ -1825,6 +1838,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			drawEye(blinkInfo.rightEye);
 			ctx.restore();
 		}
+		if (clickingMode === "open-mouth" && mouthInfo) {
+			ctx.save();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = mouthInfo.mouthOpen ? "red" : "cyan";
+			ctx.beginPath();
+			ctx.moveTo(mouthInfo.mouthTopBottomPoints[0][0], mouthInfo.mouthTopBottomPoints[0][1]);
+			ctx.lineTo(mouthInfo.mouthTopBottomPoints[1][0], mouthInfo.mouthTopBottomPoints[1][1]);
+			ctx.stroke();
+			ctx.restore();
+		}
+
 
 		if (face) {
 			const bad = faceScore < faceScoreThreshold;
