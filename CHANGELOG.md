@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ![manual takeback indicator](https://private-user-images.githubusercontent.com/3630663/534166454-d3ef5957-1d64-463f-91af-7ba73be45cdd.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjgwODU5MDgsIm5iZiI6MTc2ODA4NTYwOCwicGF0aCI6Ii8zNjMwNjYzLzUzNDE2NjQ1NC1kM2VmNTk1Ny0xZDY0LTQ2M2YtOTFhZi03YmE3M2JlNDVjZGQuc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MDExMCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjAxMTBUMjI1MzI4WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NzBmOTMwMmJiY2JlY2U2NDE1MjcyZmY3MjIxZGRkOThkZDZkYjE4NDgyNjYzMGNmYjZlNzc2NWRmMWZlYTJhNiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.fIVs27-zJmFr9gewuaamJlM_-Y8imGZj0H9lCzbROE8)
 
 - Manual takeback indicator (hand on mouse with arrows) now shows regardless of clicking mode.
+- Status text at bottom of screen now correctly reflects enabled/disabled state regardless of clicking mode.
 - Removed visual offsetting of facemesh dots overlay by the previous movement from the point tracking, which should no longer provide any smoothing benefit since the facemesh pipeline has been updated in the last release and now runs within one frame.
 
 ## [2.0.0] - 2026-01-07

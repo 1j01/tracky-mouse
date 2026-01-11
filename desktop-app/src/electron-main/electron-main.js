@@ -419,8 +419,9 @@ const createWindow = () => {
 	let cameraFeedDiagnostics = {};
 	const updateDwellClicking = () => {
 		screenOverlayWindow.webContents.send('overlayUpdate', {
-			dwellClickerEnabled: enabled && clickingMode === 'dwell' && regainControlTimeout === null,
+			isEnabled: enabled && regainControlTimeout === null,
 			isManualTakeback: enabled && regainControlTimeout !== null,
+			clickingMode,
 			cameraFeedDiagnostics,
 		});
 	};
