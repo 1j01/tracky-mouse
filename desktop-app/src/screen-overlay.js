@@ -22,6 +22,29 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 	},
 });
 
+const inputFeedbackCanvas = document.createElement("canvas");
+inputFeedbackCanvas.style.position = "absolute";
+inputFeedbackCanvas.style.top = "0";
+inputFeedbackCanvas.style.left = "0";
+inputFeedbackCanvas.width = 64;
+inputFeedbackCanvas.height = 64;
+document.body.appendChild(inputFeedbackCanvas);
+const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
+function drawInputFeedback({ blinkInfo, mouthInfo }) {
+	inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
+	// draw meters for blink and mouth openness
+	if (blinkInfo) {
+		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
+			inputFeedbackCtx.fillStyle = eye.winking ? "red" : eye.open ? "cyan" : "yellow";
+			inputFeedbackCtx.fillRect(eye === blinkInfo.leftEye ? 0 : 10, 0, 10, 10 * eye.eyeAspectRatio);
+		}
+	}
+	if (mouthInfo) {
+		inputFeedbackCtx.fillStyle = mouthInfo.open ? "red" : "cyan";
+		inputFeedbackCtx.fillRect(0, 20, 20, 10);
+	}
+}
+
 electronAPI.onMouseMove((_event, x, y) => {
 	// console.log("moveMouse", x, y);
 	document.dispatchEvent(new Event("mouseenter"));
@@ -38,6 +61,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 		cancelable: true,
 	});
 	window.dispatchEvent(domEvent);
+	inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
 });
 
 let wasDwellClickerEnabled = false;
@@ -74,4 +98,6 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	}
 	dwellClicker.paused = !dwellClickerEnabled;
 	wasDwellClickerEnabled = dwellClickerEnabled;
+
+	drawInputFeedback(data);
 });
