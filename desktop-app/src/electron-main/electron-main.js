@@ -418,12 +418,11 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let cameraFeedDiagnostics = {};
 	const updateDwellClicking = () => {
-		screenOverlayWindow.webContents.send(
-			'changeDwellClicking',
-			enabled && clickingMode === 'dwell' && regainControlTimeout === null,
-			enabled && regainControlTimeout !== null,
+		screenOverlayWindow.webContents.send('overlayUpdate', {
+			dwellClickerEnabled: enabled && clickingMode === 'dwell' && regainControlTimeout === null,
+			isManualTakeback: enabled && regainControlTimeout !== null,
 			cameraFeedDiagnostics,
-		);
+		});
 	};
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,

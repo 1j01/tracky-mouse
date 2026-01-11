@@ -41,8 +41,9 @@ electronAPI.onMouseMove((_event, x, y) => {
 });
 
 let wasEnabled = false;
-electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFeedDiagnostics) => {
-	console.log("onChangeDwellClicking", isEnabled, isManualTakeback, cameraFeedDiagnostics);
+electronAPI.onOverlayUpdate((_event, data) => {
+	console.log("onOverlayUpdate", data);
+	const { dwellClickerEnabled, isManualTakeback, cameraFeedDiagnostics } = data;
 
 	// Other diagnostics in the future would be stuff like:
 	// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
@@ -51,9 +52,9 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 	document.body.classList.toggle("tracky-mouse-head-not-found", cameraFeedDiagnostics.headNotFound);
-	actionSpan.innerText = isEnabled ? "disable" : "enable";
+	actionSpan.innerText = dwellClickerEnabled ? "disable" : "enable";
 
-	if (!isEnabled && !isManualTakeback) {
+	if (!dwellClickerEnabled && !isManualTakeback) {
 		// Fade out the message after a little while so it doesn't get in the way.
 		// TODO: make sure animation isn't interrupted by cameraFeedDiagnostics updates.
 		message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
@@ -66,10 +67,10 @@ electronAPI.onChangeDwellClicking((_event, isEnabled, isManualTakeback, cameraFe
 	// Update: I'm now setting `dwellClicker.paused`, just keeping the event dispatching
 	// in case it's needed to cancel a dwell click in progress.
 	// TODO: ensure settings `paused` to `true` cancels any in-progress dwell click.
-	if (wasEnabled !== isEnabled) {
-		document.dispatchEvent(new Event(isEnabled ? "mouseenter" : "mouseleave"));
-		window.dispatchEvent(new Event(isEnabled ? "focus" : "blur"));
+	if (wasEnabled !== dwellClickerEnabled) {
+		document.dispatchEvent(new Event(dwellClickerEnabled ? "mouseenter" : "mouseleave"));
+		window.dispatchEvent(new Event(dwellClickerEnabled ? "focus" : "blur"));
 	}
-	dwellClicker.paused = !isEnabled;
-	wasEnabled = isEnabled;
+	dwellClicker.paused = !dwellClickerEnabled;
+	wasEnabled = dwellClickerEnabled;
 });

@@ -10,7 +10,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-	onChangeDwellClicking: (callback) => ipcRenderer.on('changeDwellClicking', callback),
+	onOverlayUpdate: (callback) => ipcRenderer.on('overlayUpdate', callback),
 	// Note terrible naming inconsistency.
 	onMouseMove: (callback) => ipcRenderer.on('moveMouse', callback),
 
