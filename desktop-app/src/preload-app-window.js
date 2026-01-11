@@ -30,8 +30,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.send('notifyToggleState', nowEnabled);
 	},
 
-	notifyCameraFeedDiagnostics: (data) => {
-		ipcRenderer.send('notifyCameraFeedDiagnostics', data);
+	updateInputFeedback: (data) => {
+		ipcRenderer.send('updateInputFeedback', data);
 	},
 
 	setOptions: (optionsPatch) => {

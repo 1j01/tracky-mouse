@@ -1783,7 +1783,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 
 		if (window.electronAPI) {
-			window.electronAPI.notifyCameraFeedDiagnostics({ headNotFound: !face && !facemeshPrediction });
+			window.electronAPI.updateInputFeedback({
+				headNotFound: !face && !facemeshPrediction,
+				// blinkInfo,
+				// mouthInfo,
+			});
 		}
 
 		if (facemeshPrediction) {
