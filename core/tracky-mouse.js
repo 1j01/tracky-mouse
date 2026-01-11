@@ -1974,28 +1974,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 
 			// Easy Stop (min distance to move)
-			// Accumulate movement until it exceeds the threshold.
-			// This works as a deadzone based on distance from the last resting position.
+			// Accumulate movement until it exceeds the threshold (deadzone).
+			// Uses a "leash" metaphor: the cursor is on a leash of length `threshold` from the head position.
 			residualMovementX += movementX;
 			residualMovementY += movementY;
 			var accumulatedDistance = Math.hypot(residualMovementX, residualMovementY);
-			
-			if (accumulatedDistance < minDistance * 50) {
+			var threshold = minDistance * 50;
+
+			if (accumulatedDistance > threshold) {
+				// Move the cursor anchor towards the current head position
+				// such that the distance becomes exactly the threshold.
+				var excess = accumulatedDistance - threshold;
+				var ratio = excess / accumulatedDistance;
+				
+				movementX = residualMovementX * ratio;
+				movementY = residualMovementY * ratio;
+
+				// Update residual to reflect that we've "consumed" this movement
+				residualMovementX -= movementX;
+				residualMovementY -= movementY;
+			} else {
 				movementX = 0;
 				movementY = 0;
-			} else {
-				// Apply the accumulated movement (or just the current movement?)
-				// If we just apply the current movement, we lose the built-up movement.
-				// If we apply the accumulated movement, we get a jump.
-				// We want to "break free" of the deadzone.
-				
-				// Apply all accumulated movement:
-				movementX = residualMovementX;
-				movementY = residualMovementY;
-				
-				// Reset accumulator
-				residualMovementX = 0;
-				residualMovementY = 0;
 			}
 
 			var distance = Math.hypot(movementX, movementY);
