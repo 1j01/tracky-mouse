@@ -1361,6 +1361,22 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		oops.addPoint(x, y);
 	}
 
+	/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
+	function signedDistancePointLine(point, a, b) {
+		const [px, py] = point;
+		const [x1, y1] = a;
+		const [x2, y2] = b;
+
+		const dx = x2 - x1;
+		const dy = y2 - y1;
+
+		// Perpendicular (normal) vector
+		const nx = dy;
+		const ny = -dx;
+
+		return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
+	}
+
 	function draw(update = true) {
 		ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
 		ctx.clearRect(0, 0, canvas.width, canvas.height); // in case there's no footage
@@ -1645,22 +1661,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//       you would likely be trying to use the same janky tracking results to determine whether the face is cut off.
 							//       It *might* work, but it also might be a bit of a chicken-and-egg problem.
 
-							/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
-							function signedDistancePointLine(point, a, b) {
-								const [px, py] = point;
-								const [x1, y1] = a;
-								const [x2, y2] = b;
-
-								const dx = x2 - x1;
-								const dy = y2 - y1;
-
-								// Perpendicular (normal) vector
-								const nx = dy;
-								const ny = -dx;
-
-								return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
-							}
-
 							function getEyeMetrics(eyeUpper, eyeLower) {
 								// The lower eye keypoints have the corners
 								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
@@ -1766,6 +1766,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							mouthInfo = {
 								mouthOpen,
 								mouthTopBottomPoints,
+								corners: [annotations.lipsUpperInner[0], annotations.lipsUpperInner[annotations.lipsUpperInner.length - 1]],
 								mouthOpenDistance: mouthTopBottomDistance / headSize,
 							};
 						} else {
@@ -1864,8 +1865,29 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = mouthInfo.mouthOpen ? "red" : "cyan";
 			ctx.beginPath();
-			ctx.moveTo(mouthInfo.mouthTopBottomPoints[0][0], mouthInfo.mouthTopBottomPoints[0][1]);
-			ctx.lineTo(mouthInfo.mouthTopBottomPoints[1][0], mouthInfo.mouthTopBottomPoints[1][1]);
+			// ctx.moveTo(mouthInfo.mouthTopBottomPoints[0][0], mouthInfo.mouthTopBottomPoints[0][1]);
+			// ctx.lineTo(mouthInfo.corners[0][0], mouthInfo.corners[0][1]);
+			// ctx.lineTo(mouthInfo.mouthTopBottomPoints[1][0], mouthInfo.mouthTopBottomPoints[1][1]);
+			// ctx.lineTo(mouthInfo.corners[1][0], mouthInfo.corners[1][1]);
+			// ctx.closePath();
+			const mouthCenter = [
+				(mouthInfo.corners[0][0] + mouthInfo.corners[1][0]) / 2,
+				(mouthInfo.corners[0][1] + mouthInfo.corners[1][1]) / 2
+			];
+			const extents = mouthInfo.mouthTopBottomPoints.map(point => signedDistancePointLine(point, mouthInfo.corners[0], mouthInfo.corners[1]));
+			// Draw as two lines rather than a rectangle (or ellipse) to indicate that it's not using aspect ratio of the mouth currently
+			// const highest = Math.max(...extents);
+			// const lowest = Math.min(...extents);
+			// const mouthWidth = Math.hypot(mouthInfo.corners[1][0] - mouthInfo.corners[0][0], mouthInfo.corners[1][1] - mouthInfo.corners[0][1]);
+			const mouthWidth = 50;
+			ctx.translate(mouthCenter[0], mouthCenter[1]);
+			ctx.rotate(Math.atan2(mouthInfo.corners[1][1] - mouthInfo.corners[0][1], mouthInfo.corners[1][0] - mouthInfo.corners[0][0]));
+			ctx.beginPath();
+			// ctx.rect(-mouthWidth / 2, lowest, mouthWidth, highest - lowest);
+			for (const extent of extents) {
+				ctx.moveTo(-mouthWidth / 2, extent);
+				ctx.lineTo(mouthWidth / 2, extent);
+			}
 			ctx.stroke();
 			ctx.restore();
 		}
