@@ -1766,6 +1766,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							mouthInfo = {
 								mouthOpen,
 								mouthTopBottomPoints,
+								mouthOpenDistance: mouthTopBottomDistance / headSize,
 							};
 						} else {
 							mouthInfo = null;
@@ -1785,8 +1786,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		if (window.electronAPI) {
 			window.electronAPI.updateInputFeedback({
 				headNotFound: !face && !facemeshPrediction,
-				// blinkInfo,
-				// mouthInfo,
+				blinkInfo,
+				mouthInfo,
 			});
 		}
 

@@ -18,8 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **You can now click and drag** with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
-- Blink detection includes a visualization. It may make it look like you're wearing glasses. 😎
-- Open mouth detection includes a visualization. This is just a line for now.
+- Blink detection includes a visualization in the camera view. It may make it look like you're wearing glasses. 😎
+- Open mouth detection includes a visualization in the camera view. This is just a line for now.
+- Blink detection and open mouth detection also include a visualization near the mouse cursor, so you can be confident when it's clicking, even if what you're clicking on doesn't provide any visual feedback.
 
 ### Fixed
 
