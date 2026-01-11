@@ -202,6 +202,7 @@ let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
+let minDistance = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
 
@@ -257,6 +258,7 @@ function serializeSettings() {
 			headTrackingSensitivityX: sensitivityX,
 			headTrackingSensitivityY: sensitivityY,
 			headTrackingAcceleration: acceleration,
+			headTrackingMinDistance: minDistance,
 			// TODO:
 			// eyeTrackingSensitivityX,
 			// eyeTrackingSensitivityY,
@@ -289,6 +291,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.headTrackingAcceleration !== undefined) {
 			acceleration = settings.globalSettings.headTrackingAcceleration;
+		}
+		if (settings.globalSettings.headTrackingMinDistance !== undefined) {
+			minDistance = settings.globalSettings.headTrackingMinDistance;
 		}
 		if (settings.globalSettings.startEnabled !== undefined) {
 			startEnabled = settings.globalSettings.startEnabled;

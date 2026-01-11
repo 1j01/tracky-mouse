@@ -598,14 +598,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<span class="tracky-mouse-max-label">Smooth</span>
 				</span>
 			</label>
-			<!-- <label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Easy Stop (min distance to move)</span>
+			<label class="tracky-mouse-control-row">
+				<span class="tracky-mouse-label-text">Motion Threshold</span>
 				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance">
-					<span class="tracky-mouse-min-label">Jittery</span>
+					<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
+					<span class="tracky-mouse-min-label">Free</span>
 					<span class="tracky-mouse-max-label">Steady</span>
 				</span>
-			</label> -->
+			</label>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
@@ -675,6 +675,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
+	var minDistanceSlider = uiContainer.querySelector(".tracky-mouse-min-distance");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
@@ -739,6 +740,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityX;
 	var sensitivityY;
 	var acceleration;
+	var minDistance;
 	var face;
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
@@ -861,6 +863,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				acceleration = settings.globalSettings.headTrackingAcceleration;
 				accelerationSlider.value = acceleration * 100;
 			}
+			if (settings.globalSettings.headTrackingMinDistance !== undefined) {
+				minDistance = settings.globalSettings.headTrackingMinDistance;
+				minDistanceSlider.value = minDistance;
+			}
 			if (settings.globalSettings.startEnabled !== undefined) {
 				startEnabled = settings.globalSettings.startEnabled;
 				startEnabledCheckbox.checked = startEnabled;
@@ -890,6 +896,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				headTrackingSensitivityX: sensitivityX,
 				headTrackingSensitivityY: sensitivityY,
 				headTrackingAcceleration: acceleration,
+				headTrackingMinDistance: minDistance,
 				// TODO:
 				// eyeTrackingSensitivityX,
 				// eyeTrackingSensitivityY,
@@ -947,6 +954,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
 		}
 	};
+	minDistanceSlider.onchange = (event) => {
+		minDistance = minDistanceSlider.value;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+		}
+	};
 	mirrorCheckbox.onchange = (event) => {
 		mirror = mirrorCheckbox.checked;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
@@ -997,6 +1012,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();
+	minDistanceSlider.onchange();
 	paused = !startEnabled;
 
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
@@ -1946,6 +1962,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
+			const screenWidth = window.electronAPI ? screen.width : innerWidth;
+			const screenHeight = window.electronAPI ? screen.height : innerHeight;
+
 			var [movementX, movementY] = pointTracker.getMovement();
 
 			// Acceleration curves add a lot of stability,
@@ -1958,6 +1977,37 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var distance = Math.hypot(movementX, movementY);
 			var deltaX = accelerate(movementX * sensitivityX, distance);
 			var deltaY = accelerate(movementY * sensitivityY, distance);
+
+			// Mimicking eViacam's "Motion Threshold" implementation
+			// https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L310-L312
+			// (a threshold on instantaneous Manhattan distance, or in other words, x and y speed, separately)
+			// - It's applied after acceleration, following eViacam's lead,
+			// which makes sense in order to have the setting's unit make sense as "pixels",
+			// rather than "pixels before applying a function",
+			// to say nothing of the qualitative differences there might be in reordering the operations.
+			// - Note that it causes jumps which are increasingly noticeable as the setting is increased.
+			// - TODO: consider a "leash" behavior, or a hybrid perhaps
+			//   Note that a leash behavior might be less responsive to direction changes,
+			//   and might not achieve the goal of stability unless you move back slightly,
+			//   since if you've just pulled the leash left for instance, pulling it left
+			//   will move it no matter how small, which might turn a click into a drag.
+			//   You have to be in the center of the leash region for it to provide stability.
+			//   I'm not sure what a hybrid would look like; it might make more sense as two
+			//   separate settings, "motion threshold" and "leash distance".
+			// - TODO: actually what is needed to avoid dragging when trying to click or double click with facial gestures
+			//   is a setting to stabilize clicks by ignoring movement for a short time after a click
+			//   (especially the start of a click but also the end of a click, to help with double clicks)
+			//   Setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
+			//   with slider labels "Easy to click --> Easy to drag" or "Easier to click --> Easier to drag" or "Short --> Long"
+			//   This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
+			//   at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
+			//   and it might complicate the design of the slider labeling.
+			if (Math.abs(deltaX * screenWidth) < minDistance) {
+				deltaX = 0;
+			}
+			if (Math.abs(deltaY * screenHeight) < minDistance) {
+				deltaY = 0;
+			}
 
 			if (debugAcceleration) {
 				const graphWidth = 200;
@@ -1991,9 +2041,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 
 			if (!paused) {
-				const screenWidth = window.electronAPI ? screen.width : innerWidth;
-				const screenHeight = window.electronAPI ? screen.height : innerHeight;
-
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
 
