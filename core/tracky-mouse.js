@@ -598,14 +598,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<span class="tracky-mouse-max-label">Smooth</span>
 				</span>
 			</label>
-			<!-- <label class="tracky-mouse-control-row">
+			<label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Easy Stop (min distance to move)</span>
 				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="50" class="tracky-mouse-min-distance">
+					<input type="range" min="0" max="100" value="0" class="tracky-mouse-min-distance">
 					<span class="tracky-mouse-min-label">Jittery</span>
 					<span class="tracky-mouse-max-label">Steady</span>
 				</span>
-			</label> -->
+			</label>
 			<br>
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
@@ -675,6 +675,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
+	var minDistanceSlider = uiContainer.querySelector(".tracky-mouse-min-distance");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
@@ -739,6 +740,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityX;
 	var sensitivityY;
 	var acceleration;
+	var minDistance;
 	var face;
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
@@ -861,6 +863,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				acceleration = settings.globalSettings.headTrackingAcceleration;
 				accelerationSlider.value = acceleration * 100;
 			}
+			if (settings.globalSettings.headTrackingMinDistance !== undefined) {
+				minDistance = settings.globalSettings.headTrackingMinDistance;
+				minDistanceSlider.value = minDistance * 1000;
+			}
 			if (settings.globalSettings.startEnabled !== undefined) {
 				startEnabled = settings.globalSettings.startEnabled;
 				startEnabledCheckbox.checked = startEnabled;
@@ -890,6 +896,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				headTrackingSensitivityX: sensitivityX,
 				headTrackingSensitivityY: sensitivityY,
 				headTrackingAcceleration: acceleration,
+				headTrackingMinDistance: minDistance,
 				// TODO:
 				// eyeTrackingSensitivityX,
 				// eyeTrackingSensitivityY,
@@ -947,6 +954,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
 		}
 	};
+	minDistanceSlider.onchange = (event) => {
+		minDistance = minDistanceSlider.value / 1000;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+		}
+	};
 	mirrorCheckbox.onchange = (event) => {
 		mirror = mirrorCheckbox.checked;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
@@ -997,6 +1012,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	sensitivityXSlider.onchange();
 	sensitivityYSlider.onchange();
 	accelerationSlider.onchange();
+	minDistanceSlider.onchange();
 	paused = !startEnabled;
 
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
@@ -1956,6 +1972,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 
 			var distance = Math.hypot(movementX, movementY);
+			if (distance < minDistance * 50) {
+				movementX = 0;
+				movementY = 0;
+				distance = 0;
+			}
 			var deltaX = accelerate(movementX * sensitivityX, distance);
 			var deltaY = accelerate(movementY * sensitivityY, distance);
 

@@ -1,4 +1,3 @@
-
 // Note: Don't require any third-party (or own) modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 // I'm making an exception for Sentry, since it could help track down installation issues.
@@ -202,6 +201,7 @@ let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
+let minDistance = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
 
@@ -257,6 +257,7 @@ function serializeSettings() {
 			headTrackingSensitivityX: sensitivityX,
 			headTrackingSensitivityY: sensitivityY,
 			headTrackingAcceleration: acceleration,
+			headTrackingMinDistance: minDistance,
 			// TODO:
 			// eyeTrackingSensitivityX,
 			// eyeTrackingSensitivityY,
@@ -289,6 +290,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.headTrackingAcceleration !== undefined) {
 			acceleration = settings.globalSettings.headTrackingAcceleration;
+		}
+		if (settings.globalSettings.headTrackingMinDistance !== undefined) {
+			minDistance = settings.globalSettings.headTrackingMinDistance;
 		}
 		if (settings.globalSettings.startEnabled !== undefined) {
 			startEnabled = settings.globalSettings.startEnabled;
