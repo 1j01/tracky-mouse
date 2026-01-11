@@ -1371,8 +1371,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const dy = y2 - y1;
 
 		// Perpendicular (normal) vector
-		const nx = dy;
-		const ny = -dx;
+		const nx = -dy;
+		const ny = dx;
 
 		return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 	}
