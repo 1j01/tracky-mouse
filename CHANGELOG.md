@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **You can now click and drag** with the "Wink to click" and "Open mouth to click" modes. You may find it harder to perform simple clicks due to the mouse button being held down, but this will probably be addressed before the next release with an option.
-- **Easy Stop** slider, similar to the setting in eViacam. This makes the mouse stay still when you stop moving your head, which is especially useful for double clicking, in clicking modes other than dwell clicking, but also for general accuracy.
+- **Easy Stop** slider, similar to the setting in eViacam.\* This makes the mouse stay still when you stop moving your head, which is especially useful for double clicking, in clicking modes other than dwell clicking, but also for general accuracy.
+  - \*I'm not sure it's the same. eViacam implements it [here](https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L311-L312)
 - Blink detection includes a visualization in the camera view. It may make it look like you're wearing glasses. 😎
 - Open mouth detection includes a visualization in the camera view. This is drawn as two lines for now.
 - Blink detection and open mouth detection also include a visualization near the mouse cursor, so you can be confident when it's clicking, even if what you're clicking on doesn't provide any visual feedback.
