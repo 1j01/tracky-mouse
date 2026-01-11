@@ -741,6 +741,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityY;
 	var acceleration;
 	var minDistance;
+	var residualMovementX = 0;
+	var residualMovementY = 0;
 	var face;
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
@@ -1971,12 +1973,32 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
 			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
 
-			var distance = Math.hypot(movementX, movementY);
-			if (distance < minDistance * 50) {
+			// Easy Stop (min distance to move)
+			// Accumulate movement until it exceeds the threshold.
+			// This works as a deadzone based on distance from the last resting position.
+			residualMovementX += movementX;
+			residualMovementY += movementY;
+			var accumulatedDistance = Math.hypot(residualMovementX, residualMovementY);
+			
+			if (accumulatedDistance < minDistance * 50) {
 				movementX = 0;
 				movementY = 0;
-				distance = 0;
+			} else {
+				// Apply the accumulated movement (or just the current movement?)
+				// If we just apply the current movement, we lose the built-up movement.
+				// If we apply the accumulated movement, we get a jump.
+				// We want to "break free" of the deadzone.
+				
+				// Apply all accumulated movement:
+				movementX = residualMovementX;
+				movementY = residualMovementY;
+				
+				// Reset accumulator
+				residualMovementX = 0;
+				residualMovementY = 0;
 			}
+
+			var distance = Math.hypot(movementX, movementY);
 			var deltaX = accelerate(movementX * sensitivityX, distance);
 			var deltaY = accelerate(movementY * sensitivityY, distance);
 
