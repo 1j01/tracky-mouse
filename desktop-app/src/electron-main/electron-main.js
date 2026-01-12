@@ -666,10 +666,16 @@ app.on('ready', async () => {
 		currentVersion: app.getVersion(),
 		skippedVersion: skippedUpdateVersion
 	}).then((result) => {
+		// Note: result.action === 'download' case is ALREADY handled in `checkForUpdates`
+		// This is very awkward and was a decision made by AI.
+		// TODO: consider making it not return a promise and just have one callback for updating the
+		// skipped version, passed into the options object.
 		if (result && result.action === 'skip') {
 			skippedUpdateVersion = result.version;
 			saveSettings();
 		}
+	}, (error) => {
+		console.error("Error checking for updates:", error);
 	});
 
 	updateScreenScaleFactor();
