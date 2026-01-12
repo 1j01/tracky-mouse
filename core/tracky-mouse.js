@@ -635,8 +635,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
 				<select id="tracky-mouse-clicking-mode">
 					<option value="dwell">Dwell to click</option>
-					<option value="blink">Wink to click (Experimental)</option>
-					<option value="open-mouth">Open mouth to click (Experimental)</option>
+					<option value="blink">Wink to click</option>
+					<option value="open-mouth">Open mouth to click</option>
 					<option value="off">Off</option>
 				</select>
 			</div>
