@@ -30,6 +30,7 @@ if (process.platform === 'win32') {
 
 const { parser } = require('./cli.js');
 const { getVersion } = require('./version.js');
+const { checkForUpdates } = require('./auto-updater.js');
 
 // Compare command line arguments:
 // - unpackaged (in development):      "path/to/electron.exe" "." "maybe/a/file.png"
@@ -206,6 +207,7 @@ let minDistance = undefined;
 let delayBeforeDragging = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
+let skippedUpdateVersion = undefined;
 
 let enabled = true;
 
@@ -253,6 +255,7 @@ function serializeSettings() {
 		globalSettings: {
 			startEnabled,
 			runAtLogin,
+			skippedUpdateVersion,
 			swapMouseButtons,
 			clickingMode,
 			mirrorCameraView: mirror,
@@ -302,6 +305,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.startEnabled !== undefined) {
 			startEnabled = settings.globalSettings.startEnabled;
+		}
+		if (settings.globalSettings.skippedUpdateVersion !== undefined) {
+			skippedUpdateVersion = settings.globalSettings.skippedUpdateVersion;
 		}
 		if (settings.globalSettings.runAtLogin !== undefined) {
 			runAtLogin = settings.globalSettings.runAtLogin;
@@ -655,6 +661,16 @@ app.on('ready', async () => {
 		return;
 	}
 	createWindow();
+
+	checkForUpdates({
+		currentVersion: app.getVersion(),
+		skippedVersion: skippedUpdateVersion
+	}).then((result) => {
+		if (result && result.action === 'skip') {
+			skippedUpdateVersion = result.version;
+			saveSettings();
+		}
+	});
 
 	updateScreenScaleFactor();
 	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {
