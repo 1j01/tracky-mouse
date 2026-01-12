@@ -1762,21 +1762,22 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
 
 							// Involuntary blink rejection
-							const blinkRejectFrames = 6;
+							const blinkRejectDuration = 100; // milliseconds
+							const currentTime = performance.now();
 							// TODO: DRY
 							if (leftEye.open === blinkInfo?.leftEye.open) {
-								leftEye.framesSinceChange = (blinkInfo?.leftEye.framesSinceChange || 0) + 1;
+								leftEye.timeSinceChange = blinkInfo?.leftEye.timeSinceChange ?? currentTime;
 							} else {
-								leftEye.framesSinceChange = 0;
+								leftEye.timeSinceChange = currentTime;
 							}
 							if (rightEye.open === blinkInfo?.rightEye.open) {
-								rightEye.framesSinceChange = (blinkInfo?.rightEye.framesSinceChange || 0) + 1;
+								rightEye.timeSinceChange = blinkInfo?.rightEye.timeSinceChange ?? currentTime;
 							} else {
-								rightEye.framesSinceChange = 0;
+								rightEye.timeSinceChange = currentTime;
 							}
-							const framesSinceChange = Math.min(leftEye.framesSinceChange, rightEye.framesSinceChange);
-							leftEye.winking = framesSinceChange > blinkRejectFrames && rightEye.open && !leftEye.open;
-							rightEye.winking = framesSinceChange > blinkRejectFrames && leftEye.open && !rightEye.open;
+							const timeSinceChange = currentTime - Math.max(leftEye.timeSinceChange, rightEye.timeSinceChange);
+							leftEye.winking = timeSinceChange > blinkRejectDuration && rightEye.open && !leftEye.open;
+							rightEye.winking = timeSinceChange > blinkRejectDuration && leftEye.open && !rightEye.open;
 
 							if (rightEye.winking) {
 								clickButton = 0;
