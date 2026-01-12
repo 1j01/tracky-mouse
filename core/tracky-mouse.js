@@ -1789,8 +1789,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							mouthInfo = null;
 						}
 
-						window.electronAPI.setMouseButtonState(false, clickButton === 0);
-						window.electronAPI.setMouseButtonState(true, clickButton === 2);
+						// TODO: implement these clicking modes for the web library version
+						// and unhide the "Clicking mode" setting in the UI
+						// https://github.com/1j01/tracky-mouse/issues/72
+						window.electronAPI?.setMouseButtonState(false, clickButton === 0);
+						window.electronAPI?.setMouseButtonState(true, clickButton === 2);
 					}, () => {
 						facemeshEstimating = false;
 						facemeshFirstEstimation = false;
