@@ -203,6 +203,7 @@ let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
 let minDistance = undefined;
+let delayBeforeDragging = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
 
@@ -259,6 +260,7 @@ function serializeSettings() {
 			headTrackingSensitivityY: sensitivityY,
 			headTrackingAcceleration: acceleration,
 			headTrackingMinDistance: minDistance,
+			delayBeforeDragging,
 			// TODO:
 			// eyeTrackingSensitivityX,
 			// eyeTrackingSensitivityY,
@@ -294,6 +296,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.headTrackingMinDistance !== undefined) {
 			minDistance = settings.globalSettings.headTrackingMinDistance;
+		}
+		if (settings.globalSettings.delayBeforeDragging !== undefined) {
+			delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
 		}
 		if (settings.globalSettings.startEnabled !== undefined) {
 			startEnabled = settings.globalSettings.startEnabled;
@@ -549,6 +554,8 @@ const createWindow = () => {
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
 	});
 
+	// Note: buttonStates is redundant now that we do basically the same thing in the renderer process
+	// TODO: consider removing it, and renaming setMouseButtonState to triggerMouseUpOrDown
 	let buttonStates = {
 		left: false,
 		right: false,
