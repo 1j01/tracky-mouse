@@ -82,68 +82,57 @@ function isNewer(current, latest) {
 }
 
 module.exports = {
-	checkForUpdates: ({ currentVersion, skippedVersion }) => {
-		return new Promise((resolve, reject) => {
-			const request = net.request(API_URL);
-			request.on('response', (response) => {
-				let body = '';
-				response.on('data', (chunk) => {
-					body += chunk;
-				});
-				response.on('end', async () => {
-					if (response.statusCode !== 200) {
-						console.error('Failed to check for app updates:', response.statusCode, body);
-						resolve(null);
+	checkForUpdates: ({ currentVersion, skippedVersion, pleaseSkipThisVersion }) => {
+		const request = net.request(API_URL);
+		request.on('response', (response) => {
+			let body = '';
+			response.on('data', (chunk) => {
+				body += chunk;
+			});
+			response.on('end', async () => {
+				if (response.statusCode !== 200) {
+					console.error('Failed to check for app updates:', response.statusCode, body);
+					return;
+				}
+
+				let release;
+				try {
+					release = JSON.parse(body);
+				} catch (e) {
+					console.error('Error parsing app update GitHub API response:', e);
+				}
+				const latestVersion = release.tag_name;
+				if (typeof release.html_url !== 'string' || release.html_url.match(/^https?:\/\/.+/i) === null) {
+					console.error('Invalid release URL in GitHub API response:', release.html_url);
+					return;
+				}
+
+				if (isNewer(currentVersion, latestVersion)) {
+					if (skippedVersion === latestVersion) {
+						// User decided to skip this version
 						return;
 					}
 
-					let release;
-					try {
-						release = JSON.parse(body);
-					} catch (e) {
-						console.error('Error parsing app update GitHub API response:', e);
-						resolve(null);
-					}
-					const latestVersion = release.tag_name;
-					if (typeof release.html_url !== 'string' || release.html_url.match(/^https?:\/\/.+/i) === null) {
-						console.error('Invalid release URL in GitHub API response:', release.html_url);
-						resolve(null);
-						return;
-					}
+					const { response: buttonIndex } = await dialog.showMessageBox({
+						type: 'info',
+						title: 'Update Available',
+						message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.`,
+						buttons: ['Download', 'Remind me later', 'Skip this version'],
+						defaultId: 0,
+						cancelId: 1
+					});
 
-					if (isNewer(currentVersion, latestVersion)) {
-						if (skippedVersion === latestVersion) {
-							resolve(null); // User decided to skip this version
-							return;
-						}
-
-						const { response: buttonIndex } = await dialog.showMessageBox({
-							type: 'info',
-							title: 'Update Available',
-							message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.`,
-							buttons: ['Download', 'Remind me later', 'Skip this version'],
-							defaultId: 0,
-							cancelId: 1
-						});
-
-						if (buttonIndex === 0) {
-							shell.openExternal(release.html_url);
-							resolve({ action: 'download' });
-						} else if (buttonIndex === 2) {
-							resolve({ action: 'skip', version: latestVersion });
-						} else {
-							resolve({ action: 'remind' });
-						}
-					} else {
-						resolve(null);
+					if (buttonIndex === 0) {
+						shell.openExternal(release.html_url);
+					} else if (buttonIndex === 2) {
+						pleaseSkipThisVersion(latestVersion);
 					}
-				});
+				}
 			});
-			request.on('error', (error) => {
-				console.error('Network error checking for app updates:', error);
-				resolve(null);
-			});
-			request.end();
 		});
+		request.on('error', (error) => {
+			console.error('Network error checking for app updates:', error);
+		});
+		request.end();
 	}
 };
