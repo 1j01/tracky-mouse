@@ -26,6 +26,7 @@ const inputFeedbackCanvas = document.createElement("canvas");
 inputFeedbackCanvas.style.position = "absolute";
 inputFeedbackCanvas.style.top = "0";
 inputFeedbackCanvas.style.left = "0";
+inputFeedbackCanvas.style.pointerEvents = "none";
 inputFeedbackCanvas.width = 32;
 inputFeedbackCanvas.height = 32;
 document.body.appendChild(inputFeedbackCanvas);
