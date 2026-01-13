@@ -611,7 +611,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					</label>
 				</div>
 			</details>
-			<details>
+			<!--
+				Only dwell clicking is supported by the web library right now.
+				Currently it's a separate API (TrackyMouse.initDwellClicking)
+				TODO: bring more of desktop app functionality into core
+				https://github.com/1j01/tracky-mouse/issues/72
+
+				Also, the "Swap mouse buttons" setting is likely not useful for
+				web apps embedding Tracky Mouse and designed for head trackers,
+				since it necessitates mode switching for dwell clicker usage,
+				so it may make sense to hide (or not) even if it is supported there in the future.
+				The main point of this option is to counteract the system-level mouse button setting,
+				which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
+			-->
+			<details class="tracky-mouse-desktop-only">
 				<summary>Clicking</summary>
 				<div class="tracky-mouse-details-body">
 					<div class="tracky-mouse-control-row">
@@ -662,11 +675,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					</div>
 					<br>
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<div class="tracky-mouse-control-row">
+					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
 						<input type="checkbox" id="tracky-mouse-run-at-login"/>
 						<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
 					</div>
-					<br>
+					<br class="tracky-mouse-desktop-only">
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 					<div class="tracky-mouse-control-row">
@@ -723,21 +736,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			runAtLoginCheckbox.disabled = !isPackaged;
 		});
 	} else {
-		// Hide the mouse button swapping option if we're not in the desktop app,
-		// since the system-level mouse button setting doesn't apply,
-		// and the feature isn't implemented for the web version.
-		// It could be implemented for the web version, but if you're designing an app for facial mouse users,
-		// you might want to avoid right-clicking altogether.
-		swapMouseButtonsCheckbox.parentElement.hidden = true;
-
-		// Hide clicking mode option if not in desktop app,
-		// since dwell clicking in the web version is a separate API (TrackyMouse.initDwellClicking)
-		// and wouldn't automatically be controlled by this UI.
-		// TODO: bring more of desktop app functionality into core
-		clickingModeDropdown.parentElement.hidden = true;
-
-		// Hide the "run at login" option if we're not in the desktop app.
-		runAtLoginCheckbox.parentElement.hidden = true;
+		for (const elementToHide of uiContainer.querySelectorAll('.tracky-mouse-desktop-only')) {
+			elementToHide.hidden = true;
+		}
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
