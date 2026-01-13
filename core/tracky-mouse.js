@@ -569,7 +569,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				<summary>Head Tracking</summary>
 				<div class="tracky-mouse-details-body">
 					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Horizontal Sensitivity</span>
+						<span class="tracky-mouse-label-text">Horizontal sensitivity</span>
 						<span class="tracky-mouse-labeled-slider">
 							<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
 							<span class="tracky-mouse-min-label">Slow</span>
@@ -577,7 +577,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						</span>
 					</label>
 					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Vertical Sensitivity</span>
+						<span class="tracky-mouse-label-text">Vertical sensitivity</span>
 						<span class="tracky-mouse-labeled-slider">
 							<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
 							<span class="tracky-mouse-min-label">Slow</span>
@@ -602,7 +602,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						</span>
 					</label>
 					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Motion Threshold</span>
+						<span class="tracky-mouse-label-text">Motion threshold</span>
 						<span class="tracky-mouse-labeled-slider">
 							<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
 							<span class="tracky-mouse-min-label">Free</span>
@@ -642,7 +642,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
 							and it might complicate the design of the slider labeling.
 						-->
-						<span class="tracky-mouse-label-text">Delay Before Dragging&nbsp;&nbsp;&nbsp;</span>
+						<span class="tracky-mouse-label-text">Delay before dragging&nbsp;&nbsp;&nbsp;</span>
 						<span class="tracky-mouse-labeled-slider">
 							<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
 							<span class="tracky-mouse-min-label">Easy to drag</span>
