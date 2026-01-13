@@ -566,113 +566,113 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			<br>
 			<br>
 			<details>
-			<summary>Head Tracking</summary>
-			<div class="tracky-mouse-details-body">
-			<label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Horizontal Sensitivity</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
-					<span class="tracky-mouse-min-label">Slow</span>
-					<span class="tracky-mouse-max-label">Fast</span>
-				</span>
-			</label>
-			<label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Vertical Sensitivity</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
-					<span class="tracky-mouse-min-label">Slow</span>
-					<span class="tracky-mouse-max-label">Fast</span>
-				</span>
-			</label>
-			<!-- <label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Smoothing</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
-					<span class="tracky-mouse-min-label"></span>
-					<span class="tracky-mouse-max-label"></span>
-				</span>
-			</label> -->
-			<label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Acceleration</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
-					<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
-					<span class="tracky-mouse-min-label">Linear</span>
-					<span class="tracky-mouse-max-label">Smooth</span>
-				</span>
-			</label>
-			<label class="tracky-mouse-control-row">
-				<span class="tracky-mouse-label-text">Motion Threshold</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
-					<span class="tracky-mouse-min-label">Free</span>
-					<span class="tracky-mouse-max-label">Steady</span>
-				</span>
-			</label>
-			</div>
+				<summary>Head Tracking</summary>
+				<div class="tracky-mouse-details-body">
+					<label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Horizontal Sensitivity</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
+							<span class="tracky-mouse-min-label">Slow</span>
+							<span class="tracky-mouse-max-label">Fast</span>
+						</span>
+					</label>
+					<label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Vertical Sensitivity</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
+							<span class="tracky-mouse-min-label">Slow</span>
+							<span class="tracky-mouse-max-label">Fast</span>
+						</span>
+					</label>
+					<!-- <label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Smoothing</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
+							<span class="tracky-mouse-min-label"></span>
+							<span class="tracky-mouse-max-label"></span>
+						</span>
+					</label> -->
+					<label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Acceleration</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
+							<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
+							<span class="tracky-mouse-min-label">Linear</span>
+							<span class="tracky-mouse-max-label">Smooth</span>
+						</span>
+					</label>
+					<label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Motion Threshold</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
+							<span class="tracky-mouse-min-label">Free</span>
+							<span class="tracky-mouse-max-label">Steady</span>
+						</span>
+					</label>
+				</div>
 			</details>
 			<details>
-			<summary>Clicking</summary>
-			<div class="tracky-mouse-details-body">
-			<label class="tracky-mouse-control-row">
-				<!--
-					This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
-					with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
-					This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
-					at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
-					and it might complicate the design of the slider labeling.
-				-->
-				<span class="tracky-mouse-label-text">Delay Before Dragging</span>
-				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
-					<span class="tracky-mouse-min-label">Easy to drag</span>
-					<span class="tracky-mouse-max-label">Easy to click</span>
-				</span>
-			</label>
-			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-			<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
-			<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
-			<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-			<!-- btw: label is selected based on 'for' attribute -->
-			<div class="tracky-mouse-control-row">
-				<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
-				<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
-			</div>
-			<br>
-			<div class="tracky-mouse-control-row">
-				<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
-				<select id="tracky-mouse-clicking-mode">
-					<option value="dwell">Dwell to click</option>
-					<option value="blink">Wink to click</option>
-					<option value="open-mouth">Open mouth to click</option>
-					<option value="off">Off</option>
-				</select>
-			</div>
-			</div>
+				<summary>Clicking</summary>
+				<div class="tracky-mouse-details-body">
+					<label class="tracky-mouse-control-row">
+						<!--
+							This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
+							with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
+							This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
+							at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
+							and it might complicate the design of the slider labeling.
+						-->
+						<span class="tracky-mouse-label-text">Delay Before Dragging</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
+							<span class="tracky-mouse-min-label">Easy to drag</span>
+							<span class="tracky-mouse-max-label">Easy to click</span>
+						</span>
+					</label>
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
+					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
+					<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
+					<!-- btw: label is selected based on 'for' attribute -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
+						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
+					</div>
+					<br>
+					<div class="tracky-mouse-control-row">
+						<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
+						<select id="tracky-mouse-clicking-mode">
+							<option value="dwell">Dwell to click</option>
+							<option value="blink">Wink to click</option>
+							<option value="open-mouth">Open mouth to click</option>
+							<option value="off">Off</option>
+						</select>
+					</div>
+				</div>
 			</details>
 			<details>
-			<summary>General</summary>
-			<div class="tracky-mouse-details-body">
-			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
-			<div class="tracky-mouse-control-row">
-				<input type="checkbox" id="tracky-mouse-start-enabled"/>
-				<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
-			</div>
-			<br>
-			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-			<div class="tracky-mouse-control-row">
-				<input type="checkbox" id="tracky-mouse-run-at-login"/>
-				<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
-			</div>
-			<br>
-			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-			<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
-			<div class="tracky-mouse-control-row">
-				<input type="checkbox" checked id="tracky-mouse-mirror"/>
-				<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
-			</div>
-			</div>
+				<summary>General</summary>
+				<div class="tracky-mouse-details-body">
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" id="tracky-mouse-start-enabled"/>
+						<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
+					</div>
+					<br>
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" id="tracky-mouse-run-at-login"/>
+						<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
+					</div>
+					<br>
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" checked id="tracky-mouse-mirror"/>
+						<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
+					</div>
+				</div>
 			</details>
 		</div>
 		<div class="tracky-mouse-canvas-container-container">
