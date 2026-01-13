@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **You can now click and drag** with the "Wink to click" and "Open mouth to click" modes.
 - **Motion Threshold** slider, similar to the setting in [eViacam](https://eviacam.crea-si.com/). This helps keep the mouse still when you stop moving your head, at the cost of precision.
-- **Delay Before Dragging** slider, which prevents moving the mouse immediately after a click. This makes it easy to perform single and double clicks, in clicking modes that allow dragging. You might want to turn it off if you're going to be drawing on a canvas, or crank it up if you're not doing any dragging.
+- **Delay Before Dragging** slider, which prevents moving the mouse during a click. This makes it easier to perform single and double clicks in clicking modes that allow dragging. You might want to turn it off if you're going to be drawing on a canvas, or crank it up if you're not doing any dragging.
 - Blink detection includes a visualization in the camera view. It may make it look like you're wearing glasses. 😎
 - Open mouth detection includes a visualization in the camera view. This is drawn as two lines for now.
 - Blink detection and open mouth detection also include a visualization near the mouse cursor, so you can be confident when it's clicking, even if what you're clicking on doesn't provide any visual feedback.

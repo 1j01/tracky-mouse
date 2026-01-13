@@ -762,7 +762,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		left: false,
 		right: false,
 	};
-	var lastMouseButtonChangeTime = -Infinity;
+	var lastMouseDownTime = -Infinity;
 	var face;
 	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
@@ -1832,12 +1832,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						if ((clickButton === 0) !== buttonStates.left) {
 							window.electronAPI?.setMouseButtonState(false, clickButton === 0);
 							buttonStates.left = clickButton === 0;
-							lastMouseButtonChangeTime = performance.now();
+							if ((clickButton === 0)) {
+								lastMouseDownTime = performance.now();
+							} else {
+								// Limit "Delay Before Dragging" effect to the duration of a click.
+								// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
+								// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
+								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+							}
 						}
 						if ((clickButton === 2) !== buttonStates.right) {
 							window.electronAPI?.setMouseButtonState(true, clickButton === 2);
 							buttonStates.right = clickButton === 2;
-							lastMouseButtonChangeTime = performance.now();
+							if ((clickButton === 2)) {
+								lastMouseDownTime = performance.now();
+							} else {
+								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+							}
 						}
 					}, () => {
 						facemeshEstimating = false;
@@ -2048,10 +2059,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			if (Math.abs(deltaY * screenHeight) < minDistance) {
 				deltaY = 0;
 			}
-			// Avoid dragging when trying to click by ignoring movement for a short time after a mouse button change.
-			// This applies also to release, to help with double clicks.
-			const timeSinceMouseButtonChange = performance.now() - lastMouseButtonChangeTime;
-			if (timeSinceMouseButtonChange < delayBeforeDragging) {
+			// Avoid dragging when trying to click by ignoring movement for a short time after a mouse down.
+			// This applied previously also to release, to help with double clicks,
+			// but this felt bad, and I find personally that I can still do double clicks without that help.
+			const timeSinceMouseDown = performance.now() - lastMouseDownTime;
+			if (timeSinceMouseDown < delayBeforeDragging) {
 				deltaX = 0;
 				deltaY = 0;
 			}
