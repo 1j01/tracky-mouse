@@ -169,6 +169,10 @@ For the website:
 - Run `npm run website` to start a web server that will automatically reload when files change.
 
 For the desktop app:
+- For Linux, install XTest library needed for sending mouse input:
+  - On Ubuntu: `sudo apt-get install libxtst-dev`
+  - On Fedora: `sudo yum install libXtst-devel`
+  - On RHEL6.2: `sudo yum install libXi-devel`
 - Run `npm run in-desktop-app -- npm install` to install dependencies.
 - Run `npm run desktop-app` to start the app.
 - To test the CLI, run `npx tracky-mouse --help`.
