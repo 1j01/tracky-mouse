@@ -642,7 +642,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
 							and it might complicate the design of the slider labeling.
 						-->
-						<span class="tracky-mouse-label-text">Delay Before Dragging</span>
+						<span class="tracky-mouse-label-text">Delay Before Dragging&nbsp;&nbsp;&nbsp;</span>
 						<span class="tracky-mouse-labeled-slider">
 							<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
 							<span class="tracky-mouse-min-label">Easy to drag</span>
