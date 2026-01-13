@@ -19,6 +19,13 @@ if (version !== require('../package.json').version) {
 const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
 const changelog = fs.readFileSync(changelogPath, 'utf8');
 
+// Check if this version was already released
+const versionAlreadyReleased = changelog.includes(`## [${version}]`);
+if (versionAlreadyReleased) {
+	console.error(`Version ${version} has already been released in CHANGELOG.md`);
+	process.exit(1);
+}
+
 // Check if there's content under Unreleased
 const unreleasedMatch = changelog.match(/## \[Unreleased\]\s+([\s\S]*?)(?=\n## \[|$)/);
 if (!unreleasedMatch) {
@@ -35,14 +42,7 @@ if (!unreleasedContent || unreleasedContent.length < 10) {
 // Replace [Unreleased] with new version and date
 const newUnreleasedSection = `## [Unreleased]
 
-### Changed
-
-
-### Added
-
-
-### Fixed
-
+No changes here yet.
 
 `;
 
@@ -54,6 +54,7 @@ let updatedChangelog = changelog.replace(
 );
 
 // Update the comparison links at the bottom
+// TODO: handle prerelease versions
 const oldVersionMatch = changelog.match(/\[Unreleased\]: https:\/\/github\.com\/1j01\/tracky-mouse\/compare\/v([^.]+\.[^.]+\.[^.]+)\.\.\.HEAD/);
 if (oldVersionMatch) {
 	const previousVersion = oldVersionMatch[1];

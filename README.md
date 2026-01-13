@@ -220,9 +220,12 @@ npm version $VERSION --no-git-tag-version
 ```
 
 Update the changelog.  
-In CHANGELOG.md, first make sure all important changes are noted.  
-Then add a new heading below "Unreleased" with the new version number and date, and update links defined at the bottom which are used for version comparison.  
-Add "No changes here yet." below the "Unreleased" heading so that it doesn't appear to apply to the new version.
+In [CHANGELOG.md](CHANGELOG.md), first make sure all important changes are noted.  
+
+Then run:
+```sh
+npm run bump-changelog
+```
 
 Update download links to point to the new version:
 ```sh
