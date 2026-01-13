@@ -614,6 +614,26 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			<details>
 				<summary>Clicking</summary>
 				<div class="tracky-mouse-details-body">
+					<div class="tracky-mouse-control-row">
+						<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
+						<select id="tracky-mouse-clicking-mode">
+							<option value="dwell">Dwell to click</option>
+							<option value="blink">Wink to click</option>
+							<option value="open-mouth">Open mouth to click</option>
+							<option value="off">Off</option>
+						</select>
+					</div>
+					<br>
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
+					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
+					<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
+					<!-- btw: label is selected based on 'for' attribute -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
+						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
+					</div>
+					<br>
 					<label class="tracky-mouse-control-row">
 						<!--
 							This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -629,25 +649,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							<span class="tracky-mouse-max-label">Easy to click</span>
 						</span>
 					</label>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
-					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
-					<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-					<!-- btw: label is selected based on 'for' attribute -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
-						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
-					</div>
-					<br>
-					<div class="tracky-mouse-control-row">
-						<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
-						<select id="tracky-mouse-clicking-mode">
-							<option value="dwell">Dwell to click</option>
-							<option value="blink">Wink to click</option>
-							<option value="open-mouth">Open mouth to click</option>
-							<option value="off">Off</option>
-						</select>
-					</div>
 				</div>
 			</details>
 			<details>
