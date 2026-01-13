@@ -19,7 +19,8 @@
 		"lint-eslint": "eslint .",
 		"lint": "npm-run-all --continue-on-error --serial lint-*",
 		"update-cli-docs": "node scripts/update-cli-docs.js",
-		"update-dl-links": "node scripts/update-dl-links.js"
+		"update-dl-links": "node scripts/update-dl-links.js",
+		"bump-changelog": "node scripts/bump-changelog.js"
 	},
 	"bin": {
 		"tracky-mouse": "desktop-app/src/tracky-mouse-bin.js"
