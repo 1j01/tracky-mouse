@@ -280,7 +280,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	cursor: pointer;
 	user-select: none;
 	font-weight: bold;
-	background: rgba(0, 0, 0, 0.1);
+	background: rgba(135, 0, 191, 0.1);
 	padding: 8px;
 }
 
