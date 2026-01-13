@@ -274,11 +274,16 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
 	margin-bottom: 8px;
-	padding: 8px;
 }
 
 .tracky-mouse-controls details summary {
 	cursor: pointer;
 	user-select: none;
 	font-weight: bold;
+	background: rgba(0, 0, 0, 0.1);
+	padding: 8px;
+}
+
+.tracky-mouse-controls details .tracky-mouse-details-body {
+	padding: 8px;
 }

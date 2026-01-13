@@ -567,6 +567,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			<br>
 			<details>
 			<summary>Head Tracking</summary>
+			<div class="tracky-mouse-details-body">
 			<label class="tracky-mouse-control-row">
 				<span class="tracky-mouse-label-text">Horizontal Sensitivity</span>
 				<span class="tracky-mouse-labeled-slider">
@@ -608,9 +609,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<span class="tracky-mouse-max-label">Steady</span>
 				</span>
 			</label>
+			</div>
 			</details>
 			<details>
 			<summary>Clicking</summary>
+			<div class="tracky-mouse-details-body">
 			<label class="tracky-mouse-control-row">
 				<!--
 					This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -645,9 +648,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<option value="off">Off</option>
 				</select>
 			</div>
+			</div>
 			</details>
 			<details>
 			<summary>General</summary>
+			<div class="tracky-mouse-details-body">
 			<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 			<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
 			<div class="tracky-mouse-control-row">
@@ -666,6 +671,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			<div class="tracky-mouse-control-row">
 				<input type="checkbox" checked id="tracky-mouse-mirror"/>
 				<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
+			</div>
 			</div>
 			</details>
 		</div>
