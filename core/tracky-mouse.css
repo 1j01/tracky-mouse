@@ -90,6 +90,8 @@
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
+	margin-bottom: 10px;
+	align-items: center;
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row label {
