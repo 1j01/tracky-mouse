@@ -292,5 +292,6 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	padding: 2px 5px;
 	border-radius: 4px;
 	z-index: 100;
-	display: flex; /* Ensure flex layout for alignment if needed, though rows usually have it */
+	/* Ensure flex layout for alignment if needed, though rows usually have it */
+	display: flex;
 }
