@@ -276,13 +276,11 @@ Final steps:
 ```sh
 # Push to main
 git push
-# Publish the library to npm:
-npm run in-core -- npm publish
 # Deploy the website
 # (this may be done at any time, but it's important to update the homepage download link)
 # (technically this should be the last step since the new download link will only work once the release draft is published...)
 npm run in-website -- npm run deploy
 ```
 
-Publish the GitHub release draft.
+Publish the GitHub release. This should trigger a GitHub Actions workflow which publishes the core package to npm.
 
