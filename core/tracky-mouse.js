@@ -1063,7 +1063,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		populateCameraList = () => {
 			navigator.mediaDevices.enumerateDevices().then((devices) => {
 				const videoDevices = devices.filter(device => device.kind === 'videoinput');
-				const oldValue = cameraSelect.value;
 
 				cameraSelect.innerHTML = "";
 
