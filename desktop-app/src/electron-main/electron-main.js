@@ -199,6 +199,7 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 // (actual defaults come from the HTML template)
 let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
 let clickingMode = 'dwell'; // 'off', 'dwell', 'blink', 'open-mouth' (future: 'smile' or 'raise-cheek', 'raise-eyebrow')
+let cameraDeviceId = undefined;
 let mirror = undefined;
 let sensitivityX = undefined;
 let sensitivityY = undefined;
@@ -258,6 +259,7 @@ function serializeSettings() {
 			skippedUpdateVersion,
 			swapMouseButtons,
 			clickingMode,
+			cameraDeviceId,
 			mirrorCameraView: mirror,
 			headTrackingSensitivityX: sensitivityX,
 			headTrackingSensitivityY: sensitivityY,
@@ -284,6 +286,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.clickingMode !== undefined) {
 			clickingMode = settings.globalSettings.clickingMode;
+		}
+		if (settings.globalSettings.cameraDeviceId !== undefined) {
+			cameraDeviceId = settings.globalSettings.cameraDeviceId;
 		}
 		if (settings.globalSettings.mirrorCameraView !== undefined) {
 			mirror = settings.globalSettings.mirrorCameraView;

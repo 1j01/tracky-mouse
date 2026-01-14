@@ -1168,7 +1168,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		startStopButton.setAttribute("aria-pressed", "false");
 	};
 
-	useCameraButton.onclick = TrackyMouse.useCamera = () => {
+	useCameraButton.onclick = TrackyMouse.useCamera = async () => {
+		await settingsLoadedPromise;
 		const constraints = {
 			audio: false,
 			video: {
