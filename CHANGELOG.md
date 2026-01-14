@@ -10,9 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 - **Improved blink detection** by using eye aspect ratio instead of a simple distance between two eyelid points.
-- Removed minimum time between clicks for the "Wink to click" and "Open mouth to click" modes. You can now double click naturally, if you can keep the cursor still.
-- Stabilized blink and open mouth detection by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
-- Involuntary blinks should now be ignored in most cases.
+- **Removed minimum time between clicks** for the "Wink to click" and "Open mouth to click" modes. You can now double click naturally, as long as you can keep the cursor still.
+- **Stabilized blink and open mouth detection** by using a separate threshold for opening and closing. This means it won't rapidly oscillate between open and closed states when on the edge of open and closed.
+- **Involuntary blinks** should now be ignored in most cases.
+- "Wink to click" and "Open mouth to click" are no longer labeled as experimental.
 - **Redesigned settings**: settings are now grouped into collapsible sections.
 - Tons of cleanup of the codebase, and development process improvements.
 
@@ -20,14 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **You can now click and drag** with the "Wink to click" and "Open mouth to click" modes.
 - **Motion threshold** slider, similar to the setting in [eViacam](https://eviacam.crea-si.com/). This helps keep the mouse still when you stop moving your head, at the cost of precision.
-- **Delay before dragging** slider, which prevents moving the mouse during a click. This makes it easier to perform single and double clicks in clicking modes that allow dragging. You might want to turn it off if you're going to be drawing on a canvas, or crank it up if you're not doing any dragging.
+- **Delay before dragging** slider, which prevents moving the mouse during a click. This makes it easier to perform single and double clicks in clicking modes that allow dragging. You might want to set it to zero if you're going to be drawing on a canvas, or crank it up if you don't need to drag anything.
 - Blink detection includes a visualization in the camera view. It may make it look like you're wearing glasses. 😎
 - Open mouth detection includes a visualization in the camera view. This is drawn as two lines for now.
-- Blink detection and open mouth detection also include a visualization near the mouse cursor, so you can be confident when it's clicking, even if what you're clicking on doesn't provide any visual feedback.
+- **Cursor HUD**: Visual feedback is now shown near the mouse cursor for blink detection and open mouth detection, so you can be confident when it's clicking, even if what you're clicking on doesn't respond with any visual feedback.
+- **Update checking**: The app will now automatically check for updates on startup. You'll still have to download the new installer yourself for now.
 
 ### Fixed
 
-![manual takeback indicator](https://private-user-images.githubusercontent.com/3630663/534166454-d3ef5957-1d64-463f-91af-7ba73be45cdd.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjgwODU5MDgsIm5iZiI6MTc2ODA4NTYwOCwicGF0aCI6Ii8zNjMwNjYzLzUzNDE2NjQ1NC1kM2VmNTk1Ny0xZDY0LTQ2M2YtOTFhZi03YmE3M2JlNDVjZGQuc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MDExMCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjAxMTBUMjI1MzI4WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9NzBmOTMwMmJiY2JlY2U2NDE1MjcyZmY3MjIxZGRkOThkZDZkYjE4NDgyNjYzMGNmYjZlNzc2NWRmMWZlYTJhNiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.fIVs27-zJmFr9gewuaamJlM_-Y8imGZj0H9lCzbROE8)
+![manual takeback indicator](https://raw.githubusercontent.com/1j01/tracky-mouse/main/images/manual-takeback.svg)
 
 - Manual takeback indicator (hand on mouse with arrows) now shows regardless of clicking mode.
 - Status text at bottom of screen now correctly reflects enabled/disabled state regardless of clicking mode.
