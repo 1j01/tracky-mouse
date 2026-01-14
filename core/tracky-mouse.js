@@ -665,6 +665,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				</div>
 			</details>
 			<details>
+				<summary>Camera</summary>
+				<div class="tracky-mouse-details-body">
+					<div class="tracky-mouse-control-row">
+						<label for="tracky-mouse-camera-select"><span class="tracky-mouse-label-text">Camera source</span></label>
+						<select id="tracky-mouse-camera-select">
+							<option value="" selected>Default</option>
+						</select>
+					</div>
+				</div>
+			</details>
+			<details>
 				<summary>General</summary>
 				<div class="tracky-mouse-details-body">
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
@@ -709,6 +720,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	}
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
 	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
+	var cameraSelect = uiContainer.querySelector("#tracky-mouse-camera-select");
 	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
 	var clickingModeDropdown = uiContainer.querySelector("#tracky-mouse-clicking-mode");
 	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
@@ -790,6 +802,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var showDebugText = false;
 	var showDebugEyelidContours = false;
 	var mirror;
+	var cameraDeviceId = "";
 	var startEnabled;
 	var runAtLogin;
 	var swapMouseButtons;
@@ -888,6 +901,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				mirror = settings.globalSettings.mirrorCameraView;
 				mirrorCheckbox.checked = mirror;
 			}
+			if (settings.globalSettings.cameraDeviceId !== undefined) {
+				cameraDeviceId = settings.globalSettings.cameraDeviceId;
+				cameraSelect.value = cameraDeviceId;
+			}
 			if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
 				sensitivityX = settings.globalSettings.headTrackingSensitivityX;
 				sensitivityXSlider.value = sensitivityX * 1000;
@@ -934,6 +951,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				swapMouseButtons,
 				clickingMode,
 				mirrorCameraView: mirror,
+				cameraDeviceId,
 				headTrackingSensitivityX: sensitivityX,
 				headTrackingSensitivityY: sensitivityY,
 				headTrackingAcceleration: acceleration,
@@ -1020,6 +1038,51 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			setOptions({ globalSettings: { mirrorCameraView: mirror } });
 		}
 	};
+	cameraSelect.onchange = (event) => {
+		cameraDeviceId = cameraSelect.value;
+		// HACK: using event argument as a flag to indicate when it's not the initial setup,
+		// to avoid saving the default settings before the actual preferences are loaded.
+		if (event) {
+			setOptions({ globalSettings: { cameraDeviceId } });
+
+			// Restart camera if running and not using demo footage
+			if (cameraVideo.srcObject) {
+				// Stop current stream
+				const tracks = cameraVideo.srcObject.getTracks();
+				tracks.forEach(track => track.stop());
+				TrackyMouse.useCamera();
+			}
+		}
+	};
+
+	let populateCameraList = () => { };
+	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+		populateCameraList = () => {
+			navigator.mediaDevices.enumerateDevices().then((devices) => {
+				const videoDevices = devices.filter(device => device.kind === 'videoinput');
+				const oldValue = cameraSelect.value;
+
+				cameraSelect.innerHTML = "";
+
+				const defaultOption = document.createElement("option");
+				defaultOption.value = "";
+				defaultOption.text = "Default";
+				cameraSelect.appendChild(defaultOption);
+
+				videoDevices.forEach((device) => {
+					const option = document.createElement('option');
+					option.value = device.deviceId;
+					option.text = device.label || `Camera ${cameraSelect.length}`;
+					cameraSelect.appendChild(option);
+				});
+
+				cameraSelect.value = cameraDeviceId;
+			});
+		};
+		populateCameraList();
+		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
+	}
+
 	swapMouseButtonsCheckbox.onchange = (event) => {
 		swapMouseButtons = swapMouseButtonsCheckbox.checked;
 		// HACK: using event argument as a flag to indicate when it's not the initial setup,
@@ -1106,14 +1169,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 
 	useCameraButton.onclick = TrackyMouse.useCamera = () => {
-		navigator.mediaDevices.getUserMedia({
+		const constraints = {
 			audio: false,
 			video: {
 				width: defaultWidth,
 				height: defaultHeight,
 				facingMode: "user",
 			}
-		}).then((stream) => {
+		};
+		if (cameraDeviceId) {
+			delete constraints.video.facingMode;
+			constraints.video.deviceId = { exact: cameraDeviceId };
+		}
+		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+			populateCameraList();
 			reset();
 			try {
 				if ('srcObject' in cameraVideo) {
