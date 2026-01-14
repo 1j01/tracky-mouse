@@ -104,7 +104,7 @@ async function release() {
 			needsPublish = false;
 		} catch (error) {
 			console.error(error);
-			console.error("Failed to publish desktop app. Please check your GITHUB_TOKEN (in desktop-app/.env) and try again.");
+			console.error("Failed to publish desktop app. Please check the error output above (you may need to regenerate and replace your GITHUB_TOKEN in desktop-app/.env) and try again.");
 			await new Promise((resolve) => {
 				const rl = require("readline").createInterface({
 					input: process.stdin,
