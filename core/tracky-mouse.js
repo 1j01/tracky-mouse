@@ -665,13 +665,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				</div>
 			</details>
 			<details>
-				<summary>Camera</summary>
+				<summary>Video</summary>
 				<div class="tracky-mouse-details-body">
 					<div class="tracky-mouse-control-row">
 						<label for="tracky-mouse-camera-select"><span class="tracky-mouse-label-text">Camera source</span></label>
 						<select id="tracky-mouse-camera-select">
 							<option value="" selected>Default</option>
 						</select>
+					</div>
+					<br>
+					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
+					<div class="tracky-mouse-control-row">
+						<input type="checkbox" checked id="tracky-mouse-mirror"/>
+						<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
 					</div>
 				</div>
 			</details>
@@ -689,13 +696,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
 						<input type="checkbox" id="tracky-mouse-run-at-login"/>
 						<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
-					</div>
-					<br class="tracky-mouse-desktop-only">
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" checked id="tracky-mouse-mirror"/>
-						<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
 					</div>
 				</div>
 			</details>
