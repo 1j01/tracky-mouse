@@ -87,6 +87,10 @@ async function release() {
 	process.env.VERSION = version;
 	run("npm run update-dl-links");
 
+	// That's all the changes for the commit.
+	// Add them before the lengthy build process in case one gets tempted to edit files while it's building
+	run("git add .");
+
 	// Build the desktop app (this is redundant with the publish step)
 	// run("npm run in-desktop-app -- npm run make");
 
@@ -116,8 +120,7 @@ async function release() {
 
 	// TODO: Upload the changelog entry into the GitHub release draft's notes.
 
-	// Then commit the changes, tag the commit, and push:
-	run("git add .");
+	// Then commit the changes, tag the commit, and push the tag:
 	run(`git commit -m "Release ${version}"`);
 	run(`git tag v${version}`);
 	// run("git push"); // deferred so the release can be tested first
