@@ -991,72 +991,132 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	};
 
-	sensitivityXSlider.onchange = (event) => {
-		sensitivityX = sensitivityXSlider.value / 1000;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
-		}
-	};
-	sensitivityYSlider.onchange = (event) => {
-		sensitivityY = sensitivityYSlider.value / 1000;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
-		}
-	};
-	accelerationSlider.onchange = (event) => {
-		acceleration = accelerationSlider.value / 100;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
-		}
-	};
-	minDistanceSlider.onchange = (event) => {
-		minDistance = minDistanceSlider.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
-		}
-	};
-	delayBeforeDraggingSlider.onchange = (event) => {
-		delayBeforeDragging = delayBeforeDraggingSlider.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
-		}
-	};
-	mirrorCheckbox.onchange = (event) => {
-		mirror = mirrorCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { mirrorCameraView: mirror } });
-		}
-	};
-	cameraSelect.onchange = (event) => {
-		cameraDeviceId = cameraSelect.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { cameraDeviceId } });
-
-			// Restart camera if running and not using demo footage
-			if (cameraVideo.srcObject) {
-				// Stop current stream
-				const tracks = cameraVideo.srcObject.getTracks();
-				for (const track of tracks) {
-					track.stop();
-				}
-				TrackyMouse.useCamera();
+	const optionsGUIBindings = [
+		{
+			control: sensitivityXSlider,
+			loadValueFromControl: () => {
+				sensitivityX = sensitivityXSlider.value / 1000;
+			},
+			save: () => {
+				setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
 			}
-		}
-	};
+		},
+		{
+			control: sensitivityYSlider,
+			loadValueFromControl: () => {
+				sensitivityY = sensitivityYSlider.value / 1000;
+			},
+			save: () => {
+				setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
+			}
+		},
+		{
+			control: accelerationSlider,
+			loadValueFromControl: () => {
+				acceleration = accelerationSlider.value / 100;
+			},
+			save: () => {
+				setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
+			}
+		},
+		{
+			control: minDistanceSlider,
+			loadValueFromControl: () => {
+				minDistance = minDistanceSlider.value;
+			},
+			save: () => {
+				setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+			}
+		},
+		{
+			control: delayBeforeDraggingSlider,
+			loadValueFromControl: () => {
+				delayBeforeDragging = delayBeforeDraggingSlider.value;
+			},
+			save: () => {
+				setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
+			}
+		},
+		{
+			control: mirrorCheckbox,
+			loadValueFromControl: () => {
+				mirror = mirrorCheckbox.checked;
+			},
+			save: () => {
+				setOptions({ globalSettings: { mirrorCameraView: mirror } });
+			}
+		},
+		{
+			control: cameraSelect,
+			loadValueFromControl: () => {
+				cameraDeviceId = cameraSelect.value;
+			},
+			save: () => {
+				setOptions({ globalSettings: { cameraDeviceId } });
+			},
+			handleSettingChange() {
+				// Restart camera if running and not using demo footage
+				if (cameraVideo.srcObject) {
+					// Stop current stream
+					const tracks = cameraVideo.srcObject.getTracks();
+					for (const track of tracks) {
+						track.stop();
+					}
+					TrackyMouse.useCamera();
+				}
+			}
+		},
+		{
+			control: swapMouseButtonsCheckbox,
+			loadValueFromControl: () => {
+				swapMouseButtons = swapMouseButtonsCheckbox.checked;
+			},
+			save: () => {
+				setOptions({ globalSettings: { swapMouseButtons } });
+			}
+		},
+		{
+			control: clickingModeDropdown,
+			loadValueFromControl: () => {
+				clickingMode = clickingModeDropdown.value;
+			},
+			save: () => {
+				setOptions({ globalSettings: { clickingMode } });
+			}
+		},
+		{
+			control: startEnabledCheckbox,
+			loadValueFromControl: () => {
+				startEnabled = startEnabledCheckbox.checked;
+			},
+			save: () => {
+				setOptions({ globalSettings: { startEnabled } });
+			}
+		},
+		{
+			control: runAtLoginCheckbox,
+			loadValueFromControl: () => {
+				runAtLogin = runAtLoginCheckbox.checked;
+			},
+			save: () => {
+				setOptions({ globalSettings: { runAtLogin } });
+			}
+		},
+	];
+
+	for (const { control, loadValueFromControl, save, handleSettingChange } of optionsGUIBindings) {
+		// Load defaults from HTML
+		loadValueFromControl();
+		// Handle changes
+		control.addEventListener("change", () => {
+			loadValueFromControl();
+			save();
+			// TODO: also call this if the setting is changed through CLI
+			// Would be good to have a pattern where it's subscribing to changes to a settings store
+			handleSettingChange?.();
+		});
+	}
+	paused = !startEnabled;
 
 	let populateCameraList = () => { };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
@@ -1085,52 +1145,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
 	}
 
-	swapMouseButtonsCheckbox.onchange = (event) => {
-		swapMouseButtons = swapMouseButtonsCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { swapMouseButtons } });
-		}
-	};
-	clickingModeDropdown.onchange = (event) => {
-		clickingMode = clickingModeDropdown.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { clickingMode } });
-		}
-	};
-	startEnabledCheckbox.onchange = (event) => {
-		startEnabled = startEnabledCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { startEnabled } });
-		}
-	};
-	runAtLoginCheckbox.onchange = (event) => {
-		runAtLogin = runAtLoginCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { runAtLogin } });
-		}
-	};
-
-	// Load defaults from HTML
-	mirrorCheckbox.onchange();
-	swapMouseButtonsCheckbox.onchange();
-	clickingModeDropdown.onchange();
-	startEnabledCheckbox.onchange();
-	runAtLoginCheckbox.onchange();
-	sensitivityXSlider.onchange();
-	sensitivityYSlider.onchange();
-	accelerationSlider.onchange();
-	minDistanceSlider.onchange();
-	delayBeforeDraggingSlider.onchange();
-	paused = !startEnabled;
-
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
 	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
 	// you can still be left in a tricky situation.
@@ -1140,7 +1154,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		el.addEventListener("contextmenu", (e) => {
 			e.preventDefault();
 			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
-			swapMouseButtonsCheckbox.onchange(e);
+			swapMouseButtonsCheckbox.dispatchEvent(new Event("change"));
 		});
 	}
 
