@@ -12,7 +12,7 @@ if (!version) {
 
 if (version !== require('../package.json').version) {
 	console.error('VERSION env var does not match package.json version');
-	console.error(`Expected: ${version}, Got: ${require('../package.json').version}`);
+	console.error(`package.json: ${require('../package.json').version}, VERSION env var: ${version}`);
 	process.exit(1);
 }
 

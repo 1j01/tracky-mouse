@@ -197,82 +197,36 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 This section outlines the steps for releasing a new version of Tracky Mouse.
 
-> Hm, the version numbers need to be updated for the desktop app build (for the about window and `--version` flag to make sense), but it seems a little awkward to have to bump the version numbers on all the operating systems. Should I separate committing the bump from pushing, and push to a branch first, in order to pull on the other systems with the bump? Is that even easier?  
-> I guess it comes down to wanting to test the desktop app on all systems.  
-> But maybe I should just hope for the best, and rely on patch releases if there are issues.  
-> I guess ideally I should set up GitHub Actions to build the desktop app for all platforms, on a branch, on then test by downloading the artifacts, then merge to main and tag the commit.  
+> [!NOTE]  
+> Currently the software is only pre-built for Windows, due to a bug in Electron Forge and node-gyp woes.  
+> Eventually it would be nice if we could set up cross-platform builds using GitHub Actions.  
+> Regardless of using CI for building or not, it's best to test a new version by downloading from the GitHub release draft.  
 
-Run quality assurance checks:
-```sh
-npm run lint
-```
-
-Update CLI docs:
-```sh
-npm run update-cli-docs
-```
-
-Bump package versions.
-```sh
-# Assuming bash or similar shell syntax
-# TODO: automate this in a cross-platform way
-VERSION=1.1.0
-npm run in-core -- npm version $VERSION --no-git-tag-version
-npm run in-website -- npm version $VERSION --no-git-tag-version
-npm run in-desktop-app -- npm version $VERSION --no-git-tag-version
-npm version $VERSION --no-git-tag-version
-```
-
-Update the changelog.  
-In [CHANGELOG.md](CHANGELOG.md), first make sure all important changes are noted.  
-
-Then run:
-```sh
-npm run bump-changelog
-```
-
-Update download links to point to the new version:
-```sh
-npm run update-dl-links
-```
-
-Build the desktop app (this must be done after updating the version number, but should be done before publishing the library to npm in case any issues come up):
-```sh
-# This step should be run on all supported platforms
-npm run in-desktop-app -- npm run make
-```
+In [CHANGELOG.md](CHANGELOG.md), first make sure all important changes are noted in the Unreleased section, by looking over the commit history.  
 
 Create `desktop-app/.env` file if it doesn't exist, and inside it, set `GITHUB_TOKEN=...` with a [GitHub personal access token](https://github.com/settings/tokens?page=1&type=beta) with content permissions for creating a release.
 
-Create a GitHub release draft, automatically uploading the desktop app distributable files:
+The following command takes care of linting, bumping version numbers for each package and in the changelog:
 ```sh
-# This step should be run on all supported platforms
-npm run in-desktop-app -- npm run publish
+npm run release -- $VERSION
 ```
 
-Copy and paste the changelog entry into the GitHub release draft's notes.
+Download and install from the GitHub release draft, and test the installed desktop app.
 
-Install and test the installed desktop app.
+> [!WARNING]
+> "Point of no return" (spooky)
 
-Then commit the changes, tag the commit, and push:
+Final steps:
 ```sh
-git add .
-git commit -m "Release $VERSION"
-git tag v$VERSION
+# Push to main
 git push
-git push origin tag v$VERSION
-```
-
-Publish the library to npm:
-```sh
-npm run in-core -- npm publish --dry-run
+# Publish the library to npm:
 npm run in-core -- npm publish
+# Deploy the website
+# (this may be done at any time, but it's important to update the homepage download link)
+# (technically this should be the last step since the new download link will only work once the release draft is published...)
+npm run in-website -- npm run deploy
 ```
 
 Publish the GitHub release draft.
-
-Deploy the website (this may be done at any time, but it's good to do it with a release):
-```sh
-npm run in-website -- npm run deploy
-```
 

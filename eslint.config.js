@@ -64,6 +64,7 @@ module.exports = [
 			"scripts/update-cli-docs.js",
 			"scripts/update-dl-links.js",
 			"scripts/bump-changelog.js",
+			"scripts/release.js",
 			"website/globs-for-deploy.js",
 			"eslint.config.js",
 		],
