@@ -23,7 +23,7 @@ function getOutput(command) {
 	return execSync(command, { stdio: 'pipe', cwd: repoRoot, env: process.env }).toString();
 }
 
-function release() {
+async function release() {
 	const version = (process.argv[2] ?? "").trim().replace(/^v/, "");
 
 	// Sanity check version numbers
@@ -91,7 +91,28 @@ function release() {
 	// run("npm run in-desktop-app -- npm run make");
 
 	// Create a GitHub release draft, automatically uploading the desktop app distributable files:
-	run("npm run in-desktop-app -- npm run publish");
+	// This is the step where you need an up-to-date access token,
+	// so prompt to retry in a loop.
+	let needsPublish = true;
+	while (needsPublish) {
+		try {
+			run("npm run in-desktop-app -- npm run publish");
+			needsPublish = false;
+		} catch (error) {
+			console.error(error);
+			console.error("Failed to publish desktop app. Please check your GITHUB_TOKEN (in desktop-app/.env) and try again.");
+			await new Promise((resolve) => {
+				const rl = require("readline").createInterface({
+					input: process.stdin,
+					output: process.stdout
+				});
+				rl.question("Press Enter to retry...", () => {
+					rl.close();
+					resolve();
+				});
+			});
+		}
+	}
 
 	// TODO: Upload the changelog entry into the GitHub release draft's notes.
 
