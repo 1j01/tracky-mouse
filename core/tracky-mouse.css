@@ -269,3 +269,21 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 .tracky-mouse-ui a:visited {
 	color: rgb(135 0 191);
 }
+
+.tracky-mouse-controls details {
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-radius: 4px;
+	margin-bottom: 8px;
+}
+
+.tracky-mouse-controls details summary {
+	cursor: pointer;
+	user-select: none;
+	font-weight: bold;
+	background: rgba(135, 0, 191, 0.1);
+	padding: 8px;
+}
+
+.tracky-mouse-controls details .tracky-mouse-details-body {
+	padding: 8px;
+}

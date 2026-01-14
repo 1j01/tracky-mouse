@@ -10,7 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
 	<meta name="description" content="Control your computer with just a webcam.">
-	<link rel="preload" href="core/lib/stats.js" as="script">
+	<!-- <link rel="preload" href="core/lib/stats.js" as="script"> -->
 	<link rel="preload" href="core/lib/no-eval.js" as="script">
 	<link rel="preload" href="core/lib/clmtrackr.js" as="script">
 	<!-- TODO: figure out how to preload worker-context dependencies that use `importScripts` -->
@@ -40,7 +40,7 @@
 		</p>
 		<p>
 			<!-- TODO: download links for multiple platforms; detect platform, present download with dropdown similar to VS Code homepage, near top of page -->
-			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.0.0/Tracky.Mouse-2.0.0.Setup.exe"
+			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.1.0/Tracky.Mouse-2.1.0.Setup.exe"
 				class="big-download-button">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.7, 1.5) perspective(9px) rotateY(-10deg) translateY(-1px)">
@@ -77,10 +77,18 @@
 				</div>
 			</li>
 			<li>
-				<img width="64" height="64" src="images/dwell-clicking.svg" alt="Mouse cursor with timer">
+				<img width="64" height="64" src="images/dwell-clicking.svg" alt="Timer with mouse cursor being clicked">
 				<div>
 					<h3>Dwell Clicking</h3>
 					<p>Click by hovering over a control for a set amount of time. Cancel by moving away.</p>
+				</div>
+			</li>
+			<li>
+				<img width="64" height="64" src="images/facial-gesture-clicking.svg"
+					alt="Winking face with mouse cursor being clicked">
+				<div>
+					<h3>Facial Gestures</h3>
+					<p>Click by winking or opening your mouth. Hold the pose to drag.</p>
 				</div>
 			</li>
 			<li>
