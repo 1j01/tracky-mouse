@@ -1124,6 +1124,25 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			navigator.mediaDevices.enumerateDevices().then((devices) => {
 				const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
+				let knownCameras = {};
+				try {
+					knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+				} catch (e) { }
+				let knownCamerasChanged = false;
+				for (const device of videoDevices) {
+					if (device.deviceId && device.label) {
+						if (!knownCameras[device.deviceId] || knownCameras[device.deviceId].name !== device.label) {
+							knownCameras[device.deviceId] = { name: device.label };
+							knownCamerasChanged = true;
+						}
+					}
+				}
+				if (knownCamerasChanged) {
+					try {
+						localStorage.setItem("tracky-mouse-known-cameras", JSON.stringify(knownCameras));
+					} catch (e) { }
+				}
+
 				cameraSelect.innerHTML = "";
 
 				const defaultOption = document.createElement("option");
@@ -1144,13 +1163,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				// Defaulting to "Default" would imply a preference isn't stored.
 				// cameraSelect.value = found ? cameraDeviceId : "";
 				// Show a placeholder for the selected camera
-				// TODO: store name of camera (but outside of settings, since it's not a setting,
-				// and we don't need to expose camera model information if people are sharing settings.
-				// I'm thinking of a "tracky-mouse-known-cameras" mapping like `{[id]:{name}}`)
 				if (cameraDeviceId && !found) {
 					const option = document.createElement("option");
 					option.value = cameraDeviceId;
-					option.text = "Unavailable camera";
+					const knownInfo = knownCameras[cameraDeviceId];
+					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
 					cameraSelect.appendChild(option);
 				}
 				cameraSelect.value = cameraDeviceId;
