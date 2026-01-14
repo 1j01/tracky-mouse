@@ -1127,7 +1127,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				let knownCameras = {};
 				try {
 					knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
-				} catch (e) { }
+				} catch (error) {
+					console.error("Failed to parse known cameras from localStorage", error);
+				}
 				let knownCamerasChanged = false;
 				for (const device of videoDevices) {
 					if (device.deviceId && device.label) {
@@ -1140,7 +1142,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				if (knownCamerasChanged) {
 					try {
 						localStorage.setItem("tracky-mouse-known-cameras", JSON.stringify(knownCameras));
-					} catch (e) { }
+					} catch (error) {
+						console.error("Failed to store known cameras in localStorage", error);
+					}
 				}
 
 				cameraSelect.innerHTML = "";
