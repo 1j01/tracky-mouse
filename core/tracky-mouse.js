@@ -1055,15 +1055,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				setOptions({ globalSettings: { cameraDeviceId } });
 			},
 			handleSettingChange() {
-				// Restart camera if running and not using demo footage
+				// Restart camera (and request access if not already active)
 				if (cameraVideo.srcObject) {
 					// Stop current stream
 					const tracks = cameraVideo.srcObject.getTracks();
 					for (const track of tracks) {
 						track.stop();
 					}
-					TrackyMouse.useCamera();
 				}
+				TrackyMouse.useCamera();
 			}
 		},
 		{
