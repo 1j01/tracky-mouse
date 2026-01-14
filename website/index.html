@@ -295,32 +295,6 @@
 		</p>
 	</section>
 	<section class="page-section">
-		<h2>Technical Info</h2>
-		<p>
-			This is a head tracking system similar to <a href="https://eviacam.crea-si.com/">eViacam</a>,
-			using <a href="https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method">Lucas–Kanade optical flow</a>
-			to track points for high accuracy,
-			and face detection for understanding of where to place tracking points.
-			It uses two different face detectors, a fast-to-load one
-			(<a href="https://github.com/auduno/clmtrackr">clmtrackr.js</a>)
-			and a slower to load but much more accurate one
-			(<a href="https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection">FaceMesh</a>),
-			which it switches to automatically when available.
-		</p>
-		<p>
-			<a href="https://inspirit.github.io/jsfeat/">JSFeat</a>
-			is used for optical flow, and clmtrackr.js also uses JSFeat,
-			so I patched clmtrackr.js to export JSFeat so it doesn't need to be loaded twice.
-		</p>
-		<p>
-			clmtrackr.js used <code>eval</code> heavily, but I created
-			<a href="eval-is-evil.html">a tool that eliminates the need for <code>eval</code></a>
-			by running the code and seeing what it tries to evaluate,
-			and creating functions that do the same thing.
-			This allows Tracky Mouse to run in a context secured with <code>Content-Security-Policy</code>.
-		</p>
-	</section>
-	<section class="page-section">
 		<h2>Source Code</h2>
 		<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
 	</section>

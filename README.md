@@ -93,7 +93,7 @@ I tried npm workspaces, but it doesn't work with Electron Forge packaging. See [
 
 The core library uses the following third-party libraries:
 
-- [jsfeat](https://github.com/inspirit/jsfeat) for point tracking
+- [jsfeat](https://github.com/inspirit/jsfeat) for point tracking (using Lucas–Kanade optical flow)
 	- [MIT License](https://github.com/inspirit/jsfeat/blob/master/LICENSE)
 - [clmtrackr.js](https://github.com/auduno/clmtrackr) for fast and lightweight but inaccurate face tracking
 	- [MIT License](https://github.com/auduno/clmtrackr/blob/dev/LICENSE.txt)
@@ -107,6 +107,8 @@ To avoid the need for `unsafe-eval` in the Content Security Policy, I had to eli
 The file [no-eval.js](./core/lib/no-eval.js) overrides `eval` with a function that handles the specific cases of `eval` usage in `clmtrackr.js`.
 I made a tool to generate this file by running `clmtrackr.js` while instrumenting `eval` to collect the code it tries to evaluate.
 This tool is located in [eval-is-evil.html](./website/eval-is-evil.html).
+
+Unfortunately, when upgrading the facemesh library, I had to add back the `unsafe-eval` requirement, as it uses WebAssembly.
 
 ### Website
 
