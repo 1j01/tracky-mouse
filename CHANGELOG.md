@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- **Mirror** setting is now grouped under Video.
+
+### Added
+
+- **Camera source** setting. You can now select your preferred camera from a dropdown.
+
 
 ## [2.1.0] - 2026-01-14
 
