@@ -211,6 +211,8 @@ The following command takes care of linting, bumping version numbers for each pa
 npm run release -- $VERSION
 ```
 
+Copy and paste the changelog entry into the GitHub release draft's notes.
+
 Download and install from the GitHub release draft, and test the installed desktop app.
 
 > [!WARNING]
