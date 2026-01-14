@@ -691,7 +691,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						<input type="checkbox" id="tracky-mouse-start-enabled"/>
 						<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
 					</div>
-					<br>
+					<!-- TODO: stop relying on <br> for layout, it's too finicky, with conditional hiding -->
+					<br class="tracky-mouse-desktop-only">
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
 						<input type="checkbox" id="tracky-mouse-run-at-login"/>
