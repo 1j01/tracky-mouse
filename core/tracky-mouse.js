@@ -1131,13 +1131,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				defaultOption.text = "Default";
 				cameraSelect.appendChild(defaultOption);
 
+				let found = false;
 				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
 					option.text = device.label || `Camera ${cameraSelect.length}`;
 					cameraSelect.appendChild(option);
+					if (device.deviceId === cameraDeviceId) {
+						found = true;
+					}
 				}
-
+				// Defaulting to "Default" would imply a preference isn't stored.
+				// cameraSelect.value = found ? cameraDeviceId : "";
+				// Show a placeholder for the selected camera
+				// TODO: store name of camera (but outside of settings, since it's not a setting,
+				// and we don't need to expose camera model information if people are sharing settings.
+				// I'm thinking of a "tracky-mouse-known-cameras" mapping like `{[id]:{name}}`)
+				if (cameraDeviceId && !found) {
+					const option = document.createElement("option");
+					option.value = cameraDeviceId;
+					option.text = "Unavailable camera";
+					cameraSelect.appendChild(option);
+				}
 				cameraSelect.value = cameraDeviceId;
 			});
 		};
