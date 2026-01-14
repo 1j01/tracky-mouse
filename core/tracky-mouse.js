@@ -1050,7 +1050,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			if (cameraVideo.srcObject) {
 				// Stop current stream
 				const tracks = cameraVideo.srcObject.getTracks();
-				tracks.forEach(track => track.stop());
+				for (const track of tracks) {
+					track.stop();
+				}
 				TrackyMouse.useCamera();
 			}
 		}
@@ -1070,12 +1072,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				defaultOption.text = "Default";
 				cameraSelect.appendChild(defaultOption);
 
-				videoDevices.forEach((device) => {
+				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
 					option.text = device.label || `Camera ${cameraSelect.length}`;
 					cameraSelect.appendChild(option);
-				});
+				}
 
 				cameraSelect.value = cameraDeviceId;
 			});
@@ -1962,9 +1964,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				if (bad) {
 					ctx.fillStyle = 'rgba(255,0,255)';
 				}
-				facemeshPrediction.keypoints.forEach(({ x, y }) => {
+				for (const { x, y } of facemeshPrediction.keypoints) {
 					ctx.fillRect(x, y, 1, 1);
-				});
+				}
 			} else {
 				if (update && useFacemesh) {
 					pointsBasedOnFaceInViewConfidence -= 0.001;
