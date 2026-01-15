@@ -5,7 +5,7 @@
 Tracky Mouse is a desktop application *and embeddable web UI* for head tracking and mouse control.
 It includes a dwell clicker, and will be expanded with other clicking options in the future.
 
-Tracky Mouse is intended to be a complete UI for head tracking, similar to [eViacam](https://github.com/cmauri/eviacam), but embeddable in web applications (such as [JS Paint, with its Eye Gaze Mode](https://jspaint.app/#eye-gaze-mode), which I might rename Hands-Free Mode or Facial Mouse Mode), as well as downloadable as an application to use to control your entire computer.
+Tracky Mouse is intended to be a complete UI for head tracking, similar to [eViacam](https://github.com/cmauri/eviacam), but embeddable in web applications (such as [JS Paint](https://jspaint.app/)), as well as downloadable as an application to use to control your entire computer.
 
 I'm also thinking about making a browser extension, which would 1. bridge between the desktop application and web applications, making it so you don't need to disable dwell clicking in the desktop app to use a web app that provides dwell clicking, 2. provide the equivalent of the desktop application for Chrome OS, and 3. automatically enhance webpages to be friendlier toward facial mouse input, by preventing menus from closing based on hover, enlarging elements etc., probably using site-specific enhancements.
 
@@ -75,11 +75,11 @@ See [CHANGELOG.md](./CHANGELOG.md) for project history and API changes.
 Someone emailed me asking about how they might adjust the UI of [JS Paint](https://jspaint.app/) to work with eye tracking (enlarging the color palette, hiding other UI elements, etc.)
 and I decided to do them one better and build it as an official feature, with dwell clicking and everything.
 
-To test the Eye Gaze Mode properly, I needed a facial mouse, but eye trackers are expensive, so I tried looking for head tracking software, and found eViacam, but... either it didn't work, or at some point it stopped working on my computer.
+To test these accessibility features properly, I needed a facial mouse, but eye trackers are expensive, so I tried looking for head tracking software, and found eViacam, but... either it didn't work, or at some point it stopped working on my computer.
 
 - eViacam wasn't working on my computer.
 - There's not that much facial mouse software out there, especially cross-platform, and I think it's good to have options.
-- I want people to be able to try JS Paint's Eye Gaze Mode out easily, and an embeddable facial mouse GUI would be great for that.
+- I wanted people to be able to try JS Paint's dwell clicking out easily, and an embeddable facial mouse GUI would be great for that.
 - Sometimes my joints hurt a lot and I'd like to relieve strain by switching to an alternative input method, such as head movement. Although I also have serious neck problems, so I don't know what I was thinking. Working on this project I have to use it very sparingly, using a demo video instead of camera input whenever possible for testing.
 
 ## Software Architecture
