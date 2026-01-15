@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
 	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://fonts.googleapis.com https://fonts.gstatic.com">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
@@ -20,6 +21,11 @@
 	<!-- TODO: defer loading tracky-mouse.css -->
 	<!-- <link rel="preload" href="core/tracky-mouse.css" as="style"> -->
 	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
+		rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
@@ -254,7 +260,7 @@
 				};
 			</script>
 		</div>
-		<h3 style="font-weight: normal; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
+		<h3 style="font-weight: 100; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
 			Archery Practice Area
 			<!-- 🏹 -->
 			<!-- Could be nice to represent the bow and arrow, but an emoji isn't cutting it for me. -->
