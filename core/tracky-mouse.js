@@ -2331,15 +2331,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
 				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
-				const dx = targetX - mouseX;
-				const dy = targetY - mouseY;
+				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
+				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
 				// Slow down movement away from target.
-				// For X, mouseX -= deltaX... so we look for matching signs.
-				if (deltaX * dx > 0) {
+				if (deltaX * deltaXToMatchTilt < 0) {
 					deltaX *= 1 - tiltInfluence;
 				}
-				// For Y, mouseY += deltaY... so we look for opposite signs.
-				if (deltaY * dy < 0) {
+				if (deltaY * deltaYToMatchTilt < 0) {
 					deltaY *= 1 - tiltInfluence;
 				}
 
@@ -2350,8 +2348,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				// and choose whether it should overlap the slowing down behavior ramp,
 				// or if that should be rescaled to fit in the lower range, unless they're separate settings.
 				if (tiltInfluence == 1) {
-					deltaX = (mouseX - targetX) / screenWidth;
-					deltaY = (targetY - mouseY) / screenHeight;
+					deltaX = deltaXToMatchTilt;
+					deltaY = deltaYToMatchTilt;
 				}
 			}
 
