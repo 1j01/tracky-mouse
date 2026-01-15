@@ -438,8 +438,8 @@ const createWindow = () => {
 	const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
+	let primaryDisplay = screen.getPrimaryDisplay();
 	const updateDwellClicking = () => {
-		const primaryDisplay = screen.getPrimaryDisplay();
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		screenOverlayWindow.webContents.send('overlayUpdate', {
 			isEnabled: enabled && regainControlTimeout === null,
@@ -599,7 +599,6 @@ const createWindow = () => {
 	});
 
 	// Set up the screen overlay window.
-	const primaryDisplay = screen.getPrimaryDisplay();
 	screenOverlayWindow = new BrowserWindow({
 		fullscreen: true, // needed on Windows 11, since it seems to constrain the size to the work area otherwise
 		x: primaryDisplay.bounds.x,
@@ -651,6 +650,7 @@ const createWindow = () => {
 	});
 
 	screen.on('display-metrics-changed', () => {
+		primaryDisplay = screen.getPrimaryDisplay();
 		updateDwellClicking();
 	});
 
