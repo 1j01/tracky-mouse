@@ -1055,14 +1055,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				setOptions({ globalSettings: { cameraDeviceId } });
 			},
 			handleSettingChange: () => {
-				// Restart camera (and request access if not already active)
-				if (cameraVideo.srcObject) {
-					// Stop current stream
-					const tracks = cameraVideo.srcObject.getTracks();
-					for (const track of tracks) {
-						track.stop();
-					}
-				}
 				TrackyMouse.useCamera();
 			}
 		},
@@ -1237,7 +1229,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			populateCameraList();
 			reset();
+
+			// Stop old camera stream
+			if (cameraVideo.srcObject) {
+				for (const track of cameraVideo.srcObject.getTracks()) {
+					track.stop();
+				}
+			}
+
 			try {
+				// Code smell: feature detection with fallback
+				// that won't work with other code looking for `srcObject`
 				if ('srcObject' in cameraVideo) {
 					cameraVideo.srcObject = stream;
 				} else {
