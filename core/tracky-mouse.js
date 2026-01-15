@@ -1193,7 +1193,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	clmTracker.init();
 	var clmTrackingStarted = false;
 
-	// (Should this be included in reset?)
 	const stopCameraStream = () => {
 		if (cameraVideo.srcObject) {
 			for (const track of cameraVideo.srcObject.getTracks()) {
@@ -1204,6 +1203,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 
 	const reset = () => {
+		stopCameraStream();
 		clmTrackingStarted = false;
 		cameraFramesSinceFacemeshUpdate.length = 0;
 		if (facemeshPrediction) {
@@ -1239,7 +1239,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			populateCameraList();
 			reset();
-			stopCameraStream();
 
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
@@ -1284,7 +1283,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
 		reset();
-		stopCameraStream();
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
 	};
@@ -2354,10 +2352,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// (Would also be easy to maintain backwards compatibility while switching to using a class,
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
 
-			stopCameraStream();
-
-			// not sure this helps
+			// stopping camera stream is important, not sure about other resetting
 			reset();
+
 			// just in case there's any async code looking at whether it's paused
 			paused = true;
 
