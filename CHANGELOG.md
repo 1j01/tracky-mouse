@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Mirror** setting is now grouped under Video.
 - The yellow status text at the bottom of the screen now avoids the taskbar on Windows (and theoretically the dock on macOS.)
+- The screen overlay will now adapt to screen resolution changes.
 
 ### Added
 

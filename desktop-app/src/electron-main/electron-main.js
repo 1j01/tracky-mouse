@@ -651,6 +651,14 @@ const createWindow = () => {
 
 	screen.on('display-metrics-changed', () => {
 		primaryDisplay = screen.getPrimaryDisplay();
+		if (screenOverlayWindow) {
+			screenOverlayWindow.setBounds({
+				x: primaryDisplay.bounds.x,
+				y: primaryDisplay.bounds.y,
+				width: primaryDisplay.bounds.width,
+				height: primaryDisplay.bounds.height,
+			});
+		}
 		updateDwellClicking();
 	});
 
