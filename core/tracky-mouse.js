@@ -2093,15 +2093,50 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					const textLineHeight = 25;
 					const textYStart = -10;
 
+
 					const pitchText = `Pitch: ${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
 					const yawText = `Yaw:   ${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
 					const rollText = `Roll:  ${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
-					ctx.strokeText(pitchText, textX, textYStart);
-					ctx.fillText(pitchText, textX, textYStart);
-					ctx.strokeText(yawText, textX, textYStart + textLineHeight);
-					ctx.fillText(yawText, textX, textYStart + textLineHeight);
-					ctx.strokeText(rollText, textX, textYStart + textLineHeight * 2);
-					ctx.fillText(rollText, textX, textYStart + textLineHeight * 2);
+
+					const boxWidth = Math.max(
+						ctx.measureText(pitchText).width,
+						ctx.measureText(yawText).width,
+						ctx.measureText(rollText).width
+					);
+					const boxHeight = textLineHeight * 3;
+					const padding = 10;
+
+					// Calculate screen coordinates for the text box
+					let screenX = mirror ? canvas.width - cx : cx;
+					let screenY = cy;
+
+					// Nominal position relative to head center
+					let textScreenX = screenX + textX;
+					let textScreenY = screenY + textYStart;
+
+					// Clamp to canvas bounds
+					textScreenX = Math.max(padding, Math.min(canvas.width - boxWidth - padding, textScreenX));
+					textScreenY = Math.max(textLineHeight, Math.min(canvas.height - boxHeight + textLineHeight, textScreenY));
+
+					ctx.save();
+					if (mirror) {
+						ctx.scale(-1, 1);
+					}
+
+					const screenNoseX = mirror ? canvas.width - cx : cx;
+					const screenNoseY = cy;
+
+					const dx = textScreenX - screenNoseX;
+					const dy = textScreenY - screenNoseY;
+
+					ctx.strokeText(pitchText, dx, dy);
+					ctx.fillText(pitchText, dx, dy);
+					ctx.strokeText(yawText, dx, dy + textLineHeight);
+					ctx.fillText(yawText, dx, dy + textLineHeight);
+					ctx.strokeText(rollText, dx, dy + textLineHeight * 2);
+					ctx.fillText(rollText, dx, dy + textLineHeight * 2);
+
+					ctx.restore();
 
 					// Visualize head direction
 					const vUp = { x: top.x - chin.x, y: top.y - chin.y, z: top.z - chin.z }; // Up vector (Chin to Top)
