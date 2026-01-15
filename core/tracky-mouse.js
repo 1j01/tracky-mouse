@@ -1237,17 +1237,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				}
 			}
 
-			try {
-				// Code smell: feature detection with fallback
-				// that won't work with other code looking for `srcObject`
-				if ('srcObject' in cameraVideo) {
-					cameraVideo.srcObject = stream;
-				} else {
-					cameraVideo.src = window.URL.createObjectURL(stream);
-				}
-			} catch (_err) {
-				cameraVideo.src = stream;
-			}
+			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 			if (!paused) {
