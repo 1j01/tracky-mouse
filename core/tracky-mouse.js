@@ -1193,6 +1193,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	clmTracker.init();
 	var clmTrackingStarted = false;
 
+	// (Should this be included in reset?)
+	const stopCameraStream = () => {
+		if (cameraVideo.srcObject) {
+			for (const track of cameraVideo.srcObject.getTracks()) {
+				track.stop();
+			}
+		}
+		cameraVideo.srcObject = null;
+	};
+
 	const reset = () => {
 		clmTrackingStarted = false;
 		cameraFramesSinceFacemeshUpdate.length = 0;
@@ -1229,13 +1239,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			populateCameraList();
 			reset();
-
-			// Stop old camera stream
-			if (cameraVideo.srcObject) {
-				for (const track of cameraVideo.srcObject.getTracks()) {
-					track.stop();
-				}
-			}
+			stopCameraStream();
 
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
@@ -1280,7 +1284,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
 		reset();
-		cameraVideo.srcObject = null;
+		stopCameraStream();
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
 	};
@@ -2350,13 +2354,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// (Would also be easy to maintain backwards compatibility while switching to using a class,
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
 
-			// clean up camera stream
-			if (cameraVideo.srcObject) {
-				for (const track of cameraVideo.srcObject.getTracks()) {
-					track.stop();
-				}
-			}
-			cameraVideo.srcObject = null; // probably pointless
+			stopCameraStream();
 
 			// not sure this helps
 			reset();
