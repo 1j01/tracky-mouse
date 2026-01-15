@@ -74,7 +74,11 @@ electronAPI.onMouseMove((_event, x, y) => {
 let wasDwellClickerEnabled = false;
 electronAPI.onOverlayUpdate((_event, data) => {
 	console.log("onOverlayUpdate", data);
-	const { isEnabled, isManualTakeback, clickingMode, inputFeedback } = data;
+	const { isEnabled, isManualTakeback, clickingMode, inputFeedback, bottomOffset } = data;
+
+	if (typeof bottomOffset === "number") {
+		message.style.bottom = `${bottomOffset}px`;
+	}
 
 	// Other diagnostics in the future would be stuff like:
 	// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49

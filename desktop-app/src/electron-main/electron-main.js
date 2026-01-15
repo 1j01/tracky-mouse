@@ -439,11 +439,14 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
 	const updateDwellClicking = () => {
+		const primaryDisplay = screen.getPrimaryDisplay();
+		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		screenOverlayWindow.webContents.send('overlayUpdate', {
 			isEnabled: enabled && regainControlTimeout === null,
 			isManualTakeback: enabled && regainControlTimeout !== null,
 			clickingMode,
 			inputFeedback,
+			bottomOffset,
 		});
 	};
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
@@ -647,6 +650,10 @@ const createWindow = () => {
 	});
 	screenOverlayWindow.on('closed', () => {
 		screenOverlayWindow = null;
+	});
+
+	screen.on('display-metrics-changed', () => {
+		updateDwellClicking();
 	});
 
 	// screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
