@@ -2342,6 +2342,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				if (deltaY * dy < 0) {
 					deltaY *= 1 - tiltInfluence;
 				}
+
+				// TODO: ramp up to this behavior towards the end of the slider
+				// (or consider having multiple settings)
+				// Could try having it increase movement towards the target in order to gradate the behavior.
+				// Might have to pick an arbitrary point on the slider to start ramping up,
+				// and choose whether it should overlap the slowing down behavior ramp,
+				// or if that should be rescaled to fit in the lower range, unless they're separate settings.
+				if (tiltInfluence == 1) {
+					deltaX = (mouseX - targetX) / screenWidth;
+					deltaY = (targetY - mouseY) / screenHeight;
+				}
 			}
 
 			// Mimicking eViacam's "Motion Threshold" implementation
