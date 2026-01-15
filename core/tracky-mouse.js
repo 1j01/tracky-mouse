@@ -841,6 +841,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var pointsBasedOnFaceInViewConfidence = 0;
 	var blinkInfo;
 	var mouthInfo;
+	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
 
 	var pointTracker;
 
@@ -1815,6 +1816,31 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return true;
 						});
 
+						const keypoints = facemeshPrediction.keypoints;
+						if (keypoints) {
+							const top = keypoints[10];
+							const chin = keypoints[152];
+							const left = keypoints[454]; // Subject left (Image right)
+							const right = keypoints[234]; // Subject right (Image left)
+
+							if (top && chin && left && right) {
+								// Pitch (X-axis rotation)
+								const pitchDy = chin.y - top.y;
+								const pitchDz = chin.z - top.z;
+								headTilt.pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
+
+								// Yaw (Y-axis rotation)
+								const yawDx = left.x - right.x;
+								const yawDz = left.z - right.z;
+								headTilt.yaw = Math.atan2(yawDz, Math.abs(yawDx));
+
+								// Roll (Z-axis rotation)
+								const rollDy = left.y - right.y;
+								const rollDx = left.x - right.x;
+								headTilt.roll = Math.atan2(rollDy, rollDx);
+							}
+						}
+
 						let clickButton = -1;
 						if (clickingMode === "blink") {
 							// Note: currently head tilt matters a lot, but ideally it should not.
@@ -2049,32 +2075,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				const nose = keypoints[1];
 
 				if (top && chin && left && right && nose) {
-					// Pitch (X-axis rotation)
-					// Vector Top -> Chin (approx vertical axis of head)
-					const pitchDy = chin.y - top.y;
-					const pitchDz = chin.z - top.z;
-					// Pitch is rotation around X axis.
-					// At rest (0 pitch), dy is large positive, dz is ~0.
-					// We want pitch to capture "looking up/down".
-					// Looking down: chin moves back (z increases). dz > 0.
-					// Looking up: chin moves forward (z decreases). dz < 0.
-					const pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
-
-					// Yaw (Y-axis rotation)
-					// Vector Right -> Left (approx horizontal axis of head)
-					const yawDx = left.x - right.x;
-					const yawDz = left.z - right.z;
-					// Yaw is rotation around Y axis.
-					// At rest (0 yaw), dx is large positive, dz is ~0.
-					// Looking left (subject left, camera right): left moves back (z increases), right moves forward. dz > 0.
-					// Looking right: left moves forward, right moves back. dz < 0.
-					const yaw = Math.atan2(yawDz, Math.abs(yawDx));
-
-					// Roll (Z-axis rotation)
-					// Vector Right -> Left
-					const rollDy = left.y - right.y;
-					const rollDx = left.x - right.x;
-					const roll = Math.atan2(rollDy, rollDx);
 
 					const cx = nose.x;
 					const cy = nose.y;
@@ -2093,10 +2093,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					const textLineHeight = 25;
 					const textYStart = -10;
 
-					const pitchText = `Pitch: ${(pitch * 180 / Math.PI).toFixed(1)}°`;
-					const yawText = `Yaw:   ${(yaw * 180 / Math.PI).toFixed(1)}°`;
-					const rollText = `Roll:  ${(roll * 180 / Math.PI).toFixed(1)}°`;
-
+					const pitchText = `Pitch: ${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
+					const yawText = `Yaw:   ${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
+					const rollText = `Roll:  ${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
 					ctx.strokeText(pitchText, textX, textYStart);
 					ctx.fillText(pitchText, textX, textYStart);
 					ctx.strokeText(yawText, textX, textYStart + textLineHeight);
