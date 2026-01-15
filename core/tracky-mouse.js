@@ -609,6 +609,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							<span class="tracky-mouse-max-label">Steady</span>
 						</span>
 					</label>
+					<label class="tracky-mouse-control-row">
+						<span class="tracky-mouse-label-text">Tilt influence</span>
+						<span class="tracky-mouse-labeled-slider">
+							<input type="range" min="0" max="100" value="0" class="tracky-mouse-tilt-influence">
+							<span class="tracky-mouse-min-label">Optical flow</span>
+							<span class="tracky-mouse-max-label">Head tilt</span>
+						</span>
+					</label>
 				</div>
 			</details>
 			<!--
@@ -731,6 +739,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
 	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
 	var minDistanceSlider = uiContainer.querySelector(".tracky-mouse-min-distance");
+	var tiltInfluenceSlider = uiContainer.querySelector(".tracky-mouse-tilt-influence");
 	var delayBeforeDraggingSlider = uiContainer.querySelector(".tracky-mouse-delay-before-dragging");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
@@ -785,6 +794,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var sensitivityY;
 	var acceleration;
 	var minDistance;
+	var tiltInfluence;
 	var delayBeforeDragging;
 	var buttonStates = {
 		left: false,
@@ -922,6 +932,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				minDistance = settings.globalSettings.headTrackingMinDistance;
 				minDistanceSlider.value = minDistance;
 			}
+			if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
+				tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
+				tiltInfluenceSlider.value = tiltInfluence * 100;
+			}
 			if (settings.globalSettings.delayBeforeDragging !== undefined) {
 				delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
 				delayBeforeDraggingSlider.value = delayBeforeDragging;
@@ -957,6 +971,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				headTrackingSensitivityY: sensitivityY,
 				headTrackingAcceleration: acceleration,
 				headTrackingMinDistance: minDistance,
+				headTrackingTiltInfluence: tiltInfluence,
 				delayBeforeDragging: delayBeforeDragging,
 				// TODO:
 				// eyeTrackingSensitivityX,
@@ -1026,6 +1041,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			},
 			save: () => {
 				setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+			}
+		},
+		{
+			control: tiltInfluenceSlider,
+			loadValueFromControl: () => {
+				tiltInfluence = tiltInfluenceSlider.value / 100;
+			},
+			save: () => {
+				setOptions({ globalSettings: { headTrackingTiltInfluence: tiltInfluence } });
 			}
 		},
 		{

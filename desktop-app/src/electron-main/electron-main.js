@@ -205,6 +205,7 @@ let sensitivityX = undefined;
 let sensitivityY = undefined;
 let acceleration = undefined;
 let minDistance = undefined;
+let tiltInfluence = undefined;
 let delayBeforeDragging = undefined;
 let startEnabled = undefined;
 let runAtLogin = undefined;
@@ -265,6 +266,7 @@ function serializeSettings() {
 			headTrackingSensitivityY: sensitivityY,
 			headTrackingAcceleration: acceleration,
 			headTrackingMinDistance: minDistance,
+			headTrackingTiltInfluence: tiltInfluence,
 			delayBeforeDragging,
 			// TODO:
 			// eyeTrackingSensitivityX,
@@ -304,6 +306,9 @@ function deserializeSettings(settings) {
 		}
 		if (settings.globalSettings.headTrackingMinDistance !== undefined) {
 			minDistance = settings.globalSettings.headTrackingMinDistance;
+		}
+		if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
+			tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
 		}
 		if (settings.globalSettings.delayBeforeDragging !== undefined) {
 			delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
