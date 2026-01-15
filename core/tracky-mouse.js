@@ -633,6 +633,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							<option value="dwell">Dwell to click</option>
 							<option value="blink">Wink to click</option>
 							<option value="open-mouth">Open mouth to click</option>
+							<option value="smile">Smile to click</option>
+							<option value="raise-eyebrows">Raise eyebrows to click</option>
 							<option value="off">Off</option>
 						</select>
 					</div>
@@ -831,6 +833,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var pointsBasedOnFaceInViewConfidence = 0;
 	var blinkInfo;
 	var mouthInfo;
+	var smileInfo;
+	var eyebrowsInfo;
 
 	var pointTracker;
 
@@ -1957,6 +1961,74 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							mouthInfo = null;
 						}
 
+						if (clickingMode === "smile") {
+							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
+							const headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							const corners = [annotations.lipsUpperInner[0], annotations.lipsUpperInner[annotations.lipsUpperInner.length - 1]];
+							const mouthWidth = Math.hypot(
+								corners[0][0] - corners[1][0],
+								corners[0][1] - corners[1][1]
+							);
+							
+							const thresholdHigh = headSize * 0.45;
+							const thresholdLow = headSize * 0.40;
+							
+							const smiling = mouthWidth > (smileInfo?.smiling ? thresholdLow : thresholdHigh);
+							if (smiling) {
+								clickButton = 0;
+							}
+							smileInfo = {
+								smiling,
+								corners,
+								mouthWidth: mouthWidth / headSize,
+							};
+						} else {
+							smileInfo = null;
+						}
+
+						if (clickingMode === "raise-eyebrows") {
+							const headSize = Math.hypot(
+								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+							);
+							
+							const leftEyebrow = annotations.leftEyebrowUpper;
+							const rightEyebrow = annotations.rightEyebrowUpper;
+							const leftEye = annotations.leftEyeUpper0;
+							const rightEye = annotations.rightEyeUpper0;
+
+							const avgY = (points) => points.reduce((sum, p) => sum + p[1], 0) / points.length;
+							
+							// Distance between eyebrow and eye (vertical)
+							// Eyebrows are typically above eyes, so smaller Y value.
+							const leftDist = avgY(leftEye) - avgY(leftEyebrow);
+							const rightDist = avgY(rightEye) - avgY(rightEyebrow);
+							const avgDist = (leftDist + rightDist) / 2;
+							
+							const normalizedDist = avgDist / headSize;
+							
+							const thresholdHigh = 0.15;
+							const thresholdLow = 0.12;
+							
+							const eyebrowsRaised = normalizedDist > (eyebrowsInfo?.eyebrowsRaised ? thresholdLow : thresholdHigh);
+							if (eyebrowsRaised) {
+								clickButton = 0;
+							}
+							eyebrowsInfo = {
+								eyebrowsRaised,
+								leftEyebrow,
+								rightEyebrow,
+								leftEye,
+								rightEye,
+								eyebrowDistance: normalizedDist,
+							};
+						} else {
+							eyebrowsInfo = null;
+						}
+
 						// TODO: implement these clicking modes for the web library version
 						// and unhide the "Clicking mode" setting in the UI
 						// https://github.com/1j01/tracky-mouse/issues/72
@@ -1995,6 +2067,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				headNotFound: !face && !facemeshPrediction,
 				blinkInfo,
 				mouthInfo,
+				smileInfo,
+				eyebrowsInfo,
 			});
 		}
 
@@ -2095,6 +2169,39 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.lineTo(mouthWidth / 2, extent);
 			}
 			ctx.stroke();
+			ctx.restore();
+		}
+
+		if (clickingMode === "smile" && smileInfo) {
+			ctx.save();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = smileInfo.smiling ? "red" : "cyan";
+			ctx.beginPath();
+			ctx.moveTo(smileInfo.corners[0][0], smileInfo.corners[0][1]);
+			ctx.lineTo(smileInfo.corners[1][0], smileInfo.corners[1][1]);
+			ctx.stroke();
+			ctx.restore();
+		}
+
+		if (clickingMode === "raise-eyebrows" && eyebrowsInfo) {
+			ctx.save();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = eyebrowsInfo.eyebrowsRaised ? "red" : "cyan";
+			
+			const drawLine = (p1, p2) => {
+				const avgX1 = p1.reduce((sum, p) => sum + p[0], 0) / p1.length;
+				const avgY1 = p1.reduce((sum, p) => sum + p[1], 0) / p1.length;
+				const avgX2 = p2.reduce((sum, p) => sum + p[0], 0) / p2.length;
+				const avgY2 = p2.reduce((sum, p) => sum + p[1], 0) / p2.length;
+				ctx.beginPath();
+				ctx.moveTo(avgX1, avgY1);
+				ctx.lineTo(avgX2, avgY2);
+				ctx.stroke();
+			};
+			
+			drawLine(eyebrowsInfo.leftEyebrow, eyebrowsInfo.leftEye);
+			drawLine(eyebrowsInfo.rightEyebrow, eyebrowsInfo.rightEye);
+			
 			ctx.restore();
 		}
 
