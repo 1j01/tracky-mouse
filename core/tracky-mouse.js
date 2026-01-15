@@ -2321,19 +2321,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var deltaY = accelerate(movementY * sensitivityY, distance);
 
 			if (tiltInfluence > 0) {
-				const yawRange = 30 * Math.PI / 180;
-				const pitchUpRange = 10 * Math.PI / 180;
-				const pitchDownRange = 15 * Math.PI / 180;
+				const yawRange = [-30 * Math.PI / 180, 30 * Math.PI / 180];
+				const pitchRange = [-10 * Math.PI / 180, 15 * Math.PI / 180];
 
-				const targetX = screenWidth * (0.5 - (headTilt.yaw / yawRange) / 2);
-
-				let relativePitch;
-				if (headTilt.pitch < 0) {
-					relativePitch = headTilt.pitch / pitchUpRange;
-				} else {
-					relativePitch = headTilt.pitch / pitchDownRange;
+				function normalize(value, min, max) {
+					return (value - min) / (max - min);
 				}
-				const targetY = screenHeight * (0.5 + relativePitch / 2);
+
+				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
+				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
 				const dx = targetX - mouseX;
 				const dy = targetY - mouseY;
