@@ -44,6 +44,17 @@ header .logo {
 	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
 }
 
+footer {
+	text-align: center;
+}
+
+footer nav {
+	display: flex;
+	justify-content: center;
+	gap: 1em;
+	margin-top: 2em;
+}
+
 .page-section {
 	margin-top: 3em;
 	margin-bottom: 3em;

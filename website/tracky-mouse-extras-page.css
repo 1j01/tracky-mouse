@@ -1,0 +1,18 @@
+.wallpapers img {
+	max-height: 200px;
+	max-width: 200px;
+	margin: 10px;
+}
+
+.wallpapers a {
+	/* avoid underline on whitespace */
+	display: inline-block;
+}
+
+.page-section::after {
+	content: '';
+	display: block;
+	height: 1px;
+	background-color: rgb(80, 80, 80);
+	margin-top: 2em;
+}
