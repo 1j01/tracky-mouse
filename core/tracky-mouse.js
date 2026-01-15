@@ -2320,6 +2320,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var deltaX = accelerate(movementX * sensitivityX, distance);
 			var deltaY = accelerate(movementY * sensitivityY, distance);
 
+			if (tiltInfluence > 0) {
+				const range = 0.5; // ~30 degrees
+				const targetX = screenWidth * (0.5 - (headTilt.yaw / range) / 2);
+				const targetY = screenHeight * (0.5 + (headTilt.pitch / range) / 2);
+				const dx = targetX - mouseX;
+				const dy = targetY - mouseY;
+				// Slow down movement away from target.
+				// For X, mouseX -= deltaX... so we look for matching signs.
+				if (deltaX * dx > 0) {
+					deltaX *= 1 - tiltInfluence;
+				}
+				// For Y, mouseY += deltaY... so we look for opposite signs.
+				if (deltaY * dy < 0) {
+					deltaY *= 1 - tiltInfluence;
+				}
+			}
+
 			// Mimicking eViacam's "Motion Threshold" implementation
 			// https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L310-L312
 			// (a threshold on instantaneous Manhattan distance, or in other words, x and y speed, separately)
