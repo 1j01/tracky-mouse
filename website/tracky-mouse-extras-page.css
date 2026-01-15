@@ -16,6 +16,14 @@
 	background-color: rgb(80, 80, 80);
 	margin-top: 2em;
 
+.copy-to-clipboard {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
 .copy-to-clipboard::before {
 	content: "";
 	display: inline-block;
