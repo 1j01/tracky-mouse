@@ -180,7 +180,7 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
-const screen = require('electron').screen;
+const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
 function updateScreenScaleFactor() {
@@ -599,8 +599,6 @@ const createWindow = () => {
 	});
 
 	// Set up the screen overlay window.
-	// We cannot require the screen module until the app is ready.
-	const { screen } = require('electron');
 	const primaryDisplay = screen.getPrimaryDisplay();
 	screenOverlayWindow = new BrowserWindow({
 		fullscreen: true, // needed on Windows 11, since it seems to constrain the size to the work area otherwise
