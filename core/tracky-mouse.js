@@ -1967,23 +1967,29 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
-							const corners = [annotations.lipsUpperInner[0], annotations.lipsUpperInner[annotations.lipsUpperInner.length - 1]];
-							const mouthWidth = Math.hypot(
-								corners[0][0] - corners[1][0],
-								corners[0][1] - corners[1][1]
-							);
+							// Use lipsUpperInner for computing smile score based on curvature/uplift of corners
+							// 0 is left corner, 10 is right corner, 5 is center
+							const corners = [annotations.lipsUpperInner[0], annotations.lipsUpperInner[10]];
+							const center = annotations.lipsUpperInner[5];
 							
-							const thresholdHigh = headSize * 0.45;
-							const thresholdLow = headSize * 0.40;
+							const avgCornerY = (corners[0][1] + corners[1][1]) / 2;
+							const centerY = center[1];
 							
-							const smiling = mouthWidth > (smileInfo?.smiling ? thresholdLow : thresholdHigh);
+							// Positive value means corners are higher (lower Y) than center, i.e. a smile
+							const smileAmount = centerY - avgCornerY;
+							
+							const thresholdHigh = headSize * 0.1;
+							const thresholdLow = headSize * 0.08;
+							
+							const smiling = smileAmount > (smileInfo?.smiling ? thresholdLow : thresholdHigh);
 							if (smiling) {
 								clickButton = 0;
 							}
 							smileInfo = {
 								smiling,
 								corners,
-								mouthWidth: mouthWidth / headSize,
+								center,
+								smileScore: smileAmount / headSize,
 							};
 						} else {
 							smileInfo = null;
@@ -2010,8 +2016,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							
 							const normalizedDist = avgDist / headSize;
 							
-							const thresholdHigh = 0.15;
-							const thresholdLow = 0.12;
+							const thresholdHigh = 0.25;
+							const thresholdLow = 0.20;
 							
 							const eyebrowsRaised = normalizedDist > (eyebrowsInfo?.eyebrowsRaised ? thresholdLow : thresholdHigh);
 							if (eyebrowsRaised) {
@@ -2176,10 +2182,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = smileInfo.smiling ? "red" : "cyan";
+			
+			const mouthCenterX = smileInfo.center[0];
+			const mouthCenterY = smileInfo.center[1];
+			// Un-rotated coordinates of corners (approximate for drawing line)
+			// We want to draw the vertical distance from the center to the line connecting corners.
+			
 			ctx.beginPath();
 			ctx.moveTo(smileInfo.corners[0][0], smileInfo.corners[0][1]);
 			ctx.lineTo(smileInfo.corners[1][0], smileInfo.corners[1][1]);
 			ctx.stroke();
+
+			// Draw vertical line indicating the metric (uplift)
+			const avgCornerY = (smileInfo.corners[0][1] + smileInfo.corners[1][1]) / 2;
+			const avgCornerX = (smileInfo.corners[0][0] + smileInfo.corners[1][0]) / 2;
+			
+			ctx.beginPath();
+			ctx.moveTo(mouthCenterX, mouthCenterY);
+			ctx.lineTo(avgCornerX, avgCornerY); 
+			// Note: avgCornerX might be slightly off from mouthCenterX if mouth is asymmetric, 
+			// but for visualization it shows the verticality.
+			ctx.stroke();
+
 			ctx.restore();
 		}
 
