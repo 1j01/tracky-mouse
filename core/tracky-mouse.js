@@ -1054,7 +1054,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			save: () => {
 				setOptions({ globalSettings: { cameraDeviceId } });
 			},
-			handleSettingChange() {
+			handleSettingChange: () => {
 				// Restart camera (and request access if not already active)
 				if (cameraVideo.srcObject) {
 					// Stop current stream
