@@ -2333,23 +2333,26 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
 				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
-				// Slow down movement away from target.
+				// Slow down movement away from target, speed up movement towards target
+				// It might be worth trying separate ramps for slowing and speeding up,
+				// or other functions, e.g. exponential or sigmoid, to see if they feel better.
+				// Can use the normalize function to choose where on the slider these effects kick in.
+				// Could make these different settings, which would make it less arbitrary,
+				// but not necessarily easier for the average user to tune; at some point you say
+				// "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
+				// This setting in particular is already probably hard to understand, so unless
+				// splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
+				const slowingInfluence = tiltInfluence;
+				const speedingInfluence = Math.max(0, Math.min(1, normalize(tiltInfluence, 0.8, 1)));
 				if (deltaX * deltaXToMatchTilt < 0) {
-					deltaX *= 1 - tiltInfluence;
+					deltaX *= 1 - slowingInfluence;
+				} else {
+					deltaX += (deltaXToMatchTilt - deltaX) * speedingInfluence;
 				}
 				if (deltaY * deltaYToMatchTilt < 0) {
-					deltaY *= 1 - tiltInfluence;
-				}
-
-				// TODO: ramp up to this behavior towards the end of the slider
-				// (or consider having multiple settings)
-				// Could try having it increase movement towards the target in order to gradate the behavior.
-				// Might have to pick an arbitrary point on the slider to start ramping up,
-				// and choose whether it should overlap the slowing down behavior ramp,
-				// or if that should be rescaled to fit in the lower range, unless they're separate settings.
-				if (tiltInfluence == 1) {
-					deltaX = deltaXToMatchTilt;
-					deltaY = deltaYToMatchTilt;
+					deltaY *= 1 - slowingInfluence;
+				} else {
+					deltaY += (deltaYToMatchTilt - deltaY) * speedingInfluence;
 				}
 			}
 
