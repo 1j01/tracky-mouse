@@ -1,4 +1,4 @@
-/* global jsfeat, Stats, clm, faceLandmarksDetection */
+/* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -27,6 +27,7 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/OneEuroFilter.js`,
 	];
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
@@ -1022,6 +1023,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var blinkInfo;
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
+	var headTiltFilters = { pitch: null, yaw: null, roll: null };
 	// ## State related to switching between head trackers
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -1833,17 +1835,37 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								// Pitch (X-axis rotation)
 								const pitchDy = chin.y - top.y;
 								const pitchDz = chin.z - top.z;
-								headTilt.pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
+								let pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
 
 								// Yaw (Y-axis rotation)
 								const yawDx = left.x - right.x;
 								const yawDz = left.z - right.z;
-								headTilt.yaw = Math.atan2(yawDz, Math.abs(yawDx));
+								let yaw = Math.atan2(yawDz, Math.abs(yawDx));
 
 								// Roll (Z-axis rotation)
 								const rollDy = left.y - right.y;
 								const rollDx = left.x - right.x;
-								headTilt.roll = Math.atan2(rollDy, rollDx);
+								let roll = Math.atan2(rollDy, rollDx);
+
+								if (typeof OneEuroFilter !== "undefined") {
+									const timestamp = performance.now() / 1000;
+									if (!headTiltFilters.pitch) {
+										const freq = 60;
+										const mincutoff = 0.0;
+										const beta = 5.0;
+										const dcutoff = 0.7;
+										for (const axis of ["pitch", "yaw", "roll"]) {
+											headTiltFilters[axis] = new OneEuroFilter(freq, mincutoff, beta, dcutoff);
+										}
+									}
+									pitch = headTiltFilters.pitch.filter(pitch, timestamp);
+									yaw = headTiltFilters.yaw.filter(yaw, timestamp);
+									roll = headTiltFilters.roll.filter(roll, timestamp);
+								}
+
+								headTilt.pitch = pitch;
+								headTilt.yaw = yaw;
+								headTilt.roll = roll;
 							}
 						}
 

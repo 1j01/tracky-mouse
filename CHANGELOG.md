@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- There's a **new dependency** (optional but recommended). If you are using `loadDependencies()`, it will be included automatically. If you are including dependencies manually, you can add it with:
+  ```html
+  <script src="node_modules/tracky-mouse/lib/OneEuroFilter.js"></script>
+  ```
+  This adds a One Euro Filter to smooth out head tilt values, which can be very jittery otherwise.
 - **Mirror** setting is now grouped under Video.
 - The yellow status text at the bottom of the screen now avoids the taskbar on Windows and the dock on macOS.
 - The screen overlay will now adapt to screen resolution changes.
@@ -17,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Camera source** setting. You can now select your preferred camera from a dropdown.
 - **Tilt influence** slider. This lets you blend between point tracking and absolute head tilt. At 100% it will use only head tilt. In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) speeding up movement that is moving towards it.
-  - Note: this desperately needs smoothing on the head tilt. I plan to add this before the next release, possibly using One Euro Filter.
 - Added a new [Extras](https://trackymouse.js.org/extras) page to the website, with wallpaper downloads and text art.
 
 ### Fixed

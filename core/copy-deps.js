@@ -23,4 +23,6 @@ fs.copyFileSync("node_modules/@mediapipe/face_mesh/face_mesh_solution_simd_wasm_
 fs.copyFileSync("node_modules/@mediapipe/face_mesh/face_mesh_solution_wasm_bin.js", "lib/face_mesh/face_mesh_solution_wasm_bin.js");
 fs.copyFileSync("node_modules/@mediapipe/face_mesh/face_mesh_solution_wasm_bin.wasm", "lib/face_mesh/face_mesh_solution_wasm_bin.wasm");
 
+fs.copyFileSync("node_modules/@david18284/one-euro-filter/dist/OneEuroFilter.js", "lib/OneEuroFilter.js");
+
 console.log("Dependencies copied successfully!");

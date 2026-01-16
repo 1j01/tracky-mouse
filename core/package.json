@@ -48,6 +48,7 @@
     "lib/"
   ],
   "devDependencies": {
+    "@david18284/one-euro-filter": "^1.0.3",
     "@mediapipe/face_mesh": "^0.4.1633559619",
     "@tensorflow-models/face-landmarks-detection": "^1.0.6"
   },
