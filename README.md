@@ -78,9 +78,10 @@ and I decided to do them one better and build it as an official feature, with dw
 To test these accessibility features properly, I needed a facial mouse, but eye trackers are expensive, so I tried looking for head tracking software, and found eViacam, but... either it didn't work, or at some point it stopped working on my computer.
 
 - eViacam wasn't working on my computer.
-- There's not that much facial mouse software out there, especially cross-platform, and I think it's good to have options.
+- I didn't find there to be that much facial mouse software out there, especially cross-platform, and I want people to have options.
 - I wanted people to be able to try JS Paint's dwell clicking out easily, and an embeddable facial mouse GUI would be great for that.
-- Sometimes my joints hurt a lot and I'd like to relieve strain by switching to an alternative input method, such as head movement. Although I also have serious neck problems, so I don't know what I was thinking. Working on this project I have to use it very sparingly, using a demo video instead of camera input whenever possible for testing.
+- I've had some joint pain issues in the past (although also neck pain, which is a bit ironic)
+- I think I can push forward the state of the art in facial mouse software.
 
 ## Software Architecture
 
