@@ -2333,10 +2333,18 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
 				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
-				// Slow down movement away from target, speed up movement towards target
+				// Slow down movement away from target, speed up movement towards target*
+				// *conditionally. Applies to part of the slider range.
 				// (Hey look, we can reuse the normalize function to choose where on the slider these effects kick in!)
-				// - It might be worth trying other functions, e.g. exponential or sigmoid, to see if they feel better.
-				// - Could make these different settings, which would make it less arbitrary,
+				// - It might be worth trying other functions, e.g. exponential or sigmoid,
+				//   or adding limits to how much it can change to see if it feels better.
+				// - "Speeding up" necessarily incorporates any jitter from the head tilt,
+				//   if we're just lerping towards the target.
+				//   TODO: try incorporating the magnitude of the delta into the influence,
+				//   such that zero delta will not move towards the head tilt target,
+				//   ...unless we're at 100% of the slider? We still want to support
+				//   pure head tilt mode. So I'm not sure what the ramp should be.
+				// - Could make these different settings, which would make it less arbitrary (re: the 80% to 100% influence range),
 				//   but not necessarily easier for the average user to tune; at some point you say
 				//   "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
 				//   This setting in particular is already probably hard to understand, so unless
