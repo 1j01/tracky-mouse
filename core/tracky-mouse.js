@@ -2334,14 +2334,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
 				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
 				// Slow down movement away from target, speed up movement towards target
-				// It might be worth trying separate ramps for slowing and speeding up,
-				// or other functions, e.g. exponential or sigmoid, to see if they feel better.
-				// Can use the normalize function to choose where on the slider these effects kick in.
-				// Could make these different settings, which would make it less arbitrary,
-				// but not necessarily easier for the average user to tune; at some point you say
-				// "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
-				// This setting in particular is already probably hard to understand, so unless
-				// splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
+				// (Hey look, we can reuse the normalize function to choose where on the slider these effects kick in!)
+				// - It might be worth trying other functions, e.g. exponential or sigmoid, to see if they feel better.
+				// - Could make these different settings, which would make it less arbitrary,
+				//   but not necessarily easier for the average user to tune; at some point you say
+				//   "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
+				//   This setting in particular is already probably hard to understand, so unless
+				//   splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
 				const slowingInfluence = tiltInfluence;
 				const speedingInfluence = Math.max(0, Math.min(1, normalize(tiltInfluence, 0.8, 1)));
 				if (deltaX * deltaXToMatchTilt < 0) {
