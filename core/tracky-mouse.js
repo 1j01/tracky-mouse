@@ -2222,10 +2222,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					ctx.restore();
 				}
 			};
-			if (blinkInfo) {
-				drawEye(blinkInfo.leftEye);
-				drawEye(blinkInfo.rightEye);
-			}
+			drawEye(blinkInfo.leftEye);
+			drawEye(blinkInfo.rightEye);
 
 			if (showDebugEyeZoom) {
 				debugEyeCanvas.style.display = "";
@@ -2240,54 +2238,52 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				debugEyeCtx.fillStyle = "black";
 				debugEyeCtx.fillRect(0, 0, debugEyeCanvas.width, debugEyeCanvas.height);
 
-				if (blinkInfo) {
-					const zoom = 5;
-					const drawDebugEye = (eye, offsetX) => {
-						const points = [...eye.upperContour, ...eye.lowerContour];
-						let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-						for (const [x, y] of points) {
-							minX = Math.min(minX, x);
-							minY = Math.min(minY, y);
-							maxX = Math.max(maxX, x);
-							maxY = Math.max(maxY, y);
-						}
-						const cx = (minX + maxX) / 2;
-						const cy = (minY + maxY) / 2;
+				const zoom = 5;
+				const drawDebugEye = (eye, offsetX) => {
+					const points = [...eye.upperContour, ...eye.lowerContour];
+					let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+					for (const [x, y] of points) {
+						minX = Math.min(minX, x);
+						minY = Math.min(minY, y);
+						maxX = Math.max(maxX, x);
+						maxY = Math.max(maxY, y);
+					}
+					const cx = (minX + maxX) / 2;
+					const cy = (minY + maxY) / 2;
 
-						const sw = boxWidth / zoom;
-						const sh = boxHeight / zoom;
-						const sx = cx - sw / 2;
-						const sy = cy - sh / 2;
+					const sw = boxWidth / zoom;
+					const sh = boxHeight / zoom;
+					const sx = cx - sw / 2;
+					const sy = cy - sh / 2;
 
-						debugEyeCtx.drawImage(cameraVideo, sx, sy, sw, sh, offsetX, 0, boxWidth, boxHeight);
+					debugEyeCtx.drawImage(cameraVideo, sx, sy, sw, sh, offsetX, 0, boxWidth, boxHeight);
 
-						debugEyeCtx.save();
+					debugEyeCtx.save();
+					debugEyeCtx.beginPath();
+					debugEyeCtx.rect(offsetX, 0, boxWidth, boxHeight);
+					debugEyeCtx.clip();
+
+					debugEyeCtx.translate(offsetX, 0);
+					debugEyeCtx.scale(zoom, zoom);
+					debugEyeCtx.translate(-sx, -sy);
+
+					debugEyeCtx.lineWidth = 1 / zoom * 2;
+					debugEyeCtx.strokeStyle = "lime";
+
+					for (const contour of [eye.upperContour, eye.lowerContour]) {
 						debugEyeCtx.beginPath();
-						debugEyeCtx.rect(offsetX, 0, boxWidth, boxHeight);
-						debugEyeCtx.clip();
-
-						debugEyeCtx.translate(offsetX, 0);
-						debugEyeCtx.scale(zoom, zoom);
-						debugEyeCtx.translate(-sx, -sy);
-
-						debugEyeCtx.lineWidth = 1 / zoom * 2;
-						debugEyeCtx.strokeStyle = "lime";
-
-						for (const contour of [eye.upperContour, eye.lowerContour]) {
-							debugEyeCtx.beginPath();
-							for (let i = 0; i < contour.length; i++) {
-								const [x, y] = contour[i];
-								if (i === 0) debugEyeCtx.moveTo(x, y);
-								else debugEyeCtx.lineTo(x, y);
-							}
-							debugEyeCtx.stroke();
+						for (let i = 0; i < contour.length; i++) {
+							const [x, y] = contour[i];
+							if (i === 0) debugEyeCtx.moveTo(x, y);
+							else debugEyeCtx.lineTo(x, y);
 						}
-						debugEyeCtx.restore();
-					};
+						debugEyeCtx.stroke();
+					}
+					debugEyeCtx.restore();
+				};
 
-					drawDebugEye(blinkInfo.rightEye, 0);
-					drawDebugEye(blinkInfo.leftEye, boxWidth);
-				}
+				drawDebugEye(blinkInfo.rightEye, 0);
+				drawDebugEye(blinkInfo.leftEye, boxWidth);
 			} else {
 				debugEyeCanvas.style.display = "none";
 			}
