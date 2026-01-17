@@ -766,6 +766,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
 	var ctx = canvas.getContext('2d');
 
+	var debugEyeCanvas = document.createElement("canvas");
+	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
+	debugEyeCanvas.style.display = "none";
+	// debugEyeCanvas.style.width = "100%"; // Let it be controlled by CSS or content
+	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
+	var debugEyeCtx = debugEyeCanvas.getContext('2d');
+
 	var pointerEl = document.createElement('div');
 	pointerEl.className = "tracky-mouse-pointer";
 	pointerEl.style.display = "none";
@@ -812,6 +819,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var showDebugEyelidContours = false;
+	var showDebugEyeZoom = true;
 	var mirror;
 	var cameraDeviceId = "";
 	var startEnabled;
@@ -1842,7 +1850,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 
 						let clickButton = -1;
-						if (clickingMode === "blink") {
+						if (clickingMode === "blink" || showDebugEyeZoom || showDebugEyelidContours) {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -2214,8 +2222,75 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					ctx.restore();
 				}
 			};
-			drawEye(blinkInfo.leftEye);
-			drawEye(blinkInfo.rightEye);
+			if (blinkInfo) {
+				drawEye(blinkInfo.leftEye);
+				drawEye(blinkInfo.rightEye);
+			}
+
+			if (showDebugEyeZoom) {
+				debugEyeCanvas.style.display = "";
+				const boxWidth = 150;
+				const boxHeight = 100;
+
+				if (debugEyeCanvas.width !== boxWidth * 2) {
+					debugEyeCanvas.width = boxWidth * 2;
+					debugEyeCanvas.height = boxHeight;
+				}
+
+				debugEyeCtx.fillStyle = "black";
+				debugEyeCtx.fillRect(0, 0, debugEyeCanvas.width, debugEyeCanvas.height);
+
+				if (blinkInfo) {
+					const zoom = 5;
+					const drawDebugEye = (eye, offsetX) => {
+						const points = [...eye.upperContour, ...eye.lowerContour];
+						let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+						for (const [x, y] of points) {
+							minX = Math.min(minX, x);
+							minY = Math.min(minY, y);
+							maxX = Math.max(maxX, x);
+							maxY = Math.max(maxY, y);
+						}
+						const cx = (minX + maxX) / 2;
+						const cy = (minY + maxY) / 2;
+
+						const sw = boxWidth / zoom;
+						const sh = boxHeight / zoom;
+						const sx = cx - sw / 2;
+						const sy = cy - sh / 2;
+
+						debugEyeCtx.drawImage(cameraVideo, sx, sy, sw, sh, offsetX, 0, boxWidth, boxHeight);
+
+						debugEyeCtx.save();
+						debugEyeCtx.beginPath();
+						debugEyeCtx.rect(offsetX, 0, boxWidth, boxHeight);
+						debugEyeCtx.clip();
+
+						debugEyeCtx.translate(offsetX, 0);
+						debugEyeCtx.scale(zoom, zoom);
+						debugEyeCtx.translate(-sx, -sy);
+
+						debugEyeCtx.lineWidth = 1 / zoom * 2;
+						debugEyeCtx.strokeStyle = "lime";
+
+						for (const contour of [eye.upperContour, eye.lowerContour]) {
+							debugEyeCtx.beginPath();
+							for (let i = 0; i < contour.length; i++) {
+								const [x, y] = contour[i];
+								if (i === 0) debugEyeCtx.moveTo(x, y);
+								else debugEyeCtx.lineTo(x, y);
+							}
+							debugEyeCtx.stroke();
+						}
+						debugEyeCtx.restore();
+					};
+
+					drawDebugEye(blinkInfo.rightEye, 0);
+					drawDebugEye(blinkInfo.leftEye, boxWidth);
+				}
+			} else {
+				debugEyeCanvas.style.display = "none";
+			}
 			ctx.restore();
 		}
 		if (clickingMode === "open-mouth" && mouthInfo) {
