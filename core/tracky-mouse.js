@@ -813,11 +813,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var showDebugEyelidContours = false;
 	var showDebugEyeZoom = true;
 	var mirror;
-	var cameraDeviceId = "";
+	var cameraDeviceId;
 	var startEnabled;
 	var runAtLogin;
 	var swapMouseButtons;
-	var clickingMode = 'dwell';
+	var clickingMode;
 
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
