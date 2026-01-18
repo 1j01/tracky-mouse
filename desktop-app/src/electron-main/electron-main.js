@@ -604,8 +604,15 @@ const createWindow = () => {
 	});
 
 	// Set up the screen overlay window.
+	// fullscreen is needed on Windows 11, since it seems to constrain the size to the work area otherwise
+	// fullscreen causes app to crash on macOS 10.14.6 with Xcode 10.3, Electron 20.0.1, Node.js 21.5.0
+	// with:
+	//   2026-01-18 04:58:14.966 Electron[24086:199877] *** Assertion failure in -[ElectronNSWindow titlebarAccessoryViewControllers], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.60.112/AppKit.subproj/NSWindow.m:3439
+	//   [0118/045815.040421:WARNING:process_memory_mac.cc(93)] mach_vm_read(0x7ffee63e9000, 0x2000): (os/kern) invalid address (1)
+	// fullscreen on Linux: unknown, but previously it was enabled, so I'm leaving it as is for now.
+	const fullscreen = process.platform !== 'darwin';
 	screenOverlayWindow = new BrowserWindow({
-		fullscreen: true, // needed on Windows 11, since it seems to constrain the size to the work area otherwise
+		fullscreen,
 		x: primaryDisplay.bounds.x,
 		y: primaryDisplay.bounds.y,
 		width: primaryDisplay.bounds.width,
