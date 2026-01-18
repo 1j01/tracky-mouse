@@ -1,10 +1,19 @@
+const path = require('path');
+const fs = require('fs');
+const abs = (relativePath) => {
+	const absolutePath = path.resolve(__dirname, relativePath);
+	if (!fs.existsSync(absolutePath)) {
+		throw new Error(`File not found: ${absolutePath}`);
+	}
+	return absolutePath;
+};
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",
 	productName: "Tracky Mouse",
 	productDescription: "Hands-free mouse control",
 	genericName: "Facial Mouse",
 	homepage: "https://trackymouse.js.org/",
-	icon: "images/tracky-mouse-logo-512.png",
+	icon: abs("images/tracky-mouse-logo-512.png"),
 	categories: [
 		"Utility",
 	],
@@ -16,7 +25,7 @@ const sharedDebRpmOptions = {
 };
 module.exports = {
 	packagerConfig: {
-		icon: "./images/tracky-mouse-logo",
+		icon: path.resolve(__dirname, "./images/tracky-mouse-logo"),
 		name: "Tracky Mouse",
 		executableName: "tracky-mouse",
 		appBundleId: "io.isaiahodhner.tracky-mouse",
@@ -42,7 +51,7 @@ module.exports = {
 				title: "Tracky Mouse",
 				description: "Hands-free mouse control",
 				iconUrl: "https://raw.githubusercontent.com/1j01/tracky-mouse/4f22321a3f65ecf66d0a9ed431a24a76d547ea4c/images/tracky-mouse-logo-512.png",
-				setupIcon: "./images/tracky-mouse-logo.ico",
+				setupIcon: abs("./images/tracky-mouse-logo.ico"),
 				// loadingGif: "images/install.gif",
 			},
 		},
