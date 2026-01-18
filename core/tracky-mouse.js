@@ -563,144 +563,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
-			<details>
-				<summary>Head Tracking</summary>
-				<div class="tracky-mouse-details-body">
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Horizontal sensitivity</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
-							<span class="tracky-mouse-min-label">Slow</span>
-							<span class="tracky-mouse-max-label">Fast</span>
-						</span>
-					</label>
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Vertical sensitivity</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
-							<span class="tracky-mouse-min-label">Slow</span>
-							<span class="tracky-mouse-max-label">Fast</span>
-						</span>
-					</label>
-					<!-- <label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Smoothing</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
-							<span class="tracky-mouse-min-label"></span>
-							<span class="tracky-mouse-max-label"></span>
-						</span>
-					</label> -->
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Acceleration</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
-							<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
-							<span class="tracky-mouse-min-label">Linear</span>
-							<span class="tracky-mouse-max-label">Smooth</span>
-						</span>
-					</label>
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Motion threshold</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
-							<span class="tracky-mouse-min-label">Free</span>
-							<span class="tracky-mouse-max-label">Steady</span>
-						</span>
-					</label>
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Tilt influence</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="0" class="tracky-mouse-tilt-influence">
-							<span class="tracky-mouse-min-label">Optical flow</span>
-							<span class="tracky-mouse-max-label">Head tilt</span>
-						</span>
-					</label>
-				</div>
-			</details>
-			<!--
-				Only dwell clicking is supported by the web library right now.
-				Currently it's a separate API (TrackyMouse.initDwellClicking)
-				TODO: bring more of desktop app functionality into core
-				https://github.com/1j01/tracky-mouse/issues/72
-
-				Also, the "Swap mouse buttons" setting is likely not useful for
-				web apps embedding Tracky Mouse and designed for head trackers,
-				since it necessitates mode switching for dwell clicker usage,
-				so it may make sense to hide (or not) even if it is supported there in the future.
-				The main point of this option is to counteract the system-level mouse button setting,
-				which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
-			-->
-			<details class="tracky-mouse-desktop-only">
-				<summary>Clicking</summary>
-				<div class="tracky-mouse-details-body">
-					<div class="tracky-mouse-control-row">
-						<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
-						<select id="tracky-mouse-clicking-mode">
-							<option value="dwell" selected>Dwell to click</option>
-							<option value="blink">Wink to click</option>
-							<option value="open-mouth">Open mouth to click</option>
-							<option value="off">Off</option>
-						</select>
-					</div>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
-					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
-					<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-					<!-- btw: label is selected based on 'for' attribute -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
-						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
-					</div>
-					<label class="tracky-mouse-control-row">
-						<!--
-							This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
-							with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
-							This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
-							at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
-							and it might complicate the design of the slider labeling.
-						-->
-						<span class="tracky-mouse-label-text">Delay before dragging&nbsp;&nbsp;&nbsp;</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
-							<span class="tracky-mouse-min-label">Easy to drag</span>
-							<span class="tracky-mouse-max-label">Easy to click</span>
-						</span>
-					</label>
-				</div>
-			</details>
-			<details>
-				<summary>Video</summary>
-				<div class="tracky-mouse-details-body">
-					<div class="tracky-mouse-control-row">
-						<label for="tracky-mouse-camera-select"><span class="tracky-mouse-label-text">Camera source</span></label>
-						<select id="tracky-mouse-camera-select">
-							<option value="" selected>Default</option>
-						</select>
-					</div>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" checked id="tracky-mouse-mirror"/>
-						<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
-					</div>
-				</div>
-			</details>
-			<details>
-				<summary>General</summary>
-				<div class="tracky-mouse-details-body">
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" id="tracky-mouse-start-enabled"/>
-						<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
-					</div>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
-						<input type="checkbox" id="tracky-mouse-run-at-login"/>
-						<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
-					</div>
-				</div>
-			</details>
 		</div>
 		<div class="tracky-mouse-canvas-container-container">
 			<div class="tracky-mouse-canvas-container">
@@ -721,24 +583,597 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		document.body.appendChild(uiContainer);
 	}
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
-	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
-	var cameraSelect = uiContainer.querySelector("#tracky-mouse-camera-select");
-	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
-	var clickingModeDropdown = uiContainer.querySelector("#tracky-mouse-clicking-mode");
-	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
-	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
-	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
-	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
-	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
-	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
-	var minDistanceSlider = uiContainer.querySelector(".tracky-mouse-min-distance");
-	var tiltInfluenceSlider = uiContainer.querySelector(".tracky-mouse-tilt-influence");
-	var delayBeforeDraggingSlider = uiContainer.querySelector(".tracky-mouse-delay-before-dragging");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
+
+	// Settings (initialized later; defaults are defined in settingsCategories)
+	var sensitivityX;
+	var sensitivityY;
+	var acceleration;
+	var minDistance;
+	var tiltInfluence;
+	var delayBeforeDragging;
+	var mirror;
+	var cameraDeviceId;
+	var startEnabled;
+	var runAtLogin;
+	var swapMouseButtons;
+	var clickingMode;
+
+	// Abstract model of settings UI.
+	// Note: don't use `in` operator like `if ("headTrackingSensitivityX" in settings.globalSettings)`.
+	// Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
+	// TODO: clean up old commented out HTML template fragments
+	// TODO: make setting definitions less verbose (using an object to store settings will help a lot!)
+	const settingsCategories = [
+
+		// <details>
+		// 	<summary>Head Tracking</summary>
+		// 	<div class="tracky-mouse-details-body">
+		// 		<label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Horizontal sensitivity</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
+		// 				<span class="tracky-mouse-min-label">Slow</span>
+		// 				<span class="tracky-mouse-max-label">Fast</span>
+		// 			</span>
+		// 		</label>
+		// 		<label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Vertical sensitivity</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
+		// 				<span class="tracky-mouse-min-label">Slow</span>
+		// 				<span class="tracky-mouse-max-label">Fast</span>
+		// 			</span>
+		// 		</label>
+		// 		<!-- <label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Smoothing</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
+		// 				<span class="tracky-mouse-min-label"></span>
+		// 				<span class="tracky-mouse-max-label"></span>
+		// 			</span>
+		// 		</label> -->
+		// 		<label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Acceleration</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
+		// 				<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
+		// 				<span class="tracky-mouse-min-label">Linear</span>
+		// 				<span class="tracky-mouse-max-label">Smooth</span>
+		// 			</span>
+		// 		</label>
+		// 		<label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Motion threshold</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
+		// 				<span class="tracky-mouse-min-label">Free</span>
+		// 				<span class="tracky-mouse-max-label">Steady</span>
+		// 			</span>
+		// 		</label>
+		// 		<label class="tracky-mouse-control-row">
+		// 			<span class="tracky-mouse-label-text">Tilt influence</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="100" value="0" class="tracky-mouse-tilt-influence">
+		// 				<span class="tracky-mouse-min-label">Optical flow</span>
+		// 				<span class="tracky-mouse-max-label">Head tilt</span>
+		// 			</span>
+		// 		</label>
+		// 	</div>
+		// </details>
+		{
+			title: "Head Tracking",
+			settings: [
+				{
+					label: "Horizontal sensitivity",
+					className: "tracky-mouse-sensitivity-x",
+					// key: "headTrackingSensitivityX",
+					load: (control, settings) => {
+						if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
+							sensitivityX = settings.globalSettings.headTrackingSensitivityX;
+							control.value = sensitivityX * 1000;
+						}
+					},
+					loadValueFromControl: (control) => {
+						sensitivityX = control.value / 1000;
+					},
+					save: () => {
+						setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
+					},
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 25,
+					labels: {
+						min: "Slow",
+						max: "Fast",
+					},
+				},
+				{
+					label: "Vertical sensitivity",
+					className: "tracky-mouse-sensitivity-y",
+					// key: "headTrackingSensitivityY",
+					load: (control, settings) => {
+						if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
+							sensitivityY = settings.globalSettings.headTrackingSensitivityY;
+							control.value = sensitivityY * 1000;
+						}
+					},
+					loadValueFromControl: (control) => {
+						sensitivityY = control.value / 1000;
+					},
+					save: () => {
+						setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
+					},
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 50,
+					labels: {
+						min: "Slow",
+						max: "Fast",
+					},
+				},
+				// {
+				// 	label: "Smoothing",
+				// 	className: "tracky-mouse-smoothing",
+				// 	// key: "headTrackingSmoothing",
+				// 	load: (control, settings) => {
+				// 		if (settings.globalSettings.headTrackingSmoothing !== undefined) {
+				// 			headTrackingSmoothing = settings.globalSettings.headTrackingSmoothing
+				// 			control.value = headTrackingSmoothing;
+				// 		}
+				// 	},
+				// 	loadValueFromControl: (control) => {
+				// 		headTrackingSmoothing = control.value;
+				// 	},
+				// 	save: () => {
+				// 		setOptions({ globalSettings: { headTrackingSmoothing: headTrackingSmoothing } });
+				// 	},
+				// 	type: "slider",
+				// 	min: 0,
+				// 	max: 100,
+				// 	default: 50,
+				// 	labels: {
+				// 		min: "Linear", // or "Direct", "Raw", "None"
+				// 		max: "Smooth", // or "Smoothed"
+				// 	},
+				// },
+				// TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side.
+				// Should it be swapped? What does other software with acceleration control look like?
+				// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
+				{
+					label: "Acceleration",
+					className: "tracky-mouse-acceleration",
+					// key: "headTrackingAcceleration",
+					load: (control, settings) => {
+						if (settings.globalSettings.headTrackingAcceleration !== undefined) {
+							acceleration = settings.globalSettings.headTrackingAcceleration;
+							control.value = acceleration * 100;
+						}
+					},
+					loadValueFromControl: (control) => {
+						acceleration = control.value / 100;
+					},
+					save: () => {
+						setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
+					},
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 50,
+					labels: {
+						min: "Linear", // or "Direct", "Raw"
+						max: "Smooth",
+					},
+				},
+				{
+					label: "Motion threshold",
+					className: "tracky-mouse-min-distance",
+					// key: "headTrackingMinDistance",
+					load: (control, settings) => {
+						if (settings.globalSettings.headTrackingMinDistance !== undefined) {
+							minDistance = settings.globalSettings.headTrackingMinDistance;
+							control.value = minDistance;
+						}
+					},
+					loadValueFromControl: (control) => {
+						minDistance = control.value;
+					},
+					save: () => {
+						setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+					},
+					type: "slider",
+					min: 0,
+					max: 10,
+					default: 0,
+					labels: {
+						min: "Free",
+						max: "Steady",
+					},
+				},
+				{
+					label: "Tilt influence",
+					className: "tracky-mouse-tilt-influence",
+					// key: "headTrackingTiltInfluence",
+					load: (control, settings) => {
+						if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
+							tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
+							control.value = tiltInfluence * 100;
+						}
+					},
+					loadValueFromControl: (control) => {
+						tiltInfluence = control.value / 100;
+					},
+					save: () => {
+						setOptions({ globalSettings: { headTrackingTiltInfluence: tiltInfluence } });
+					},
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 0,
+					labels: {
+						min: "Optical flow",
+						max: "Head tilt",
+					},
+				},
+			],
+		},
+
+		// <!--
+		// 	Only dwell clicking is supported by the web library right now.
+		// 	Currently it's a separate API (TrackyMouse.initDwellClicking)
+		// 	TODO: bring more of desktop app functionality into core
+		// 	https://github.com/1j01/tracky-mouse/issues/72
+
+		// 	Also, the "Swap mouse buttons" setting is likely not useful for
+		// 	web apps embedding Tracky Mouse and designed for head trackers,
+		// 	since it necessitates mode switching for dwell clicker usage,
+		// 	so it may make sense to hide (or not) even if it is supported there in the future.
+		// 	The main point of this option is to counteract the system-level mouse button setting,
+		// 	which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
+		// -->
+		// <details class="tracky-mouse-desktop-only">
+		// 	<summary>Clicking</summary>
+		// 	<div class="tracky-mouse-details-body">
+		// 		<div class="tracky-mouse-control-row">
+		// 			<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
+		// 			<select id="tracky-mouse-clicking-mode">
+		// 				<option value="dwell" selected>Dwell to click</option>
+		// 				<option value="blink">Wink to click</option>
+		// 				<option value="open-mouth">Open mouth to click</option>
+		// 				<option value="off">Off</option>
+		// 			</select>
+		// 		</div>
+		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+		// 		<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
+		// 		<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
+		// 		<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
+		// 		<!-- btw: label is selected based on 'for' attribute -->
+		// 		<div class="tracky-mouse-control-row">
+		// 			<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
+		// 			<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
+		// 		</div>
+		// 		<label class="tracky-mouse-control-row">
+		// 			<!--
+		// 				This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
+		// 				with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
+		// 				This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
+		// 				at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
+		// 				and it might complicate the design of the slider labeling.
+		// 			-->
+		// 			<span class="tracky-mouse-label-text">Delay before dragging&nbsp;&nbsp;&nbsp;</span>
+		// 			<span class="tracky-mouse-labeled-slider">
+		// 				<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
+		// 				<span class="tracky-mouse-min-label">Easy to drag</span>
+		// 				<span class="tracky-mouse-max-label">Easy to click</span>
+		// 			</span>
+		// 		</label>
+		// 	</div>
+		// </details>
+
+
+		// Only dwell clicking is supported by the web library right now.
+		// Currently it's a separate API (TrackyMouse.initDwellClicking)
+		// TODO: bring more of desktop app functionality into core
+		// https://github.com/1j01/tracky-mouse/issues/72
+
+		// Also, the "Swap mouse buttons" setting is likely not useful for
+		// web apps embedding Tracky Mouse and designed for head trackers,
+		// since it necessitates mode switching for dwell clicker usage,
+		// so it may make sense to hide (or not) even if it is supported there in the future.
+		// The main point of this option is to counteract the system-level mouse button setting,
+		// which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
+		{
+			title: "Clicking",
+			settings: [
+				{
+					label: "Clicking mode:", // TODO: ":"?
+					className: "tracky-mouse-clicking-mode",
+					// key: "clickingMode",
+					load: (control, settings) => {
+						if (settings.globalSettings.clickingMode !== undefined) {
+							clickingMode = settings.globalSettings.clickingMode;
+							control.value = clickingMode;
+						}
+					},
+					loadValueFromControl: (control) => {
+						clickingMode = control.value;
+					},
+					save: () => {
+						setOptions({ globalSettings: { clickingMode: clickingMode } });
+					},
+					type: "dropdown",
+					options: [
+						{ value: "dwell", label: "Dwell to click" },
+						{ value: "blink", label: "Wink to click" },
+						{ value: "open-mouth", label: "Open mouth to click" },
+						{ value: "off", label: "Off" },
+					],
+					default: "dwell",
+					platform: "desktop",
+				},
+				{
+					// TODO: add description of what this is for:
+					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
+					// "swap" is purposefully generic language so we don't have to know what system-level setting is
+					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
+					label: "Swap mouse buttons",
+					className: "tracky-mouse-swap-mouse-buttons",
+					// key: "swapMouseButtons",
+					load: (control, settings) => {
+						if (settings.globalSettings.swapMouseButtons !== undefined) {
+							swapMouseButtons = settings.globalSettings.swapMouseButtons;
+							control.checked = swapMouseButtons;
+						}
+					},
+					loadValueFromControl: (control) => {
+						swapMouseButtons = control.checked;
+					},
+					save: () => {
+						setOptions({ globalSettings: { swapMouseButtons: swapMouseButtons } });
+					},
+					type: "checkbox",
+					default: false,
+					platform: "desktop",
+				},
+
+				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
+				// with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
+				// This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
+				// at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
+				// and it might complicate the design of the slider labeling.
+				{
+					label: "Delay before dragging&nbsp;&nbsp;&nbsp;", // TODO: avoid non-breaking space hack
+					className: "tracky-mouse-delay-before-dragging",
+					// key: "delayBeforeDragging",
+					load: (control, settings) => {
+						if (settings.globalSettings.delayBeforeDragging !== undefined) {
+							delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
+							control.value = delayBeforeDragging;
+						}
+					},
+					loadValueFromControl: (control) => {
+						delayBeforeDragging = control.value;
+					},
+					save: () => {
+						setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
+					},
+					type: "slider",
+					min: 0,
+					max: 1000,
+					labels: {
+						min: "Easy to drag",
+						max: "Easy to click",
+					},
+					default: 0, // TODO: increase default
+					platform: "desktop",
+				},
+			],
+		},
+		// <details>
+		// 	<summary>Video</summary>
+		// 	<div class="tracky-mouse-details-body">
+		// 		<div class="tracky-mouse-control-row">
+		// 			<label for="tracky-mouse-camera-select"><span class="tracky-mouse-label-text">Camera source</span></label>
+		// 			<select id="tracky-mouse-camera-select">
+		// 				<option value="" selected>Default</option>
+		// 			</select>
+		// 		</div>
+		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+		// 		<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
+		// 		<div class="tracky-mouse-control-row">
+		// 			<input type="checkbox" checked id="tracky-mouse-mirror"/>
+		// 			<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
+		// 		</div>
+		// 	</div>
+		// </details>
+		{
+			title: "Video",
+			settings: [
+				{
+					label: "Camera source",
+					className: "tracky-mouse-camera-select",
+					// key: "cameraDeviceId",
+					load: (control, settings) => {
+						if (settings.globalSettings.cameraDeviceId !== undefined) {
+							cameraDeviceId = settings.globalSettings.cameraDeviceId;
+							control.value = cameraDeviceId;
+						}
+					},
+					loadValueFromControl: (control) => {
+						cameraDeviceId = control.value;
+					},
+					save: () => {
+						setOptions({ globalSettings: { cameraDeviceId: cameraDeviceId } });
+					},
+					handleSettingChange: () => {
+						TrackyMouse.useCamera();
+					},
+					type: "dropdown",
+					options: [
+						{ value: "", label: "Default" },
+					],
+					default: "",
+				},
+				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
+				{
+					label: "Mirror",
+					className: "tracky-mouse-mirror",
+					// key: "mirror",
+					load: (control, settings) => {
+						if (settings.globalSettings.mirror !== undefined) {
+							mirror = settings.globalSettings.mirror;
+							control.checked = mirror;
+						}
+					},
+					loadValueFromControl: (control) => {
+						mirror = control.checked;
+					},
+					save: () => {
+						setOptions({ globalSettings: { mirror: mirror } });
+					},
+					type: "checkbox",
+					default: true,
+				},
+			]
+		},
+		// <details>
+		// 	<summary>General</summary>
+		// 	<div class="tracky-mouse-details-body">
+		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+		// 		<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
+		// 		<div class="tracky-mouse-control-row">
+		// 			<input type="checkbox" id="tracky-mouse-start-enabled"/>
+		// 			<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
+		// 		</div>
+		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
+		// 		<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
+		// 			<input type="checkbox" id="tracky-mouse-run-at-login"/>
+		// 			<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
+		// 		</div>
+		// 	</div>
+		// </details>
+		{
+			title: "General",
+			settings: [
+				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
+				{
+					label: "Start enabled",
+					className: "tracky-mouse-start-enabled",
+					// key: "startEnabled",
+					load: (control, settings, initialLoad) => {
+						if (settings.globalSettings.startEnabled !== undefined) {
+							startEnabled = settings.globalSettings.startEnabled;
+							control.checked = startEnabled;
+							if (initialLoad) {
+								paused = !startEnabled;
+							}
+						}
+					},
+					loadValueFromControl: (control) => {
+						startEnabled = control.checked;
+					},
+					save: () => {
+						setOptions({ globalSettings: { startEnabled: startEnabled } });
+					},
+					type: "checkbox",
+					default: false,
+				},
+				{
+					label: "Run at login",
+					className: "tracky-mouse-run-at-login",
+					// key: "runAtLogin",
+					load: (control, settings) => {
+						if (settings.globalSettings.runAtLogin !== undefined) {
+							runAtLogin = settings.globalSettings.runAtLogin;
+							control.checked = runAtLogin;
+						}
+					},
+					loadValueFromControl: (control) => {
+						runAtLogin = control.checked;
+					},
+					save: () => {
+						setOptions({ globalSettings: { runAtLogin: runAtLogin } });
+					},
+					type: "checkbox",
+					default: false,
+					platform: "desktop",
+				},
+			],
+		},
+	];
+
+	for (const category of settingsCategories) {
+		const detailsEl = document.createElement("details");
+		// detailsEl.className = "tracky-mouse-settings-category";
+		if (category.settings.every(setting => setting.platform === "desktop")) {
+			detailsEl.classList.add("tracky-mouse-desktop-only");
+		}
+		const summaryEl = document.createElement("summary");
+		summaryEl.textContent = category.title;
+		detailsEl.appendChild(summaryEl);
+		const bodyEl = document.createElement("div");
+		bodyEl.className = "tracky-mouse-details-body";
+		for (const setting of category.settings) {
+			// TODO: consider making everything use <label for=""> inside and <div> outside
+			const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
+			rowEl.className = "tracky-mouse-control-row";
+			if (setting.type === "slider") {
+				rowEl.innerHTML = `
+					<span class="tracky-mouse-label-text">${setting.label}</span>
+					<span class="tracky-mouse-labeled-slider">
+						<input type="range" min="${setting.min}" max="${setting.max}" value="${setting.default}" class="${setting.className}">
+						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
+						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+					</span>
+				`;
+			} else if (setting.type === "checkbox") {
+				// special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work
+				rowEl.innerHTML = `
+					<input type="checkbox" id="${setting.className}" ${setting.default ? "checked" : ""} class="${setting.className}">
+					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+				`;
+			} else if (setting.type === "dropdown") {
+				const optionsHtml = setting.options.map(option => `
+					<option value="${option.value}" ${option.value === setting.default ? "selected" : ""}>${option.label}</option>
+				`.trim()).join("\n");
+				rowEl.innerHTML = `
+					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+					<select id="${setting.className}" class="${setting.className}">
+						${optionsHtml}
+					</select>
+				`;
+			}
+			if (setting.platform === "desktop") {
+				rowEl.classList.add("tracky-mouse-desktop-only");
+			}
+			bodyEl.appendChild(rowEl);
+
+
+			const control = rowEl.querySelector(`.${setting.className}`);
+			// Load defaults
+			setting.loadValueFromControl(control);
+			// Handle changes
+			control.addEventListener("change", () => {
+				setting.loadValueFromControl(control);
+				setting.save();
+				// TODO: also call this if the setting is changed through CLI
+				// Would be good to have a pattern where it's subscribing to changes to a settings store
+				setting.handleSettingChange?.();
+			});
+		}
+		detailsEl.appendChild(bodyEl);
+		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
+	}
+
+	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
+	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
+	const swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
+	const cameraSelect = uiContainer.querySelector(".tracky-mouse-camera-select");
 
 	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
@@ -782,20 +1217,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		stats.domElement.style.left = '';
 		document.body.appendChild(stats.domElement);
 	}
-
-	// Settings (initialized from HTML template defaults, then overridden by any saved settings)
-	var sensitivityX;
-	var sensitivityY;
-	var acceleration;
-	var minDistance;
-	var tiltInfluence;
-	var delayBeforeDragging;
-	var mirror;
-	var cameraDeviceId;
-	var startEnabled;
-	var runAtLogin;
-	var swapMouseButtons;
-	var clickingMode;
 
 	// Debug flags (not shown in the UI; could become Advanced Settings in the future)
 	var debugAcceleration = false;
@@ -965,57 +1386,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	function deserializeSettings(settings, initialLoad = false) {
 		// TODO: DRY with deserializeSettings in electron-main.js
 		if ("globalSettings" in settings) {
-			// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
-			if (settings.globalSettings.swapMouseButtons !== undefined) {
-				swapMouseButtons = settings.globalSettings.swapMouseButtons;
-				swapMouseButtonsCheckbox.checked = swapMouseButtons;
-			}
-			if (settings.globalSettings.clickingMode !== undefined) {
-				clickingMode = settings.globalSettings.clickingMode;
-				clickingModeDropdown.value = clickingMode;
-			}
-			if (settings.globalSettings.mirrorCameraView !== undefined) {
-				mirror = settings.globalSettings.mirrorCameraView;
-				mirrorCheckbox.checked = mirror;
-			}
-			if (settings.globalSettings.cameraDeviceId !== undefined) {
-				cameraDeviceId = settings.globalSettings.cameraDeviceId;
-				cameraSelect.value = cameraDeviceId;
-			}
-			if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-				sensitivityX = settings.globalSettings.headTrackingSensitivityX;
-				sensitivityXSlider.value = sensitivityX * 1000;
-			}
-			if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-				sensitivityY = settings.globalSettings.headTrackingSensitivityY;
-				sensitivityYSlider.value = sensitivityY * 1000;
-			}
-			if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-				acceleration = settings.globalSettings.headTrackingAcceleration;
-				accelerationSlider.value = acceleration * 100;
-			}
-			if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-				minDistance = settings.globalSettings.headTrackingMinDistance;
-				minDistanceSlider.value = minDistance;
-			}
-			if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
-				tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
-				tiltInfluenceSlider.value = tiltInfluence * 100;
-			}
-			if (settings.globalSettings.delayBeforeDragging !== undefined) {
-				delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
-				delayBeforeDraggingSlider.value = delayBeforeDragging;
-			}
-			if (settings.globalSettings.startEnabled !== undefined) {
-				startEnabled = settings.globalSettings.startEnabled;
-				startEnabledCheckbox.checked = startEnabled;
-				if (initialLoad) {
-					paused = !startEnabled;
+			for (const category of settingsCategories) {
+				for (const setting of category.settings) {
+					if (setting.load) {
+						const control = uiContainer.querySelector(`.${setting.className}`);
+						if (control) {
+							setting.load(control, settings, initialLoad);
+						}
+					}
 				}
-			}
-			if (settings.globalSettings.runAtLogin !== undefined) {
-				runAtLogin = settings.globalSettings.runAtLogin;
-				runAtLoginCheckbox.checked = runAtLogin;
 			}
 		}
 	}
@@ -1072,132 +1451,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	};
 
-	const optionsGUIBindings = [
-		{
-			control: sensitivityXSlider,
-			loadValueFromControl: () => {
-				sensitivityX = sensitivityXSlider.value / 1000;
-			},
-			save: () => {
-				setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
-			}
-		},
-		{
-			control: sensitivityYSlider,
-			loadValueFromControl: () => {
-				sensitivityY = sensitivityYSlider.value / 1000;
-			},
-			save: () => {
-				setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
-			}
-		},
-		{
-			control: accelerationSlider,
-			loadValueFromControl: () => {
-				acceleration = accelerationSlider.value / 100;
-			},
-			save: () => {
-				setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
-			}
-		},
-		{
-			control: minDistanceSlider,
-			loadValueFromControl: () => {
-				minDistance = minDistanceSlider.value;
-			},
-			save: () => {
-				setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
-			}
-		},
-		{
-			control: tiltInfluenceSlider,
-			loadValueFromControl: () => {
-				tiltInfluence = tiltInfluenceSlider.value / 100;
-			},
-			save: () => {
-				setOptions({ globalSettings: { headTrackingTiltInfluence: tiltInfluence } });
-			}
-		},
-		{
-			control: delayBeforeDraggingSlider,
-			loadValueFromControl: () => {
-				delayBeforeDragging = delayBeforeDraggingSlider.value;
-			},
-			save: () => {
-				setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
-			}
-		},
-		{
-			control: mirrorCheckbox,
-			loadValueFromControl: () => {
-				mirror = mirrorCheckbox.checked;
-			},
-			save: () => {
-				setOptions({ globalSettings: { mirrorCameraView: mirror } });
-			}
-		},
-		{
-			control: cameraSelect,
-			loadValueFromControl: () => {
-				cameraDeviceId = cameraSelect.value;
-			},
-			save: () => {
-				setOptions({ globalSettings: { cameraDeviceId } });
-			},
-			handleSettingChange: () => {
-				TrackyMouse.useCamera();
-			}
-		},
-		{
-			control: swapMouseButtonsCheckbox,
-			loadValueFromControl: () => {
-				swapMouseButtons = swapMouseButtonsCheckbox.checked;
-			},
-			save: () => {
-				setOptions({ globalSettings: { swapMouseButtons } });
-			}
-		},
-		{
-			control: clickingModeDropdown,
-			loadValueFromControl: () => {
-				clickingMode = clickingModeDropdown.value;
-			},
-			save: () => {
-				setOptions({ globalSettings: { clickingMode } });
-			}
-		},
-		{
-			control: startEnabledCheckbox,
-			loadValueFromControl: () => {
-				startEnabled = startEnabledCheckbox.checked;
-			},
-			save: () => {
-				setOptions({ globalSettings: { startEnabled } });
-			}
-		},
-		{
-			control: runAtLoginCheckbox,
-			loadValueFromControl: () => {
-				runAtLogin = runAtLoginCheckbox.checked;
-			},
-			save: () => {
-				setOptions({ globalSettings: { runAtLogin } });
-			}
-		},
-	];
-
-	for (const { control, loadValueFromControl, save, handleSettingChange } of optionsGUIBindings) {
-		// Load defaults from HTML
-		loadValueFromControl();
-		// Handle changes
-		control.addEventListener("change", () => {
-			loadValueFromControl();
-			save();
-			// TODO: also call this if the setting is changed through CLI
-			// Would be good to have a pattern where it's subscribing to changes to a settings store
-			handleSettingChange?.();
-		});
-	}
 	paused = !startEnabled;
 
 	let populateCameraList = () => { };
