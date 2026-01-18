@@ -563,8 +563,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
-			<br>
-			<br>
 			<details>
 				<summary>Head Tracking</summary>
 				<div class="tracky-mouse-details-body">
@@ -644,7 +642,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							<option value="off">Off</option>
 						</select>
 					</div>
-					<br>
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
 					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
@@ -654,7 +651,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
 						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
 					</div>
-					<br>
 					<label class="tracky-mouse-control-row">
 						<!--
 							This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -681,7 +677,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							<option value="" selected>Default</option>
 						</select>
 					</div>
-					<br>
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
 					<div class="tracky-mouse-control-row">
@@ -699,8 +694,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						<input type="checkbox" id="tracky-mouse-start-enabled"/>
 						<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
 					</div>
-					<!-- TODO: stop relying on <br> for layout, it's too finicky, with conditional hiding -->
-					<br class="tracky-mouse-desktop-only">
 					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
 					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
 						<input type="checkbox" id="tracky-mouse-run-at-login"/>

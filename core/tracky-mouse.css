@@ -78,6 +78,7 @@
 	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
+	margin-bottom: 10px;
 	width: 120px;
 	cursor: pointer;
 }
@@ -90,6 +91,8 @@
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
+	min-height: 30px;
+	align-items: center;
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row label {
@@ -106,7 +109,8 @@
 .tracky-mouse-ui .tracky-mouse-labeled-slider {
 	display: inline-flex;
 	position: relative;
-	margin-bottom: 20px;
+	margin-bottom: 18px;
+	margin-top: 5px;
 	flex: 1;
 	max-width: 400px;
 }
@@ -119,7 +123,7 @@
 .tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
 	opacity: 0.8;
 	position: absolute;
-	bottom: -10px;
+	bottom: -12px;
 	pointer-events: none;
 }
 
