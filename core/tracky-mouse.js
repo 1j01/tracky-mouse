@@ -769,7 +769,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
 	debugEyeCanvas.style.display = "none";
-	// debugEyeCanvas.style.width = "100%"; // Let it be controlled by CSS or content
 	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
 	var debugEyeCtx = debugEyeCanvas.getContext('2d');
 
