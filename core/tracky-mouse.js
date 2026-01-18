@@ -606,64 +606,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Abstract model of settings UI.
 	// Note: don't use `in` operator like `if ("headTrackingSensitivityX" in settings.globalSettings)`.
 	// Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
-	// TODO: clean up old commented out HTML template fragments
 	// TODO: make setting definitions less verbose (using an object to store settings will help a lot!)
 	const settingsCategories = [
-
-		// <details>
-		// 	<summary>Head Tracking</summary>
-		// 	<div class="tracky-mouse-details-body">
-		// 		<label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Horizontal sensitivity</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
-		// 				<span class="tracky-mouse-min-label">Slow</span>
-		// 				<span class="tracky-mouse-max-label">Fast</span>
-		// 			</span>
-		// 		</label>
-		// 		<label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Vertical sensitivity</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
-		// 				<span class="tracky-mouse-min-label">Slow</span>
-		// 				<span class="tracky-mouse-max-label">Fast</span>
-		// 			</span>
-		// 		</label>
-		// 		<!-- <label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Smoothing</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
-		// 				<span class="tracky-mouse-min-label"></span>
-		// 				<span class="tracky-mouse-max-label"></span>
-		// 			</span>
-		// 		</label> -->
-		// 		<label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Acceleration</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
-		// 				<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
-		// 				<span class="tracky-mouse-min-label">Linear</span>
-		// 				<span class="tracky-mouse-max-label">Smooth</span>
-		// 			</span>
-		// 		</label>
-		// 		<label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Motion threshold</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
-		// 				<span class="tracky-mouse-min-label">Free</span>
-		// 				<span class="tracky-mouse-max-label">Steady</span>
-		// 			</span>
-		// 		</label>
-		// 		<label class="tracky-mouse-control-row">
-		// 			<span class="tracky-mouse-label-text">Tilt influence</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="100" value="0" class="tracky-mouse-tilt-influence">
-		// 				<span class="tracky-mouse-min-label">Optical flow</span>
-		// 				<span class="tracky-mouse-max-label">Head tilt</span>
-		// 			</span>
-		// 		</label>
-		// 	</div>
-		// </details>
 		{
 			title: "Head Tracking",
 			settings: [
@@ -823,59 +767,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			],
 		},
 
-		// <!--
-		// 	Only dwell clicking is supported by the web library right now.
-		// 	Currently it's a separate API (TrackyMouse.initDwellClicking)
-		// 	TODO: bring more of desktop app functionality into core
-		// 	https://github.com/1j01/tracky-mouse/issues/72
-
-		// 	Also, the "Swap mouse buttons" setting is likely not useful for
-		// 	web apps embedding Tracky Mouse and designed for head trackers,
-		// 	since it necessitates mode switching for dwell clicker usage,
-		// 	so it may make sense to hide (or not) even if it is supported there in the future.
-		// 	The main point of this option is to counteract the system-level mouse button setting,
-		// 	which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
-		// -->
-		// <details class="tracky-mouse-desktop-only">
-		// 	<summary>Clicking</summary>
-		// 	<div class="tracky-mouse-details-body">
-		// 		<div class="tracky-mouse-control-row">
-		// 			<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
-		// 			<select id="tracky-mouse-clicking-mode">
-		// 				<option value="dwell" selected>Dwell to click</option>
-		// 				<option value="blink">Wink to click</option>
-		// 				<option value="open-mouth">Open mouth to click</option>
-		// 				<option value="off">Off</option>
-		// 			</select>
-		// 		</div>
-		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-		// 		<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
-		// 		<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
-		// 		<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-		// 		<!-- btw: label is selected based on 'for' attribute -->
-		// 		<div class="tracky-mouse-control-row">
-		// 			<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
-		// 			<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
-		// 		</div>
-		// 		<label class="tracky-mouse-control-row">
-		// 			<!--
-		// 				This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
-		// 				with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
-		// 				This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
-		// 				at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
-		// 				and it might complicate the design of the slider labeling.
-		// 			-->
-		// 			<span class="tracky-mouse-label-text">Delay before dragging&nbsp;&nbsp;&nbsp;</span>
-		// 			<span class="tracky-mouse-labeled-slider">
-		// 				<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
-		// 				<span class="tracky-mouse-min-label">Easy to drag</span>
-		// 				<span class="tracky-mouse-max-label">Easy to click</span>
-		// 			</span>
-		// 		</label>
-		// 	</div>
-		// </details>
-
-
 		// Only dwell clicking is supported by the web library right now.
 		// Currently it's a separate API (TrackyMouse.initDwellClicking)
 		// TODO: bring more of desktop app functionality into core
@@ -974,23 +865,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				},
 			],
 		},
-		// <details>
-		// 	<summary>Video</summary>
-		// 	<div class="tracky-mouse-details-body">
-		// 		<div class="tracky-mouse-control-row">
-		// 			<label for="tracky-mouse-camera-select"><span class="tracky-mouse-label-text">Camera source</span></label>
-		// 			<select id="tracky-mouse-camera-select">
-		// 				<option value="" selected>Default</option>
-		// 			</select>
-		// 		</div>
-		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-		// 		<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
-		// 		<div class="tracky-mouse-control-row">
-		// 			<input type="checkbox" checked id="tracky-mouse-mirror"/>
-		// 			<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
-		// 		</div>
-		// 	</div>
-		// </details>
 		{
 			title: "Video",
 			settings: [
@@ -1041,22 +915,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				},
 			]
 		},
-		// <details>
-		// 	<summary>General</summary>
-		// 	<div class="tracky-mouse-details-body">
-		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-		// 		<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
-		// 		<div class="tracky-mouse-control-row">
-		// 			<input type="checkbox" id="tracky-mouse-start-enabled"/>
-		// 			<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
-		// 		</div>
-		// 		<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-		// 		<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
-		// 			<input type="checkbox" id="tracky-mouse-run-at-login"/>
-		// 			<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
-		// 		</div>
-		// 	</div>
-		// </details>
 		{
 			title: "General",
 			settings: [
