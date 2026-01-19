@@ -2223,7 +2223,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				const boxWidth = 150;
 				const boxHeight = 100;
 
-				if (debugEyeCanvas.width !== boxWidth * 2) {
+				if (debugEyeCanvas.width !== boxWidth * 2 || debugEyeCanvas.height !== boxHeight) {
 					debugEyeCanvas.width = boxWidth * 2;
 					debugEyeCanvas.height = boxHeight;
 				}
