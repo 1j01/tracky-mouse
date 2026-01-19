@@ -893,7 +893,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			const load = (settings, initialLoad) => {
 				// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
 				// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
-				if (settings.globalSettings[setting.key] !== undefined) {
+				if (settings.globalSettings?.[setting.key] !== undefined) {
 					s[setting.key] = settings.globalSettings[setting.key];
 					setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
 				}
@@ -1143,11 +1143,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	function deserializeSettings(settings, initialLoad = false) {
 		// TODO: DRY with deserializeSettings in electron-main.js
-		if ("globalSettings" in settings) {
-			for (const category of settingsCategories) {
-				for (const setting of category.settings) {
-					setting._load?.(settings, initialLoad);
-				}
+		for (const category of settingsCategories) {
+			for (const setting of category.settings) {
+				setting._load?.(settings, initialLoad);
 			}
 		}
 	}
