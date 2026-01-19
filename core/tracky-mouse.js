@@ -593,8 +593,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	const s = {};
 
 	// Abstract model of settings UI.
-	// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
-	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
 	// Note: min, max, and default are in INPUT value units, not setting value units.
 	// TODO: make min/max/default be in setting value units, and automatically define
 	// input unit scale to avoid rounding to 0 or 1 for fractions (for example) - or use step?
@@ -893,6 +891,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			};
 
 			const load = (settings, initialLoad) => {
+				// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
+				// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
 				if (settings.globalSettings[setting.key] !== undefined) {
 					s[setting.key] = settings.globalSettings[setting.key];
 					setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
