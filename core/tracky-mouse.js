@@ -892,22 +892,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				}
 			};
 
-			// const load = (control, settings) => {
-			// 	if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-			// 		s.headTrackingSensitivityX = settings.globalSettings.headTrackingSensitivityX;
-			// 		control.value = s.headTrackingSensitivityX * 1000;
-			// 	}
-			// };
-			// const loadValueFromControl = (control) => {
-			// 	s.headTrackingSensitivityX = control.value / 1000;
-			// };
-			// const save = () => {
-			// 	setOptions({ globalSettings: { headTrackingSensitivityX: s.headTrackingSensitivityX } });
-			// };
 			const load = (settings, initialLoad) => {
 				if (settings.globalSettings[setting.key] !== undefined) {
 					s[setting.key] = settings.globalSettings[setting.key];
-					// control.value = s[setting.key] * 1000;
 					setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
 				}
 				if (initialLoad) {
@@ -915,7 +902,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				}
 			};
 			const loadValueFromControl = () => {
-				// s[setting.key] = control.value / 1000;
 				s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
 			};
 			const save = () => {
@@ -934,41 +920,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			});
 			// Handle loading from stored settings
 			setting._load = load;
-
-			// // Load defaults
-			// setting._load = (settings, initialLoad) => {
-
-			// 	if (settings?.globalSettings?.[setting.key] !== undefined) {
-			// 		s[setting.key] = settings.globalSettings[setting.key];
-			// 		// control.value = setting.settingValueToInputValue ? setting.settingValueToInputValue(s[setting.key]) : s[setting.key];
-			// 		// setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key] ?? setting.default));
-			// 	}
-			// 	// TODO: optimization? previously this was only called when the particular setting's control needed to be updated
-			// 	// now it's outside of the conditional there, but does that matter?
-			// 	setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key] ?? setting.default));
-			// 	// setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
-			// 	// I don't know if this hook makes sense
-			// 	if (initialLoad) {
-			// 		setting.afterInitialLoad?.();
-			// 	}
-			// };
-			// // TODO: clarify `initialLoad`; isn't this load more "initial" than when loading from stored settings?
-			// // should it be passed true here? or should we rename it `fromStoredSettings`?
-			// // setting._load({}, true);
-			// // setting._load({ globalSettings: { [setting.key]: setting.default } }, true);
-			// // setting._load({ globalSettings: { [setting.key]: setting.default } }, false);
-			// setting._load();
-			// // Handle changes
-			// control.addEventListener("change", () => {
-			// 	// Apply new value from control
-			// 	s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
-			// 	// Save changes
-			// 	setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
-			// 	// Trigger any additional change handling
-			// 	// TODO: also call this if the setting is changed through CLI
-			// 	// Would be good to have a pattern where it's subscribing to changes to a settings store
-			// 	setting.handleSettingChange?.();
-			// });
 		}
 		detailsEl.appendChild(bodyEl);
 		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
