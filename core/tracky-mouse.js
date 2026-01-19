@@ -1255,23 +1255,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	const formatName = "tracky-mouse-settings";
 	function serializeSettings() {
 		// TODO: DRY with serializeSettings in electron-main.js
+		// The important part is done (don't need to list every setting here - or there),
+		// but we could still switch to using IPC for saving/loading serialized settings
+		// eliminating the duplicate format handling, which may become more complex over time.
+		// The main process will still want to know about _some_ settings, and this shouldn't go through the serialization,
+		// but that can remain using the existing IPC calls while we add new ones dealing with serialized settings.
+		// (So I guess this is really a todo for the electron app; maybe this sort of detailed comment would make more sense there.)
 		return {
 			formatVersion,
 			formatName,
-			globalSettings: {
-				startEnabled: s.startEnabled,
-				runAtLogin: s.runAtLogin,
-				swapMouseButtons: s.swapMouseButtons,
-				clickingMode: s.clickingMode,
-				mirrorCameraView: s.mirror,
-				cameraDeviceId: s.cameraDeviceId,
-				headTrackingSensitivityX: s.headTrackingSensitivityX,
-				headTrackingSensitivityY: s.headTrackingSensitivityY,
-				headTrackingAcceleration: s.headTrackingAcceleration,
-				headTrackingMinDistance: s.headTrackingMinDistance,
-				headTrackingTiltInfluence: s.headTrackingTiltInfluence,
-				delayBeforeDragging: s.delayBeforeDragging,
-			},
+			globalSettings: s,
 			// profiles: [],
 		};
 	};
