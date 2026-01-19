@@ -595,7 +595,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Abstract model of settings UI.
 	// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
 	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
-	// TODO: make setting definitions less verbose. Now that I've made it store active settings in an object instead of loose variables, it should be easier.
+	// Note: min, max, and default are in INPUT value units, not setting value units.
+	// TODO: make min/max/default be in setting value units, and automatically define
+	// input unit scale to avoid rounding to 0 or 1 for fractions (for example) - or use step?
 	const settingsCategories = [
 		{
 			title: "Head Tracking",
@@ -603,19 +605,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Horizontal sensitivity",
 					className: "tracky-mouse-sensitivity-x",
-					// key: "headTrackingSensitivityX",
-					load: (control, settings) => {
-						if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-							s.headTrackingSensitivityX = settings.globalSettings.headTrackingSensitivityX;
-							control.value = s.headTrackingSensitivityX * 1000;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.headTrackingSensitivityX = control.value / 1000;
-					},
-					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityX: s.headTrackingSensitivityX } });
-					},
+					key: "headTrackingSensitivityX",
+					settingValueToInputValue: (settingValue) => settingValue * 1000,
+					inputValueToSettingValue: (inputValue) => inputValue / 1000,
 					type: "slider",
 					min: 0,
 					max: 100,
@@ -628,19 +620,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Vertical sensitivity",
 					className: "tracky-mouse-sensitivity-y",
-					// key: "headTrackingSensitivityY",
-					load: (control, settings) => {
-						if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-							s.headTrackingSensitivityY = settings.globalSettings.headTrackingSensitivityY;
-							control.value = s.headTrackingSensitivityY * 1000;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.headTrackingSensitivityY = control.value / 1000;
-					},
-					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityY: s.headTrackingSensitivityY } });
-					},
+					key: "headTrackingSensitivityY",
+					settingValueToInputValue: (settingValue) => settingValue * 1000,
+					inputValueToSettingValue: (inputValue) => inputValue / 1000,
 					type: "slider",
 					min: 0,
 					max: 100,
@@ -653,19 +635,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				// {
 				// 	label: "Smoothing",
 				// 	className: "tracky-mouse-smoothing",
-				// 	// key: "headTrackingSmoothing",
-				// 	load: (control, settings) => {
-				// 		if (settings.globalSettings.headTrackingSmoothing !== undefined) {
-				// 			s.headTrackingSmoothing = settings.globalSettings.headTrackingSmoothing;
-				// 			control.value = s.headTrackingSmoothing;
-				// 		}
-				// 	},
-				// 	loadValueFromControl: (control) => {
-				// 		s.headTrackingSmoothing = control.value;
-				// 	},
-				// 	save: () => {
-				// 		setOptions({ globalSettings: { headTrackingSmoothing: s.headTrackingSmoothing } });
-				// 	},
+				// 	key: "headTrackingSmoothing",
+				// 	settingValueToInputValue: (settingValue) => settingValue,
+				// 	inputValueToSettingValue: (inputValue) => inputValue,
 				// 	type: "slider",
 				// 	min: 0,
 				// 	max: 100,
@@ -687,19 +659,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Acceleration",
 					className: "tracky-mouse-acceleration",
-					// key: "headTrackingAcceleration",
-					load: (control, settings) => {
-						if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-							s.headTrackingAcceleration = settings.globalSettings.headTrackingAcceleration;
-							control.value = s.headTrackingAcceleration * 100;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.headTrackingAcceleration = control.value / 100;
-					},
-					save: () => {
-						setOptions({ globalSettings: { headTrackingAcceleration: s.headTrackingAcceleration } });
-					},
+					key: "headTrackingAcceleration",
+					settingValueToInputValue: (settingValue) => settingValue * 100,
+					inputValueToSettingValue: (inputValue) => inputValue / 100,
 					type: "slider",
 					min: 0,
 					max: 100,
@@ -712,19 +674,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Motion threshold",
 					className: "tracky-mouse-min-distance",
-					// key: "headTrackingMinDistance",
-					load: (control, settings) => {
-						if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-							s.headTrackingMinDistance = settings.globalSettings.headTrackingMinDistance;
-							control.value = s.headTrackingMinDistance;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.headTrackingMinDistance = control.value;
-					},
-					save: () => {
-						setOptions({ globalSettings: { headTrackingMinDistance: s.headTrackingMinDistance } });
-					},
+					key: "headTrackingMinDistance",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "slider",
 					min: 0,
 					max: 10,
@@ -737,19 +689,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Tilt influence",
 					className: "tracky-mouse-tilt-influence",
-					// key: "headTrackingTiltInfluence",
-					load: (control, settings) => {
-						if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
-							s.headTrackingTiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
-							control.value = s.headTrackingTiltInfluence * 100;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.headTrackingTiltInfluence = control.value / 100;
-					},
-					save: () => {
-						setOptions({ globalSettings: { headTrackingTiltInfluence: s.headTrackingTiltInfluence } });
-					},
+					key: "headTrackingTiltInfluence",
+					settingValueToInputValue: (settingValue) => settingValue * 100,
+					inputValueToSettingValue: (inputValue) => inputValue / 100,
 					type: "slider",
 					min: 0,
 					max: 100,
@@ -779,19 +721,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Clicking mode:", // TODO: ":"?
 					className: "tracky-mouse-clicking-mode",
-					// key: "clickingMode",
-					load: (control, settings) => {
-						if (settings.globalSettings.clickingMode !== undefined) {
-							s.clickingMode = settings.globalSettings.clickingMode;
-							control.value = s.clickingMode;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.clickingMode = control.value;
-					},
-					save: () => {
-						setOptions({ globalSettings: { clickingMode: s.clickingMode } });
-					},
+					key: "clickingMode",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "dropdown",
 					options: [
 						{ value: "dwell", label: "Dwell to click" },
@@ -809,19 +741,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
 					label: "Swap mouse buttons",
 					className: "tracky-mouse-swap-mouse-buttons",
-					// key: "swapMouseButtons",
-					load: (control, settings) => {
-						if (settings.globalSettings.swapMouseButtons !== undefined) {
-							s.swapMouseButtons = settings.globalSettings.swapMouseButtons;
-							control.checked = s.swapMouseButtons;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.swapMouseButtons = control.checked;
-					},
-					save: () => {
-						setOptions({ globalSettings: { swapMouseButtons: s.swapMouseButtons } });
-					},
+					key: "swapMouseButtons",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
@@ -835,19 +757,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Delay before dragging&nbsp;&nbsp;&nbsp;", // TODO: avoid non-breaking space hack
 					className: "tracky-mouse-delay-before-dragging",
-					// key: "delayBeforeDragging",
-					load: (control, settings) => {
-						if (settings.globalSettings.delayBeforeDragging !== undefined) {
-							s.delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
-							control.value = s.delayBeforeDragging;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.delayBeforeDragging = control.value;
-					},
-					save: () => {
-						setOptions({ globalSettings: { delayBeforeDragging: s.delayBeforeDragging } });
-					},
+					key: "delayBeforeDragging",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "slider",
 					min: 0,
 					max: 1000,
@@ -866,19 +778,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Camera source",
 					className: "tracky-mouse-camera-select",
-					// key: "cameraDeviceId",
-					load: (control, settings) => {
-						if (settings.globalSettings.cameraDeviceId !== undefined) {
-							s.cameraDeviceId = settings.globalSettings.cameraDeviceId;
-							control.value = s.cameraDeviceId;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.cameraDeviceId = control.value;
-					},
-					save: () => {
-						setOptions({ globalSettings: { cameraDeviceId: s.cameraDeviceId } });
-					},
+					key: "cameraDeviceId",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					handleSettingChange: () => {
 						TrackyMouse.useCamera();
 					},
@@ -892,19 +794,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Mirror",
 					className: "tracky-mouse-mirror",
-					// key: "mirror",
-					load: (control, settings) => {
-						if (settings.globalSettings.mirror !== undefined) {
-							s.mirror = settings.globalSettings.mirror;
-							control.checked = s.mirror;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.mirror = control.checked;
-					},
-					save: () => {
-						setOptions({ globalSettings: { mirror: s.mirror } });
-					},
+					key: "mirror",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "checkbox",
 					default: true,
 				},
@@ -917,21 +809,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Start enabled",
 					className: "tracky-mouse-start-enabled",
-					// key: "startEnabled",
-					load: (control, settings, initialLoad) => {
-						if (settings.globalSettings.startEnabled !== undefined) {
-							s.startEnabled = settings.globalSettings.startEnabled;
-							control.checked = s.startEnabled;
-							if (initialLoad) {
-								paused = !s.startEnabled;
-							}
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.startEnabled = control.checked;
-					},
-					save: () => {
-						setOptions({ globalSettings: { startEnabled: s.startEnabled } });
+					key: "startEnabled",
+					afterInitialLoad: () => { // TODO: does this hook make sense? right now it's the only usage. could this code not just be called later?
+						paused = !s.startEnabled;
 					},
 					type: "checkbox",
 					default: false,
@@ -939,19 +819,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					label: "Run at login",
 					className: "tracky-mouse-run-at-login",
-					// key: "runAtLogin",
-					load: (control, settings) => {
-						if (settings.globalSettings.runAtLogin !== undefined) {
-							s.runAtLogin = settings.globalSettings.runAtLogin;
-							control.checked = s.runAtLogin;
-						}
-					},
-					loadValueFromControl: (control) => {
-						s.runAtLogin = control.checked;
-					},
-					save: () => {
-						setOptions({ globalSettings: { runAtLogin: s.runAtLogin } });
-					},
+					key: "runAtLogin",
+					settingValueToInputValue: (settingValue) => settingValue,
+					inputValueToSettingValue: (inputValue) => inputValue,
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
@@ -972,6 +842,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const bodyEl = document.createElement("div");
 		bodyEl.className = "tracky-mouse-details-body";
 		for (const setting of category.settings) {
+			// Validation
+			if (!setting.key) {
+				console.warn("Setting is missing key:", setting);
+				continue;
+			}
+			if (!setting.type) {
+				console.warn("Setting is missing type:", setting);
+				continue;
+			}
+			// could go on...
+
 			// TODO: consider making everything use <label for=""> inside and <div> outside
 			const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
 			rowEl.className = "tracky-mouse-control-row";
@@ -1008,16 +889,102 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 
 			const control = rowEl.querySelector(`.${setting.className}`);
+			const getControlValue = () => {
+				if (setting.type === "slider") {
+					return Number(control.value);
+				} else if (setting.type === "checkbox") {
+					return control.checked;
+				} else if (setting.type === "dropdown") {
+					return control.value;
+				}
+			};
+			const setControlValue = (value) => {
+				if (setting.type === "slider") {
+					control.value = value;
+				} else if (setting.type === "checkbox") {
+					control.checked = value;
+				} else if (setting.type === "dropdown") {
+					control.value = value;
+				}
+			};
+
+			// const load = (control, settings) => {
+			// 	if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
+			// 		s.headTrackingSensitivityX = settings.globalSettings.headTrackingSensitivityX;
+			// 		control.value = s.headTrackingSensitivityX * 1000;
+			// 	}
+			// };
+			// const loadValueFromControl = (control) => {
+			// 	s.headTrackingSensitivityX = control.value / 1000;
+			// };
+			// const save = () => {
+			// 	setOptions({ globalSettings: { headTrackingSensitivityX: s.headTrackingSensitivityX } });
+			// };
+			const load = (settings, initialLoad) => {
+				if (settings.globalSettings[setting.key] !== undefined) {
+					s[setting.key] = settings.globalSettings[setting.key];
+					// control.value = s[setting.key] * 1000;
+					setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
+				}
+				if (initialLoad) {
+					setting.afterInitialLoad?.();
+				}
+			};
+			const loadValueFromControl = () => {
+				// s[setting.key] = control.value / 1000;
+				s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+			};
+			const save = () => {
+				setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
+			};
+
 			// Load defaults
-			setting.loadValueFromControl(control);
+			loadValueFromControl();
 			// Handle changes
 			control.addEventListener("change", () => {
-				setting.loadValueFromControl(control);
-				setting.save();
+				loadValueFromControl();
+				save();
 				// TODO: also call this if the setting is changed through CLI
 				// Would be good to have a pattern where it's subscribing to changes to a settings store
 				setting.handleSettingChange?.();
 			});
+			// Handle loading from stored settings
+			setting._load = load;
+
+			// // Load defaults
+			// setting._load = (settings, initialLoad) => {
+
+			// 	if (settings?.globalSettings?.[setting.key] !== undefined) {
+			// 		s[setting.key] = settings.globalSettings[setting.key];
+			// 		// control.value = setting.settingValueToInputValue ? setting.settingValueToInputValue(s[setting.key]) : s[setting.key];
+			// 		// setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key] ?? setting.default));
+			// 	}
+			// 	// TODO: optimization? previously this was only called when the particular setting's control needed to be updated
+			// 	// now it's outside of the conditional there, but does that matter?
+			// 	setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key] ?? setting.default));
+			// 	// setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
+			// 	// I don't know if this hook makes sense
+			// 	if (initialLoad) {
+			// 		setting.afterInitialLoad?.();
+			// 	}
+			// };
+			// // TODO: clarify `initialLoad`; isn't this load more "initial" than when loading from stored settings?
+			// // should it be passed true here? or should we rename it `fromStoredSettings`?
+			// // setting._load({}, true);
+			// // setting._load({ globalSettings: { [setting.key]: setting.default } }, true);
+			// // setting._load({ globalSettings: { [setting.key]: setting.default } }, false);
+			// setting._load();
+			// // Handle changes
+			// control.addEventListener("change", () => {
+			// 	// Apply new value from control
+			// 	s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+			// 	// Save changes
+			// 	setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
+			// 	// Trigger any additional change handling
+			// 	// TODO: also call this if the setting is changed through CLI
+			// 	// Would be good to have a pattern where it's subscribing to changes to a settings store
+			// 	setting.handleSettingChange?.();
+			// });
 		}
 		detailsEl.appendChild(bodyEl);
 		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
@@ -1241,12 +1208,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		if ("globalSettings" in settings) {
 			for (const category of settingsCategories) {
 				for (const setting of category.settings) {
-					if (setting.load) {
-						const control = uiContainer.querySelector(`.${setting.className}`);
-						if (control) {
-							setting.load(control, settings, initialLoad);
-						}
-					}
+					setting._load?.(settings, initialLoad);
 				}
 			}
 		}
