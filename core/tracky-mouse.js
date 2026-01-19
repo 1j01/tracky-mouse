@@ -980,7 +980,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var debugAcceleration = false;
 	var showDebugText = false;
 	var showDebugEyelidContours = false;
-	var showDebugEyeZoom = true;
+	var showDebugEyeZoom = false;
+	var showDebugHeadTilt = false;
 
 	// Constants (could become Advanced Settings in the future)
 	var defaultWidth = 640;
@@ -2068,7 +2069,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 
 			const keypoints = facemeshPrediction.keypoints;
-			if (keypoints) {
+			if (showDebugHeadTilt && keypoints) {
 				const top = keypoints[10];
 				const chin = keypoints[152];
 				const left = keypoints[454]; // Subject left (Image right)
