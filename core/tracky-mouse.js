@@ -590,23 +590,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
 	// Settings (initialized later; defaults are defined in settingsCategories)
-	var sensitivityX;
-	var sensitivityY;
-	var acceleration;
-	var minDistance;
-	var tiltInfluence;
-	var delayBeforeDragging;
-	var mirror;
-	var cameraDeviceId;
-	var startEnabled;
-	var runAtLogin;
-	var swapMouseButtons;
-	var clickingMode;
+	const s = {};
 
 	// Abstract model of settings UI.
 	// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
 	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
-	// TODO: make setting definitions less verbose (using an object to store settings will help a lot!)
+	// TODO: make setting definitions less verbose. Now that I've made it store active settings in an object instead of loose variables, it should be easier.
+	// Still need to rename the properties to match the serialized settings keys though.
 	const settingsCategories = [
 		{
 			title: "Head Tracking",
@@ -617,15 +607,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingSensitivityX",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-							sensitivityX = settings.globalSettings.headTrackingSensitivityX;
-							control.value = sensitivityX * 1000;
+							s.sensitivityX = settings.globalSettings.headTrackingSensitivityX;
+							control.value = s.sensitivityX * 1000;
 						}
 					},
 					loadValueFromControl: (control) => {
-						sensitivityX = control.value / 1000;
+						s.sensitivityX = control.value / 1000;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
+						setOptions({ globalSettings: { headTrackingSensitivityX: s.sensitivityX } });
 					},
 					type: "slider",
 					min: 0,
@@ -642,15 +632,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingSensitivityY",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-							sensitivityY = settings.globalSettings.headTrackingSensitivityY;
-							control.value = sensitivityY * 1000;
+							s.sensitivityY = settings.globalSettings.headTrackingSensitivityY;
+							control.value = s.sensitivityY * 1000;
 						}
 					},
 					loadValueFromControl: (control) => {
-						sensitivityY = control.value / 1000;
+						s.sensitivityY = control.value / 1000;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
+						setOptions({ globalSettings: { headTrackingSensitivityY: s.sensitivityY } });
 					},
 					type: "slider",
 					min: 0,
@@ -695,15 +685,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingAcceleration",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-							acceleration = settings.globalSettings.headTrackingAcceleration;
-							control.value = acceleration * 100;
+							s.acceleration = settings.globalSettings.headTrackingAcceleration;
+							control.value = s.acceleration * 100;
 						}
 					},
 					loadValueFromControl: (control) => {
-						acceleration = control.value / 100;
+						s.acceleration = control.value / 100;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
+						setOptions({ globalSettings: { headTrackingAcceleration: s.acceleration } });
 					},
 					type: "slider",
 					min: 0,
@@ -720,15 +710,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingMinDistance",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-							minDistance = settings.globalSettings.headTrackingMinDistance;
-							control.value = minDistance;
+							s.minDistance = settings.globalSettings.headTrackingMinDistance;
+							control.value = s.minDistance;
 						}
 					},
 					loadValueFromControl: (control) => {
-						minDistance = control.value;
+						s.minDistance = control.value;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
+						setOptions({ globalSettings: { headTrackingMinDistance: s.minDistance } });
 					},
 					type: "slider",
 					min: 0,
@@ -745,15 +735,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingTiltInfluence",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
-							tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
-							control.value = tiltInfluence * 100;
+							s.tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
+							control.value = s.tiltInfluence * 100;
 						}
 					},
 					loadValueFromControl: (control) => {
-						tiltInfluence = control.value / 100;
+						s.tiltInfluence = control.value / 100;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingTiltInfluence: tiltInfluence } });
+						setOptions({ globalSettings: { headTrackingTiltInfluence: s.tiltInfluence } });
 					},
 					type: "slider",
 					min: 0,
@@ -787,15 +777,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "clickingMode",
 					load: (control, settings) => {
 						if (settings.globalSettings.clickingMode !== undefined) {
-							clickingMode = settings.globalSettings.clickingMode;
-							control.value = clickingMode;
+							s.clickingMode = settings.globalSettings.clickingMode;
+							control.value = s.clickingMode;
 						}
 					},
 					loadValueFromControl: (control) => {
-						clickingMode = control.value;
+						s.clickingMode = control.value;
 					},
 					save: () => {
-						setOptions({ globalSettings: { clickingMode: clickingMode } });
+						setOptions({ globalSettings: { clickingMode: s.clickingMode } });
 					},
 					type: "dropdown",
 					options: [
@@ -817,15 +807,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "swapMouseButtons",
 					load: (control, settings) => {
 						if (settings.globalSettings.swapMouseButtons !== undefined) {
-							swapMouseButtons = settings.globalSettings.swapMouseButtons;
-							control.checked = swapMouseButtons;
+							s.swapMouseButtons = settings.globalSettings.swapMouseButtons;
+							control.checked = s.swapMouseButtons;
 						}
 					},
 					loadValueFromControl: (control) => {
-						swapMouseButtons = control.checked;
+						s.swapMouseButtons = control.checked;
 					},
 					save: () => {
-						setOptions({ globalSettings: { swapMouseButtons: swapMouseButtons } });
+						setOptions({ globalSettings: { swapMouseButtons: s.swapMouseButtons } });
 					},
 					type: "checkbox",
 					default: false,
@@ -843,15 +833,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "delayBeforeDragging",
 					load: (control, settings) => {
 						if (settings.globalSettings.delayBeforeDragging !== undefined) {
-							delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
-							control.value = delayBeforeDragging;
+							s.delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
+							control.value = s.delayBeforeDragging;
 						}
 					},
 					loadValueFromControl: (control) => {
-						delayBeforeDragging = control.value;
+						s.delayBeforeDragging = control.value;
 					},
 					save: () => {
-						setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
+						setOptions({ globalSettings: { delayBeforeDragging: s.delayBeforeDragging } });
 					},
 					type: "slider",
 					min: 0,
@@ -874,15 +864,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "cameraDeviceId",
 					load: (control, settings) => {
 						if (settings.globalSettings.cameraDeviceId !== undefined) {
-							cameraDeviceId = settings.globalSettings.cameraDeviceId;
-							control.value = cameraDeviceId;
+							s.cameraDeviceId = settings.globalSettings.cameraDeviceId;
+							control.value = s.cameraDeviceId;
 						}
 					},
 					loadValueFromControl: (control) => {
-						cameraDeviceId = control.value;
+						s.cameraDeviceId = control.value;
 					},
 					save: () => {
-						setOptions({ globalSettings: { cameraDeviceId: cameraDeviceId } });
+						setOptions({ globalSettings: { cameraDeviceId: s.cameraDeviceId } });
 					},
 					handleSettingChange: () => {
 						TrackyMouse.useCamera();
@@ -900,15 +890,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "mirror",
 					load: (control, settings) => {
 						if (settings.globalSettings.mirror !== undefined) {
-							mirror = settings.globalSettings.mirror;
-							control.checked = mirror;
+							s.mirror = settings.globalSettings.mirror;
+							control.checked = s.mirror;
 						}
 					},
 					loadValueFromControl: (control) => {
-						mirror = control.checked;
+						s.mirror = control.checked;
 					},
 					save: () => {
-						setOptions({ globalSettings: { mirror: mirror } });
+						setOptions({ globalSettings: { mirror: s.mirror } });
 					},
 					type: "checkbox",
 					default: true,
@@ -925,18 +915,18 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "startEnabled",
 					load: (control, settings, initialLoad) => {
 						if (settings.globalSettings.startEnabled !== undefined) {
-							startEnabled = settings.globalSettings.startEnabled;
-							control.checked = startEnabled;
+							s.startEnabled = settings.globalSettings.startEnabled;
+							control.checked = s.startEnabled;
 							if (initialLoad) {
-								paused = !startEnabled;
+								paused = !s.startEnabled;
 							}
 						}
 					},
 					loadValueFromControl: (control) => {
-						startEnabled = control.checked;
+						s.startEnabled = control.checked;
 					},
 					save: () => {
-						setOptions({ globalSettings: { startEnabled: startEnabled } });
+						setOptions({ globalSettings: { startEnabled: s.startEnabled } });
 					},
 					type: "checkbox",
 					default: false,
@@ -947,15 +937,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "runAtLogin",
 					load: (control, settings) => {
 						if (settings.globalSettings.runAtLogin !== undefined) {
-							runAtLogin = settings.globalSettings.runAtLogin;
-							control.checked = runAtLogin;
+							s.runAtLogin = settings.globalSettings.runAtLogin;
+							control.checked = s.runAtLogin;
 						}
 					},
 					loadValueFromControl: (control) => {
-						runAtLogin = control.checked;
+						s.runAtLogin = control.checked;
 					},
 					save: () => {
-						setOptions({ globalSettings: { runAtLogin: runAtLogin } });
+						setOptions({ globalSettings: { runAtLogin: s.runAtLogin } });
 					},
 					type: "checkbox",
 					default: false,
@@ -1264,18 +1254,18 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			formatVersion,
 			formatName,
 			globalSettings: {
-				startEnabled,
-				runAtLogin,
-				swapMouseButtons,
-				clickingMode,
-				mirrorCameraView: mirror,
-				cameraDeviceId,
-				headTrackingSensitivityX: sensitivityX,
-				headTrackingSensitivityY: sensitivityY,
-				headTrackingAcceleration: acceleration,
-				headTrackingMinDistance: minDistance,
-				headTrackingTiltInfluence: tiltInfluence,
-				delayBeforeDragging: delayBeforeDragging,
+				startEnabled: s.startEnabled,
+				runAtLogin: s.runAtLogin,
+				swapMouseButtons: s.swapMouseButtons,
+				clickingMode: s.clickingMode,
+				mirrorCameraView: s.mirror,
+				cameraDeviceId: s.cameraDeviceId,
+				headTrackingSensitivityX: s.sensitivityX,
+				headTrackingSensitivityY: s.sensitivityY,
+				headTrackingAcceleration: s.acceleration,
+				headTrackingMinDistance: s.minDistance,
+				headTrackingTiltInfluence: s.tiltInfluence,
+				delayBeforeDragging: s.delayBeforeDragging,
 				// TODO:
 				// eyeTrackingSensitivityX,
 				// eyeTrackingSensitivityY,
@@ -1309,7 +1299,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	};
 
-	paused = !startEnabled;
+	paused = !s.startEnabled;
 
 	let populateCameraList = () => { };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
@@ -1353,21 +1343,21 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					option.value = device.deviceId;
 					option.text = device.label || `Camera ${cameraSelect.length}`;
 					cameraSelect.appendChild(option);
-					if (device.deviceId === cameraDeviceId) {
+					if (device.deviceId === s.cameraDeviceId) {
 						found = true;
 					}
 				}
 				// Defaulting to "Default" would imply a preference isn't stored.
-				// cameraSelect.value = found ? cameraDeviceId : "";
+				// cameraSelect.value = found ? s.cameraDeviceId : "";
 				// Show a placeholder for the selected camera
-				if (cameraDeviceId && !found) {
+				if (s.cameraDeviceId && !found) {
 					const option = document.createElement("option");
-					option.value = cameraDeviceId;
-					const knownInfo = knownCameras[cameraDeviceId];
+					option.value = s.cameraDeviceId;
+					const knownInfo = knownCameras[s.cameraDeviceId];
 					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
 					cameraSelect.appendChild(option);
 				}
-				cameraSelect.value = cameraDeviceId;
+				cameraSelect.value = s.cameraDeviceId;
 			});
 		};
 		populateCameraList();
@@ -1433,9 +1423,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				facingMode: "user",
 			}
 		};
-		if (cameraDeviceId) {
+		if (s.cameraDeviceId) {
 			delete constraints.video.facingMode;
-			constraints.video.deviceId = { exact: cameraDeviceId };
+			constraints.video.deviceId = { exact: s.cameraDeviceId };
 		}
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			populateCameraList();
@@ -1700,7 +1690,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			return;
 		}
 		const rect = canvas.getBoundingClientRect();
-		if (mirror) {
+		if (s.mirror) {
 			pointTracker.addPoint(
 				(rect.right - event.clientX) / rect.width * canvas.width,
 				(event.clientY - rect.top) / rect.height * canvas.height,
@@ -1765,7 +1755,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 		currentCameraImageData = imageData;
 
-		if (mirror) {
+		if (s.mirror) {
 			ctx.translate(canvas.width, 0);
 			ctx.scale(-1, 1);
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
@@ -1965,7 +1955,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 
 						let clickButton = -1;
-						if (clickingMode === "blink" || showDebugEyeZoom || showDebugEyelidContours) {
+						if (s.clickingMode === "blink" || showDebugEyeZoom || showDebugEyelidContours) {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -2095,7 +2085,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						} else {
 							blinkInfo = null;
 						}
-						if (clickingMode === "open-mouth") {
+						if (s.clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
 							// TODO: refactor and move this code (it's too nested)
 							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
@@ -2230,7 +2220,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					const padding = 10;
 
 					// Calculate screen coordinates for the text box
-					let screenX = mirror ? canvas.width - cx : cx;
+					let screenX = s.mirror ? canvas.width - cx : cx;
 					let screenY = cy;
 
 					// Nominal position relative to head center
@@ -2242,11 +2232,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					textScreenY = Math.max(textLineHeight, Math.min(canvas.height - boxHeight + textLineHeight, textScreenY));
 
 					ctx.save();
-					if (mirror) {
+					if (s.mirror) {
 						ctx.scale(-1, 1);
 					}
 
-					const screenNoseX = mirror ? canvas.width - cx : cx;
+					const screenNoseX = s.mirror ? canvas.width - cx : cx;
 					const screenNoseY = cy;
 
 					const dx = textScreenX - screenNoseX;
@@ -2292,7 +2282,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 		}
 
-		if (clickingMode === "blink" && blinkInfo) {
+		if (s.clickingMode === "blink" && blinkInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			const drawEye = (eye) => {
@@ -2404,7 +2394,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 			ctx.restore();
 		}
-		if (clickingMode === "open-mouth" && mouthInfo) {
+		if (s.clickingMode === "open-mouth" && mouthInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = mouthInfo.mouthOpen ? "red" : "cyan";
@@ -2500,13 +2490,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
+			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.acceleration);
 
 			var distance = Math.hypot(movementX, movementY);
-			var deltaX = accelerate(movementX * sensitivityX, distance);
-			var deltaY = accelerate(movementY * sensitivityY, distance);
+			var deltaX = accelerate(movementX * s.sensitivityX, distance);
+			var deltaY = accelerate(movementY * s.sensitivityY, distance);
 
-			if (tiltInfluence > 0) {
+			if (s.tiltInfluence > 0) {
 				const yawRange = [-30 * Math.PI / 180, 30 * Math.PI / 180];
 				const pitchRange = [-10 * Math.PI / 180, 15 * Math.PI / 180];
 
@@ -2535,8 +2525,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				//   "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
 				//   This setting in particular is already probably hard to understand, so unless
 				//   splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
-				const slowingInfluence = tiltInfluence;
-				const speedingInfluence = Math.max(0, Math.min(1, normalize(tiltInfluence, 0.8, 1)));
+				const slowingInfluence = s.tiltInfluence;
+				const speedingInfluence = Math.max(0, Math.min(1, normalize(s.tiltInfluence, 0.8, 1)));
 				if (deltaX * deltaXToMatchTilt < 0) {
 					deltaX *= 1 - slowingInfluence;
 				} else {
@@ -2552,7 +2542,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// Mimicking eViacam's "Motion Threshold" implementation
 			// https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L310-L312
 			// (a threshold on instantaneous Manhattan distance, or in other words, x and y speed, separately)
-			// - It's applied after acceleration, following eViacam's lead,
+			// - It's applied after s.acceleration, following eViacam's lead,
 			// which makes sense in order to have the setting's unit make sense as "pixels",
 			// rather than "pixels before applying a function",
 			// to say nothing of the qualitative differences there might be in reordering the operations.
@@ -2565,17 +2555,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			//   You have to be in the center of the leash region for it to provide stability.
 			//   I'm not sure what a hybrid would look like; it might make more sense as two
 			//   separate settings, "motion threshold" and "leash distance".
-			if (Math.abs(deltaX * screenWidth) < minDistance) {
+			if (Math.abs(deltaX * screenWidth) < s.minDistance) {
 				deltaX = 0;
 			}
-			if (Math.abs(deltaY * screenHeight) < minDistance) {
+			if (Math.abs(deltaY * screenHeight) < s.minDistance) {
 				deltaY = 0;
 			}
 			// Avoid dragging when trying to click by ignoring movement for a short time after a mouse down.
 			// This applied previously also to release, to help with double clicks,
 			// but this felt bad, and I find personally that I can still do double clicks without that help.
 			const timeSinceMouseDown = performance.now() - lastMouseDownTime;
-			if (timeSinceMouseDown < delayBeforeDragging) {
+			if (timeSinceMouseDown < s.delayBeforeDragging) {
 				deltaX = 0;
 				deltaY = 0;
 			}
@@ -2589,7 +2579,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.save();
 				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, graphWidth, graphHeight);
-				const highlightInput = movementX * sensitivityX;
+				const highlightInput = movementX * s.sensitivityX;
 				for (let x = 0; x < graphWidth; x++) {
 					const input = x / graphWidth * graphMaxInput;
 					const output = accelerate(input, input);
