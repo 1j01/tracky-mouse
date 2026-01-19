@@ -596,7 +596,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
 	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
 	// TODO: make setting definitions less verbose. Now that I've made it store active settings in an object instead of loose variables, it should be easier.
-	// Still need to rename the properties to match the serialized settings keys though.
 	const settingsCategories = [
 		{
 			title: "Head Tracking",
@@ -607,15 +606,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingSensitivityX",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-							s.sensitivityX = settings.globalSettings.headTrackingSensitivityX;
-							control.value = s.sensitivityX * 1000;
+							s.headTrackingSensitivityX = settings.globalSettings.headTrackingSensitivityX;
+							control.value = s.headTrackingSensitivityX * 1000;
 						}
 					},
 					loadValueFromControl: (control) => {
-						s.sensitivityX = control.value / 1000;
+						s.headTrackingSensitivityX = control.value / 1000;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityX: s.sensitivityX } });
+						setOptions({ globalSettings: { headTrackingSensitivityX: s.headTrackingSensitivityX } });
 					},
 					type: "slider",
 					min: 0,
@@ -632,15 +631,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingSensitivityY",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-							s.sensitivityY = settings.globalSettings.headTrackingSensitivityY;
-							control.value = s.sensitivityY * 1000;
+							s.headTrackingSensitivityY = settings.globalSettings.headTrackingSensitivityY;
+							control.value = s.headTrackingSensitivityY * 1000;
 						}
 					},
 					loadValueFromControl: (control) => {
-						s.sensitivityY = control.value / 1000;
+						s.headTrackingSensitivityY = control.value / 1000;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingSensitivityY: s.sensitivityY } });
+						setOptions({ globalSettings: { headTrackingSensitivityY: s.headTrackingSensitivityY } });
 					},
 					type: "slider",
 					min: 0,
@@ -657,15 +656,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				// 	// key: "headTrackingSmoothing",
 				// 	load: (control, settings) => {
 				// 		if (settings.globalSettings.headTrackingSmoothing !== undefined) {
-				// 			headTrackingSmoothing = settings.globalSettings.headTrackingSmoothing
-				// 			control.value = headTrackingSmoothing;
+				// 			s.headTrackingSmoothing = settings.globalSettings.headTrackingSmoothing;
+				// 			control.value = s.headTrackingSmoothing;
 				// 		}
 				// 	},
 				// 	loadValueFromControl: (control) => {
-				// 		headTrackingSmoothing = control.value;
+				// 		s.headTrackingSmoothing = control.value;
 				// 	},
 				// 	save: () => {
-				// 		setOptions({ globalSettings: { headTrackingSmoothing: headTrackingSmoothing } });
+				// 		setOptions({ globalSettings: { headTrackingSmoothing: s.headTrackingSmoothing } });
 				// 	},
 				// 	type: "slider",
 				// 	min: 0,
@@ -676,6 +675,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				// 		max: "Smooth", // or "Smoothed"
 				// 	},
 				// },
+
+				// TODO:
+				// - eyeTrackingSensitivityX
+				// - eyeTrackingSensitivityY
+				// - eyeTrackingAcceleration
+
 				// TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side.
 				// Should it be swapped? What does other software with acceleration control look like?
 				// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
@@ -685,15 +690,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingAcceleration",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-							s.acceleration = settings.globalSettings.headTrackingAcceleration;
-							control.value = s.acceleration * 100;
+							s.headTrackingAcceleration = settings.globalSettings.headTrackingAcceleration;
+							control.value = s.headTrackingAcceleration * 100;
 						}
 					},
 					loadValueFromControl: (control) => {
-						s.acceleration = control.value / 100;
+						s.headTrackingAcceleration = control.value / 100;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingAcceleration: s.acceleration } });
+						setOptions({ globalSettings: { headTrackingAcceleration: s.headTrackingAcceleration } });
 					},
 					type: "slider",
 					min: 0,
@@ -710,15 +715,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingMinDistance",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-							s.minDistance = settings.globalSettings.headTrackingMinDistance;
-							control.value = s.minDistance;
+							s.headTrackingMinDistance = settings.globalSettings.headTrackingMinDistance;
+							control.value = s.headTrackingMinDistance;
 						}
 					},
 					loadValueFromControl: (control) => {
-						s.minDistance = control.value;
+						s.headTrackingMinDistance = control.value;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingMinDistance: s.minDistance } });
+						setOptions({ globalSettings: { headTrackingMinDistance: s.headTrackingMinDistance } });
 					},
 					type: "slider",
 					min: 0,
@@ -735,15 +740,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					// key: "headTrackingTiltInfluence",
 					load: (control, settings) => {
 						if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
-							s.tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
-							control.value = s.tiltInfluence * 100;
+							s.headTrackingTiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
+							control.value = s.headTrackingTiltInfluence * 100;
 						}
 					},
 					loadValueFromControl: (control) => {
-						s.tiltInfluence = control.value / 100;
+						s.headTrackingTiltInfluence = control.value / 100;
 					},
 					save: () => {
-						setOptions({ globalSettings: { headTrackingTiltInfluence: s.tiltInfluence } });
+						setOptions({ globalSettings: { headTrackingTiltInfluence: s.headTrackingTiltInfluence } });
 					},
 					type: "slider",
 					min: 0,
@@ -1260,16 +1265,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				clickingMode: s.clickingMode,
 				mirrorCameraView: s.mirror,
 				cameraDeviceId: s.cameraDeviceId,
-				headTrackingSensitivityX: s.sensitivityX,
-				headTrackingSensitivityY: s.sensitivityY,
-				headTrackingAcceleration: s.acceleration,
-				headTrackingMinDistance: s.minDistance,
-				headTrackingTiltInfluence: s.tiltInfluence,
+				headTrackingSensitivityX: s.headTrackingSensitivityX,
+				headTrackingSensitivityY: s.headTrackingSensitivityY,
+				headTrackingAcceleration: s.headTrackingAcceleration,
+				headTrackingMinDistance: s.headTrackingMinDistance,
+				headTrackingTiltInfluence: s.headTrackingTiltInfluence,
 				delayBeforeDragging: s.delayBeforeDragging,
-				// TODO:
-				// eyeTrackingSensitivityX,
-				// eyeTrackingSensitivityY,
-				// eyeTrackingAcceleration,
 			},
 			// profiles: [],
 		};
@@ -2490,13 +2491,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.acceleration);
+			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
 
 			var distance = Math.hypot(movementX, movementY);
-			var deltaX = accelerate(movementX * s.sensitivityX, distance);
-			var deltaY = accelerate(movementY * s.sensitivityY, distance);
+			var deltaX = accelerate(movementX * s.headTrackingSensitivityX, distance);
+			var deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
 
-			if (s.tiltInfluence > 0) {
+			if (s.headTrackingTiltInfluence > 0) {
 				const yawRange = [-30 * Math.PI / 180, 30 * Math.PI / 180];
 				const pitchRange = [-10 * Math.PI / 180, 15 * Math.PI / 180];
 
@@ -2525,8 +2526,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				//   "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
 				//   This setting in particular is already probably hard to understand, so unless
 				//   splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
-				const slowingInfluence = s.tiltInfluence;
-				const speedingInfluence = Math.max(0, Math.min(1, normalize(s.tiltInfluence, 0.8, 1)));
+				const slowingInfluence = s.headTrackingTiltInfluence;
+				const speedingInfluence = Math.max(0, Math.min(1, normalize(s.headTrackingTiltInfluence, 0.8, 1)));
 				if (deltaX * deltaXToMatchTilt < 0) {
 					deltaX *= 1 - slowingInfluence;
 				} else {
@@ -2542,7 +2543,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// Mimicking eViacam's "Motion Threshold" implementation
 			// https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L310-L312
 			// (a threshold on instantaneous Manhattan distance, or in other words, x and y speed, separately)
-			// - It's applied after s.acceleration, following eViacam's lead,
+			// - It's applied after s.headTrackingAcceleration, following eViacam's lead,
 			// which makes sense in order to have the setting's unit make sense as "pixels",
 			// rather than "pixels before applying a function",
 			// to say nothing of the qualitative differences there might be in reordering the operations.
@@ -2555,10 +2556,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			//   You have to be in the center of the leash region for it to provide stability.
 			//   I'm not sure what a hybrid would look like; it might make more sense as two
 			//   separate settings, "motion threshold" and "leash distance".
-			if (Math.abs(deltaX * screenWidth) < s.minDistance) {
+			if (Math.abs(deltaX * screenWidth) < s.headTrackingMinDistance) {
 				deltaX = 0;
 			}
-			if (Math.abs(deltaY * screenHeight) < s.minDistance) {
+			if (Math.abs(deltaY * screenHeight) < s.headTrackingMinDistance) {
 				deltaY = 0;
 			}
 			// Avoid dragging when trying to click by ignoring movement for a short time after a mouse down.
@@ -2579,7 +2580,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.save();
 				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, graphWidth, graphHeight);
-				const highlightInput = movementX * s.sensitivityX;
+				const highlightInput = movementX * s.headTrackingSensitivityX;
 				for (let x = 0; x < graphWidth; x++) {
 					const input = x / graphWidth * graphMaxInput;
 					const output = accelerate(input, input);
