@@ -195,21 +195,8 @@ require("./menus.js"); //({ loadSettings });
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
 app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 
-// Settings
-// (actual defaults come from the HTML template)
-let swapMouseButtons = undefined; // for left-handed users on Windows, where serenade-driver is affected by the system setting
-let clickingMode = undefined; // 'off', 'dwell', 'blink', 'open-mouth' (future: 'smile' or 'raise-cheek', 'raise-eyebrow')
-let cameraDeviceId = undefined;
-let mirror = undefined;
-let sensitivityX = undefined;
-let sensitivityY = undefined;
-let acceleration = undefined;
-let minDistance = undefined;
-let tiltInfluence = undefined;
-let delayBeforeDragging = undefined;
-let startEnabled = undefined;
-let runAtLogin = undefined;
-let skippedUpdateVersion = undefined;
+
+let activeSettings = {};
 
 let enabled = true;
 
@@ -250,77 +237,32 @@ async function saveSettings() {
 	await fs.writeFile(settingsFile, JSON.stringify(serializeSettings(), null, '\t'));
 }
 function serializeSettings() {
-	// TODO: DRY with serializeSettings in tracky-mouse.js
+	// TODO: DRY with serializeSettings in tracky-mouse.js? The main stuff is taken care of now (listing every setting)
+	// but it's still two places defining / dealing with the serialization format
 	return {
 		formatVersion,
 		formatName,
-		globalSettings: {
-			startEnabled,
-			runAtLogin,
-			skippedUpdateVersion,
-			swapMouseButtons,
-			clickingMode,
-			cameraDeviceId,
-			mirrorCameraView: mirror,
-			headTrackingSensitivityX: sensitivityX,
-			headTrackingSensitivityY: sensitivityY,
-			headTrackingAcceleration: acceleration,
-			headTrackingMinDistance: minDistance,
-			headTrackingTiltInfluence: tiltInfluence,
-			delayBeforeDragging,
-			// TODO:
-			// eyeTrackingSensitivityX,
-			// eyeTrackingSensitivityY,
-			// eyeTrackingAcceleration,
-		},
+		globalSettings: activeSettings,
 		// profiles: [],
 	};
 };
 function deserializeSettings(settings) {
-	// TODO: DRY with deserializeSettings in tracky-mouse.js
+	// TODO: DRY with deserializeSettings in tracky-mouse.js? The main stuff is taken care of now (listing every setting)
+	// but it's still two places defining / dealing with the serialization format
+
 	// Handles partial settings objects,
 	// to allow manually editing the settings file, removing settings to reset them to their defaults,
 	// as well as accepting settings updates over IPC from the UI.
+	// Don't use `... in settings.globalSettings` to check if a setting is defined.
+	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
+	// Similarly, `Object.assign` would overwrite existing settings with undefined values.
 	if ("globalSettings" in settings) {
-		// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
-		if (settings.globalSettings.swapMouseButtons !== undefined) {
-			swapMouseButtons = settings.globalSettings.swapMouseButtons;
-		}
-		if (settings.globalSettings.clickingMode !== undefined) {
-			clickingMode = settings.globalSettings.clickingMode;
-		}
-		if (settings.globalSettings.cameraDeviceId !== undefined) {
-			cameraDeviceId = settings.globalSettings.cameraDeviceId;
-		}
-		if (settings.globalSettings.mirrorCameraView !== undefined) {
-			mirror = settings.globalSettings.mirrorCameraView;
-		}
-		if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-			sensitivityX = settings.globalSettings.headTrackingSensitivityX;
-		}
-		if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-			sensitivityY = settings.globalSettings.headTrackingSensitivityY;
-		}
-		if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-			acceleration = settings.globalSettings.headTrackingAcceleration;
-		}
-		if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-			minDistance = settings.globalSettings.headTrackingMinDistance;
-		}
-		if (settings.globalSettings.headTrackingTiltInfluence !== undefined) {
-			tiltInfluence = settings.globalSettings.headTrackingTiltInfluence;
-		}
-		if (settings.globalSettings.delayBeforeDragging !== undefined) {
-			delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
-		}
-		if (settings.globalSettings.startEnabled !== undefined) {
-			startEnabled = settings.globalSettings.startEnabled;
-		}
-		if (settings.globalSettings.skippedUpdateVersion !== undefined) {
-			skippedUpdateVersion = settings.globalSettings.skippedUpdateVersion;
+		for (const key in settings.globalSettings) {
+			if (settings.globalSettings[key] !== undefined) {
+				activeSettings[key] = settings.globalSettings[key];
+			}
 		}
 		if (settings.globalSettings.runAtLogin !== undefined) {
-			runAtLogin = settings.globalSettings.runAtLogin;
 			if (app.isPackaged) {
 				if (process.platform === 'win32') {
 					// Handle Squirrel installer on Windows.
@@ -330,7 +272,7 @@ function deserializeSettings(settings) {
 					const exeName = path.basename(process.execPath);
 
 					app.setLoginItemSettings({
-						openAtLogin: runAtLogin,
+						openAtLogin: activeSettings.runAtLogin,
 						path: updateExe,
 						args: [
 							'--processStart', `"${exeName}"`,
@@ -339,7 +281,7 @@ function deserializeSettings(settings) {
 					});
 				} else {
 					app.setLoginItemSettings({
-						openAtLogin: runAtLogin,
+						openAtLogin: activeSettings.runAtLogin,
 					});
 				}
 			} else {
@@ -449,7 +391,7 @@ const createWindow = () => {
 		screenOverlayWindow.webContents.send('overlayUpdate', {
 			isEnabled: enabled && regainControlTimeout === null,
 			isManualTakeback: enabled && regainControlTimeout !== null,
-			clickingMode,
+			clickingMode: activeSettings.clickingMode,
 			inputFeedback,
 			bottomOffset,
 		});
@@ -540,7 +482,7 @@ const createWindow = () => {
 	});
 
 	function clickingAllowed() {
-		if (regainControlTimeout || !enabled || clickingMode === 'off') {
+		if (regainControlTimeout || !enabled || activeSettings.clickingMode === 'off') {
 			return false;
 		}
 
@@ -567,7 +509,7 @@ const createWindow = () => {
 		y += screenOverlayWindow.getContentBounds().y;
 
 		await setMouseLocationTracky(x, y);
-		await click(swapMouseButtons ? "right" : "left");
+		await click(activeSettings.swapMouseButtons ? "right" : "left");
 
 		// const latency = performance.now() - time;
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
@@ -586,7 +528,7 @@ const createWindow = () => {
 			return;
 		}
 
-		const button = (swapMouseButtons !== secondaryButton) ? "right" : "left";
+		const button = (activeSettings.swapMouseButtons !== secondaryButton) ? "right" : "left";
 		if (down) {
 			if (!buttonStates[button]) {
 				buttonStates[button] = true;
@@ -694,9 +636,9 @@ app.on('ready', async () => {
 
 	checkForUpdates({
 		currentVersion: app.getVersion(),
-		skippedVersion: skippedUpdateVersion,
+		skippedVersion: activeSettings.skippedUpdateVersion,
 		pleaseSkipThisVersion: (version) => {
-			skippedUpdateVersion = version;
+			activeSettings.skippedUpdateVersion = version;
 			saveSettings();
 		}
 	});

@@ -604,8 +604,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var clickingMode;
 
 	// Abstract model of settings UI.
-	// Note: don't use `in` operator like `if ("headTrackingSensitivityX" in settings.globalSettings)`.
-	// Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
+	// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
+	// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
 	// TODO: make setting definitions less verbose (using an object to store settings will help a lot!)
 	const settingsCategories = [
 		{
