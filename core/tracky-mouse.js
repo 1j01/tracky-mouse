@@ -844,7 +844,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				rowEl.innerHTML = `
 					<span class="tracky-mouse-label-text">${setting.label}</span>
 					<span class="tracky-mouse-labeled-slider">
-						<input type="range" min="${setting.min}" max="${setting.max}" value="${setting.default}" class="${setting.className}">
+						<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
 						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
 						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
 					</span>
@@ -852,12 +852,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			} else if (setting.type === "checkbox") {
 				// special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work
 				rowEl.innerHTML = `
-					<input type="checkbox" id="${setting.className}" ${setting.default ? "checked" : ""} class="${setting.className}">
+					<input type="checkbox" id="${setting.className}" class="${setting.className}">
 					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
 				`;
 			} else if (setting.type === "dropdown") {
 				const optionsHtml = setting.options.map(option => `
-					<option value="${option.value}" ${option.value === setting.default ? "selected" : ""}>${option.label}</option>
+					<option value="${option.value}">${option.label}</option>
 				`.trim()).join("\n");
 				rowEl.innerHTML = `
 					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
@@ -909,7 +909,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			};
 
 			// Load defaults
-			loadValueFromControl();
+			// currently defined in input value units
+			setControlValue(setting.default);
+			s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+
 			// Handle changes
 			control.addEventListener("change", () => {
 				loadValueFromControl();
