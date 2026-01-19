@@ -1932,43 +1932,44 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								};
 							}
 
-							const newBlinkInfo = {
+							const eyes = {
 								leftEye: getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0),
 								rightEye: getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0)
 							};
 
 							const thresholdHigh = 0.2;
 							const thresholdLow = 0.16;
-							newBlinkInfo.leftEye.open = newBlinkInfo.leftEye.eyeAspectRatio > (blinkInfo?.leftEye.open ? thresholdLow : thresholdHigh);
-							newBlinkInfo.rightEye.open = newBlinkInfo.rightEye.eyeAspectRatio > (blinkInfo?.rightEye.open ? thresholdLow : thresholdHigh);
+							for (const key of ["leftEye", "rightEye"]) {
+								eyes[key].open = eyes[key].eyeAspectRatio > (blinkInfo?.[key].open ? thresholdLow : thresholdHigh);
+							}
 
 							// An attempt at biasing the blink detection based on the other eye's state
 							// (I'm not sure if this is the same as the idea I had noted above)
 							// const threshold = 0.16;
 							// const bias = 0.3;
-							// leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
-							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							// eyes.leftEye.open = eyes.leftEye.eyeAspectRatio - threshold - ((eyes.rightEye.eyeAspectRatio - threshold) * bias) > 0;
+							// eyes.rightEye.open = eyes.rightEye.eyeAspectRatio - threshold - ((eyes.leftEye.eyeAspectRatio - threshold) * bias) > 0;
 
 							// Involuntary blink rejection
 							const blinkRejectDuration = 100; // milliseconds
 							const currentTime = performance.now();
 							for (const key of ["leftEye", "rightEye"]) {
-								if (newBlinkInfo[key].open === blinkInfo?.[key].open) {
-									newBlinkInfo[key].timeSinceChange = blinkInfo?.[key].timeSinceChange ?? currentTime;
+								if (eyes[key].open === blinkInfo?.[key].open) {
+									eyes[key].timeSinceChange = blinkInfo?.[key].timeSinceChange ?? currentTime;
 								} else {
-									newBlinkInfo[key].timeSinceChange = currentTime;
+									eyes[key].timeSinceChange = currentTime;
 								}
 							}
-							const timeSinceChange = currentTime - Math.max(newBlinkInfo.leftEye.timeSinceChange, newBlinkInfo.rightEye.timeSinceChange);
-							newBlinkInfo.leftEye.winking = timeSinceChange > blinkRejectDuration && newBlinkInfo.rightEye.open && !newBlinkInfo.leftEye.open;
-							newBlinkInfo.rightEye.winking = timeSinceChange > blinkRejectDuration && newBlinkInfo.leftEye.open && !newBlinkInfo.rightEye.open;
+							const timeSinceChange = currentTime - Math.max(eyes.leftEye.timeSinceChange, eyes.rightEye.timeSinceChange);
+							eyes.leftEye.winking = timeSinceChange > blinkRejectDuration && eyes.rightEye.open && !eyes.leftEye.open;
+							eyes.rightEye.winking = timeSinceChange > blinkRejectDuration && eyes.leftEye.open && !eyes.rightEye.open;
 
-							if (newBlinkInfo.rightEye.winking) {
+							if (eyes.rightEye.winking) {
 								clickButton = 0;
-							} else if (newBlinkInfo.leftEye.winking) {
+							} else if (eyes.leftEye.winking) {
 								clickButton = 2;
 							}
-							blinkInfo = newBlinkInfo;
+							blinkInfo = eyes;
 						} else {
 							blinkInfo = null;
 						}
