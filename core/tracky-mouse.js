@@ -2230,6 +2230,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 				debugEyeCtx.fillStyle = "black";
 				debugEyeCtx.fillRect(0, 0, debugEyeCanvas.width, debugEyeCanvas.height);
+				debugEyeCtx.save();
+				debugEyeCtx.translate(s.mirror ? debugEyeCanvas.width : 0, 0);
+				debugEyeCtx.scale(s.mirror ? -1 : 1, 1);
 
 				const zoom = 5;
 				const drawDebugEye = (eye, offsetX) => {
@@ -2277,6 +2280,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 				drawDebugEye(blinkInfo.rightEye, 0);
 				drawDebugEye(blinkInfo.leftEye, boxWidth);
+
+				debugEyeCtx.restore();
 			} else {
 				debugEyeCanvas.style.display = "none";
 			}
