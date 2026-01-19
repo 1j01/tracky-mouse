@@ -708,7 +708,19 @@ app.on('ready', async () => {
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');
-		appWindow.webContents.send("shortcut", "toggle-tracking");
+		try {
+			appWindow.webContents.send("shortcut", "toggle-tracking");
+		} catch (error) {
+			// Speculative error handling for renderer process crash
+			// TODO: test this by crashing the renderer process
+			// probably want to use events instead of only responding after a failed keyboard shortcut
+			// also reloading may not work if load events are handled once or in a way that only works once
+			console.error("Failed to send shortcut event:", error);
+			console.error("appWindow.webContents.isDestroyed():", appWindow.webContents.isDestroyed());
+			if (appWindow.webContents.isDestroyed() || error.message.includes("Render frame was disposed before WebFrameMain could be accessed")) {
+				appWindow.webContents.reloadIgnoringCache();
+			}
+		}
 	});
 	if (!success) {
 		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
