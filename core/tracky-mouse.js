@@ -1832,6 +1832,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							const right = keypoints[234]; // Subject right (Image left)
 
 							if (top && bottom && left && right) {
+
+								headTilt.keypoints = { top, bottom, left, right };
+
 								// Pitch (X-axis rotation)
 								const pitchDy = bottom.y - top.y;
 								const pitchDz = bottom.z - top.z;
@@ -2088,11 +2091,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			const keypoints = facemeshPrediction.keypoints;
 			if (showDebugHeadTilt && keypoints) {
-				// TODO: use single source of truth for keypoints used in calculation!
-				const top = keypoints[10]; // Top of forehead
-				const bottom = keypoints[2]; // Bottom of nose (formerly chin; this better avoids jaw movement effects)
-				const left = keypoints[454]; // Subject left (Image right)
-				const right = keypoints[234]; // Subject right (Image left)
+				const { top, bottom, left, right } = headTilt.keypoints;
 				const nose = keypoints[1];
 
 				if (top && bottom && left && right && nose) {
