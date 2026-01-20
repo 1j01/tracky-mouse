@@ -980,7 +980,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// Debug flags (not shown in the UI; could become Advanced Settings in the future)
 	var debugAcceleration = false;
 	var showDebugText = false;
-	var showDebugEyelidContours = false;
 	var showDebugEyeZoom = false;
 	var showDebugHeadTilt = false;
 
@@ -1869,7 +1868,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 
 						let clickButton = -1;
-						if (s.clickingMode === "blink" || showDebugEyeZoom || showDebugEyelidContours) {
+						if (s.clickingMode === "blink" || showDebugEyeZoom) {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -1879,7 +1878,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// - When tilting your head up, the contour of an open eyelid becomes more straight, which can lead to false positives.
 							// - *This is a geometric explanation, but in practice, facemesh loses the ability to detect
 							//   whether the eye is closed when the head is tilted beyond a point.
-							//   Enable `showDebugEyelidContours` to see the shapes we're dealing with here.
+							//   Enable `showDebugEyeZoom` to see the shapes we're dealing with here.
 							// - Facemesh uses an "attention mesh model", enabled with `refineLandmarks: true`,
 							//   which adjusts points near the eyes and lips to be more accurate (and is 100% necessary for this blink detection to work).
 							//   This is what we might ideally target to improve blink detection.
@@ -2206,33 +2205,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
 				ctx.stroke();
 				ctx.restore();
-				// Zoom in and show the eyelid contour SHAPE, for qualitative debugging
-				// This helps to show that the facemesh model doesn't really know whether your eye is open or closed beyond a certain head angle.
-				// Therefore there's not much we can do using the eyelid contour to improve blink detection.
-				// We might be able to tease a little more accuracy out of it using surrounding points in some clever way, 3D information, etc.
-				// but fundamentally, garbage in, garbage out.
-				if (showDebugEyelidContours) {
-					const eyeCenter = [(eye.corners[0][0] + eye.corners[1][0]) / 2, (eye.corners[0][1] + eye.corners[1][1]) / 2];
-					ctx.save();
-					ctx.translate(eyeCenter[0], eyeCenter[1]);
-					ctx.scale(5, 5);
-					ctx.translate(-eyeCenter[0], -eyeCenter[1]);
-					ctx.strokeStyle = "green";
-					ctx.beginPath();
-					for (const contour of [eye.upperContour, eye.lowerContour]) {
-						for (let i = 0; i < contour.length; i++) {
-							const [x, y] = contour[i];
-							if (i === 0) {
-								ctx.moveTo(x, y);
-							} else {
-								ctx.lineTo(x, y);
-							}
-						}
-					}
-					ctx.lineWidth = 2 / 5;
-					ctx.stroke();
-					ctx.restore();
-				}
 			};
 			drawEye(blinkInfo.leftEye);
 			drawEye(blinkInfo.rightEye);
