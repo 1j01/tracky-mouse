@@ -1835,17 +1835,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								// Pitch (X-axis rotation)
 								const pitchDy = chin.y - top.y;
 								const pitchDz = chin.z - top.z;
-								let pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
+								headTilt.pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
 
 								// Yaw (Y-axis rotation)
 								const yawDx = left.x - right.x;
 								const yawDz = left.z - right.z;
-								let yaw = Math.atan2(yawDz, Math.abs(yawDx));
+								headTilt.yaw = Math.atan2(yawDz, Math.abs(yawDx));
 
 								// Roll (Z-axis rotation)
 								const rollDy = left.y - right.y;
 								const rollDx = left.x - right.x;
-								let roll = Math.atan2(rollDy, rollDx);
+								headTilt.roll = Math.atan2(rollDy, rollDx);
 
 								if (typeof OneEuroFilter !== "undefined") {
 									const timestamp = performance.now() / 1000;
@@ -1858,14 +1858,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 											headTiltFilters[axis] = new OneEuroFilter(freq, mincutoff, beta, dcutoff);
 										}
 									}
-									pitch = headTiltFilters.pitch.filter(pitch, timestamp);
-									yaw = headTiltFilters.yaw.filter(yaw, timestamp);
-									roll = headTiltFilters.roll.filter(roll, timestamp);
+									for (const axis of ["pitch", "yaw", "roll"]) {
+										headTilt[axis] = headTiltFilters[axis].filter(headTilt[axis], timestamp);
+									}
 								}
-
-								headTilt.pitch = pitch;
-								headTilt.yaw = yaw;
-								headTilt.roll = roll;
 							}
 						}
 
