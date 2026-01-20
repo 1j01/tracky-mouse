@@ -1867,6 +1867,38 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							}
 						}
 
+						function getAspectMetrics(upperContour, lowerContour) {
+							// The lower eye keypoints have the corners
+							const corners = [lowerContour[0], lowerContour[lowerContour.length - 1]];
+							// Excluding the corners isn't really important since their measures will be 0.
+							const otherPoints = upperContour.concat(lowerContour).filter(point => !corners.includes(point));
+							let highest = 0;
+							let lowest = 0;
+							for (const point of otherPoints) {
+								const distance = signedDistancePointLine(point, corners[0], corners[1]);
+								if (distance < lowest) {
+									lowest = distance;
+								}
+								if (distance > highest) {
+									highest = distance;
+								}
+							}
+
+							const width = Math.hypot(
+								corners[0][0] - corners[1][0],
+								corners[0][1] - corners[1][1]
+							);
+							const height = highest - lowest;
+							return {
+								corners,
+								upperContour,
+								lowerContour,
+								highest,
+								lowest,
+								heightRatio: height / width,
+							};
+						}
+
 						let clickButton = -1;
 						if (s.clickingMode === "blink" || showDebugEyeZoom) {
 							// Note: currently head tilt matters a lot, but ideally it should not.
@@ -1920,56 +1952,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//       you would likely be trying to use the same janky tracking results to determine whether the face is cut off.
 							//       It *might* work, but it also might be a bit of a chicken-and-egg problem.
 
-							function getEyeMetrics(eyeUpper, eyeLower) {
-								// The lower eye keypoints have the corners
-								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
-								// Excluding the corners isn't really important since their measures will be 0.
-								const otherPoints = eyeUpper.concat(eyeLower).filter(point => !corners.includes(point));
-								let highest = 0;
-								let lowest = 0;
-								for (const point of otherPoints) {
-									const distance = signedDistancePointLine(point, corners[0], corners[1]);
-									if (distance < lowest) {
-										lowest = distance;
-									}
-									if (distance > highest) {
-										highest = distance;
-									}
-								}
-
-								const eyeWidth = Math.hypot(
-									corners[0][0] - corners[1][0],
-									corners[0][1] - corners[1][1]
-								);
-								const eyeHeight = highest - lowest;
-								const eyeAspectRatio = eyeHeight / eyeWidth;
-								return {
-									corners,
-									upperContour: eyeUpper,
-									lowerContour: eyeLower,
-									highest,
-									lowest,
-									eyeAspectRatio,
-								};
-							}
-
 							const eyes = {
-								leftEye: getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0),
-								rightEye: getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0)
+								leftEye: getAspectMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0),
+								rightEye: getAspectMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0)
 							};
 
 							const thresholdHigh = 0.2;
 							const thresholdLow = 0.16;
 							for (const key of ["leftEye", "rightEye"]) {
-								eyes[key].open = eyes[key].eyeAspectRatio > (blinkInfo?.[key].open ? thresholdLow : thresholdHigh);
+								eyes[key].open = eyes[key].heightRatio > (blinkInfo?.[key].open ? thresholdLow : thresholdHigh);
 							}
 
 							// An attempt at biasing the blink detection based on the other eye's state
 							// (I'm not sure if this is the same as the idea I had noted above)
 							// const threshold = 0.16;
 							// const bias = 0.3;
-							// eyes.leftEye.open = eyes.leftEye.eyeAspectRatio - threshold - ((eyes.rightEye.eyeAspectRatio - threshold) * bias) > 0;
-							// eyes.rightEye.open = eyes.rightEye.eyeAspectRatio - threshold - ((eyes.leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							// eyes.leftEye.open = eyes.leftEye.heightRatio - threshold - ((eyes.rightEye.heightRatio - threshold) * bias) > 0;
+							// eyes.rightEye.open = eyes.rightEye.heightRatio - threshold - ((eyes.leftEye.heightRatio - threshold) * bias) > 0;
 
 							// Involuntary blink rejection
 							const blinkRejectDuration = 100; // milliseconds
@@ -1982,12 +1981,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								}
 							}
 							const timeSinceChange = currentTime - Math.max(eyes.leftEye.timeSinceChange, eyes.rightEye.timeSinceChange);
-							eyes.leftEye.winking = timeSinceChange > blinkRejectDuration && eyes.rightEye.open && !eyes.leftEye.open;
-							eyes.rightEye.winking = timeSinceChange > blinkRejectDuration && eyes.leftEye.open && !eyes.rightEye.open;
+							eyes.leftEye.active = timeSinceChange > blinkRejectDuration && eyes.rightEye.open && !eyes.leftEye.open;
+							eyes.rightEye.active = timeSinceChange > blinkRejectDuration && eyes.leftEye.open && !eyes.rightEye.open;
 
-							if (eyes.rightEye.winking) {
+							eyes.leftEye.thresholdMet = !eyes.leftEye.open;
+							eyes.rightEye.thresholdMet = !eyes.rightEye.open;
+
+							if (eyes.rightEye.active) {
 								clickButton = 0;
-							} else if (eyes.leftEye.winking) {
+							} else if (eyes.leftEye.active) {
 								clickButton = 2;
 							}
 							blinkInfo = eyes;
@@ -2188,26 +2190,28 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 		}
 
+		const drawAspectMetrics = ({ corners, lowest, highest, active, thresholdMet }) => {
+			const [a, b] = corners;
+			ctx.strokeStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
+			ctx.beginPath();
+			ctx.moveTo(a[0], a[1]);
+			ctx.lineTo(b[0], b[1]);
+			ctx.stroke();
+			// draw extents as a rectangle
+			ctx.save();
+			ctx.translate(a[0], a[1]);
+			ctx.rotate(Math.atan2(b[1] - a[1], b[0] - a[0]));
+			ctx.beginPath();
+			ctx.rect(0, lowest, Math.hypot(b[0] - a[0], b[1] - a[1]), highest - lowest);
+			ctx.stroke();
+			ctx.restore();
+		};
+
 		if (s.clickingMode === "blink" && blinkInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
-			const drawEye = (eye) => {
-				ctx.strokeStyle = eye.winking ? "red" : eye.open ? "cyan" : "yellow";
-				ctx.beginPath();
-				ctx.moveTo(eye.corners[0][0], eye.corners[0][1]);
-				ctx.lineTo(eye.corners[1][0], eye.corners[1][1]);
-				ctx.stroke();
-				// draw extents as a rectangle
-				ctx.save();
-				ctx.translate(eye.corners[0][0], eye.corners[0][1]);
-				ctx.rotate(Math.atan2(eye.corners[1][1] - eye.corners[0][1], eye.corners[1][0] - eye.corners[0][0]));
-				ctx.beginPath();
-				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
-				ctx.stroke();
-				ctx.restore();
-			};
-			drawEye(blinkInfo.leftEye);
-			drawEye(blinkInfo.rightEye);
+			drawAspectMetrics(blinkInfo.leftEye);
+			drawAspectMetrics(blinkInfo.rightEye);
 
 			if (showDebugEyeZoom) {
 				debugEyeCanvas.style.display = "";

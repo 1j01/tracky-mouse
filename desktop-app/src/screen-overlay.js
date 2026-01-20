@@ -40,8 +40,8 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 	// draw meters for blink and mouth openness
 	if (blinkInfo) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
-			inputFeedbackCtx.fillStyle = eye.winking ? "red" : eye.open ? "cyan" : "yellow";
-			inputFeedbackCtx.fillRect(eye === blinkInfo.leftEye ? 0 : 20, 0, 10, Math.max(2, 20 * eye.eyeAspectRatio));
+			inputFeedbackCtx.fillStyle = eye.active ? "red" : eye.thresholdMet ? "yellow" : "cyan";
+			inputFeedbackCtx.fillRect(eye === blinkInfo.leftEye ? 0 : 20, 0, 10, Math.max(2, 20 * eye.heightRatio));
 		}
 	}
 	if (mouthInfo) {
