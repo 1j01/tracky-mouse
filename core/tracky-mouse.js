@@ -2033,35 +2033,19 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// TODO: implement these clicking modes for the web library version
 						// and unhide the "Clicking mode" setting in the UI
 						// https://github.com/1j01/tracky-mouse/issues/72
-						// TODO: DRY
-						if ((clickButton === 0) !== buttonStates.left) {
-							window.electronAPI?.setMouseButtonState(0, clickButton === 0);
-							buttonStates.left = clickButton === 0;
-							if ((clickButton === 0)) {
-								lastMouseDownTime = performance.now();
-							} else {
-								// Limit "Delay Before Dragging" effect to the duration of a click.
-								// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
-								// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
-								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
-							}
-						}
-						if ((clickButton === 2) !== buttonStates.right) {
-							window.electronAPI?.setMouseButtonState(2, clickButton === 2);
-							buttonStates.right = clickButton === 2;
-							if ((clickButton === 2)) {
-								lastMouseDownTime = performance.now();
-							} else {
-								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
-							}
-						}
-						if ((clickButton === 1) !== buttonStates.middle) {
-							window.electronAPI?.setMouseButtonState(1, clickButton === 1);
-							buttonStates.middle = clickButton === 1;
-							if ((clickButton === 1)) {
-								lastMouseDownTime = performance.now();
-							} else {
-								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+						const buttonNames = ["left", "middle", "right"];
+						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
+							if ((clickButton === buttonIndex) !== buttonStates[buttonNames[buttonIndex]]) {
+								window.electronAPI?.setMouseButtonState(buttonIndex, clickButton === buttonIndex);
+								buttonStates[buttonNames[buttonIndex]] = clickButton === buttonIndex;
+								if ((clickButton === buttonIndex)) {
+									lastMouseDownTime = performance.now();
+								} else {
+									// Limit "Delay Before Dragging" effect to the duration of a click.
+									// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
+									// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
+									lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+								}
 							}
 						}
 					}, () => {
