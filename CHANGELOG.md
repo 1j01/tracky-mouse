@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Camera source** setting. You can now select your preferred camera from a dropdown.
 - **Tilt influence** slider. This lets you blend between point tracking and absolute head tilt. At 100% it will use only head tilt. In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) speeding up movement that is moving towards it. ([issue #45](https://github.com/1j01/tracky-mouse/issues/45))
+- **Head tilt calibration settings.** You can now adjust the horizontal and vertical tilt range and offset settings. This makes the head tilt feature more comfortable for different camera placements (above or below screen) and physical capabilities. ([issue #103](https://github.com/1j01/tracky-mouse/issues/103))
 - **You can now right click and middle click using mouth opening with eye modifiers.** Close your right eye and open your mouth to right click, close your left eye and open your mouth to middle click.
 - Added a new [Extras](https://trackymouse.js.org/extras) page to the website, with wallpaper downloads and text art.
 

@@ -696,6 +696,66 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						max: "Head tilt",
 					},
 				},
+				{
+					label: "Horizontal tilt range",
+					className: "tracky-mouse-head-tilt-yaw-range",
+					key: "headTiltYawRange",
+					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+					type: "slider",
+					min: 10,
+					max: 90,
+					default: 60,
+					labels: {
+						min: "Narrow",
+						max: "Wide",
+					},
+				},
+				{
+					label: "Horizontal tilt offset",
+					className: "tracky-mouse-head-tilt-yaw-offset",
+					key: "headTiltYawOffset",
+					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+					type: "slider",
+					min: -45,
+					max: 45,
+					default: 0,
+					labels: {
+						min: "Left",
+						max: "Right",
+					},
+				},
+				{
+					label: "Vertical tilt range",
+					className: "tracky-mouse-head-tilt-pitch-range",
+					key: "headTiltPitchRange",
+					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+					type: "slider",
+					min: 10,
+					max: 60,
+					default: 25,
+					labels: {
+						min: "Narrow",
+						max: "Wide",
+					},
+				},
+				{
+					label: "Vertical tilt offset",
+					className: "tracky-mouse-head-tilt-pitch-offset",
+					key: "headTiltPitchOffset",
+					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+					type: "slider",
+					min: -30,
+					max: 30,
+					default: 2.5,
+					labels: {
+						min: "Down",
+						max: "Up",
+					},
+				},
 			],
 		},
 
@@ -2358,8 +2418,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			var deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
 
 			if (s.headTrackingTiltInfluence > 0) {
-				const yawRange = [-30 * Math.PI / 180, 30 * Math.PI / 180];
-				const pitchRange = [-10 * Math.PI / 180, 15 * Math.PI / 180];
+				const yawRange = [
+					s.headTiltYawOffset - s.headTiltYawRange / 2,
+					s.headTiltYawOffset + s.headTiltYawRange / 2
+				];
+				const pitchRange = [
+					s.headTiltPitchOffset - s.headTiltPitchRange / 2,
+					s.headTiltPitchOffset + s.headTiltPitchRange / 2
+				];
 
 				function normalize(value, min, max) {
 					return (value - min) / (max - min);
