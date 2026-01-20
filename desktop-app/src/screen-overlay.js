@@ -38,6 +38,7 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 		return;
 	}
 	// draw meters for blink and mouth openness
+	// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
 	if (blinkInfo) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
 			inputFeedbackCtx.fillStyle = eye.active ? "red" : eye.thresholdMet ? "yellow" : "cyan";
@@ -45,8 +46,8 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 		}
 	}
 	if (mouthInfo) {
-		inputFeedbackCtx.fillStyle = mouthInfo.mouthOpen ? "red" : "cyan";
-		inputFeedbackCtx.fillRect(0, 20, 20, 40 * mouthInfo.mouthOpenDistance);
+		inputFeedbackCtx.fillStyle = mouthInfo.active ? "red" : mouthInfo.thresholdMet ? "yellow" : "cyan";
+		inputFeedbackCtx.fillRect(0, 20, 20, 40 * mouthInfo.heightRatio);
 	}
 }
 

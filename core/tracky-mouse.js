@@ -1998,35 +1998,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 						if (s.clickingMode === "open-mouth") {
 							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
-							// TODO: refactor and move this code (it's too nested)
-							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
-							// - mouth width (implies making an "O" mouth shape would be favored over a wide open mouth shape)
-							const mid = Math.floor(annotations.lipsLowerInner.length / 2);
-							const mouthTopBottomPoints = [
-								annotations.lipsUpperInner[mid],
-								annotations.lipsLowerInner[mid]
-							];
-							const mouthTopBottomDistance = Math.hypot(
-								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
-								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
-							);
-							const headSize = Math.hypot(
-								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
-							);
-							const thresholdHigh = headSize * 0.15;
-							const thresholdLow = headSize * 0.1;
-							// console.log("mouthTopBottomDistance", mouthTopBottomDistance, "threshold", threshold);
-							const mouthOpen = mouthTopBottomDistance > (mouthInfo?.mouthOpen ? thresholdLow : thresholdHigh);
-							if (mouthOpen) {
+							// TODO: move this gesture recognition code (it's too nested)
+							const prevThresholdMet = mouthInfo?.thresholdMet;
+							mouthInfo = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
+							const thresholdHigh = 0.15;
+							const thresholdLow = 0.1;
+							mouthInfo.thresholdMet = mouthInfo.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
+							mouthInfo.active = mouthInfo.thresholdMet;
+							if (mouthInfo.active) {
 								clickButton = 0;
 							}
-							mouthInfo = {
-								mouthOpen,
-								mouthTopBottomPoints,
-								corners: [annotations.lipsUpperInner[0], annotations.lipsUpperInner[annotations.lipsUpperInner.length - 1]],
-								mouthOpenDistance: mouthTopBottomDistance / headSize,
-							};
 						} else {
 							mouthInfo = null;
 						}
@@ -2285,32 +2266,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		if (s.clickingMode === "open-mouth" && mouthInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
-			ctx.strokeStyle = mouthInfo.mouthOpen ? "red" : "cyan";
-			ctx.beginPath();
-			// ctx.moveTo(mouthInfo.mouthTopBottomPoints[0][0], mouthInfo.mouthTopBottomPoints[0][1]);
-			// ctx.lineTo(mouthInfo.corners[0][0], mouthInfo.corners[0][1]);
-			// ctx.lineTo(mouthInfo.mouthTopBottomPoints[1][0], mouthInfo.mouthTopBottomPoints[1][1]);
-			// ctx.lineTo(mouthInfo.corners[1][0], mouthInfo.corners[1][1]);
-			// ctx.closePath();
-			const mouthCenter = [
-				(mouthInfo.corners[0][0] + mouthInfo.corners[1][0]) / 2,
-				(mouthInfo.corners[0][1] + mouthInfo.corners[1][1]) / 2
-			];
-			const extents = mouthInfo.mouthTopBottomPoints.map(point => signedDistancePointLine(point, mouthInfo.corners[0], mouthInfo.corners[1]));
-			// Draw as two lines rather than a rectangle (or ellipse) to indicate that it's not using aspect ratio of the mouth currently
-			// const highest = Math.max(...extents);
-			// const lowest = Math.min(...extents);
-			// const mouthWidth = Math.hypot(mouthInfo.corners[1][0] - mouthInfo.corners[0][0], mouthInfo.corners[1][1] - mouthInfo.corners[0][1]);
-			const mouthWidth = 50;
-			ctx.translate(mouthCenter[0], mouthCenter[1]);
-			ctx.rotate(Math.atan2(mouthInfo.corners[1][1] - mouthInfo.corners[0][1], mouthInfo.corners[1][0] - mouthInfo.corners[0][0]));
-			ctx.beginPath();
-			// ctx.rect(-mouthWidth / 2, lowest, mouthWidth, highest - lowest);
-			for (const extent of extents) {
-				ctx.moveTo(-mouthWidth / 2, extent);
-				ctx.lineTo(mouthWidth / 2, extent);
-			}
-			ctx.stroke();
+			drawAspectMetrics(mouthInfo);
 			ctx.restore();
 		}
 

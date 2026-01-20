@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   <script src="node_modules/tracky-mouse/lib/OneEuroFilter.js"></script>
   ```
   This adds a One Euro Filter to smooth out head tilt values, which can be very jittery otherwise.
+- **Improved open mouth detection** by using mouth aspect ratio instead of a simple distance between two lip points. If you make a narrow "O" shape with your mouth, it will detect that more reliably.
 - **Mirror** setting is now grouped under Video.
 - The yellow status text at the bottom of the screen now avoids the taskbar on Windows and the dock on macOS.
 - The screen overlay will now adapt to screen resolution changes.
