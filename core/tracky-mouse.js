@@ -1826,15 +1826,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						const keypoints = facemeshPrediction.keypoints;
 						if (keypoints) {
-							const top = keypoints[10];
-							const chin = keypoints[152];
+							const top = keypoints[10]; // Top of forehead
+							const bottom = keypoints[2]; // Bottom of nose (formerly chin; this better avoids jaw movement effects)
 							const left = keypoints[454]; // Subject left (Image right)
 							const right = keypoints[234]; // Subject right (Image left)
 
-							if (top && chin && left && right) {
+							if (top && bottom && left && right) {
 								// Pitch (X-axis rotation)
-								const pitchDy = chin.y - top.y;
-								const pitchDz = chin.z - top.z;
+								const pitchDy = bottom.y - top.y;
+								const pitchDz = bottom.z - top.z;
 								headTilt.pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
 
 								// Yaw (Y-axis rotation)
@@ -2088,13 +2088,14 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			const keypoints = facemeshPrediction.keypoints;
 			if (showDebugHeadTilt && keypoints) {
-				const top = keypoints[10];
-				const chin = keypoints[152];
+				// TODO: use single source of truth for keypoints used in calculation!
+				const top = keypoints[10]; // Top of forehead
+				const bottom = keypoints[2]; // Bottom of nose (formerly chin; this better avoids jaw movement effects)
 				const left = keypoints[454]; // Subject left (Image right)
 				const right = keypoints[234]; // Subject right (Image left)
 				const nose = keypoints[1];
 
-				if (top && chin && left && right && nose) {
+				if (top && bottom && left && right && nose) {
 
 					const cx = nose.x;
 					const cy = nose.y;
@@ -2159,7 +2160,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					ctx.restore();
 
 					// Visualize head direction
-					const vUp = { x: top.x - chin.x, y: top.y - chin.y, z: top.z - chin.z }; // Up vector (Chin to Top)
+					const vUp = { x: top.x - bottom.x, y: top.y - bottom.y, z: top.z - bottom.z }; // Up vector (Chin to Top)
 					const vRight = { x: left.x - right.x, y: left.y - right.y, z: left.z - right.z }; // Right vector (Right to Left)
 
 					// Cross Product: Right x Up
