@@ -2003,8 +2003,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						detectBlinks();
 						detectMouthOpen();
 
+						blinkInfo.used = false;
+						mouthInfo.used = false;
 						let clickButton = -1;
 						if (s.clickingMode === "blink") {
+							blinkInfo.used = true;
 							if (blinkInfo.rightEye.active) {
 								clickButton = 0;
 							} else if (blinkInfo.leftEye.active) {
@@ -2013,6 +2016,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
 						if (s.clickingMode === "open-mouth") {
+							mouthInfo.used = true;
+							blinkInfo.used = true;
 							// Modifiers with eye closing trigger different buttons,
 							// making this a three-button mouse.
 							// (Eyebrow raising could be another alternative modifier.)
@@ -2200,7 +2205,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.restore();
 		};
 
-		if ((s.clickingMode === "blink" || s.clickingMode === "open-mouth") && blinkInfo) {
+		if (blinkInfo?.used) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			drawAspectMetrics(blinkInfo.leftEye);
@@ -2275,7 +2280,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			}
 			ctx.restore();
 		}
-		if (s.clickingMode === "open-mouth" && mouthInfo) {
+		if (mouthInfo?.used) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			drawAspectMetrics(mouthInfo);
