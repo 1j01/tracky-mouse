@@ -817,3 +817,16 @@ app.on('activate', () => {
 		createWindow();
 	}
 });
+
+ipcMain.on('openCameraSettings', (_event, deviceId) => {
+	const exec = require('child_process').exec;
+	const command = `ffmpeg -f dshow -list_options true -i video="${deviceId}"`;
+
+	exec(command, (error, _stdout, stderr) => {
+		if (error) {
+			console.error(`Error opening camera settings: ${error.message}`);
+			return;
+		}
+		console.log(`Camera settings output: ${stderr}`);
+	});
+});

@@ -845,6 +845,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					type: "checkbox",
 					default: true,
 				},
+				{
+					label: "Open Camera Settings",
+					className: "tracky-mouse-open-camera-settings",
+					key: "openCameraSettings",
+					type: "button",
+					handleSettingChange: () => {
+						const selectedDeviceId = settings.cameraDeviceId || "";
+						window.electronAPI.openCameraSettings(selectedDeviceId);
+					},
+				},
 			]
 		},
 		{
@@ -923,6 +933,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					<select id="${setting.className}" class="${setting.className}">
 						${optionsHtml}
 					</select>
+				`;
+			} else if (setting.type === "button") {
+				rowEl.innerHTML = `
+					<button class="tracky-mouse-button ${setting.className}">${setting.label}</button>
 				`;
 			}
 			if (setting.platform === "desktop") {
