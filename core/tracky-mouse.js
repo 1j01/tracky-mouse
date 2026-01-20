@@ -2200,7 +2200,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			ctx.restore();
 		};
 
-		if (s.clickingMode === "blink" && blinkInfo) {
+		if ((s.clickingMode === "blink" || s.clickingMode === "open-mouth") && blinkInfo) {
 			ctx.save();
 			ctx.lineWidth = 2;
 			drawAspectMetrics(blinkInfo.leftEye);
