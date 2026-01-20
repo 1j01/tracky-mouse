@@ -2007,14 +2007,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							];
 							const mouthTopBottomDistance = Math.hypot(
 								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
-								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
+								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1],
+								annotations.lipsUpperInner[mid][2] - annotations.lipsLowerInner[mid][2],
 							);
 							const headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
+								annotations.leftCheek[0][1] - annotations.rightCheek[0][1],
+								annotations.leftCheek[0][2] - annotations.rightCheek[0][2],
 							);
-							const thresholdHigh = headSize * 0.15;
-							const thresholdLow = headSize * 0.1;
+							const thresholdHigh = headSize * 0.1;
+							const thresholdLow = headSize * 0.06;
 							// console.log("mouthTopBottomDistance", mouthTopBottomDistance, "threshold", threshold);
 							const mouthOpen = mouthTopBottomDistance > (mouthInfo?.mouthOpen ? thresholdLow : thresholdHigh);
 							if (mouthOpen) {
