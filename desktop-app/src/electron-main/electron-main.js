@@ -818,15 +818,79 @@ app.on('activate', () => {
 	}
 });
 
-ipcMain.on('openCameraSettings', (_event, deviceId) => {
-	const exec = require('child_process').exec;
-	const command = `ffmpeg -f dshow -list_options true -i video="${deviceId}"`;
+ipcMain.on('openCameraSettings', async (_event, cameraDeviceName) => {
+	console.log("Requested to open camera settings for device:", cameraDeviceName);
+	const { spawn } = require('child_process');
+	const pathToFfmpeg = require('ffmpeg-static');
+	console.log("Path to ffmpeg:", pathToFfmpeg);
 
-	exec(command, (error, _stdout, stderr) => {
-		if (error) {
-			console.error(`Error opening camera settings: ${error.message}`);
-			return;
+	const run = (program, args) => {
+		return new Promise((resolve, reject) => {
+			const proc = spawn(program, args);
+			let stdout = '';
+			let stderr = '';
+			proc.stdout.on('data', d => stdout += d);
+			proc.stderr.on('data', d => stderr += d);
+			proc.on('error', reject);
+			proc.on('close', code => {
+				resolve({ code, stdout, stderr });
+			});
+		});
+	};
+
+	let listDevicesResult;
+	try {
+		listDevicesResult = await run(pathToFfmpeg, [
+			'-list_devices', 'true', '-f', 'dshow', '-i', 'dummy', '-hide_banner'
+		]);
+	} catch (err) {
+		console.error(`Error listing devices: ${err.message}`);
+		return;
+	}
+
+	console.log(`Device list output: ${listDevicesResult.stderr}`);
+
+	const videoDeviceRegex = /\[dshow @ [^\]]+\] "([^"]+)" \(video\)/g;
+	let match;
+	let deviceFound = false;
+
+	while ((match = videoDeviceRegex.exec(listDevicesResult.stderr)) !== null) {
+		const deviceName = match[1];
+		console.log(`Found video device: ${deviceName}`);
+		if (
+			deviceName === cameraDeviceName ||
+			deviceName === cameraDeviceName.replace(/\s\(.*\)$/, '')
+		) {
+			deviceFound = true;
+			cameraDeviceName = deviceName;
+			break;
 		}
-		console.log(`Camera settings output: ${stderr}`);
-	});
+	}
+
+	if (!deviceFound) {
+		console.error(`Camera device "${cameraDeviceName}" not found in device list.`);
+		return;
+	}
+
+	console.log(`Opening settings dialog for camera device: ${cameraDeviceName}`);
+
+	try {
+		const result = await run(pathToFfmpeg, [
+			'-f', 'dshow',
+			'-show_video_device_dialog', 'true',
+			'-i', `video=${cameraDeviceName}`
+		]);
+		console.log(`Command output: ${result.stderr}`);
+		// const dshowRegex = /\[dshow @ [^\]]+\] (.*)/g;
+		// const relevantOutput = result.stderr.split('\n').filter(line => line.startsWith('[dshow @'));
+		// TODO: return error to renderer process
+		// and give nice message for "requested filter does not have a property page to show"
+		// like "The camera settings dialog is not available for this camera."
+		// or "No settings found for this camera source."
+		// Also, could fall back to opening ms-settings:privacy-webcam on Windows 10 and 11
+		// There's also a way to link to the settings for a specific camera in Windows 11:
+		// https://learn.microsoft.com/en-us/windows/apps/develop/camera/launch-camera-settings
+	} catch (err) {
+		console.error(`Error opening camera settings: ${err.message}`);
+	}
 });

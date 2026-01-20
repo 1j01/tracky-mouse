@@ -837,6 +837,24 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					],
 					default: "",
 				},
+				// TODO: move this inline with the camera source dropdown?
+				{
+					label: "Open Camera Settings",
+					className: "tracky-mouse-open-camera-settings",
+					key: "openCameraSettings",
+					type: "button",
+					platform: "desktop",
+					onClick: () => {
+						let knownCameras = {};
+						try {
+							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+						} catch (error) {
+							console.error("Failed to parse known cameras from localStorage", error);
+						}
+						const selectedDeviceName = knownCameras[s.cameraDeviceId]?.name || "Default";
+						window.electronAPI.openCameraSettings(selectedDeviceName);
+					},
+				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
 				{
 					label: "Mirror",
@@ -844,16 +862,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					key: "mirror",
 					type: "checkbox",
 					default: true,
-				},
-				{
-					label: "Open Camera Settings",
-					className: "tracky-mouse-open-camera-settings",
-					key: "openCameraSettings",
-					type: "button",
-					handleSettingChange: () => {
-						const selectedDeviceId = settings.cameraDeviceId || "";
-						window.electronAPI.openCameraSettings(selectedDeviceId);
-					},
 				},
 			]
 		},
@@ -936,7 +944,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				`;
 			} else if (setting.type === "button") {
 				rowEl.innerHTML = `
-					<button class="tracky-mouse-button ${setting.className}">${setting.label}</button>
+					<button class="${setting.className}">${setting.label}</button>
 				`;
 			}
 			if (setting.platform === "desktop") {
@@ -998,6 +1006,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			});
 			// Handle loading from stored settings
 			setting._load = load;
+
+			if (setting.type === "button") {
+				control.addEventListener("click", () => {
+					setting.onClick?.();
+				});
+			}
 		}
 		detailsEl.appendChild(bodyEl);
 		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
