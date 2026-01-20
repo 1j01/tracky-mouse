@@ -41,17 +41,17 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 	// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
 	// (Ideally it should stay on top of the taskbar and context menus all the time
 	// 	but that's another issue: https://github.com/1j01/tracky-mouse/issues/14)
-	// TODO: fix mouth meter getting cut off at bottom of canvas
-	// (could anchor each meter's center vertically)
+	const drawMeter = (x, yCenter, width, height, { active, thresholdMet }) => {
+		inputFeedbackCtx.fillStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
+		inputFeedbackCtx.fillRect(x, yCenter - height / 2, width, height);
+	};
 	if (blinkInfo) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
-			inputFeedbackCtx.fillStyle = eye.active ? "red" : eye.thresholdMet ? "yellow" : "cyan";
-			inputFeedbackCtx.fillRect(eye === blinkInfo.leftEye ? 0 : 20, 0, 10, Math.max(2, 20 * eye.heightRatio));
+			drawMeter(eye === blinkInfo.leftEye ? 5 : 20, 5, 10, Math.max(2, 20 * eye.heightRatio), eye);
 		}
 	}
 	if (mouthInfo) {
-		inputFeedbackCtx.fillStyle = mouthInfo.active ? "red" : mouthInfo.thresholdMet ? "yellow" : "cyan";
-		inputFeedbackCtx.fillRect(0, 20, 20, 40 * mouthInfo.heightRatio);
+		drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
 	}
 }
 

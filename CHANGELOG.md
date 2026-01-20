@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   This adds a One Euro Filter to smooth out head tilt values, which can be very jittery otherwise.
 - **Improved open mouth detection** by using mouth aspect ratio instead of a simple distance between two lip points. If you make a narrow "O" shape with your mouth, it will detect that more reliably.
+- Tweaked layout of mouth and eye meters in cursor-attached HUD. Each meter is now anchored at its vertical center, and meters better avoid being occluded by the cursor or cut off.
 - Mirror setting is now grouped under Video.
 - Tweaked settings UI spacing.
 
