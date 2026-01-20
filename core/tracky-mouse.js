@@ -1994,8 +1994,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						function detectMouthOpen() {
 							const prevThresholdMet = mouthInfo?.thresholdMet;
 							mouthInfo = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
-							const thresholdHigh = 0.15;
-							const thresholdLow = 0.1;
+							const thresholdHigh = 0.25;
+							const thresholdLow = 0.15;
 							mouthInfo.thresholdMet = mouthInfo.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
 							mouthInfo.active = mouthInfo.thresholdMet;
 						}
