@@ -1853,7 +1853,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 									const timestamp = performance.now() / 1000;
 									if (!headTiltFilters.pitch) {
 										const freq = 60;
-										const mincutoff = 0.0;
+										const mincutoff = 0.01;
 										const beta = 5.0;
 										const dcutoff = 0.7;
 										for (const axis of ["pitch", "yaw", "roll"]) {
