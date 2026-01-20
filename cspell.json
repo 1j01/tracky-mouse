@@ -69,6 +69,7 @@
 		"pointerenter",
 		"pointerleave",
 		"pointermove",
+		"pointerup",
 		"rescap",
 		"retarget",
 		"retargeted",

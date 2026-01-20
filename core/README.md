@@ -161,6 +161,7 @@ Arguments:
 - `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 - `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
 - `config.afterReleaseDrag()` (optional): a function to call after a drag is released. May be merged with `config.afterDispatch()` in the future.
+- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`). Not needed for basic `config.shouldDrag(el)` usage. Honestly I don't remember what this is for.
 
 Returns an object with the following properties:
 - `paused`: a getter/setter for whether dwell clicking is paused. Use this to implement a pause/resume button, in conjunction with `config.dwellClickEvenIfPaused`.
@@ -257,6 +258,7 @@ const config = {
 	// especially `beforePointerDownDispatch` which could be supplanted by passing an `Event` to `beforeDispatch`.
 	beforePointerDownDispatch: () => { window.pointers = []; },
 	afterReleaseDrag: () => { window.pointers = []; },
+	isHeld: () => { return window.pointer_active; },
 };
 const dwellClicker = TrackyMouse.initDwellClicking(config);
 // dwellClicker.paused = !dwellClicker.paused; // toggle

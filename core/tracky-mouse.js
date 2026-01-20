@@ -59,6 +59,8 @@ const initDwellClicking = (config) => {
 		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
 		- `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 		- `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+		- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
+		- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`).
 	*/
 	if (typeof config !== "object") {
 		throw new Error("configuration object required for initDwellClicking");
