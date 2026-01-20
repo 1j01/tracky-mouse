@@ -28,7 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it. 
   - **Head tilt calibration settings.** You can adjust the horizontal and vertical tilt range and offset. This allows the head tilt feature to be used with different camera placements (above or below the screen) and postures, and lets you balance comfort+speed and precision. ([issue #103](https://github.com/1j01/tracky-mouse/issues/103))
     - Recommended: switch to 100% tilt influence while adjusting these settings, so you can see the effect directly.
-- **You can now right click and middle click using mouth opening with eye modifiers.** Close your right eye and open your mouth to right click, close your left eye and open your mouth to middle click.
+- **Eye modifiers** in "Open mouth to click" mode.
+  - With your right eye closed, open your mouth to right click.
+  - With your left eye closed, open your mouth to middle click.
+  - This makes it a three-button mouse! Universal computer control.
 - Added a new [Extras](https://trackymouse.js.org/extras) page to the website, with wallpaper downloads and text art.
 
 ### Fixed
