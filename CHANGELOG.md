@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - With your right eye closed, open your mouth to right click.
   - With your left eye closed, open your mouth to middle click.
   - This makes it a three-button mouse! Universal computer control.
-- Added a new [Extras](https://trackymouse.js.org/extras) page to the website, with wallpaper downloads and text art.
+- Added a new [Goodies](https://trackymouse.js.org/goodies) page to the website, with wallpaper downloads and text art.
 
 ### Fixed
 
