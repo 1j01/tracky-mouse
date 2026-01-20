@@ -39,6 +39,10 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 	}
 	// draw meters for blink and mouth openness
 	// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
+	// (Ideally it should stay on top of the taskbar and context menus all the time
+	// 	but that's another issue: https://github.com/1j01/tracky-mouse/issues/14)
+	// TODO: fix mouth meter getting cut off at bottom of canvas
+	// (could anchor each meter's center vertically)
 	if (blinkInfo) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
 			inputFeedbackCtx.fillStyle = eye.active ? "red" : eye.thresholdMet ? "yellow" : "cyan";
