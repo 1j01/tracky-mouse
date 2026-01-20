@@ -14,20 +14,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   This adds a One Euro Filter to smooth out head tilt values, which can be very jittery otherwise.
 - **Improved open mouth detection** by using mouth aspect ratio instead of a simple distance between two lip points. If you make a narrow "O" shape with your mouth, it will detect that more reliably.
-- **Mirror** setting is now grouped under Video.
-- The yellow status text at the bottom of the screen now avoids the taskbar on Windows and the dock on macOS.
-- The screen overlay will now adapt to screen resolution changes.
+- Mirror setting is now grouped under Video.
 - Tweaked settings UI spacing.
 
 ### Added
 
 - **Camera source** setting. You can now select your preferred camera from a dropdown.
-- **Tilt influence** slider. This lets you blend between point tracking and absolute head tilt. At 100% it will use only head tilt. In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) speeding up movement that is moving towards it.
+- **Tilt influence** slider. This lets you blend between point tracking and absolute head tilt. At 100% it will use only head tilt. In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) speeding up movement that is moving towards it. ([issue #45](https://github.com/1j01/tracky-mouse/issues/45))
 - Added a new [Extras](https://trackymouse.js.org/extras) page to the website, with wallpaper downloads and text art.
 
 ### Fixed
 
 - Fixed a crash on launch on macOS 10.14 with Xcode 10.3
+- The yellow status text at the bottom of the screen now avoids the taskbar on Windows and the dock on macOS. ([issue #76](https://github.com/1j01/tracky-mouse/issues/76))
+- The screen overlay will now adapt to screen resolution changes.
 
 ## [2.1.0] - 2026-01-14
 
