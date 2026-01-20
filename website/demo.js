@@ -397,3 +397,9 @@ async function animateTargetHit(archery_target) {
 		// ignore cancelation
 	}
 }
+
+// Enhance demo link with smooth scrolling
+document.querySelector('[href="#demo"]').addEventListener('click', function (event) {
+	event.preventDefault();
+	document.querySelector('#demo').scrollIntoView({ behavior: 'smooth' });
+});
