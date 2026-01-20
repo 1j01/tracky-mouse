@@ -45,7 +45,7 @@ function drawInputFeedback({ inputFeedback, isEnabled, clickingMode }) {
 		inputFeedbackCtx.fillStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
 		inputFeedbackCtx.fillRect(x, yCenter - height / 2, width, height);
 	};
-	if (blinkInfo && (clickingMode === "blink")) {
+	if (blinkInfo && (clickingMode === "blink" || clickingMode === "open-mouth")) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
 			drawMeter(eye === blinkInfo.leftEye ? 5 : 20, 5, 10, Math.max(2, 20 * eye.heightRatio), eye);
 		}

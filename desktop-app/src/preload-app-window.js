@@ -15,8 +15,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.send('moveMouse', x, y, performance.now());
 	},
 
-	setMouseButtonState: (secondaryButton, down) => {
-		ipcRenderer.send('setMouseButtonState', secondaryButton, down);
+	setMouseButtonState: (button, down) => {
+		ipcRenderer.send('setMouseButtonState', button, down);
 	},
 
 	onShortcut: (callback) => {

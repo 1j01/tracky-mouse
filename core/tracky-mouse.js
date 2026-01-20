@@ -1034,6 +1034,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var buttonStates = {
 		left: false,
 		right: false,
+		middle: false,
 	};
 	var lastMouseDownTime = -Infinity;
 	var mouseNeedsInitPos = true;
@@ -2010,18 +2011,31 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								clickButton = 2;
 							}
 						}
+						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
 						if (s.clickingMode === "open-mouth") {
-							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
+							// Modifiers with eye closing trigger different buttons,
+							// making this a three-button mouse.
+							// (Eyebrow raising could be another alternative modifier.)
+							// TODO: keep same button held if eye is opened,
+							// so you can continue to scroll a webpage without trying to
+							// read with one eye closed (for example).
 							if (mouthInfo.active) {
-								clickButton = 0;
+								if (blinkInfo.rightEye.active) {
+									clickButton = 1;
+								} else if (blinkInfo.leftEye.active) {
+									clickButton = 2;
+								} else {
+									clickButton = 0;
+								}
 							}
 						}
 
 						// TODO: implement these clicking modes for the web library version
 						// and unhide the "Clicking mode" setting in the UI
 						// https://github.com/1j01/tracky-mouse/issues/72
+						// TODO: DRY
 						if ((clickButton === 0) !== buttonStates.left) {
-							window.electronAPI?.setMouseButtonState(false, clickButton === 0);
+							window.electronAPI?.setMouseButtonState(0, clickButton === 0);
 							buttonStates.left = clickButton === 0;
 							if ((clickButton === 0)) {
 								lastMouseDownTime = performance.now();
@@ -2033,9 +2047,18 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							}
 						}
 						if ((clickButton === 2) !== buttonStates.right) {
-							window.electronAPI?.setMouseButtonState(true, clickButton === 2);
+							window.electronAPI?.setMouseButtonState(2, clickButton === 2);
 							buttonStates.right = clickButton === 2;
 							if ((clickButton === 2)) {
+								lastMouseDownTime = performance.now();
+							} else {
+								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+							}
+						}
+						if ((clickButton === 1) !== buttonStates.middle) {
+							window.electronAPI?.setMouseButtonState(1, clickButton === 1);
+							buttonStates.middle = clickButton === 1;
+							if ((clickButton === 1)) {
 								lastMouseDownTime = performance.now();
 							} else {
 								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer

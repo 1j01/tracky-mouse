@@ -520,24 +520,28 @@ const createWindow = () => {
 	let buttonStates = {
 		left: false,
 		right: false,
+		middle: false,
 	};
-	ipcMain.on('setMouseButtonState', async (_event, secondaryButton, down) => {
+	ipcMain.on('setMouseButtonState', async (_event, button, down) => {
 		// TODO: make sure the mouse button is released when disabling clicking ability
 		// (including exiting the app, I suppose!)
 		if (!clickingAllowed()) {
 			return;
 		}
 
-		const button = (activeSettings.swapMouseButtons !== secondaryButton) ? "right" : "left";
+		let buttonName = "middle";
+		if (button !== 1) {
+			buttonName = (activeSettings.swapMouseButtons !== (button === 2)) ? "right" : "left";
+		}
 		if (down) {
-			if (!buttonStates[button]) {
-				buttonStates[button] = true;
-				await mouseDown(button);
+			if (!buttonStates[buttonName]) {
+				buttonStates[buttonName] = true;
+				await mouseDown(buttonName);
 			}
 		} else {
-			if (buttonStates[button]) {
-				buttonStates[button] = false;
-				await mouseUp(button);
+			if (buttonStates[buttonName]) {
+				buttonStates[buttonName] = false;
+				await mouseUp(buttonName);
 			}
 		}
 
