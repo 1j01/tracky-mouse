@@ -1899,8 +1899,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							};
 						}
 
-						let clickButton = -1;
-						if (s.clickingMode === "blink" || showDebugEyeZoom) {
+						// TODO: move facial gesture recognition code to a separate file
+						function detectBlinks() {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -1987,29 +1987,34 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							eyes.leftEye.thresholdMet = !eyes.leftEye.open;
 							eyes.rightEye.thresholdMet = !eyes.rightEye.open;
 
-							if (eyes.rightEye.active) {
-								clickButton = 0;
-							} else if (eyes.leftEye.active) {
-								clickButton = 2;
-							}
 							blinkInfo = eyes;
-						} else {
-							blinkInfo = null;
 						}
-						if (s.clickingMode === "open-mouth") {
-							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
-							// TODO: move this gesture recognition code (it's too nested)
+
+						function detectMouthOpen() {
 							const prevThresholdMet = mouthInfo?.thresholdMet;
 							mouthInfo = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
 							const thresholdHigh = 0.15;
 							const thresholdLow = 0.1;
 							mouthInfo.thresholdMet = mouthInfo.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
 							mouthInfo.active = mouthInfo.thresholdMet;
+						}
+
+						detectBlinks();
+						detectMouthOpen();
+
+						let clickButton = -1;
+						if (s.clickingMode === "blink") {
+							if (blinkInfo.rightEye.active) {
+								clickButton = 0;
+							} else if (blinkInfo.leftEye.active) {
+								clickButton = 2;
+							}
+						}
+						if (s.clickingMode === "open-mouth") {
+							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
 							if (mouthInfo.active) {
 								clickButton = 0;
 							}
-						} else {
-							mouthInfo = null;
 						}
 
 						// TODO: implement these clicking modes for the web library version

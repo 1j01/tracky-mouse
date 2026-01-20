@@ -31,7 +31,7 @@ inputFeedbackCanvas.width = 32;
 inputFeedbackCanvas.height = 32;
 document.body.appendChild(inputFeedbackCanvas);
 const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
-function drawInputFeedback({ inputFeedback, isEnabled }) {
+function drawInputFeedback({ inputFeedback, isEnabled, clickingMode }) {
 	const { blinkInfo, mouthInfo } = inputFeedback;
 	inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
 	if (!isEnabled) {
@@ -45,12 +45,12 @@ function drawInputFeedback({ inputFeedback, isEnabled }) {
 		inputFeedbackCtx.fillStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
 		inputFeedbackCtx.fillRect(x, yCenter - height / 2, width, height);
 	};
-	if (blinkInfo) {
+	if (blinkInfo && (clickingMode === "blink")) {
 		for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
 			drawMeter(eye === blinkInfo.leftEye ? 5 : 20, 5, 10, Math.max(2, 20 * eye.heightRatio), eye);
 		}
 	}
-	if (mouthInfo) {
+	if (mouthInfo && (clickingMode === "open-mouth")) {
 		drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
 	}
 }
