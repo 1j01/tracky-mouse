@@ -851,7 +851,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						} catch (error) {
 							console.error("Failed to parse known cameras from localStorage", error);
 						}
-						const selectedDeviceName = knownCameras[s.cameraDeviceId]?.name || "Default";
+
+						const activeStream = cameraVideo.srcObject;
+						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
+						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
+
 						window.electronAPI.openCameraSettings(selectedDeviceName);
 					},
 				},
