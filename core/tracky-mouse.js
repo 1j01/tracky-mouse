@@ -603,6 +603,34 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			label: "Cursor Movement",
 			settings: [
 				{
+					label: "Tilt influence",
+					className: "tracky-mouse-tilt-influence",
+					key: "headTrackingTiltInfluence",
+					settingValueToInputValue: (settingValue) => settingValue * 100,
+					inputValueToSettingValue: (inputValue) => inputValue / 100,
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 0,
+					labels: {
+						min: "Optical flow",
+						max: "Head tilt",
+					},
+				},
+				{
+					label: "Motion threshold",
+					className: "tracky-mouse-min-distance",
+					key: "headTrackingMinDistance",
+					type: "slider",
+					min: 0,
+					max: 10,
+					default: 0,
+					labels: {
+						min: "Free",
+						max: "Steady",
+					},
+				},
+				{
 					type: "group",
 					label: "Point tracking",
 					settings: [
@@ -674,34 +702,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							},
 						},
 					],
-				},
-				{
-					label: "Motion threshold",
-					className: "tracky-mouse-min-distance",
-					key: "headTrackingMinDistance",
-					type: "slider",
-					min: 0,
-					max: 10,
-					default: 0,
-					labels: {
-						min: "Free",
-						max: "Steady",
-					},
-				},
-				{
-					label: "Tilt influence",
-					className: "tracky-mouse-tilt-influence",
-					key: "headTrackingTiltInfluence",
-					settingValueToInputValue: (settingValue) => settingValue * 100,
-					inputValueToSettingValue: (inputValue) => inputValue / 100,
-					type: "slider",
-					min: 0,
-					max: 100,
-					default: 0,
-					labels: {
-						min: "Optical flow",
-						max: "Head tilt",
-					},
 				},
 				{
 					type: "group",
