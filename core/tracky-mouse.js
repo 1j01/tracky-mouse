@@ -616,8 +616,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						min: "Optical flow",
 						max: "Head tilt",
 					},
-					// TODO: this deserves a multiline description
-					description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
+					// description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
+					description: `Blends between using point tracking (2D) and detected head tilt (3D).
+- At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
+- At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
+- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`,
 				},
 				{
 					label: "Motion threshold",
@@ -632,6 +635,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						max: "Steady",
 					},
 					description: "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.",
+					// description: "Movement less than this distance in pixels will be ignored.",
+					// description: "Speed in pixels/frame required to move the cursor.",
 				},
 				{
 					type: "group",
@@ -708,7 +713,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							},
 							// description: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.",
 							// description: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.",
-							description: "Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements. Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto-calibration.",
+							description: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
+Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`,
 						},
 					],
 				},
@@ -732,7 +738,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								max: "Wide",
 							},
 							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
-							description: "How much you need to tilt your head left and right to reach the edges of the screen.",
+							// description: "How much you need to tilt your head left and right to reach the edges of the screen.",
+							// description: "How much you need to tilt your head left or right to reach the edge of the screen.",
+							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
 						},
 						{
 							label: "Horizontal tilt offset",
@@ -750,7 +758,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							},
 							// TODO: how to describe this??
 							// Specifically, how to disambiguate which direction is which / which way to adjust it?
-							description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
+							// And shouldn't the option behave opposite? I think we have pitch yaw and roll all reversed from standard aviation definitions.
+							// description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
+							description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
 						},
 						{
 							label: "Vertical tilt range",
@@ -767,7 +777,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								max: "Wide",
 							},
 							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
-							description: "How much you need to tilt your head up and down to reach the edges of the screen.",
+							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
+							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
+							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
 						},
 						{
 							label: "Vertical tilt offset",
@@ -818,8 +830,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					],
 					default: "dwell",
 					platform: "desktop",
-					// TODO: deserves a multiline description outlining each mode
-					description: "Choose how to perform mouse clicks.",
+					description: `Choose how to perform mouse clicks.
+- Dwell to click: Hold the cursor in place for a short time to click.
+- Wink to click: Close one eye to click. Left eye for left click, right eye for right click.
+- Open mouth to click: Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
+- Off: Disable clicking. Use with an external switch or programs that provide their own dwell clicking.`,
 				},
 				{
 					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
@@ -831,7 +846,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
-					description: "Switches the left and right mouse buttons. Useful if your system's mouse buttons are swapped. Could also be used to right click with the dwell clicker in a pinch.",
+					description: `Switches the left and right mouse buttons.
+Useful if your system's mouse buttons are swapped.
+Could also be used to right click with the dwell clicker in a pinch.`,
 				},
 
 				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -853,7 +870,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					default: 0, // TODO: increase default
 					platform: "desktop",
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
-					description: "Prevents mouse movement for the specified time after a click starts. You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you meant to click.",
+					// description: "Locks mouse movement during the start of a click to prevent accidental dragging.",
+					// description: `Prevents mouse movement for the specified time after a click starts.
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
+					description: `Locks mouse movement for the given duration during the start of a click.
+You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
 				},
 			],
 		},
@@ -873,7 +894,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						{ value: "", label: "Default" },
 					],
 					default: "",
-					description: "Select which camera to use for head tracking.",
+					// description: "Select which camera to use for head tracking.",
+					description: "Selects which camera is used for head tracking.",
 				},
 				// TODO: move this inline with the camera source dropdown?
 				{
@@ -905,7 +927,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						}
 					},
 					// description: "Open your camera's system settings window to adjust properties like brightness and contrast.",
-					description: "Open the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
+					// description: "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
+					description: "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.",
 				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
 				{
@@ -914,7 +937,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					key: "mirror",
 					type: "checkbox",
 					default: true,
-					description: "Mirror the camera view horizontally.",
+					description: "Mirrors the camera view horizontally.",
 				},
 			]
 		},
@@ -932,8 +955,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					},
 					type: "checkbox",
 					default: false,
-					// description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
-					description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
+					description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
+					// description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
+					// description: "Makes Tracky Mouse active as soon as it's launched.",
+					// description: "Automatically starts Tracky Mouse as soon as it's run.",
 				},
 				{
 					label: "Run at login",
@@ -942,8 +967,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
-					// description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
-					description: "Makes Tracky Mouse start automatically when you log into your computer.",
+					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
+					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
 				},
 			],
 		},
