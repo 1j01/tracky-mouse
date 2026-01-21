@@ -599,7 +599,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// input unit scale to avoid rounding to 0 or 1 for fractions (for example) - or use step?
 	const settingsCategories = [
 		{
-			title: "Head Tracking",
+			title: "Cursor Movement",
 			settings: [
 				{
 					type: "group",
