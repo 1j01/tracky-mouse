@@ -844,19 +844,24 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					key: "openCameraSettings",
 					type: "button",
 					platform: "desktop",
-					onClick: () => {
+					onClick: async () => {
 						let knownCameras = {};
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							console.error("Failed to parse known cameras from localStorage", error);
+							alert("Failed to parse known cameras from localStorage: " + error.message);
+							return;
 						}
 
 						const activeStream = cameraVideo.srcObject;
 						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
 						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
 
-						window.electronAPI.openCameraSettings(selectedDeviceName);
+						try {
+							await window.electronAPI.openCameraSettings(selectedDeviceName);
+						} catch (error) {
+							alert("Failed to open camera settings: " + error.message);
+						}
 					},
 				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view

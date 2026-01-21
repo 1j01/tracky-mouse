@@ -818,7 +818,7 @@ app.on('activate', () => {
 	}
 });
 
-ipcMain.on('openCameraSettings', async (_event, cameraDeviceName) => {
+ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 	console.log("Requested to open camera settings for device:", cameraDeviceName);
 	const { spawn } = require('child_process');
 	const pathToFfmpeg = require('ffmpeg-static');
@@ -844,8 +844,11 @@ ipcMain.on('openCameraSettings', async (_event, cameraDeviceName) => {
 			'-list_devices', 'true', '-f', 'dshow', '-i', 'dummy', '-hide_banner'
 		]);
 	} catch (err) {
-		console.error(`Error listing devices: ${err.message}`);
-		return;
+		// TODO: is there a point to re-throwing here vs not catching?
+		// maybe if we handled localization for error messages
+		// ...or if we return instead of throw, to avoid the extra wrapping of the message by Electron!
+		// yeah, TODO: return instead of throw
+		throw new Error(`Error listing devices: ${err.message}`);
 	}
 
 	console.log(`Device list output: ${listDevicesResult.stderr}`);
@@ -869,7 +872,7 @@ ipcMain.on('openCameraSettings', async (_event, cameraDeviceName) => {
 
 	if (!deviceFound) {
 		console.error(`Camera device "${cameraDeviceName}" not found in device list.`);
-		return;
+		throw new Error(`Camera device "${cameraDeviceName}" not found in device list.`);
 	}
 
 	console.log(`Opening settings dialog for camera device: ${cameraDeviceName}`);
@@ -883,14 +886,18 @@ ipcMain.on('openCameraSettings', async (_event, cameraDeviceName) => {
 		console.log(`Command output: ${result.stderr}`);
 		// const dshowRegex = /\[dshow @ [^\]]+\] (.*)/g;
 		// const relevantOutput = result.stderr.split('\n').filter(line => line.startsWith('[dshow @'));
-		// TODO: return error to renderer process
-		// and give nice message for "requested filter does not have a property page to show"
-		// like "The camera settings dialog is not available for this camera."
-		// or "No settings found for this camera source."
+		if (result.code !== 0) {
+			if (result.stderr.includes('requested filter does not have a property page to show')) {
+				// or shorter: "No settings found for this camera source."
+				throw new Error(`The camera settings dialog is not available for this camera.`);
+			}
+			throw new Error(`ffmpeg exited with code ${result.code}`);
+		}
 		// Also, could fall back to opening ms-settings:privacy-webcam on Windows 10 and 11
 		// There's also a way to link to the settings for a specific camera in Windows 11:
 		// https://learn.microsoft.com/en-us/windows/apps/develop/camera/launch-camera-settings
 	} catch (err) {
 		console.error(`Error opening camera settings: ${err.message}`);
+		throw err;
 	}
 });

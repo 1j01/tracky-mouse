@@ -47,6 +47,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	getIsPackaged: () => ipcRenderer.invoke('getIsPackaged'),
 
 	openCameraSettings: (deviceId) => {
-		ipcRenderer.send('openCameraSettings', deviceId);
+		return ipcRenderer.invoke('openCameraSettings', deviceId);
 	},
 });
