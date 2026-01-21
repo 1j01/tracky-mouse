@@ -43,7 +43,7 @@ module.exports = {
 				description: "Hands-free mouse control",
 				iconUrl: "https://raw.githubusercontent.com/1j01/tracky-mouse/4f22321a3f65ecf66d0a9ed431a24a76d547ea4c/images/tracky-mouse-logo-512.png",
 				setupIcon: "./images/tracky-mouse-logo.ico",
-				// loadingGif: "images/install.gif",
+				loadingGif: "./images/tracky-mouse-logo-thick-360-spin.gif",
 			},
 		},
 		{
