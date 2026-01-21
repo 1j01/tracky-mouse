@@ -2179,12 +2179,16 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						function detectMouthOpen() {
 							const prevThresholdMet = mouthInfo?.thresholdMet;
-							mouthInfo = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
+							const mouth = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
 							const thresholdHigh = 0.25;
 							const thresholdLow = 0.15;
-							mouthInfo.thresholdMet = mouthInfo.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
-							mouthInfo.active = mouthInfo.thresholdMet;
+							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
+							mouth.active = mouth.thresholdMet;
+							mouth.mouseButton = mouthInfo?.mouseButton ?? -1;
+							mouthInfo = mouth;
 						}
+
+						const prevMouthOpen = mouthInfo?.active;
 
 						detectBlinks();
 						detectMouthOpen();
@@ -2207,17 +2211,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// Modifiers with eye closing trigger different buttons,
 							// making this a three-button mouse.
 							// (Eyebrow raising could be another alternative modifier.)
-							// TODO: keep same button held if eye is opened,
+							// Keep same button held if eye is opened,
 							// so you can continue to scroll a webpage without trying to
 							// read with one eye closed (for example).
-							if (mouthInfo.active) {
+							if (mouthInfo.active && !prevMouthOpen) {
 								if (blinkInfo.rightEye.active) {
-									clickButton = 1;
+									mouthInfo.mouseButton = 1;
 								} else if (blinkInfo.leftEye.active) {
-									clickButton = 2;
+									mouthInfo.mouseButton = 2;
 								} else {
-									clickButton = 0;
+									mouthInfo.mouseButton = 0;
 								}
+							}
+							if (mouthInfo.active) {
+								clickButton = mouthInfo.mouseButton;
 							}
 						}
 
