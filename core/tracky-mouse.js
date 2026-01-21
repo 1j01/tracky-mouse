@@ -2174,7 +2174,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							eyes.leftEye.thresholdMet = !eyes.leftEye.open;
 							eyes.rightEye.thresholdMet = !eyes.rightEye.open;
 
-							blinkInfo = eyes;
+							return eyes;
 						}
 
 						function detectMouthOpen() {
@@ -2184,14 +2184,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							const thresholdLow = 0.15;
 							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
 							mouth.active = mouth.thresholdMet;
+							// Preserve mouse button state; could be simpler as a separate variable.
 							mouth.mouseButton = mouthInfo?.mouseButton ?? -1;
-							mouthInfo = mouth;
+							return mouth;
 						}
 
 						const prevMouthOpen = mouthInfo?.active;
 
-						detectBlinks();
-						detectMouthOpen();
+						blinkInfo = detectBlinks();
+						mouthInfo = detectMouthOpen();
 
 						blinkInfo.used = false;
 						mouthInfo.used = false;
