@@ -928,33 +928,47 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	}
 
-	for (const category of settingsCategories) {
-		const detailsEl = document.createElement("details");
-		// detailsEl.className = "tracky-mouse-settings-category";
-		if (category.settings.every(setting => setting.platform === "desktop")) {
-			detailsEl.classList.add("tracky-mouse-desktop-only");
-		}
-		const summaryEl = document.createElement("summary");
-		summaryEl.textContent = category.label;
-		detailsEl.appendChild(summaryEl);
-		const bodyEl = document.createElement("div");
-		bodyEl.className = "tracky-mouse-details-body";
-		const elsByGroup = new Map();
-		traverseSettings(category.settings, (setting, parentGroup) => {
-			const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
+	function buildSettingsUI(parentEl, settingsCategories) {
 
-			// Groups
-			if (setting.type === "group") {
-				const fieldsetEl = document.createElement("fieldset");
-				fieldsetEl.className = "tracky-mouse-control-group";
-				const legendEl = document.createElement("legend");
-				legendEl.className = "tracky-mouse-control-group-label";
-				legendEl.textContent = setting.label;
-				fieldsetEl.appendChild(legendEl);
-				elsByGroup.set(setting, fieldsetEl);
-				parentGroupElement.appendChild(fieldsetEl);
-				return;
+		for (const category of settingsCategories) {
+			const detailsEl = document.createElement("details");
+			// detailsEl.className = "tracky-mouse-settings-category";
+			if (category.settings.every(setting => setting.platform === "desktop")) {
+				detailsEl.classList.add("tracky-mouse-desktop-only");
 			}
+			const summaryEl = document.createElement("summary");
+			summaryEl.textContent = category.label;
+			detailsEl.appendChild(summaryEl);
+			const bodyEl = document.createElement("div");
+			bodyEl.className = "tracky-mouse-details-body";
+			detailsEl.appendChild(bodyEl);
+			const elsByGroup = new Map();
+			traverseSettings(category.settings, (setting, parentGroup) => {
+				const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
+
+				// Groups
+				if (setting.type === "group") {
+					const fieldsetEl = document.createElement("fieldset");
+					fieldsetEl.className = "tracky-mouse-control-group";
+					const legendEl = document.createElement("legend");
+					legendEl.className = "tracky-mouse-control-group-label";
+					legendEl.textContent = setting.label;
+					fieldsetEl.appendChild(legendEl);
+					elsByGroup.set(setting, fieldsetEl);
+					parentGroupElement.appendChild(fieldsetEl);
+					return;
+				}
+
+				// Individual settings
+				const rowEl = buildSettingItemUI(setting);
+				parentGroupElement.appendChild(rowEl);
+			});
+
+			parentEl.appendChild(detailsEl);
+
+		}
+
+		function buildSettingItemUI(setting) {
 
 			// Validation
 			if (!setting.key) {
@@ -1003,9 +1017,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			if (setting.platform === "desktop") {
 				rowEl.classList.add("tracky-mouse-desktop-only");
 			}
-
-			parentGroupElement.appendChild(rowEl);
-
 
 			const control = rowEl.querySelector(`.${setting.className}`);
 			const getControlValue = () => {
@@ -1066,10 +1077,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					setting.onClick?.();
 				});
 			}
-		});
-		detailsEl.appendChild(bodyEl);
-		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
+
+			return rowEl;
+		}
+
 	}
+
+	buildSettingsUI(uiContainer.querySelector(".tracky-mouse-controls"), settingsCategories);
 
 	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
 	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
