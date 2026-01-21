@@ -933,17 +933,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	function buildSettingsUI(parentEl, settingsCategories) {
 
 		for (const category of settingsCategories) {
-			const detailsEl = document.createElement("details");
-			// detailsEl.className = "tracky-mouse-settings-category";
-			if (category.settings.every(setting => setting.platform === "desktop")) {
-				detailsEl.classList.add("tracky-mouse-desktop-only");
-			}
-			const summaryEl = document.createElement("summary");
-			summaryEl.textContent = category.label;
-			detailsEl.appendChild(summaryEl);
-			const bodyEl = document.createElement("div");
-			bodyEl.className = "tracky-mouse-details-body";
-			detailsEl.appendChild(bodyEl);
+			const detailsEl = buildSettingGroupUI(category);
+			const bodyEl = detailsEl.querySelector(".tracky-mouse-details-body");
 			traverseSettings(category.settings, (setting, parentGroup) => {
 				const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
 
@@ -963,14 +954,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	}
 
 	function buildSettingGroupUI(group) {
-		const fieldsetEl = document.createElement("fieldset");
-		fieldsetEl.className = "tracky-mouse-control-group";
-		const legendEl = document.createElement("legend");
-		legendEl.className = "tracky-mouse-control-group-label";
-		legendEl.textContent = group.label;
-		fieldsetEl.appendChild(legendEl);
-		elsByGroup.set(group, fieldsetEl);
-		return fieldsetEl;
+		const detailsEl = document.createElement("details");
+		// detailsEl.className = "tracky-mouse-settings-group";
+		// TODO: recursive check for platform - or just define platform on groups
+		if (group.settings.every(setting => setting.platform === "desktop")) {
+			detailsEl.classList.add("tracky-mouse-desktop-only");
+		}
+		const summaryEl = document.createElement("summary");
+		summaryEl.textContent = group.label;
+		detailsEl.appendChild(summaryEl);
+		const bodyEl = document.createElement("div");
+		bodyEl.className = "tracky-mouse-details-body";
+		detailsEl.appendChild(bodyEl);
+		elsByGroup.set(group, bodyEl);
+		return detailsEl;
 	}
 
 	function buildSettingItemUI(setting) {
