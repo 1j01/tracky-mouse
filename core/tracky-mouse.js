@@ -968,119 +968,119 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 		}
 
-		function buildSettingItemUI(setting) {
+	}
 
-			// Validation
-			if (!setting.key) {
-				console.warn("Setting is missing key:", setting);
-				return;
-			}
-			if (!setting.type) {
-				console.warn("Setting is missing type:", setting);
-				return;
-			}
-			// could go on...
+	function buildSettingItemUI(setting) {
 
-			// TODO: consider making everything use <label for=""> inside and <div> outside
-			const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
-			rowEl.className = "tracky-mouse-control-row";
-			if (setting.type === "slider") {
-				rowEl.innerHTML = `
-					<span class="tracky-mouse-label-text">${setting.label}</span>
-					<span class="tracky-mouse-labeled-slider">
-						<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
-						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
-						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
-					</span>
-				`;
-			} else if (setting.type === "checkbox") {
-				// special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work
-				rowEl.innerHTML = `
-					<input type="checkbox" id="${setting.className}" class="${setting.className}">
-					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
-				`;
-			} else if (setting.type === "dropdown") {
-				const optionsHtml = setting.options.map(option => `
-					<option value="${option.value}">${option.label}</option>
-				`.trim()).join("\n");
-				rowEl.innerHTML = `
-					<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
-					<select id="${setting.className}" class="${setting.className}">
-						${optionsHtml}
-					</select>
-				`;
-			} else if (setting.type === "button") {
-				rowEl.innerHTML = `
-					<button class="${setting.className}">${setting.label}</button>
-				`;
-			}
-			if (setting.platform === "desktop") {
-				rowEl.classList.add("tracky-mouse-desktop-only");
-			}
+		// Validation
+		if (!setting.key) {
+			console.warn("Setting is missing key:", setting);
+			return;
+		}
+		if (!setting.type) {
+			console.warn("Setting is missing type:", setting);
+			return;
+		}
+		// could go on...
 
-			const control = rowEl.querySelector(`.${setting.className}`);
-			const getControlValue = () => {
-				if (setting.type === "slider") {
-					return Number(control.value);
-				} else if (setting.type === "checkbox") {
-					return control.checked;
-				} else if (setting.type === "dropdown") {
-					return control.value;
-				}
-			};
-			const setControlValue = (value) => {
-				if (setting.type === "slider") {
-					control.value = value;
-				} else if (setting.type === "checkbox") {
-					control.checked = value;
-				} else if (setting.type === "dropdown") {
-					control.value = value;
-				}
-			};
-
-			const load = (settings, initialLoad) => {
-				// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
-				// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
-				if (settings.globalSettings?.[setting.key] !== undefined) {
-					s[setting.key] = settings.globalSettings[setting.key];
-					setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
-				}
-				if (initialLoad) {
-					setting.afterInitialLoad?.();
-				}
-			};
-			const loadValueFromControl = () => {
-				s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
-			};
-			const save = () => {
-				setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
-			};
-
-			// Load defaults
-			// currently defined in input value units
-			setControlValue(setting.default);
-			s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
-
-			// Handle changes
-			control.addEventListener("change", () => {
-				loadValueFromControl();
-				save();
-				// TODO: also call this if the setting is changed through CLI
-				// Would be good to have a pattern where it's subscribing to changes to a settings store
-				setting.handleSettingChange?.();
-			});
-			// Handle loading from stored settings
-			setting._load = load;
-
-			if (setting.type === "button") {
-				control.addEventListener("click", () => {
-					setting.onClick?.();
-				});
-			}
-
-			return rowEl;
+		// TODO: consider making everything use <label for=""> inside and <div> outside
+		const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
+		rowEl.className = "tracky-mouse-control-row";
+		if (setting.type === "slider") {
+			rowEl.innerHTML = `
+				<span class="tracky-mouse-label-text">${setting.label}</span>
+				<span class="tracky-mouse-labeled-slider">
+					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
+					<span class="tracky-mouse-min-label">${setting.labels.min}</span>
+					<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+				</span>
+			`;
+		} else if (setting.type === "checkbox") {
+			// special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work
+			rowEl.innerHTML = `
+				<input type="checkbox" id="${setting.className}" class="${setting.className}">
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+			`;
+		} else if (setting.type === "dropdown") {
+			const optionsHtml = setting.options.map(option => `
+				<option value="${option.value}">${option.label}</option>
+			`.trim()).join("\n");
+			rowEl.innerHTML = `
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+				<select id="${setting.className}" class="${setting.className}">
+					${optionsHtml}
+				</select>
+			`;
+		} else if (setting.type === "button") {
+			rowEl.innerHTML = `
+				<button class="${setting.className}">${setting.label}</button>
+			`;
+		}
+		if (setting.platform === "desktop") {
+			rowEl.classList.add("tracky-mouse-desktop-only");
 		}
 
+		const control = rowEl.querySelector(`.${setting.className}`);
+		const getControlValue = () => {
+			if (setting.type === "slider") {
+				return Number(control.value);
+			} else if (setting.type === "checkbox") {
+				return control.checked;
+			} else if (setting.type === "dropdown") {
+				return control.value;
+			}
+		};
+		const setControlValue = (value) => {
+			if (setting.type === "slider") {
+				control.value = value;
+			} else if (setting.type === "checkbox") {
+				control.checked = value;
+			} else if (setting.type === "dropdown") {
+				control.value = value;
+			}
+		};
+
+		const load = (settings, initialLoad) => {
+			// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
+			// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
+			if (settings.globalSettings?.[setting.key] !== undefined) {
+				s[setting.key] = settings.globalSettings[setting.key];
+				setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
+			}
+			if (initialLoad) {
+				setting.afterInitialLoad?.();
+			}
+		};
+		const loadValueFromControl = () => {
+			s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+		};
+		const save = () => {
+			setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
+		};
+
+		// Load defaults
+		// currently defined in input value units
+		setControlValue(setting.default);
+		s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+
+		// Handle changes
+		control.addEventListener("change", () => {
+			loadValueFromControl();
+			save();
+			// TODO: also call this if the setting is changed through CLI
+			// Would be good to have a pattern where it's subscribing to changes to a settings store
+			setting.handleSettingChange?.();
+		});
+		// Handle loading from stored settings
+		setting._load = load;
+
+		if (setting.type === "button") {
+			control.addEventListener("click", () => {
+				setting.onClick?.();
+			});
+		}
+
+		return rowEl;
 	}
 
 	buildSettingsUI(uiContainer.querySelector(".tracky-mouse-controls"), settingsCategories);
