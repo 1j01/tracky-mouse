@@ -599,12 +599,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// input unit scale to avoid rounding to 0 or 1 for fractions (for example) - or use step?
 	const settingsCategories = [
 		{
-			title: "Cursor Movement",
+			type: "group",
+			label: "Cursor Movement",
 			settings: [
 				{
 					type: "group",
 					label: "Point tracking",
-					className: "tracky-mouse-point-tracking-group",
 					settings: [
 						{
 							label: "Horizontal sensitivity",
@@ -706,7 +706,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					type: "group",
 					label: "Head tilt calibration",
-					className: "tracky-mouse-head-tilt-calibration-group",
 					settings: [
 						{
 							label: "Horizontal tilt range",
@@ -785,7 +784,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		// The main point of this option is to counteract the system-level mouse button setting,
 		// which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
 		{
-			title: "Clicking",
+			type: "group",
+			label: "Clicking",
 			settings: [
 				{
 					label: "Clicking mode:", // TODO: ":"?
@@ -836,7 +836,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			],
 		},
 		{
-			title: "Video",
+			type: "group",
+			label: "Video",
 			settings: [
 				{
 					label: "Camera source",
@@ -892,7 +893,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			]
 		},
 		{
-			title: "General",
+			type: "group",
+			label: "General",
 			settings: [
 				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
 				{
@@ -933,7 +935,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			detailsEl.classList.add("tracky-mouse-desktop-only");
 		}
 		const summaryEl = document.createElement("summary");
-		summaryEl.textContent = category.title;
+		summaryEl.textContent = category.label;
 		detailsEl.appendChild(summaryEl);
 		const bodyEl = document.createElement("div");
 		bodyEl.className = "tracky-mouse-details-body";
