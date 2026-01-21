@@ -602,71 +602,78 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			title: "Head Tracking",
 			settings: [
 				{
-					label: "Horizontal sensitivity",
-					className: "tracky-mouse-sensitivity-x",
-					key: "headTrackingSensitivityX",
-					settingValueToInputValue: (settingValue) => settingValue * 1000,
-					inputValueToSettingValue: (inputValue) => inputValue / 1000,
-					type: "slider",
-					min: 0,
-					max: 100,
-					default: 25,
-					labels: {
-						min: "Slow",
-						max: "Fast",
-					},
-				},
-				{
-					label: "Vertical sensitivity",
-					className: "tracky-mouse-sensitivity-y",
-					key: "headTrackingSensitivityY",
-					settingValueToInputValue: (settingValue) => settingValue * 1000,
-					inputValueToSettingValue: (inputValue) => inputValue / 1000,
-					type: "slider",
-					min: 0,
-					max: 100,
-					default: 50,
-					labels: {
-						min: "Slow",
-						max: "Fast",
-					},
-				},
-				// {
-				// 	label: "Smoothing",
-				// 	className: "tracky-mouse-smoothing",
-				// 	key: "headTrackingSmoothing",
-				// 	type: "slider",
-				// 	min: 0,
-				// 	max: 100,
-				// 	default: 50,
-				// 	labels: {
-				// 		min: "Linear", // or "Direct", "Raw", "None"
-				// 		max: "Smooth", // or "Smoothed"
-				// 	},
-				// },
+					type: "group",
+					label: "Point tracking",
+					className: "tracky-mouse-point-tracking-group",
+					settings: [
+						{
+							label: "Horizontal sensitivity",
+							className: "tracky-mouse-sensitivity-x",
+							key: "headTrackingSensitivityX",
+							settingValueToInputValue: (settingValue) => settingValue * 1000,
+							inputValueToSettingValue: (inputValue) => inputValue / 1000,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 25,
+							labels: {
+								min: "Slow",
+								max: "Fast",
+							},
+						},
+						{
+							label: "Vertical sensitivity",
+							className: "tracky-mouse-sensitivity-y",
+							key: "headTrackingSensitivityY",
+							settingValueToInputValue: (settingValue) => settingValue * 1000,
+							inputValueToSettingValue: (inputValue) => inputValue / 1000,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 50,
+							labels: {
+								min: "Slow",
+								max: "Fast",
+							},
+						},
+						// {
+						// 	label: "Smoothing",
+						// 	className: "tracky-mouse-smoothing",
+						// 	key: "headTrackingSmoothing",
+						// 	type: "slider",
+						// 	min: 0,
+						// 	max: 100,
+						// 	default: 50,
+						// 	labels: {
+						// 		min: "Linear", // or "Direct", "Raw", "None"
+						// 		max: "Smooth", // or "Smoothed"
+						// 	},
+						// },
 
-				// TODO:
-				// - eyeTrackingSensitivityX
-				// - eyeTrackingSensitivityY
-				// - eyeTrackingAcceleration
+						// TODO:
+						// - eyeTrackingSensitivityX
+						// - eyeTrackingSensitivityY
+						// - eyeTrackingAcceleration
 
-				// TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side.
-				// Should it be swapped? What does other software with acceleration control look like?
-				// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
-				{
-					label: "Acceleration",
-					className: "tracky-mouse-acceleration",
-					key: "headTrackingAcceleration",
-					settingValueToInputValue: (settingValue) => settingValue * 100,
-					inputValueToSettingValue: (inputValue) => inputValue / 100,
-					type: "slider",
-					min: 0,
-					max: 100,
-					default: 50,
-					labels: {
-						min: "Linear", // or "Direct", "Raw"
-						max: "Smooth",
-					},
+						// TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side.
+						// Should it be swapped? What does other software with acceleration control look like?
+						// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
+						{
+							label: "Acceleration",
+							className: "tracky-mouse-acceleration",
+							key: "headTrackingAcceleration",
+							settingValueToInputValue: (settingValue) => settingValue * 100,
+							inputValueToSettingValue: (inputValue) => inputValue / 100,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 50,
+							labels: {
+								min: "Linear", // or "Direct", "Raw"
+								max: "Smooth",
+							},
+						},
+					],
 				},
 				{
 					label: "Motion threshold",
@@ -697,64 +704,71 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					},
 				},
 				{
-					label: "Horizontal tilt range",
-					className: "tracky-mouse-head-tilt-yaw-range",
-					key: "headTiltYawRange",
-					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
-					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
-					type: "slider",
-					min: 10,
-					max: 90,
-					default: 60,
-					labels: {
-						min: "Narrow",
-						max: "Wide",
-					},
-				},
-				{
-					label: "Horizontal tilt offset",
-					className: "tracky-mouse-head-tilt-yaw-offset",
-					key: "headTiltYawOffset",
-					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
-					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
-					type: "slider",
-					min: -45,
-					max: 45,
-					default: 0,
-					labels: {
-						min: "Left",
-						max: "Right",
-					},
-				},
-				{
-					label: "Vertical tilt range",
-					className: "tracky-mouse-head-tilt-pitch-range",
-					key: "headTiltPitchRange",
-					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
-					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
-					type: "slider",
-					min: 10,
-					max: 60,
-					default: 25,
-					labels: {
-						min: "Narrow",
-						max: "Wide",
-					},
-				},
-				{
-					label: "Vertical tilt offset",
-					className: "tracky-mouse-head-tilt-pitch-offset",
-					key: "headTiltPitchOffset",
-					settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
-					inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
-					type: "slider",
-					min: -30,
-					max: 30,
-					default: 2.5,
-					labels: {
-						min: "Down",
-						max: "Up",
-					},
+					type: "group",
+					label: "Head tilt calibration",
+					className: "tracky-mouse-head-tilt-calibration-group",
+					settings: [
+						{
+							label: "Horizontal tilt range",
+							className: "tracky-mouse-head-tilt-yaw-range",
+							key: "headTiltYawRange",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: 10,
+							max: 90,
+							default: 60,
+							labels: {
+								min: "Narrow",
+								max: "Wide",
+							},
+						},
+						{
+							label: "Horizontal tilt offset",
+							className: "tracky-mouse-head-tilt-yaw-offset",
+							key: "headTiltYawOffset",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: -45,
+							max: 45,
+							default: 0,
+							labels: {
+								min: "Left",
+								max: "Right",
+							},
+						},
+						{
+							label: "Vertical tilt range",
+							className: "tracky-mouse-head-tilt-pitch-range",
+							key: "headTiltPitchRange",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: 10,
+							max: 60,
+							default: 25,
+							labels: {
+								min: "Narrow",
+								max: "Wide",
+							},
+						},
+						{
+							label: "Vertical tilt offset",
+							className: "tracky-mouse-head-tilt-pitch-offset",
+							key: "headTiltPitchOffset",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: -30,
+							max: 30,
+							default: 2.5,
+							labels: {
+								min: "Down",
+								max: "Up",
+							},
+						},
+					],
 				},
 			],
 		},
@@ -903,6 +917,15 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		},
 	];
 
+	function traverseSettings(settings, callback, parentGroup = null) {
+		for (const setting of settings) {
+			callback(setting, parentGroup);
+			if (setting.type === "group") {
+				traverseSettings(setting.settings, callback, setting);
+			}
+		}
+	}
+
 	for (const category of settingsCategories) {
 		const detailsEl = document.createElement("details");
 		// detailsEl.className = "tracky-mouse-settings-category";
@@ -914,15 +937,31 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		detailsEl.appendChild(summaryEl);
 		const bodyEl = document.createElement("div");
 		bodyEl.className = "tracky-mouse-details-body";
-		for (const setting of category.settings) {
+		const elsByGroup = new Map();
+		traverseSettings(category.settings, (setting, parentGroup) => {
+			const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
+
+			// Groups
+			if (setting.type === "group") {
+				const fieldsetEl = document.createElement("fieldset");
+				fieldsetEl.className = "tracky-mouse-control-group";
+				const legendEl = document.createElement("legend");
+				legendEl.className = "tracky-mouse-control-group-label";
+				legendEl.textContent = setting.label;
+				fieldsetEl.appendChild(legendEl);
+				elsByGroup.set(setting, fieldsetEl);
+				parentGroupElement.appendChild(fieldsetEl);
+				return;
+			}
+
 			// Validation
 			if (!setting.key) {
 				console.warn("Setting is missing key:", setting);
-				continue;
+				return;
 			}
 			if (!setting.type) {
 				console.warn("Setting is missing type:", setting);
-				continue;
+				return;
 			}
 			// could go on...
 
@@ -962,7 +1001,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			if (setting.platform === "desktop") {
 				rowEl.classList.add("tracky-mouse-desktop-only");
 			}
-			bodyEl.appendChild(rowEl);
+
+			parentGroupElement.appendChild(rowEl);
 
 
 			const control = rowEl.querySelector(`.${setting.className}`);
@@ -1024,7 +1064,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					setting.onClick?.();
 				});
 			}
-		}
+		});
 		detailsEl.appendChild(bodyEl);
 		uiContainer.querySelector(".tracky-mouse-controls").appendChild(detailsEl);
 	}
@@ -1247,9 +1287,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	function deserializeSettings(settings, initialLoad = false) {
 		// TODO: DRY with deserializeSettings in electron-main.js
 		for (const category of settingsCategories) {
-			for (const setting of category.settings) {
+			traverseSettings(category.settings, (setting) => {
 				setting._load?.(settings, initialLoad);
-			}
+			});
 		}
 	}
 	const formatVersion = 1;
