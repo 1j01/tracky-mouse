@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Point tracking settings are now grouped under "Point Tracking" subsection.
   - Tweaked settings UI spacing.
   - Inapplicable controls are now disabled.
+  - Added tooltips to settings. Hover over each setting to see a description.
 
 ### Added
 

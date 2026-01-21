@@ -616,6 +616,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						min: "Optical flow",
 						max: "Head tilt",
 					},
+					// TODO: this deserves a multiline description
+					description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
 				},
 				{
 					label: "Motion threshold",
@@ -629,6 +631,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						min: "Free",
 						max: "Steady",
 					},
+					description: "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.",
 				},
 				{
 					type: "group",
@@ -649,6 +652,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Slow",
 								max: "Fast",
 							},
+							description: "Speed of cursor movement in response to horizontal head movement.",
 						},
 						{
 							label: "Vertical sensitivity",
@@ -664,6 +668,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Slow",
 								max: "Fast",
 							},
+							description: "Speed of cursor movement in response to vertical head movement.",
 						},
 						// {
 						// 	label: "Smoothing",
@@ -701,6 +706,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Linear", // or "Direct", "Raw"
 								max: "Smooth",
 							},
+							// description: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.",
+							// description: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.",
+							description: "Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements. Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto-calibration.",
 						},
 					],
 				},
@@ -723,6 +731,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Narrow",
 								max: "Wide",
 							},
+							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
+							description: "How much you need to tilt your head left and right to reach the edges of the screen.",
 						},
 						{
 							label: "Horizontal tilt offset",
@@ -738,6 +748,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Left",
 								max: "Right",
 							},
+							// TODO: how to describe this??
+							// Specifically, how to disambiguate which direction is which / which way to adjust it?
+							description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
 						},
 						{
 							label: "Vertical tilt range",
@@ -753,6 +766,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Narrow",
 								max: "Wide",
 							},
+							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
+							description: "How much you need to tilt your head up and down to reach the edges of the screen.",
 						},
 						{
 							label: "Vertical tilt offset",
@@ -768,6 +783,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 								min: "Down",
 								max: "Up",
 							},
+							description: "Adjusts the center position of vertical head tilt.",
 						},
 					],
 				},
@@ -802,9 +818,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					],
 					default: "dwell",
 					platform: "desktop",
+					// TODO: deserves a multiline description outlining each mode
+					description: "Choose how to perform mouse clicks.",
 				},
 				{
-					// TODO: add description of what this is for:
 					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
 					// "swap" is purposefully generic language so we don't have to know what system-level setting is
 					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
@@ -814,6 +831,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
+					description: "Switches the left and right mouse buttons. Useful if your system's mouse buttons are swapped. Could also be used to right click with the dwell clicker in a pinch.",
 				},
 
 				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -835,6 +853,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					default: 0, // TODO: increase default
 					platform: "desktop",
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
+					description: "Prevents mouse movement for the specified time after a click starts. You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you meant to click.",
 				},
 			],
 		},
@@ -854,6 +873,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						{ value: "", label: "Default" },
 					],
 					default: "",
+					description: "Select which camera to use for head tracking.",
 				},
 				// TODO: move this inline with the camera source dropdown?
 				{
@@ -884,6 +904,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							alert("Failed to open camera settings:\n" + error.message);
 						}
 					},
+					// description: "Open your camera's system settings window to adjust properties like brightness and contrast.",
+					description: "Open the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
 				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
 				{
@@ -892,6 +914,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					key: "mirror",
 					type: "checkbox",
 					default: true,
+					description: "Mirror the camera view horizontally.",
 				},
 			]
 		},
@@ -909,6 +932,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					},
 					type: "checkbox",
 					default: false,
+					// description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
+					description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
 				},
 				{
 					label: "Run at login",
@@ -917,6 +942,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
+					// description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
+					description: "Makes Tracky Mouse start automatically when you log into your computer.",
 				},
 			],
 		},
@@ -992,15 +1019,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	function buildSettingItemUI(setting) {
 
 		// Validation
-		if (!setting.key) {
-			console.warn("Setting is missing key:", setting);
-			return;
+		for (const requiredProp of ["label", "className", "key", "type", "default"]) {
+			if (setting[requiredProp] === undefined) {
+				if (setting.type === "button" && requiredProp === "default") {
+					continue; // buttons don't need a default value
+				}
+				console.warn(`Setting is missing ${requiredProp}:`, setting);
+				return;
+			}
 		}
-		if (!setting.type) {
-			console.warn("Setting is missing type:", setting);
-			return;
+		for (const importantProp of ["description"]) {
+			if (setting[importantProp] === undefined) {
+				console.warn(`Setting is missing ${importantProp}:`, setting);
+			}
 		}
-		// could go on...
 
 		// TODO: consider making everything use <label for=""> inside and <div> outside
 		const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
@@ -1037,6 +1069,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 		if (setting.platform === "desktop") {
 			rowEl.classList.add("tracky-mouse-desktop-only");
+		}
+
+		if (setting.description) {
+			// Tooltip; TODO: try an ⓘ info icon button with a popover
+			rowEl.setAttribute("title", setting.description);
 		}
 
 		const control = rowEl.querySelector(`.${setting.className}`);
