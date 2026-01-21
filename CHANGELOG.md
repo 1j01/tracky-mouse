@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Renamed "Head Tracking" section to "Cursor Movement"
   - Point tracking settings are now grouped under "Point Tracking" subsection.
   - Tweaked settings UI spacing.
+  - Inapplicable controls are now disabled.
 
 ### Added
 

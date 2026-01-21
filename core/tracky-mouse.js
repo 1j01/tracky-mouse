@@ -633,6 +633,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					type: "group",
 					label: "Point tracking",
+					disabled: () => s.headTrackingTiltInfluence === 1,
 					settings: [
 						{
 							label: "Horizontal sensitivity",
@@ -706,6 +707,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				{
 					type: "group",
 					label: "Head tilt calibration",
+					disabled: () => s.headTrackingTiltInfluence === 0,
 					settings: [
 						{
 							label: "Horizontal tilt range",
@@ -832,6 +834,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					},
 					default: 0, // TODO: increase default
 					platform: "desktop",
+					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
 				},
 			],
 		},
@@ -929,6 +932,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	}
 
 	const elsByGroup = new Map();
+	const functionsToUpdateDisabledStates = [];
 
 	function buildSettingsUI(parentEl, settingsCategories) {
 
@@ -938,12 +942,27 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			traverseSettings(category.settings, (setting, parentGroup) => {
 				const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
 
+				let el;
 				if (setting.type === "group") {
-					const rowEl = buildSettingGroupUI(setting);
-					parentGroupElement.appendChild(rowEl);
+					el = buildSettingGroupUI(setting);
 				} else {
-					const rowEl = buildSettingItemUI(setting);
-					parentGroupElement.appendChild(rowEl);
+					el = buildSettingItemUI(setting);
+				}
+				parentGroupElement.appendChild(el);
+
+				if (setting.disabled) {
+					const updateDisabledState = () => {
+						// TODO: supply a message for why it's disabled (can update `disabled()` to return a string or object)
+						const disabled = setting.disabled?.() ?? setting.disabled === true;
+						el.classList.toggle("tracky-mouse-disabled", disabled);
+						const controls = el.querySelectorAll(`input, select, button`);
+						for (const control of controls) {
+							// This should handle nested disabled conditions properly
+							control.disabled = control.closest(".tracky-mouse-disabled") !== null;
+						}
+					};
+					functionsToUpdateDisabledStates.push(updateDisabledState);
+					// Not useful to call updateDisabledState() here because dependent setting values aren't loaded yet
 				}
 			});
 
@@ -1062,6 +1081,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		// currently defined in input value units
 		setControlValue(setting.default);
 		s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+		// Not useful to call functionsToUpdateDisabledStates here because dependent setting values aren't necessarily loaded yet
 
 		// Handle changes
 		control.addEventListener("change", () => {
@@ -1070,6 +1090,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// TODO: also call this if the setting is changed through CLI
 			// Would be good to have a pattern where it's subscribing to changes to a settings store
 			setting.handleSettingChange?.();
+
+			for (const func of functionsToUpdateDisabledStates) {
+				func();
+			}
 		});
 		// Handle loading from stored settings
 		setting._load = load;
@@ -1307,6 +1331,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				setting._load?.(settings, initialLoad);
 			});
 		}
+
+		// Now that all settings are loaded, update disabled states
+		for (const func of functionsToUpdateDisabledStates) {
+			func();
+		}
+
 	}
 	const formatVersion = 1;
 	const formatName = "tracky-mouse-settings";
