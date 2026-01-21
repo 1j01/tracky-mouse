@@ -849,7 +849,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							alert("Failed to parse known cameras from localStorage: " + error.message);
+							alert("Failed to open camera settings:\n" + "Failed to parse known cameras from localStorage:\n" + error.message);
 							return;
 						}
 
@@ -858,9 +858,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
 
 						try {
-							await window.electronAPI.openCameraSettings(selectedDeviceName);
+							const { error } = await window.electronAPI.openCameraSettings(selectedDeviceName);
+							if (error) {
+								alert("Failed to open camera settings:\n" + error);
+							}
 						} catch (error) {
-							alert("Failed to open camera settings: " + error.message);
+							alert("Failed to open camera settings:\n" + error.message);
 						}
 					},
 				},

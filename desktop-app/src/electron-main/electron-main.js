@@ -844,11 +844,7 @@ ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 			'-list_devices', 'true', '-f', 'dshow', '-i', 'dummy', '-hide_banner'
 		]);
 	} catch (err) {
-		// TODO: is there a point to re-throwing here vs not catching?
-		// maybe if we handled localization for error messages
-		// ...or if we return instead of throw, to avoid the extra wrapping of the message by Electron!
-		// yeah, TODO: return instead of throw
-		throw new Error(`Error listing devices: ${err.message}`);
+		return { error: `Error listing devices: ${err.message}` };
 	}
 
 	console.log(`Device list output: ${listDevicesResult.stderr}`);
@@ -872,7 +868,7 @@ ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 
 	if (!deviceFound) {
 		console.error(`Camera device "${cameraDeviceName}" not found in device list.`);
-		throw new Error(`Camera device "${cameraDeviceName}" not found in device list.`);
+		return { error: `Camera device "${cameraDeviceName}" not found in device list.` };
 	}
 
 	console.log(`Opening settings dialog for camera device: ${cameraDeviceName}`);
@@ -884,20 +880,26 @@ ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 			'-i', `video=${cameraDeviceName}`
 		]);
 		console.log(`Command output: ${result.stderr}`);
-		// const dshowRegex = /\[dshow @ [^\]]+\] (.*)/g;
+		const dshowRegex = /\[dshow @ [^\]]+\] (.*)(Input #[\d+], dshow, .*)/g;
 		// const relevantOutput = result.stderr.split('\n').filter(line => line.startsWith('[dshow @'));
 		if (result.code !== 0) {
 			if (result.stderr.includes('requested filter does not have a property page to show')) {
 				// or shorter: "No settings found for this camera source."
-				throw new Error(`The camera settings dialog is not available for this camera.`);
+				return { error: `The camera settings dialog is not available for this camera.` };
 			}
-			throw new Error(`ffmpeg exited with code ${result.code}`);
+			// return { error: `ffmpeg exited with code ${result.code}\n\n${result.stderr}` };
+			// ffmpeg actually returns code 1 even after successfully showing the dialog.
+			// check for actual arbitrary errors in the output via dshowRegex
+			const match = dshowRegex.exec(result.stderr);
+			if (match) {
+				return { error: match[1] };
+			}
 		}
-		// Also, could fall back to opening ms-settings:privacy-webcam on Windows 10 and 11
+		// TODO: could fall back to opening ms-settings:privacy-webcam on Windows 10 and 11
 		// There's also a way to link to the settings for a specific camera in Windows 11:
 		// https://learn.microsoft.com/en-us/windows/apps/develop/camera/launch-camera-settings
 	} catch (err) {
 		console.error(`Error opening camera settings: ${err.message}`);
-		throw err;
+		return { error: `Error opening camera settings: ${err.message}` };
 	}
 });
