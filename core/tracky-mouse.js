@@ -876,9 +876,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
 
 						try {
-							const { error } = await window.electronAPI.openCameraSettings(selectedDeviceName);
-							if (error) {
-								alert("Failed to open camera settings:\n" + error);
+							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
+							if (result?.error) {
+								alert("Failed to open camera settings:\n" + result.error);
 							}
 						} catch (error) {
 							alert("Failed to open camera settings:\n" + error.message);

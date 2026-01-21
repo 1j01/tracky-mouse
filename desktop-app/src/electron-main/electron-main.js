@@ -902,4 +902,5 @@ ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 		console.error(`Error opening camera settings: ${err.message}`);
 		return { error: `Error opening camera settings: ${err.message}` };
 	}
+	return { success: true };
 });
