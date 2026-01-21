@@ -928,6 +928,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	}
 
+	const elsByGroup = new Map();
+
 	function buildSettingsUI(parentEl, settingsCategories) {
 
 		for (const category of settingsCategories) {
@@ -942,32 +944,33 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			const bodyEl = document.createElement("div");
 			bodyEl.className = "tracky-mouse-details-body";
 			detailsEl.appendChild(bodyEl);
-			const elsByGroup = new Map();
 			traverseSettings(category.settings, (setting, parentGroup) => {
 				const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
 
-				// Groups
 				if (setting.type === "group") {
-					const fieldsetEl = document.createElement("fieldset");
-					fieldsetEl.className = "tracky-mouse-control-group";
-					const legendEl = document.createElement("legend");
-					legendEl.className = "tracky-mouse-control-group-label";
-					legendEl.textContent = setting.label;
-					fieldsetEl.appendChild(legendEl);
-					elsByGroup.set(setting, fieldsetEl);
-					parentGroupElement.appendChild(fieldsetEl);
-					return;
+					const rowEl = buildSettingGroupUI(setting);
+					parentGroupElement.appendChild(rowEl);
+				} else {
+					const rowEl = buildSettingItemUI(setting);
+					parentGroupElement.appendChild(rowEl);
 				}
-
-				// Individual settings
-				const rowEl = buildSettingItemUI(setting);
-				parentGroupElement.appendChild(rowEl);
 			});
 
 			parentEl.appendChild(detailsEl);
 
 		}
 
+	}
+
+	function buildSettingGroupUI(group) {
+		const fieldsetEl = document.createElement("fieldset");
+		fieldsetEl.className = "tracky-mouse-control-group";
+		const legendEl = document.createElement("legend");
+		legendEl.className = "tracky-mouse-control-group-label";
+		legendEl.textContent = group.label;
+		fieldsetEl.appendChild(legendEl);
+		elsByGroup.set(group, fieldsetEl);
+		return fieldsetEl;
 	}
 
 	function buildSettingItemUI(setting) {
