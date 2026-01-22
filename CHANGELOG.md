@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   <script src="node_modules/tracky-mouse/lib/OneEuroFilter.js"></script>
   ```
   This adds a One Euro Filter to smooth out head tilt values, which can be very jittery otherwise.
-- **Improved open mouth detection** by using mouth aspect ratio instead of a simple distance between two lip points. If you make a narrow "O" shape with your mouth, it will detect that more reliably.
+- **Improved open mouth detection** by using mouth aspect ratio instead of a simple distance between two lip points. If you make a narrow "O" shape with your mouth, it will detect that more reliably. ([issue #97](https://github.com/1j01/tracky-mouse/issues/97))
 - Tweaked layout of mouth and eye meters in cursor-attached HUD. Each meter is now anchored at its vertical center, and meters better avoid being occluded by the cursor or cut off.
 - Settings UI:
   - Mirror setting is now grouped under "Video".
@@ -21,12 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Point tracking settings are now grouped under "Point Tracking" subsection.
   - Tweaked settings UI spacing.
   - Controls are now disabled when inapplicable.
-  - Added tooltips to settings. Hover over each setting to see a description.
+  - Added tooltips to settings. Hover over each setting to see a description. ([issue #79](https://github.com/1j01/tracky-mouse/issues/79))
 
 ### Added
 
 - **Camera source** setting. You can now select your preferred camera from a dropdown.
-- **Open Camera Settings** button in desktop app. This opens the system camera settings dialog for your selected camera, if available. (Tested only on Windows.)
+- **Open Camera Settings** button in desktop app. This opens the system camera settings dialog for your selected camera, if available. (Tested only on Windows.) ([issue #110](https://github.com/1j01/tracky-mouse/issues/110))
 - **Direct head tilt based control**
   - **Tilt influence** slider. This lets you blend between using point tracking (existing behavior) and directly detected head tilt. ([issue #45](https://github.com/1j01/tracky-mouse/issues/45))
     - At 0% it will use only point tracking, as before. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - With your right eye closed, open your mouth to right click.
   - With your left eye closed, open your mouth to middle click.
   - This makes it a three-button mouse! Universal computer control.
-- Installer includes a new animated loading GIF.
+- Installer includes a new animated loading GIF. ([issue #86](https://github.com/1j01/tracky-mouse/issues/86))
 - Added a new [Goodies](https://trackymouse.js.org/goodies) page to the website, with wallpaper downloads and text art.
 
 ### Fixed
