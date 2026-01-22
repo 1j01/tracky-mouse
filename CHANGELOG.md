@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.2.0] - 2026-01-22
+
 ### Changed
 
 - There's a **new dependency** (optional but recommended). If you are using `loadDependencies()`, it will be included automatically. If you are including dependencies manually, you can add it with:
@@ -172,7 +176,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/1j01/tracky-mouse/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/1j01/tracky-mouse/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/1j01/tracky-mouse/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/1j01/tracky-mouse/compare/v1.1.0...v1.2.0
