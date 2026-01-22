@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Camera source** setting. You can now select your preferred camera from a dropdown.
-- **Open Camera Settings** button in desktop app. This opens the system camera settings dialog for your selected camera, if available. (Tested only on Windows.) ([issue #110](https://github.com/1j01/tracky-mouse/issues/110))
+- **Open Camera Settings** button in desktop app. This opens the system camera settings dialog for your selected camera, if available. (Probably only works on Windows.) ([issue #110](https://github.com/1j01/tracky-mouse/issues/110))
 - **Direct head tilt based control**
   - **Tilt influence** slider. This lets you blend between using point tracking (existing behavior) and directly detected head tilt. ([issue #45](https://github.com/1j01/tracky-mouse/issues/45))
     - At 0% it will use only point tracking, as before. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
