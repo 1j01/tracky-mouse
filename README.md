@@ -2,17 +2,28 @@
 
 > Control your computer by moving your head.
 
-Tracky Mouse is a desktop application *and embeddable web UI* for head tracking and mouse control.
-It includes a dwell clicker, and will be expanded with other clicking options in the future.
+Tracky Mouse is a desktop application providing **hands-free universal computer access**.
 
-Tracky Mouse is intended to be a complete UI for head tracking, similar to [eViacam](https://github.com/cmauri/eviacam), but embeddable in web applications (such as [JS Paint](https://jspaint.app/)), as well as downloadable as an application to use to control your entire computer.
+It's also embeddable in web applications as a JavaScript library. See the [API docs](./core/README.md).
 
-I'm also thinking about making a browser extension, which would 1. bridge between the desktop application and web applications, making it so you don't need to disable dwell clicking in the desktop app to use a web app that provides dwell clicking, 2. provide the equivalent of the desktop application for Chrome OS, and 3. automatically enhance webpages to be friendlier toward facial mouse input, by preventing menus from closing based on hover, enlarging elements etc., probably using site-specific enhancements.
+Features include:
+- [x] Move your head to move the mouse pointer.
+- [x] Dwell to click.
+- [x] Blink to click mode (desktop app only).
+- [x] Open mouth to click mode (desktop app only). This provides **three-button mouse** functionality using closed eyes as modifiers.
+- [x] The screen overlay provides visual feedback for dwell clicking and facial gestures at your cursor.
+- [x] Settings for sensitivity, acceleration, running at login, and more.
+- [x] Moving the mouse manually (with a physical mouse or touchpad) automatically pauses control.
 
-So this would be a three-in-one project: desktop app, JavaScript library, and browser extension.
-Sharing code between these different facets of the project means a lot of improvements can be made to three different products at once, and the library means that applications can have a fully functional facial mouse UI, and get people interested in head tracking because they can try it out right away.
+By building it as a desktop app *and* an embeddable web UI, users can try it out right away in their browser, and then install the desktop app for full computer control.
+<!-- Building Tracky Mouse as a desktop app *and* an embeddable web UI means you can try it out right away in their browser, and then install the desktop app for full computer control. -->
 
-Options could be exported/imported or even synced between the products.
+<!--
+Users will even be able to share settings between the embedded web UI and desktop app.
+I also have plans for a browser extension https://github.com/1j01/tracky-mouse/issues/27
+making this a three-in-one project: desktop app, JavaScript library, and browser extension.
+Settings could be shared between all three products (with import/export, which is already implemented in the desktop app, and possibly cloud syncing, but also just through familiarity with the settings UI).
+-->
 
 [✨👉 **Try out the Demo!** 👈✨](https://trackymouse.js.org/)
 
@@ -20,7 +31,7 @@ Options could be exported/imported or even synced between the products.
 
 [⬇️ Download for Windows](https://github.com/1j01/tracky-mouse/releases/download/v2.1.0/Tracky.Mouse-2.1.0.Setup.exe) and run the installer.
 
-Pre-built binaries are not yet available for macOS or Linux, due to an [Electron Forge issue](https://github.com/electron/forge/issues/3238#issuecomment-2067577947), however you can run the app from source on those platforms.
+Pre-built binaries are not yet available for macOS or Linux, due to an [Electron Forge issue](https://github.com/electron/forge/issues/3238#issuecomment-2067577947), however you can run the app from source code on those platforms.
 See [Development Setup](#development-setup).
 
 ## Usage Guide
@@ -28,29 +39,54 @@ See [Development Setup](#development-setup).
 These instructions apply to using the desktop app or the web UI.
 
 ### Set up your camera and environment:
-- Make sure to have good lighting on your face. Placing a lamp beside your monitor can help a lot!
-- Back-lighting can be problematic, especially if your head moves in and out from occluding the light during use.
+- Make sure to have **good lighting** on your face. Placing a lamp beside your monitor can help a lot!
+- Back-lighting can be problematic, especially if your head moves in and out from occluding the light during use, but also due to glare.
 - Your webcam should be centered in front of your head, with your head fully visible when sitting comfortably.
 
 ### Start using Tracky Mouse:
 - Press the "Start" button to start moving the mouse and clicking. You can also use the keyboard shortcut <kbd>F9</kbd>. When using the desktop app, this shortcut works even when the app is not in focus.
 - Dwell in one spot to click. To avoid clicking, you have to keep moving your head, or pause the app with <kbd>F9</kbd>.
+- (Desktop app only) Try changing **Clicking mode** to **Wink to click** or **Open mouth to click** in the settings. 
+  - With **Wink to click**:
+    - Close your right eye to left click
+    - Close your left eye to right click.
+    - If this feels backwards, you can enable "Swap mouse buttons"
+  - With **Open mouth to click**:
+    - Close your right eye and open your mouth to middle click
+    - Close your left eye and open your mouth to right click
+    - Open your mouth with both eyes open to left click.
 
 ### General usage tips:
 - Adjust the settings until you can comfortably move the mouse to the edges of the screen with some accuracy.
-- If the mouse cursor feels off-center, you can recalibrate by simply moving your head past where the cursor meets the edge of the screen.
-- Note that not only rotating your head, but translating your head (moving it left/right, up/down, or forward/backward) moves the mouse.
-  - One nuance to this is, if the camera is positioned above your head, leaning forward generally moves the pointer down, whereas if the camera is below your head, leaning forward generally moves the pointer up.
+- Advice for point tracking mode:
+  - If the mouse cursor feels off-center, you can recalibrate by simply moving your head past where the cursor meets the edge of the screen.
+  - Note that not only rotating your head, but translating your head (moving it left/right, up/down, or forward/backward) moves the mouse.
+    - One nuance to this is, if the camera is positioned above your head, leaning forward generally moves the pointer down, whereas if the camera is below your head, leaning forward generally moves the pointer up.
+- Using the **Tilt influence** slider: This setting lets you blend between using 2D point tracking and 3D head tilt.
+  - At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face, so it responds to both head rotation and translation. It's very accurate and responsive, but can get out of sync with your head orientation over time, requiring you to recenter by pushing the cursor to the edge of the screen.
+    - Recommended: high acceleration
+  - At 100% it will use only head tilt. This uses an estimate of your face's rotation in 3D space, and ignores head translation. Note that this signal is smoothed (as it's very jittery otherwise), so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen, but you do need to calibrate it in the **Head tilt calibration settings** section first.
+    - Acceleration does not apply, as movement is absolute based on head tilt.
+  - In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position targeted based on the head tilt, and (only past 80% on the slider) actively moving towards it. 
+    - Recommended: medium point tracking acceleration; point tracking sensitivity should roughly match head tilt sensitivity.
+- **Head tilt calibration settings:** You can adjust the horizontal and vertical tilt range and offset. This allows the head tilt feature to be used with different camera placements (above or below the screen) and postures, and lets you balance comfort+speed and precision.
 
 ### Troubleshooting:
-- If the camera feed appears black, make sure there is no privacy/dust cover on the camera, and ensure there's enough light. Check the camera in another application to make sure it's working.
+- If you have multiple cameras, make sure to select the correct one under **Video > Camera source**.
+- If the camera feed appears black:
+  - Make sure there is no privacy/dust cover on the camera.
+  - Ensure there's enough light.
+  - Check the camera in another application to make sure it's working.
+  - Resuming from sleep/hibernate can also cause this (see [issue #77](https://github.com/1j01/tracky-mouse/issues/77)). Try restarting the app.
 - If the camera can't be accessed at all, make sure it's not being used by another application, then click "Allow Camera Access" in the app. Also try unplugging the camera and plugging it in again (if it's an external camera), or restarting your computer.
   - On Linux: Installing (and maybe running?) `guvcview` can magically fix a webcam not showing up. ([source](https://forums.linuxmint.com/viewtopic.php?t=131011))
+  - On Windows 11, it's possible to allow multiple apps to access the camera at once.
+    - Go to **Settings > Bluetooth & devices > Camera**, select your camera, and in **Advanced camera options**, enable **Allow multiple apps to use camera at the same time**. (You'll need to stop any apps currently using the camera first.)
 - Auto-focus and auto-brightness can cause head tracking disruptions. Consider disabling auto-focus on your camera, and adjusting focus manually. If you disable auto-brightness, you will have to adjust the brightness regularly as the lighting changes, at least assuming you have any natural light in the room.
-- If you have multiple cameras, the app does not yet support selecting a camera, so you'll have to disable the other cameras in your system settings (or unplug them, if they're external) in order to target the desired camera.
+  - Advanced camera settings can be accessed with **Video > Open Camera Settings** in the desktop app on Windows.
 
 ### Integrating with external software
-Track Mouse comes with a command-line interface (CLI) which can be used to control the desktop app with a voice command system or other external programs. See [CLI documentation](./CLI.md) for usage.
+Tracky Mouse comes with a command-line interface (CLI) which can be used to control the desktop app with a voice command system or other external programs. See [CLI documentation](./CLI.md) for usage.
 
 
 ## Add to your project
@@ -78,7 +114,7 @@ and I decided to do them one better and build it as an official feature, with dw
 To test these accessibility features properly, I needed a facial mouse, but eye trackers are expensive, so I tried looking for head tracking software, and found eViacam, but... either it didn't work, or at some point it stopped working on my computer.
 
 - eViacam wasn't working on my computer.
-- I didn't find there to be that much facial mouse software out there, especially cross-platform, and I want people to have options.
+- I didn't find there to be very many facial mouse software options out there, especially cross-platform, and I want people to have options.
 - I wanted people to be able to try JS Paint's dwell clicking out easily, and an embeddable facial mouse GUI would be great for that.
 - I've had some joint pain issues in the past (although also neck pain, which is a bit ironic)
 - I think I can push forward the state of the art in facial mouse software.
@@ -98,10 +134,15 @@ The core library uses the following third-party libraries:
 	- [MIT License](https://github.com/inspirit/jsfeat/blob/master/LICENSE)
 - [clmtrackr.js](https://github.com/auduno/clmtrackr) for fast and lightweight but inaccurate face tracking
 	- [MIT License](https://github.com/auduno/clmtrackr/blob/dev/LICENSE.txt)
-- [facemesh](https://github.com/tensorflow/tfjs-models/tree/master/facemesh#mediapipe-facemesh) and [TensorFlow.js](https://www.tensorflow.org/) for accurate face tracking (once this loads, it stops using clmtrackr.js)
+- [facemesh](https://www.npmjs.com/package/@tensorflow-models/face-landmarks-detection) and [TensorFlow.js](https://www.tensorflow.org/) for accurate face tracking (once this loads, it stops using clmtrackr.js)
 	- [tfjs-models: Apache License 2.0](https://github.com/tensorflow/tfjs-models/blob/master/LICENSE)
 	- [TensorFlow: Apache License 2.0](https://github.com/tensorflow/tensorflow/blob/master/LICENSE)
 
+Some dependencies are versioned with npm and copied into `core/lib/` with `npm run in-core -- npm run copy-deps`
+
+Others are just stored in `core/lib/` without npm versioning.
+
+#### No eval
 
 To avoid the need for `unsafe-eval` in the Content Security Policy, I had to eliminate the use of `eval` (and `Function` construction) in `clmtrackr.js`.
 
@@ -111,17 +152,19 @@ This tool is located in [eval-is-evil.html](./website/eval-is-evil.html).
 
 Unfortunately, when upgrading the facemesh library, I had to add back the `unsafe-eval` requirement, as it uses WebAssembly.
 
+WebAssembly is not the same as `eval`, but browsers grouped them together under the same CSP directive.
+Even if browsers widely support the more fine-grained `wasm-unsafe-eval`, old browsers would still be blocked from using the library if `unsafe-eval` is not included in the CSP.
+
 ### Website
 
 The website uses symlinks to reference the library (`core`) and shared resources (`images`) during development.
 
-When deploying with `npm run in-website -- npm run deploy`, the symlinks are dereferenced using `cp -rL`.
+When deploying with `npm run in-website -- npm run deploy`, it will prompt when there are any new files not that are not defined as included or excluded in [website/globs-for-deploy.js](./website/globs-for-deploy.js).
 
-The website is deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
+It will then be deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
 
-(GitHub Pages supports symlinks, but not to paths outside of `docs` when deploying `docs` as the site root, unfortunately,
-hence I can't use symlinks to reference the library and avoid a deployment script, while keeping a clean repository structure.
-I would have to have the website files at the root of the repository.)
+Deploys can be rolled back by force-pushing to the `gh-pages` branch.
+
 
 ### Desktop App
 
@@ -159,6 +202,10 @@ The architecture for normal usage of the library is much simpler.
 
 Ooh, but the diagram for the desktop app interacting with web pages (including pages using the library) through the browser extension would be interesting. That's all theoretical for now though.
 
+P.S. There is a script to list IPC events: `node scripts/list-ipc-events.js`
+
+Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j01/tracky-mouse/issues/72)
+
 ## Development Setup
 
 - Before cloning on Windows, make sure you have `git config --global core.symlinks true` set, or you may have issues with symbolic links.
@@ -166,6 +213,9 @@ Ooh, but the diagram for the desktop app interacting with web pages (including p
 - Install [Node.js](https://nodejs.org/) if you don't have it
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
+
+> [!NOTE]
+> There's also `npm run install-all` as a shortcut to install dependencies for all packages.
 
 For the website:
 - Run `npm run in-website -- npm install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run a command within the directory of the package.)
@@ -183,7 +233,8 @@ For the desktop app:
   - Those options skip Electron Forge currently. To test the CLI through Electron Forge, run `npm run desktop-app -- -- -- --help` (Yes it's a lot of dashes. It's going through npm, then npm within a subfolder, and then Electron Forge. Each tool has its own `--help` flag, but supports `--` to pass on any following arguments as-is.)
 - Run `npm run in-desktop-app -- npm run make` to build the app for distribution. Look in the `desktop-app/out/` directory for build artifacts.
 
-(The core library doesn't currently use `npm` for dependencies. It has dependencies stored in the `core/lib` directory. And it doesn't have any npm scripts.)
+For the core library:
+- Dependencies are stored in `core/lib/`; you don't need to run `npm run in-core -- npm install` unless you plan to modify the library's dependencies and run `npm run in-core -- npm run copy-deps` to copy them into `core/lib/`.
 
 ### Debugging
 
