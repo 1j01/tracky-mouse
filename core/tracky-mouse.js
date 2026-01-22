@@ -743,6 +743,25 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
 						},
 						{
+							label: "Vertical tilt range",
+							className: "tracky-mouse-head-tilt-pitch-range",
+							key: "headTiltPitchRange",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: 10,
+							max: 60,
+							default: 25,
+							labels: {
+								min: "Little neck movement",
+								max: "Large neck movement",
+							},
+							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
+							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
+							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
+							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
+						},
+						{
 							// label: "Horizontal tilt offset",
 							label: "Horizontal cursor offset",
 							className: "tracky-mouse-head-tilt-yaw-offset",
@@ -768,25 +787,6 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							// TODO: should this say "horizontal" in the (main part of the) description?
 							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
 ⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`,
-						},
-						{
-							label: "Vertical tilt range",
-							className: "tracky-mouse-head-tilt-pitch-range",
-							key: "headTiltPitchRange",
-							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
-							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
-							type: "slider",
-							min: 10,
-							max: 60,
-							default: 25,
-							labels: {
-								min: "Little neck movement",
-								max: "Large neck movement",
-							},
-							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
-							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
-							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
-							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
 						},
 						{
 							// label: "Vertical tilt offset",
