@@ -1,7 +1,7 @@
 html {
 	background-color: white;
 	color: black;
-	font-family: sans-serif;
+	font-family: 'Atkinson Hyperlegible Next', sans-serif;
 }
 
 body {
@@ -16,7 +16,8 @@ body {
 		color: white;
 	}
 
-	a:link {
+	a:link,
+	header .try-demo-button.try-demo-button {
 		color: aquamarine;
 	}
 
@@ -42,6 +43,44 @@ header .tagline {
 
 header .logo {
 	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
+}
+
+header .try-demo-cta {
+	margin-top: 2em;
+}
+
+header .try-demo-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em 2em;
+	font-size: 1.2em;
+	font-weight: bold;
+	border: none;
+	border-radius: 0.5em;
+	text-decoration: none;
+	transition: background-color 0.3s;
+	cursor: pointer;
+	color: rgb(0, 96, 206);
+}
+
+header .try-demo-button:hover {
+	background-color: rgb(from currentColor r g b / 0.1);
+}
+
+header .try-demo-button:active {
+	background-color: rgb(from currentColor r g b / 0.2);
+}
+
+footer {
+	text-align: center;
+}
+
+footer nav {
+	display: flex;
+	justify-content: center;
+	gap: 1em;
+	margin-top: 2em;
 }
 
 .page-section {

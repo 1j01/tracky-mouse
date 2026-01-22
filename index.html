@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
 	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob:">
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://fonts.googleapis.com https://fonts.gstatic.com">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Tracky Mouse</title>
@@ -20,6 +21,11 @@
 	<!-- TODO: defer loading tracky-mouse.css -->
 	<!-- <link rel="preload" href="core/tracky-mouse.css" as="style"> -->
 	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
+		rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-homepage.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
@@ -32,6 +38,16 @@
 		<!-- <p class="tagline">Control your computer with your head!</p> -->
 		<p class="tagline">Hands-free mouse control</p>
 		<!-- <p class="tagline">Hands-free computer control</p> -->
+		<div class="try-demo-cta">
+			<!-- <p>Try the demo below to experience Tracky Mouse in action!</p> -->
+			<a href="#demo" class="try-demo-button">Try the Demo
+				<svg height="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+					class="chevron-icon">
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+			</a>
+		</div>
 	</header>
 	<section class="page-section">
 		<h2>Control your whole computer</h2>
@@ -40,7 +56,7 @@
 		</p>
 		<p>
 			<!-- TODO: download links for multiple platforms; detect platform, present download with dropdown similar to VS Code homepage, near top of page -->
-			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.1.0/Tracky.Mouse-2.1.0.Setup.exe"
+			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe"
 				class="big-download-button">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.7, 1.5) perspective(9px) rotateY(-10deg) translateY(-1px)">
@@ -185,23 +201,19 @@
 	<section class="cursors-background">
 		<h2>Who is this for?</h2>
 		<p>
-			People who have limited mobility, due to motor neuron diseases like ALS,
+			People who have ALS or other motor neuron diseases, spinal cord injuries,
+			arthritis, repetitive strain injuries,
 			or other conditions that make it difficult to use a mouse,
 			can greatly benefit from hands-free computer control.
 		</p>
 		<p>
-			I hope to make it good enough that people want to use it even for common repetitive strain injuries like
-			carpal tunnel syndrome.
+			As a programmer, Tracky Mouse helps me edit code faster because I my hands don't have to leave the keyboard.
 		</p>
 		<p>
 			It's also just fun! It feels like controlling the computer with your mind.
 		</p>
-		<p>
-			Ever wanted to use your computer while playing guitar, or while eating a sandwich?
-			Maybe Tracky Mouse is for you!
-		</p>
 	</section>
-	<section class="page-section">
+	<section class="page-section" id="demo">
 		<h2>Try it out</h2>
 		<p>
 			You can try out Tracky Mouse right here in your browser.
@@ -254,7 +266,7 @@
 				};
 			</script>
 		</div>
-		<h3 style="font-weight: normal; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
+		<h3 style="font-weight: 100; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;">
 			Archery Practice Area
 			<!-- 🏹 -->
 			<!-- Could be nice to represent the bow and arrow, but an emoji isn't cutting it for me. -->
@@ -290,56 +302,15 @@
 			for more information.
 		</p>
 		<p>
-			<a href="https://jspaint.app/about">JS Paint</a> uses Tracky Mouse for dwell clicking in its
-			<a href="https://jspaint.app/#eye-gaze-mode">Eye Gaze Mode</a>.
-		</p>
-	</section>
-	<section class="page-section">
-		<h2>Technical Info</h2>
-		<p>
-			This is a head tracking system similar to <a href="https://eviacam.crea-si.com/">eViacam</a>,
-			using <a href="https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method">Lucas–Kanade optical flow</a>
-			to track points for high accuracy,
-			and face detection for understanding of where to place tracking points.
-			It uses two different face detectors, a fast-to-load one
-			(<a href="https://github.com/auduno/clmtrackr">clmtrackr.js</a>)
-			and a slower to load but much more accurate one
-			(<a href="https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection">FaceMesh</a>),
-			which it switches to automatically when available.
-		</p>
-		<p>
-			<a href="https://inspirit.github.io/jsfeat/">JSFeat</a>
-			is used for optical flow, and clmtrackr.js also uses JSFeat,
-			so I patched clmtrackr.js to export JSFeat so it doesn't need to be loaded twice.
-		</p>
-		<p>
-			clmtrackr.js used <code>eval</code> heavily, but I created
-			<a href="eval-is-evil.html">a tool that eliminates the need for <code>eval</code></a>
-			by running the code and seeing what it tries to evaluate,
-			and creating functions that do the same thing.
-			This allows Tracky Mouse to run in a context secured with <code>Content-Security-Policy</code>.
+			<a href="https://jspaint.app/about">JS Paint</a> uses Tracky Mouse for its Dwell Clicker and Head Tracker
+			features.
+			<a href="https://jspaint.app/#enlarge-ui,dwell-clicker,head-tracker,vertical-color-box-mode,easy-undo">Click
+				here to launch JS Paint in Head Tracker mode</a>.
 		</p>
 	</section>
 	<section class="page-section">
 		<h2>Source Code</h2>
 		<p><a href="https://github.com/1j01/tracky-mouse">Open source on GitHub.</a> MIT-licensed.</p>
-	</section>
-	<section class="page-section">
-		<h2>Privacy Policy</h2>
-		<p>
-			All processing is done locally on your computer.
-		</p>
-		<p>
-			Tracky Mouse does not store any personally identifiable information.
-		</p>
-		<p>
-			When an error occurs, the Tracky Mouse desktop app
-			may send error reports to a third-party service (<a href="https://sentry.io/">Sentry</a>)
-			to help with improving the software.
-			No personally identifiable information is collected,
-			only stack traces and environment details,
-			such as CPU type, operating system version, and app version.
-		</p>
 	</section>
 	<section class="page-section">
 		<h2>Feedback</h2>
@@ -348,6 +319,22 @@
 			or <a href="https://github.com/1j01/tracky-mouse/issues">open an issue on GitHub</a>.
 		</p>
 	</section>
+	<footer>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="https://github.com/1j01/tracky-mouse">GitHub</a>
+			<a href="goodies.html">Wallpapers & Other Downloads</a>
+			<a href="privacy.html">Privacy Policy</a>
+			<a href="mailto:isaiahodhner@gmail.com">Send Email</a>
+			<!-- <a href="privacy.html">Privacy Policy</a> -->
+			<!-- <a href="api.html">API</a> -->
+			<!-- <a href="cli.html">CLI</a> -->
+			<!-- <a href="contact.html">Contact</a> -->
+		</nav>
+		<p>
+			&copy; 2026 Isaiah Odhner
+		</p>
+	</footer>
 	<script defer src="core/tracky-mouse.js"></script>
 	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
 	<script type="module" src="demo.js"></script>

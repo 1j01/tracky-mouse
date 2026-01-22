@@ -1,4 +1,4 @@
-/* global jsfeat, Stats, clm, faceLandmarksDetection */
+/* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -27,6 +27,7 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
+		`${TrackyMouse.dependenciesRoot}/lib/OneEuroFilter.js`,
 	];
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
@@ -563,131 +564,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
-			<br>
-			<br>
-			<details>
-				<summary>Head Tracking</summary>
-				<div class="tracky-mouse-details-body">
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Horizontal sensitivity</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="25" class="tracky-mouse-sensitivity-x">
-							<span class="tracky-mouse-min-label">Slow</span>
-							<span class="tracky-mouse-max-label">Fast</span>
-						</span>
-					</label>
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Vertical sensitivity</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-sensitivity-y">
-							<span class="tracky-mouse-min-label">Slow</span>
-							<span class="tracky-mouse-max-label">Fast</span>
-						</span>
-					</label>
-					<!-- <label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Smoothing</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-smoothing">
-							<span class="tracky-mouse-min-label"></span>
-							<span class="tracky-mouse-max-label"></span>
-						</span>
-					</label> -->
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Acceleration</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="100" value="50" class="tracky-mouse-acceleration">
-							<!-- TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side. Should it be swapped? What does other software with acceleration control look like? In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor. -->
-							<span class="tracky-mouse-min-label">Linear</span>
-							<span class="tracky-mouse-max-label">Smooth</span>
-						</span>
-					</label>
-					<label class="tracky-mouse-control-row">
-						<span class="tracky-mouse-label-text">Motion threshold</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="10" value="0" class="tracky-mouse-min-distance">
-							<span class="tracky-mouse-min-label">Free</span>
-							<span class="tracky-mouse-max-label">Steady</span>
-						</span>
-					</label>
-				</div>
-			</details>
-			<!--
-				Only dwell clicking is supported by the web library right now.
-				Currently it's a separate API (TrackyMouse.initDwellClicking)
-				TODO: bring more of desktop app functionality into core
-				https://github.com/1j01/tracky-mouse/issues/72
-
-				Also, the "Swap mouse buttons" setting is likely not useful for
-				web apps embedding Tracky Mouse and designed for head trackers,
-				since it necessitates mode switching for dwell clicker usage,
-				so it may make sense to hide (or not) even if it is supported there in the future.
-				The main point of this option is to counteract the system-level mouse button setting,
-				which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
-			-->
-			<details class="tracky-mouse-desktop-only">
-				<summary>Clicking</summary>
-				<div class="tracky-mouse-details-body">
-					<div class="tracky-mouse-control-row">
-						<label for="tracky-mouse-clicking-mode"><span class="tracky-mouse-label-text">Clicking mode:</span></label>
-						<select id="tracky-mouse-clicking-mode">
-							<option value="dwell">Dwell to click</option>
-							<option value="blink">Wink to click</option>
-							<option value="open-mouth">Open mouth to click</option>
-							<option value="off">Off</option>
-						</select>
-					</div>
-					<br>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- though this option might not be wanted in jspaint; might be good to hide it in the embedded case, or make it optional -->
-					<!-- also TODO: add description of what this is for: on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click() -->
-					<!-- also this may be seen as a weirdly named/designed option for right-clicking -->
-					<!-- btw: label is selected based on 'for' attribute -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" id="tracky-mouse-swap-mouse-buttons"/>
-						<label for="tracky-mouse-swap-mouse-buttons"><span class="tracky-mouse-label-text">Swap mouse buttons</span></label>
-					</div>
-					<br>
-					<label class="tracky-mouse-control-row">
-						<!--
-							This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
-							with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
-							This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
-							at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
-							and it might complicate the design of the slider labeling.
-						-->
-						<span class="tracky-mouse-label-text">Delay before dragging&nbsp;&nbsp;&nbsp;</span>
-						<span class="tracky-mouse-labeled-slider">
-							<input type="range" min="0" max="1000" value="0" class="tracky-mouse-delay-before-dragging">
-							<span class="tracky-mouse-min-label">Easy to drag</span>
-							<span class="tracky-mouse-max-label">Easy to click</span>
-						</span>
-					</label>
-				</div>
-			</details>
-			<details>
-				<summary>General</summary>
-				<div class="tracky-mouse-details-body">
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- opposite, "Start paused", might be clearer, especially if I add a "pause" button -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" id="tracky-mouse-start-enabled"/>
-						<label for="tracky-mouse-start-enabled"><span class="tracky-mouse-label-text">Start enabled</span></label>
-					</div>
-					<br>
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<div class="tracky-mouse-control-row tracky-mouse-desktop-only">
-						<input type="checkbox" id="tracky-mouse-run-at-login"/>
-						<label for="tracky-mouse-run-at-login"><span class="tracky-mouse-label-text">Run at login</span></label>
-					</div>
-					<br class="tracky-mouse-desktop-only">
-					<!-- special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work -->
-					<!-- TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view -->
-					<div class="tracky-mouse-control-row">
-						<input type="checkbox" checked id="tracky-mouse-mirror"/>
-						<label for="tracky-mouse-mirror"><span class="tracky-mouse-label-text">Mirror</span></label>
-					</div>
-				</div>
-			</details>
 		</div>
 		<div class="tracky-mouse-canvas-container-container">
 			<div class="tracky-mouse-canvas-container">
@@ -708,22 +584,609 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		document.body.appendChild(uiContainer);
 	}
 	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
-	var mirrorCheckbox = uiContainer.querySelector("#tracky-mouse-mirror");
-	var swapMouseButtonsCheckbox = uiContainer.querySelector("#tracky-mouse-swap-mouse-buttons");
-	var clickingModeDropdown = uiContainer.querySelector("#tracky-mouse-clicking-mode");
-	var startEnabledCheckbox = uiContainer.querySelector("#tracky-mouse-start-enabled");
-	var runAtLoginCheckbox = uiContainer.querySelector("#tracky-mouse-run-at-login");
-	var swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
-	var sensitivityXSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-x");
-	var sensitivityYSlider = uiContainer.querySelector(".tracky-mouse-sensitivity-y");
-	var accelerationSlider = uiContainer.querySelector(".tracky-mouse-acceleration");
-	var minDistanceSlider = uiContainer.querySelector(".tracky-mouse-min-distance");
-	var delayBeforeDraggingSlider = uiContainer.querySelector(".tracky-mouse-delay-before-dragging");
 	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
 	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
+
+	// Settings (initialized later; defaults are defined in settingsCategories)
+	const s = {};
+
+	// Abstract model of settings UI.
+	// Note: min, max, and default are in INPUT value units, not setting value units.
+	// TODO: make min/max/default be in setting value units, and automatically define
+	// input unit scale to avoid rounding to 0 or 1 for fractions (for example) - or use step?
+	const settingsCategories = [
+		{
+			type: "group",
+			label: "Cursor Movement",
+			settings: [
+				{
+					label: "Tilt influence",
+					className: "tracky-mouse-tilt-influence",
+					key: "headTrackingTiltInfluence",
+					settingValueToInputValue: (settingValue) => settingValue * 100,
+					inputValueToSettingValue: (inputValue) => inputValue / 100,
+					type: "slider",
+					min: 0,
+					max: 100,
+					default: 0,
+					labels: {
+						// min: "Optical flow", // too technical
+						// min: "Point tracking", // still technical but at least it's terminology we're already using
+						min: "Point tracking (2D)",
+						// max: "Head tilt",
+						max: "Head tilt (3D)",
+					},
+					// description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
+					description: `Blends between using point tracking (2D) and detected head tilt (3D).
+- At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
+- At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
+- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`,
+				},
+				{
+					label: "Motion threshold",
+					className: "tracky-mouse-min-distance",
+					key: "headTrackingMinDistance",
+					type: "slider",
+					min: 0,
+					max: 10,
+					default: 0,
+					labels: {
+						min: "Free",
+						max: "Steady",
+					},
+					description: "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.",
+					// description: "Movement less than this distance in pixels will be ignored.",
+					// description: "Speed in pixels/frame required to move the cursor.",
+				},
+				{
+					type: "group",
+					label: "Point tracking",
+					disabled: () => s.headTrackingTiltInfluence === 1,
+					settings: [
+						{
+							label: "Horizontal sensitivity",
+							className: "tracky-mouse-sensitivity-x",
+							key: "headTrackingSensitivityX",
+							settingValueToInputValue: (settingValue) => settingValue * 1000,
+							inputValueToSettingValue: (inputValue) => inputValue / 1000,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 25,
+							labels: {
+								min: "Slow",
+								max: "Fast",
+							},
+							description: "Speed of cursor movement in response to horizontal head movement.",
+						},
+						{
+							label: "Vertical sensitivity",
+							className: "tracky-mouse-sensitivity-y",
+							key: "headTrackingSensitivityY",
+							settingValueToInputValue: (settingValue) => settingValue * 1000,
+							inputValueToSettingValue: (inputValue) => inputValue / 1000,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 50,
+							labels: {
+								min: "Slow",
+								max: "Fast",
+							},
+							description: "Speed of cursor movement in response to vertical head movement.",
+						},
+						// {
+						// 	label: "Smoothing",
+						// 	className: "tracky-mouse-smoothing",
+						// 	key: "headTrackingSmoothing",
+						// 	type: "slider",
+						// 	min: 0,
+						// 	max: 100,
+						// 	default: 50,
+						// 	labels: {
+						// 		min: "Linear", // or "Direct", "Raw", "None"
+						// 		max: "Smooth", // or "Smoothed"
+						// 	},
+						// },
+
+						// TODO:
+						// - eyeTrackingSensitivityX
+						// - eyeTrackingSensitivityY
+						// - eyeTrackingAcceleration
+
+						// TODO: "Linear" could be described as "Fast", and the other "Fast" labels are on the other side.
+						// Should it be swapped? What does other software with acceleration control look like?
+						// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
+						{
+							label: "Acceleration",
+							className: "tracky-mouse-acceleration",
+							key: "headTrackingAcceleration",
+							settingValueToInputValue: (settingValue) => settingValue * 100,
+							inputValueToSettingValue: (inputValue) => inputValue / 100,
+							type: "slider",
+							min: 0,
+							max: 100,
+							default: 50,
+							labels: {
+								min: "Linear", // or "Direct", "Raw"
+								max: "Smooth",
+							},
+							// description: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.",
+							// description: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.",
+							description: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
+Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`,
+						},
+					],
+				},
+				{
+					type: "group",
+					label: "Head tilt calibration",
+					disabled: () => s.headTrackingTiltInfluence === 0,
+					settings: [
+						{
+							label: "Horizontal tilt range",
+							className: "tracky-mouse-head-tilt-yaw-range",
+							key: "headTiltYawRange",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: 10,
+							max: 90,
+							default: 60,
+							labels: {
+								min: "Little neck movement",
+								max: "Large neck movement",
+							},
+							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
+							// description: "How much you need to tilt your head left and right to reach the edges of the screen.",
+							// description: "How much you need to tilt your head left or right to reach the edge of the screen.",
+							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
+						},
+						{
+							label: "Vertical tilt range",
+							className: "tracky-mouse-head-tilt-pitch-range",
+							key: "headTiltPitchRange",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: 10,
+							max: 60,
+							default: 25,
+							labels: {
+								min: "Little neck movement",
+								max: "Large neck movement",
+							},
+							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
+							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
+							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
+							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
+						},
+						{
+							// label: "Horizontal tilt offset",
+							label: "Horizontal cursor offset",
+							className: "tracky-mouse-head-tilt-yaw-offset",
+							key: "headTiltYawOffset",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: -45,
+							max: 45,
+							default: 0,
+							labels: {
+								min: "Left",
+								max: "Right",
+							},
+							// TODO: how to describe this??
+							// Specifically, how to disambiguate which direction is which / which way to adjust it?
+							// And shouldn't the option behave opposite? I think we have pitch yaw and roll all reversed from standard aviation definitions.
+							// Since it's opposite, even though it's technically yaw (angle units), it's easier to think of as moving the cursor.
+							// Hence I've renamed the setting.
+							// A later update might change the definitions and include a settings file format upgrade step.
+							// description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
+							// description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
+							// TODO: should this say "horizontal" in the (main part of the) description?
+							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
+⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`,
+						},
+						{
+							// label: "Vertical tilt offset",
+							label: "Vertical cursor offset",
+							className: "tracky-mouse-head-tilt-pitch-offset",
+							key: "headTiltPitchOffset",
+							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
+							inputValueToSettingValue: (inputValue) => inputValue * Math.PI / 180,
+							type: "slider",
+							min: -30,
+							max: 30,
+							default: 2.5,
+							labels: {
+								min: "Down",
+								max: "Up",
+							},
+							// description: "Adjusts the center position of vertical head tilt.",
+							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.`,
+						},
+					],
+				},
+			],
+		},
+
+		// Only dwell clicking is supported by the web library right now.
+		// Currently it's a separate API (TrackyMouse.initDwellClicking)
+		// TODO: bring more of desktop app functionality into core
+		// https://github.com/1j01/tracky-mouse/issues/72
+
+		// Also, the "Swap mouse buttons" setting is likely not useful for
+		// web apps embedding Tracky Mouse and designed for head trackers,
+		// since it necessitates mode switching for dwell clicker usage,
+		// so it may make sense to hide (or not) even if it is supported there in the future.
+		// The main point of this option is to counteract the system-level mouse button setting,
+		// which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
+		{
+			type: "group",
+			label: "Clicking",
+			settings: [
+				{
+					label: "Clicking mode:", // TODO: ":"?
+					className: "tracky-mouse-clicking-mode",
+					key: "clickingMode",
+					type: "dropdown",
+					options: [
+						{ value: "dwell", label: "Dwell to click" },
+						{ value: "blink", label: "Wink to click" },
+						{ value: "open-mouth", label: "Open mouth to click" },
+						{ value: "off", label: "Off" },
+					],
+					default: "dwell",
+					platform: "desktop",
+					description: `Choose how to perform mouse clicks.
+- Dwell to click: Hold the cursor in place for a short time to click.
+- Wink to click: Close one eye to click. Left eye for left click, right eye for right click.
+- Open mouth to click: Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
+- Off: Disable clicking. Use with an external switch or programs that provide their own dwell clicking.`,
+				},
+				{
+					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
+					// "swap" is purposefully generic language so we don't have to know what system-level setting is
+					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
+					label: "Swap mouse buttons",
+					className: "tracky-mouse-swap-mouse-buttons",
+					key: "swapMouseButtons",
+					type: "checkbox",
+					default: false,
+					platform: "desktop",
+					description: `Switches the left and right mouse buttons.
+Useful if your system's mouse buttons are swapped.
+Could also be used to right click with the dwell clicker in a pinch.`,
+				},
+
+				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
+				// with slider labels "Easy to click -> Easy to drag" or "Easier to click -> Easier to drag" or "Short -> Long"
+				// This could generalize into "never allow dragging" at the extreme, if it's special cased to jump to infinity
+				// at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
+				// and it might complicate the design of the slider labeling.
+				{
+					label: "Delay before dragging&nbsp;&nbsp;&nbsp;", // TODO: avoid non-breaking space hack
+					className: "tracky-mouse-delay-before-dragging",
+					key: "delayBeforeDragging",
+					type: "slider",
+					min: 0,
+					max: 1000,
+					labels: {
+						min: "Easy to drag",
+						max: "Easy to click",
+					},
+					default: 0, // TODO: increase default
+					platform: "desktop",
+					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
+					// description: "Locks mouse movement during the start of a click to prevent accidental dragging.",
+					// description: `Prevents mouse movement for the specified time after a click starts.
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
+					description: `Locks mouse movement for the given duration during the start of a click.
+You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
+				},
+			],
+		},
+		{
+			type: "group",
+			label: "Video",
+			settings: [
+				{
+					label: "Camera source",
+					className: "tracky-mouse-camera-select",
+					key: "cameraDeviceId",
+					handleSettingChange: () => {
+						TrackyMouse.useCamera();
+					},
+					type: "dropdown",
+					options: [
+						{ value: "", label: "Default" },
+					],
+					default: "",
+					// description: "Select which camera to use for head tracking.",
+					description: "Selects which camera is used for head tracking.",
+				},
+				// TODO: move this inline with the camera source dropdown?
+				{
+					label: "Open Camera Settings",
+					className: "tracky-mouse-open-camera-settings",
+					key: "openCameraSettings",
+					type: "button",
+					platform: "desktop",
+					onClick: async () => {
+						let knownCameras = {};
+						try {
+							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+						} catch (error) {
+							alert("Failed to open camera settings:\n" + "Failed to parse known cameras from localStorage:\n" + error.message);
+							return;
+						}
+
+						const activeStream = cameraVideo.srcObject;
+						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
+						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
+
+						try {
+							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
+							if (result?.error) {
+								alert("Failed to open camera settings:\n" + result.error);
+							}
+						} catch (error) {
+							alert("Failed to open camera settings:\n" + error.message);
+						}
+					},
+					// description: "Open your camera's system settings window to adjust properties like brightness and contrast.",
+					// description: "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
+					description: "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.",
+				},
+				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
+				{
+					label: "Mirror",
+					className: "tracky-mouse-mirror",
+					key: "mirror",
+					type: "checkbox",
+					default: true,
+					description: "Mirrors the camera view horizontally.",
+				},
+			]
+		},
+		{
+			type: "group",
+			label: "General",
+			settings: [
+				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
+				{
+					label: "Start enabled",
+					className: "tracky-mouse-start-enabled",
+					key: "startEnabled",
+					afterInitialLoad: () => { // TODO: does this hook make sense? right now it's the only usage. could this code not just be called later?
+						paused = !s.startEnabled;
+					},
+					type: "checkbox",
+					default: false,
+					description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
+					// description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
+					// description: "Makes Tracky Mouse active as soon as it's launched.",
+					// description: "Automatically starts Tracky Mouse as soon as it's run.",
+				},
+				{
+					label: "Run at login",
+					className: "tracky-mouse-run-at-login",
+					key: "runAtLogin",
+					type: "checkbox",
+					default: false,
+					platform: "desktop",
+					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
+					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
+				},
+			],
+		},
+	];
+
+	function traverseSettings(settings, callback, parentGroup = null) {
+		for (const setting of settings) {
+			callback(setting, parentGroup);
+			if (setting.type === "group") {
+				traverseSettings(setting.settings, callback, setting);
+			}
+		}
+	}
+
+	const elsByGroup = new Map();
+	const functionsToUpdateDisabledStates = [];
+
+	function buildSettingsUI(parentEl, settingsCategories) {
+
+		for (const category of settingsCategories) {
+			const detailsEl = buildSettingGroupUI(category);
+			const bodyEl = detailsEl.querySelector(".tracky-mouse-details-body");
+			traverseSettings(category.settings, (setting, parentGroup) => {
+				const parentGroupElement = (elsByGroup.get(parentGroup) ?? bodyEl);
+
+				let el;
+				if (setting.type === "group") {
+					el = buildSettingGroupUI(setting);
+				} else {
+					el = buildSettingItemUI(setting);
+				}
+				parentGroupElement.appendChild(el);
+
+				if (setting.disabled) {
+					const updateDisabledState = () => {
+						// TODO: supply a message for why it's disabled (can update `disabled()` to return a string or object)
+						const disabled = setting.disabled?.() ?? setting.disabled === true;
+						el.classList.toggle("tracky-mouse-disabled", disabled);
+						const controls = el.querySelectorAll(`input, select, button`);
+						for (const control of controls) {
+							// This should handle nested disabled conditions properly
+							control.disabled = control.closest(".tracky-mouse-disabled") !== null;
+						}
+					};
+					functionsToUpdateDisabledStates.push(updateDisabledState);
+					// Not useful to call updateDisabledState() here because dependent setting values aren't loaded yet
+				}
+			});
+
+			parentEl.appendChild(detailsEl);
+
+		}
+
+	}
+
+	function buildSettingGroupUI(group) {
+		const detailsEl = document.createElement("details");
+		// detailsEl.className = "tracky-mouse-settings-group";
+		// TODO: recursive check for platform - or just define platform on groups
+		if (group.settings.every(setting => setting.platform === "desktop")) {
+			detailsEl.classList.add("tracky-mouse-desktop-only");
+		}
+		const summaryEl = document.createElement("summary");
+		summaryEl.textContent = group.label;
+		detailsEl.appendChild(summaryEl);
+		const bodyEl = document.createElement("div");
+		bodyEl.className = "tracky-mouse-details-body";
+		detailsEl.appendChild(bodyEl);
+		elsByGroup.set(group, bodyEl);
+		return detailsEl;
+	}
+
+	function buildSettingItemUI(setting) {
+
+		// Validation
+		for (const requiredProp of ["label", "className", "key", "type", "default"]) {
+			if (setting[requiredProp] === undefined) {
+				if (setting.type === "button" && requiredProp === "default") {
+					continue; // buttons don't need a default value
+				}
+				console.warn(`Setting is missing ${requiredProp}:`, setting);
+				return;
+			}
+		}
+		for (const importantProp of ["description"]) {
+			if (setting[importantProp] === undefined) {
+				console.warn(`Setting is missing ${importantProp}:`, setting);
+			}
+		}
+
+		// TODO: consider making everything use <label for=""> inside and <div> outside
+		const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
+		rowEl.className = "tracky-mouse-control-row";
+		if (setting.type === "slider") {
+			rowEl.innerHTML = `
+				<span class="tracky-mouse-label-text">${setting.label}</span>
+				<span class="tracky-mouse-labeled-slider">
+					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
+					<span class="tracky-mouse-min-label">${setting.labels.min}</span>
+					<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+				</span>
+			`;
+		} else if (setting.type === "checkbox") {
+			// special interest: jspaint wants label not to use parent-child relationship so that os-gui's 98.css checkbox styles can work
+			rowEl.innerHTML = `
+				<input type="checkbox" id="${setting.className}" class="${setting.className}">
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+			`;
+		} else if (setting.type === "dropdown") {
+			const optionsHtml = setting.options.map(option => `
+				<option value="${option.value}">${option.label}</option>
+			`.trim()).join("\n");
+			rowEl.innerHTML = `
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
+				<select id="${setting.className}" class="${setting.className}">
+					${optionsHtml}
+				</select>
+			`;
+		} else if (setting.type === "button") {
+			rowEl.innerHTML = `
+				<button class="${setting.className}">${setting.label}</button>
+			`;
+		}
+		if (setting.platform === "desktop") {
+			rowEl.classList.add("tracky-mouse-desktop-only");
+		}
+
+		if (setting.description) {
+			// Tooltip; TODO: try an ⓘ info icon button with a popover
+			rowEl.setAttribute("title", setting.description);
+		}
+
+		const control = rowEl.querySelector(`.${setting.className}`);
+		const getControlValue = () => {
+			if (setting.type === "slider") {
+				return Number(control.value);
+			} else if (setting.type === "checkbox") {
+				return control.checked;
+			} else if (setting.type === "dropdown") {
+				return control.value;
+			}
+		};
+		const setControlValue = (value) => {
+			if (setting.type === "slider") {
+				control.value = value;
+			} else if (setting.type === "checkbox") {
+				control.checked = value;
+			} else if (setting.type === "dropdown") {
+				control.value = value;
+			}
+		};
+
+		const load = (settings, initialLoad) => {
+			// Note: Don't use `... in settings.globalSettings` to check if a setting is defined.
+			// We must ignore `undefined` values so that the defaults carry over from the renderer to the main process in the Electron app.
+			if (settings.globalSettings?.[setting.key] !== undefined) {
+				s[setting.key] = settings.globalSettings[setting.key];
+				setControlValue((setting.settingValueToInputValue ?? ((x) => x))(s[setting.key]));
+			}
+			if (initialLoad) {
+				setting.afterInitialLoad?.();
+			}
+		};
+		const loadValueFromControl = () => {
+			s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+		};
+		const save = () => {
+			setOptions({ globalSettings: { [setting.key]: s[setting.key] } });
+		};
+
+		// Load defaults
+		// currently defined in input value units
+		setControlValue(setting.default);
+		s[setting.key] = (setting.inputValueToSettingValue ?? ((x) => x))(getControlValue());
+		// Not useful to call functionsToUpdateDisabledStates here because dependent setting values aren't necessarily loaded yet
+
+		// Handle changes
+		control.addEventListener("change", () => {
+			loadValueFromControl();
+			save();
+			// TODO: also call this if the setting is changed through CLI
+			// Would be good to have a pattern where it's subscribing to changes to a settings store
+			setting.handleSettingChange?.();
+
+			for (const func of functionsToUpdateDisabledStates) {
+				func();
+			}
+		});
+		// Handle loading from stored settings
+		setting._load = load;
+
+		if (setting.type === "button") {
+			control.addEventListener("click", () => {
+				setting.onClick?.();
+			});
+		}
+
+		return rowEl;
+	}
+
+	buildSettingsUI(uiContainer.querySelector(".tracky-mouse-controls"), settingsCategories);
+
+	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
+	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
+	const swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
+	const cameraSelect = uiContainer.querySelector(".tracky-mouse-camera-select");
 
 	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
@@ -744,6 +1207,12 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
 	var ctx = canvas.getContext('2d');
 
+	var debugEyeCanvas = document.createElement("canvas");
+	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
+	debugEyeCanvas.style.display = "none";
+	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
+	var debugEyeCtx = debugEyeCanvas.getContext('2d');
+
 	var pointerEl = document.createElement('div');
 	pointerEl.className = "tracky-mouse-pointer";
 	pointerEl.style.display = "none";
@@ -762,42 +1231,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		document.body.appendChild(stats.domElement);
 	}
 
+	// Debug flags (not shown in the UI; could become Advanced Settings in the future)
+	var debugAcceleration = false;
+	var showDebugText = false;
+	var showDebugEyeZoom = false;
+	var showDebugHeadTilt = false;
+
+	// Constants (could become Advanced Settings in the future)
 	var defaultWidth = 640;
 	var defaultHeight = 480;
 	var maxPoints = 1000;
-	var mouseX = 0;
-	var mouseY = 0;
-	var cameraFramesSinceFacemeshUpdate = [];
-	var sensitivityX;
-	var sensitivityY;
-	var acceleration;
-	var minDistance;
-	var delayBeforeDragging;
-	var buttonStates = {
-		left: false,
-		right: false,
-	};
-	var lastMouseDownTime = -Infinity;
-	var face;
-	var faceScore = 0;
 	var faceScoreThreshold = 0.5;
-	var faceConvergence = 0;
-	// var faceConvergenceThreshold = 50;
-	var pointsBasedOnFaceScore = 0;
-	var paused = true;
-	var mouseNeedsInitPos = true;
-	var debugAcceleration = false;
-	var showDebugText = false;
-	var showDebugEyelidContours = false;
-	var mirror;
-	var startEnabled;
-	var runAtLogin;
-	var swapMouseButtons;
-	var clickingMode = 'dwell';
-
-	var useClmTracking = true;
-	var showClmTracking = useClmTracking;
-	var useFacemesh = true;
 	var facemeshOptions = {
 		maxContinuousChecks: 5,
 		detectionConfidence: 0.9,
@@ -805,8 +1249,21 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		iouThreshold: 0.3,
 		scoreThreshold: 0.75
 	};
-	var fallbackTimeoutID;
+	var useFacemesh = true;
+	// maybe should be based on size of head in view?
+	const pruningGridSize = 5;
+	const minDistanceToAddPoint = pruningGridSize * 1.5;
 
+	// Head tracking and facial gesture state
+	// ## Clmtrackr state
+	var face;
+	var faceScore = 0;
+	var faceConvergence = 0;
+	// var faceConvergenceThreshold = 50;
+	var pointsBasedOnFaceScore = 0;
+	// ## Facemesh state
+	let detector;
+	let currentCameraImageData;
 	var facemeshLoaded = false;
 	var facemeshFirstEstimation = true;
 	var facemeshEstimating = false;
@@ -815,13 +1272,82 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	var facemeshEstimateFaces;
 	var faceInViewConfidenceThreshold = 0.7;
 	var pointsBasedOnFaceInViewConfidence = 0;
+	var cameraFramesSinceFacemeshUpdate = [];
 	var blinkInfo;
 	var mouthInfo;
+	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
+	var headTiltFilters = { pitch: null, yaw: null, roll: null };
+	// ## State related to switching between head trackers
+	var useClmTracking = true;
+	var showClmTracking = useClmTracking;
+	var fallbackTimeoutID;
 
+	// Mouse state
+	var mouseX = 0;
+	var mouseY = 0;
+	var buttonStates = {
+		left: false,
+		right: false,
+		middle: false,
+	};
+	var lastMouseDownTime = -Infinity;
+	var mouseNeedsInitPos = true;
+
+	// Other state
+	var paused = true;
 	var pointTracker;
 
-	let currentCameraImageData;
-	let detector;
+	// Named lists of facemesh landmark indices
+	const MESH_ANNOTATIONS = {
+		silhouette: [
+			10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288,
+			397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136,
+			172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109
+		],
+
+		lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
+		lipsLowerOuter: [146, 91, 181, 84, 17, 314, 405, 321, 375, 291],
+		lipsUpperInner: [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308],
+		lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
+
+		rightEyeUpper0: [246, 161, 160, 159, 158, 157, 173],
+		rightEyeLower0: [33, 7, 163, 144, 145, 153, 154, 155, 133],
+		rightEyeUpper1: [247, 30, 29, 27, 28, 56, 190],
+		rightEyeLower1: [130, 25, 110, 24, 23, 22, 26, 112, 243],
+		rightEyeUpper2: [113, 225, 224, 223, 222, 221, 189],
+		rightEyeLower2: [226, 31, 228, 229, 230, 231, 232, 233, 244],
+		rightEyeLower3: [143, 111, 117, 118, 119, 120, 121, 128, 245],
+
+		rightEyebrowUpper: [156, 70, 63, 105, 66, 107, 55, 193],
+		rightEyebrowLower: [35, 124, 46, 53, 52, 65],
+
+		rightEyeIris: [473, 474, 475, 476, 477],
+
+		leftEyeUpper0: [466, 388, 387, 386, 385, 384, 398],
+		leftEyeLower0: [263, 249, 390, 373, 374, 380, 381, 382, 362],
+		leftEyeUpper1: [467, 260, 259, 257, 258, 286, 414],
+		leftEyeLower1: [359, 255, 339, 254, 253, 252, 256, 341, 463],
+		leftEyeUpper2: [342, 445, 444, 443, 442, 441, 413],
+		leftEyeLower2: [446, 261, 448, 449, 450, 451, 452, 453, 464],
+		leftEyeLower3: [372, 340, 346, 347, 348, 349, 350, 357, 465],
+
+		leftEyebrowUpper: [383, 300, 293, 334, 296, 336, 285, 417],
+		leftEyebrowLower: [265, 353, 276, 283, 282, 295],
+
+		leftEyeIris: [468, 469, 470, 471, 472],
+
+		midwayBetweenEyes: [168],
+
+		noseTip: [1],
+		noseBottom: [2],
+		noseRightCorner: [98],
+		noseLeftCorner: [327],
+
+		rightCheek: [205],
+		leftCheek: [425]
+	};
+
+
 	const initFacemesh = async () => {
 		if (detector) {
 			detector.dispose();
@@ -874,76 +1400,32 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 	function deserializeSettings(settings, initialLoad = false) {
 		// TODO: DRY with deserializeSettings in electron-main.js
-		if ("globalSettings" in settings) {
-			// Don't use `in` here. Must ignore `undefined` values for the settings to default to the HTML template's defaults in the Electron app.
-			if (settings.globalSettings.swapMouseButtons !== undefined) {
-				swapMouseButtons = settings.globalSettings.swapMouseButtons;
-				swapMouseButtonsCheckbox.checked = swapMouseButtons;
-			}
-			if (settings.globalSettings.clickingMode !== undefined) {
-				clickingMode = settings.globalSettings.clickingMode;
-				clickingModeDropdown.value = clickingMode;
-			}
-			if (settings.globalSettings.mirrorCameraView !== undefined) {
-				mirror = settings.globalSettings.mirrorCameraView;
-				mirrorCheckbox.checked = mirror;
-			}
-			if (settings.globalSettings.headTrackingSensitivityX !== undefined) {
-				sensitivityX = settings.globalSettings.headTrackingSensitivityX;
-				sensitivityXSlider.value = sensitivityX * 1000;
-			}
-			if (settings.globalSettings.headTrackingSensitivityY !== undefined) {
-				sensitivityY = settings.globalSettings.headTrackingSensitivityY;
-				sensitivityYSlider.value = sensitivityY * 1000;
-			}
-			if (settings.globalSettings.headTrackingAcceleration !== undefined) {
-				acceleration = settings.globalSettings.headTrackingAcceleration;
-				accelerationSlider.value = acceleration * 100;
-			}
-			if (settings.globalSettings.headTrackingMinDistance !== undefined) {
-				minDistance = settings.globalSettings.headTrackingMinDistance;
-				minDistanceSlider.value = minDistance;
-			}
-			if (settings.globalSettings.delayBeforeDragging !== undefined) {
-				delayBeforeDragging = settings.globalSettings.delayBeforeDragging;
-				delayBeforeDraggingSlider.value = delayBeforeDragging;
-			}
-			if (settings.globalSettings.startEnabled !== undefined) {
-				startEnabled = settings.globalSettings.startEnabled;
-				startEnabledCheckbox.checked = startEnabled;
-				if (initialLoad) {
-					paused = !startEnabled;
-				}
-			}
-			if (settings.globalSettings.runAtLogin !== undefined) {
-				runAtLogin = settings.globalSettings.runAtLogin;
-				runAtLoginCheckbox.checked = runAtLogin;
-			}
+		for (const category of settingsCategories) {
+			traverseSettings(category.settings, (setting) => {
+				setting._load?.(settings, initialLoad);
+			});
 		}
+
+		// Now that all settings are loaded, update disabled states
+		for (const func of functionsToUpdateDisabledStates) {
+			func();
+		}
+
 	}
 	const formatVersion = 1;
 	const formatName = "tracky-mouse-settings";
 	function serializeSettings() {
 		// TODO: DRY with serializeSettings in electron-main.js
+		// The important part is done (don't need to list every setting here - or there),
+		// but we could still switch to using IPC for saving/loading serialized settings
+		// eliminating the duplicate format handling, which may become more complex over time.
+		// The main process will still want to know about _some_ settings, and this shouldn't go through the serialization,
+		// but that can remain using the existing IPC calls while we add new ones dealing with serialized settings.
+		// (So I guess this is really a todo for the electron app; maybe this sort of detailed comment would make more sense there.)
 		return {
 			formatVersion,
 			formatName,
-			globalSettings: {
-				startEnabled,
-				runAtLogin,
-				swapMouseButtons,
-				clickingMode,
-				mirrorCameraView: mirror,
-				headTrackingSensitivityX: sensitivityX,
-				headTrackingSensitivityY: sensitivityY,
-				headTrackingAcceleration: acceleration,
-				headTrackingMinDistance: minDistance,
-				delayBeforeDragging: delayBeforeDragging,
-				// TODO:
-				// eyeTrackingSensitivityX,
-				// eyeTrackingSensitivityY,
-				// eyeTrackingAcceleration,
-			},
+			globalSettings: s,
 			// profiles: [],
 		};
 	};
@@ -972,99 +1454,70 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		}
 	};
 
-	sensitivityXSlider.onchange = (event) => {
-		sensitivityX = sensitivityXSlider.value / 1000;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingSensitivityX: sensitivityX } });
-		}
-	};
-	sensitivityYSlider.onchange = (event) => {
-		sensitivityY = sensitivityYSlider.value / 1000;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingSensitivityY: sensitivityY } });
-		}
-	};
-	accelerationSlider.onchange = (event) => {
-		acceleration = accelerationSlider.value / 100;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingAcceleration: acceleration } });
-		}
-	};
-	minDistanceSlider.onchange = (event) => {
-		minDistance = minDistanceSlider.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { headTrackingMinDistance: minDistance } });
-		}
-	};
-	delayBeforeDraggingSlider.onchange = (event) => {
-		delayBeforeDragging = delayBeforeDraggingSlider.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { delayBeforeDragging: delayBeforeDragging } });
-		}
-	};
-	mirrorCheckbox.onchange = (event) => {
-		mirror = mirrorCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { mirrorCameraView: mirror } });
-		}
-	};
-	swapMouseButtonsCheckbox.onchange = (event) => {
-		swapMouseButtons = swapMouseButtonsCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { swapMouseButtons } });
-		}
-	};
-	clickingModeDropdown.onchange = (event) => {
-		clickingMode = clickingModeDropdown.value;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { clickingMode } });
-		}
-	};
-	startEnabledCheckbox.onchange = (event) => {
-		startEnabled = startEnabledCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { startEnabled } });
-		}
-	};
-	runAtLoginCheckbox.onchange = (event) => {
-		runAtLogin = runAtLoginCheckbox.checked;
-		// HACK: using event argument as a flag to indicate when it's not the initial setup,
-		// to avoid saving the default settings before the actual preferences are loaded.
-		if (event) {
-			setOptions({ globalSettings: { runAtLogin } });
-		}
-	};
+	paused = !s.startEnabled;
 
-	// Load defaults from HTML
-	mirrorCheckbox.onchange();
-	swapMouseButtonsCheckbox.onchange();
-	clickingModeDropdown.onchange();
-	startEnabledCheckbox.onchange();
-	runAtLoginCheckbox.onchange();
-	sensitivityXSlider.onchange();
-	sensitivityYSlider.onchange();
-	accelerationSlider.onchange();
-	minDistanceSlider.onchange();
-	delayBeforeDraggingSlider.onchange();
-	paused = !startEnabled;
+	let populateCameraList = () => { };
+	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+		populateCameraList = () => {
+			navigator.mediaDevices.enumerateDevices().then((devices) => {
+				const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+				let knownCameras = {};
+				try {
+					knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+				} catch (error) {
+					console.error("Failed to parse known cameras from localStorage", error);
+				}
+				let knownCamerasChanged = false;
+				for (const device of videoDevices) {
+					if (device.deviceId && device.label) {
+						if (!knownCameras[device.deviceId] || knownCameras[device.deviceId].name !== device.label) {
+							knownCameras[device.deviceId] = { name: device.label };
+							knownCamerasChanged = true;
+						}
+					}
+				}
+				if (knownCamerasChanged) {
+					try {
+						localStorage.setItem("tracky-mouse-known-cameras", JSON.stringify(knownCameras));
+					} catch (error) {
+						console.error("Failed to store known cameras in localStorage", error);
+					}
+				}
+
+				cameraSelect.innerHTML = "";
+
+				const defaultOption = document.createElement("option");
+				defaultOption.value = "";
+				defaultOption.text = "Default";
+				cameraSelect.appendChild(defaultOption);
+
+				let found = false;
+				for (const device of videoDevices) {
+					const option = document.createElement('option');
+					option.value = device.deviceId;
+					option.text = device.label || `Camera ${cameraSelect.length}`;
+					cameraSelect.appendChild(option);
+					if (device.deviceId === s.cameraDeviceId) {
+						found = true;
+					}
+				}
+				// Defaulting to "Default" would imply a preference isn't stored.
+				// cameraSelect.value = found ? s.cameraDeviceId : "";
+				// Show a placeholder for the selected camera
+				if (s.cameraDeviceId && !found) {
+					const option = document.createElement("option");
+					option.value = s.cameraDeviceId;
+					const knownInfo = knownCameras[s.cameraDeviceId];
+					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
+					cameraSelect.appendChild(option);
+				}
+				cameraSelect.value = s.cameraDeviceId;
+			});
+		};
+		populateCameraList();
+		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
+	}
 
 	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
 	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
@@ -1075,7 +1528,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		el.addEventListener("contextmenu", (e) => {
 			e.preventDefault();
 			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
-			swapMouseButtonsCheckbox.onchange(e);
+			swapMouseButtonsCheckbox.dispatchEvent(new Event("change"));
 		});
 	}
 
@@ -1086,7 +1539,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	clmTracker.init();
 	var clmTrackingStarted = false;
 
+	const stopCameraStream = () => {
+		if (cameraVideo.srcObject) {
+			for (const track of cameraVideo.srcObject.getTracks()) {
+				track.stop();
+			}
+		}
+		cameraVideo.srcObject = null;
+	};
+
 	const reset = () => {
+		stopCameraStream();
 		clmTrackingStarted = false;
 		cameraFramesSinceFacemeshUpdate.length = 0;
 		if (facemeshPrediction) {
@@ -1105,25 +1568,25 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		startStopButton.setAttribute("aria-pressed", "false");
 	};
 
-	useCameraButton.onclick = TrackyMouse.useCamera = () => {
-		navigator.mediaDevices.getUserMedia({
+	useCameraButton.onclick = TrackyMouse.useCamera = async () => {
+		await settingsLoadedPromise;
+		const constraints = {
 			audio: false,
 			video: {
 				width: defaultWidth,
 				height: defaultHeight,
 				facingMode: "user",
 			}
-		}).then((stream) => {
+		};
+		if (s.cameraDeviceId) {
+			delete constraints.video.facingMode;
+			constraints.video.deviceId = { exact: s.cameraDeviceId };
+		}
+		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+			populateCameraList();
 			reset();
-			try {
-				if ('srcObject' in cameraVideo) {
-					cameraVideo.srcObject = stream;
-				} else {
-					cameraVideo.src = window.URL.createObjectURL(stream);
-				}
-			} catch (_err) {
-				cameraVideo.src = stream;
-			}
+
+			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 			if (!paused) {
@@ -1166,7 +1629,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
 		reset();
-		cameraVideo.srcObject = null;
 		cameraVideo.src = `${TrackyMouse.dependenciesRoot}/private/demo-input-footage.webm`;
 		cameraVideo.loop = true;
 	};
@@ -1248,10 +1710,6 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	// 		offset += matrix.buffer.f32.length;
 	// 	}
 	// }
-
-	// maybe should be based on size of head in view?
-	const pruningGridSize = 5;
-	const minDistanceToAddPoint = pruningGridSize * 1.5;
 
 	// Object Oriented Programming Sucks
 	// or Optical flOw Points System
@@ -1387,7 +1845,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			return;
 		}
 		const rect = canvas.getBoundingClientRect();
-		if (mirror) {
+		if (s.mirror) {
 			pointTracker.addPoint(
 				(rect.right - event.clientX) / rect.width * canvas.width,
 				(event.clientY - rect.top) / rect.height * canvas.height,
@@ -1452,7 +1910,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 		currentCameraImageData = imageData;
 
-		if (mirror) {
+		if (s.mirror) {
 			ctx.translate(canvas.width, 0);
 			ctx.scale(-1, 1);
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
@@ -1570,57 +2028,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 						const getPoint = (index) =>
 							facemeshPrediction.keypoints[index] ?
-								[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y] :
+								[facemeshPrediction.keypoints[index].x, facemeshPrediction.keypoints[index].y, facemeshPrediction.keypoints[index].z] :
 								undefined;
-
-						const MESH_ANNOTATIONS = {
-							silhouette: [
-								10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288,
-								397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136,
-								172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109
-							],
-
-							lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
-							lipsLowerOuter: [146, 91, 181, 84, 17, 314, 405, 321, 375, 291],
-							lipsUpperInner: [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308],
-							lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
-
-							rightEyeUpper0: [246, 161, 160, 159, 158, 157, 173],
-							rightEyeLower0: [33, 7, 163, 144, 145, 153, 154, 155, 133],
-							rightEyeUpper1: [247, 30, 29, 27, 28, 56, 190],
-							rightEyeLower1: [130, 25, 110, 24, 23, 22, 26, 112, 243],
-							rightEyeUpper2: [113, 225, 224, 223, 222, 221, 189],
-							rightEyeLower2: [226, 31, 228, 229, 230, 231, 232, 233, 244],
-							rightEyeLower3: [143, 111, 117, 118, 119, 120, 121, 128, 245],
-
-							rightEyebrowUpper: [156, 70, 63, 105, 66, 107, 55, 193],
-							rightEyebrowLower: [35, 124, 46, 53, 52, 65],
-
-							rightEyeIris: [473, 474, 475, 476, 477],
-
-							leftEyeUpper0: [466, 388, 387, 386, 385, 384, 398],
-							leftEyeLower0: [263, 249, 390, 373, 374, 380, 381, 382, 362],
-							leftEyeUpper1: [467, 260, 259, 257, 258, 286, 414],
-							leftEyeLower1: [359, 255, 339, 254, 253, 252, 256, 341, 463],
-							leftEyeUpper2: [342, 445, 444, 443, 442, 441, 413],
-							leftEyeLower2: [446, 261, 448, 449, 450, 451, 452, 453, 464],
-							leftEyeLower3: [372, 340, 346, 347, 348, 349, 350, 357, 465],
-
-							leftEyebrowUpper: [383, 300, 293, 334, 296, 336, 285, 417],
-							leftEyebrowLower: [265, 353, 276, 283, 282, 295],
-
-							leftEyeIris: [468, 469, 470, 471, 472],
-
-							midwayBetweenEyes: [168],
-
-							noseTip: [1],
-							noseBottom: [2],
-							noseRightCorner: [98],
-							noseLeftCorner: [327],
-
-							rightCheek: [205],
-							leftCheek: [425]
-						};
 
 						const annotations = Object.fromEntries(Object.entries(MESH_ANNOTATIONS).map(([key, indices]) => {
 							return [key, indices.map(getPoint)];
@@ -1675,8 +2084,84 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							return true;
 						});
 
-						let clickButton = -1;
-						if (clickingMode === "blink") {
+						const keypoints = facemeshPrediction.keypoints;
+						if (keypoints) {
+							const top = keypoints[10]; // Top of forehead
+							const bottom = keypoints[2]; // Bottom of nose (formerly chin; this better avoids jaw movement effects)
+							const left = keypoints[454]; // Subject left (Image right)
+							const right = keypoints[234]; // Subject right (Image left)
+
+							if (top && bottom && left && right) {
+
+								headTilt.keypoints = { top, bottom, left, right };
+
+								// Pitch (X-axis rotation)
+								const pitchDy = bottom.y - top.y;
+								const pitchDz = bottom.z - top.z;
+								headTilt.pitch = Math.atan2(pitchDz, Math.abs(pitchDy));
+
+								// Yaw (Y-axis rotation)
+								const yawDx = left.x - right.x;
+								const yawDz = left.z - right.z;
+								headTilt.yaw = Math.atan2(yawDz, Math.abs(yawDx));
+
+								// Roll (Z-axis rotation)
+								const rollDy = left.y - right.y;
+								const rollDx = left.x - right.x;
+								headTilt.roll = Math.atan2(rollDy, rollDx);
+
+								if (typeof OneEuroFilter !== "undefined") {
+									const timestamp = performance.now() / 1000;
+									if (!headTiltFilters.pitch) {
+										const freq = 60;
+										const mincutoff = 0.01;
+										const beta = 5.0;
+										const dcutoff = 0.7;
+										for (const axis of ["pitch", "yaw", "roll"]) {
+											headTiltFilters[axis] = new OneEuroFilter(freq, mincutoff, beta, dcutoff);
+										}
+									}
+									for (const axis of ["pitch", "yaw", "roll"]) {
+										headTilt[axis] = headTiltFilters[axis].filter(headTilt[axis], timestamp);
+									}
+								}
+							}
+						}
+
+						function getAspectMetrics(upperContour, lowerContour) {
+							// The lower eye keypoints have the corners
+							const corners = [lowerContour[0], lowerContour[lowerContour.length - 1]];
+							// Excluding the corners isn't really important since their measures will be 0.
+							const otherPoints = upperContour.concat(lowerContour).filter(point => !corners.includes(point));
+							let highest = 0;
+							let lowest = 0;
+							for (const point of otherPoints) {
+								const distance = signedDistancePointLine(point, corners[0], corners[1]);
+								if (distance < lowest) {
+									lowest = distance;
+								}
+								if (distance > highest) {
+									highest = distance;
+								}
+							}
+
+							const width = Math.hypot(
+								corners[0][0] - corners[1][0],
+								corners[0][1] - corners[1][1]
+							);
+							const height = highest - lowest;
+							return {
+								corners,
+								upperContour,
+								lowerContour,
+								highest,
+								lowest,
+								heightRatio: height / width,
+							};
+						}
+
+						// TODO: move facial gesture recognition code to a separate file
+						function detectBlinks() {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -1686,7 +2171,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							// - When tilting your head up, the contour of an open eyelid becomes more straight, which can lead to false positives.
 							// - *This is a geometric explanation, but in practice, facemesh loses the ability to detect
 							//   whether the eye is closed when the head is tilted beyond a point.
-							//   Enable `showDebugEyelidContours` to see the shapes we're dealing with here.
+							//   Enable `showDebugEyeZoom` to see the shapes we're dealing with here.
 							// - Facemesh uses an "attention mesh model", enabled with `refineLandmarks: true`,
 							//   which adjusts points near the eyes and lips to be more accurate (and is 100% necessary for this blink detection to work).
 							//   This is what we might ideally target to improve blink detection.
@@ -1728,141 +2213,112 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							//       you would likely be trying to use the same janky tracking results to determine whether the face is cut off.
 							//       It *might* work, but it also might be a bit of a chicken-and-egg problem.
 
-							function getEyeMetrics(eyeUpper, eyeLower) {
-								// The lower eye keypoints have the corners
-								const corners = [eyeLower[0], eyeLower[eyeLower.length - 1]];
-								// Excluding the corners isn't really important since their measures will be 0.
-								const otherPoints = eyeUpper.concat(eyeLower).filter(point => !corners.includes(point));
-								let highest = 0;
-								let lowest = 0;
-								for (const point of otherPoints) {
-									const distance = signedDistancePointLine(point, corners[0], corners[1]);
-									if (distance < lowest) {
-										lowest = distance;
-									}
-									if (distance > highest) {
-										highest = distance;
-									}
-								}
-
-								const eyeWidth = Math.hypot(
-									corners[0][0] - corners[1][0],
-									corners[0][1] - corners[1][1]
-								);
-								const eyeHeight = highest - lowest;
-								const eyeAspectRatio = eyeHeight / eyeWidth;
-								return {
-									corners,
-									upperContour: eyeUpper,
-									lowerContour: eyeLower,
-									highest,
-									lowest,
-									eyeAspectRatio,
-								};
-							}
-
-							const leftEye = getEyeMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0);
-							const rightEye = getEyeMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0);
+							const eyes = {
+								leftEye: getAspectMetrics(annotations.leftEyeUpper0, annotations.leftEyeLower0),
+								rightEye: getAspectMetrics(annotations.rightEyeUpper0, annotations.rightEyeLower0)
+							};
 
 							const thresholdHigh = 0.2;
 							const thresholdLow = 0.16;
-							leftEye.open = leftEye.eyeAspectRatio > (blinkInfo?.leftEye.open ? thresholdLow : thresholdHigh);
-							rightEye.open = rightEye.eyeAspectRatio > (blinkInfo?.rightEye.open ? thresholdLow : thresholdHigh);
+							for (const key of ["leftEye", "rightEye"]) {
+								eyes[key].open = eyes[key].heightRatio > (blinkInfo?.[key].open ? thresholdLow : thresholdHigh);
+							}
 
 							// An attempt at biasing the blink detection based on the other eye's state
 							// (I'm not sure if this is the same as the idea I had noted above)
 							// const threshold = 0.16;
 							// const bias = 0.3;
-							// leftEye.open = leftEye.eyeAspectRatio - threshold - ((rightEye.eyeAspectRatio - threshold) * bias) > 0;
-							// rightEye.open = rightEye.eyeAspectRatio - threshold - ((leftEye.eyeAspectRatio - threshold) * bias) > 0;
+							// eyes.leftEye.open = eyes.leftEye.heightRatio - threshold - ((eyes.rightEye.heightRatio - threshold) * bias) > 0;
+							// eyes.rightEye.open = eyes.rightEye.heightRatio - threshold - ((eyes.leftEye.heightRatio - threshold) * bias) > 0;
 
 							// Involuntary blink rejection
 							const blinkRejectDuration = 100; // milliseconds
 							const currentTime = performance.now();
-							// TODO: DRY
-							if (leftEye.open === blinkInfo?.leftEye.open) {
-								leftEye.timeSinceChange = blinkInfo?.leftEye.timeSinceChange ?? currentTime;
-							} else {
-								leftEye.timeSinceChange = currentTime;
+							for (const key of ["leftEye", "rightEye"]) {
+								if (eyes[key].open === blinkInfo?.[key].open) {
+									eyes[key].timeSinceChange = blinkInfo?.[key].timeSinceChange ?? currentTime;
+								} else {
+									eyes[key].timeSinceChange = currentTime;
+								}
 							}
-							if (rightEye.open === blinkInfo?.rightEye.open) {
-								rightEye.timeSinceChange = blinkInfo?.rightEye.timeSinceChange ?? currentTime;
-							} else {
-								rightEye.timeSinceChange = currentTime;
-							}
-							const timeSinceChange = currentTime - Math.max(leftEye.timeSinceChange, rightEye.timeSinceChange);
-							leftEye.winking = timeSinceChange > blinkRejectDuration && rightEye.open && !leftEye.open;
-							rightEye.winking = timeSinceChange > blinkRejectDuration && leftEye.open && !rightEye.open;
+							const timeSinceChange = currentTime - Math.max(eyes.leftEye.timeSinceChange, eyes.rightEye.timeSinceChange);
+							eyes.leftEye.active = timeSinceChange > blinkRejectDuration && eyes.rightEye.open && !eyes.leftEye.open;
+							eyes.rightEye.active = timeSinceChange > blinkRejectDuration && eyes.leftEye.open && !eyes.rightEye.open;
 
-							if (rightEye.winking) {
+							eyes.leftEye.thresholdMet = !eyes.leftEye.open;
+							eyes.rightEye.thresholdMet = !eyes.rightEye.open;
+
+							return eyes;
+						}
+
+						function detectMouthOpen() {
+							const prevThresholdMet = mouthInfo?.thresholdMet;
+							const mouth = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
+							const thresholdHigh = 0.25;
+							const thresholdLow = 0.15;
+							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
+							mouth.active = mouth.thresholdMet;
+							// Preserve mouse button state; could be simpler as a separate variable.
+							mouth.mouseButton = mouthInfo?.mouseButton ?? -1;
+							return mouth;
+						}
+
+						const prevMouthOpen = mouthInfo?.active;
+
+						blinkInfo = detectBlinks();
+						mouthInfo = detectMouthOpen();
+
+						blinkInfo.used = false;
+						mouthInfo.used = false;
+						let clickButton = -1;
+						if (s.clickingMode === "blink") {
+							blinkInfo.used = true;
+							if (blinkInfo.rightEye.active) {
 								clickButton = 0;
-							} else if (leftEye.winking) {
+							} else if (blinkInfo.leftEye.active) {
 								clickButton = 2;
 							}
-							blinkInfo = {
-								leftEye,
-								rightEye
-							};
-						} else {
-							blinkInfo = null;
 						}
-						if (clickingMode === "open-mouth") {
-							// TODO: modifiers with eye closing or eyebrow raising to trigger different buttons
-							// TODO: refactor and move this code (it's too nested)
-							// TODO: headSize is not a perfect measurement; try alternative measurements, e.g.
-							// - mouth width (implies making an "O" mouth shape would be favored over a wide open mouth shape)
-							const mid = Math.floor(annotations.lipsLowerInner.length / 2);
-							const mouthTopBottomPoints = [
-								annotations.lipsUpperInner[mid],
-								annotations.lipsLowerInner[mid]
-							];
-							const mouthTopBottomDistance = Math.hypot(
-								annotations.lipsUpperInner[mid][0] - annotations.lipsLowerInner[mid][0],
-								annotations.lipsUpperInner[mid][1] - annotations.lipsLowerInner[mid][1]
-							);
-							const headSize = Math.hypot(
-								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
-							);
-							const thresholdHigh = headSize * 0.15;
-							const thresholdLow = headSize * 0.1;
-							// console.log("mouthTopBottomDistance", mouthTopBottomDistance, "threshold", threshold);
-							const mouthOpen = mouthTopBottomDistance > (mouthInfo?.mouthOpen ? thresholdLow : thresholdHigh);
-							if (mouthOpen) {
-								clickButton = 0;
+						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
+						if (s.clickingMode === "open-mouth") {
+							mouthInfo.used = true;
+							blinkInfo.used = true;
+							// Modifiers with eye closing trigger different buttons,
+							// making this a three-button mouse.
+							// (Eyebrow raising could be another alternative modifier.)
+							// Keep same button held if eye is opened,
+							// so you can continue to scroll a webpage without trying to
+							// read with one eye closed (for example).
+							if (mouthInfo.active && !prevMouthOpen) {
+								if (blinkInfo.rightEye.active) {
+									mouthInfo.mouseButton = 1;
+								} else if (blinkInfo.leftEye.active) {
+									mouthInfo.mouseButton = 2;
+								} else {
+									mouthInfo.mouseButton = 0;
+								}
 							}
-							mouthInfo = {
-								mouthOpen,
-								mouthTopBottomPoints,
-								corners: [annotations.lipsUpperInner[0], annotations.lipsUpperInner[annotations.lipsUpperInner.length - 1]],
-								mouthOpenDistance: mouthTopBottomDistance / headSize,
-							};
-						} else {
-							mouthInfo = null;
+							if (mouthInfo.active) {
+								clickButton = mouthInfo.mouseButton;
+							}
 						}
 
 						// TODO: implement these clicking modes for the web library version
 						// and unhide the "Clicking mode" setting in the UI
 						// https://github.com/1j01/tracky-mouse/issues/72
-						if ((clickButton === 0) !== buttonStates.left) {
-							window.electronAPI?.setMouseButtonState(false, clickButton === 0);
-							buttonStates.left = clickButton === 0;
-							if ((clickButton === 0)) {
-								lastMouseDownTime = performance.now();
-							} else {
-								// Limit "Delay Before Dragging" effect to the duration of a click.
-								// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
-								// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
-								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
-							}
-						}
-						if ((clickButton === 2) !== buttonStates.right) {
-							window.electronAPI?.setMouseButtonState(true, clickButton === 2);
-							buttonStates.right = clickButton === 2;
-							if ((clickButton === 2)) {
-								lastMouseDownTime = performance.now();
-							} else {
-								lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+						const buttonNames = ["left", "middle", "right"];
+						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
+							if ((clickButton === buttonIndex) !== buttonStates[buttonNames[buttonIndex]]) {
+								window.electronAPI?.setMouseButtonState(buttonIndex, clickButton === buttonIndex);
+								buttonStates[buttonNames[buttonIndex]] = clickButton === buttonIndex;
+								if ((clickButton === buttonIndex)) {
+									lastMouseDownTime = performance.now();
+								} else {
+									// Limit "Delay Before Dragging" effect to the duration of a click.
+									// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
+									// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
+									lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
+								}
 							}
 						}
 					}, () => {
@@ -1891,94 +2347,211 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				if (bad) {
 					ctx.fillStyle = 'rgba(255,0,255)';
 				}
-				facemeshPrediction.keypoints.forEach(({ x, y }) => {
+				for (const { x, y } of facemeshPrediction.keypoints) {
 					ctx.fillRect(x, y, 1, 1);
-				});
+				}
 			} else {
 				if (update && useFacemesh) {
 					pointsBasedOnFaceInViewConfidence -= 0.001;
 				}
 			}
-		}
 
-		if (clickingMode === "blink" && blinkInfo) {
-			ctx.save();
-			ctx.lineWidth = 2;
-			const drawEye = (eye) => {
-				ctx.strokeStyle = eye.winking ? "red" : eye.open ? "cyan" : "yellow";
-				ctx.beginPath();
-				ctx.moveTo(eye.corners[0][0], eye.corners[0][1]);
-				ctx.lineTo(eye.corners[1][0], eye.corners[1][1]);
-				ctx.stroke();
-				// draw extents as a rectangle
-				ctx.save();
-				ctx.translate(eye.corners[0][0], eye.corners[0][1]);
-				ctx.rotate(Math.atan2(eye.corners[1][1] - eye.corners[0][1], eye.corners[1][0] - eye.corners[0][0]));
-				ctx.beginPath();
-				ctx.rect(0, eye.lowest, Math.hypot(eye.corners[1][0] - eye.corners[0][0], eye.corners[1][1] - eye.corners[0][1]), eye.highest - eye.lowest);
-				ctx.stroke();
-				ctx.restore();
-				// Zoom in and show the eyelid contour SHAPE, for qualitative debugging
-				// This helps to show that the facemesh model doesn't really know whether your eye is open or closed beyond a certain head angle.
-				// Therefore there's not much we can do using the eyelid contour to improve blink detection.
-				// We might be able to tease a little more accuracy out of it using surrounding points in some clever way, 3D information, etc.
-				// but fundamentally, garbage in, garbage out.
-				if (showDebugEyelidContours) {
-					const eyeCenter = [(eye.corners[0][0] + eye.corners[1][0]) / 2, (eye.corners[0][1] + eye.corners[1][1]) / 2];
+			const keypoints = facemeshPrediction.keypoints;
+			if (showDebugHeadTilt && keypoints) {
+				const { top, bottom, left, right } = headTilt.keypoints;
+				const nose = keypoints[1];
+
+				if (top && bottom && left && right && nose) {
+
+					const cx = nose.x;
+					const cy = nose.y;
+					const arrowLen = 100;
+
 					ctx.save();
-					ctx.translate(eyeCenter[0], eyeCenter[1]);
-					ctx.scale(5, 5);
-					ctx.translate(-eyeCenter[0], -eyeCenter[1]);
-					ctx.strokeStyle = "green";
-					ctx.beginPath();
-					for (const contour of [eye.upperContour, eye.lowerContour]) {
-						for (let i = 0; i < contour.length; i++) {
-							const [x, y] = contour[i];
-							if (i === 0) {
-								ctx.moveTo(x, y);
-							} else {
-								ctx.lineTo(x, y);
-							}
-						}
+					ctx.translate(cx, cy);
+
+					ctx.fillStyle = "cyan";
+					ctx.font = "bold 20px monospace";
+					ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+					ctx.lineWidth = 3;
+					ctx.lineJoin = "round";
+
+					const textX = 60;
+					const textLineHeight = 25;
+					const textYStart = -10;
+
+
+					const pitchText = `Pitch: ${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
+					const yawText = `Yaw:   ${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
+					const rollText = `Roll:  ${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
+
+					const boxWidth = Math.max(
+						ctx.measureText(pitchText).width,
+						ctx.measureText(yawText).width,
+						ctx.measureText(rollText).width
+					);
+					const boxHeight = textLineHeight * 3;
+					const padding = 10;
+
+					// Calculate screen coordinates for the text box
+					let screenX = s.mirror ? canvas.width - cx : cx;
+					let screenY = cy;
+
+					// Nominal position relative to head center
+					let textScreenX = screenX + textX;
+					let textScreenY = screenY + textYStart;
+
+					// Clamp to canvas bounds
+					textScreenX = Math.max(padding, Math.min(canvas.width - boxWidth - padding, textScreenX));
+					textScreenY = Math.max(textLineHeight, Math.min(canvas.height - boxHeight + textLineHeight, textScreenY));
+
+					ctx.save();
+					if (s.mirror) {
+						ctx.scale(-1, 1);
 					}
-					ctx.lineWidth = 2 / 5;
-					ctx.stroke();
+
+					const screenNoseX = s.mirror ? canvas.width - cx : cx;
+					const screenNoseY = cy;
+
+					const dx = textScreenX - screenNoseX;
+					const dy = textScreenY - screenNoseY;
+
+					ctx.strokeText(pitchText, dx, dy);
+					ctx.fillText(pitchText, dx, dy);
+					ctx.strokeText(yawText, dx, dy + textLineHeight);
+					ctx.fillText(yawText, dx, dy + textLineHeight);
+					ctx.strokeText(rollText, dx, dy + textLineHeight * 2);
+					ctx.fillText(rollText, dx, dy + textLineHeight * 2);
+
+					ctx.restore();
+
+					// Visualize head direction
+					const vUp = { x: top.x - bottom.x, y: top.y - bottom.y, z: top.z - bottom.z }; // Up vector (Chin to Top)
+					const vRight = { x: left.x - right.x, y: left.y - right.y, z: left.z - right.z }; // Right vector (Right to Left)
+
+					// Cross Product: Right x Up
+					const vFwd = {
+						x: vRight.y * vUp.z - vRight.z * vUp.y,
+						y: vRight.z * vUp.x - vRight.x * vUp.z,
+						z: vRight.x * vUp.y - vRight.y * vUp.x
+					};
+
+					const mag = Math.hypot(vFwd.x, vFwd.y, vFwd.z);
+					if (mag > 0.001) {
+						ctx.strokeStyle = "cyan";
+						ctx.beginPath();
+						ctx.moveTo(0, 0);
+						const s = arrowLen / mag;
+						ctx.lineTo(vFwd.x * s, vFwd.y * s);
+						ctx.stroke();
+
+						ctx.fillStyle = "cyan";
+						ctx.beginPath();
+						ctx.arc(vFwd.x * s, vFwd.y * s, 5, 0, Math.PI * 2);
+						ctx.fill();
+					}
+
 					ctx.restore();
 				}
-			};
-			drawEye(blinkInfo.leftEye);
-			drawEye(blinkInfo.rightEye);
-			ctx.restore();
+			}
 		}
-		if (clickingMode === "open-mouth" && mouthInfo) {
+
+		const drawAspectMetrics = ({ corners, lowest, highest, active, thresholdMet }) => {
+			const [a, b] = corners;
+			ctx.strokeStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
+			ctx.beginPath();
+			ctx.moveTo(a[0], a[1]);
+			ctx.lineTo(b[0], b[1]);
+			ctx.stroke();
+			// draw extents as a rectangle
+			ctx.save();
+			ctx.translate(a[0], a[1]);
+			ctx.rotate(Math.atan2(b[1] - a[1], b[0] - a[0]));
+			ctx.beginPath();
+			ctx.rect(0, lowest, Math.hypot(b[0] - a[0], b[1] - a[1]), highest - lowest);
+			ctx.stroke();
+			ctx.restore();
+		};
+
+		if (blinkInfo?.used) {
 			ctx.save();
 			ctx.lineWidth = 2;
-			ctx.strokeStyle = mouthInfo.mouthOpen ? "red" : "cyan";
-			ctx.beginPath();
-			// ctx.moveTo(mouthInfo.mouthTopBottomPoints[0][0], mouthInfo.mouthTopBottomPoints[0][1]);
-			// ctx.lineTo(mouthInfo.corners[0][0], mouthInfo.corners[0][1]);
-			// ctx.lineTo(mouthInfo.mouthTopBottomPoints[1][0], mouthInfo.mouthTopBottomPoints[1][1]);
-			// ctx.lineTo(mouthInfo.corners[1][0], mouthInfo.corners[1][1]);
-			// ctx.closePath();
-			const mouthCenter = [
-				(mouthInfo.corners[0][0] + mouthInfo.corners[1][0]) / 2,
-				(mouthInfo.corners[0][1] + mouthInfo.corners[1][1]) / 2
-			];
-			const extents = mouthInfo.mouthTopBottomPoints.map(point => signedDistancePointLine(point, mouthInfo.corners[0], mouthInfo.corners[1]));
-			// Draw as two lines rather than a rectangle (or ellipse) to indicate that it's not using aspect ratio of the mouth currently
-			// const highest = Math.max(...extents);
-			// const lowest = Math.min(...extents);
-			// const mouthWidth = Math.hypot(mouthInfo.corners[1][0] - mouthInfo.corners[0][0], mouthInfo.corners[1][1] - mouthInfo.corners[0][1]);
-			const mouthWidth = 50;
-			ctx.translate(mouthCenter[0], mouthCenter[1]);
-			ctx.rotate(Math.atan2(mouthInfo.corners[1][1] - mouthInfo.corners[0][1], mouthInfo.corners[1][0] - mouthInfo.corners[0][0]));
-			ctx.beginPath();
-			// ctx.rect(-mouthWidth / 2, lowest, mouthWidth, highest - lowest);
-			for (const extent of extents) {
-				ctx.moveTo(-mouthWidth / 2, extent);
-				ctx.lineTo(mouthWidth / 2, extent);
+			drawAspectMetrics(blinkInfo.leftEye);
+			drawAspectMetrics(blinkInfo.rightEye);
+
+			if (showDebugEyeZoom) {
+				debugEyeCanvas.style.display = "";
+				const boxWidth = 150;
+				const boxHeight = 100;
+
+				if (debugEyeCanvas.width !== boxWidth * 2 || debugEyeCanvas.height !== boxHeight) {
+					debugEyeCanvas.width = boxWidth * 2;
+					debugEyeCanvas.height = boxHeight;
+				}
+
+				debugEyeCtx.fillStyle = "black";
+				debugEyeCtx.fillRect(0, 0, debugEyeCanvas.width, debugEyeCanvas.height);
+				debugEyeCtx.save();
+				debugEyeCtx.translate(s.mirror ? debugEyeCanvas.width : 0, 0);
+				debugEyeCtx.scale(s.mirror ? -1 : 1, 1);
+
+				const zoom = 5;
+				const drawDebugEye = (eye, offsetX) => {
+					const points = [...eye.upperContour, ...eye.lowerContour];
+					let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+					for (const [x, y] of points) {
+						minX = Math.min(minX, x);
+						minY = Math.min(minY, y);
+						maxX = Math.max(maxX, x);
+						maxY = Math.max(maxY, y);
+					}
+					const cx = (minX + maxX) / 2;
+					const cy = (minY + maxY) / 2;
+
+					const sw = boxWidth / zoom;
+					const sh = boxHeight / zoom;
+					const sx = cx - sw / 2;
+					const sy = cy - sh / 2;
+
+					debugEyeCtx.drawImage(cameraVideo, sx, sy, sw, sh, offsetX, 0, boxWidth, boxHeight);
+
+					debugEyeCtx.save();
+					debugEyeCtx.beginPath();
+					debugEyeCtx.rect(offsetX, 0, boxWidth, boxHeight);
+					debugEyeCtx.clip();
+
+					debugEyeCtx.translate(offsetX, 0);
+					debugEyeCtx.scale(zoom, zoom);
+					debugEyeCtx.translate(-sx, -sy);
+
+					debugEyeCtx.lineWidth = 1 / zoom * 2;
+					debugEyeCtx.strokeStyle = "lime";
+
+					for (const contour of [eye.upperContour, eye.lowerContour]) {
+						debugEyeCtx.beginPath();
+						for (let i = 0; i < contour.length; i++) {
+							const [x, y] = contour[i];
+							if (i === 0) debugEyeCtx.moveTo(x, y);
+							else debugEyeCtx.lineTo(x, y);
+						}
+						debugEyeCtx.stroke();
+					}
+					debugEyeCtx.restore();
+				};
+
+				drawDebugEye(blinkInfo.rightEye, 0);
+				drawDebugEye(blinkInfo.leftEye, boxWidth);
+
+				debugEyeCtx.restore();
+			} else {
+				debugEyeCanvas.style.display = "none";
 			}
-			ctx.stroke();
+			ctx.restore();
+		}
+		if (mouthInfo?.used) {
+			ctx.save();
+			ctx.lineWidth = 2;
+			drawAspectMetrics(mouthInfo);
 			ctx.restore();
 		}
 
@@ -2046,16 +2619,65 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
 			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** acceleration);
+			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
 
 			var distance = Math.hypot(movementX, movementY);
-			var deltaX = accelerate(movementX * sensitivityX, distance);
-			var deltaY = accelerate(movementY * sensitivityY, distance);
+			var deltaX = accelerate(movementX * s.headTrackingSensitivityX, distance);
+			var deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
+
+			if (s.headTrackingTiltInfluence > 0) {
+				const yawRange = [
+					s.headTiltYawOffset - s.headTiltYawRange / 2,
+					s.headTiltYawOffset + s.headTiltYawRange / 2
+				];
+				const pitchRange = [
+					s.headTiltPitchOffset - s.headTiltPitchRange / 2,
+					s.headTiltPitchOffset + s.headTiltPitchRange / 2
+				];
+
+				function normalize(value, min, max) {
+					return (value - min) / (max - min);
+				}
+
+				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
+				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
+
+				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
+				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
+				// Slow down movement away from target, speed up movement towards target*
+				// *conditionally. Applies to part of the slider range.
+				// (Hey look, we can reuse the normalize function to choose where on the slider these effects kick in!)
+				// - It might be worth trying other functions, e.g. exponential or sigmoid,
+				//   or adding limits to how much it can change to see if it feels better.
+				// - "Speeding up" necessarily incorporates any jitter from the head tilt,
+				//   if we're just lerping towards the target.
+				//   TODO: try incorporating the magnitude of the delta into the influence,
+				//   such that zero delta will not move towards the head tilt target,
+				//   ...unless we're at 100% of the slider? We still want to support
+				//   pure head tilt mode. So I'm not sure what the ramp should be.
+				// - Could make these different settings, which would make it less arbitrary (re: the 80% to 100% influence range),
+				//   but not necessarily easier for the average user to tune; at some point you say
+				//   "wow that's a lot of options, maybe I'll explore them later..." and back away slowly.
+				//   This setting in particular is already probably hard to understand, so unless
+				//   splitting it can make it a lot clearer, it's probably better not to add to the decision fatigue.
+				const slowingInfluence = s.headTrackingTiltInfluence;
+				const speedingInfluence = Math.max(0, Math.min(1, normalize(s.headTrackingTiltInfluence, 0.8, 1)));
+				if (deltaX * deltaXToMatchTilt < 0) {
+					deltaX *= 1 - slowingInfluence;
+				} else {
+					deltaX += (deltaXToMatchTilt - deltaX) * speedingInfluence;
+				}
+				if (deltaY * deltaYToMatchTilt < 0) {
+					deltaY *= 1 - slowingInfluence;
+				} else {
+					deltaY += (deltaYToMatchTilt - deltaY) * speedingInfluence;
+				}
+			}
 
 			// Mimicking eViacam's "Motion Threshold" implementation
 			// https://github.com/cmauri/eviacam/blob/a4032ed9c59def5399a93e74f5ea84513d2f42b1/wxutil/mousecontrol.cpp#L310-L312
 			// (a threshold on instantaneous Manhattan distance, or in other words, x and y speed, separately)
-			// - It's applied after acceleration, following eViacam's lead,
+			// - It's applied after s.headTrackingAcceleration, following eViacam's lead,
 			// which makes sense in order to have the setting's unit make sense as "pixels",
 			// rather than "pixels before applying a function",
 			// to say nothing of the qualitative differences there might be in reordering the operations.
@@ -2068,17 +2690,17 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			//   You have to be in the center of the leash region for it to provide stability.
 			//   I'm not sure what a hybrid would look like; it might make more sense as two
 			//   separate settings, "motion threshold" and "leash distance".
-			if (Math.abs(deltaX * screenWidth) < minDistance) {
+			if (Math.abs(deltaX * screenWidth) < s.headTrackingMinDistance) {
 				deltaX = 0;
 			}
-			if (Math.abs(deltaY * screenHeight) < minDistance) {
+			if (Math.abs(deltaY * screenHeight) < s.headTrackingMinDistance) {
 				deltaY = 0;
 			}
 			// Avoid dragging when trying to click by ignoring movement for a short time after a mouse down.
 			// This applied previously also to release, to help with double clicks,
 			// but this felt bad, and I find personally that I can still do double clicks without that help.
 			const timeSinceMouseDown = performance.now() - lastMouseDownTime;
-			if (timeSinceMouseDown < delayBeforeDragging) {
+			if (timeSinceMouseDown < s.delayBeforeDragging) {
 				deltaX = 0;
 				deltaY = 0;
 			}
@@ -2092,7 +2714,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 				ctx.save();
 				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, graphWidth, graphHeight);
-				const highlightInput = movementX * sensitivityX;
+				const highlightInput = movementX * s.headTrackingSensitivityX;
 				for (let x = 0; x < graphWidth; x++) {
 					const input = x / graphWidth * graphMaxInput;
 					const output = accelerate(input, input);
@@ -2236,16 +2858,9 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 			// (Would also be easy to maintain backwards compatibility while switching to using a class,
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
 
-			// clean up camera stream
-			if (cameraVideo.srcObject) {
-				for (const track of cameraVideo.srcObject.getTracks()) {
-					track.stop();
-				}
-			}
-			cameraVideo.srcObject = null; // probably pointless
-
-			// not sure this helps
+			// stopping camera stream is important, not sure about other resetting
 			reset();
+
 			// just in case there's any async code looking at whether it's paused
 			paused = true;
 
