@@ -734,8 +734,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 90,
 							default: 60,
 							labels: {
-								min: "Narrow",
-								max: "Wide",
+								min: "Little neck movement",
+								max: "Large neck movement",
 							},
 							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
 							// description: "How much you need to tilt your head left and right to reach the edges of the screen.",
@@ -743,7 +743,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
 						},
 						{
-							label: "Horizontal tilt offset",
+							// label: "Horizontal tilt offset",
+							label: "Horizontal cursor offset",
 							className: "tracky-mouse-head-tilt-yaw-offset",
 							key: "headTiltYawOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -759,8 +760,14 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							// TODO: how to describe this??
 							// Specifically, how to disambiguate which direction is which / which way to adjust it?
 							// And shouldn't the option behave opposite? I think we have pitch yaw and roll all reversed from standard aviation definitions.
+							// Since it's opposite, even though it's technically yaw (angle units), it's easier to think of as moving the cursor.
+							// Hence I've renamed the setting.
+							// A later update might change the definitions and include a settings file format upgrade step.
 							// description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
-							description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
+							// description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
+							// TODO: should this say "horizontal" in the (main part of the) description?
+							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
+⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`,
 						},
 						{
 							label: "Vertical tilt range",
@@ -773,8 +780,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 60,
 							default: 25,
 							labels: {
-								min: "Narrow",
-								max: "Wide",
+								min: "Little neck movement",
+								max: "Large neck movement",
 							},
 							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
 							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
@@ -782,7 +789,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
 						},
 						{
-							label: "Vertical tilt offset",
+							// label: "Vertical tilt offset",
+							label: "Vertical cursor offset",
 							className: "tracky-mouse-head-tilt-pitch-offset",
 							key: "headTiltPitchOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -795,7 +803,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 								min: "Down",
 								max: "Up",
 							},
-							description: "Adjusts the center position of vertical head tilt.",
+							// description: "Adjusts the center position of vertical head tilt.",
+							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.`,
 						},
 					],
 				},
