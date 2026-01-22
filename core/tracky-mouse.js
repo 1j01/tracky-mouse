@@ -613,8 +613,11 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					max: 100,
 					default: 0,
 					labels: {
-						min: "Optical flow",
-						max: "Head tilt",
+						// min: "Optical flow", // too technical
+						// min: "Point tracking", // still technical but at least it's terminology we're already using
+						min: "Point tracking (2D)",
+						// max: "Head tilt",
+						max: "Head tilt (3D)",
 					},
 					// description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
 					description: `Blends between using point tracking (2D) and detected head tilt (3D).
