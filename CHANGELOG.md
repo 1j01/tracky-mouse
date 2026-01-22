@@ -35,8 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Head tilt calibration settings.** You can adjust the horizontal and vertical tilt range and offset. This allows the head tilt feature to be used with different camera placements (above or below the screen) and postures, and lets you balance comfort+speed and precision. ([issue #103](https://github.com/1j01/tracky-mouse/issues/103))
     - Recommended: switch to 100% tilt influence while adjusting these settings, so you can see the effect directly.
 - **Eye modifiers** in "Open mouth to click" mode.
-  - With your right eye closed, open your mouth to right click.
-  - With your left eye closed, open your mouth to middle click.
+  - With your left eye closed, open your mouth to right click.
+  - With your right eye closed, open your mouth to middle click.
   - This makes it a three-button mouse! Universal computer control.
 - Installer includes a new animated loading GIF. ([issue #86](https://github.com/1j01/tracky-mouse/issues/86))
 - Added a new [Goodies](https://trackymouse.js.org/goodies) page to the website, with wallpaper downloads and text art.
