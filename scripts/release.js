@@ -135,10 +135,10 @@ Please install via the GitHub release draft and test the installed desktop app.
 If everything looks good, proceed with publishing:
 
 git push
-npm run in-core -- npm publish
 npm run in-website -- npm run deploy
 
 and hit Publish on the GitHub release.
+This should trigger a GitHub Actions workflow which publishes the core package to npm.
 `);
 }
 release();
