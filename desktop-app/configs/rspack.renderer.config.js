@@ -1,5 +1,5 @@
 /** @typedef {import('@rspack/core').Configuration} Configuration */
-import ReactRefreshPlugin from '@rspack/plugin-react-refresh';
+// import ReactRefreshPlugin from '@rspack/plugin-react-refresh';
 
 import { isDevelopment, isProduction } from './rspack.env.js';
 import { optimization } from './rspack.optimization.js';
@@ -12,6 +12,7 @@ rules.push({
 	type: 'asset',
 });
 
+/*
 rules.push({
 	test: /\.less$/,
 	type: 'css/module',
@@ -27,11 +28,12 @@ rules.push({
 		},
 	].filter(Boolean),
 });
+*/
 
 const rendererPlugins = [...plugins];
 
 if (isDevelopment) {
-	rendererPlugins.push(new ReactRefreshPlugin());
+	// rendererPlugins.push(new ReactRefreshPlugin());
 }
 
 /** @type {Configuration} */
