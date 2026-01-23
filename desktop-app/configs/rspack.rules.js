@@ -4,7 +4,7 @@ import { isDevelopment } from './rspack.env.js';
 import { appSrcPath } from './utils.js';
 
 /** @param {'typescript' | 'ecmascript'} syntax */
-const swcLoaderOptions = (syntax, sourceType = 'module') => {
+const swcLoaderOptions = (syntax) => {
 	return {
 		module: {
 			type: 'es6',
@@ -15,14 +15,12 @@ const swcLoaderOptions = (syntax, sourceType = 'module') => {
 				syntax === 'typescript'
 					? {
 						syntax: 'typescript',
-						sourceType,
 						tsx: true,
 						dynamicImport: true,
 						decorators: true,
 					}
 					: {
 						syntax: 'ecmascript',
-						sourceType,
 						jsx: true,
 						numericSeparator: true,
 						classPrivateProperty: true,
@@ -76,14 +74,7 @@ export const rules = [
 		options: swcLoaderOptions('typescript'),
 	},
 	{
-		test: /.*electron-main[/\\].*\.(js|mjs|jsx)$/,
-		loader: 'builtin:swc-loader',
-		include: appSrcPath,
-		options: swcLoaderOptions('ecmascript', 'script'),
-	},
-	{
 		test: /\.(js|mjs|jsx)$/,
-		exclude: /.*electron-main[/\\].*/,
 		loader: 'builtin:swc-loader',
 		include: appSrcPath,
 		options: swcLoaderOptions('ecmascript'),
