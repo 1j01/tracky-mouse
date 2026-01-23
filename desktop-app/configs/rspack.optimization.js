@@ -4,7 +4,7 @@
 
 import { rspack } from '@rspack/core';
 
-import { isProduction } from './rspack.env';
+import { isProduction } from './rspack.env.js';
 
 /** @type {Configuration['optimization']} */
 const optimization = {

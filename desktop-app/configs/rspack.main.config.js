@@ -2,10 +2,10 @@
  * @typedef {import('@rspack/core').Configuration} Configuration
  */
 
-import { isProduction } from './rspack.env';
-import { plugins } from './rspack.plugins';
-import { rules } from './rspack.rules';
-import { pathResolve } from './utils';
+import { isProduction } from './rspack.env.js';
+import { plugins } from './rspack.plugins.js';
+import { rules } from './rspack.rules.js';
+import { pathResolve } from './utils.js';
 
 /** @type {Configuration} */
 export const mainConfig = {

@@ -1,7 +1,7 @@
 const { RspackPlugin } = require("electron-forge-plugin-rspack");
 
-const { mainConfig } = require("./rspack.main.config.js");
-const { rendererConfig } = require("./rspack.renderer.config.js");
+const { mainConfig } = require("./configs/rspack.main.config.js");
+const { rendererConfig } = require("./configs/rspack.renderer.config.js");
 
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",

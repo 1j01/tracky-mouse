@@ -1,11 +1,11 @@
 /** @typedef {import('@rspack/core').Configuration} Configuration */
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh';
 
-import { isDevelopment, isProduction } from './rspack.env';
-import { optimization } from './rspack.optimization';
-import { plugins } from './rspack.plugins';
-import { rules } from './rspack.rules';
-import { pathResolve } from './utils';
+import { isDevelopment, isProduction } from './rspack.env.js';
+import { optimization } from './rspack.optimization.js';
+import { plugins } from './rspack.plugins.js';
+import { rules } from './rspack.rules.js';
+import { pathResolve } from './utils.js';
 
 rules.push({
 	test: /\.(png|jpg|jpeg|gif|svg)$/i,

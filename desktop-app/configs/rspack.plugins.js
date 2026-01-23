@@ -1,10 +1,9 @@
 import { rspack } from '@rspack/core';
-import ESLintPlugin from 'eslint-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import StylelintPlugin from 'stylelint-webpack-plugin';
+// import ESLintPlugin from 'eslint-webpack-plugin';
+// import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+// import StylelintPlugin from 'stylelint-webpack-plugin';
 
-import { isDevelopment } from './rspack.env';
-import { appSrcPath, pathResolve } from './utils';
+import { isDevelopment } from './rspack.env.js';
 
 const plugins = [
 	new rspack.DefinePlugin({
@@ -13,6 +12,7 @@ const plugins = [
 ];
 
 if (isDevelopment) {
+	/*
 	plugins.push(
 		new ForkTsCheckerWebpackPlugin({
 			async: true,
@@ -59,6 +59,7 @@ if (isDevelopment) {
 			threads: true,
 		}),
 	);
+	*/
 }
 
 export { plugins };

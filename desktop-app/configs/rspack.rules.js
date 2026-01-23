@@ -1,7 +1,7 @@
 /** @typedef {import('@rspack/core').ModuleOptions} ModuleOptions */
 
-import { isDevelopment } from './rspack.env';
-import { appSrcPath } from './utils';
+import { isDevelopment } from './rspack.env.js';
+import { appSrcPath } from './utils.js';
 
 /** @param {'typescript' | 'ecmascript'} syntax */
 const swcLoaderOptions = (syntax) => {
