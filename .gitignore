@@ -95,6 +95,12 @@ typings/
 # Webpack
 .webpack/
 
+# rspack
+.rspack/
+
+# Vite
+.vite/
+
 # Electron-Forge
 out/
 
