@@ -37,7 +37,7 @@
     "url": "https://github.com/1j01/tracky-mouse/issues"
   },
   "homepage": "https://trackymouse.js.org/",
-  "main": "src/electron-main/electron-main.js",
+  "main": "./.rspack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",

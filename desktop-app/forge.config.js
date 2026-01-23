@@ -1,3 +1,8 @@
+const { RspackPlugin } = require("electron-forge-plugin-rspack");
+
+const { mainConfig } = require("./rspack.main.config.js");
+const { rendererConfig } = require("./rspack.renderer.config.js");
+
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",
 	productName: "Tracky Mouse",
@@ -33,6 +38,24 @@ module.exports = {
 		// TODO: maybe
 		// https://electron.github.io/packager/main/interfaces/Options.html#darwinDarkModeSupport
 	},
+	plugins: [
+		new RspackPlugin({
+			mainConfig,
+			renderer: {
+				config: rendererConfig,
+				entryPoints: [
+					{
+						html: "./index.html",
+						js: "./src/renderer.ts",
+						name: "main_window",
+						preload: {
+							js: "./src/preload.ts",
+						},
+					},
+				],
+			},
+		}),
+	],
 	makers: [
 		{
 			name: "@electron-forge/maker-squirrel",
