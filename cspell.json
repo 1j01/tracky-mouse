@@ -13,6 +13,7 @@
 		"argparse",
 		"binarypb",
 		"clmtrackr",
+		"codeframe",
 		"combinatorially",
 		"dcutoff",
 		"deinitialize",
@@ -63,8 +64,10 @@
 		"pointerenter",
 		"pointerleave",
 		"pointermove",
+		"relocator",
 		"retarget",
 		"retargeted",
+		"rspack",
 		"sandboxing",
 		"scriptable",
 		"setx",
@@ -83,6 +86,7 @@
 		"unpackaged",
 		"Viacam",
 		"webgl",
+		"xcodereleases",
 		"XFCE"
 	]
 }
