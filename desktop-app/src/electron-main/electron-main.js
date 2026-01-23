@@ -335,7 +335,7 @@ const createWindow = () => {
 		width: appWindowState.width,
 		height: appWindowState.height,
 		webPreferences: {
-			preload: path.join(app.getAppPath(), 'src/preload-app-window.js'),
+			preload: APP_WINDOW_PRELOAD_RSPACK_ENTRY,
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
 			backgroundThrottling: false,
 		},
@@ -343,7 +343,7 @@ const createWindow = () => {
 	});
 
 	// and load the html page of the app.
-	appWindow.loadFile(`src/electron-app.html`);
+	appWindow.loadURL(APP_WINDOW_RSPACK_ENTRY);
 
 	// Toggle the DevTools with F12
 	appWindow.webContents.on("before-input-event", (_e, input) => {
@@ -578,13 +578,13 @@ const createWindow = () => {
 		skipTaskbar: true,
 		accessibleTitle: 'Tracky Mouse Screen Overlay',
 		webPreferences: {
-			preload: path.join(app.getAppPath(), 'src/preload-screen-overlay.js'),
+			preload: SCREEN_OVERLAY_PRELOAD_RSPACK_ENTRY,
 		},
 	});
 	screenOverlayWindow.setIgnoreMouseEvents(true);
 	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
-	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
+	screenOverlayWindow.loadURL(SCREEN_OVERLAY_RSPACK_ENTRY);
 	screenOverlayWindow.on('close', (event) => {
 		// If Windows Explorer is restarted while the app is running,
 		// the Screen Overlay Window can appear in the taskbar, and become closable.
