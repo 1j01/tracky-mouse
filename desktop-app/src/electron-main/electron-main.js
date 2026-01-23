@@ -849,6 +849,10 @@ ipcMain.handle('openCameraSettings', async (_event, cameraDeviceName) => {
 
 	console.log(`Device list output: ${listDevicesResult.stderr}`);
 
+	if (listDevicesResult.stderr.includes("Unrecognized option 'list_devices'")) {
+		return { error: `Can't show camera settings on this platform.` };
+	}
+
 	const videoDeviceRegex = /\[dshow @ [^\]]+\] "([^"]+)" \(video\)/g;
 	let match;
 	let deviceFound = false;
