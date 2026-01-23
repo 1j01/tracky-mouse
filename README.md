@@ -211,6 +211,8 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 - Before cloning on Windows, make sure you have `git config --global core.symlinks true` set, or you may have issues with symbolic links.
 - [Clone the repo.](https://help.github.com/articles/cloning-a-repository/)
 - Install [Node.js](https://nodejs.org/) if you don't have it
+  - Recommended: install via [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
+  - The supported Node.js version is specified in [`.nvmrc`](./.nvmrc)
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
 
@@ -226,6 +228,10 @@ For the desktop app:
   - On Ubuntu: `sudo apt-get install libxtst-dev`
   - On Fedora: `sudo yum install libXtst-devel`
   - On RHEL6.2: `sudo yum install libXi-devel`
+- For macOS:
+  - macOS 10.14 (Mojave) is the supported version
+  - You apparently need a full Xcode installation, not just the command line tools, for the native module to compile.
+  - Tested with Xcode 10.3. Old versions of Xcode can be downloaded from [xcodereleases.com](https://xcodereleases.com/)
 - Run `npm run in-desktop-app -- npm install` to install dependencies.
 - Run `npm run desktop-app` to start the app.
 - To test the CLI, run `npx tracky-mouse --help`.
