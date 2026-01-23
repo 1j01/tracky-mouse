@@ -29,12 +29,12 @@ module.exports = {
 		appCopyright: "© 2024 Isaiah Odhner",
 		junk: true,
 		// TODO: assess filtering of files; check node_modules to make sure prune is working
-		ignore: [
-			".history", // VS Code "Local History" extension
-			// TODO: organize image files so I can ignore most of them
-			// Maybe add a custom lint script to check that no images are being used by the app
-			// that won't be packaged, and that all images are being used
-		],
+		// ignore: [
+		// 	".history", // VS Code "Local History" extension
+		// 	// TODO: organize image files so I can ignore most of them
+		// 	// Maybe add a custom lint script to check that no images are being used by the app
+		// 	// that won't be packaged, and that all images are being used
+		// ],
 		// TODO: maybe
 		// https://electron.github.io/packager/main/interfaces/Options.html#darwinDarkModeSupport
 	},
@@ -45,11 +45,19 @@ module.exports = {
 				config: rendererConfig,
 				entryPoints: [
 					{
-						html: "./index.html",
-						js: "./src/renderer.js",
-						name: "main_window",
+						html: "./src/electron-app.html",
+						js: "./src/app-window.js",
+						name: "app_window",
 						preload: {
-							js: "./src/preload.js",
+							js: "./src/preload-app-window.js",
+						},
+					},
+					{
+						html: "./src/electron-screen-overlay.html",
+						js: "./src/screen-overlay.js",
+						name: "screen_overlay",
+						preload: {
+							js: "./src/preload-screen-overlay.js",
 						},
 					},
 				],
