@@ -13,7 +13,7 @@ export const mainConfig = {
 	 * This is the main entry point for your application, it's the first file
 	 * that runs in the main process.
 	 */
-	entry: './src/main.ts',
+	entry: './electron-main/electron-main.js',
 	// Put your normal webpack config below here
 	module: {
 		rules,

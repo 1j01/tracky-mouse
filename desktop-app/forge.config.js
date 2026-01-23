@@ -46,10 +46,10 @@ module.exports = {
 				entryPoints: [
 					{
 						html: "./index.html",
-						js: "./src/renderer.ts",
+						js: "./src/renderer.js",
 						name: "main_window",
 						preload: {
-							js: "./src/preload.ts",
+							js: "./src/preload.js",
 						},
 					},
 				],
