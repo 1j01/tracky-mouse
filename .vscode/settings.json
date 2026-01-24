@@ -61,6 +61,7 @@
 		"[fairyfloss]": {
 			"terminal.ansiMagenta": "#f36aff", // hard to see npm errors otherwise
 			"terminal.ansiBrightMagenta": "#f8adff", // not sure if needed, but figured I'd override the set of magentas
+			"terminal.ansiWhite": "#3f3f3f", // rspack emits horrible contrast errors?
 		}
 	},
 	// .------------------------- - .
