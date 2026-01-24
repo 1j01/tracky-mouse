@@ -14,6 +14,7 @@ const sharedDebRpmOptions = {
 		// "application/x-tracky-mouse",
 	],
 };
+/** @type {import('@electron-forge/shared-types').ForgeConfig} */
 module.exports = {
 	packagerConfig: {
 		icon: "./images/tracky-mouse-logo",
