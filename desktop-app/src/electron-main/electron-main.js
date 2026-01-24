@@ -179,7 +179,20 @@
 	// Normal app behavior continues here.
 
 	const windowStateKeeper = require('electron-window-state');
-	const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+	// const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+	// MOCKS
+	const setMouseLocationWithoutTracking = async (x, y) => {
+		console.log(`setMouseLocationWithoutTracking: (${x}, ${y})`);
+	};
+	const getMouseLocation = async () => {
+		console.log(`getMouseLocation`);
+		return { x: 100, y: 100 };
+	};
+	const click = async (button) => { console.log(`click: ${button}`); };
+	const mouseDown = async (button) => { console.log(`mouseDown: ${button}`); };
+	const mouseUp = async (button) => { console.log(`mouseUp: ${button}`); };
+
+
 	const screen = require('electron').screen; // Note: can't be used until ready event
 
 	let screenScaleFactor = 1;

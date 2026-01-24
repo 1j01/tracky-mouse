@@ -12,12 +12,12 @@ const isMac = process.platform === 'darwin';
 // The `about-window` module doesn't support custom version string.
 // Also it doesn't give a lot of room for the string, since it's expecting a simple format.
 // Should probably just use a custom about window.
-const originalAppGetVersion = app.getVersion;
-const isCalledFromModule = (moduleName) => new Error().stack.includes(require.resolve(moduleName));
-app.getVersion = () =>
-	isCalledFromModule("about-window") ?
-		require('./version').getVersion().replace(/development/, 'dev') :
-		originalAppGetVersion();
+// const originalAppGetVersion = app.getVersion;
+// const isCalledFromModule = (moduleName) => new Error().stack.includes(require.resolve(moduleName));
+// app.getVersion = () =>
+// 	isCalledFromModule("about-window") ?
+// 		require('./version').getVersion().replace(/development/, 'dev') :
+// 		originalAppGetVersion();
 
 const aboutItem = {
 	label: 'About Tracky Mouse',

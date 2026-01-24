@@ -38,10 +38,10 @@ const swcLoaderOptions = (syntax) => {
 						topLevelAwait: true,
 						importAssertions: true,
 					},
-			target: 'es5',
+			target: 'es2020',
 			// false:正常模式尽可能地遵循 ECMAScript 6 的语义 true:松散模式产生更简单的 ES5 代码
 			loose: false,
-			externalHelpers: true,
+			externalHelpers: false,
 			transform: {
 				legacyDecorator: true,
 				react: {
