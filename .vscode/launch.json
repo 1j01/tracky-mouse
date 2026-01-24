@@ -40,6 +40,21 @@
 				"desktop-app"
 			],
 			"outputCapture": "std"
+		},
+		{
+			// based on the "Electron: Debug Main Process" config
+			"name": "Debug Make Step of Electron Forge",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/desktop-app",
+			"runtimeExecutable": "${workspaceFolder}/desktop-app/node_modules/.bin/electron-forge",
+			"windows": {
+				"runtimeExecutable": "${workspaceFolder}/desktop-app/node_modules/.bin/electron-forge.cmd"
+			},
+			"args": [
+				"make"
+			],
+			"outputCapture": "std"
 		}
 	]
 }
