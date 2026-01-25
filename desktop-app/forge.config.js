@@ -19,7 +19,7 @@ module.exports = {
 	packagerConfig: {
 		icon: "./images/tracky-mouse-logo",
 		name: "Tracky Mouse",
-		executableName: "tracky-mouse",
+		executableName: "tracky-mouse-electron",
 		appBundleId: "io.isaiahodhner.tracky-mouse",
 		appCategoryType: "public.app-category.utilities",
 		appCopyright: "© 2024 Isaiah Odhner",
