@@ -40,13 +40,10 @@ module.exports = {
 			// This is needed on Ubuntu due to https://github.com/electron/forge/issues/3238
 			const { cp, rm } = require('fs').promises;
 			const { join, dirname } = require('path');
-			// TODO: find all symlinked modules instead of hardcoding
+			// TODO: find all symlinked modules instead of hardcoding, and handle scoped packages
 			const modulesToCopy = ['tracky-mouse'];
 			for (const moduleName of modulesToCopy) {
-				// TODO: robustly find package folder
-				// This assumes package.json's main field points to a file at the root of the package.
-				// (There's also scoped packages to consider. Is there a proper way to do this?)
-				const moduleDir = dirname(require.resolve(moduleName));
+				const moduleDir = dirname(require.resolve(join(moduleName, 'package.json')));
 				const destPath = join(buildPath, 'node_modules', moduleName);
 				// Delete broken symlink
 				await rm(destPath, { recursive: true, force: true });
