@@ -36,20 +36,40 @@ module.exports = {
 	},
 	hooks: {
 		packageAfterPrune: async (_forgeConfig, buildPath) => {
-			// Fix broken symlinks in node_modules of the packaged app.
+			// Fix broken symlinks in the packaged app.
 			// This is needed on Ubuntu due to https://github.com/electron/forge/issues/3238
-			const { cp, rm } = require('fs').promises;
-			const { join, dirname } = require('path');
-			// TODO: find all symlinked modules instead of hardcoding, and handle scoped packages
-			const modulesToCopy = ['tracky-mouse'];
-			for (const moduleName of modulesToCopy) {
-				const moduleDir = dirname(require.resolve(join(moduleName, 'package.json')));
-				const destPath = join(buildPath, 'node_modules', moduleName);
-				// Delete broken symlink
-				await rm(destPath, { recursive: true, force: true });
-				// Copy module folder
-				await cp(moduleDir, destPath, { recursive: true });
+
+			const sourceAppRoot = __dirname;
+
+			const { lstat, readlink, unlink, cp, readdir } = require('fs').promises;
+			const { join, resolve, relative, dirname } = require('path');
+
+			async function fixBrokenSymlinks(dir) {
+				const entries = await readdir(dir, { withFileTypes: true });
+
+				for (const entry of entries) {
+					const fullPath = join(dir, entry.name);
+
+					if (entry.isSymbolicLink()) {
+						const linkTarget = await readlink(fullPath);
+						const resolvedTarget = resolve(dirname(fullPath), linkTarget);
+						try {
+							await lstat(resolvedTarget);
+						} catch (error) {
+							if (error.code !== 'ENOENT') {
+								throw error;
+							}
+							await unlink(fullPath);
+							const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
+							await cp(sourcePath, fullPath, { recursive: true });
+						}
+					} else if (entry.isDirectory()) {
+						await fixBrokenSymlinks(fullPath);
+					}
+				}
 			}
+
+			await fixBrokenSymlinks(buildPath);
 		},
 	},
 	makers: [
