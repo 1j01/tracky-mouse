@@ -1,3 +1,4 @@
+const os = require('os');
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",
 	productName: "Tracky Mouse",
@@ -19,7 +20,7 @@ module.exports = {
 	packagerConfig: {
 		icon: "./images/tracky-mouse-logo",
 		name: "Tracky Mouse",
-		executableName: "tracky-mouse-electron",
+		executableName: os.platform() === "linux" ? "tracky-mouse-electron" : "tracky-mouse",
 		appBundleId: "io.isaiahodhner.tracky-mouse",
 		appCategoryType: "public.app-category.utilities",
 		appCopyright: "© 2024 Isaiah Odhner",
