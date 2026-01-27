@@ -257,21 +257,13 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 This section outlines the steps for releasing a new version of Tracky Mouse.
 
-> [!NOTE]  
-> Currently the software is only pre-built for Windows, due to a bug in Electron Forge and node-gyp woes.  
-> Eventually it would be nice if we could set up cross-platform builds using GitHub Actions.  
-> Regardless of using CI for building or not, it's best to test a new version by downloading from the GitHub release draft.  
 
 In [CHANGELOG.md](CHANGELOG.md), first make sure all important changes are noted in the Unreleased section, by looking over the commit history.  
 
-Create `desktop-app/.env` file if it doesn't exist, and inside it, set `GITHUB_TOKEN=...` with a [GitHub personal access token](https://github.com/settings/tokens?page=1&type=beta) with content permissions for creating a release.
-
-The following command takes care of linting, bumping version numbers for each package and in the changelog:
+The following command takes care of linting, and bumping version numbers for each package and in the changelog. It also creates a git commit and tag for the new version, and pushes the tag to GitHub, triggering the GitHub Actions workflow to create a release draft.
 ```sh
 npm run release -- $VERSION
 ```
-
-Copy and paste the changelog entry into the GitHub release draft's notes.
 
 Download and install from the GitHub release draft, and test the installed desktop app.
 

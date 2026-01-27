@@ -1,5 +1,5 @@
 const { execSync } = require("child_process");
-const fs = require("fs");
+// const fs = require("fs");
 const path = require("path");
 
 // async function run(command) {
@@ -45,10 +45,11 @@ async function release() {
 
 	// Check that GITHUB_TOKEN is configured
 	// (it may be expired though)
-	if (!fs.existsSync(path.join(repoRoot, "desktop-app/.env"))) {
-		console.error("desktop-app/.env must be created defining a GITHUB_TOKEN");
-		process.exit(1);
-	}
+	// This is no longer needed because the GitHub Actions workflow handles creating the release draft
+	// if (!fs.existsSync(path.join(repoRoot, "desktop-app/.env"))) {
+	// 	console.error("desktop-app/.env must be created defining a GITHUB_TOKEN");
+	// 	process.exit(1);
+	// }
 
 	// Check working directory is clean
 	if (getOutput("git status -u --porcelain").trim()) {
@@ -97,34 +98,37 @@ async function release() {
 	// Create a GitHub release draft, automatically uploading the desktop app distributable files:
 	// This is the step where you need an up-to-date access token,
 	// so prompt to retry in a loop.
-	let needsPublish = true;
-	while (needsPublish) {
-		try {
-			run("npm run in-desktop-app -- npm run publish");
-			needsPublish = false;
-		} catch (error) {
-			console.error(error);
-			console.error("Failed to publish desktop app. Please check the error output above (you may need to regenerate and replace your GITHUB_TOKEN in desktop-app/.env) and try again.");
-			await new Promise((resolve) => {
-				const rl = require("readline").createInterface({
-					input: process.stdin,
-					output: process.stdout
-				});
-				rl.question("Press Enter to retry...", () => {
-					rl.close();
-					resolve();
-				});
-			});
-		}
-	}
-
-	// TODO: Upload the changelog entry into the GitHub release draft's notes.
+	// THIS NOW RUNS ON GITHUB ACTIONS
+	// let needsPublish = true;
+	// while (needsPublish) {
+	// 	try {
+	// 		run("npm run in-desktop-app -- npm run publish");
+	// 		needsPublish = false;
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 		console.error("Failed to publish desktop app. Please check the error output above (you may need to regenerate and replace your GITHUB_TOKEN in desktop-app/.env) and try again.");
+	// 		await new Promise((resolve) => {
+	// 			const rl = require("readline").createInterface({
+	// 				input: process.stdin,
+	// 				output: process.stdout
+	// 			});
+	// 			rl.question("Press Enter to retry...", () => {
+	// 				rl.close();
+	// 				resolve();
+	// 			});
+	// 		});
+	// 	}
+	// }
 
 	// Then commit the changes, tag the commit, and push the tag:
 	run(`git commit -m "Release ${version}"`);
 	run(`git tag v${version}`);
 	// run("git push"); // deferred so the release can be tested first
 	run(`git push origin tag v${version}`);
+
+	// Pushing the tag should trigger a GitHub Actions workflow
+	// which builds the app for all platforms and creates a release draft,
+	// including release notes from the changelog.
 
 	// Publish the library to npm:
 	run("npm run in-core -- npm publish --dry-run");

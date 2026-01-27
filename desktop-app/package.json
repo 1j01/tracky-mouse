@@ -42,7 +42,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "env-cmd electron-forge publish"
+    "publish": "electron-forge publish"
   },
   "dependencies": {
     "@sentry/electron": "^5.11.0",
@@ -61,7 +61,6 @@
     "@electron-forge/maker-squirrel": "^7.11.1",
     "@electron-forge/maker-zip": "^7.11.1",
     "@electron-forge/publisher-github": "^7.11.1",
-    "electron": "20.0.1",
-    "env-cmd": "^10.1.0"
+    "electron": "20.0.1"
   }
 }
