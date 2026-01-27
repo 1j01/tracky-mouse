@@ -41,6 +41,11 @@ module.exports = {
 			// This is needed on Ubuntu due to https://github.com/electron/forge/issues/3238
 
 			const sourceAppRoot = __dirname;
+			const log = (...args) => {
+				console.log("[fix-broken-symlinks]", ...args);
+			};
+
+			log("🔧 Fixing broken symlinks in packaged app...");
 
 			const { lstat, readlink, unlink, cp, readdir } = require('fs').promises;
 			const { join, resolve, relative, dirname } = require('path');
@@ -52,17 +57,23 @@ module.exports = {
 					const fullPath = join(dir, entry.name);
 
 					if (entry.isSymbolicLink()) {
+						log(`Found symlink: '${fullPath}'`);
 						const linkTarget = await readlink(fullPath);
 						const resolvedTarget = resolve(dirname(fullPath), linkTarget);
+						log(`Symlink points to '${linkTarget}' which resolves to '${resolvedTarget}'`);
 						try {
 							await lstat(resolvedTarget);
+							log(`Symlink is valid: '${fullPath}' -> '${linkTarget}'`);
 						} catch (error) {
 							if (error.code !== 'ENOENT') {
 								throw error;
 							}
 							await unlink(fullPath);
 							const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
-							await cp(sourcePath, fullPath, { recursive: true });
+							await cp(sourcePath, fullPath, { recursive: true, dereference: true });
+							log(`Replaced broken symlink with copy of: '${sourcePath}'`);
+							const stat = await lstat(fullPath);
+							log('After fix, type is:', stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : stat.isSymbolicLink() ? 'symlink' : 'other');
 						}
 					} else if (entry.isDirectory()) {
 						await fixBrokenSymlinks(fullPath);
