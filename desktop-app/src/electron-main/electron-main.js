@@ -638,14 +638,16 @@ app.on('ready', async () => {
 	}
 	createWindow();
 
-	checkForUpdates({
-		currentVersion: app.getVersion(),
-		skippedVersion: activeSettings.skippedUpdateVersion,
-		pleaseSkipThisVersion: (version) => {
-			activeSettings.skippedUpdateVersion = version;
-			saveSettings();
-		}
-	});
+	if (activeSettings.checkForUpdates !== false) {
+		checkForUpdates({
+			currentVersion: app.getVersion(),
+			skippedVersion: activeSettings.skippedUpdateVersion,
+			pleaseSkipThisVersion: (version) => {
+				activeSettings.skippedUpdateVersion = version;
+				saveSettings();
+			}
+		});
+	}
 
 	updateScreenScaleFactor();
 	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {

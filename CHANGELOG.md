@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
 
+### Added
+- Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version.
+
 ## [2.2.0] - 2026-01-22
 
 ### Changed

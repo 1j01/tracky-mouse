@@ -982,6 +982,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
 					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
 				},
+				{
+					label: "Check for updates",
+					className: "tracky-mouse-check-for-updates",
+					key: "checkForUpdates",
+					type: "checkbox",
+					default: true,
+					platform: "desktop",
+					description: "If enabled, Tracky Mouse will automatically check for updates when it starts.",
+					// description: "Notifies you of new versions of Tracky Mouse.",
+					// description: "Notifies you when a new version of Tracky Mouse is available.",
+				},
 			],
 		},
 	];
