@@ -1,22 +1,22 @@
 name: Publish Package to npm
 on:
-    release:
-        types: [published]
-    workflow_dispatch:
+  release:
+    types: [published]
+  workflow_dispatch:
 permissions:
-    id-token: write # Required for OIDC
-    contents: read
+  id-token: write # Required for OIDC
+  contents: read
 jobs:
-    publish:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: "24"
-                  registry-url: "https://registry.npmjs.org"
-            - run: cd core && npm ci
-            # - run: cd core && npm run build --if-present
-            # - run: cd core && npm test
-            - run: cd core && npm publish
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+      - run: cd core && npm ci
+      # - run: cd core && npm run build --if-present
+      # - run: cd core && npm test
+      - run: cd core && npm publish
