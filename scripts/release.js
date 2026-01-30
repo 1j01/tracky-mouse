@@ -69,7 +69,7 @@ async function release() {
 	// TODO: try/catch with git reset --hard for the rest of the script to make it atomic?
 
 	// Update CLI docs:
-	run("npm run update-cli-docs");
+	require("./update-cli-docs.js");
 
 	// Bump package versions.
 	// TODO: bump also package-lock.json version numbers that reference other packages within the monorepo?
@@ -82,11 +82,11 @@ async function release() {
 
 	// Update version numbers and links in the changelog.
 	process.env.VERSION = version;
-	run("npm run bump-changelog");
+	require("./bump-changelog.js");
 
 	// Update download links to point to the new version:
 	process.env.VERSION = version;
-	run("npm run update-dl-links");
+	require("./update-dl-links.js");
 
 	// That's all the changes for the commit.
 	// Add them before the lengthy build process in case one gets tempted to edit files while it's building
