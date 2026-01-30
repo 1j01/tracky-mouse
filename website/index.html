@@ -55,9 +55,9 @@
 			Install the desktop app to control your whole computer with just a webcam.
 		</p>
 		<p>
-			<!-- TODO: detect platform, maybe present alternate downloads in a dropdown attached to the download button; maybe move closer to top of page -->
+			<!-- TODO: maybe present alternate downloads in a dropdown attached to the download button; maybe move closer to top of page -->
 			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe"
-				class="big-download-button">
+				class="big-download-button windows windows-installer">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.7, 1.5) perspective(9px) rotateY(-10deg) translateY(-1px)">
 					<rect x="5" y="5" width="50" height="50" fill="white" />
@@ -68,17 +68,23 @@
 				Download for Windows
 			</a>
 			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse_2.2.0_amd64.deb"
-				class="big-download-button">
+				class="big-download-button linux linux-deb">
 				<img src="images/tux.svg" alt="Tux the Linux penguin mascot"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5)">
 				Download for Linux (.deb)
 			</a>
 			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm"
-				class="big-download-button">
+				class="big-download-button linux linux-rpm">
 				<img src="images/tux.svg" alt="Tux the Linux penguin mascot"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5)">
 				Download for Linux (.rpm)
 			</a>
+			<!-- <a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-macos.zip"
+				class="big-download-button osx">
+				<img src="images/apple-logo.svg" alt="Apple logo"
+					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5) translateY(-2px); filter: invert()">
+				Download for macOS
+			</a> -->
 			<!-- <br>
 			<a href="" class="secondary-download-button">Download for Windows</a>
 			<br>
@@ -94,6 +100,24 @@
 			</a>
 		</p>
 	</section>
+	<script>
+		const ua = window.navigator.userAgent;
+		const platform = ua.includes("Mac") ? "osx" : ua.includes("Linux") || ua.includes("X11") ? ua.includes("x86_64") ? "linux x64" : "linux" : ua.includes("Win") ? "win" : "other-os";
+		// Hide elements for other platforms only if platform is known
+		// TODO: once osx is supported, enable hiding non-osx elements
+		if (platform.match(/linux|win/)) {
+			// if (platform.match(/linux|win|osx/)) {
+			for (const el of document.getElementsByClassName("linux")) {
+				el.style.display = platform.startsWith("linux") ? "" : "none";
+			}
+			for (const el of document.getElementsByClassName("windows")) {
+				el.style.display = platform === "win" ? "" : "none";
+			}
+			// for (const el of document.getElementsByClassName("osx")) {
+			// 	el.style.display = platform === "osx" ? "" : "none";
+			// }
+		}
+	</script>
 	<section class="page-section">
 		<h2>Features</h2>
 		<ul class="features-list">
