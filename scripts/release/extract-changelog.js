@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const pkgPath = path.resolve(__dirname, "../desktop-app/package.json");
-const changelogPath = path.resolve(__dirname, "../CHANGELOG.md");
+const pkgPath = path.resolve(__dirname, "../../desktop-app/package.json");
+const changelogPath = path.resolve(__dirname, "../../CHANGELOG.md");
 
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
 

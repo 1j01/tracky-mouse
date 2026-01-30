@@ -5,7 +5,7 @@ if (!version) {
 	console.error('VERSION env var is not set');
 	process.exit(1);
 }
-if (version !== require('../package.json').version) {
+if (version !== require('../../package.json').version) {
 	console.error('VERSION env var does not match package.json version');
 	process.exit(1);
 }

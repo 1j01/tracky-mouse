@@ -6,17 +6,17 @@ const date = process.env.DATE || new Date().toISOString().split('T')[0];
 
 if (!version) {
 	console.error('VERSION env var is not set');
-	console.error('Usage: VERSION=x.y.z node scripts/bump-changelog.js');
+	console.error('Usage: VERSION=x.y.z node scripts/release/bump-changelog.js');
 	process.exit(1);
 }
 
-if (version !== require('../package.json').version) {
+if (version !== require('../../package.json').version) {
 	console.error('VERSION env var does not match package.json version');
-	console.error(`package.json: ${require('../package.json').version}, VERSION env var: ${version}`);
+	console.error(`package.json: ${require('../../package.json').version}, VERSION env var: ${version}`);
 	process.exit(1);
 }
 
-const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
+const changelogPath = path.join(__dirname, '../../CHANGELOG.md');
 const changelog = fs.readFileSync(changelogPath, 'utf8');
 
 // Check if this version was already released

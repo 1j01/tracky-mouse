@@ -39,7 +39,7 @@ jobs:
         if: runner.os == 'Windows'
         id: changelog
         shell: bash
-        run: node scripts/extract-changelog.js >> $GITHUB_OUTPUT
+        run: node scripts/release/extract-changelog.js >> $GITHUB_OUTPUT
 
       - name: Update Release
         if: runner.os == 'Windows'

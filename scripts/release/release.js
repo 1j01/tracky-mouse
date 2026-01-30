@@ -37,7 +37,7 @@ async function release() {
 		process.exit(1);
 	}
 	// TODO: check that `version` is greater?
-	if (version === require('../package.json').version) {
+	if (version === require('../../package.json').version) {
 		console.error(`VERSION argument matches package.json version (${version})`);
 		console.error("Please reset to a clean state in case the release was interrupted, and otherwise, make sure to increment the version.");
 		process.exit(1);
@@ -69,7 +69,7 @@ async function release() {
 	// TODO: try/catch with git reset --hard for the rest of the script to make it atomic?
 
 	// Update CLI docs:
-	require("./update-cli-docs.js");
+	require("../update-cli-docs.js");
 
 	// Bump package versions.
 	// TODO: bump also package-lock.json version numbers that reference other packages within the monorepo?
