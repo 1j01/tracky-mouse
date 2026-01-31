@@ -51,3 +51,12 @@ jobs:
           name: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
+
+      - name: Publish to Windows Store
+        uses: isaacrlevin/windows-store-action
+        with:
+          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+          app-id: ${{ secrets.STORE_APP_ID }}
+          package-path: "${{ github.workspace }}/desltp-app/otu/make/wasdfsdf.msix"

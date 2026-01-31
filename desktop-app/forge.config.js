@@ -98,6 +98,18 @@ module.exports = {
 			},
 		},
 		{
+			name: '@electron-forge/maker-msix',
+			config: {
+				manifestVariables: {
+					publisher: 'Isaiah Odhner'
+				},
+				windowsSignOptions: {
+					// certificateFile: 'C:\\devcert.pfx',
+					// certificatePassword: '122345'
+				}
+			}
+		},
+		{
 			name: "@electron-forge/maker-zip",
 			platforms: [
 				"darwin",  // macOS uses a .zip, which may be automatically extracted when opened
