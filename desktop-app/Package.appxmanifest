@@ -40,7 +40,7 @@
 		<!-- wWinMain or Windows.FullTrustApplication? -->
 		<Application
 			Id="TrackyMouse"
-			Executable="tracky-mouse.exe"
+			Executable="app/tracky-mouse.exe"
 			EntryPoint="wWinMain">
 			<VisualElements
 				DisplayName="Tracky Mouse"
