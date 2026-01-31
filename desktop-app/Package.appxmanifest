@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
 	<Identity Name="IsaiahOdhner.TrackyMouse"
 		Version="2.2.0.0"
-		Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784" />
+		Publisher="CN=Isaiah Odhner" />
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>
 		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
