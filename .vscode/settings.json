@@ -57,6 +57,10 @@
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2,
 	},
+	"[github-actions-workflow]": {
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2,
+	},
 	// .----------------------------.
 	// | Theming                    |
 	// '----------------------------'

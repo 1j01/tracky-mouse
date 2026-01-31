@@ -51,3 +51,12 @@ jobs:
           name: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
+
+      # - name: Publish to Windows Store
+      #   uses: isaacrlevin/windows-store-action@25ac1ac31e3434add3fede11f458a453fe371fb0
+      #   with:
+      #     tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+      #     client-id: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
+      #     client-secret: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
+      #     app-id: ${{ secrets.STORE_APP_ID }}
+      #     package-path: "${{ github.workspace }}/desktop-app/out/make/msix/x64/Tracky Mouse.msix"

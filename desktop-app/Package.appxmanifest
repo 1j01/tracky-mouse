@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+>
+	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
+	<Identity Name="IsaiahOdhner.TrackyMouse"
+		Version="2.2.0.0"
+		Publisher="CN=Isaiah Odhner" />
+	<Properties>
+		<DisplayName>Tracky Mouse</DisplayName>
+		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
+		<Description>Control your computer hands-free.</Description>
+		<Logo>app/resources/app/images/tracky-mouse-logo-512.png</Logo>
+	</Properties>
+	<Dependencies>
+		<!-- TODO: real numbers... electron-windows-msix seems to treat
+		 the min version as an EXACT VERSION OF THE SDK THAT MUST EXIST
+		 It HAS logic to find the actual installed version, but how do we trigger that (fallback) logic? -->
+		<TargetDeviceFamily
+			Name="Windows.Desktop"
+			MinVersion="10.0.26100.0"
+			MaxVersionTested="10.0.26100.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="en-US" />
+	</Resources>
+	<Capabilities>
+		<rescap:Capability Name="runFullTrust" />
+		<rescap:Capability Name="uiAccess" />
+		<rescap:Capability Name="inputInjectionBrokered" />
+		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
+		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
+		<DeviceCapability Name="webcam" />
+	</Capabilities>
+	<!-- https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-securityoverview -->
+	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
+	manifest? Docs are hard to navigate. -->
+	<!-- <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+		<security>
+			<requestedPrivileges>
+				<requestedExecutionLevel
+					level="highestAvailable"
+					uiAccess="true" />
+			</requestedPrivileges>
+		</security>
+	</trustInfo> -->
+	<Applications>
+		<!-- wWinMain or Windows.FullTrustApplication? -->
+		<Application
+			Id="TrackyMouse"
+			Executable="app/tracky-mouse.exe"
+			uap10:RuntimeBehavior="packagedClassicApp"
+			uap10:TrustLevel="mediumIL">
+			<uap:VisualElements
+				DisplayName="Tracky Mouse"
+				Description="Control your computer hands-free."
+				Square150x150Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				Square44x44Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				BackgroundColor="#FFFF00" />
+			<!-- <VisualElements
+				DisplayName="Tracky Mouse"
+				Description="Control your computer hands-free."
+				Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				SmallLogo="app/resources/app/images/tracky-mouse-logo-512.png"
+				ForegroundText="dark"
+				BackgroundColor="#FFFF00">
+				<SplashScreen Image="app/resources/app/images/tracky-mouse-logo-512.png" />
+			</VisualElements> -->
+		</Application>
+	</Applications>
+</Package>
+<!-- TODO:
+https://learn.microsoft.com/en-us/windows/win32/winauto/ease-of-access- -
+-assistive-technology-registration -->

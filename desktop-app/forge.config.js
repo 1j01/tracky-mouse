@@ -98,6 +98,13 @@ module.exports = {
 			},
 		},
 		{
+			name: '@electron-forge/maker-msix',
+			config: {
+				appManifest: './Package.appxmanifest',
+				logLevel: 'debug',
+			}
+		},
+		{
 			name: "@electron-forge/maker-zip",
 			platforms: [
 				"darwin",  // macOS uses a .zip, which may be automatically extracted when opened
