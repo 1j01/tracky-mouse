@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
 	<Identity Name="IsaiahOdhner.TrackyMouse"
-		Version="2.2.0"
+		Version="2.2.0.0"
 		Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784" />
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>
@@ -9,8 +9,9 @@
 		<Logo>images/tracky-mouse-logo-512.png</Logo>
 	</Properties>
 	<Prerequisites>
-		<OSMinVersion></OSMinVersion>
-		<OSMaxVersionTested></OSMaxVersionTested>
+		<!-- TODO: real numbers -->
+		<OSMinVersion>6.2</OSMinVersion>
+		<OSMaxVersionTested>6.2</OSMaxVersionTested>
 	</Prerequisites>
 	<Resources>
 		<Resource Language="en-US" />
@@ -26,7 +27,7 @@
 	</Capabilities>
 	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
 	manifest? Docs are hard to navigate. -->
-	<trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+	<!-- <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
 		<security>
 			<requestedPrivileges>
 				<requestedExecutionLevel
@@ -34,15 +35,16 @@
 					uiAccess="true" />
 			</requestedPrivileges>
 		</security>
-	</trustInfo>
+	</trustInfo> -->
 	<Applications>
-		<Application Id="TrackyMouse" Executable="Tracky.Mouse.DesktopApp.exe"
-			EntryPoint="wWinMainWindows.FullTrustApplication">
-			<VisualElements DisplayName="" Description=""
+		<!-- wWinMain or Windows.FullTrustApplication? -->
+		<Application Id="TrackyMouse" Executable="tracky-mouse.exe"
+			EntryPoint="wWinMain">
+			<!-- <VisualElements DisplayName="" Description=""
 				Logo="" SmallLogo=""
 				ForegroundText="" BackgroundColor="">
 				<SplashScreen Image="" />
-			</VisualElements>
+			</VisualElements> -->
 		</Application>
 	</Applications>
 </Package>

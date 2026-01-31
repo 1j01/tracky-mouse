@@ -100,13 +100,8 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-msix',
 			config: {
-				manifestVariables: {
-					publisher: 'Isaiah Odhner'
-				},
-				windowsSignOptions: {
-					// certificateFile: 'C:\\devcert.pfx',
-					// certificatePassword: '122345'
-				}
+				appManifest: './Package.appxmanifest',
+				logLevel: 'debug',
 			}
 		},
 		{
