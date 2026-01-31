@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+	<Identity Name="IsaiahOdhner.TrackyMouse"
+		Version="2.2.0"
+		Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784" />
+	<Properties>
+		<DisplayName>Tracky Mouse</DisplayName>
+		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
+		<Logo>images/tracky-mouse-logo-512.png</Logo>
+	</Properties>
+	<Prerequisites>
+		<OSMinVersion></OSMinVersion>
+		<OSMaxVersionTested></OSMaxVersionTested>
+	</Prerequisites>
+	<Resources>
+		<Resource Language="en-US" />
+	</Resources>
+	<Capabilities>
+		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
+		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
+		<DeviceCapability Name="webcam" />
+		<!-- how do you add these things? -->
+		<!-- <Capability Name="uiAccess" /> -->
+		<!-- <Capability Name="inputInjectionBrokered" /> -->
+		<!-- <Capability Name="runFullTrust" /> ? -->
+	</Capabilities>
+	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
+	manifest? Docs are hard to navigate. -->
+	<trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+		<security>
+			<requestedPrivileges>
+				<requestedExecutionLevel
+					level="highestAvailable"
+					uiAccess="true" />
+			</requestedPrivileges>
+		</security>
+	</trustInfo>
+	<Applications>
+		<Application Id="TrackyMouse" Executable="Tracky.Mouse.DesktopApp.exe"
+			EntryPoint="wWinMainWindows.FullTrustApplication">
+			<VisualElements DisplayName="" Description=""
+				Logo="" SmallLogo=""
+				ForegroundText="" BackgroundColor="">
+				<SplashScreen Image="" />
+			</VisualElements>
+		</Application>
+	</Applications>
+</Package>

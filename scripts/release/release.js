@@ -88,6 +88,10 @@ async function release() {
 	process.env.VERSION = version;
 	require("./update-dl-links.js");
 
+	// Update version number in MSIX package manifest:
+	process.env.VERSION = version;
+	require("./update-msix-package-version.js");
+
 	// That's all the changes for the commit.
 	// Add them before the lengthy build process in case one gets tempted to edit files while it's building
 	run("git add .");
