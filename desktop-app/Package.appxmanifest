@@ -38,13 +38,19 @@
 	</trustInfo> -->
 	<Applications>
 		<!-- wWinMain or Windows.FullTrustApplication? -->
-		<Application Id="TrackyMouse" Executable="tracky-mouse.exe"
+		<Application
+			Id="TrackyMouse"
+			Executable="tracky-mouse.exe"
 			EntryPoint="wWinMain">
-			<!-- <VisualElements DisplayName="" Description=""
-				Logo="" SmallLogo=""
-				ForegroundText="" BackgroundColor="">
-				<SplashScreen Image="" />
-			</VisualElements> -->
+			<VisualElements
+				DisplayName="Tracky Mouse"
+				Description="Control your computer hands-free."
+				Logo="images/tracky-mouse-logo-512.png"
+				SmallLogo="images/tracky-mouse-logo-512.png"
+				ForegroundText="dark"
+				BackgroundColor="#FFFF00">
+				<SplashScreen Image="images/tracky-mouse-logo-512.png" />
+			</VisualElements>
 		</Application>
 	</Applications>
 </Package>
