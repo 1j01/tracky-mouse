@@ -59,4 +59,4 @@ jobs:
           client-id: ${{ secrets.AZURE_AD_APPLICATION_CLIENT_ID }}
           client-secret: ${{ secrets.AZURE_AD_APPLICATION_SECRET }}
           app-id: ${{ secrets.STORE_APP_ID }}
-          package-path: "${{ github.workspace }}/desltp-app/otu/make/wasdfsdf.msix"
+          package-path: "${{ github.workspace }}/desktop-app/out/make/*.msix" # TODO: find exact path; * might not work
