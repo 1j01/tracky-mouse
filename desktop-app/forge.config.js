@@ -47,8 +47,20 @@ module.exports = {
 
 			log("🔧 Fixing broken symlinks in packaged app...");
 
-			const { lstat, readlink, unlink, cp, readdir } = require('fs').promises;
+			const { lstat, access, readlink, unlink, cp, readdir } = require('fs').promises;
 			const { join, resolve, relative, dirname } = require('path');
+			async function exists(path) {
+				try {
+					await access(path);
+					return true;
+				} catch {
+					return false;
+				}
+			}
+			function isWithin(outer, inner) {
+				const relPath = relative(outer, inner);
+				return relPath.split(/[/\\]+/).every(part => part !== '..') && relPath !== '';
+			}
 
 			async function fixBrokenSymlinks(dir) {
 				const entries = await readdir(dir, { withFileTypes: true });
@@ -61,17 +73,19 @@ module.exports = {
 						const linkTarget = await readlink(fullPath);
 						const resolvedTarget = resolve(dirname(fullPath), linkTarget);
 						log(`Symlink points to '${linkTarget}' which resolves to '${resolvedTarget}'`);
-						try {
-							await lstat(resolvedTarget);
+						const targetExists = await exists(resolvedTarget);
+						if (targetExists && isWithin(buildPath, resolvedTarget)) {
 							log(`Symlink is valid: '${fullPath}' -> '${linkTarget}'`);
-						} catch (error) {
-							if (error.code !== 'ENOENT') {
-								throw error;
+						} else {
+							if (targetExists) {
+								log(`Symlink target exists but is outside build path, and so would not be portable or reliable.`);
+							} else {
+								log(`Symlink target does not exist.`);
 							}
 							await unlink(fullPath);
 							const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
 							await cp(sourcePath, fullPath, { recursive: true, dereference: true });
-							log(`Replaced broken symlink with copy of: '${sourcePath}'`);
+							log(`Replaced invalid symlink with copy of: '${sourcePath}'`);
 							const stat = await lstat(fullPath);
 							log('After fix, type is:', stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : stat.isSymbolicLink() ? 'symlink' : 'other');
 						}
