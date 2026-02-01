@@ -2,8 +2,8 @@
 <Package
 	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
 	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
 	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-	IgnorableNamespaces="uap rescap"
 >
 	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
 	<Identity Name="IsaiahOdhner.TrackyMouse"
@@ -12,13 +12,16 @@
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>
 		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
+		<Description>Control your computer hands-free.</Description>
 		<Logo>app/resources/app/images/tracky-mouse-logo-512.png</Logo>
 	</Properties>
-	<Prerequisites>
+	<Dependencies>
 		<!-- TODO: real numbers -->
-		<OSMinVersion>6.2</OSMinVersion>
-		<OSMaxVersionTested>6.2</OSMaxVersionTested>
-	</Prerequisites>
+		<TargetDeviceFamily
+			Name="Windows.Desktop"
+			MinVersion="10.0.19041.0"
+			MaxVersionTested="10.0.19041.0" />
+	</Dependencies>
 	<Resources>
 		<Resource Language="en-US" />
 	</Resources>
@@ -47,8 +50,15 @@
 		<Application
 			Id="TrackyMouse"
 			Executable="app/tracky-mouse.exe"
-			EntryPoint="Windows.FullTrustApplication">
-			<VisualElements
+			uap10:RuntimeBehavior="packagedClassicApp"
+			uap10:TrustLevel="mediumIL">
+			<uap:VisualElements
+				DisplayName="Tracky Mouse"
+				Description="Control your computer hands-free."
+				Square150x150Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				Square44x44Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				BackgroundColor="#FFFF00" />
+			<!-- <VisualElements
 				DisplayName="Tracky Mouse"
 				Description="Control your computer hands-free."
 				Logo="app/resources/app/images/tracky-mouse-logo-512.png"
@@ -56,7 +66,7 @@
 				ForegroundText="dark"
 				BackgroundColor="#FFFF00">
 				<SplashScreen Image="app/resources/app/images/tracky-mouse-logo-512.png" />
-			</VisualElements>
+			</VisualElements> -->
 		</Application>
 	</Applications>
 </Package>
