@@ -7,7 +7,7 @@
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>
 		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
-		<Logo>images/tracky-mouse-logo-512.png</Logo>
+		<Logo>app/resources/app/images/tracky-mouse-logo-512.png</Logo>
 	</Properties>
 	<Prerequisites>
 		<!-- TODO: real numbers -->
@@ -47,11 +47,11 @@
 			<VisualElements
 				DisplayName="Tracky Mouse"
 				Description="Control your computer hands-free."
-				Logo="images/tracky-mouse-logo-512.png"
-				SmallLogo="images/tracky-mouse-logo-512.png"
+				Logo="app/resources/app/images/tracky-mouse-logo-512.png"
+				SmallLogo="app/resources/app/images/tracky-mouse-logo-512.png"
 				ForegroundText="dark"
 				BackgroundColor="#FFFF00">
-				<SplashScreen Image="images/tracky-mouse-logo-512.png" />
+				<SplashScreen Image="app/resources/app/images/tracky-mouse-logo-512.png" />
 			</VisualElements>
 		</Application>
 	</Applications>
