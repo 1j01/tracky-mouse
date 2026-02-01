@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+<Package
+	xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+	xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+	IgnorableNamespaces="uap rescap"
+>
 	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
 	<Identity Name="IsaiahOdhner.TrackyMouse"
 		Version="2.2.0.0"
@@ -21,10 +26,9 @@
 		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
 		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
 		<DeviceCapability Name="webcam" />
-		<!-- how do you add these things? -->
-		<!-- <Capability Name="uiAccess" /> -->
-		<!-- <Capability Name="inputInjectionBrokered" /> -->
-		<!-- <Capability Name="runFullTrust" /> ? -->
+		<rescap:Capability Name="runFullTrust" />
+		<rescap:Capability Name="uiAccess" />
+		<rescap:Capability Name="inputInjectionBrokered" />
 	</Capabilities>
 	<!-- https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-securityoverview -->
 	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
@@ -43,7 +47,7 @@
 		<Application
 			Id="TrackyMouse"
 			Executable="app/tracky-mouse.exe"
-			EntryPoint="wWinMain">
+			EntryPoint="Windows.FullTrustApplication">
 			<VisualElements
 				DisplayName="Tracky Mouse"
 				Description="Control your computer hands-free."

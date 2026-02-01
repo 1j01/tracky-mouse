@@ -68,6 +68,7 @@
 		"pointerenter",
 		"pointerleave",
 		"pointermove",
+		"rescap",
 		"retarget",
 		"retargeted",
 		"sandboxing",
