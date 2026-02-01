@@ -51,34 +51,47 @@ module.exports = {
 			const { join, resolve, relative, dirname } = require('path');
 
 			async function fixBrokenSymlinks(dir) {
-				const entries = await readdir(dir, { withFileTypes: true });
-
-				for (const entry of entries) {
-					const fullPath = join(dir, entry.name);
-
-					if (entry.isSymbolicLink()) {
-						log(`Found symlink: '${fullPath}'`);
-						const linkTarget = await readlink(fullPath);
-						const resolvedTarget = resolve(dirname(fullPath), linkTarget);
-						log(`Symlink points to '${linkTarget}' which resolves to '${resolvedTarget}'`);
-						try {
-							await lstat(resolvedTarget);
-							log(`Symlink is valid: '${fullPath}' -> '${linkTarget}'`);
-						} catch (error) {
-							if (error.code !== 'ENOENT') {
-								throw error;
-							}
-							await unlink(fullPath);
-							const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
-							await cp(sourcePath, fullPath, { recursive: true, dereference: true });
-							log(`Replaced broken symlink with copy of: '${sourcePath}'`);
-							const stat = await lstat(fullPath);
-							log('After fix, type is:', stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : stat.isSymbolicLink() ? 'symlink' : 'other');
-						}
-					} else if (entry.isDirectory()) {
-						await fixBrokenSymlinks(fullPath);
-					}
+				const { cp, rm } = require('fs').promises;
+				const { join, dirname } = require('path');
+				// TODO: find all symlinked modules instead of hardcoding, and handle scoped packages
+				const modulesToCopy = ['tracky-mouse'];
+				for (const moduleName of modulesToCopy) {
+					const moduleDir = dirname(require.resolve(join(moduleName, 'package.json')));
+					const destPath = join(buildPath, 'node_modules', moduleName);
+					// Delete broken symlink
+					await rm(destPath, { recursive: true, force: true });
+					// Copy module folder
+					await cp(moduleDir, destPath, { recursive: true });
 				}
+
+				// const entries = await readdir(dir, { withFileTypes: true });
+
+				// for (const entry of entries) {
+				// 	const fullPath = join(dir, entry.name);
+
+				// 	if (entry.isSymbolicLink()) {
+				// 		log(`Found symlink: '${fullPath}'`);
+				// 		const linkTarget = await readlink(fullPath);
+				// 		const resolvedTarget = resolve(dirname(fullPath), linkTarget);
+				// 		log(`Symlink points to '${linkTarget}' which resolves to '${resolvedTarget}'`);
+				// 		try {
+				// 			await lstat(resolvedTarget);
+				// 			log(`Symlink is valid: '${fullPath}' -> '${linkTarget}'`);
+				// 		} catch (error) {
+				// 			if (error.code !== 'ENOENT') {
+				// 				throw error;
+				// 			}
+				// 			await unlink(fullPath);
+				// 			const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
+				// 			await cp(sourcePath, fullPath, { recursive: true, dereference: true });
+				// 			log(`Replaced broken symlink with copy of: '${sourcePath}'`);
+				// 			const stat = await lstat(fullPath);
+				// 			log('After fix, type is:', stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : stat.isSymbolicLink() ? 'symlink' : 'other');
+				// 		}
+				// 	} else if (entry.isDirectory()) {
+				// 		await fixBrokenSymlinks(fullPath);
+				// 	}
+				// }
 			}
 
 			await fixBrokenSymlinks(buildPath);
