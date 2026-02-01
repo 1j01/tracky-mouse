@@ -26,6 +26,7 @@
 		<!-- <Capability Name="inputInjectionBrokered" /> -->
 		<!-- <Capability Name="runFullTrust" /> ? -->
 	</Capabilities>
+	<!-- https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-securityoverview -->
 	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
 	manifest? Docs are hard to navigate. -->
 	<!-- <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
@@ -55,3 +56,5 @@
 		</Application>
 	</Applications>
 </Package>
+<!-- TODO:
+https://learn.microsoft.com/en-us/windows/win32/winauto/ease-of-access---assistive-technology-registration -->
