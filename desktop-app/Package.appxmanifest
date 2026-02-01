@@ -16,22 +16,23 @@
 		<Logo>app/resources/app/images/tracky-mouse-logo-512.png</Logo>
 	</Properties>
 	<Dependencies>
-		<!-- TODO: real numbers -->
+		<!-- TODO: real numbers... electron-windows-msix seems to treat
+		 the min version as an EXACT VERSION OF THE SDK THAT MUST EXIST -->
 		<TargetDeviceFamily
 			Name="Windows.Desktop"
-			MinVersion="10.0.0.0"
-			MaxVersionTested="10.0.0.0" />
+			MinVersion="10.0.26100.0"
+			MaxVersionTested="10.0.26100.0" />
 	</Dependencies>
 	<Resources>
 		<Resource Language="en-US" />
 	</Resources>
 	<Capabilities>
-		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
-		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
-		<DeviceCapability Name="webcam" />
 		<rescap:Capability Name="runFullTrust" />
 		<rescap:Capability Name="uiAccess" />
 		<rescap:Capability Name="inputInjectionBrokered" />
+		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
+		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
+		<DeviceCapability Name="webcam" />
 	</Capabilities>
 	<!-- https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-securityoverview -->
 	<!-- These are lowercase? Is this case-insensitive or is this from a different sort of app
