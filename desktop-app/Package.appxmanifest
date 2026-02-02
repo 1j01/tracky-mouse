@@ -31,7 +31,9 @@
 		<rescap:Capability Name="runFullTrust" />
 		<rescap:Capability Name="uiAccess" />
 		<rescap:Capability Name="inputInjectionBrokered" />
-		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
+		<!-- for Sentry error reporting (and update checking, although Windows Store should handle
+		updates...) -->
+		<Capability Name="internetClient" />
 		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
 		<DeviceCapability Name="webcam" />
 	</Capabilities>

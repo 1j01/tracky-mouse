@@ -2,10 +2,10 @@
 // Note: Don't require any third-party (or own) modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 // I'm making an exception for Sentry, since it could help track down installation issues.
-const Sentry = require("@sentry/electron/main");
-Sentry.init({
-	dsn: "https://d02619b2adf1ec1ea0c6219e5cbb6f0d@o4507120033660928.ingest.us.sentry.io/4510658749202432",
-});
+// const Sentry = require("@sentry/electron/main");
+// Sentry.init({
+// 	dsn: "https://d02619b2adf1ec1ea0c6219e5cbb6f0d@o4507120033660928.ingest.us.sentry.io/4510658749202432",
+// });
 
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
@@ -30,7 +30,6 @@ if (process.platform === 'win32') {
 
 const { parser } = require('./cli.js');
 const { getVersion } = require('./version.js');
-const { checkForUpdates } = require('./auto-updater.js');
 
 // Compare command line arguments:
 // - unpackaged (in development):      "path/to/electron.exe" "." "maybe/a/file.png"
@@ -343,7 +342,14 @@ const createWindow = () => {
 	});
 
 	// and load the html page of the app.
-	appWindow.loadFile(`src/electron-app.html`);
+	if (dialog.showMessageBoxSync(appWindow, {
+		type: 'question',
+		buttons: ['Load HTML file', 'Do nothing'],
+		title: 'Tracky Mouse',
+		message: 'Load the app window HTML file?',
+	}) === 0) {
+		appWindow.loadFile(`src/electron-app.html`);
+	}
 
 	// Toggle the DevTools with F12
 	appWindow.webContents.on("before-input-event", (_e, input) => {
@@ -584,7 +590,7 @@ const createWindow = () => {
 	screenOverlayWindow.setIgnoreMouseEvents(true);
 	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
-	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
+	// screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
 	screenOverlayWindow.on('close', (event) => {
 		// If Windows Explorer is restarted while the app is running,
 		// the Screen Overlay Window can appear in the taskbar, and become closable.
@@ -627,6 +633,13 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+	// Disable network access for the app to avoid "Location" permission prompts
+	// in the Windows Store / MSIX packaged app. (doesn't seem to help!)
+	const { session } = require('electron');
+	session.defaultSession.enableNetworkEmulation({
+		offline: true,
+	});
+
 	try {
 		await loadSettings();
 	} catch (error) {
@@ -638,16 +651,31 @@ app.on('ready', async () => {
 	}
 	createWindow();
 
-	if (activeSettings.checkForUpdates !== false) {
-		checkForUpdates({
-			currentVersion: app.getVersion(),
-			skippedVersion: activeSettings.skippedUpdateVersion,
-			pleaseSkipThisVersion: (version) => {
-				activeSettings.skippedUpdateVersion = version;
-				saveSettings();
-			}
-		});
-	}
+	// await dialog.showMessageBox(appWindow, {
+	// 	type: 'info',
+	// 	buttons: ['OK'],
+	// 	title: 'Tracky Mouse',
+	// 	message: 'process.windowsStore is ' + process.windowsStore,
+	// });
+
+	// if (activeSettings.checkForUpdates !== false && !process.windowsStore) {
+	// 	const { checkForUpdates } = require('./auto-updater.js');
+	// 	checkForUpdates({
+	// 		currentVersion: app.getVersion(),
+	// 		skippedVersion: activeSettings.skippedUpdateVersion,
+	// 		pleaseSkipThisVersion: (version) => {
+	// 			activeSettings.skippedUpdateVersion = version;
+	// 			saveSettings();
+	// 		}
+	// 	});
+	// }
+	// await dialog.showMessageBox(appWindow, {
+	// 	type: 'info',
+	// 	buttons: ['OK'],
+	// 	title: 'Tracky Mouse',
+	// 	message: 'second dialog after update check',
+	// });
+
 
 	updateScreenScaleFactor();
 	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {
