@@ -1,17 +1,8 @@
 :root {
-	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+	font-family: sans-serif;
 	font-size: 16px;
-	line-height: 24px;
-	font-weight: 400;
-
 	color-scheme: dark;
 	color: rgba(255, 255, 255, 0.87);
-
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -36,9 +27,4 @@ canvas {
 			rgba(79, 166, 167, 0.849) 8%,
 			rgba(61, 79, 94, 0.885) 40%,
 			rgb(17, 19, 23));
-}
-
-h1 {
-	font-size: 3.2em;
-	line-height: 1.1;
 }
