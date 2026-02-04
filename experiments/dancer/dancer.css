@@ -1,0 +1,44 @@
+:root {
+	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+
+	color-scheme: dark;
+	color: rgba(255, 255, 255, 0.87);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	display: flex;
+	place-items: center;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+canvas {
+	height: 100%;
+	width: 100%;
+	outline: none;
+
+	background: rgb(34, 193, 195);
+	background: linear-gradient(0deg,
+			rgb(8, 163, 166) 0%,
+			rgba(79, 166, 167, 0.849) 8%,
+			rgba(61, 79, 94, 0.885) 40%,
+			rgb(17, 19, 23));
+}
+
+h1 {
+	font-size: 3.2em;
+	line-height: 1.1;
+}

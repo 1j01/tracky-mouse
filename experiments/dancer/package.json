@@ -1,0 +1,57 @@
+{
+	"name": "dancer",
+	"version": "2.2.0",
+	"description": "Dasher-like text entry",
+	"license": "MIT",
+	"author": {
+		"name": "Isaiah Odhner",
+		"email": "isaiahodhner@gmail.com",
+		"url": "https://isaiahodhner.io"
+	},
+	"keywords": [
+		"head-tracker",
+		"head-tracking",
+		"face-tracker",
+		"face-tracking",
+		"headmouse",
+		"facial-mouse",
+		"eye-tracker",
+		"eye-tracking",
+		"eye-gaze",
+		"accessibility",
+		"keyboard",
+		"typing",
+		"text-entry",
+		"input-method",
+		"hands-free",
+		"handsfree"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/1j01/tracky-mouse.git"
+	},
+	"bugs": {
+		"url": "https://github.com/1j01/tracky-mouse/issues"
+	},
+	"homepage": "https://trackymouse.js.org/",
+	"main": "dancer.js",
+	"browser": "dancer.js",
+	"files": [
+		"dancer.js",
+		"dancer.css",
+		"lib/"
+	],
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"vite": "^7.3.1"
+	},
+	"dependencies": {
+		"lil-gui": "^0.21.0",
+		"stats.js": "^0.17.0",
+		"three": "^0.182.0"
+	}
+}
