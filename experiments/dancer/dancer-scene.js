@@ -15,6 +15,7 @@ import {
 	Scene,
 	WebGLRenderer
 } from 'three';
+import { DancerCore } from './dancer-core.js';
 
 /** @type {HTMLCanvasElement} */
 let canvas;
@@ -95,6 +96,9 @@ function init() {
 
 		scene.add(cube);
 		scene.add(plane);
+
+		const core = new DancerCore();
+		scene.add(core.group);
 	}
 
 	// ===== 🎥 CAMERA =====
