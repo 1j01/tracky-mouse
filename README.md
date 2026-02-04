@@ -32,8 +32,8 @@ Settings could be shared between all three products (with import/export, which i
 <!-- Note: the Linux versions do not actually exist for 2.2.0; but these will be replaced automatically with the next release. -->
 
 - [⬇️ Download for Windows](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe) and run the installer.
-- [⬇️ Download for Linux (.deb)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse_2.2.0_amd64.deb)
-- [⬇️ Download for Linux (.rpm)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm)
+- [⬇️ Download for Linux (.deb)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse_2.2.0_amd64.deb) (COMING SOON)
+- [⬇️ Download for Linux (.rpm)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm) (COMING SOON)
 
 Pre-built binaries are not yet available for macOS, due to a couple issues: [camera permissions](https://github.com/1j01/tracky-mouse/issues/119), and [the more powerful clicking modes not clicking properly](https://github.com/1j01/tracky-mouse/issues/102).
 You *can* still run the app on macOS. See [Development Setup](#development-setup).
