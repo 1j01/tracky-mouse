@@ -5,6 +5,8 @@ class DancerTile {
 
 	depth = 0;
 
+	box = new THREE.Box2();
+
 	plane = new THREE.PlaneGeometry();
 
 	/** @type {THREE.Mesh} */
@@ -39,7 +41,8 @@ class DancerTile {
 export class DancerCore {
 	text = '';
 
-	alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ',.!? ".split('');
+	// alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ',.!? ".split('');
+	alphabet = "ABCD".split('');
 
 	root = new DancerTile('', null, this);
 
@@ -58,6 +61,7 @@ export class DancerCore {
 	constructor() {
 		this.generateFontTexture();
 
+		this.root.box = new THREE.Box2(new THREE.Vector2(-1, -1), new THREE.Vector2(1, 1));
 		this.group.add(this.root.mesh);
 		this.populate(this.root);
 	}
@@ -69,6 +73,8 @@ export class DancerCore {
 		this.fontCanvas.width = this.alphabet.length * charWidth;
 		this.fontCanvas.height = charHeight;
 		const ctx = this.fontCanvas.getContext('2d');
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, this.fontCanvas.width, this.fontCanvas.height);
 		ctx.fillStyle = 'white';
 		ctx.font = '48px sans-serif';
 		ctx.textBaseline = 'top';
@@ -84,9 +90,32 @@ export class DancerCore {
 	populate(parentTile) {
 		if (parentTile.depth >= 3) return;
 
-		for (const symbol of this.alphabet) {
+		for (let i = 0; i < this.alphabet.length; i++) {
+			const symbol = this.alphabet[i];
+
 			const childTile = new DancerTile(symbol, parentTile, this);
 			childTile.depth = parentTile.depth + 1;
+			const childSize = (parentTile.box.max.x - parentTile.box.min.x) / this.alphabet.length;
+			childTile.box = new THREE.Box2(
+				new THREE.Vector2(
+					parentTile.box.max.x,
+					parentTile.box.min.y + childSize * i
+				),
+				new THREE.Vector2(
+					parentTile.box.max.x + childSize,
+					parentTile.box.min.y + childSize * (i + 1),
+				)
+			);
+			childTile.mesh.position.set(
+				(childTile.box.min.x + childTile.box.max.x) / 2,
+				(childTile.box.min.y + childTile.box.max.y) / 2,
+				0,
+			);
+			childTile.mesh.scale.set(
+				(childTile.box.max.x - childTile.box.min.x),
+				(childTile.box.max.y - childTile.box.min.y),
+				1
+			);
 			parentTile.children.push(childTile);
 			this.group.add(childTile.mesh);
 			this.populate(childTile);
