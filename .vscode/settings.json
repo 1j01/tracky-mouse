@@ -41,6 +41,8 @@
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always",
 	},
+	"javascript.format.semicolons": "insert",
+	"typescript.format.semicolons": "insert",
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"html.format.unformattedContentDelimiter": "<!--no_format-->",
