@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Now available for Linux!
-  - For Ubuntu, Mint, Kali, elementary OS, or Pop!_OS, download the `.deb` file.
-  - For Fedora, RHEL, or openSUSE, download the `.rpm` file.
+  - For most Linux distributions, you can download the `.AppImage` file, which should work without installation.
+    - You may need to make it executable first by right-clicking the file, selecting "Properties", going to the "Permissions" tab, and checking "Allow this file to run as a program" or "Is executable" or similar (depending on your file manager). Then you can double-click it to run it. See [How to run an AppImage](https://discourse.appimage.org/t/how-to-run-an-appimage/80) for more details.
+  - For Ubuntu, Mint, Kali, elementary OS, or Pop!_OS, the `.deb` package can also be used.
+  - For Fedora, RHEL, or openSUSE, the `.rpm` package can also be used.
 - Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version.
 
 ### Fixed

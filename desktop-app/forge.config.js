@@ -1,4 +1,8 @@
 const os = require('os');
+
+/** For maker-deb, this has to match name from package.json of the desktop app */
+const executableName = os.platform() === "linux" ? "tracky-mouse-electron" : "tracky-mouse";
+
 const sharedDebRpmOptions = {
 	name: "tracky-mouse",
 	productName: "Tracky Mouse",
@@ -15,12 +19,13 @@ const sharedDebRpmOptions = {
 		// "application/x-tracky-mouse",
 	],
 };
+
 /** @type {import('@electron-forge/shared-types').ForgeConfig} */
 module.exports = {
 	packagerConfig: {
 		icon: "./images/tracky-mouse-logo",
 		name: "Tracky Mouse",
-		executableName: os.platform() === "linux" ? "tracky-mouse-electron" : "tracky-mouse",
+		executableName,
 		appBundleId: "io.isaiahodhner.tracky-mouse",
 		appCategoryType: "public.app-category.utilities",
 		appCopyright: "© 2024 Isaiah Odhner",
@@ -103,7 +108,7 @@ module.exports = {
 			name: "@electron-forge/maker-squirrel",
 			config: {
 				name: "tracky-mouse",
-				exe: "tracky-mouse.exe",
+				exe: `${executableName}.exe`,
 				title: "Tracky Mouse",
 				description: "Hands-free mouse control",
 				iconUrl: "https://raw.githubusercontent.com/1j01/tracky-mouse/4f22321a3f65ecf66d0a9ed431a24a76d547ea4c/images/tracky-mouse-logo-512.png",
@@ -142,7 +147,36 @@ module.exports = {
 					license: "MIT",
 				},
 			},
-		}
+		},
+		{
+			name: "@reforged/maker-appimage",
+			config: {
+				options: {
+					// No productDescription field?
+					// There is an option to a desktopFile...
+					bin: executableName,
+					name: "tracky-mouse",
+					productName: "Tracky Mouse",
+					genericName: "Facial Mouse",
+					homepage: "https://trackymouse.js.org/",
+					icon: "images/tracky-mouse-logo-512.png",
+					categories: [
+						"Utility",
+						"Accessibility",
+					],
+					keywords: [
+						"mouse",
+						"cursor",
+						"pointer",
+						"pointing",
+						"hands-free",
+						"accessibility",
+						"facial recognition",
+						"head tracking",
+					],
+				}
+			}
+		},
 	],
 	publishers: [
 		{

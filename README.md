@@ -32,6 +32,8 @@ Settings could be shared between all three products (with import/export, which i
 <!-- Note: the Linux versions do not actually exist for 2.2.0; but these will be replaced automatically with the next release. -->
 
 - [⬇️ Download for Windows](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe) and run the installer.
+- [⬇️ Download for Linux (.AppImage)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0-x64.AppImage) (COMING SOON)
+  - You may need to make it executable first by right-clicking the file, selecting "Properties", going to the "Permissions" tab, and checking "Allow this file to run as a program" or "Is executable" or similar (depending on your file manager). Then you can double-click it to run it. See [How to run an AppImage](https://discourse.appimage.org/t/how-to-run-an-appimage/80) for more details.
 - [⬇️ Download for Linux (.deb)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse_2.2.0_amd64.deb) (COMING SOON)
 - [⬇️ Download for Linux (.rpm)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm) (COMING SOON)
 
