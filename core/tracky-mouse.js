@@ -1301,6 +1301,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		right: false,
 		middle: false,
 	};
+	var mouseButtonUntilMouthCloses = -1;
 	var lastMouseDownTime = -Infinity;
 	var mouseNeedsInitPos = true;
 
@@ -2269,8 +2270,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							const thresholdLow = 0.15;
 							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
 							mouth.active = mouth.thresholdMet;
-							// Preserve mouse button state; could be simpler as a separate variable.
-							mouth.mouseButton = mouthInfo?.mouseButton ?? -1;
 							return mouth;
 						}
 
@@ -2291,6 +2290,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							}
 						}
 						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
+						// (or just hold out for a full I/O binding system)
 						if (s.clickingMode === "open-mouth") {
 							mouthInfo.used = true;
 							blinkInfo.used = true;
@@ -2302,15 +2302,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// read with one eye closed (for example).
 							if (mouthInfo.active && !prevMouthOpen) {
 								if (blinkInfo.rightEye.active) {
-									mouthInfo.mouseButton = 1;
+									mouseButtonUntilMouthCloses = 1;
 								} else if (blinkInfo.leftEye.active) {
-									mouthInfo.mouseButton = 2;
+									mouseButtonUntilMouthCloses = 2;
 								} else {
-									mouthInfo.mouseButton = 0;
+									mouseButtonUntilMouthCloses = 0;
 								}
 							}
 							if (mouthInfo.active) {
-								clickButton = mouthInfo.mouseButton;
+								clickButton = mouseButtonUntilMouthCloses;
 							}
 						}
 
