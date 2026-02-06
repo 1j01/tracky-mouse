@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- In "Open mouth to click" mode, it should no longer click if both your eyes are closed. ([issue #106](https://github.com/1j01/tracky-mouse/issues/106))
+  - Caveat: the visuals still show it as red (clicking) until you open your mouth again. It should be yellow (passive) in this case.
 - It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
 
 ### Added

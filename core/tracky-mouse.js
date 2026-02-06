@@ -2305,12 +2305,20 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									mouseButtonUntilMouthCloses = 1;
 								} else if (blinkInfo.leftEye.active) {
 									mouseButtonUntilMouthCloses = 2;
+								} else if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+									mouseButtonUntilMouthCloses = -1;
 								} else {
 									mouseButtonUntilMouthCloses = 0;
 								}
 							}
 							if (mouthInfo.active) {
 								clickButton = mouseButtonUntilMouthCloses;
+								if (clickButton === -1) {
+									// TODO: Show as unused / not clicking in visuals
+									// N.B. - can't use this because it's used by prevMouthOpen
+									// TODO: separate facial state from gesture state to avoid this conflict.
+									// mouthInfo.active = false;
+								}
 							}
 						}
 
