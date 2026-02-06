@@ -2269,11 +2269,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							const thresholdHigh = 0.25;
 							const thresholdLow = 0.15;
 							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
-							mouth.active = mouth.thresholdMet;
+							mouth.active = mouth.thresholdMet; // TODO: maybe default to false, have this only set externally in gesture handling code
 							return mouth;
 						}
 
-						const prevMouthOpen = mouthInfo?.active;
+						const prevMouthOpen = mouthInfo?.thresholdMet;
 
 						blinkInfo = detectBlinks();
 						mouthInfo = detectMouthOpen();
@@ -2300,7 +2300,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// Keep same button held if eye is opened,
 							// so you can continue to scroll a webpage without trying to
 							// read with one eye closed (for example).
-							if (mouthInfo.active && !prevMouthOpen) {
+							if (mouthInfo.thresholdMet && !prevMouthOpen) {
 								if (blinkInfo.rightEye.active) {
 									mouseButtonUntilMouthCloses = 1;
 								} else if (blinkInfo.leftEye.active) {
@@ -2311,13 +2311,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									mouseButtonUntilMouthCloses = 0;
 								}
 							}
-							if (mouthInfo.active) {
+							if (mouthInfo.thresholdMet) {
 								clickButton = mouseButtonUntilMouthCloses;
 								if (clickButton === -1) {
-									// TODO: Show as unused / not clicking in visuals
-									// N.B. - can't use this because it's used by prevMouthOpen
-									// TODO: separate facial state from gesture state to avoid this conflict.
-									// mouthInfo.active = false;
+									// Show as unused / not clicking in visuals
+									mouthInfo.active = false;
 								}
 							}
 						}
