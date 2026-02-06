@@ -2314,9 +2314,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							if (mouthInfo.thresholdMet) {
 								clickButton = mouseButtonUntilMouthCloses;
 								if (clickButton === -1) {
-									// Show as unused / not clicking in visuals
+									// Show as passive / not clicking in visuals
 									mouthInfo.active = false;
+									// TODO: show eyes as yellow too regardless of eye state?
 								}
+								// TODO: DRY mapping
+								blinkInfo.rightEye.active = clickButton === 1;
+								blinkInfo.leftEye.active = clickButton === 2;
 							}
 						}
 
