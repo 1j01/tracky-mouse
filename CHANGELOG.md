@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed slider labels overlapping when the window is narrow (like on a phone). ([issue #112](https://github.com/1j01/tracky-mouse/issues/112))
+- The settings can now be scrolled when they overflow the window. (part of [issue #78](https://github.com/1j01/tracky-mouse/issues/78))
 - It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
 
 ## [2.2.0] - 2026-01-22

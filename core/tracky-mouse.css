@@ -270,6 +270,10 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	color: rgb(135 0 191);
 }
 
+.tracky-mouse-controls {
+	overflow: auto;
+}
+
 .tracky-mouse-controls details {
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
