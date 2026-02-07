@@ -8,8 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - In "Open mouth to click" mode, it should no longer click if both your eyes are closed. ([issue #106](https://github.com/1j01/tracky-mouse/issues/106))
-- In "Open mouth to click" mode, it will now show eye visuals as red (active) when an eye is modifying a click, even after the eye is reopened. This makes it easier to see when you're doing a modified click, and to know which eye is modifying the click.
-- It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
+- In "Open mouth to click" mode, it will now show eye visuals as red (indicating it's part of an active gesture) even after an eye is reopened, if the eye is modifying a click. This makes it easier to see when you're doing a modified click, and to know which eye is modifying the click.
 
 ### Added
 - Now available for Linux!
@@ -19,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed slider labels overlapping when the window is narrow (like on a phone).
+- It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
 
 ## [2.2.0] - 2026-01-22
 
