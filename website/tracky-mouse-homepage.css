@@ -177,10 +177,10 @@ a.secondary-download-button {
 }
 
 a.secondary-download-button {
-	background-color: rgb(0, 60, 128);
-	color: white;
-	/* background-color: white;
-	color: black; */
+	/* background-color: rgb(0, 60, 128);
+	color: white; */
+	background-color: rgb(233, 233, 233);
+	color: black;
 	font-size: 0.9em;
 }
 
