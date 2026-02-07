@@ -38,7 +38,7 @@ Settings could be shared between all three products (with import/export, which i
 - [⬇️ Download for Linux (.rpm)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm) (COMING SOON)
 
 Pre-built binaries are not yet available for macOS, due to a couple issues: [camera permissions](https://github.com/1j01/tracky-mouse/issues/119), and [the more powerful clicking modes not clicking properly](https://github.com/1j01/tracky-mouse/issues/102).
-You *can* still run the app on macOS. See [Development Setup](#development-setup).
+You *can* still run the app on macOS, if you follow the [Development Setup](#development-setup) instructions.
 
 ## Usage Guide
 
