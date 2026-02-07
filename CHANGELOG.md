@@ -16,10 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - You may need to make it executable first by right-clicking the file, selecting "Properties", going to the "Permissions" tab, and checking "Allow this file to run as a program" or "Is executable" or similar (depending on your file manager). Then you can double-click it to run it. See [How to run an AppImage](https://discourse.appimage.org/t/how-to-run-an-appimage/80) for more details.
   - For Ubuntu, Mint, Kali, elementary OS, or Pop!_OS, the `.deb` package can also be used.
   - For Fedora, RHEL, or openSUSE, the `.rpm` package can also be used.
-- Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version.
+- Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version. ([issue #83](https://github.com/1j01/tracky-mouse/issues/83))
 
 ### Fixed
-- Fixed slider labels overlapping when the window is narrow (like on a phone).
+- Fixed slider labels overlapping when the window is narrow (like on a phone). ([issue #112](https://github.com/1j01/tracky-mouse/issues/112))
 - It now shows a friendlier error message when camera settings can't be shown, on platforms where ffmpeg doesn't support the `-list_devices` option.
 
 ## [2.2.0] - 2026-01-22
