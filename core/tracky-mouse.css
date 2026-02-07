@@ -108,7 +108,7 @@
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider {
 	display: inline-flex;
-	position: relative;
+	flex-direction: column;
 	margin-bottom: 18px;
 	margin-top: 5px;
 	flex: 1;
@@ -119,20 +119,16 @@
 	flex: 1;
 }
 
-.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label,
-.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
+.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-slider-labels {
 	opacity: 0.8;
-	position: absolute;
-	bottom: -12px;
 	pointer-events: none;
-}
-
-.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-min-label {
+	display: flex;
+	width: 100%;
 	left: 0;
-}
-
-.tracky-mouse-ui .tracky-mouse-labeled-slider .tracky-mouse-max-label {
 	right: 0;
+	justify-content: space-between;
+	/* If they come this close, wrap the slider label text */
+	gap: 10px;
 }
 
 .tracky-mouse-canvas-container-container {

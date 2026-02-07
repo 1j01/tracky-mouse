@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - For Fedora, RHEL, or openSUSE, download the `.rpm` file.
 - Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version.
 
+### Fixed
+- Fixed slider labels overlapping when the window is narrow (like on a phone).
+
 ## [2.2.0] - 2026-01-22
 
 ### Changed

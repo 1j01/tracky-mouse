@@ -1090,8 +1090,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				<span class="tracky-mouse-label-text">${setting.label}</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
-					<span class="tracky-mouse-min-label">${setting.labels.min}</span>
-					<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+					<span class="tracky-mouse-slider-labels">
+						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
+						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+					</span>
 				</span>
 			`;
 		} else if (setting.type === "checkbox") {
