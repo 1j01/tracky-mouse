@@ -2295,7 +2295,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
 							lastTimeWhenAnEyeWasOpen = performance.now();
 						}
-						if (performance.now() - lastTimeWhenAnEyeWasOpen > 1500) {
+						if (performance.now() - lastTimeWhenAnEyeWasOpen > 2000) {
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
