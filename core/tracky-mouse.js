@@ -1301,7 +1301,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
 	var headTiltFilters = { pitch: null, yaw: null, roll: null };
-	var lastTimeWhenAnEyeWasOpen = -Infinity;
+	var lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
 	// ## State related to switching between head trackers
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -1589,6 +1589,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
+		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
 
 		startStopButton.textContent = "Start";
 		startStopButton.setAttribute("aria-pressed", "false");
