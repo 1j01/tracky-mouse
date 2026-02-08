@@ -14,7 +14,7 @@ const path = require("path");
 // 	});
 // }
 
-const repoRoot = path.join(__dirname, '..');
+const repoRoot = path.join(__dirname, '../..');
 
 function run(command) {
 	return execSync(command, { stdio: 'inherit', cwd: repoRoot, env: process.env });
@@ -79,6 +79,10 @@ async function release() {
 		run(`npm run in-${package} -- npm version ${version} --no-git-tag-version`);
 	}
 	run(`npm version ${version} --no-git-tag-version`);
+
+	// Some of these sub-scripts check package.json version
+	// and they must see the updated version number to proceed.
+	delete require.cache[require.resolve("../../package.json")];
 
 	// Update version numbers and links in the changelog.
 	process.env.VERSION = version;
