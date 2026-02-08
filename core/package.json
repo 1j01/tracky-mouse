@@ -15,6 +15,7 @@
     "webcam",
     "head-tracker",
     "head-tracking",
+    "facial-recognition",
     "face-tracker",
     "face-tracking",
     "headmouse",
@@ -24,13 +25,15 @@
     "eye-tracking",
     "eye-gaze",
     "accessibility",
+    "assistive-technology",
     "cursor",
     "pointer",
     "pointing",
     "input-method",
     "hands-free",
     "handsfree",
-    "desktop-automation"
+    "desktop-automation",
+    "telekinesis"
   ],
   "repository": {
     "type": "git",

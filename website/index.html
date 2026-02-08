@@ -382,6 +382,75 @@
 	<script defer src="core/tracky-mouse.js"></script>
 	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
 	<script type="module" src="demo.js"></script>
+
+	<!--
+		TODO:
+			"screenshot": "https://trackymouse.js.org/images/TODO/screenshot.png",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": "https://trackymouse.js.org/search?q={search_term_string}",
+				"query-input": "required name=search_term_string"
+			},
+			"softwareRequirements": "https://trackymouse.js.org/docs/supporting/requirements",
+			"sameAs" : [
+				"https://en.wikipedia.org/wiki/Visual_Studio_Code",
+				"https://twitter.com/code",
+				"https://www.youtube.com/code",
+				"https://www.tiktok.com/@vscode",
+				"https://github.com/microsoft/vscode"
+			],
+			"operatingSystem": "Mac, Linux, Windows",
+
+			"downloadUrl": "https://trackymouse.js.org/download",
+			"If the file can be downloaded, URL to download the binary."
+			that doesn't sound quite right, but VS Code uses it for the download page.
+			"installUrl": "https://trackymouse.js.org/download",
+			"URL at which the app may be installed, if different from the URL of the item."
+			that sounds more like it's intended for a download page
+	-->
+	<script type="application/ld+json">
+		{
+			"@context" : "http://schema.org",
+			"@type" : "SoftwareApplication",
+			"name" : "Tracky Mouse",
+			"softwareVersion": "2.2.0",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"applicationCategory": "UtilitiesApplication",
+			"applicationSubCategory": "Accessibility",
+			"permissions": "Camera",
+			"datePublished": "2024-10-20",
+			"operatingSystem": "Linux, Windows",
+			"logo": "https://trackymouse.js.org/images/tracky-mouse-logo-512.png",
+			"releaseNotes": "https://github.com/1j01/tracky-mouse/releases",
+			"license": "https://github.com/1j01/tracky-mouse/blob/main/LICENSE.txt",
+			"url" : "https://trackymouse.js.org",
+			"abstract": "Hands-free computer control.",
+			"description": "Control your computer with just a webcam.",
+			"isAccessibleForFree": true,
+			"isFamilyFriendly": true,
+			"keywords": "camera mouse, mouse, camera, webcam, head tracker, head tracking, facial recognition, face tracker, face tracking, headmouse, facial mouse, facemesh, eye tracker, eye tracking, eye gaze, accessibility, assistive-technology, cursor, pointer, pointing, input method, hands-free, handsfree, desktop automation, telekinesis",
+			"author": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"publisher": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"maintainer": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"sameAs" : [
+				"https://github.com/1j01/tracky-mouse",
+				"https://www.npmjs.com/package/tracky-mouse"
+			]
+		}
+	</script>
 </body>
 
 </html>
