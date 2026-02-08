@@ -11,9 +11,11 @@ if (version !== require('../../package.json').version) {
 }
 const filesWithDownloadLinks = ["README.md", "website/index.html"];
 const releaseDownloadLinkRegex = /(https:\/\/github.com\/1j01\/tracky-mouse\/releases\/download\/)[^/]*(\/Tracky.Mouse.)[^/)'"]*(.Setup.exe)/g;
+const softwareVersionRegex = /("softwareVersion": ?")[^"]*(")/g;
 for (const file of filesWithDownloadLinks) {
 	fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
 		.replace(releaseDownloadLinkRegex, '$1v' + version + '$2' + version + '$3')
+		.replace(softwareVersionRegex, '$1' + version + '$2')
 	);
 }
 
