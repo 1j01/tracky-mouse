@@ -973,6 +973,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// description: "Automatically starts Tracky Mouse as soon as it's run.",
 				},
 				{
+					// label: "Start/stop by closing eyes for a few seconds",
+					// className: "tracky-mouse-toggle-by-closing-eyes",
+					// key: "toggleByClosingEyes",
+					label: "Close eyes to start/stop",
+					className: "tracky-mouse-close-eyes-to-toggle",
+					key: "closeEyesToToggle",
+					type: "checkbox",
+					default: false,
+					description: "If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.",
+				},
+				{
 					label: "Run at login",
 					className: "tracky-mouse-run-at-login",
 					key: "runAtLogin",
@@ -1290,6 +1301,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
 	var headTiltFilters = { pitch: null, yaw: null, roll: null };
+	var lastTimeWhenAnEyeWasOpen = -Infinity;
 	// ## State related to switching between head trackers
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -2279,6 +2291,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						blinkInfo = detectBlinks();
 						mouthInfo = detectMouthOpen();
+						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
+							lastTimeWhenAnEyeWasOpen = performance.now();
+						}
+						if (performance.now() - lastTimeWhenAnEyeWasOpen > 1500) {
+							if (s.closeEyesToToggle) {
+								paused = !paused;
+								updatePaused();
+								// TODO: handle edge cases
+								// TODO: try to keep variable names meaningful
+								lastTimeWhenAnEyeWasOpen = Infinity;
+							}
+						}
 
 						blinkInfo.used = false;
 						mouthInfo.used = false;
