@@ -13,23 +13,25 @@
 </head>
 
 <body>
-	<div class="tracky-mouse-absolute-center">
-		<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
-			<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+	<div class="tracky-mouse-hide-near-cursor">
+		<div class="tracky-mouse-absolute-center">
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
+				<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+			</div>
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
+				<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
+			</div>
 		</div>
-		<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
-			<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
-		</div>
-	</div>
-	<div id="tracky-mouse-screen-overlay-message">
-		<div class="tracky-mouse-manual-takeback-indicator">
-			<!-- Pausing temporarily for manual takeback. -->
-			<!-- Manual Takeback -->
-			<!-- Will resume in <span id="countdown">5</span> seconds. -->
-			Will resume after mouse stops moving.
-		</div>
-		<div class="tracky-mouse-no-takeback-indicator">
-			Press F9 to <span id="enable-disable">toggle</span> Tracky Mouse.
+		<div id="tracky-mouse-screen-overlay-message">
+			<div class="tracky-mouse-manual-takeback-indicator">
+				<!-- Pausing temporarily for manual takeback. -->
+				<!-- Manual Takeback -->
+				<!-- Will resume in <span id="countdown">5</span> seconds. -->
+				Will resume after mouse stops moving.
+			</div>
+			<div class="tracky-mouse-no-takeback-indicator">
+				Press F9 to <span id="enable-disable">toggle</span> Tracky Mouse.
+			</div>
 		</div>
 	</div>
 </body>

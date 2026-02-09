@@ -74,6 +74,13 @@ electronAPI.onMouseMove((_event, x, y) => {
 	// inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
 	// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
 	inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
+
+	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
+	const maskImage = `radial-gradient(circle at ${x}px ${y}px, transparent 0, transparent 50px, rgba(0, 0, 0, 0.85) 140px, rgba(0, 0, 0, 1) 200px, rgba(0, 0, 0, 1) 100%)`;
+	for (const el of hideNearCursorEls) {
+		el.style.webkitMaskImage = maskImage;
+		el.style.maskImage = maskImage;
+	}
 });
 
 let wasDwellClickerEnabled = false;
