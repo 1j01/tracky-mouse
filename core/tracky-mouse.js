@@ -973,10 +973,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// description: "Automatically starts Tracky Mouse as soon as it's run.",
 				},
 				{
-					// label: "Start/stop by closing eyes for a few seconds",
-					// className: "tracky-mouse-toggle-by-closing-eyes",
-					// key: "toggleByClosingEyes",
-					label: "Close eyes to start/stop",
+					// For "experimental" label:
+					// - I'm preferring language that doesn't assume a new build is coming soon, fixing everything
+					// - I considered adding "⚠︎" but it feels a little too alarming
+					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
+					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
+					label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
 					className: "tracky-mouse-close-eyes-to-toggle",
 					key: "closeEyesToToggle",
 					type: "checkbox",
