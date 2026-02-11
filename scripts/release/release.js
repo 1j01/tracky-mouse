@@ -17,10 +17,16 @@ const path = require("path");
 const repoRoot = path.join(__dirname, '../..');
 
 function run(command) {
+	console.log(`\n👉 Running command: ${command}\n`);
 	return execSync(command, { stdio: 'inherit', cwd: repoRoot, env: process.env });
 }
 function getOutput(command) {
+	console.log(`\n🧐 Getting output of command: ${command}\n`);
 	return execSync(command, { stdio: 'pipe', cwd: repoRoot, env: process.env }).toString();
+}
+function load(modulePath) {
+	console.log(`\n🧩 Loading module: ${modulePath}\n`);
+	require(modulePath);
 }
 
 async function release() {
@@ -69,7 +75,7 @@ async function release() {
 	// TODO: try/catch with git reset --hard for the rest of the script to make it atomic?
 
 	// Update CLI docs:
-	require("../update-cli-docs.js");
+	load("../update-cli-docs.js");
 
 	// Bump package versions.
 	// TODO: bump also package-lock.json version numbers that reference other packages within the monorepo?
@@ -86,15 +92,15 @@ async function release() {
 
 	// Update version numbers and links in the changelog.
 	process.env.VERSION = version;
-	require("./bump-changelog.js");
+	load("./bump-changelog.js");
 
 	// Update download links to point to the new version:
 	process.env.VERSION = version;
-	require("./update-dl-links.js");
+	load("./update-dl-links.js");
 
 	// Update version number in MSIX package manifest:
 	process.env.VERSION = version;
-	require("./update-msix-package-version.js");
+	load("./update-msix-package-version.js");
 
 	// That's all the changes for the commit.
 	// Add them before the lengthy build process in case one gets tempted to edit files while it's building
