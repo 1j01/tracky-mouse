@@ -1,4 +1,5 @@
 const os = require('os');
+const fs = require('fs');
 
 /** For maker-deb, this has to match name from package.json of the desktop app */
 const executableName = os.platform() === "linux" ? "tracky-mouse-electron" : "tracky-mouse";
@@ -41,6 +42,18 @@ module.exports = {
 		// https://electron.github.io/packager/main/interfaces/Options.html#darwinDarkModeSupport
 	},
 	hooks: {
+		// (The exact hook time is not necessarily important
+		// but I wanted these to be separate hooks.)
+		packageAfterCopy: async (_forgeConfig, buildPath) => {
+			// Add marker file for official releases built in CI
+			if (process.env.TRACKY_MOUSE_OFFICIAL_RELEASE) {
+				const markerPath = require('path').join(buildPath, 'official-release.txt');
+				fs.writeFileSync(markerPath, 'This file marks this build as an official release.');
+				console.log('Created official release marker:', markerPath);
+			} else {
+				console.log('Not creating official release marker since TRACKY_MOUSE_OFFICIAL_RELEASE is not set.');
+			}
+		},
 		packageAfterPrune: async (_forgeConfig, buildPath) => {
 			// Fix broken symlinks in the packaged app.
 			// This is needed due to https://github.com/electron/forge/issues/3238

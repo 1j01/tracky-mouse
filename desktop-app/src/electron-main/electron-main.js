@@ -2,13 +2,30 @@
 // Note: Don't require any third-party (or own) modules until after squirrel events are handled.
 // If anything goes wrong, it's very bad for it to go wrong during installation and uninstallation!
 // I'm making an exception for Sentry, since it could help track down installation issues.
+const path = require('path');
+const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
 const Sentry = require("@sentry/electron/main");
+let sentryEnvironment = app.isPackaged ? "packaged" : "development";
+try {
+	// Look for marker file in packaged app root
+	const markerPath = path.join(process.resourcesPath, 'app/official-release.txt');
+	if (require('fs').existsSync(markerPath)) {
+		sentryEnvironment = "production";
+	}
+} catch (error) {
+	console.error("Error checking for official release marker file:", error);
+}
 Sentry.init({
 	dsn: "https://d02619b2adf1ec1ea0c6219e5cbb6f0d@o4507120033660928.ingest.us.sentry.io/4510658749202432",
+	environment: sentryEnvironment,
 });
+// Special handling for a very broken computer of mine
+// so hopefully I can filter out the crashes that it gets
+if (process.env.IS_BAD_COMPUTER === 'true') {
+	Sentry.setTag("is_bad_computer", "true");
+}
 
-const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+
 const fs = require('fs/promises');
 const { handleStartupEvent } = require('./squirrel-update.js');
 
