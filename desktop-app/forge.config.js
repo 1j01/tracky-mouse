@@ -43,7 +43,7 @@ module.exports = {
 	hooks: {
 		packageAfterPrune: async (_forgeConfig, buildPath) => {
 			// Fix broken symlinks in the packaged app.
-			// This is needed on Ubuntu due to https://github.com/electron/forge/issues/3238
+			// This is needed due to https://github.com/electron/forge/issues/3238
 
 			const sourceAppRoot = __dirname;
 			const log = (...args) => {
@@ -52,55 +52,24 @@ module.exports = {
 
 			log("🔧 Fixing broken symlinks in packaged app...");
 
-			const { lstat, access, readlink, unlink, cp, readdir } = require('fs').promises;
-			const { join, resolve, relative, dirname } = require('path');
-			async function exists(path) {
-				try {
-					await access(path);
-					return true;
-				} catch {
-					return false;
-				}
+			const { unlink } = require('fs').promises;
+			const { dirname, join } = require('path');
+			const { execSync } = require('child_process');
+			const modulesToCopy = ['tracky-mouse'];
+			for (const moduleName of modulesToCopy) {
+				const sourcePath = dirname(require.resolve(join(moduleName, 'package.json')));
+				const destPath = join(buildPath, 'node_modules', moduleName);
+				log(`Deleting presumed broken symlink: ${destPath}`);
+				await unlink(destPath);
+				log(`Packing module: ${moduleName}`);
+				const tarballName = execSync(`npm pack ${sourcePath}`, { cwd: sourceAppRoot }).toString().trim();
+				const tarballPath = join(sourceAppRoot, tarballName);
+				log(`Created tarball: ${tarballPath}`);
+				log(`Installing tarball into ${buildPath}`);
+				execSync(`npm install --no-save ${tarballPath} --prefix ${buildPath}`);
+				log(`Removing tarball: ${tarballPath}`);
+				await unlink(tarballPath);
 			}
-			function isWithin(outer, inner) {
-				const relPath = relative(outer, inner);
-				return relPath.split(/[/\\]+/).every(part => part !== '..') && relPath !== '';
-			}
-
-			async function fixBrokenSymlinks(dir) {
-				const entries = await readdir(dir, { withFileTypes: true });
-
-				for (const entry of entries) {
-					const fullPath = join(dir, entry.name);
-
-					if (entry.isSymbolicLink()) {
-						log(`Found symlink: '${fullPath}'`);
-						const linkTarget = await readlink(fullPath);
-						const resolvedTarget = resolve(dirname(fullPath), linkTarget);
-						log(`Symlink points to '${linkTarget}' which resolves to '${resolvedTarget}'`);
-						const targetExists = await exists(resolvedTarget);
-						if (targetExists && isWithin(buildPath, resolvedTarget)) {
-							log(`Symlink is valid: '${fullPath}' -> '${linkTarget}'`);
-						} else {
-							if (targetExists) {
-								log(`Symlink target exists but is outside build path, and so would not be portable or reliable.`);
-							} else {
-								log(`Symlink target does not exist.`);
-							}
-							await unlink(fullPath);
-							const sourcePath = resolve(sourceAppRoot, relative(buildPath, fullPath));
-							await cp(sourcePath, fullPath, { recursive: true, dereference: true });
-							log(`Replaced invalid symlink with copy of: '${sourcePath}'`);
-							const stat = await lstat(fullPath);
-							log('After fix, type is:', stat.isDirectory() ? 'directory' : stat.isFile() ? 'file' : stat.isSymbolicLink() ? 'symlink' : 'other');
-						}
-					} else if (entry.isDirectory()) {
-						await fixBrokenSymlinks(fullPath);
-					}
-				}
-			}
-
-			await fixBrokenSymlinks(buildPath);
 		},
 	},
 	makers: [
