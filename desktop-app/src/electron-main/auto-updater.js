@@ -1,4 +1,7 @@
-const { dialog, shell, net } = require('electron');
+const { dialog, shell, net, app } = require('electron');
+const fs = require('fs');
+const path = require('path');
+const { execFile } = require('child_process');
 
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
@@ -81,6 +84,50 @@ function isNewer(current, latest) {
 	return false;
 }
 
+// ---------
+// AI GENERATED CODE
+// may be overly complex
+function execGit(args, options = {}) {
+	return new Promise((resolve, reject) => {
+		execFile('git', args, options, (error, stdout, stderr) => {
+			if (error) {
+				const details = stderr || stdout || error.message;
+				reject(new Error(details));
+				return;
+			}
+			resolve(stdout.trim());
+		});
+	});
+}
+
+function findGitRoot(startDir) {
+	let currentDir = startDir;
+	while (currentDir && currentDir !== path.parse(currentDir).root) {
+		const gitPath = path.join(currentDir, '.git');
+		if (fs.existsSync(gitPath)) {
+			return currentDir;
+		}
+		currentDir = path.dirname(currentDir);
+	}
+	return null;
+}
+
+async function getGitRepoRoot() {
+	const startDir = app.getAppPath();
+	const repoRoot = findGitRoot(startDir);
+	if (!repoRoot) {
+		return null;
+	}
+	await execGit(['-C', repoRoot, 'rev-parse', '--is-inside-work-tree']);
+	return repoRoot;
+}
+
+async function pullTag(repoRoot, tagName) {
+	await execGit(['-C', repoRoot, 'fetch', '--tags']);
+	await execGit(['-C', repoRoot, 'checkout', tagName]);
+}
+// ---------
+
 module.exports = {
 	checkForUpdates: ({ currentVersion, skippedVersion, pleaseSkipThisVersion }) => {
 		const request = net.request(API_URL);
@@ -113,17 +160,68 @@ module.exports = {
 						return;
 					}
 
+					let repoRoot = null;
+					try {
+						repoRoot = await getGitRepoRoot();
+					} catch (error) {
+						console.warn('Unable to detect git repo for update pull:', error);
+					}
+
+					// TODO: show release notes (release.body is in markdown format)
+					// TODO: get terminology straight
+					// I wouldn't personally call it a "git checkout", I'd just say
+					// a "git repo" or a "git clone". This is what the AI decided to call it.
+					// It's not that it's inaccurate, but I only use it as a verb,
+					// and it may be confusing since the verb action IS what we're doing here.
+					// Also "pulling a tag" a colloquial term (that I used when prompting the AI),
+					// but is it technically accurate?
+					// Also, have to think about non-technical users who may have cloned the repo
+					// out of necessity (to run on a platform without prebuilt binaries)
+					// where "pull tag" may be meaningless. Maybe just "Update" or "Update from git".
+					const buttons = repoRoot
+						? ['Pull tag', 'Remind me later', 'Skip this version']
+						: ['Download', 'Remind me later', 'Skip this version'];
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
 						title: 'Update Available',
-						message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.`,
-						buttons: ['Download', 'Remind me later', 'Skip this version'],
+						message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.` +
+							(repoRoot ? '\n\nThis looks like a git checkout, so the update can be pulled directly.' : ''),
+						buttons,
 						defaultId: 0,
 						cancelId: 1
 					});
 
 					if (buttonIndex === 0) {
-						shell.openExternal(release.html_url);
+						if (repoRoot) {
+							try {
+								// TODO: make sure there are no uncommitted changes
+								await pullTag(repoRoot, latestVersion);
+								await dialog.showMessageBox({
+									type: 'info',
+									title: 'Update Pulled',
+									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`
+								});
+								// TODO: maybe actually offer to restart the app
+								// maybe ensure that the software restarts enabled if it's currently enabled
+								// or mention whether it will end up active (depending on the setting)
+							} catch (error) {
+								// TODO: rename variable
+								const { response: fallbackIndex } = await dialog.showMessageBox({
+									type: 'error',
+									title: 'Update Pull Failed',
+									message: `Couldn't pull ${latestVersion} from git.\n\n${error.message}`,
+									buttons: ['Open download page', 'Close'],
+									defaultId: 0,
+									cancelId: 1
+								});
+								if (fallbackIndex === 0) {
+									// TODO: consider restructuring to deduplicate this
+									shell.openExternal(release.html_url);
+								}
+							}
+						} else {
+							shell.openExternal(release.html_url);
+						}
 					} else if (buttonIndex === 2) {
 						pleaseSkipThisVersion(latestVersion);
 					}
