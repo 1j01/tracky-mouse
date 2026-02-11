@@ -6,6 +6,8 @@ const { execFile } = require('child_process');
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
 
+// NOTE TO SELF: If you're expecting to see the update dialog,
+// make sure "General > Check for updates" IS ENABLED!
 const TEST_UPDATE_CHECKING = process.env.TEST_UPDATE_CHECKING === 'true';
 
 if (TEST_UPDATE_CHECKING) {
@@ -25,10 +27,19 @@ if (TEST_UPDATE_CHECKING) {
 			const owner = match[1];
 			const repo = match[2];
 
+			// Don't include v prefix so that it doesn't trigger a
+			// GitHub Actions workflow if a tag with this name is pushed.
+			// This allows for testing of the git repo update logic
+			// by manually pushing a tag to the repo from another computer.
+			// (and not fetching on the test computer, since that should be part of the tested logic)
+			// We _could_ fully avoid github for testing by adding
+			// a remote that points to a local git repo.
+			const fakeReleaseTagName = '9001-fake-release';
+
 			const mockResponse = {
 				url: `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
-				html_url: `https://github.com/${owner}/${repo}/releases/tag/v9001.0.0`,
-				tag_name: 'v9001.0.0',
+				html_url: `https://github.com/${owner}/${repo}/releases/tag/${fakeReleaseTagName}`,
+				tag_name: fakeReleaseTagName,
 				name: 'Mock Release v9001.0.0',
 				draft: false,
 				prerelease: false,
