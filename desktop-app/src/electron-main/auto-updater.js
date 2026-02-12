@@ -221,6 +221,15 @@ module.exports = {
 									checkout: "Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.",
 									install: "Failed to install dependencies for the new version after checking it out from git."
 								}[step] ?? "An error occurred while updating from git.";
+								console.error(`Error during git update at step "${step}":`, friendlyMessage, error);
+								try {
+									const Sentry = require("@sentry/electron/main");
+									Sentry.captureException(error, {
+										extra: { step, repoRoot, latestVersion, friendlyMessage }
+									});
+								} catch (sentryError) {
+									console.error("Additionally, failed to report error to Sentry:", sentryError);
+								}
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
 									title: 'Update Failed',
