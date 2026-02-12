@@ -98,9 +98,9 @@ function isNewer(current, latest) {
 // ---------
 // AI GENERATED CODE
 // may be overly complex
-function execGit(args, options = {}) {
+function exec(program, args, options = {}) {
 	return new Promise((resolve, reject) => {
-		execFile('git', args, options, (error, stdout, stderr) => {
+		execFile(program, args, options, (error, stdout, stderr) => {
 			if (error) {
 				const details = stderr || stdout || error.message;
 				reject(new Error(details));
@@ -129,7 +129,7 @@ async function getGitRepoRoot() {
 	if (!repoRoot) {
 		return null;
 	}
-	await execGit(['-C', repoRoot, 'rev-parse', '--is-inside-work-tree']);
+	await exec('git', ['-C', repoRoot, 'rev-parse', '--is-inside-work-tree']);
 	return repoRoot;
 }
 // ---------
@@ -195,11 +195,12 @@ module.exports = {
 							// TODO: make sure there are no uncommitted changes
 							let step = "fetch";
 							try {
-								await execGit(['-C', repoRoot, 'fetch', '--tags']);
+								await exec('git', ['-C', repoRoot, 'fetch', '--tags']);
 								step = "checkout";
-								await execGit(['-C', repoRoot, 'checkout', latestVersion]);
+								await exec('git', ['-C', repoRoot, 'checkout', latestVersion]);
 								// TODO: update dependencies
 								// step = "install";
+
 								await dialog.showMessageBox({
 									type: 'info',
 									title: 'Update Successful',
