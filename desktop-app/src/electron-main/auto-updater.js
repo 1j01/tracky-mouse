@@ -132,11 +132,6 @@ async function getGitRepoRoot() {
 	await execGit(['-C', repoRoot, 'rev-parse', '--is-inside-work-tree']);
 	return repoRoot;
 }
-
-async function pullTag(repoRoot, tagName) {
-	await execGit(['-C', repoRoot, 'fetch', '--tags']);
-	await execGit(['-C', repoRoot, 'checkout', tagName]);
-}
 // ---------
 
 module.exports = {
@@ -197,11 +192,14 @@ module.exports = {
 
 					if (buttonIndex === 0) {
 						if (repoRoot) {
+							// TODO: make sure there are no uncommitted changes
+							let step = "fetch";
 							try {
-								// TODO: make sure there are no uncommitted changes
-								// Probably makes sense to split `pullTag` and give more specific (friendly) error messages.
-								// (BTW "pulling a tag" isn't necessarily proper git terminology, but searching online shows others using it coloquially in the same way)
-								await pullTag(repoRoot, latestVersion);
+								await execGit(['-C', repoRoot, 'fetch', '--tags']);
+								step = "checkout";
+								await execGit(['-C', repoRoot, 'checkout', latestVersion]);
+								// TODO: update dependencies
+								// step = "install";
 								await dialog.showMessageBox({
 									type: 'info',
 									title: 'Update Successful',
@@ -212,10 +210,13 @@ module.exports = {
 								// maybe ensure that the software restarts enabled if it's currently enabled
 								// or mention whether it will end up active (depending on the setting)
 							} catch (error) {
+								const friendlyMessage = step === "fetch" ?
+									"Couldn't fetch updates from git." :
+									"Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.";
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
 									title: 'Update Failed',
-									message: `Couldn't pull ${latestVersion} from git.\n\n${error.message}`,
+									message: `${friendlyMessage}\n\n${error.message}`,
 									buttons: ['Open download page', 'Close'],
 									defaultId: 0,
 									cancelId: 1
