@@ -192,7 +192,6 @@ module.exports = {
 
 					if (buttonIndex === 0) {
 						if (repoRoot) {
-							// TODO: make sure there are no uncommitted changes
 							let step = "fetch";
 							try {
 								await exec('git', ['-C', repoRoot, 'fetch', '--tags']);
