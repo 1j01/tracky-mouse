@@ -179,24 +179,17 @@ module.exports = {
 					}
 
 					// TODO: show release notes (release.body is in markdown format)
-					// TODO: get terminology straight
-					// I wouldn't personally call it a "git checkout", I'd just say
-					// a "git repo" or a "git clone". This is what the AI decided to call it.
-					// It's not that it's inaccurate, but I only use it as a verb,
-					// and it may be confusing since the verb action IS what we're doing here.
-					// Also "pulling a tag" a colloquial term (that I used when prompting the AI),
-					// but is it technically accurate?
-					// Also, have to think about non-technical users who may have cloned the repo
-					// out of necessity (to run on a platform without prebuilt binaries)
-					// where "pull tag" may be meaningless. Maybe just "Update" or "Update from git".
+
+					// Wording options: "Update Git Repo", "Update via Git", "Update from Git", or just "Update"?
+					// (formerly "Pull Tag")
 					const buttons = repoRoot
-						? ['Pull tag', 'Remind me later', 'Skip this version']
+						? ['Update from Git', 'Remind me later', 'Skip this version']
 						: ['Download', 'Remind me later', 'Skip this version'];
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
 						title: 'Update Available',
 						message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.` +
-							(repoRoot ? '\n\nThis looks like a git checkout, so the update can be pulled directly.' : ''),
+							(repoRoot ? '\n\nSince this is a git repository, the update can be pulled directly.' : ''),
 						buttons,
 						defaultId: 0,
 						cancelId: 1
@@ -206,26 +199,27 @@ module.exports = {
 						if (repoRoot) {
 							try {
 								// TODO: make sure there are no uncommitted changes
+								// Probably makes sense to split `pullTag` and give more specific (friendly) error messages.
+								// (BTW "pulling a tag" isn't necessarily proper git terminology, but searching online shows others using it coloquially in the same way)
 								await pullTag(repoRoot, latestVersion);
 								await dialog.showMessageBox({
 									type: 'info',
-									title: 'Update Pulled',
+									title: 'Update Successful',
 									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`
 								});
 								// TODO: maybe actually offer to restart the app
 								// maybe ensure that the software restarts enabled if it's currently enabled
 								// or mention whether it will end up active (depending on the setting)
 							} catch (error) {
-								// TODO: rename variable
-								const { response: fallbackIndex } = await dialog.showMessageBox({
+								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
-									title: 'Update Pull Failed',
+									title: 'Update Failed',
 									message: `Couldn't pull ${latestVersion} from git.\n\n${error.message}`,
 									buttons: ['Open download page', 'Close'],
 									defaultId: 0,
 									cancelId: 1
 								});
-								if (fallbackIndex === 0) {
+								if (fallbackButtonIndex === 0) {
 									// TODO: consider restructuring to deduplicate this
 									shell.openExternal(release.html_url);
 								}
