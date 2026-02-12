@@ -198,8 +198,8 @@ module.exports = {
 								await exec('git', ['-C', repoRoot, 'fetch', '--tags']);
 								step = "checkout";
 								await exec('git', ['-C', repoRoot, 'checkout', latestVersion]);
-								// TODO: update dependencies
-								// step = "install";
+								step = "install";
+								await exec('npm', ['install'], { cwd: path.join(repoRoot, "desktop-app") });
 
 								await dialog.showMessageBox({
 									type: 'info',
@@ -211,9 +211,11 @@ module.exports = {
 								// maybe ensure that the software restarts enabled if it's currently enabled
 								// or mention whether it will end up active (depending on the setting)
 							} catch (error) {
-								const friendlyMessage = step === "fetch" ?
-									"Couldn't fetch updates from git." :
-									"Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.";
+								const friendlyMessage = {
+									fetch: "Couldn't fetch updates from git.",
+									checkout: "Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.",
+									install: "Failed to install dependencies for the new version after checking it out from git."
+								}[step] ?? "An error occurred while updating from git.";
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
 									title: 'Update Failed',
