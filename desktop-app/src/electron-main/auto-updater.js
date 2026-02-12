@@ -201,15 +201,21 @@ module.exports = {
 								step = "install";
 								await exec('npm', ['install'], { cwd: path.join(repoRoot, "desktop-app") });
 
-								await dialog.showMessageBox({
+								const { response: restartChoice } = await dialog.showMessageBox({
 									type: 'info',
 									title: 'Update Successful',
-									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`
+									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`,
+									buttons: ['Restart Now', 'Later'],
+									defaultId: 0,
+									cancelId: 1
 								});
+								if (restartChoice === 0) {
+									// TODO: maybe ensure that the software restarts enabled if it's currently enabled
+									// or mention whether it will end up active (depending on the setting)
+									app.relaunch();
+									app.exit(0);
+								}
 								return;
-								// TODO: maybe actually offer to restart the app
-								// maybe ensure that the software restarts enabled if it's currently enabled
-								// or mention whether it will end up active (depending on the setting)
 							} catch (error) {
 								const friendlyMessage = {
 									fetch: "Couldn't fetch updates from git.",
