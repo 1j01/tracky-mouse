@@ -207,6 +207,7 @@ module.exports = {
 									title: 'Update Successful',
 									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`
 								});
+								return;
 								// TODO: maybe actually offer to restart the app
 								// maybe ensure that the software restarts enabled if it's currently enabled
 								// or mention whether it will end up active (depending on the setting)
@@ -219,14 +220,12 @@ module.exports = {
 									defaultId: 0,
 									cancelId: 1
 								});
-								if (fallbackButtonIndex === 0) {
-									// TODO: consider restructuring to deduplicate this
-									shell.openExternal(release.html_url);
+								if (fallbackButtonIndex !== 0) {
+									return;
 								}
 							}
-						} else {
-							shell.openExternal(release.html_url);
 						}
+						shell.openExternal(release.html_url);
 					} else if (buttonIndex === 2) {
 						pleaseSkipThisVersion(latestVersion);
 					}
