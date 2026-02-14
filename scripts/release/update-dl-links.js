@@ -10,11 +10,12 @@ if (version !== require('../../package.json').version) {
 	process.exit(1);
 }
 const filesWithDownloadLinks = ["README.md", "website/index.html"];
-const releaseDownloadLinkRegex = /(https:\/\/github.com\/1j01\/tracky-mouse\/releases\/download\/)[^/]*(\/Tracky.Mouse.)[^/)'"]*(.Setup.exe)/g;
+const releaseDownloadLinkRegex = /https:\/\/github.com\/1j01\/tracky-mouse\/releases\/download\/[^)"'\s]*/g;
+const simpleVersionRegex = /\d+\.\d+\.\d+/g;
 const softwareVersionRegex = /("softwareVersion": ?")[^"]*(")/g;
 for (const file of filesWithDownloadLinks) {
 	fs.writeFileSync(file, fs.readFileSync(file, 'utf8')
-		.replace(releaseDownloadLinkRegex, '$1v' + version + '$2' + version + '$3')
+		.replace(releaseDownloadLinkRegex, (url) => url.replace(simpleVersionRegex, version))
 		.replace(softwareVersionRegex, '$1' + version + '$2')
 	);
 }
