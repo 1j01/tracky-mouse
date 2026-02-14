@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added setting **General > Close eyes to start/stop**. With this enabled, you can toggle mouse control by holding both your eyes shut for a few seconds. ([issue #105](https://github.com/1j01/tracky-mouse/issues/105))
   - This lets you take breaks without needing to touch the mouse or keyboard. It's useful for watching videos, or just pausing to think without worrying about clicking on things accidentally. It's also great as a casual user for when you lean back away from the keyboard and mouse but then realize you want to interact with something. You can now do so while staying relaxed.
 - Added setting **General > Check for updates**. This lets you disable automatic update checking on startup, which can be useful in case new versions become incompatible with your operating system version. ([issue #83](https://github.com/1j01/tracky-mouse/issues/83))
-- If the desktop app is running from a git checkout, the update prompt can now pull the latest release tag directly instead of sending you to the download page.
+- If the desktop app is running from source code, it will now offer to update to a new version directly through Git instead of sending you to the download page.
 
 ### Fixed
 - Fixed slider labels overlapping when the window is narrow (like on a phone). ([issue #112](https://github.com/1j01/tracky-mouse/issues/112))
