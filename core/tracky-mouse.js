@@ -1642,8 +1642,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
 				errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
-				// constraints can not be satisfied by avb. devices
-				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
+				// constraints cannot be satisfied by available devices
+				// TODO: improve handling of OverconstrainedError
+				// now that we constrain on a deviceId if a camera has been selected
+				// https://github.com/1j01/tracky-mouse/issues/122
+				errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
 				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
