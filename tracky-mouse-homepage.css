@@ -164,13 +164,24 @@ footer nav {
 	text-align: center;
 }
 
-a.big-download-button {
+a.big-download-button,
+a.secondary-download-button {
 	display: inline-block;
 	padding: 0.8em 1em;
 	background-color: rgb(0, 96, 206);
 	color: white;
 	text-decoration: none;
 	border-radius: 0.5em;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+a.secondary-download-button {
+	/* background-color: rgb(0, 60, 128);
+	color: white; */
+	background-color: rgb(233, 233, 233);
+	color: black;
+	font-size: 0.9em;
 }
 
 .cursors-background {

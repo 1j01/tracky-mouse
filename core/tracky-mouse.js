@@ -35,16 +35,16 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	return Promise.all(scriptFiles.map(loadScript));
 };
 
-const is_selector_valid = ((dummy_element) =>
+const isSelectorValid = ((dummyElement) =>
 	(selector) => {
-		try { dummy_element.querySelector(selector); } catch { return false; }
+		try { dummyElement.querySelector(selector); } catch { return false; }
 		return true;
 	})(document.createDocumentFragment());
 
 
-const dwell_clickers = [];
+const dwellClickers = [];
 
-const init_dwell_clicking = (config) => {
+const initDwellClicking = (config) => {
 	/*
 		Arguments:
 		- `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored.
@@ -59,6 +59,8 @@ const init_dwell_clicking = (config) => {
 		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
 		- `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 		- `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+		- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
+		- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`).
 	*/
 	if (typeof config !== "object") {
 		throw new Error("configuration object required for initDwellClicking");
@@ -69,7 +71,7 @@ const init_dwell_clicking = (config) => {
 	if (typeof config.targets !== "string") {
 		throw new Error("config.targets must be a string (a CSS selector)");
 	}
-	if (!is_selector_valid(config.targets)) {
+	if (!isSelectorValid(config.targets)) {
 		throw new Error("config.targets is not a valid CSS selector");
 	}
 	if (config.click === undefined) {
@@ -126,89 +128,89 @@ const init_dwell_clicking = (config) => {
 			if (typeof rule.to !== "string" && typeof rule.to !== "function" && !(rule.to instanceof Element) && rule.to !== null) {
 				throw new Error(`config.retarget[${i}].to must be a CSS selector string, an Element, a function, or null`);
 			}
-			if (typeof rule.from === "string" && !is_selector_valid(rule.from)) {
+			if (typeof rule.from === "string" && !isSelectorValid(rule.from)) {
 				throw new Error(`config.retarget[${i}].from is not a valid CSS selector`);
 			}
-			if (typeof rule.to === "string" && !is_selector_valid(rule.to)) {
+			if (typeof rule.to === "string" && !isSelectorValid(rule.to)) {
 				throw new Error(`config.retarget[${i}].to is not a valid CSS selector`);
 			}
 		}
 	}
 
-	// tracky_mouse_container.querySelector(".tracky-mouse-canvas").classList.add("inset-deep");
+	// trackyMouseContainer.querySelector(".tracky-mouse-canvas").classList.add("inset-deep");
 
-	const circle_radius_max = 50; // dwell indicator size in pixels
-	const hover_timespan = 500; // how long between the dwell indicator appearing and triggering a click
-	const averaging_window_timespan = 500;
-	const inactive_at_startup_timespan = 1500; // (should be at least averaging_window_timespan, but more importantly enough to make it not awkward when enabling dwell clicking)
-	const inactive_after_release_timespan = 1000; // after click or drag release (from dwell or otherwise)
-	const inactive_after_hovered_timespan = 1000; // after dwell click indicator appears; does not control the time to finish that dwell click, only to click on something else after this is canceled (but it doesn't control that directly)
-	const inactive_after_invalid_timespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
-	const inactive_after_focused_timespan = 1000; // after page becomes focused after being unfocused
-	let recent_points = [];
-	let inactive_until_time = performance.now();
+	const circleRadiusMax = 50; // dwell indicator size in pixels
+	const hoverTimespan = 500; // how long between the dwell indicator appearing and triggering a click
+	const averagingWindowTimespan = 500;
+	const inactiveAtStartupTimespan = 1500; // (should be at least averagingWindowTimespan, but more importantly enough to make it not awkward when enabling dwell clicking)
+	const inactiveAfterReleaseTimespan = 1000; // after click or drag release (from dwell or otherwise)
+	const inactiveAfterHoveredTimespan = 1000; // after dwell click indicator appears; does not control the time to finish that dwell click, only to click on something else after this is canceled (but it doesn't control that directly)
+	const inactiveAfterInvalidTimespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
+	const inactiveAfterFocusedTimespan = 1000; // after page becomes focused after being unfocused
+	let recentPoints = [];
+	let inactiveUntilTime = performance.now();
 	let paused = false;
-	let hover_candidate;
-	let dwell_dragging = null;
+	let hoverCandidate;
+	let dwellDragging = null;
 
-	const deactivate_for_at_least = (timespan) => {
-		inactive_until_time = Math.max(inactive_until_time, performance.now() + timespan);
+	const deactivateForAtLeast = (timespan) => {
+		inactiveUntilTime = Math.max(inactiveUntilTime, performance.now() + timespan);
 	};
-	deactivate_for_at_least(inactive_at_startup_timespan);
+	deactivateForAtLeast(inactiveAtStartupTimespan);
 
 	const halo = document.createElement("div");
 	halo.className = "tracky-mouse-hover-halo";
 	halo.style.display = "none";
 	document.body.appendChild(halo);
-	const dwell_indicator = document.createElement("div");
-	dwell_indicator.className = "tracky-mouse-dwell-indicator";
-	dwell_indicator.style.width = `${circle_radius_max}px`;
-	dwell_indicator.style.height = `${circle_radius_max}px`;
-	dwell_indicator.style.display = "none";
-	document.body.appendChild(dwell_indicator);
+	const dwellIndicator = document.createElement("div");
+	dwellIndicator.className = "tracky-mouse-dwell-indicator";
+	dwellIndicator.style.width = `${circleRadiusMax}px`;
+	dwellIndicator.style.height = `${circleRadiusMax}px`;
+	dwellIndicator.style.display = "none";
+	document.body.appendChild(dwellIndicator);
 
-	const on_pointer_move = (e) => {
-		recent_points.push({ x: e.clientX, y: e.clientY, time: performance.now() });
+	const onPointerMove = (e) => {
+		recentPoints.push({ x: e.clientX, y: e.clientY, time: performance.now() });
 	};
-	const on_pointer_up_or_cancel = (_e) => {
-		deactivate_for_at_least(inactive_after_release_timespan);
-		dwell_dragging = null;
-	};
-
-	let page_focused = document.visibilityState === "visible"; // guess/assumption
-	let mouse_inside_page = true; // assumption
-	const on_focus = () => {
-		page_focused = true;
-		deactivate_for_at_least(inactive_after_focused_timespan);
-	};
-	const on_blur = () => {
-		page_focused = false;
-	};
-	const on_mouse_leave_page = () => {
-		mouse_inside_page = false;
-	};
-	const on_mouse_enter_page = () => {
-		mouse_inside_page = true;
+	const onPointerUpOrCancel = (_e) => {
+		deactivateForAtLeast(inactiveAfterReleaseTimespan);
+		dwellDragging = null;
 	};
 
-	window.addEventListener("pointermove", on_pointer_move);
-	window.addEventListener("pointerup", on_pointer_up_or_cancel);
-	window.addEventListener("pointercancel", on_pointer_up_or_cancel);
-	window.addEventListener("focus", on_focus);
-	window.addEventListener("blur", on_blur);
-	document.addEventListener("mouseleave", on_mouse_leave_page);
-	document.addEventListener("mouseenter", on_mouse_enter_page);
+	let pageFocused = document.visibilityState === "visible"; // guess/assumption
+	let mouseInsidePage = true; // assumption
+	const onFocus = () => {
+		pageFocused = true;
+		deactivateForAtLeast(inactiveAfterFocusedTimespan);
+	};
+	const onBlur = () => {
+		pageFocused = false;
+	};
+	const onMouseLeavePage = () => {
+		mouseInsidePage = false;
+	};
+	const onMouseEnterPage = () => {
+		mouseInsidePage = true;
+	};
 
-	const get_hover_candidate = (clientX, clientY) => {
+	window.addEventListener("pointermove", onPointerMove);
+	window.addEventListener("pointerup", onPointerUpOrCancel);
+	window.addEventListener("pointercancel", onPointerUpOrCancel);
+	window.addEventListener("focus", onFocus);
+	window.addEventListener("blur", onBlur);
+	document.addEventListener("mouseleave", onMouseLeavePage);
+	document.addEventListener("mouseenter", onMouseEnterPage);
 
-		if (!page_focused || !mouse_inside_page) return null;
+	const getHoverCandidate = (clientX, clientY) => {
+
+		if (!pageFocused || !mouseInsidePage) return null;
 
 		let target = document.elementFromPoint(clientX, clientY);
 		if (!target) {
 			return null;
 		}
 
-		let hover_candidate = {
+		let hoverCandidate = {
 			x: clientX,
 			y: clientY,
 			time: performance.now(),
@@ -221,33 +223,33 @@ const init_dwell_clicking = (config) => {
 					typeof from === "function" ? from(target) :
 						target.matches(from)
 			) {
-				const to_element =
+				const toElement =
 					(to instanceof Element || to === null) ? to :
 						typeof to === "function" ? to(target) :
 							(target.closest(to) || target.querySelector(to));
-				if (to_element === null) {
+				if (toElement === null) {
 					return null;
-				} else if (to_element) {
-					const to_rect = to_element.getBoundingClientRect();
+				} else if (toElement) {
+					const toRect = toElement.getBoundingClientRect();
 					if (
-						hover_candidate.x > to_rect.left - withinMargin &&
-						hover_candidate.y > to_rect.top - withinMargin &&
-						hover_candidate.x < to_rect.right + withinMargin &&
-						hover_candidate.y < to_rect.bottom + withinMargin
+						hoverCandidate.x > toRect.left - withinMargin &&
+						hoverCandidate.y > toRect.top - withinMargin &&
+						hoverCandidate.x < toRect.right + withinMargin &&
+						hoverCandidate.y < toRect.bottom + withinMargin
 					) {
-						target = to_element;
-						hover_candidate.x = Math.min(
-							to_rect.right - 1,
+						target = toElement;
+						hoverCandidate.x = Math.min(
+							toRect.right - 1,
 							Math.max(
-								to_rect.left,
-								hover_candidate.x,
+								toRect.left,
+								hoverCandidate.x,
 							),
 						);
-						hover_candidate.y = Math.min(
-							to_rect.bottom - 1,
+						hoverCandidate.y = Math.min(
+							toRect.bottom - 1,
 							Math.max(
-								to_rect.top,
-								hover_candidate.y,
+								toRect.top,
+								hoverCandidate.y,
 							),
 						);
 						retargeted = true;
@@ -267,14 +269,14 @@ const init_dwell_clicking = (config) => {
 		if (!config.noCenter?.(target)) {
 			// Nudge hover previews to the center of buttons and things
 			const rect = target.getBoundingClientRect();
-			hover_candidate.x = rect.left + rect.width / 2;
-			hover_candidate.y = rect.top + rect.height / 2;
+			hoverCandidate.x = rect.left + rect.width / 2;
+			hoverCandidate.y = rect.top + rect.height / 2;
 		}
-		hover_candidate.target = target;
-		return hover_candidate;
+		hoverCandidate.target = target;
+		return hoverCandidate;
 	};
 
-	const get_event_options = ({ x, y }) => {
+	const getEventOptions = ({ x, y }) => {
 		return {
 			view: window, // needed for offsetX/Y calculation
 			clientX: x,
@@ -287,7 +289,7 @@ const init_dwell_clicking = (config) => {
 		};
 	};
 
-	const average_points = (points) => {
+	const averagePoints = (points) => {
 		const average = { x: 0, y: 0 };
 		for (const pointer of points) {
 			average.x += pointer.x;
@@ -300,78 +302,78 @@ const init_dwell_clicking = (config) => {
 
 	const update = () => {
 		const time = performance.now();
-		recent_points = recent_points.filter((point_record) => time < point_record.time + averaging_window_timespan);
-		if (recent_points.length) {
-			const latest_point = recent_points[recent_points.length - 1];
-			recent_points.push({ x: latest_point.x, y: latest_point.y, time });
-			const average_point = average_points(recent_points);
+		recentPoints = recentPoints.filter((pointRecord) => time < pointRecord.time + averagingWindowTimespan);
+		if (recentPoints.length) {
+			const latestPoint = recentPoints[recentPoints.length - 1];
+			recentPoints.push({ x: latestPoint.x, y: latestPoint.y, time });
+			const averagePoint = averagePoints(recentPoints);
 			// debug
-			// const canvas_point = to_canvas_coords({clientX: average_point.x, clientY: average_point.y});
+			// const canvasPoint = toCanvasCoords({clientX: averagePoint.x, clientY: averagePoint.y});
 			// ctx.fillStyle = "red";
-			// ctx.fillRect(canvas_point.x, canvas_point.y, 10, 10);
-			const recent_movement_amount = Math.hypot(latest_point.x - average_point.x, latest_point.y - average_point.y);
+			// ctx.fillRect(canvasPoint.x, canvasPoint.y, 10, 10);
+			const recentMovementAmount = Math.hypot(latestPoint.x - averagePoint.x, latestPoint.y - averagePoint.y);
 
 			// Invalidate in case an element pops up in front of the element you're hovering over, e.g. a submenu
-			// (that use case doesn't actually work in jspaint because the menu pops up before the hover_candidate exists)
+			// (that use case doesn't actually work in jspaint because the menu pops up before the hoverCandidate exists)
 			// (TODO: disable hovering to open submenus in facial mouse mode in jspaint)
 			// or an element occludes the center of an element you're hovering over, in which case it
 			// could be confusing if it showed a dwell click indicator over a different element than it would click
 			// (but TODO: just move the indicator off center in that case)
-			if (hover_candidate && !dwell_dragging) {
-				const apparent_hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
-				const show_occluder_indicator = (occluder) => {
-					const occluder_indicator = document.createElement("div");
-					const occluder_rect = occluder.getBoundingClientRect();
-					const outline_width = 4;
-					occluder_indicator.style.pointerEvents = "none";
-					occluder_indicator.style.zIndex = 1000001;
-					occluder_indicator.style.display = "block";
-					occluder_indicator.style.position = "fixed";
-					occluder_indicator.style.left = `${occluder_rect.left + outline_width}px`;
-					occluder_indicator.style.top = `${occluder_rect.top + outline_width}px`;
-					occluder_indicator.style.width = `${occluder_rect.width - outline_width * 2}px`;
-					occluder_indicator.style.height = `${occluder_rect.height - outline_width * 2}px`;
-					occluder_indicator.style.outline = `${outline_width}px dashed red`;
-					occluder_indicator.style.boxShadow = `0 0 ${outline_width}px ${outline_width}px maroon`;
-					document.body.appendChild(occluder_indicator);
+			if (hoverCandidate && !dwellDragging) {
+				const apparentHoverCandidate = getHoverCandidate(hoverCandidate.x, hoverCandidate.y);
+				const showOccluderIndicator = (occluder) => {
+					const occluderIndicator = document.createElement("div");
+					const occluderRect = occluder.getBoundingClientRect();
+					const outlineWidth = 4;
+					occluderIndicator.style.pointerEvents = "none";
+					occluderIndicator.style.zIndex = 1000001;
+					occluderIndicator.style.display = "block";
+					occluderIndicator.style.position = "fixed";
+					occluderIndicator.style.left = `${occluderRect.left + outlineWidth}px`;
+					occluderIndicator.style.top = `${occluderRect.top + outlineWidth}px`;
+					occluderIndicator.style.width = `${occluderRect.width - outlineWidth * 2}px`;
+					occluderIndicator.style.height = `${occluderRect.height - outlineWidth * 2}px`;
+					occluderIndicator.style.outline = `${outlineWidth}px dashed red`;
+					occluderIndicator.style.boxShadow = `0 0 ${outlineWidth}px ${outlineWidth}px maroon`;
+					document.body.appendChild(occluderIndicator);
 					setTimeout(() => {
-						occluder_indicator.remove();
-					}, inactive_after_invalid_timespan * 0.5);
+						occluderIndicator.remove();
+					}, inactiveAfterInvalidTimespan * 0.5);
 				};
-				if (apparent_hover_candidate) {
+				if (apparentHoverCandidate) {
 					if (
-						apparent_hover_candidate.target !== hover_candidate.target &&
+						apparentHoverCandidate.target !== hoverCandidate.target &&
 						// !retargeted &&
 						!config.isEquivalentTarget?.(
-							apparent_hover_candidate.target, hover_candidate.target
+							apparentHoverCandidate.target, hoverCandidate.target
 						)
 					) {
-						hover_candidate = null;
-						deactivate_for_at_least(inactive_after_invalid_timespan);
-						show_occluder_indicator(apparent_hover_candidate.target);
+						hoverCandidate = null;
+						deactivateForAtLeast(inactiveAfterInvalidTimespan);
+						showOccluderIndicator(apparentHoverCandidate.target);
 					}
 				} else {
-					let occluder = document.elementFromPoint(hover_candidate.x, hover_candidate.y);
-					hover_candidate = null;
-					deactivate_for_at_least(inactive_after_invalid_timespan);
-					show_occluder_indicator(occluder || document.body);
+					let occluder = document.elementFromPoint(hoverCandidate.x, hoverCandidate.y);
+					hoverCandidate = null;
+					deactivateForAtLeast(inactiveAfterInvalidTimespan);
+					showOccluderIndicator(occluder || document.body);
 				}
 			}
 
-			let circle_position = latest_point;
-			let circle_opacity = 0;
-			let circle_radius = 0;
-			if (hover_candidate) {
-				circle_position = hover_candidate;
-				circle_opacity = 0.4;
-				circle_radius =
-					(hover_candidate.time - time + hover_timespan) / hover_timespan
-					* circle_radius_max;
-				if (time > hover_candidate.time + hover_timespan) {
-					if (config.isHeld?.() || dwell_dragging) {
+			let circlePosition = latestPoint;
+			let circleOpacity = 0;
+			let circleRadius = 0;
+			if (hoverCandidate) {
+				circlePosition = hoverCandidate;
+				circleOpacity = 0.4;
+				circleRadius =
+					(hoverCandidate.time - time + hoverTimespan) / hoverTimespan
+					* circleRadiusMax;
+				if (time > hoverCandidate.time + hoverTimespan) {
+					if (config.isHeld?.() || dwellDragging) {
 						config.beforeDispatch?.();
-						hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
-							Object.assign(get_event_options(hover_candidate), {
+						hoverCandidate.target.dispatchEvent(new PointerEvent("pointerup",
+							Object.assign(getEventOptions(hoverCandidate), {
 								button: 0,
 								buttons: 0,
 							})
@@ -380,70 +382,70 @@ const init_dwell_clicking = (config) => {
 					} else {
 						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
-						hover_candidate.target.dispatchEvent(new PointerEvent("pointerdown",
-							Object.assign(get_event_options(hover_candidate), {
+						hoverCandidate.target.dispatchEvent(new PointerEvent("pointerdown",
+							Object.assign(getEventOptions(hoverCandidate), {
 								button: 0,
 								buttons: 1,
 							})
 						));
 						config.afterDispatch?.();
-						if (config.shouldDrag?.(hover_candidate.target)) {
-							dwell_dragging = hover_candidate.target;
+						if (config.shouldDrag?.(hoverCandidate.target)) {
+							dwellDragging = hoverCandidate.target;
 						} else {
 							config.beforeDispatch?.();
-							hover_candidate.target.dispatchEvent(new PointerEvent("pointerup",
-								Object.assign(get_event_options(hover_candidate), {
+							hoverCandidate.target.dispatchEvent(new PointerEvent("pointerup",
+								Object.assign(getEventOptions(hoverCandidate), {
 									button: 0,
 									buttons: 0,
 								})
 							));
-							config.click(hover_candidate);
+							config.click(hoverCandidate);
 							config.afterDispatch?.();
 						}
 					}
-					hover_candidate = null;
-					deactivate_for_at_least(inactive_after_hovered_timespan);
+					hoverCandidate = null;
+					deactivateForAtLeast(inactiveAfterHoveredTimespan);
 				}
 			}
 
-			if (dwell_dragging) {
-				dwell_indicator.classList.add("tracky-mouse-for-release");
+			if (dwellDragging) {
+				dwellIndicator.classList.add("tracky-mouse-for-release");
 			} else {
-				dwell_indicator.classList.remove("tracky-mouse-for-release");
+				dwellIndicator.classList.remove("tracky-mouse-for-release");
 			}
-			dwell_indicator.style.display = "";
-			dwell_indicator.style.opacity = circle_opacity;
-			dwell_indicator.style.transform = `scale(${circle_radius / circle_radius_max})`;
-			dwell_indicator.style.left = `${circle_position.x - circle_radius_max / 2}px`;
-			dwell_indicator.style.top = `${circle_position.y - circle_radius_max / 2}px`;
+			dwellIndicator.style.display = "";
+			dwellIndicator.style.opacity = circleOpacity;
+			dwellIndicator.style.transform = `scale(${circleRadius / circleRadiusMax})`;
+			dwellIndicator.style.left = `${circlePosition.x - circleRadiusMax / 2}px`;
+			dwellIndicator.style.top = `${circlePosition.y - circleRadiusMax / 2}px`;
 
-			let halo_target =
-				dwell_dragging ||
-				(hover_candidate || get_hover_candidate(latest_point.x, latest_point.y) || {}).target;
+			let haloTarget =
+				dwellDragging ||
+				(hoverCandidate || getHoverCandidate(latestPoint.x, latestPoint.y) || {}).target;
 
-			if (halo_target && (!paused || config.dwellClickEvenIfPaused?.(halo_target))) {
-				let rect = halo_target.getBoundingClientRect();
-				const computed_style = getComputedStyle(halo_target);
-				let ancestor = halo_target;
-				let border_radius_scale = 1; // for border radius mimicry, given parents with transform: scale()
+			if (haloTarget && (!paused || config.dwellClickEvenIfPaused?.(haloTarget))) {
+				let rect = haloTarget.getBoundingClientRect();
+				const computedStyle = getComputedStyle(haloTarget);
+				let ancestor = haloTarget;
+				let borderRadiusScale = 1; // for border radius mimicry, given parents with transform: scale()
 				while (ancestor instanceof HTMLElement) {
-					const ancestor_computed_style = getComputedStyle(ancestor);
-					if (ancestor_computed_style.transform) {
+					const ancestorComputedStyle = getComputedStyle(ancestor);
+					if (ancestorComputedStyle.transform) {
 						// Collect scale transforms
-						const match = ancestor_computed_style.transform.match(/(?:scale|matrix)\((\d+(?:\.\d+)?)/);
+						const match = ancestorComputedStyle.transform.match(/(?:scale|matrix)\((\d+(?:\.\d+)?)/);
 						if (match) {
-							border_radius_scale *= Number(match[1]);
+							borderRadiusScale *= Number(match[1]);
 						}
 					}
-					if (ancestor_computed_style.overflow !== "visible") {
+					if (ancestorComputedStyle.overflow !== "visible") {
 						// Clamp to visible region if in scrollable area
 						// This lets you see the hover halo when scrolled to the middle of a large canvas
-						const scroll_area_rect = ancestor.getBoundingClientRect();
+						const scrollAreaRect = ancestor.getBoundingClientRect();
 						rect = {
-							left: Math.max(rect.left, scroll_area_rect.left),
-							top: Math.max(rect.top, scroll_area_rect.top),
-							right: Math.min(rect.right, scroll_area_rect.right),
-							bottom: Math.min(rect.bottom, scroll_area_rect.bottom),
+							left: Math.max(rect.left, scrollAreaRect.left),
+							top: Math.max(rect.top, scrollAreaRect.top),
+							right: Math.min(rect.right, scrollAreaRect.right),
+							bottom: Math.min(rect.bottom, scrollAreaRect.bottom),
 						};
 						rect.width = rect.right - rect.left;
 						rect.height = rect.bottom - rect.top;
@@ -468,40 +470,40 @@ const init_dwell_clicking = (config) => {
 					"borderBottomLeftRadius",
 				]) {
 					// Unfortunately, getComputedStyle can return percentages, probably other units, probably also "auto"
-					if (computed_style[prop].endsWith("px")) {
-						halo.style[prop] = `${parseFloat(computed_style[prop]) * border_radius_scale}px`;
+					if (computedStyle[prop].endsWith("px")) {
+						halo.style[prop] = `${parseFloat(computedStyle[prop]) * borderRadiusScale}px`;
 					} else {
-						halo.style[prop] = computed_style[prop];
+						halo.style[prop] = computedStyle[prop];
 					}
 				}
 			} else {
 				halo.style.display = "none";
 			}
 
-			if (time < inactive_until_time) {
+			if (time < inactiveUntilTime) {
 				return;
 			}
-			if (recent_movement_amount < 5) {
-				if (!hover_candidate) {
-					hover_candidate = {
-						x: average_point.x,
-						y: average_point.y,
+			if (recentMovementAmount < 5) {
+				if (!hoverCandidate) {
+					hoverCandidate = {
+						x: averagePoint.x,
+						y: averagePoint.y,
 						time: performance.now(),
-						target: dwell_dragging || null,
+						target: dwellDragging || null,
 					};
-					if (!dwell_dragging) {
-						hover_candidate = get_hover_candidate(hover_candidate.x, hover_candidate.y);
+					if (!dwellDragging) {
+						hoverCandidate = getHoverCandidate(hoverCandidate.x, hoverCandidate.y);
 					}
-					if (hover_candidate && (paused && !config.dwellClickEvenIfPaused?.(hover_candidate.target))) {
-						hover_candidate = null;
+					if (hoverCandidate && (paused && !config.dwellClickEvenIfPaused?.(hoverCandidate.target))) {
+						hoverCandidate = null;
 					}
 				}
 			}
-			if (recent_movement_amount > 100) {
-				if (dwell_dragging) {
+			if (recentMovementAmount > 100) {
+				if (dwellDragging) {
 					config.beforeDispatch?.();
 					window.dispatchEvent(new PointerEvent("pointerup",
-						Object.assign(get_event_options(average_point), {
+						Object.assign(getEventOptions(averagePoint), {
 							button: 0,
 							buttons: 0,
 						})
@@ -510,29 +512,29 @@ const init_dwell_clicking = (config) => {
 					config.afterReleaseDrag?.();
 				}
 			}
-			if (recent_movement_amount > 60) {
-				hover_candidate = null;
+			if (recentMovementAmount > 60) {
+				hoverCandidate = null;
 			}
 		}
 	};
-	let raf_id;
+	let rafId;
 	const animate = () => {
-		raf_id = requestAnimationFrame(animate);
+		rafId = requestAnimationFrame(animate);
 		update();
 	};
-	raf_id = requestAnimationFrame(animate);
+	rafId = requestAnimationFrame(animate);
 
 	const dispose = () => {
-		cancelAnimationFrame(raf_id);
+		cancelAnimationFrame(rafId);
 		halo.remove();
-		dwell_indicator.remove();
-		window.removeEventListener("pointermove", on_pointer_move);
-		window.removeEventListener("pointerup", on_pointer_up_or_cancel);
-		window.removeEventListener("pointercancel", on_pointer_up_or_cancel);
-		window.removeEventListener("focus", on_focus);
-		window.removeEventListener("blur", on_blur);
-		document.removeEventListener("mouseleave", on_mouse_leave_page);
-		document.removeEventListener("mouseenter", on_mouse_enter_page);
+		dwellIndicator.remove();
+		window.removeEventListener("pointermove", onPointerMove);
+		window.removeEventListener("pointerup", onPointerUpOrCancel);
+		window.removeEventListener("pointercancel", onPointerUpOrCancel);
+		window.removeEventListener("focus", onFocus);
+		window.removeEventListener("blur", onBlur);
+		document.removeEventListener("mouseleave", onMouseLeavePage);
+		document.removeEventListener("mouseenter", onMouseEnterPage);
 	};
 
 	const dwellClicker = {
@@ -544,16 +546,16 @@ const init_dwell_clicking = (config) => {
 		},
 		dispose,
 	};
-	dwell_clickers.push(dwellClicker);
+	dwellClickers.push(dwellClicker);
 	return dwellClicker;
 };
 
 TrackyMouse.initDwellClicking = function (config) {
-	return init_dwell_clicking(config);
+	return initDwellClicking(config);
 };
 TrackyMouse.cleanupDwellClicking = function () {
-	for (const dwell_clicker of dwell_clickers) {
-		dwell_clicker.dispose();
+	for (const dwellClicker of dwellClickers) {
+		dwellClicker.dispose();
 	}
 };
 
@@ -973,6 +975,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// description: "Automatically starts Tracky Mouse as soon as it's run.",
 				},
 				{
+					// For "experimental" label:
+					// - I'm preferring language that doesn't assume a new build is coming soon, fixing everything
+					// - I considered adding "⚠︎" but it feels a little too alarming
+					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
+					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
+					label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
+					className: "tracky-mouse-close-eyes-to-toggle",
+					key: "closeEyesToToggle",
+					type: "checkbox",
+					default: false,
+					description: "If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.",
+				},
+				{
 					label: "Run at login",
 					className: "tracky-mouse-run-at-login",
 					key: "runAtLogin",
@@ -981,6 +996,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					platform: "desktop",
 					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
 					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
+				},
+				{
+					label: "Check for updates",
+					className: "tracky-mouse-check-for-updates",
+					key: "checkForUpdates",
+					type: "checkbox",
+					default: true,
+					platform: "desktop",
+					description: "If enabled, Tracky Mouse will automatically check for updates when it starts.",
+					// description: "Notifies you of new versions of Tracky Mouse.",
+					// description: "Notifies you when a new version of Tracky Mouse is available.",
 				},
 			],
 		},
@@ -1079,8 +1105,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				<span class="tracky-mouse-label-text">${setting.label}</span>
 				<span class="tracky-mouse-labeled-slider">
 					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
-					<span class="tracky-mouse-min-label">${setting.labels.min}</span>
-					<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+					<span class="tracky-mouse-slider-labels">
+						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
+						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
+					</span>
 				</span>
 			`;
 		} else if (setting.type === "checkbox") {
@@ -1277,6 +1305,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
 	var headTiltFilters = { pitch: null, yaw: null, roll: null };
+	var lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
 	// ## State related to switching between head trackers
 	var useClmTracking = true;
 	var showClmTracking = useClmTracking;
@@ -1290,6 +1319,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		right: false,
 		middle: false,
 	};
+	var mouseButtonUntilMouthCloses = -1;
 	var lastMouseDownTime = -Infinity;
 	var mouseNeedsInitPos = true;
 
@@ -1563,6 +1593,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
+		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
 
 		startStopButton.textContent = "Start";
 		startStopButton.setAttribute("aria-pressed", "false");
@@ -2257,16 +2288,26 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							const thresholdHigh = 0.25;
 							const thresholdLow = 0.15;
 							mouth.thresholdMet = mouth.heightRatio > (prevThresholdMet ? thresholdLow : thresholdHigh);
-							mouth.active = mouth.thresholdMet;
-							// Preserve mouse button state; could be simpler as a separate variable.
-							mouth.mouseButton = mouthInfo?.mouseButton ?? -1;
+							mouth.active = mouth.thresholdMet; // TODO: maybe default to false, have this only set externally in gesture handling code
 							return mouth;
 						}
 
-						const prevMouthOpen = mouthInfo?.active;
+						const prevMouthOpen = mouthInfo?.thresholdMet;
 
 						blinkInfo = detectBlinks();
 						mouthInfo = detectMouthOpen();
+						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
+							lastTimeWhenAnEyeWasOpen = performance.now();
+						}
+						if (performance.now() - lastTimeWhenAnEyeWasOpen > 2000) {
+							if (s.closeEyesToToggle) {
+								paused = !paused;
+								updatePaused();
+								// TODO: handle edge cases
+								// TODO: try to keep variable names meaningful
+								lastTimeWhenAnEyeWasOpen = Infinity;
+							}
+						}
 
 						blinkInfo.used = false;
 						mouthInfo.used = false;
@@ -2280,6 +2321,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							}
 						}
 						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
+						// (or just hold out for a full I/O binding system)
 						if (s.clickingMode === "open-mouth") {
 							mouthInfo.used = true;
 							blinkInfo.used = true;
@@ -2289,17 +2331,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// Keep same button held if eye is opened,
 							// so you can continue to scroll a webpage without trying to
 							// read with one eye closed (for example).
-							if (mouthInfo.active && !prevMouthOpen) {
+							if (mouthInfo.thresholdMet && !prevMouthOpen) {
 								if (blinkInfo.rightEye.active) {
-									mouthInfo.mouseButton = 1;
+									mouseButtonUntilMouthCloses = 1;
 								} else if (blinkInfo.leftEye.active) {
-									mouthInfo.mouseButton = 2;
+									mouseButtonUntilMouthCloses = 2;
+								} else if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+									mouseButtonUntilMouthCloses = -1;
 								} else {
-									mouthInfo.mouseButton = 0;
+									mouseButtonUntilMouthCloses = 0;
 								}
 							}
-							if (mouthInfo.active) {
-								clickButton = mouthInfo.mouseButton;
+							if (mouthInfo.thresholdMet) {
+								clickButton = mouseButtonUntilMouthCloses;
+								if (clickButton === -1) {
+									// Show as passive / not clicking in visuals
+									mouthInfo.active = false;
+									// TODO: show eyes as yellow too regardless of eye state?
+								}
+								// TODO: DRY mapping
+								blinkInfo.rightEye.active = clickButton === 1;
+								blinkInfo.leftEye.active = clickButton === 2;
 							}
 						}
 

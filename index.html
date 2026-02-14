@@ -16,7 +16,7 @@
 	<link rel="preload" href="core/lib/clmtrackr.js" as="script">
 	<!-- TODO: figure out how to preload worker-context dependencies that use `importScripts` -->
 	<!-- <link rel="preload" href="core/lib/tf.js" as="worker-importScripts-dependency?"> -->
-	<!-- <link rel="preload" href="core/lib/facemesh/facemesh.js" as="worker-importScripts-dependency?"> -->
+	<!-- <link rel="preload" href="core/lib/face_mesh/face_mesh.js" as="worker-importScripts-dependency?"> -->
 	<!-- <link rel="preload" href="core/lib/jsfeat-min.js" as="script"> exported from patched clmtrackr.js -->
 	<!-- TODO: defer loading tracky-mouse.css -->
 	<!-- <link rel="preload" href="core/tracky-mouse.css" as="style"> -->
@@ -55,9 +55,9 @@
 			Install the desktop app to control your whole computer with just a webcam.
 		</p>
 		<p>
-			<!-- TODO: download links for multiple platforms; detect platform, present download with dropdown similar to VS Code homepage, near top of page -->
-			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe"
-				class="big-download-button">
+			<!-- TODO: maybe present alternate downloads in a dropdown attached to the download button; maybe move closer to top of page -->
+			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.3.0/Tracky.Mouse-2.3.0.Setup.exe"
+				class="big-download-button windows windows-installer">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
 					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.7, 1.5) perspective(9px) rotateY(-10deg) translateY(-1px)">
 					<rect x="5" y="5" width="50" height="50" fill="white" />
@@ -67,6 +67,32 @@
 				</svg>
 				Download for Windows
 			</a>
+			<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0-x64.AppImage"
+				class="big-download-button linux linux-appimage">
+				<img src="images/tux.svg" alt="Tux the Linux penguin mascot"
+					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5)">
+				Download for Linux (.AppImage)
+			</a>
+			<span style="display: flex; margin-top: 10px; gap: 8px;">
+				<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse_2.2.0_amd64.deb"
+					class="secondary-download-button linux linux-deb">
+					<img src="images/tux.svg" alt="Tux the Linux penguin mascot"
+						style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5)">
+					Download for Linux (.deb)
+				</a>
+				<a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-1.x86_64.rpm"
+					class="secondary-download-button linux linux-rpm">
+					<img src="images/tux.svg" alt="Tux the Linux penguin mascot"
+						style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5)">
+					Download for Linux (.rpm)
+				</a>
+			</span>
+			<!-- <a href="https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/tracky-mouse-2.2.0-macos.zip"
+				class="big-download-button osx">
+				<img src="images/apple-logo.svg" alt="Apple logo"
+					style="vertical-align: middle; margin-right: 11px; height: 1em; transform: scale(1.5) translateY(-2px); filter: invert()">
+				Download for macOS
+			</a> -->
 			<!-- <br>
 			<a href="" class="secondary-download-button">Download for Windows</a>
 			<br>
@@ -82,6 +108,24 @@
 			</a>
 		</p>
 	</section>
+	<script>
+		const ua = window.navigator.userAgent;
+		const platform = ua.includes("Mac") ? "osx" : ua.includes("Linux") || ua.includes("X11") ? ua.includes("x86_64") ? "linux x64" : "linux" : ua.includes("Win") ? "win" : "other-os";
+		// Hide elements for other platforms only if platform is known
+		// TODO: once osx is supported, enable hiding non-osx elements
+		if (platform.match(/linux|win/)) {
+			// if (platform.match(/linux|win|osx/)) {
+			for (const el of document.getElementsByClassName("linux")) {
+				el.style.display = platform.startsWith("linux") ? "" : "none";
+			}
+			for (const el of document.getElementsByClassName("windows")) {
+				el.style.display = platform === "win" ? "" : "none";
+			}
+			// for (const el of document.getElementsByClassName("osx")) {
+			// 	el.style.display = platform === "osx" ? "" : "none";
+			// }
+		}
+	</script>
 	<section class="page-section">
 		<h2>Features</h2>
 		<ul class="features-list">
@@ -338,6 +382,75 @@
 	<script defer src="core/tracky-mouse.js"></script>
 	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
 	<script type="module" src="demo.js"></script>
+
+	<!--
+		TODO:
+			"screenshot": "https://trackymouse.js.org/images/TODO/screenshot.png",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": "https://trackymouse.js.org/search?q={search_term_string}",
+				"query-input": "required name=search_term_string"
+			},
+			"softwareRequirements": "https://trackymouse.js.org/docs/supporting/requirements",
+			"sameAs" : [
+				"https://en.wikipedia.org/wiki/Visual_Studio_Code",
+				"https://twitter.com/code",
+				"https://www.youtube.com/code",
+				"https://www.tiktok.com/@vscode",
+				"https://github.com/microsoft/vscode"
+			],
+			"operatingSystem": "Mac, Linux, Windows",
+
+			"downloadUrl": "https://trackymouse.js.org/download",
+			"If the file can be downloaded, URL to download the binary."
+			that doesn't sound quite right, but VS Code uses it for the download page.
+			"installUrl": "https://trackymouse.js.org/download",
+			"URL at which the app may be installed, if different from the URL of the item."
+			that sounds more like it's intended for a download page
+	-->
+	<script type="application/ld+json">
+		{
+			"@context" : "http://schema.org",
+			"@type" : "SoftwareApplication",
+			"name" : "Tracky Mouse",
+			"softwareVersion": "2.3.0",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"applicationCategory": "UtilitiesApplication",
+			"applicationSubCategory": "Accessibility",
+			"permissions": "Camera",
+			"datePublished": "2024-10-20",
+			"operatingSystem": "Linux, Windows",
+			"logo": "https://trackymouse.js.org/images/tracky-mouse-logo-512.png",
+			"releaseNotes": "https://github.com/1j01/tracky-mouse/releases",
+			"license": "https://github.com/1j01/tracky-mouse/blob/main/LICENSE.txt",
+			"url" : "https://trackymouse.js.org",
+			"abstract": "Hands-free computer control.",
+			"description": "Control your computer with just a webcam.",
+			"isAccessibleForFree": true,
+			"isFamilyFriendly": true,
+			"keywords": "camera mouse, mouse, camera, webcam, head tracker, head tracking, facial recognition, face tracker, face tracking, headmouse, facial mouse, facemesh, eye tracker, eye tracking, eye gaze, accessibility, assistive-technology, cursor, pointer, pointing, input method, hands-free, handsfree, desktop automation, telekinesis",
+			"author": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"publisher": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"maintainer": {
+				"@type": "Person",
+				"name": "Isaiah Odhner"
+			},
+			"sameAs" : [
+				"https://github.com/1j01/tracky-mouse",
+				"https://www.npmjs.com/package/tracky-mouse"
+			]
+		}
+	</script>
 </body>
 
 </html>
