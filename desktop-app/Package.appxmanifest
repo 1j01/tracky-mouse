@@ -7,7 +7,7 @@
 >
 	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
 	<Identity Name="IsaiahOdhner.TrackyMouse"
-		Version="2.2.0.0"
+		Version="2.3.0.0"
 		Publisher="CN=Isaiah Odhner" />
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>

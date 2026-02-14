@@ -31,7 +31,7 @@ Settings could be shared between all three products (with import/export, which i
 
 <!-- Note: the Linux versions do not actually exist for 2.2.0; but these will be replaced automatically with the next release. -->
 
-- [⬇️ Download for Windows (.exe installer)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse-2.2.0.Setup.exe) and run the installer.
+- [⬇️ Download for Windows (.exe installer)](https://github.com/1j01/tracky-mouse/releases/download/v2.3.0/Tracky.Mouse-2.3.0.Setup.exe) and run the installer.
   - If you get a SmartScreen warning, click "More info" and then "Run anyway".
 - [⬇️ Download for Windows (.msix)](https://github.com/1j01/tracky-mouse/releases/download/v2.2.0/Tracky.Mouse.msix) (COMING SOON)
   - After downloading the `.msix` file, right click on it, select Properties, go to the Digital Signatures tab, select the embedded signature from the list, click Details, click View Certificate, and install the certificate. Then double click the `.msix` file. Then click "Restart as administrator" to restart the installer (you do not need to restart your computer, don't worry). Say Yes to allow App Installer to make changes to the device. Then click Install.

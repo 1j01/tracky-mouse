@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.3.0] - 2026-02-14
+
 ### Changed
 - In "Open mouth to click" mode, it should no longer click if both your eyes are closed. ([issue #106](https://github.com/1j01/tracky-mouse/issues/106))
 - In "Open mouth to click" mode, it will now show eye visuals as red (indicating it's part of an active gesture) even after an eye is reopened, if the eye is modifying a click. This makes it easier to see when you're doing a modified click, and to know which eye is modifying the click.
@@ -199,7 +203,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/1j01/tracky-mouse/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/1j01/tracky-mouse/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/1j01/tracky-mouse/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/1j01/tracky-mouse/compare/v1.2.0...v2.0.0
