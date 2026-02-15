@@ -1594,9 +1594,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		faceScore = 0;
 		faceConvergence = 0;
 		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
-
-		startStopButton.textContent = "Start";
-		startStopButton.setAttribute("aria-pressed", "false");
+		updateStartStopButton();
 	};
 
 	useCameraButton.onclick = TrackyMouse.useCamera = async () => {
@@ -1620,10 +1618,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
-			if (!paused) {
-				startStopButton.textContent = "Stop";
-				startStopButton.setAttribute("aria-pressed", "true");
-			}
 		}, (error) => {
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
@@ -2866,11 +2860,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		TrackyMouse.useCamera();
 	}
 
-	const updatePaused = () => {
-		mouseNeedsInitPos = true;
-		if (paused) {
-			pointerEl.style.display = "none";
-		}
+	const updateStartStopButton = () => {
 		if (paused) {
 			startStopButton.textContent = "Start";
 			startStopButton.setAttribute("aria-pressed", "false");
@@ -2878,6 +2868,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			startStopButton.textContent = "Stop";
 			startStopButton.setAttribute("aria-pressed", "true");
 		}
+	};
+	const updatePaused = () => {
+		mouseNeedsInitPos = true;
+		if (paused) {
+			pointerEl.style.display = "none";
+		}
+		updateStartStopButton();
 		if (window.electronAPI) {
 			window.electronAPI.notifyToggleState(!paused);
 		}
