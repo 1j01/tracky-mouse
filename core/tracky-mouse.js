@@ -1397,6 +1397,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		} catch (error) {
 			detector = null;
 			// TODO: avoid alert
+			console.error("Failed to create facemesh detector:", error);
 			alert(error);
 		}
 
@@ -1417,6 +1418,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				detector.dispose();
 				detector = null;
 				// TODO: avoid alert
+				console.error("Facemesh estimation failed:", error);
 				alert(error);
 			}
 			return [];
@@ -1486,6 +1488,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 	paused = !s.startEnabled;
 
+	// Basically Promise.withResolvers (but I'm not sure browser support is good enough)
+	function createDeferred() {
+		let resolve, reject;
+		const promise = new Promise((res, rej) => {
+			resolve = res;
+			reject = rej;
+		});
+		return { promise, resolve, reject };
+	}
+
+	let matchedCameraIdDeferred = createDeferred();
 	let populateCameraList = () => { };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
 		populateCameraList = () => {
@@ -1522,27 +1535,35 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				defaultOption.text = "Default";
 				cameraSelect.appendChild(defaultOption);
 
-				let found = false;
+				let matchingDeviceId = "";
 				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
 					option.text = device.label || `Camera ${cameraSelect.length}`;
 					cameraSelect.appendChild(option);
 					if (device.deviceId === s.cameraDeviceId) {
-						found = true;
+						matchingDeviceId = device.deviceId;
+					} else if (device.label === knownCameras[s.cameraDeviceId]?.name) {
+						matchingDeviceId ||= device.deviceId;
 					}
 				}
-				// Defaulting to "Default" would imply a preference isn't stored.
+
+				// Defaulting to "Default" would imply a preference isn't stored...
+				// but would it be more friendly anyways?
 				// cameraSelect.value = found ? s.cameraDeviceId : "";
+
 				// Show a placeholder for the selected camera
-				if (s.cameraDeviceId && !found) {
+				if (s.cameraDeviceId && !matchingDeviceId) {
 					const option = document.createElement("option");
 					option.value = s.cameraDeviceId;
 					const knownInfo = knownCameras[s.cameraDeviceId];
 					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
 					cameraSelect.appendChild(option);
+					cameraSelect.value = s.cameraDeviceId;
+				} else {
+					cameraSelect.value = matchingDeviceId;
 				}
-				cameraSelect.value = s.cameraDeviceId;
+				matchedCameraIdDeferred.resolve(matchingDeviceId);
 			});
 		};
 		populateCameraList();
@@ -1594,12 +1615,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		faceScore = 0;
 		faceConvergence = 0;
 		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
-
-		startStopButton.textContent = "Start";
-		startStopButton.setAttribute("aria-pressed", "false");
+		updateStartStopButton();
 	};
 
-	useCameraButton.onclick = TrackyMouse.useCamera = async () => {
+	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent) => {
 		await settingsLoadedPromise;
 		const constraints = {
 			audio: false,
@@ -1609,9 +1628,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				facingMode: "user",
 			}
 		};
-		if (s.cameraDeviceId) {
+		const deviceIdToTry = optionsOrEvent?.retryWithCameraDeviceId ?? s.cameraDeviceId;
+		if (deviceIdToTry) {
 			delete constraints.video.facingMode;
-			constraints.video.deviceId = { exact: s.cameraDeviceId };
+			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			populateCameraList();
@@ -1620,11 +1640,50 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
-			if (!paused) {
-				startStopButton.textContent = "Stop";
-				startStopButton.setAttribute("aria-pressed", "true");
+		}, async (error) => {
+
+			// OverconstrainedError can be caused by `deviceId` not matching,
+			// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
+			// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
+			// Note: (Not sure about ConstraintNotSatisfiedError here)
+			if (
+				(error.name === "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") &&
+				constraints.video.deviceId?.exact
+			) {
+				// This is giving me User Gesture Hinged Access And Access Attempt Absorption Anxiety,
+				// or "UGHAaAAAA" (I'm coining that term)
+				const matchedCameraId = await matchedCameraIdDeferred.promise;
+				if (matchedCameraId) {
+					// TODO: make sure matchedCameraId !== deviceIdToTry
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId });
+				} else {
+					// TODO: unify code branches for error handling
+
+					// TODO: handle case where permission is no longer granted,
+					// and enumerateDevices returns a fake list
+					// and getUserMedia fails with OverconstrainedError when passed a real deviceId because it's not in the fake list
+					// It's possible we could connect to the device without the user having to change the device
+					// in the dropdown (twice, in case they want a non-default camera)
+					// by first calling getUserMedia with no deviceId constraint, then closing the stream,
+					// then enumerating devices (and updating the dropdown with the real info)
+					// and calling getUserMedia again with the deviceId from the settings.
+					// The user should only need to respond to a permissions prompt once.
+
+					console.error(error, { matchedCameraId, "s.cameraDeviceId": s.cameraDeviceId, knownCameras: JSON.parse(localStorage.getItem("tracky-mouse-known-cameras") || "{}"), videoDevices: await navigator.mediaDevices.enumerateDevices() });
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
+					errorMessage.textContent = "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.";
+					// It's awkward but that's my best attempt at conveying how you may need to proceed
+					// without complicated description of how/why the dropdown might be populated with
+					// fake information until a camera stream is successfully opened.
+					errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
+					errorMessage.hidden = false;
+				}
+				return;
 			}
-		}, (error) => {
+
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
@@ -1640,10 +1699,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
-				errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
+				// Update: it definitely isn't, but I can't say exactly what it means in other cases.
+				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
+				// I really hope that isn't the problem.
+				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
+				errorMessage.textContent = "Please make sure no other programs are using the camera and try again.";
+				// A more honest/helpful message might be:
+				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
+				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
+				// if it were not to be confusing.
+				// That is, one could save some time by just hitting the button to try again before trying to figure out of another program is using the camera,
+				// because sometimes that's enough.
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
-				// constraints can not be satisfied by avb. devices
-				errorMessage.textContent = "Webcam does not support the required resolution. Please change your settings.";
+				// constraints cannot be satisfied by available devices
+				// NOTE: handled above
+				errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
 				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
@@ -1667,9 +1737,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	startStopButton.onclick = () => {
 		if (!useCameraButton.hidden) {
 			TrackyMouse.useCamera();
-			if (!paused) {
-				return;
-			}
 		}
 		handleShortcut("toggle-tracking");
 	};
@@ -2863,11 +2930,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		TrackyMouse.useCamera();
 	}
 
-	const updatePaused = () => {
-		mouseNeedsInitPos = true;
-		if (paused) {
-			pointerEl.style.display = "none";
-		}
+	const updateStartStopButton = () => {
 		if (paused) {
 			startStopButton.textContent = "Start";
 			startStopButton.setAttribute("aria-pressed", "false");
@@ -2875,6 +2938,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			startStopButton.textContent = "Stop";
 			startStopButton.setAttribute("aria-pressed", "true");
 		}
+	};
+	const updatePaused = () => {
+		mouseNeedsInitPos = true;
+		if (paused) {
+			pointerEl.style.display = "none";
+		}
+		updateStartStopButton();
 		if (window.electronAPI) {
 			window.electronAPI.notifyToggleState(!paused);
 		}

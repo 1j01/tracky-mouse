@@ -16,20 +16,17 @@ TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
 // It's simplified a bit, but includes various settings.
 const config = {
 	// The elements to click. Anything else is ignored.
-	// TODO: maybe allow clicking on everything, but first
-	// make sure to enable dwell clicking only when the head tracker is enabled.
-	targets: ".archery-target",
-	// targets: `
-	// 	button:not([disabled]),
-	// 	input,
-	// 	textarea,
-	// 	label,
-	// 	a,
-	// 	details summary,
-	// 	.radio-or-checkbox-wrapper,
-	// 	.drawing-canvas,
-	// 	.window:not(.maximized) .window-titlebar
-	// `,
+	targets: `
+		button:not([disabled]),
+		input,
+		textarea,
+		label,
+		a,
+		details summary,
+		.radio-or-checkbox-wrapper,
+		.drawing-canvas,
+		.window:not(.maximized) .window-titlebar
+	`,
 	// Filter for elements to drag. They must be included in the targets first.
 	// shouldDrag: (target) => (
 	// 	target.matches(".window-titlebar") ||
@@ -100,7 +97,21 @@ const config = {
 	beforeDispatch: () => { window.untrusted_gesture = true; },
 	afterDispatch: () => { window.untrusted_gesture = false; },
 };
-TrackyMouse.initDwellClicking(config);
+const dwellClicker = TrackyMouse.initDwellClicking(config);
+
+// Integrate the Dwell Clicker and the UI's enabled state
+// TODO: expose an event for when the UI toggles on/off
+// and/or make the init API accept a dwell clicking config...
+// I guess eventually it should just be a "clicking" config
+// since the other clicking modes should be supported in the demo.
+// For now, observe aria-pressed attribute as a hack
+const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+const observer = new MutationObserver(() => {
+	const started = toggleButton.getAttribute("aria-pressed") === "true";
+	dwellClicker.paused = !started;
+});
+observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
+
 
 // Source: https://stackoverflow.com/a/54492696/2624876
 function getCurrentRotation(el) {
