@@ -1664,9 +1664,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	startStopButton.onclick = () => {
 		if (!useCameraButton.hidden) {
 			TrackyMouse.useCamera();
-			if (!paused) {
-				return;
-			}
 		}
 		handleShortcut("toggle-tracking");
 	};

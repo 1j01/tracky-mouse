@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Fixed
+- It will no longer get stuck "enabled" if it fails to access the camera. The Start/Stop button should always toggle when clicked.
 
 ## [2.3.0] - 2026-02-14
 
