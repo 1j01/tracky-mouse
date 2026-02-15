@@ -1397,6 +1397,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		} catch (error) {
 			detector = null;
 			// TODO: avoid alert
+			console.error("Failed to create facemesh detector:", error);
 			alert(error);
 		}
 
@@ -1417,6 +1418,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				detector.dispose();
 				detector = null;
 				// TODO: avoid alert
+				console.error("Facemesh estimation failed:", error);
 				alert(error);
 			}
 			return [];
