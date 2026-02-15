@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.")
   - It will now fall back to matching a camera by name in case the device ID has changed.
   - It will show a more appropriate error message if it still can't find the camera.
+- It will now show a slightly more general error message for `AbortError`, since this error can be received for reasons other than the camera being used by another program, and simply trying again can work in some cases.
 
 ## [2.3.0] - 2026-02-14
 

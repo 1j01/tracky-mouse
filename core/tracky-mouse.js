@@ -1699,7 +1699,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
-				errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
+				// Update: it definitely isn't, but I can't say exactly what it means in other cases.
+				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
+				// I really hope that isn't the problem.
+				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
+				errorMessage.textContent = "Please make sure no other programs are using the camera and try again.";
+				// A more honest/helpful message might be:
+				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
+				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
+				// if it were not to be confusing.
+				// That is, one could save some time by just hitting the button to try again before trying to figure out of another program is using the camera,
+				// because sometimes that's enough.
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
 				// constraints cannot be satisfied by available devices
 				// NOTE: handled above
