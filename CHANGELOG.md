@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - It will no longer get stuck "enabled" if it fails to access the camera. The Start/Stop button should always toggle when clicked.
+- In case the camera device ID has changed or the camera is no longer plugged in, after selecting a specific camera for Video > Camera source,
+  previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.")
+  - It will now fall back to matching a camera by name in case the device ID has changed.
+  - It will show a more appropriate error message if it still can't find the camera.
 
 ## [2.3.0] - 2026-02-14
 
