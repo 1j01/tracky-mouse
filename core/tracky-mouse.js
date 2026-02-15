@@ -1498,10 +1498,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		return { promise, resolve, reject };
 	}
 
-	let matchedCameraIdDeferred = createDeferred();
-	let populateCameraList = () => { };
+	let populateCameraList = () => { return Promise.resolve(); };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
 		populateCameraList = () => {
+			let matchedCameraIdDeferred = createDeferred();
 			navigator.mediaDevices.enumerateDevices().then((devices) => {
 				const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
@@ -1565,6 +1565,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				}
 				matchedCameraIdDeferred.resolve(matchingDeviceId);
 			});
+			return matchedCameraIdDeferred.promise;
 		};
 		populateCameraList();
 		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
@@ -1618,7 +1619,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		updateStartStopButton();
 	};
 
-	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent) => {
+	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
 		await settingsLoadedPromise;
 		const constraints = {
 			audio: false,
@@ -1628,12 +1629,42 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				facingMode: "user",
 			}
 		};
-		const deviceIdToTry = optionsOrEvent?.retryWithCameraDeviceId ?? s.cameraDeviceId;
+		// The first time (before recursing), just try any device in order to get camera permissions
+		// in order to get actual data from `enumerateDevices`.
+		// Only then actually try to get a stream for the configured camera.
+		// This is to handle a case where permission is no longer granted,
+		// but a camera is configured in Tracky Mouse's settings.
+		// `getUserMedia` will fail with OverconstrainedError when passed a real `deviceId` because it's not in the fake list
+		// and will not trigger a permission prompt that would lead to the real list being populated,
+		// so we have to call `getUserMedia` without the `deviceId` constraint, then close the stream
+		// because it may not be the device we want (and we can't apparently tell from the MediaStream object),
+		// then call `enumerateDevices` to populate the real list, then call `getUserMedia` again with the `deviceId` constraint.
+		// This is similar to what the `mic-check` npm package does, but they presumably encourage a pattern
+		// where errors are not handled nicely if they occur on the second call to `getUserMedia`,
+		// whereas by using recursion we can handle errors in both cases (and avoid code duplication).
+		// Another way to avoid code duplication would be to separate out error handling into a function.
+		const deviceIdToTry = optionsOrEvent?.retryWithCameraDeviceId;// ?? s.cameraDeviceId;
 		if (deviceIdToTry) {
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
-		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
+			// NOTE: need to treat empty string differently from non-existence for retryWithCameraDeviceId
+			if (!("retryWithCameraDeviceId" in optionsOrEvent)) {
+				for (const track of stream.getTracks()) {
+					track.stop();
+				}
+				// This is giving me User Gesture Hinged Access and Async Authorization Asking Attempt Absorption Anxiety,
+				// or "UGHAaAAAAAA" (I'm coining that term)
+				// (Look I made a presentation about it: https://websim.com/@1j01/ughaaaaaa)
+				const matchedCameraId = await populateCameraList();
+				if (matchedCameraId) {
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId });
+				} else {
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: "" });
+				}
+				return;
+			}
 			populateCameraList();
 			reset();
 
@@ -1641,49 +1672,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
-
-			// OverconstrainedError can be caused by `deviceId` not matching,
-			// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
-			// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
-			// Note: (Not sure about ConstraintNotSatisfiedError here)
-			if (
-				(error.name === "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") &&
-				constraints.video.deviceId?.exact
-			) {
-				// This is giving me User Gesture Hinged Access And Access Attempt Absorption Anxiety,
-				// or "UGHAaAAAA" (I'm coining that term)
-				const matchedCameraId = await matchedCameraIdDeferred.promise;
-				if (matchedCameraId) {
-					// TODO: make sure matchedCameraId !== deviceIdToTry
-					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId });
-				} else {
-					// TODO: unify code branches for error handling
-
-					// TODO: handle case where permission is no longer granted,
-					// and enumerateDevices returns a fake list
-					// and getUserMedia fails with OverconstrainedError when passed a real deviceId because it's not in the fake list
-					// It's possible we could connect to the device without the user having to change the device
-					// in the dropdown (twice, in case they want a non-default camera)
-					// by first calling getUserMedia with no deviceId constraint, then closing the stream,
-					// then enumerating devices (and updating the dropdown with the real info)
-					// and calling getUserMedia again with the deviceId from the settings.
-					// The user should only need to respond to a permissions prompt once.
-
-					console.error(error, { matchedCameraId, "s.cameraDeviceId": s.cameraDeviceId, knownCameras: JSON.parse(localStorage.getItem("tracky-mouse-known-cameras") || "{}"), videoDevices: await navigator.mediaDevices.enumerateDevices() });
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
-					errorMessage.textContent = "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.";
-					// It's awkward but that's my best attempt at conveying how you may need to proceed
-					// without complicated description of how/why the dropdown might be populated with
-					// fake information until a camera stream is successfully opened.
-					errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
-					errorMessage.hidden = false;
-				}
-				return;
-			}
-
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
@@ -1712,8 +1700,22 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// because sometimes that's enough.
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
 				// constraints cannot be satisfied by available devices
-				// NOTE: handled above
-				errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
+
+				// OverconstrainedError can be caused by `deviceId` not matching,
+				// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
+				// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
+				if (constraints.video.deviceId?.exact) {
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
+					errorMessage.textContent = "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.";
+					// It's awkward but that's my best attempt at conveying how you may need to proceed
+					// without complicated description of how/why the dropdown might be populated with
+					// fake information until a camera stream is successfully opened.
+				} else {
+					errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
+				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
 				errorMessage.textContent = "Permission denied. Please enable access to the camera.";

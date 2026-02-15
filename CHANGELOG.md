@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.")
   - It will now fall back to matching a camera by name in case the device ID has changed.
   - It will show a more appropriate error message if it still can't find the camera.
+- In order to handle a case where permissions are revoked, after selecting a specific camera for Video > Camera source, in which case the browser gives a fake list of devices and requesting a real device ID will not work:
+  - It will now first request camera access in general and then when granted (at which point it can see the real list of devices) it will request access to the configured device.
+  - This may cause multiple permission prompts in a row unless you specify to allow all cameras in the first prompt.
 - It will now show a slightly more general error message for `AbortError`, since this error can be received for reasons other than the camera being used by another program, and simply trying again can work in some cases.
 
 ## [2.3.0] - 2026-02-14
