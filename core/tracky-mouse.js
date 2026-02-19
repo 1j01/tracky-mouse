@@ -839,15 +839,23 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 					options: [
 						{ value: "dwell", label: "Dwell to click" },
 						{ value: "blink", label: "Wink to click" },
-						{ value: "open-mouth", label: "Open mouth to click" },
+						{ value: "open-mouth-simple", label: "Open mouth to click (simple)" },
+						{ value: "open-mouth-ignoring-eyes", label: "Open mouth to click (ignoring eyes)" },
+						{ value: "open-mouth", label: "Open mouth to click (with eye modifiers)" },
 						{ value: "off", label: "Off" },
 					],
 					default: "dwell",
 					platform: "desktop",
+					// TODO: clarify that ooh works better than ah
+					// "open wide" refers to height, but could be misinterpreted as opposite advice - a wide mouth shape when narrow works better
+					// "open wide" is also perhaps unnecessary considering detection is improved... but who knows. maybe someone will try opening their mouth only slightly and expect it to work
+					// Some people may understand "tall and narrow" better than "ooh rather than ah" and visa-versa
 					description: `Choose how to perform mouse clicks.
 - Dwell to click: Hold the cursor in place for a short time to click.
 - Wink to click: Close one eye to click. Left eye for left click, right eye for right click.
-- Open mouth to click: Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
+- Open mouth to click (simple): Open your mouth wide to click. At least one eye must be open to click.
+- Open mouth to click (ignoring eyes): Open your mouth wide to click. Eye state is ignored.
+- Open mouth to click (with eye modifiers): Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
 - Off: Disable clicking. Use with an external switch or programs that provide their own dwell clicking.`,
 				},
 				{
@@ -2389,11 +2397,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								clickButton = 2;
 							}
 						}
-						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
-						// (or just hold out for a full I/O binding system)
-						if (s.clickingMode === "open-mouth") {
+						if (s.clickingMode === "open-mouth-ignoring-eyes") {
+							mouthInfo.used = true;
+							if (mouthInfo.thresholdMet) {
+								clickButton = 0;
+							}
+						}
+						if (s.clickingMode === "open-mouth" || s.clickingMode === "open-mouth-simple") {
 							mouthInfo.used = true;
 							blinkInfo.used = true;
+							const allowModifiers = s.clickingMode !== "open-mouth-simple";
 							// Modifiers with eye closing trigger different buttons,
 							// making this a three-button mouse.
 							// (Eyebrow raising could be another alternative modifier.)
@@ -2401,9 +2414,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// so you can continue to scroll a webpage without trying to
 							// read with one eye closed (for example).
 							if (mouthInfo.thresholdMet && !prevMouthOpen) {
-								if (blinkInfo.rightEye.active) {
+								if (blinkInfo.rightEye.active && allowModifiers) {
 									mouseButtonUntilMouthCloses = 1;
-								} else if (blinkInfo.leftEye.active) {
+								} else if (blinkInfo.leftEye.active && allowModifiers) {
 									mouseButtonUntilMouthCloses = 2;
 								} else if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
 									mouseButtonUntilMouthCloses = -1;
@@ -2418,7 +2431,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									mouthInfo.active = false;
 									// TODO: show eyes as yellow too regardless of eye state?
 								}
-								// TODO: DRY mapping
+							}
+							// In the mode with modifiers, it's helpful to preview a click's modifiers,
+							// but in simple mode, it may be confusing to show any active state
+							// when you're not clicking.
+							if (mouthInfo.thresholdMet || s.clickingMode === "open-mouth-simple") {
+								// TODO: DRY mapping (deduplicate the association of eyes to buttons)
 								blinkInfo.rightEye.active = clickButton === 1;
 								blinkInfo.leftEye.active = clickButton === 2;
 							}

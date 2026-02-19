@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed "Open mouth to click" mode to "Open mouth to click (with eye modifiers)"
+
+### Added
+
+- Added two simplified "Open mouth to click" modes ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
+  - **Open mouth to click (simple)**: Left click by opening mouth. Closing both eyes still prevents clicks. Recommended mode to avoid accidental clicks.
+  - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
+
 ### Fixed
 - It will no longer get stuck "enabled" if it fails to access the camera. The Start/Stop button should always toggle when clicked.
 - In case the camera device ID has changed or the camera is no longer plugged in, after selecting a specific camera for Video > Camera source,
