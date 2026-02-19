@@ -79,6 +79,7 @@ module.exports = {
 				const tarballPath = join(sourceAppRoot, tarballName);
 				log(`Created tarball: ${tarballPath}`);
 				log(`Installing tarball into ${buildPath}`);
+				// TODO: avoid undocumented --prefix parameter https://github.com/npm/cli/issues/1368#issuecomment-1241076700
 				execSync(`npm install --no-save ${tarballPath} --prefix ${buildPath}`);
 				log(`Removing tarball: ${tarballPath}`);
 				await unlink(tarballPath);
