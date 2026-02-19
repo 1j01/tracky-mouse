@@ -837,26 +837,20 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 					key: "clickingMode",
 					type: "dropdown",
 					options: [
-						{ value: "dwell", label: "Dwell to click" },
-						{ value: "blink", label: "Wink to click" },
-						{ value: "open-mouth-simple", label: "Open mouth to click (simple)" },
-						{ value: "open-mouth-ignoring-eyes", label: "Open mouth to click (ignoring eyes)" },
-						{ value: "open-mouth", label: "Open mouth to click (with eye modifiers)" },
-						{ value: "off", label: "Off" },
+						{ value: "dwell", label: "Dwell to click", description: "Hold the cursor in place for a short time to click." },
+						{ value: "blink", label: "Wink to click", description: "Close one eye to click. Left eye for left click, right eye for right click." },
+						// TODO: clarify that ooh works better than ah
+						// "open wide" refers to height, but could be misinterpreted as opposite advice - a wide mouth shape when narrow works better
+						// "open wide" is also perhaps unnecessary considering detection is improved... but who knows. maybe someone will try opening their mouth only slightly and expect it to work
+						// Some people may understand "tall and narrow" better than "ooh rather than ah" and visa-versa
+						{ value: "open-mouth-simple", label: "Open mouth to click (simple)", description: "Open your mouth wide to click. At least one eye must be open to click." },
+						{ value: "open-mouth-ignoring-eyes", label: "Open mouth to click (ignoring eyes)", description: "Open your mouth wide to click. Eye state is ignored." },
+						{ value: "open-mouth", label: "Open mouth to click (with eye modifiers)", description: "Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click." },
+						{ value: "off", label: "Off", description: "Disable clicking. Use with an external switch or programs that provide their own dwell clicking." },
 					],
 					default: "dwell",
 					platform: "desktop",
-					// TODO: clarify that ooh works better than ah
-					// "open wide" refers to height, but could be misinterpreted as opposite advice - a wide mouth shape when narrow works better
-					// "open wide" is also perhaps unnecessary considering detection is improved... but who knows. maybe someone will try opening their mouth only slightly and expect it to work
-					// Some people may understand "tall and narrow" better than "ooh rather than ah" and visa-versa
-					description: `Choose how to perform mouse clicks.
-- Dwell to click: Hold the cursor in place for a short time to click.
-- Wink to click: Close one eye to click. Left eye for left click, right eye for right click.
-- Open mouth to click (simple): Open your mouth wide to click. At least one eye must be open to click.
-- Open mouth to click (ignoring eyes): Open your mouth wide to click. Eye state is ignored.
-- Open mouth to click (with eye modifiers): Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
-- Off: Disable clicking. Use with an external switch or programs that provide their own dwell clicking.`,
+					description: "Choose how to perform mouse clicks.",
 				},
 				{
 					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
@@ -1135,6 +1129,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					${optionsHtml}
 				</select>
 			`;
+			if (setting.options.some(option => option.description)) {
+				setting.description += "\n\nOptions:\n" + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
+			}
 		} else if (setting.type === "button") {
 			rowEl.innerHTML = `
 				<button class="${setting.className}">${setting.label}</button>
