@@ -1,4 +1,8 @@
 /* global TrackyMouse, electronAPI */
+
+/** translation placeholder */
+const t = (s) => s;
+
 const message = document.getElementById("tracky-mouse-screen-overlay-message");
 const actionSpan = document.getElementById("enable-disable");
 
@@ -90,7 +94,7 @@ electronAPI.onOverlayUpdate((_event, data) => {
 
 	document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 	document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound);
-	actionSpan.innerText = isEnabled ? "disable" : "enable";
+	actionSpan.innerText = isEnabled ? t("disable") : t("enable");
 
 	if (!isEnabled && !isManualTakeback) {
 		// Fade out the message after a little while so it doesn't get in the way.

@@ -2,6 +2,9 @@ const { app, dialog, Menu } = require('electron');
 const { readFile, writeFile, copyFile } = require('fs').promises;
 const { join } = require('path');
 
+/** translation placeholder */
+const t = (s) => s;
+
 const isMac = process.platform === 'darwin';
 
 // let loadSettings;
@@ -20,14 +23,14 @@ app.getVersion = () =>
 		originalAppGetVersion();
 
 const aboutItem = {
-	label: 'About Tracky Mouse',
+	label: t('About Tracky Mouse'),
 	click: async () => {
 		const openAboutWindow = require('about-window').default;
 		openAboutWindow({
 			icon_path: join(__dirname, '../../images/tracky-mouse-logo-512.png'),
 			bug_report_url: 'https://github.com/1j01/tracky-mouse/issues',
 			homepage: 'https://trackymouse.js.org',
-			description: 'Control your computer with your webcam.',
+			description: t('Control your computer with your webcam.'),
 			license: 'MIT',
 		});
 	},
@@ -56,34 +59,34 @@ const template = [
 		: []),
 	// { role: 'fileMenu' }
 	{
-		label: 'File',
+		label: t('File'),
 		submenu: [
 			{
-				label: 'Export Settings',
+				label: t('Export Settings'),
 				click: async () => {
 					const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 					const defaultPath = join(app.getPath('documents'), 'tracky-mouse-settings.json');
 					const { filePath } = await dialog.showSaveDialog({
-						title: 'Export Settings',
-						buttonLabel: 'Export',
+						title: t('Export Settings'),
+						buttonLabel: t('Export'),
 						defaultPath,
-						filters: [{ name: 'JSON', extensions: ['json'] }],
+						filters: [{ name: t('JSON'), extensions: ['json'] }],
 					});
 					if (!filePath) return;
 					await copyFile(settingsPath, filePath);
 				},
 			},
 			{
-				label: 'Import Settings',
+				label: t('Import Settings'),
 				click: async () => {
 					const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 					const defaultPath = app.getPath('documents');
 					const { canceled, filePaths } = await dialog.showOpenDialog({
-						title: 'Import Settings',
-						buttonLabel: 'Import',
+						title: t('Import Settings'),
+						buttonLabel: t('Import'),
 						defaultPath,
 						properties: ['openFile'],
-						filters: [{ name: 'JSON', extensions: ['json'] }],
+						filters: [{ name: t('JSON'), extensions: ['json'] }],
 					});
 					if (canceled) return;
 					const [filePath] = filePaths;
@@ -107,7 +110,7 @@ const template = [
 	},
 	// { role: 'editMenu' }
 	{
-		label: 'Edit',
+		label: t('Edit'),
 		submenu: [
 			{ role: 'undo' },
 			{ role: 'redo' },
@@ -122,7 +125,7 @@ const template = [
 					{ role: 'selectAll' },
 					{ type: 'separator' },
 					{
-						label: 'Speech',
+						label: t('Speech'),
 						submenu: [
 							{ role: 'startSpeaking' },
 							{ role: 'stopSpeaking' }
@@ -138,13 +141,13 @@ const template = [
 	},
 	// { role: 'viewMenu' }
 	{
-		label: 'View',
+		label: t('View'),
 		submenu: [
 			{ role: 'reload' },
 			{ role: 'forceReload' },
 			{ role: 'toggleDevTools' },
 			{
-				label: 'Toggle Developer Tools (Screen Overlay)',
+				label: t('Toggle Developer Tools (Screen Overlay)'),
 				click: async () => {
 					const { BrowserWindow } = require('electron');
 					// XXX: localization hazard: relying on the untranslated window title
@@ -166,7 +169,7 @@ const template = [
 	},
 	// { role: 'windowMenu' }
 	{
-		label: 'Window',
+		label: t('Window'),
 		submenu: [
 			{ role: 'minimize' },
 			{ role: 'zoom' },
@@ -186,14 +189,14 @@ const template = [
 		role: 'help',
 		submenu: [
 			{
-				label: 'Home Page',
+				label: t('Home Page'),
 				click: async () => {
 					const { shell } = require('electron');
 					await shell.openExternal('https://trackymouse.js.org');
 				},
 			},
 			{
-				label: 'GitHub Repository',
+				label: t('GitHub Repository'),
 				click: async () => {
 					const { shell } = require('electron');
 					await shell.openExternal('https://github.com/1j01/tracky-mouse');

@@ -1,4 +1,5 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
+
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -62,77 +63,81 @@ const initDwellClicking = (config) => {
 		- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
 		- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`).
 	*/
+
+	/** translation placeholder */
+	const t = (s) => s;
+
 	if (typeof config !== "object") {
-		throw new Error("configuration object required for initDwellClicking");
+		throw new Error(t("configuration object required for initDwellClicking"));
 	}
 	if (config.targets === undefined) {
-		throw new Error("config.targets is required (must be a CSS selector)");
+		throw new Error(t("config.targets is required (must be a CSS selector)"));
 	}
 	if (typeof config.targets !== "string") {
-		throw new Error("config.targets must be a string (a CSS selector)");
+		throw new Error(t("config.targets must be a string (a CSS selector)"));
 	}
 	if (!isSelectorValid(config.targets)) {
-		throw new Error("config.targets is not a valid CSS selector");
+		throw new Error(t("config.targets is not a valid CSS selector"));
 	}
 	if (config.click === undefined) {
-		throw new Error("config.click is required");
+		throw new Error(t("config.click is required"));
 	}
 	if (typeof config.click !== "function") {
-		throw new Error("config.click must be a function");
+		throw new Error(t("config.click must be a function"));
 	}
 	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
-		throw new Error("config.shouldDrag must be a function");
+		throw new Error(t("config.shouldDrag must be a function"));
 	}
 	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
-		throw new Error("config.noCenter must be a function");
+		throw new Error(t("config.noCenter must be a function"));
 	}
 	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
-		throw new Error("config.isEquivalentTarget must be a function");
+		throw new Error(t("config.isEquivalentTarget must be a function"));
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
-		throw new Error("config.dwellClickEvenIfPaused must be a function");
+		throw new Error(t("config.dwellClickEvenIfPaused must be a function"));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
-		throw new Error("config.beforeDispatch must be a function");
+		throw new Error(t("config.beforeDispatch must be a function"));
 	}
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
-		throw new Error("config.afterDispatch must be a function");
+		throw new Error(t("config.afterDispatch must be a function"));
 	}
 	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
-		throw new Error("config.beforePointerDownDispatch must be a function");
+		throw new Error(t("config.beforePointerDownDispatch must be a function"));
 	}
 	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
-		throw new Error("config.isHeld must be a function");
+		throw new Error(t("config.isHeld must be a function"));
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
-			throw new Error("config.retarget must be an array of objects");
+			throw new Error(t("config.retarget must be an array of objects"));
 		}
 		for (let i = 0; i < config.retarget.length; i++) {
 			const rule = config.retarget[i];
 			if (typeof rule !== "object") {
-				throw new Error("config.retarget must be an array of objects");
+				throw new Error(t("config.retarget must be an array of objects"));
 			}
 			if (rule.from === undefined) {
-				throw new Error(`config.retarget[${i}].from is required`);
+				throw new Error(t("config.retarget[%0].from is required").replace("%0", i));
 			}
 			if (rule.to === undefined) {
-				throw new Error(`config.retarget[${i}].to is required (although can be null to ignore the element)`);
+				throw new Error(t("config.retarget[%0].to is required (although can be null to ignore the element)").replace("%0", i));
 			}
 			if (rule.withinMargin !== undefined && typeof rule.withinMargin !== "number") {
-				throw new Error(`config.retarget[${i}].withinMargin must be a number`);
+				throw new Error(t("config.retarget[%0].withinMargin must be a number").replace("%0", i));
 			}
 			if (typeof rule.from !== "string" && typeof rule.from !== "function" && !(rule.from instanceof Element)) {
-				throw new Error(`config.retarget[${i}].from must be a CSS selector string, an Element, or a function`);
+				throw new Error(t("config.retarget[%0].from must be a CSS selector string, an Element, or a function").replace("%0", i));
 			}
 			if (typeof rule.to !== "string" && typeof rule.to !== "function" && !(rule.to instanceof Element) && rule.to !== null) {
-				throw new Error(`config.retarget[${i}].to must be a CSS selector string, an Element, a function, or null`);
+				throw new Error(t("config.retarget[%0].to must be a CSS selector string, an Element, a function, or null").replace("%0", i));
 			}
 			if (typeof rule.from === "string" && !isSelectorValid(rule.from)) {
-				throw new Error(`config.retarget[${i}].from is not a valid CSS selector`);
+				throw new Error(t("config.retarget[%0].from is not a valid CSS selector").replace("%0", i));
 			}
 			if (typeof rule.to === "string" && !isSelectorValid(rule.to)) {
-				throw new Error(`config.retarget[${i}].to is not a valid CSS selector`);
+				throw new Error(t("config.retarget[%0].to is not a valid CSS selector").replace("%0", i));
 			}
 		}
 	}
@@ -561,25 +566,28 @@ TrackyMouse.cleanupDwellClicking = function () {
 
 TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
+	/** translation placeholder */
+	const t = (s) => s;
+
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
-			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("Start")}</button>
 		</div>
 		<div class="tracky-mouse-canvas-container-container">
 			<div class="tracky-mouse-canvas-container">
 				<div class="tracky-mouse-canvas-overlay">
-					<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
-					<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
-					<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
+					<button class="tracky-mouse-use-camera-button">${t("Allow Camera Access")}</button>
+					<!--<button class="tracky-mouse-use-camera-button">${t("Use my camera")}</button>-->
+					<button class="tracky-mouse-use-demo-footage-button" hidden>${t("Use demo footage")}</button>
 					<div class="tracky-mouse-error-message" role="alert" hidden></div>
 				</div>
 				<canvas class="tracky-mouse-canvas"></canvas>
 			</div>
 		</div>
 		<p class="tracky-mouse-desktop-app-download-message">
-			You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.
+			${t('You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.')}
 		</p>
 	`;
 	if (!div) {
@@ -602,10 +610,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	const settingsCategories = [
 		{
 			type: "group",
-			label: "Cursor Movement",
+			label: t("Cursor Movement"),
 			settings: [
 				{
-					label: "Tilt influence",
+					label: t("Tilt influence"),
 					className: "tracky-mouse-tilt-influence",
 					key: "headTrackingTiltInfluence",
 					settingValueToInputValue: (settingValue) => settingValue * 100,
@@ -615,20 +623,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					max: 100,
 					default: 0,
 					labels: {
-						// min: "Optical flow", // too technical
-						// min: "Point tracking", // still technical but at least it's terminology we're already using
-						min: "Point tracking (2D)",
-						// max: "Head tilt",
-						max: "Head tilt (3D)",
+						// min: t("Optical flow"), // too technical
+						// min: t("Point tracking"), // still technical but at least it's terminology we're already using
+						min: t("Point tracking (2D)"),
+						// max: t("Head tilt"),
+						max: t("Head tilt (3D)"),
 					},
-					// description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
-					description: `Blends between using point tracking (2D) and detected head tilt (3D).
+					// description: t("Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed."),
+					description: t(`Blends between using point tracking (2D) and detected head tilt (3D).
 - At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
 - At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
-- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`,
+- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`),
 				},
 				{
-					label: "Motion threshold",
+					label: t("Motion threshold"),
 					className: "tracky-mouse-min-distance",
 					key: "headTrackingMinDistance",
 					type: "slider",
@@ -636,20 +644,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					max: 10,
 					default: 0,
 					labels: {
-						min: "Free",
-						max: "Steady",
+						min: t("Free"),
+						max: t("Steady"),
 					},
-					description: "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.",
-					// description: "Movement less than this distance in pixels will be ignored.",
-					// description: "Speed in pixels/frame required to move the cursor.",
+					description: t("Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor."),
+					// description: t("Movement less than this distance in pixels will be ignored."),
+					// description: t("Speed in pixels/frame required to move the cursor."),
 				},
 				{
 					type: "group",
-					label: "Point tracking",
+					label: t("Point tracking"),
 					disabled: () => s.headTrackingTiltInfluence === 1,
 					settings: [
 						{
-							label: "Horizontal sensitivity",
+							label: t("Horizontal sensitivity"),
 							className: "tracky-mouse-sensitivity-x",
 							key: "headTrackingSensitivityX",
 							settingValueToInputValue: (settingValue) => settingValue * 1000,
@@ -659,13 +667,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 25,
 							labels: {
-								min: "Slow",
-								max: "Fast",
+								min: t("Slow"),
+								max: t("Fast"),
 							},
-							description: "Speed of cursor movement in response to horizontal head movement.",
+							description: t("Speed of cursor movement in response to horizontal head movement."),
 						},
 						{
-							label: "Vertical sensitivity",
+							label: t("Vertical sensitivity"),
 							className: "tracky-mouse-sensitivity-y",
 							key: "headTrackingSensitivityY",
 							settingValueToInputValue: (settingValue) => settingValue * 1000,
@@ -675,13 +683,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 50,
 							labels: {
-								min: "Slow",
-								max: "Fast",
+								min: t("Slow"),
+								max: t("Fast"),
 							},
-							description: "Speed of cursor movement in response to vertical head movement.",
+							description: t("Speed of cursor movement in response to vertical head movement."),
 						},
 						// {
-						// 	label: "Smoothing",
+						// 	label: t("Smoothing"),
 						// 	className: "tracky-mouse-smoothing",
 						// 	key: "headTrackingSmoothing",
 						// 	type: "slider",
@@ -689,8 +697,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// 	max: 100,
 						// 	default: 50,
 						// 	labels: {
-						// 		min: "Linear", // or "Direct", "Raw", "None"
-						// 		max: "Smooth", // or "Smoothed"
+						// 		min: t("Linear"), // or "Direct", "Raw", "None"
+						// 		max: t("Smooth"), // or "Smoothed"
 						// 	},
 						// },
 
@@ -703,7 +711,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Should it be swapped? What does other software with acceleration control look like?
 						// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
 						{
-							label: "Acceleration",
+							label: t("Acceleration"),
 							className: "tracky-mouse-acceleration",
 							key: "headTrackingAcceleration",
 							settingValueToInputValue: (settingValue) => settingValue * 100,
@@ -713,23 +721,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 50,
 							labels: {
-								min: "Linear", // or "Direct", "Raw"
-								max: "Smooth",
+								min: t("Linear"), // or "Direct", "Raw"
+								max: t("Smooth"),
 							},
-							// description: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.",
-							// description: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.",
-							description: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
-Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`,
+							// description: t("Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly."),
+							// description: t("Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor."),
+							description: t(`Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
+Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`),
 						},
 					],
 				},
 				{
 					type: "group",
-					label: "Head tilt calibration",
+					label: t("Head tilt calibration"),
 					disabled: () => s.headTrackingTiltInfluence === 0,
 					settings: [
 						{
-							label: "Horizontal tilt range",
+							label: t("Horizontal tilt range"),
 							className: "tracky-mouse-head-tilt-yaw-range",
 							key: "headTiltYawRange",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -739,16 +747,16 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 90,
 							default: 60,
 							labels: {
-								min: "Little neck movement",
-								max: "Large neck movement",
+								min: t("Little neck movement"),
+								max: t("Large neck movement"),
 							},
-							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
-							// description: "How much you need to tilt your head left and right to reach the edges of the screen.",
-							// description: "How much you need to tilt your head left or right to reach the edge of the screen.",
-							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
+							// description: t("Range of horizontal head tilt that moves the cursor from one side of the screen to the other."),
+							// description: t("How much you need to tilt your head left and right to reach the edges of the screen."),
+							// description: t("How much you need to tilt your head left or right to reach the edge of the screen."),
+							description: t("Controls how much you need to tilt your head left or right to reach the edge of the screen."),
 						},
 						{
-							label: "Vertical tilt range",
+							label: t("Vertical tilt range"),
 							className: "tracky-mouse-head-tilt-pitch-range",
 							key: "headTiltPitchRange",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -758,17 +766,17 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 60,
 							default: 25,
 							labels: {
-								min: "Little neck movement",
-								max: "Large neck movement",
+								min: t("Little neck movement"),
+								max: t("Large neck movement"),
 							},
-							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
-							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
-							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
-							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
+							// description: t("Range of vertical head tilt required to move the cursor from the top to the bottom of the screen."),
+							// description: t("How much you need to tilt your head up and down to reach the edges of the screen."),
+							// description: t("How much you need to tilt your head up or down to reach the edge of the screen."),
+							description: t("Controls how much you need to tilt your head up or down to reach the edge of the screen."),
 						},
 						{
 							// label: "Horizontal tilt offset",
-							label: "Horizontal cursor offset",
+							label: t("Horizontal cursor offset"),
 							className: "tracky-mouse-head-tilt-yaw-offset",
 							key: "headTiltYawOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -778,8 +786,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 45,
 							default: 0,
 							labels: {
-								min: "Left",
-								max: "Right",
+								min: t("Left"),
+								max: t("Right"),
 							},
 							// TODO: how to describe this??
 							// Specifically, how to disambiguate which direction is which / which way to adjust it?
@@ -787,15 +795,15 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							// Since it's opposite, even though it's technically yaw (angle units), it's easier to think of as moving the cursor.
 							// Hence I've renamed the setting.
 							// A later update might change the definitions and include a settings file format upgrade step.
-							// description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
-							// description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
+							// description: t("Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible."),
+							// description: t("Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible."),
 							// TODO: should this say "horizontal" in the (main part of the) description?
-							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
-⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`,
+							description: t(`Adjusts the position of the cursor when the camera sees the head facing straight ahead.
+⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`),
 						},
 						{
 							// label: "Vertical tilt offset",
-							label: "Vertical cursor offset",
+							label: t("Vertical cursor offset"),
 							className: "tracky-mouse-head-tilt-pitch-offset",
 							key: "headTiltPitchOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -805,11 +813,11 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 30,
 							default: 2.5,
 							labels: {
-								min: "Down",
-								max: "Up",
+								min: t("Down"),
+								max: t("Up"),
 							},
-							// description: "Adjusts the center position of vertical head tilt.",
-							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.`,
+							// description: t("Adjusts the center position of vertical head tilt."),
+							description: t(`Adjusts the position of the cursor when the camera sees the head facing straight ahead.`),
 						},
 					],
 				},
@@ -829,42 +837,42 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 		// which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
 		{
 			type: "group",
-			label: "Clicking",
+			label: t("Clicking"),
 			settings: [
 				{
-					label: "Clicking mode:", // TODO: ":"?
+					label: t("Clicking mode:"), // TODO: ":"?
 					className: "tracky-mouse-clicking-mode",
 					key: "clickingMode",
 					type: "dropdown",
 					options: [
-						{ value: "dwell", label: "Dwell to click", description: "Hold the cursor in place for a short time to click." },
-						{ value: "blink", label: "Wink to click", description: "Close one eye to click. Left eye for left click, right eye for right click." },
+						{ value: "dwell", label: t("Dwell to click"), description: t("Hold the cursor in place for a short time to click.") },
+						{ value: "blink", label: t("Wink to click"), description: t("Close one eye to click. Left eye for left click, right eye for right click.") },
 						// TODO: clarify that ooh works better than ah
 						// "open wide" refers to height, but could be misinterpreted as opposite advice - a wide mouth shape when narrow works better
 						// "open wide" is also perhaps unnecessary considering detection is improved... but who knows. maybe someone will try opening their mouth only slightly and expect it to work
 						// Some people may understand "tall and narrow" better than "ooh rather than ah" and visa-versa
-						{ value: "open-mouth-simple", label: "Open mouth to click (simple)", description: "Open your mouth wide to click. At least one eye must be open to click." },
-						{ value: "open-mouth-ignoring-eyes", label: "Open mouth to click (ignoring eyes)", description: "Open your mouth wide to click. Eye state is ignored." },
-						{ value: "open-mouth", label: "Open mouth to click (with eye modifiers)", description: "Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click." },
-						{ value: "off", label: "Off", description: "Disable clicking. Use with an external switch or programs that provide their own dwell clicking." },
+						{ value: "open-mouth-simple", label: t("Open mouth to click (simple)"), description: t("Open your mouth wide to click. At least one eye must be open to click.") },
+						{ value: "open-mouth-ignoring-eyes", label: t("Open mouth to click (ignoring eyes)"), description: t("Open your mouth wide to click. Eye state is ignored.") },
+						{ value: "open-mouth", label: t("Open mouth to click (with eye modifiers)"), description: t("Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.") },
+						{ value: "off", label: t("Off"), description: t("Disable clicking. Use with an external switch or programs that provide their own dwell clicking.") },
 					],
 					default: "dwell",
 					platform: "desktop",
-					description: "Choose how to perform mouse clicks.",
+					description: t("Choose how to perform mouse clicks."),
 				},
 				{
 					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
 					// "swap" is purposefully generic language so we don't have to know what system-level setting is
 					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
-					label: "Swap mouse buttons",
+					label: t("Swap mouse buttons"),
 					className: "tracky-mouse-swap-mouse-buttons",
 					key: "swapMouseButtons",
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
-					description: `Switches the left and right mouse buttons.
+					description: t(`Switches the left and right mouse buttons.
 Useful if your system's mouse buttons are swapped.
-Could also be used to right click with the dwell clicker in a pinch.`,
+Could also be used to right click with the dwell clicker in a pinch.`),
 				},
 
 				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -873,33 +881,33 @@ Could also be used to right click with the dwell clicker in a pinch.`,
 				// at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
 				// and it might complicate the design of the slider labeling.
 				{
-					label: "Delay before dragging&nbsp;&nbsp;&nbsp;", // TODO: avoid non-breaking space hack
+					label: t("Delay before dragging&nbsp;&nbsp;&nbsp;"), // TODO: avoid non-breaking space hack
 					className: "tracky-mouse-delay-before-dragging",
 					key: "delayBeforeDragging",
 					type: "slider",
 					min: 0,
 					max: 1000,
 					labels: {
-						min: "Easy to drag",
-						max: "Easy to click",
+						min: t("Easy to drag"),
+						max: t("Easy to click"),
 					},
 					default: 0, // TODO: increase default
 					platform: "desktop",
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
-					// description: "Locks mouse movement during the start of a click to prevent accidental dragging.",
-					// description: `Prevents mouse movement for the specified time after a click starts.
-					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
-					description: `Locks mouse movement for the given duration during the start of a click.
-You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
+					// description: t("Locks mouse movement during the start of a click to prevent accidental dragging."),
+					// description: t(`Prevents mouse movement for the specified time after a click starts.
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`),
+					description: t(`Locks mouse movement for the given duration during the start of a click.
+You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`),
 				},
 			],
 		},
 		{
 			type: "group",
-			label: "Video",
+			label: t("Video"),
 			settings: [
 				{
-					label: "Camera source",
+					label: t("Camera source"),
 					className: "tracky-mouse-camera-select",
 					key: "cameraDeviceId",
 					handleSettingChange: () => {
@@ -907,15 +915,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					},
 					type: "dropdown",
 					options: [
-						{ value: "", label: "Default" },
+						{ value: "", label: t("Default") },
 					],
 					default: "",
-					// description: "Select which camera to use for head tracking.",
-					description: "Selects which camera is used for head tracking.",
+					// description: t("Select which camera to use for head tracking."),
+					description: t("Selects which camera is used for head tracking."),
 				},
 				// TODO: move this inline with the camera source dropdown?
 				{
-					label: "Open Camera Settings",
+					label: t("Open Camera Settings"),
 					className: "tracky-mouse-open-camera-settings",
 					key: "openCameraSettings",
 					type: "button",
@@ -925,45 +933,45 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							alert("Failed to open camera settings:\n" + "Failed to parse known cameras from localStorage:\n" + error.message);
+							alert(t("Failed to open camera settings:\n") + t("Failed to parse known cameras from localStorage:\n") + error.message);
 							return;
 						}
 
 						const activeStream = cameraVideo.srcObject;
 						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
-						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
+						const selectedDeviceName = knownCameras[activeDeviceId]?.name || t("Default");
 
 						try {
 							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
 							if (result?.error) {
-								alert("Failed to open camera settings:\n" + result.error);
+								alert(t("Failed to open camera settings:\n") + result.error);
 							}
 						} catch (error) {
-							alert("Failed to open camera settings:\n" + error.message);
+							alert(t("Failed to open camera settings:\n") + error.message);
 						}
 					},
-					// description: "Open your camera's system settings window to adjust properties like brightness and contrast.",
-					// description: "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
-					description: "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.",
+					// description: t("Open your camera's system settings window to adjust properties like brightness and contrast."),
+					// description: t("Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure."),
+					description: t("Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure."),
 				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
 				{
-					label: "Mirror",
+					label: t("Mirror"),
 					className: "tracky-mouse-mirror",
 					key: "mirror",
 					type: "checkbox",
 					default: true,
-					description: "Mirrors the camera view horizontally.",
+					description: t("Mirrors the camera view horizontally."),
 				},
 			]
 		},
 		{
 			type: "group",
-			label: "General",
+			label: t("General"),
 			settings: [
 				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
 				{
-					label: "Start enabled",
+					label: t("Start enabled"),
 					className: "tracky-mouse-start-enabled",
 					key: "startEnabled",
 					afterInitialLoad: () => { // TODO: does this hook make sense? right now it's the only usage. could this code not just be called later?
@@ -971,10 +979,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					},
 					type: "checkbox",
 					default: false,
-					description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
-					// description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
-					// description: "Makes Tracky Mouse active as soon as it's launched.",
-					// description: "Automatically starts Tracky Mouse as soon as it's run.",
+					description: t("If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched."),
+					// description: t("Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready."),
+					// description: t("Makes Tracky Mouse active as soon as it's launched."),
+					// description: t("Automatically starts Tracky Mouse as soon as it's run."),
 				},
 				{
 					// For "experimental" label:
@@ -982,33 +990,33 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// - I considered adding "⚠︎" but it feels a little too alarming
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
-					label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
+					label: t("Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)"),
 					className: "tracky-mouse-close-eyes-to-toggle",
 					key: "closeEyesToToggle",
 					type: "checkbox",
 					default: false,
-					description: "If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.",
+					description: t("If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds."),
 				},
 				{
-					label: "Run at login",
+					label: t("Run at login"),
 					className: "tracky-mouse-run-at-login",
 					key: "runAtLogin",
 					type: "checkbox",
 					default: false,
 					platform: "desktop",
-					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
-					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
+					description: t("If enabled, Tracky Mouse will automatically start when you log into your computer."),
+					// description: t("Makes Tracky Mouse start automatically when you log into your computer."),
 				},
 				{
-					label: "Check for updates",
+					label: t("Check for updates"),
 					className: "tracky-mouse-check-for-updates",
 					key: "checkForUpdates",
 					type: "checkbox",
 					default: true,
 					platform: "desktop",
-					description: "If enabled, Tracky Mouse will automatically check for updates when it starts.",
-					// description: "Notifies you of new versions of Tracky Mouse.",
-					// description: "Notifies you when a new version of Tracky Mouse is available.",
+					description: t("If enabled, Tracky Mouse will automatically check for updates when it starts."),
+					// description: t("Notifies you of new versions of Tracky Mouse."),
+					// description: t("Notifies you when a new version of Tracky Mouse is available."),
 				},
 			],
 		},
@@ -1130,7 +1138,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				</select>
 			`;
 			if (setting.options.some(option => option.description)) {
-				setting.description += "\n\nOptions:\n" + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
+				setting.description += t("\n\nOptions:\n") + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
 			}
 		} else if (setting.type === "button") {
 			rowEl.innerHTML = `
@@ -1537,14 +1545,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 				const defaultOption = document.createElement("option");
 				defaultOption.value = "";
-				defaultOption.text = "Default";
+				defaultOption.text = t("Default");
 				cameraSelect.appendChild(defaultOption);
 
 				let matchingDeviceId = "";
 				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
-					option.text = device.label || `Camera ${cameraSelect.length}`;
+					option.text = device.label || t(`Camera ${cameraSelect.length}`);
 					cameraSelect.appendChild(option);
 					if (device.deviceId === s.cameraDeviceId) {
 						matchingDeviceId = device.deviceId;
@@ -1562,7 +1570,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const option = document.createElement("option");
 					option.value = s.cameraDeviceId;
 					const knownInfo = knownCameras[s.cameraDeviceId];
-					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
+					option.text = knownInfo ? `${knownInfo.name} (${t("Unavailable")})` : t("Unavailable camera");
 					cameraSelect.appendChild(option);
 					cameraSelect.value = s.cameraDeviceId;
 				} else {
@@ -1680,7 +1688,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
-				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
+				errorMessage.textContent = t("No camera found. Please make sure you have a camera connected and enabled.");
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
 				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
@@ -1688,7 +1696,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
 				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
 				// or "1 camera source detected" preceding it)
-				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+				errorMessage.textContent = t("Webcam is already in use. Please make sure you have no other programs using the camera.");
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
@@ -1696,7 +1704,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
 				// I really hope that isn't the problem.
 				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
-				errorMessage.textContent = "Please make sure no other programs are using the camera and try again.";
+				errorMessage.textContent = t("Please make sure no other programs are using the camera and try again.");
 				// A more honest/helpful message might be:
 				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
 				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
@@ -1714,24 +1722,24 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
 					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
 					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
-					errorMessage.textContent = "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.";
+					errorMessage.textContent = t("The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.");
 					// It's awkward but that's my best attempt at conveying how you may need to proceed
 					// without complicated description of how/why the dropdown might be populated with
 					// fake information until a camera stream is successfully opened.
 				} else {
-					errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
+					errorMessage.textContent = t(`Webcam does not support the required resolution. Please change your settings.`);
 				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
-				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
+				errorMessage.textContent = t("Permission denied. Please enable access to the camera.");
 			} else if (error.name == "TypeError") {
 				// empty constraints object
-				errorMessage.textContent = `Something went wrong accessing the camera. (${error.name}: ${error.message})`;
+				errorMessage.textContent = t(`Something went wrong accessing the camera. (${error.name}: ${error.message})`);
 			} else {
 				// other errors
-				errorMessage.textContent = `Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`;
+				errorMessage.textContent = t(`Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`);
 			}
-			errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
+			errorMessage.textContent = t(`⚠️ ${errorMessage.textContent}`);
 			errorMessage.hidden = false;
 		});
 	};
@@ -2517,9 +2525,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const textYStart = -10;
 
 
-					const pitchText = `Pitch: ${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
-					const yawText = `Yaw:   ${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
-					const rollText = `Roll:  ${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
+					const pitchText = t("Pitch: ") + `${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
+					const yawText = t("Yaw:   ") + `${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
+					const rollText = t("Roll:  ") + `${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
 
 					const boxWidth = Math.max(
 						ctx.measureText(pitchText).width,
@@ -2907,9 +2915,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.lineWidth = 3;
 			ctx.font = "20px sans-serif";
 			ctx.beginPath();
-			const text3 = "Face convergence score: " + ((useFacemesh && facemeshPrediction) ? "N/A" : faceConvergence.toFixed(4));
-			const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
-			const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
+			const text3 = t("Face convergence score: ") + ((useFacemesh && facemeshPrediction) ? t("N/A") : faceConvergence.toFixed(4));
+			const text1 = t("Face tracking score: ") + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
+			const text2 = t("Points based on score: ") + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
 			ctx.strokeText(text1, 50, 50);
 			ctx.fillText(text1, 50, 50);
 			ctx.strokeText(text2, 50, 70);
@@ -2949,10 +2957,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 	const updateStartStopButton = () => {
 		if (paused) {
-			startStopButton.textContent = "Start";
+			startStopButton.textContent = t("Start");
 			startStopButton.setAttribute("aria-pressed", "false");
 		} else {
-			startStopButton.textContent = "Stop";
+			startStopButton.textContent = t("Stop");
 			startStopButton.setAttribute("aria-pressed", "true");
 		}
 	};

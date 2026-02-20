@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { execFile } = require('child_process');
 
+/** translation placeholder */
+const t = (s) => s;
+
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
 
@@ -178,13 +181,13 @@ module.exports = {
 					// Wording options: "Update Git Repo", "Update via Git", "Update from Git", or just "Update"?
 					// (formerly "Pull Tag")
 					const buttons = repoRoot
-						? ['Update from Git', 'Remind me later', 'Skip this version']
-						: ['Download', 'Remind me later', 'Skip this version'];
+						? [t('Update from Git'), t('Remind me later'), t('Skip this version')]
+						: [t('Download'), t('Remind me later'), t('Skip this version')];
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
-						title: 'Update Available',
-						message: `A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.` +
-							(repoRoot ? '\n\nSince this is a git repository, the update can be pulled directly.' : ''),
+						title: t('Update Available'),
+						message: t(`A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.`) +
+							(repoRoot ? t('\n\nSince this is a git repository, the update can be pulled directly.') : ''),
 						buttons,
 						defaultId: 0,
 						cancelId: 1
@@ -202,9 +205,9 @@ module.exports = {
 
 								const { response: restartChoice } = await dialog.showMessageBox({
 									type: 'info',
-									title: 'Update Successful',
-									message: `Checked out ${latestVersion}. Restart the app to use the updated version.`,
-									buttons: ['Restart Now', 'Later'],
+									title: t('Update Successful'),
+									message: t(`Checked out ${latestVersion}. Restart the app to use the updated version.`),
+									buttons: [t('Restart Now'), t('Later')],
 									defaultId: 0,
 									cancelId: 1
 								});
@@ -217,10 +220,10 @@ module.exports = {
 								return;
 							} catch (error) {
 								const friendlyMessage = {
-									fetch: "Couldn't fetch updates from git.",
-									checkout: "Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.",
-									install: "Failed to install dependencies for the new version after checking it out from git."
-								}[step] ?? "An error occurred while updating from git.";
+									fetch: t("Couldn't fetch updates from git."),
+									checkout: t("Couldn't checkout the latest version in the local git repository. You may have uncommitted changes."),
+									install: t("Failed to install dependencies for the new version after checking it out from git.")
+								}[step] ?? t("An error occurred while updating from git.");
 								console.error(`Error during git update at step "${step}":`, friendlyMessage, error);
 								try {
 									const Sentry = require("@sentry/electron/main");
@@ -232,9 +235,9 @@ module.exports = {
 								}
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
-									title: 'Update Failed',
-									message: `${friendlyMessage}\n\n${error.message}`,
-									buttons: ['Open download page', 'Close'],
+									title: t('Update Failed'),
+									message: t(`${friendlyMessage}\n\n${error.message}`),
+									buttons: [t('Open download page'), t('Close')],
 									defaultId: 0,
 									cancelId: 1
 								});

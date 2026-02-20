@@ -1,8 +1,11 @@
 const { ArgumentParser, SUPPRESS /*, RawDescriptionHelpFormatter*/ } = require("argparse");
 
+/** translation placeholder */
+const t = (s) => s;
+
 const parser = new ArgumentParser({
 	prog: "tracky-mouse",
-	description: "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly.",
+	description: t("Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly."),
 	// 	epilog: `Configuration Options (for use with --set, --adjust, and --get):
 	// - "startEnabled"              default: false  controls whether head tracking is enabled when the app starts.
 	// - "runAtLogin"                default: false  controls whether the app starts when you log in.
@@ -25,27 +28,27 @@ const parser = new ArgumentParser({
 
 // Should this support loading by name or by file path? Should it have two separate options?
 // parser.add_argument("--profile", {
-// 	help: "The settings profile to use.",
+// 	help: t("The settings profile to use."),
 // 	nargs: 1,
 // 	metavar: "PROFILE",
 // });
 
 // parser.add_argument("--set", {
-// 	help: "Change an option to a particular value. (Also outputs the new value, which may be constrained to some limits.)",
+// 	help: t("Change an option to a particular value. (Also outputs the new value, which may be constrained to some limits.)"),
 // 	nargs: 2,
 // 	metavar: ["OPTION", "VALUE"],
 // 	action: "append",
 // });
 
 // parser.add_argument("--adjust", {
-// 	help: "Adjust an option by an amount relative to its current value. (Also outputs the new value, which may be constrained to some limits.)",
+// 	help: t("Adjust an option by an amount relative to its current value. (Also outputs the new value, which may be constrained to some limits.)"),
 // 	nargs: 2,
 // 	metavar: ["OPTION", "DELTA"],
 // 	action: "append",
 // });
 
 // parser.add_argument("--get", {
-// 	help: "Outputs the current value of an option.",
+// 	help: t("Outputs the current value of an option."),
 // 	nargs: 1,
 // 	metavar: "OPTION",
 // 	action: "append",
@@ -53,19 +56,19 @@ const parser = new ArgumentParser({
 
 // TODO: Need to decide how to handle toggling mouse movement vs dwell clicking...
 parser.add_argument("--start", {
-	help: "Start head tracking.",
+	help: t("Start head tracking."),
 	action: "store_true",
 });
 
 parser.add_argument("--stop", {
-	help: "Stop head tracking.",
+	help: t("Stop head tracking."),
 	action: "store_true",
 });
 
 parser.add_argument("-v", "--version", {
 	// action: "version",
 	// version: require("../../package.json").version,
-	help: "Show the version number.",
+	help: t("Show the version number."),
 	action: "store_true",
 });
 
