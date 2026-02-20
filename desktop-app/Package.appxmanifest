@@ -5,10 +5,9 @@
 	xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
 	xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
 >
-	<!-- Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784"? -->
-	<Identity Name="IsaiahOdhner.TrackyMouse"
+	<Identity Name="IsaiahOdhner.TrackyMouse_tmkzztptx392j"
 		Version="2.3.0.0"
-		Publisher="CN=Isaiah Odhner" />
+		Publisher="CN=CE6477EF-1F09-4D35-B865-45A402CC8784" />
 	<Properties>
 		<DisplayName>Tracky Mouse</DisplayName>
 		<PublisherDisplayName>Isaiah Odhner</PublisherDisplayName>
