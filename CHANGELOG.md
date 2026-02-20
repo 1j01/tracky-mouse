@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
 
 ### Fixed
+- Fixed sporadic error "o.Facemesh is not a constructor" on load ([issue #113](https://github.com/1j01/tracky-mouse/issues/113))
 - It will no longer get stuck "enabled" if it fails to access the camera. The Start/Stop button should always toggle when clicked.
 - In case the camera device ID has changed or the camera is no longer plugged in, after selecting a specific camera for Video > Camera source,
   previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.")
