@@ -8,7 +8,7 @@
     "live-server": "^1.2.1"
   },
   "scripts": {
-    "start": "live-server --port=64206",
+    "start": "live-server --port=64206 --no-browser",
     "test": "node ../scripts/copy-with-review.js . ../dist globs-for-deploy.js --dry-run",
     "deploy": "rm -rf ../dist && node ../scripts/copy-with-review.js . ../dist globs-for-deploy.js && gh-pages -d ../dist"
   },
