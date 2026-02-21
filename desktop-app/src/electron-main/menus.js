@@ -92,9 +92,17 @@ const template = [
 					const [filePath] = filePaths;
 					const json = await readFile(filePath, 'utf8');
 					// Backup settings
-					const backupPath = settingsPath.replace(/\.json$/, `-backup-${new Date().toISOString().replace(/:/g, '')}.json`);
-					console.log('Copying settings to backup path:', backupPath);
-					await copyFile(settingsPath, backupPath);
+					try {
+						const backupPath = settingsPath.replace(/\.json$/, `-backup-${new Date().toISOString().replace(/:/g, '')}.json`);
+						console.log('Copying settings to backup path:', backupPath);
+						await copyFile(settingsPath, backupPath);
+					} catch (error) {
+						if (error.code === 'ENOENT') {
+							console.log('Never mind, no existing settings to backup.');
+						} else {
+							throw error;
+						}
+					}
 					// Write settings
 					console.log('Writing settings:', settingsPath);
 					await writeFile(settingsPath, json);
