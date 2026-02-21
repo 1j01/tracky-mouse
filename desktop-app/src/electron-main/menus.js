@@ -73,7 +73,11 @@ const template = [
 						filters: [{ name: t('JSON'), extensions: ['json'] }],
 					});
 					if (!filePath) return;
-					await copyFile(settingsPath, filePath);
+					try {
+						await copyFile(settingsPath, filePath);
+					} catch (error) {
+						await dialog.showErrorBox(t('Export Settings'), t('Failed to export settings.\n\n') + error.message);
+					}
 				},
 			},
 			{
@@ -90,7 +94,13 @@ const template = [
 					});
 					if (canceled) return;
 					const [filePath] = filePaths;
-					const json = await readFile(filePath, 'utf8');
+					let json;
+					try {
+						json = await readFile(filePath, 'utf8');
+					} catch (error) {
+						await dialog.showErrorBox(t('Import Settings'), t('Failed to read selected file.\n\n') + error.message);
+						return;
+					}
 					// Backup settings
 					try {
 						const backupPath = settingsPath.replace(/\.json$/, `-backup-${new Date().toISOString().replace(/:/g, '')}.json`);
@@ -100,12 +110,18 @@ const template = [
 						if (error.code === 'ENOENT') {
 							console.log('Never mind, no existing settings to backup.');
 						} else {
-							throw error;
+							await dialog.showErrorBox(t('Import Settings'), t('Failed to backup current settings before import.\n\n') + error.message);
+							return;
 						}
 					}
 					// Write settings
 					console.log('Writing settings:', settingsPath);
-					await writeFile(settingsPath, json);
+					try {
+						await writeFile(settingsPath, json);
+					} catch (error) {
+						await dialog.showErrorBox(t('Import Settings'), t('Failed to import settings.\n\n') + error.message);
+						return;
+					}
 					// Reload settings
 					// loadSettings(); // doesn't actually reload the settings in the app window
 					app.relaunch(); // overkill! TODO: apply the settings without restarting the app
