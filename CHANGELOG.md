@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added two simplified "Open mouth to click" modes ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
   - **Open mouth to click (simple)**: Left click by opening mouth. Closing both eyes still prevents clicks. Recommended mode to avoid accidental clicks.
   - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
+- In the API, introduced an UNSTABLE method `TrackyMouse.initScreenOverlay` (working towards bringing more features from the desktop app to the web experience; see [issue #72](https://github.com/1j01/tracky-mouse/issues/72))
 
 ### Fixed
 - Fixed sporadic error "o.Facemesh is not a constructor" on load ([issue #113](https://github.com/1j01/tracky-mouse/issues/113))

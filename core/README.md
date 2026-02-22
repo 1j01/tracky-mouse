@@ -287,6 +287,15 @@ function getCurrentRotation(el) {
 
 This stops the dwell clicker.
 
+## Screen Overlay (HUD)
+
+### `TrackyMouse.initScreenOverlay()` [UNSTABLE]
+This creates the screen overlay (heads-up display) elements and adds them to the page.
+
+This is used only by the desktop app for now, and is subject to change or removal without a major version bump. The HUD may be automatically initialized when initializing the UI in the future.
+
+Returns an object with `update(data)` and `updateMousePos(x, y)` methods.
+
 ## Changelog
 
 For release notes, see [CHANGELOG.md](https://github.com/1j01/tracky-mouse/blob/main/CHANGELOG.md)
