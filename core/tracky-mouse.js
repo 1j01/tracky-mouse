@@ -3045,6 +3045,111 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	};
 };
 
+TrackyMouse.initScreenOverlay = () => {
+
+	/** translation placeholder */
+	const t = (s) => s;
+
+	const template = `
+		<div class="tracky-mouse-absolute-center">
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
+				<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+			</div>
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
+				<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
+			</div>
+		</div>
+		<div id="tracky-mouse-screen-overlay-message">
+			<div class="tracky-mouse-manual-takeback-indicator">
+				<!-- Pausing temporarily for manual takeback. -->
+				<!-- Manual Takeback -->
+				<!-- Will resume in <span id="countdown">5</span> seconds. -->
+				${t("Will resume after mouse stops moving.")}
+			</div>
+			<div class="tracky-mouse-no-takeback-indicator">
+				${t("Press %0 to toggle Tracky Mouse.").replace("%0", "F9")}
+			</div>
+		</div>
+	`;
+	const fragment = document.createRange().createContextualFragment(template);
+	document.body.appendChild(fragment);
+
+	const message = document.getElementById("tracky-mouse-screen-overlay-message");
+	const toggleMessage = message.querySelector(".tracky-mouse-no-takeback-indicator");
+
+	const inputFeedbackCanvas = document.createElement("canvas");
+	inputFeedbackCanvas.style.position = "absolute";
+	inputFeedbackCanvas.style.top = "0";
+	inputFeedbackCanvas.style.left = "0";
+	inputFeedbackCanvas.style.pointerEvents = "none";
+	inputFeedbackCanvas.width = 32;
+	inputFeedbackCanvas.height = 32;
+	document.body.appendChild(inputFeedbackCanvas);
+	const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
+	function drawInputFeedback({ inputFeedback, isEnabled }) {
+		const { blinkInfo, mouthInfo } = inputFeedback;
+		inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
+		if (!isEnabled) {
+			return;
+		}
+		// draw meters for blink and mouth openness
+		// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
+		// (Ideally it should stay on top of the taskbar and context menus all the time
+		// 	but that's another issue: https://github.com/1j01/tracky-mouse/issues/14)
+		const drawMeter = (x, yCenter, width, height, { active, thresholdMet }) => {
+			inputFeedbackCtx.fillStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
+			inputFeedbackCtx.fillRect(x, yCenter - height / 2, width, height);
+		};
+		if (blinkInfo?.used) {
+			for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
+				drawMeter(eye === blinkInfo.leftEye ? 5 : 20, 5, 10, Math.max(2, 20 * eye.heightRatio), eye);
+			}
+		}
+		if (mouthInfo?.used) {
+			drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
+		}
+	}
+
+	function updateMousePos(x, y) {
+		// inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
+		// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
+		inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
+	}
+
+	function update(data) {
+		const { isEnabled, isManualTakeback, inputFeedback, bottomOffset } = data;
+
+		message.style.bottom = `${bottomOffset}px`;
+
+		// Other diagnostics in the future would be stuff like:
+		// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
+		// - bad lighting conditions
+		// see: https://github.com/1j01/tracky-mouse/issues/26
+
+		document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
+		document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound);
+		toggleMessage.innerText = isEnabled ?
+			t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
+			t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
+
+		if (!isEnabled && !isManualTakeback) {
+			// Fade out the message after a little while so it doesn't get in the way.
+			// TODO: make sure animation isn't interrupted by inputFeedback updates.
+			message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
+		} else {
+			message.style.animation = "";
+			message.style.opacity = "1";
+		}
+
+		drawInputFeedback(data);
+	}
+
+	return {
+		update,
+		updateMousePos,
+	};
+};
+
 // CommonJS export is untested. Script tag usage recommended.
 // Just including this in case it is somehow useful.
 // eslint-disable-next-line no-undef
