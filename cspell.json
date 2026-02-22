@@ -5,6 +5,7 @@
 		"out",
 		"dist",
 		"images",
+		"locales",
 		"CNAME"
 	],
 	"words": [
