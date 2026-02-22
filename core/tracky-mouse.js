@@ -824,7 +824,7 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 								max: t("Up"),
 							},
 							// description: t("Adjusts the center position of vertical head tilt."),
-							description: t(`Adjusts the position of the cursor when the camera sees the head facing straight ahead.`),
+							description: t("Adjusts the position of the cursor when the camera sees the head facing straight ahead."),
 						},
 					],
 				},
@@ -1559,7 +1559,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
-					option.text = device.label || t(`Camera ${cameraSelect.length}`);
+					option.text = device.label || t("Camera %0").replace("%0", cameraSelect.length);
 					cameraSelect.appendChild(option);
 					if (device.deviceId === s.cameraDeviceId) {
 						matchingDeviceId = device.deviceId;
@@ -1734,19 +1734,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// without complicated description of how/why the dropdown might be populated with
 					// fake information until a camera stream is successfully opened.
 				} else {
-					errorMessage.textContent = t(`Webcam does not support the required resolution. Please change your settings.`);
+					errorMessage.textContent = t("Webcam does not support the required resolution. Please change your settings.");
 				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
 				errorMessage.textContent = t("Permission denied. Please enable access to the camera.");
 			} else if (error.name == "TypeError") {
 				// empty constraints object
-				errorMessage.textContent = t(`Something went wrong accessing the camera. (${error.name}: ${error.message})`);
+				errorMessage.textContent = `${t("Something went wrong accessing the camera.")} (${error.name}: ${error.message})`;
 			} else {
 				// other errors
-				errorMessage.textContent = t(`Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`);
+				errorMessage.textContent = `${t("Something went wrong accessing the camera. Please try again.")} (${error.name}: ${error.message})`;
 			}
-			errorMessage.textContent = t(`⚠️ ${errorMessage.textContent}`);
+			errorMessage.textContent = `${t("⚠️ ")}${errorMessage.textContent}`;
 			errorMessage.hidden = false;
 		});
 	};

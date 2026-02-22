@@ -186,7 +186,7 @@ module.exports = {
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
 						title: t('Update Available'),
-						message: t(`A new version of Tracky Mouse is available: ${latestVersion}\n\nYou are currently using version ${currentVersion}.`) +
+						message: `${t("A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.").replace("%0", latestVersion).replace("%1", currentVersion)}` +
 							(repoRoot ? t('\n\nSince this is a git repository, the update can be pulled directly.') : ''),
 						buttons,
 						defaultId: 0,
@@ -206,7 +206,7 @@ module.exports = {
 								const { response: restartChoice } = await dialog.showMessageBox({
 									type: 'info',
 									title: t('Update Successful'),
-									message: t(`Checked out ${latestVersion}. Restart the app to use the updated version.`),
+									message: `${t("Checked out %0. Restart the app to use the updated version.").replace("%0", latestVersion)}`,
 									buttons: [t('Restart Now'), t('Later')],
 									defaultId: 0,
 									cancelId: 1
@@ -236,7 +236,7 @@ module.exports = {
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
 									title: t('Update Failed'),
-									message: t(`${friendlyMessage}\n\n${error.message}`),
+									message: `${friendlyMessage}\n\n${error.message}`,
 									buttons: [t('Open download page'), t('Close')],
 									defaultId: 0,
 									cancelId: 1
