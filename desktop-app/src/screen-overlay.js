@@ -108,7 +108,7 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
 	// Update: I'm now setting `dwellClicker.paused`, just keeping the event dispatching
 	// in case it's needed to cancel a dwell click in progress.
-	// TODO: ensure settings `paused` to `true` cancels any in-progress dwell click.
+	// TODO: ensure setting `paused` to `true` cancels any in-progress dwell click.
 	const dwellClickerEnabled = isEnabled && clickingMode === "dwell";
 	if (wasDwellClickerEnabled !== dwellClickerEnabled) {
 		document.dispatchEvent(new Event(dwellClickerEnabled ? "mouseenter" : "mouseleave"));
