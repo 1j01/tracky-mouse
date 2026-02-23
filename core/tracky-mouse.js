@@ -573,8 +573,44 @@ TrackyMouse.cleanupDwellClicking = function () {
 
 TrackyMouse.init = function (div, { statsJs = false } = {}) {
 
-	/** translation placeholder */
-	const t = (s) => s;
+	let translations = {};
+	let locale = navigator.language || "en";
+	// Transform en-US to en, etc.
+	// We don't support variants yet
+	if (locale.includes("-")) {
+		locale = locale.split("-")[0];
+	}
+	// TODO: sync list automatically
+	const availableLanguages = ["en", "es", "de", "it"];
+	// Fallback to a valid dropdown value for unsupported locales
+	if (!availableLanguages.includes(locale)) {
+		locale = "en";
+	}
+	try {
+		// Load settings early so that they can be used to define settings (among other things)
+		// It's a bit hacky to load them twice but yeah
+		// (Actually in the desktop app it's even more hacky because I
+		// added code in electron-app.html to load the settings via the electron API
+		// and populate localStorage so that this code will work)
+		const settingsJSON = localStorage.getItem("tracky-mouse-settings");
+		if (settingsJSON) {
+			locale = JSON.parse(settingsJSON)?.globalSettings?.language || locale;
+		}
+		if (locale !== "en") {
+			// synchronous XHR baby!
+			const request = new XMLHttpRequest();
+			request.open("GET", `${TrackyMouse.dependenciesRoot}/locales/${locale}/translation.json`, false);
+			request.send(null);
+			if (request.status === 200) {
+				translations = JSON.parse(request.responseText);
+			} else {
+				console.warn(`Could not load translations for locale ${locale} (status ${request.status})`);
+			}
+		}
+	} catch (e) {
+		console.warn("Could not load translations for TrackyMouse UI:", e);
+	}
+	const t = (s) => translations[s] ?? s;
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
@@ -1024,6 +1060,29 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					description: t("If enabled, Tracky Mouse will automatically check for updates when it starts."),
 					// description: t("Notifies you of new versions of Tracky Mouse."),
 					// description: t("Notifies you when a new version of Tracky Mouse is available."),
+				},
+				{
+					label: t("Language"),
+					className: "tracky-mouse-language",
+					key: "language",
+					type: "dropdown",
+					options: [
+						{ value: "en", label: t("English") },
+						{ value: "es", label: t("Spanish") },
+						{ value: "de", label: t("German") },
+						{ value: "it", label: t("Italian") },
+					],
+					default: locale,
+					handleSettingChange: () => {
+						// TODO(desktop): ensure file is written before reloading,
+						// and handle page reload (don't re-register global shortcut; make sure it cleans up and works to load a second time)
+						// and include more appropriate prose ("page" is unpolished for an app to refer to itself as)
+						if (confirm(t("Reload the page to apply the new language?"))) {
+							location.reload();
+						}
+					},
+					description: t("Select the language for the Tracky Mouse interface."),
+					// description: t("Changes the language Tracky Mouse is displayed in."),
 				},
 			],
 		},

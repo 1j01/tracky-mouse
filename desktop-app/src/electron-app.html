@@ -76,8 +76,25 @@
 <body>
 	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
 	<script>
-		TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
-		TrackyMouse.init();
+		(async () => {
+			// Load options before initializing UI and put in localStorage
+			// because currently the translation loading uses localStorage only
+			let opts;
+			try {
+				opts = await window.electronAPI.getOptions();
+			} catch (error) {
+				console.error("Error getting options from main process:", error);
+			}
+			try {
+				localStorage.setItem("tracky-mouse-settings", JSON.stringify(opts));
+			} catch (error) {
+				console.error("Error saving options to localStorage:", error);
+			}
+			// -------
+
+			TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
+			TrackyMouse.init();
+		})();
 	</script>
 </body>
 
