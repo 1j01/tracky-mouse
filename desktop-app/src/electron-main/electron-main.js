@@ -205,7 +205,8 @@ function updateScreenScaleFactor() {
 	screenScaleFactor = screen.getPrimaryDisplay().scaleFactor;
 }
 
-require("./menus.js"); //({ loadSettings });
+const { updateMenu } = require("./menus.js");
+const { setLocale } = require('./i18n.js');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -305,6 +306,10 @@ function deserializeSettings(settings) {
 				// console.log("Ignoring runAtLogin setting because the app is not packaged.");
 				// Could maybe try to pass it arguments to run the app in development mode, but it might not be worth it.
 			}
+		}
+		if (settings.globalSettings.language !== undefined) {
+			setLocale(settings.globalSettings.language);
+			updateMenu();
 		}
 	}
 }
