@@ -206,7 +206,7 @@ function updateScreenScaleFactor() {
 }
 
 const { updateMenu } = require("./menus.js");
-const { setLocale } = require('./i18n.js');
+const { t, setLocale } = require('./i18n.js');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -410,12 +410,20 @@ const createWindow = () => {
 	let primaryDisplay = screen.getPrimaryDisplay();
 	const updateDwellClicking = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
+		const isManualTakeback = enabled && regainControlTimeout !== null;
+		const messageText =
+			isManualTakeback ?
+				t("Will resume after mouse stops moving.") :
+				enabled ?
+					t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
+					t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
 		screenOverlayWindow.webContents.send('overlayUpdate', {
-			isEnabled: enabled && regainControlTimeout === null,
-			isManualTakeback: enabled && regainControlTimeout !== null,
+			isEnabled: enabled && !isManualTakeback,
+			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
 			inputFeedback,
 			bottomOffset,
+			messageText,
 		});
 	};
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {

@@ -3106,9 +3106,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 TrackyMouse.initScreenOverlay = () => {
 
-	/** translation placeholder */
-	const t = (s) => s;
-
 	const template = `
 		<div class="tracky-mouse-absolute-center">
 			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
@@ -3118,23 +3115,12 @@ TrackyMouse.initScreenOverlay = () => {
 				<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
 			</div>
 		</div>
-		<div id="tracky-mouse-screen-overlay-message">
-			<div class="tracky-mouse-manual-takeback-indicator">
-				<!-- Pausing temporarily for manual takeback. -->
-				<!-- Manual Takeback -->
-				<!-- Will resume in <span id="countdown">5</span> seconds. -->
-				${t("Will resume after mouse stops moving.")}
-			</div>
-			<div class="tracky-mouse-no-takeback-indicator">
-				${t("Press %0 to toggle Tracky Mouse.").replace("%0", "F9")}
-			</div>
-		</div>
+		<div id="tracky-mouse-screen-overlay-message"></div>
 	`;
 	const fragment = document.createRange().createContextualFragment(template);
 	document.body.appendChild(fragment);
 
 	const message = document.getElementById("tracky-mouse-screen-overlay-message");
-	const toggleMessage = message.querySelector(".tracky-mouse-no-takeback-indicator");
 
 	const inputFeedbackCanvas = document.createElement("canvas");
 	inputFeedbackCanvas.style.position = "absolute";
@@ -3176,7 +3162,7 @@ TrackyMouse.initScreenOverlay = () => {
 	}
 
 	function update(data) {
-		const { isEnabled, isManualTakeback, inputFeedback, bottomOffset } = data;
+		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset } = data;
 
 		message.style.bottom = `${bottomOffset}px`;
 
@@ -3187,9 +3173,8 @@ TrackyMouse.initScreenOverlay = () => {
 
 		document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
 		document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound);
-		toggleMessage.innerText = isEnabled ?
-			t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
-			t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
+
+		message.innerText = messageText;
 
 		if (!isEnabled && !isManualTakeback) {
 			// Fade out the message after a little while so it doesn't get in the way.
