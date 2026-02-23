@@ -43,7 +43,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 
 let wasDwellClickerEnabled = false;
 electronAPI.onOverlayUpdate((_event, data) => {
-	console.log("onOverlayUpdate", data);
+	// console.log("onOverlayUpdate", data);
 	const { isEnabled, clickingMode } = data;
 
 	screenOverlay.update(data);
