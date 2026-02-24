@@ -3005,7 +3005,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false (at least in some version of Electron (v12 I think, when I tested it), on Ubuntu, with XFCE)
-	setInterval(function animationLoop() {
+	const iid = setInterval(function animationLoop() {
 		draw(!paused || document.visibilityState === "visible");
 	}, 15);
 
@@ -3070,6 +3070,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// Wouldn't need to change the API that way.
 			// (Would also be easy to maintain backwards compatibility while switching to using a class,
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
+
+			clearInterval(iid);
 
 			// stopping camera stream is important, not sure about other resetting
 			reset();
