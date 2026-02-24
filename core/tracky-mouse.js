@@ -571,7 +571,7 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse._initInner = function (div, { statsJs = false, requestReinit } = {}) {
+TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 
 	let translations = {};
 	let locale = navigator.language || "en";
@@ -1084,7 +1084,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							console.error("Error saving options to localStorage:", error);
 							return;
 						}
-						requestReinit();
+						reinit();
 					},
 					description: t("Select the language for the Tracky Mouse interface."),
 					// description: t("Changes the language Tracky Mouse is displayed in."),
@@ -3186,13 +3186,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 TrackyMouse.init = function (div, opts = {}) {
 	let inner = null;
 
-	const requestReinit = () => {
+	const reinit = () => {
 		inner.dispose();
 		createInner();
 	};
 
 	const createInner = () => {
-		inner = TrackyMouse._initInner(div, Object.assign({}, opts, { requestReinit }));
+		inner = TrackyMouse._initInner(div, opts, reinit);
 	};
 
 	createInner();
