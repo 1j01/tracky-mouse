@@ -571,7 +571,7 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse.init = function (div, { statsJs = false } = {}) {
+TrackyMouse._initInner = function (div, { statsJs = false, requestReinit } = {}) {
 
 	let translations = {};
 	let locale = navigator.language || "en";
@@ -611,6 +611,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 		console.warn("Could not load translations for TrackyMouse UI:", e);
 	}
 	const t = (s) => translations[s] ?? s;
+	// console.trace("Initializing UI with locale", locale);
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
@@ -1074,12 +1075,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					],
 					default: locale,
 					handleSettingChange: () => {
-						// TODO(desktop): ensure file is written before reloading,
-						// and handle page reload (don't re-register global shortcut; make sure it cleans up and works to load a second time)
-						// and include more appropriate prose ("page" is unpolished for an app to refer to itself as)
-						if (confirm(t("Reload the page to apply the new language?"))) {
-							location.reload();
+						// console.trace("handleSettingChange for language setting");
+						// HACK: update localStorage because it's what's used to determine the language
+						// This is needed for the desktop app which otherwise saves to a file not localStorage
+						try {
+							localStorage.setItem("tracky-mouse-settings", JSON.stringify(serializeSettings()));
+						} catch (error) {
+							console.error("Error saving options to localStorage:", error);
+							return;
 						}
+						requestReinit();
 					},
 					description: t("Select the language for the Tracky Mouse interface."),
 					// description: t("Changes the language Tracky Mouse is displayed in."),
@@ -3175,6 +3180,29 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 		},
 	};
+};
+
+// Wrapper that manages an inner instance and recreates it when the language is changed.
+TrackyMouse.init = function (div, opts = {}) {
+	let inner = null;
+
+	const requestReinit = () => {
+		inner.dispose();
+		createInner();
+	};
+
+	const createInner = () => {
+		inner = TrackyMouse._initInner(div, Object.assign({}, opts, { requestReinit }));
+	};
+
+	createInner();
+
+	return {
+		dispose() {
+			inner.dispose();
+		},
+	};
+
 };
 
 TrackyMouse.initScreenOverlay = () => {
