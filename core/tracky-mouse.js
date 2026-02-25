@@ -1699,7 +1699,77 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	};
 
 	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
+		// Phases:
+		// 1. "tryPreferredCamera"
+		//    Use the configured device ID to try to access the preferred camera.
+		//    If the permission has been revoked, the browser may
+		//    switch to a mode where `enumerateDevices` gives FAKE data
+		//    and `getUserMedia` will fail with OverconstrainedError
+		//    when trying to access a real device
+		//    (without even triggering a permission prompt that might
+		//    lead to getting the real list of devices.)
+		// 2. "justGetPermission"
+		//    Request any camera in order to get camera permission
+		//    in general and get real data from `enumerateDevices`
+		//    in phase 3.
+		//    Close the stream immediately, as it may not be the
+		//    stream we want, and we can't tell, as far I know.
+		//    Then populate the camera list with real data.
+		// 3. "retryPreferredCamera"
+		//    Now that we have a real list of devices,
+		//    and are allowed to access real devices,
+		//    try again with a specific device ID.
+		//    If there's a match by name and not ID, we use that.
+		//
+		// Q: Why not get rid of phase 1? Shouldn't 2+3 handle it?
+		// In Electron, closing the stream and re-requesting access
+		// often gives a "camera in use" error.
+		// Plus, _ideally_ phase 1 means it can connect faster in browsers.
+		// However, phase 1 may only get OverconstrainedError in browsers
+		// as it's implemented.
+		// We could get rid of phase 1 in browsers, basically separating the flows.
+		// But...
+		// I wonder if revoking camera access is what changes device IDs,
+		// and if device IDs changing is what gives OverconstrainedError,
+		// not the "fake device list" behavior. Is it perhaps only hiding labels in that mode,
+		// but separately permanently scrambling IDs as a single event?
+		// If device IDs are changed, storing the new device ID to try in phase 1
+		// might make phase 1 work as an optimization in browsers.
+		//
+		// Q: If Electron has such a problem, would it not occur in the later phases?
+		// Phase 2+3 should never occur in Electron.
+		// In fact, we can guard against this.
+		// Although, if phase 2+3 are only enterred on failure,
+		// it can't really be a problem, can it?
+		//
+		// Q: Will this cause unnecessary prompts?
+		// In the case of one existing camera, no.
+		// In the case that there are multiple existing cameras,
+		// and the user grants access to a different one than is configured,
+		// it may cause an extra prompt.
+		// In Firefox, you can choose to allow all cameras with a checkbox.
+		// If you check that box, or select the matching camera before clicking Allow,
+		// there should be only one prompt.
+		//
+		// Q: Why not use a library for this?
+		// The mic-check package uses a similar approach, but seems to
+		// encourage a pattern where nice error handling is applied
+		// only to a "just get permission" equivalent phase,
+		// whereas by using recursion or separating out the error handling
+		// into a function, one can handle errors nicely always.
+		// mic-check provides only the one phase, and presumably
+		// is meant for a two-phase solution.
+		//
+		// Q: What happens if there are multiple overlapping calls to `useCamera`?
+		// I don't know. TODO: test this.
+		//
+		// P.S. I gave a talk about this at Rubber Duck Conf 2026
+		// You can view the slides here: https://websim.com/@1j01/ughaaaaaa
+
 		await settingsLoadedPromise;
+
+		const phase = optionsOrEvent.phase ?? "tryPreferredCamera";
+
 		const constraints = {
 			audio: false,
 			video: {
@@ -1708,28 +1778,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				facingMode: "user",
 			}
 		};
-		// The first time (before recursing), just try any device in order to get camera permissions
-		// in order to get actual data from `enumerateDevices`.
-		// Only then actually try to get a stream for the configured camera.
-		// This is to handle a case where permission is no longer granted,
-		// but a camera is configured in Tracky Mouse's settings.
-		// `getUserMedia` will fail with OverconstrainedError when passed a real `deviceId` because it's not in the fake list
-		// and will not trigger a permission prompt that would lead to the real list being populated,
-		// so we have to call `getUserMedia` without the `deviceId` constraint, then close the stream
-		// because it may not be the device we want (and we can't apparently tell from the MediaStream object),
-		// then call `enumerateDevices` to populate the real list, then call `getUserMedia` again with the `deviceId` constraint.
-		// This is similar to what the `mic-check` npm package does, but they presumably encourage a pattern
-		// where errors are not handled nicely if they occur on the second call to `getUserMedia`,
-		// whereas by using recursion we can handle errors in both cases (and avoid code duplication).
-		// Another way to avoid code duplication would be to separate out error handling into a function.
-		const deviceIdToTry = optionsOrEvent?.retryWithCameraDeviceId;// ?? s.cameraDeviceId;
+		const deviceIdToTry = phase === "retryPreferredCamera" ?
+			optionsOrEvent.retryWithCameraDeviceId :
+			phase === "tryPreferredCamera" ?
+				s.cameraDeviceId :
+				"";
 		if (deviceIdToTry) {
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
 		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
-			// NOTE: need to treat empty string differently from non-existence for retryWithCameraDeviceId
-			if (!("retryWithCameraDeviceId" in optionsOrEvent)) {
+			if (phase === "justGetPermission") {
 				for (const track of stream.getTracks()) {
 					track.stop();
 				}
@@ -1738,9 +1797,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// (Look I made a presentation about it: https://websim.com/@1j01/ughaaaaaa)
 				const matchedCameraId = await populateCameraList();
 				if (matchedCameraId) {
-					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId });
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId, phase: "retryPreferredCamera" });
 				} else {
-					TrackyMouse.useCamera({ retryWithCameraDeviceId: "" });
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: "", phase: "retryPreferredCamera" });
 				}
 				return;
 			}
@@ -1751,6 +1810,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
+			if (
+				phase === "tryPreferredCamera" &&
+				(error.name === "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") &&
+				!window.electronAPI
+			) {
+				console.log("Failed to access the preferred camera.", error);
+				console.log("Now trying to get permission to access any camera, which may allow us to access the preferred camera on a retry.");
+				TrackyMouse.useCamera({ phase: "justGetPermission" });
+				return;
+			}
 			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
