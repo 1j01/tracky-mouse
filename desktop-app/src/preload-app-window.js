@@ -20,10 +20,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	},
 
 	onShortcut: (callback) => {
-		ipcRenderer.on("shortcut", (_event, data) => {
-			// console.log("shortcut", data);
-			callback(data);
-		});
+		const listener = (_event, data) => { callback(data); };
+		ipcRenderer.on("shortcut", listener);
+		return () => { ipcRenderer.removeListener("shortcut", listener); };
 	},
 
 	notifyToggleState: (nowEnabled) => {

@@ -3051,8 +3051,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	// Try to handle both the global and local shortcuts
 	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
 	// I hope there's no cross-platform issue with this.
+	let removeShortcutListener = null;
 	if (window.electronAPI) {
-		window.electronAPI.onShortcut(handleShortcut);
+		removeShortcutListener = window.electronAPI.onShortcut(handleShortcut);
 	}
 	const handleKeydown = (event) => {
 		// Same shortcut as the global shortcut in the electron app
@@ -3093,6 +3094,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			stats?.domElement.remove(); // there is no dispose method but this may be all that it would need to do https://github.com/mrdoob/stats.js/pull/96
 
 			removeEventListener("keydown", handleKeydown);
+
+			removeShortcutListener?.();
 
 			// This is a little awkward, reversing the initialization based on a possibly-preexisting element
 			// Could save and restore innerHTML but that won't restore event listeners, references, etc.
