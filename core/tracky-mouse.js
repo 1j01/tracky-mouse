@@ -1787,6 +1787,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
+		console.log("TrackyMouse.useCamera phase", phase, "constraints", constraints);
 		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
 			if (phase === "justGetPermission") {
 				for (const track of stream.getTracks()) {
@@ -1810,17 +1811,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
+			console.log("TrackyMouse.useCamera phase", phase, "error", error);
 			if (
 				phase === "tryPreferredCamera" &&
 				(error.name === "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") &&
 				!window.electronAPI
 			) {
-				console.log("Failed to access the preferred camera.", error);
-				console.log("Now trying to get permission to access any camera, which may allow us to access the preferred camera on a retry.");
 				TrackyMouse.useCamera({ phase: "justGetPermission" });
 				return;
 			}
-			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
 				errorMessage.textContent = t("No camera found. Please make sure you have a camera connected and enabled.");
