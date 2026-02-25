@@ -105,12 +105,14 @@ const dwellClicker = TrackyMouse.initDwellClicking(config);
 // I guess eventually it should just be a "clicking" config
 // since the other clicking modes should be supported in the demo.
 // For now, observe aria-pressed attribute as a hack
-const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 const observer = new MutationObserver(() => {
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started;
 });
-observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
+// observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
+// The UI can now be re-initialized when switching languages, creating a new button
+observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
 
 
 // Source: https://stackoverflow.com/a/54492696/2624876
