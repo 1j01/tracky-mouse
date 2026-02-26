@@ -1,0 +1,201 @@
+{
+  "\n\nOptions:\n": "\n\nالخيارات:\n",
+  "\n\nSince this is a git repository, the update can be pulled directly.": "\n\nنظرًا لكونه مستودع Git، يمكن جلب التحديث مباشرةً.",
+  "⚠️ ": "⚠️ ",
+  "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "يتوفر إصدار جديد من Tracky Mouse: %0\n\nأنت تستخدم حاليًا الإصدار %1.",
+  "About Tracky Mouse": "حول Tracky Mouse",
+  "Acceleration": "التسارع",
+  "Adjust an option by an amount relative to its current value. (Also outputs the new value, which may be constrained to some limits.)": "يضبط خيارًا بمقدار نسبي للقيمة الحالية. (كما يعرض القيمة الجديدة، والتي قد تُقيَّد ببعض الحدود.)",
+  "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.": "يضبط موضع مركز إمالة الرأس الأفقي. هذا غير مستحسن؛ حرِّك الكاميرا بدلاً من ذلك إن أمكن.",
+  "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.": "يضبط موضع مركز إمالة الرأس الأفقي. لا يُنصح بهذا الإزاحة الأفقية؛ حرِّك الكاميرا بدلاً من ذلك إن أمكن.",
+  "Adjusts the center position of vertical head tilt.": "يضبط موضع مركز إمالة الرأس العمودية.",
+  "Adjusts the position of the cursor when the camera sees the head facing straight ahead.": "يضبط موضع المؤشر عندما ترى الكاميرا الرأس متجهًا للأمام مباشرة.",
+  "Adjusts the position of the cursor when the camera sees the head facing straight ahead.\n⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷": "يضبط موضع المؤشر عندما ترى الكاميرا الرأس متجهًا للأمام مباشرة.\n⚠️ لا يُنصح بهذا الإزاحة الأفقية؛ حرِّك الكاميرا بدلاً من ذلك إن أمكن. 📷",
+  "Allow Camera Access": "السماح بالوصول إلى الكاميرا",
+  "An error occurred while updating from git.": "حدث خطأ أثناء التحديث من Git.",
+  "Automatically starts Tracky Mouse as soon as it's run.": "يبدأ تشغيل Tracky Mouse تلقائيًا بمجرد تشغيله.",
+  "Blends between using point tracking (2D) and detected head tilt (3D).\n- At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.\n- At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.\n- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.": "يمزج بين استخدام تتبّع النقاط (ثنائي الأبعاد) وإمالة الرأس المكتشفة (ثلاثية الأبعاد).\n- عند 0% سيستخدم تتبّع النقاط فقط. يحرك المؤشر وفقًا للحركة الظاهرة لنقاط وجهك ثنائية الأبعاد في صورة الكاميرا، لذا يستجيب لدوران الرأس وتحريكه معًا.\n- عند 100% سيستخدم إمالة الرأس فقط. يستخدم تقديرًا لاتجاه وجهك في الفضاء ثلاثي الأبعاد، ويتجاهل تحريك الرأس. لاحظ أن هذه القيمة ملساء، لذا فهي ليست سريعة الاستجابة مثل تتبّع النقاط. في هذا الوضع لن تحتاج لإعادة المعايرة بدفع المؤشر إلى حافة الشاشة.\n- في القيم المتوسطة سيتصرّف كمعايرة تلقائية، فيعدّل تتبّع النقاط تدريجيًا ليتطابق مع إمالة الرأس. يقوم بذلك عبر إبطاء حركة المؤشر التي تبتعد عن الموضع المتوقع بناءً على إمالة الرأس، و(فقط بعد 80% على شريط التمرير) تحريك المؤشر فعليًا نحوه.",
+  "Camera %0": "الكاميرا %0",
+  "Camera source": "مصدر الكاميرا",
+  "Change an option to a particular value. (Also outputs the new value, which may be constrained to some limits.)": "يغيّر خيارًا إلى قيمة معيّنة. (كما يعرض القيمة الجديدة، والتي قد تُقيَّد ببعض الحدود.)",
+  "Check for updates": "التحقّق من وجود تحديثات",
+  "Checked out %0. Restart the app to use the updated version.": "تم سحب %0. أعد تشغيل التطبيق لاستخدام الإصدار المحدَّث.",
+  "Choose how to perform mouse clicks.": "اختر كيفية تنفيذ نقرات الفأرة.",
+  "Clicking": "النقر",
+  "Clicking mode:": "وضع النقر:",
+  "Close": "إغلاق",
+  "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)": "أغلق عينيك لبدء/إيقاف (<span style=\"border-bottom: 1px dotted;\" title=\"• لا توجد حاليًا أي ملاحظات بصرية أو صوتية.\n• لا توجد إعدادات لمدد التفعيل والتعطيل.\n• تتأثر باكتشافات الوميض الخاطئة، خاصة عند النظر إلى الأسفل.\">تجريبي</span>)",
+  "Close one eye to click. Left eye for left click, right eye for right click.": "أغمض عينًا واحدة للنقر. العين اليسرى للنقر الأيسر، واليمنى للنقر الأيمن.",
+  "config.afterDispatch must be a function": "يجب أن يكون ‎config.afterDispatch‎ دالة.",
+  "config.beforeDispatch must be a function": "يجب أن يكون ‎config.beforeDispatch‎ دالة.",
+  "config.beforePointerDownDispatch must be a function": "يجب أن يكون ‎config.beforePointerDownDispatch‎ دالة.",
+  "config.click is required": "الخيار ‎config.click‎ مطلوب.",
+  "config.click must be a function": "يجب أن يكون ‎config.click‎ دالة.",
+  "config.dwellClickEvenIfPaused must be a function": "يجب أن يكون ‎config.dwellClickEvenIfPaused‎ دالة.",
+  "config.isEquivalentTarget must be a function": "يجب أن يكون ‎config.isEquivalentTarget‎ دالة.",
+  "config.isHeld must be a function": "يجب أن يكون ‎config.isHeld‎ دالة.",
+  "config.noCenter must be a function": "يجب أن يكون ‎config.noCenter‎ دالة.",
+  "config.retarget must be an array of objects": "يجب أن يكون ‎config.retarget‎ مصفوفة من الكائنات.",
+  "config.retarget[%0].from is not a valid CSS selector": "‎config.retarget[%0].from‎ ليس محدِّد CSS صالحًا.",
+  "config.retarget[%0].from is required": "الحقل ‎config.retarget[%0].from‎ مطلوب.",
+  "config.retarget[%0].from must be a CSS selector string, an Element, or a function": "يجب أن يكون ‎config.retarget[%0].from‎ سلسلة لمحدِّد CSS أو عنصرًا أو دالة.",
+  "config.retarget[%0].to is not a valid CSS selector": "‎config.retarget[%0].to‎ ليس محدِّد CSS صالحًا.",
+  "config.retarget[%0].to is required (although can be null to ignore the element)": "الحقل ‎config.retarget[%0].to‎ مطلوب (ويمكن أن يكون ‎null‎ لتجاهل العنصر).",
+  "config.retarget[%0].to must be a CSS selector string, an Element, a function, or null": "يجب أن يكون ‎config.retarget[%0].to‎ سلسلة لمحدِّد CSS أو عنصرًا أو دالة أو ‎null‎.",
+  "config.retarget[%0].withinMargin must be a number": "يجب أن يكون ‎config.retarget[%0].withinMargin‎ رقمًا.",
+  "config.shouldDrag must be a function": "يجب أن يكون ‎config.shouldDrag‎ دالة.",
+  "config.targets is not a valid CSS selector": "‎config.targets‎ ليس محدِّد CSS صالحًا.",
+  "config.targets is required (must be a CSS selector)": "الخيار ‎config.targets‎ مطلوب (يجب أن يكون محدِّد CSS).",
+  "config.targets must be a string (a CSS selector)": "يجب أن يكون ‎config.targets‎ سلسلة نصية (محدِّد CSS).",
+  "configuration object required for initDwellClicking": "كائن إعدادات مطلوب لـ ‎initDwellClicking‎.",
+  "Control your computer with your webcam.": "تحكّم في حاسوبك باستخدام كاميرا الويب.",
+  "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly.": "تحكّم في مؤشر الفأرة دون استخدام اليدين. هذا الأمر الطرفي يتحكّم في تطبيق Tracky Mouse قيد التشغيل. يُقصَد به أن تستخدمه البرامج الخارجية مثل أنظمة أوامر الصوت لتبديل Tracky Mouse وضبط الإعدادات أثناء العمل.",
+  "Controls how much you need to tilt your head left or right to reach the edge of the screen.": "يتحكّم في مقدار إمالة الرأس إلى اليسار أو اليمين اللازم للوصول إلى حافة الشاشة.",
+  "Controls how much you need to tilt your head up or down to reach the edge of the screen.": "يتحكّم في مقدار إمالة الرأس للأعلى أو الأسفل اللازم للوصول إلى حافة الشاشة.",
+  "Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.": "تعذّر سحب أحدث إصدار من مستودع Git المحلي. ربما لديك تغييرات غير مُلتزَمة.",
+  "Couldn't fetch updates from git.": "تعذّر جلب التحديثات من Git.",
+  "Cursor Movement": "حركة المؤشر",
+  "Default": "الافتراضي",
+  "Delay before dragging&nbsp;&nbsp;&nbsp;": "التأخير قبل السحب&nbsp;&nbsp;&nbsp;",
+  "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "يحدّد ما إذا كانت حركة المؤشر تعتمد على إمالة الرأس ثلاثية الأبعاد، أم حركة الوجه ثنائية الأبعاد في تغذية الكاميرا.",
+  "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "يعطّل النقر. استعمله مع مفتاح خارجي أو برامج توفّر آلية النقر بالتثبيت الخاصة بها.",
+  "Down": "أسفل",
+  "Download": "تنزيل",
+  "Dwell to click": "انقر بالتثبيت",
+  "Easy to click": "سهل النقر",
+  "Easy to drag": "سهل السحب",
+  "Edit": "تحرير",
+  "Export": "تصدير",
+  "Export Settings": "تصدير الإعدادات",
+  "Face convergence score: ": "درجة تقارب الوجه: ",
+  "Face tracking score: ": "درجة تتبّع الوجه: ",
+  "Failed to backup current settings before import.\n\n": "فشل نسخ الإعدادات الحالية احتياطيًا قبل الاستيراد.\n\n",
+  "Failed to export settings.\n\n": "فشل تصدير الإعدادات.\n\n",
+  "Failed to import settings.\n\n": "فشل استيراد الإعدادات.\n\n",
+  "Failed to install dependencies for the new version after checking it out from git.": "فشل تثبيت الاعتمادات للإصدار الجديد بعد سحبه من Git.",
+  "Failed to open camera settings:\n": "فشل فتح إعدادات الكاميرا:\n",
+  "Failed to parse known cameras from localStorage:\n": "فشل تحليل الكاميرات المعروفة من ‎localStorage‎:\n",
+  "Failed to read selected file.\n\n": "فشل قراءة الملف المحدد.\n\n",
+  "Fast": "سريع",
+  "File": "ملف",
+  "Free": "مجاني",
+  "General": "عام",
+  "GitHub Repository": "مستودع GitHub",
+  "Head tilt": "إمالة الرأس",
+  "Head tilt (3D)": "إمالة الرأس (ثلاثية الأبعاد)",
+  "Head tilt calibration": "معايرة إمالة الرأس",
+  "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.": "التسارع الأعلى يجعل المؤشر يتحرك أسرع عندما يتحرك الرأس بسرعة، وأبطأ عندما يتحرك ببطء.",
+  "Hold the cursor in place for a short time to click.": "ثبّت المؤشر في مكانه لوقت قصير للنقر.",
+  "Home Page": "الصفحة الرئيسية",
+  "Horizontal cursor offset": "إزاحة المؤشر أفقيًا",
+  "Horizontal sensitivity": "الحساسية الأفقية",
+  "Horizontal tilt range": "نطاق الإمالة الأفقية",
+  "How much you need to tilt your head left and right to reach the edges of the screen.": "مقدار إمالة رأسك لليسار واليمين للوصول إلى حواف الشاشة.",
+  "How much you need to tilt your head left or right to reach the edge of the screen.": "مقدار إمالة رأسك لليسار أو اليمين للوصول إلى حافة الشاشة.",
+  "How much you need to tilt your head up and down to reach the edges of the screen.": "مقدار إمالة رأسك للأعلى والأسفل للوصول إلى حواف الشاشة.",
+  "How much you need to tilt your head up or down to reach the edge of the screen.": "مقدار إمالة رأسك للأعلى أو الأسفل للوصول إلى حافة الشاشة.",
+  "If enabled, Tracky Mouse will automatically check for updates when it starts.": "إذا كان مفعّلًا، سيتحقّق Tracky Mouse تلقائيًا من وجود تحديثات عند بدء التشغيل.",
+  "If enabled, Tracky Mouse will automatically start when you log into your computer.": "إذا كان مفعّلًا، سيبدأ Tracky Mouse تلقائيًا عند تسجيل الدخول إلى حاسوبك.",
+  "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.": "إذا كان مفعّلًا، سيبدأ Tracky Mouse في التحكّم بالمؤشر بمجرد تشغيله.",
+  "If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.": "إذا كان مفعّلًا، يمكنك بدء أو إيقاف التحكّم بالمؤشر عبر إبقاء كلتا عينيك مغلقتين لعدّة ثوانٍ.",
+  "Import": "استيراد",
+  "Import Settings": "استيراد الإعدادات",
+  "JSON": "JSON",
+  "Large neck movement": "حركة عنق كبيرة",
+  "Later": "لاحقًا",
+  "Left": "يسار",
+  "Linear": "خطي",
+  "Little neck movement": "حركة عنق بسيطة",
+  "Locks mouse movement during the start of a click to prevent accidental dragging.": "يقفل حركة الفأرة في بداية النقر لمنع السحب غير المقصود.",
+  "Locks mouse movement for the given duration during the start of a click.\nYou may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.": "يقفل حركة الفأرة للمدة المحددة في بداية النقر.\nقد ترغب في إيقاف هذا الخيار إذا كنت ترسم على لوحة، أو زيادته إذا كنت تسحب العناصر عن طريق الخطأ عند محاولة النقر.",
+  "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.": "يجعل المؤشر يتحرك بسرعة إضافية مع حركات الرأس السريعة، وببطء شديد مع الحركات البطيئة. يساعد على تثبيت المؤشر.",
+  "Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.\nHelps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.": "يجعل المؤشر يتحرك بسرعة نسبية مع حركات الرأس السريعة، وببطء نسبي مع الحركات البطيئة.\nيساعد على تثبيت المؤشر. لكن عند استخدام تتبّع النقاط مع إمالة الرأس، قد تعمل قيمة أقل بشكل أفضل لأن إمالة الرأس خطية، ومن المفيد أن يكون تتبّع النقاط قريبًا منها ليعمل كمعايرة تلقائية سلسة.",
+  "Makes Tracky Mouse active as soon as it's launched.": "يجعل Tracky Mouse نشطًا بمجرد تشغيله.",
+  "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.": "يجعل Tracky Mouse نشطًا عند تشغيله. وإلا فيمكنك تشغيله يدويًا عندما تكون مستعدًا.",
+  "Makes Tracky Mouse start automatically when you log into your computer.": "يجعل Tracky Mouse يبدأ تلقائيًا عند تسجيل الدخول إلى حاسوبك.",
+  "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.": "أدنى مسافة لتحريك المؤشر في إطار واحد، بالبكسل. يساعد على إيقاف المؤشر تمامًا.",
+  "Mirror": "عكس أفقي",
+  "Mirrors the camera view horizontally.": "يعكس صورة الكاميرا أفقيًا.",
+  "Motion threshold": "عتبة الحركة",
+  "Movement less than this distance in pixels will be ignored.": "لن تُحتسب الحركة الأقل من هذه المسافة (بالبكسل).",
+  "N/A": "غير متوفر",
+  "No camera found. Please make sure you have a camera connected and enabled.": "لم يتم العثور على كاميرا. يرجى التأكد من توصيل الكاميرا وتفعيلها.",
+  "Notifies you of new versions of Tracky Mouse.": "يُخطرك بالإصدارات الجديدة من Tracky Mouse.",
+  "Notifies you when a new version of Tracky Mouse is available.": "يُخطرك عندما يتوفر إصدار جديد من Tracky Mouse.",
+  "Off": "إيقاف",
+  "Open Camera Settings": "فتح إعدادات الكاميرا",
+  "Open download page": "فتح صفحة التنزيل",
+  "Open mouth to click (ignoring eyes)": "افتح فمك للنقر (مع تجاهل حالة العينين)",
+  "Open mouth to click (simple)": "افتح فمك للنقر (بسيط)",
+  "Open mouth to click (with eye modifiers)": "افتح فمك للنقر (مع معدِّلات العين)",
+  "Open your camera's system settings window to adjust properties like brightness and contrast.": "يفتح نافذة إعدادات النظام الخاصة بالكاميرا لضبط خصائص مثل السطوع والتباين.",
+  "Open your mouth wide to click. At least one eye must be open to click.": "افتح فمك على اتساعه للنقر. يجب أن تكون عين واحدة على الأقل مفتوحة ليتم النقر.",
+  "Open your mouth wide to click. Eye state is ignored.": "افتح فمك على اتساعه للنقر. يتم تجاهل حالة العينين.",
+  "Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.": "افتح فمك على اتساعه للنقر. إذا كانت العين اليسرى مغلقة فسيكون النقر أيمن؛ وإذا كانت العين اليمنى مغلقة فسيكون النقر بالزر الأوسط.",
+  "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "يفتح مربع حوار إعدادات النظام للكاميرا المحددة لضبط خصائص مثل التركيز التلقائي والتعريض التلقائي.",
+  "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "يفتح نافذة إعدادات النظام للكاميرا لضبط خصائص مثل التركيز التلقائي والتعريض التلقائي.",
+  "Optical flow": "التدفق البصري",
+  "Outputs the current value of an option.": "يعرض القيمة الحالية لأحد الخيارات.",
+  "Permission denied. Please enable access to the camera.": "تم رفض الإذن. يرجى تفعيل الوصول إلى الكاميرا.",
+  "Pitch: ": "الميل: ",
+  "Please make sure no other programs are using the camera and try again.": "يرجى التأكد من عدم استخدام برامج أخرى للكاميرا ثم المحاولة مرة أخرى.",
+  "Point tracking": "تتبّع النقاط",
+  "Point tracking (2D)": "تتبّع النقاط (ثنائي الأبعاد)",
+  "Points based on score: ": "النقاط حسب الدرجة: ",
+  "Press %0 to disable Tracky Mouse.": "اضغط %0 لتعطيل Tracky Mouse.",
+  "Press %0 to enable Tracky Mouse.": "اضغط %0 لتمكين Tracky Mouse.",
+  "Press %0 to toggle Tracky Mouse.": "اضغط %0 لتبديل حالة Tracky Mouse.",
+  "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.": "نطاق إمالة الرأس الأفقية الذي ينقل المؤشر من جانب الشاشة إلى الجانب الآخر.",
+  "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.": "نطاق إمالة الرأس العمودية المطلوب لنقل المؤشر من أعلى الشاشة إلى أسفلها.",
+  "Remind me later": "ذكّرني لاحقًا",
+  "Restart Now": "أعِد التشغيل الآن",
+  "Right": "يمين",
+  "Roll:  ": "اللف:  ",
+  "Run at login": "تشغيل عند تسجيل الدخول",
+  "Select which camera to use for head tracking.": "حدّد الكاميرا التي ستُستخدم لتتبّع الرأس.",
+  "Selects which camera is used for head tracking.": "يحدّد الكاميرا المستخدمة لتتبّع الرأس.",
+  "Show the version number.": "عرض رقم الإصدار.",
+  "Skip this version": "تخطَّ هذا الإصدار",
+  "Slow": "بطيء",
+  "Smooth": "سلس",
+  "Smoothing": "التنعيم",
+  "Something went wrong accessing the camera.": "حدث خطأ أثناء الوصول إلى الكاميرا.",
+  "Something went wrong accessing the camera. Please try again.": "حدث خطأ أثناء الوصول إلى الكاميرا. يرجى المحاولة مرة أخرى.",
+  "Speech": "الصوت",
+  "Speed in pixels/frame required to move the cursor.": "السرعة المطلوبة بالبكسل لكل إطار لتحريك المؤشر.",
+  "Speed of cursor movement in response to horizontal head movement.": "سرعة حركة المؤشر استجابةً لحركة الرأس الأفقية.",
+  "Speed of cursor movement in response to vertical head movement.": "سرعة حركة المؤشر استجابةً لحركة الرأس العمودية.",
+  "Start": "بدء",
+  "Start enabled": "البدء مُفعَّل",
+  "Start head tracking.": "بدء تتبّع الرأس.",
+  "Steady": "ثابت",
+  "Stop": "إيقاف",
+  "Stop head tracking.": "إيقاف تتبّع الرأس.",
+  "Swap mouse buttons": "تبديل أزرار الفأرة",
+  "Switches the left and right mouse buttons.\nUseful if your system's mouse buttons are swapped.\nCould also be used to right click with the dwell clicker in a pinch.": "يبدّل بين زري الفأرة الأيسر والأيمن.\nمفيد إذا كانت أزرار الفأرة في نظامك مبدَّلة.\nيمكن استخدامه أيضًا للنقر بالزر الأيمن مع النقر بالتثبيت عند الحاجة.",
+  "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.": "الكاميرا المحددة سابقًا غير متاحة. جرّب اختيار \"الافتراضي\" من فيديو > مصدر الكاميرا، ثم اختر كاميرا محددة إذا احتجت ذلك.",
+  "The settings profile to use.": "ملف إعدادات الاستخدام.",
+  "Tilt influence": "تأثير الإمالة",
+  "Toggle Developer Tools (Screen Overlay)": "تبديل أدوات المطوّر (تراكب الشاشة)",
+  "Unavailable": "غير متاح",
+  "Unavailable camera": "كاميرا غير متاحة",
+  "Up": "أعلى",
+  "Update Available": "تحديث متاح",
+  "Update Failed": "فشل التحديث",
+  "Update from Git": "التحديث من Git",
+  "Update Successful": "تم التحديث بنجاح",
+  "Use demo footage": "استخدام لقطات تجريبية",
+  "Use my camera": "استخدام كاميرتي",
+  "Vertical cursor offset": "إزاحة المؤشر عموديًا",
+  "Vertical sensitivity": "الحساسية العمودية",
+  "Vertical tilt range": "نطاق الإمالة العمودية",
+  "Video": "فيديو",
+  "View": "عرض",
+  "Webcam does not support the required resolution. Please change your settings.": "كاميرا الويب لا تدعم الدقة المطلوبة. يرجى تغيير الإعدادات.",
+  "Webcam is already in use. Please make sure you have no other programs using the camera.": "كاميرا الويب قيد الاستخدام بالفعل. يرجى التأكد من عدم استخدام برامج أخرى للكاميرا.",
+  "Will resume after mouse stops moving.": "سيُستأنف بعد توقّف حركة الفأرة.",
+  "Window": "نافذة",
+  "Wink to click": "غمزة للنقر",
+  "Yaw:   ": "الانحراف:   ",
+  "You can control your entire computer with the <a href=\"https://trackymouse.js.org/\">TrackyMouse</a> desktop app.": "يمكنك التحكّم في كامل حاسوبك باستخدام تطبيق سطح المكتب <a href=\"https://trackymouse.js.org/\">TrackyMouse</a>."
+}
