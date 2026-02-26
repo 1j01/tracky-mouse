@@ -24,7 +24,7 @@ Translations for both core and desktop app are stored in `core/locales/$lang/tra
 
 After adding or changing localizable strings, run `npx i18next-cli extract`, then look at the git diff and add translations for any new strings. Then run `npx i18next-cli status` to verify translation completeness.
 
-To add a new language, run `mkdir -p core/locales/$NEW_LANG; cp core/locales/en/translation.json core/locales/$NEW_LANG; npm run update-locales`, then look at `core/locales/$NEW_LANG/translation.json` and add translations for all the strings.
+To add a new language, run in the terminal `NEW_LANG=<ISO language code>; mkdir -p core/locales/$NEW_LANG; cp core/locales/en/translation.json core/locales/$NEW_LANG; npm run update-locales`, then look at `core/locales/$NEW_LANG/translation.json` and patch it to add translations for all the strings. Finally, run `npx i18next-cli status` to verify translation completeness.
 
 ## Changelog
 
