@@ -20,6 +20,7 @@ export default defineConfig({
 			"**/electron-main.js", // uses top-level return
 		],
 		output: "core/locales/{{language}}/{{namespace}}.json",
+		primaryLanguage: "en",
 		nsSeparator: false,
 		keySeparator: false,
 	},
