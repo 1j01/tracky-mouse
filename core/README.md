@@ -229,11 +229,12 @@ const config = {
 				rect.height > rect.width;
 			const min = Number(target.min);
 			const max = Number(target.max);
-			target.value = (
-				vertical ?
-					(y - rect.top) / rect.height :
-					(x - rect.left) / rect.width
-			) * (max - min) + min;
+			const style = window.getComputedStyle(target);
+			const isRTL = !vertical && style.direction === "rtl";
+			const fraction = vertical
+				? (y - rect.top) / rect.height
+				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
+			target.value = fraction * (max - min) + min;
 			target.dispatchEvent(new Event("input", { bubbles: true }));
 			target.dispatchEvent(new Event("change", { bubbles: true }));
 		} else {
