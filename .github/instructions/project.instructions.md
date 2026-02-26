@@ -28,8 +28,7 @@ To add a new language, run in the terminal `NEW_LANG=<ISO language code>; mkdir 
 
 ## Changelog
 
-Should the changelog be updated?
-Follow these rules and make sure to read the Unreleased section of the changelog before deciding whether to update the changelog.
+After making any code changes, **read the content of `CHANGELOG.md`** (specifically the Unreleased section), then follow these rules to decide whether or not to update the changelog.
 
 `CHANGELOG.md` is for users of the desktop app and the API, not for developers of Tracky Mouse.
 
@@ -42,8 +41,6 @@ Update existing entries in the Unreleased section if applicable, for instance "R
 If a fix is made, an applicable caveat may be removed, for instance "Added X, but Y is broken" + "Fixed Y" = "Added X". No mention of the fix should remain, since the bug was never released.
 
 Write for a broad audience and limit technical jargon. Try to make it clear which part of the project is affected. 
-
-Updates to the changelog should be made in the same commit as the code changes.
 
 ## Committing
 
