@@ -105,7 +105,7 @@ module.exports = {
 				appManifest: './Package.appxmanifest',
 				logLevel: 'debug',
 				// Windows Store supposedly allows certificates but they cause problems and won't be used anyway
-				sign: false,
+				// sign: false,
 			}
 		},
 		{
