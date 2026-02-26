@@ -48,9 +48,10 @@ function t(s) {
 function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 	return isManualTakeback ?
 		t("Will resume after mouse stops moving.") :
-		enabled ?
-			t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
-			t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
+		typeof enabled !== "boolean" ? t("Press %0 to toggle Tracky Mouse.").replace("%0", "F9") :
+			enabled ?
+				t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
+				t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
 }
 
 module.exports = { setLocale, t, getLocale: () => currentLocale, getScreenOverlayMessageText };
