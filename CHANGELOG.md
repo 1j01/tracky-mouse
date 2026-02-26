@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **General > Language**: choose between English, Italian, German, Spanish, French, Dutch, Korean, Traditional Chinese, Hindi, Arabic, and Japanese (with more to come!)
+- **General > Language**: choose between English, Italian, German, Spanish, French, Dutch, Korean, Traditional Chinese, Hindi, Bengali, Arabic, and Japanese (with more to come!)
 - Added two simplified "Open mouth to click" modes ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
   - **Open mouth to click (simple)**: Left click by opening mouth. Closing both eyes still prevents clicks. Recommended mode to avoid accidental clicks.
   - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
