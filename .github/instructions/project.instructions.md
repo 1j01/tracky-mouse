@@ -28,7 +28,22 @@ To add a new language, run `mkdir -p core/locales/$NEW_LANG; cp core/locales/en/
 
 ## Changelog
 
-Always update the `CHANGELOG.md` when making any user-facing changes. Write for a broad audience and limit technical jargon. Try to make it clear which part of the project is affected. Skip this step for refactors or other developer-facing changes. Update existing entries in the Unreleased section if applicable, for instance "Removed X" + "Added back part of X" = "Removed X except for Y". Updates to the changelog should be made in the same commit as the code changes.
+Should the changelog be updated?
+Follow these rules and make sure to read the Unreleased section of the changelog before deciding whether to update the changelog.
+
+`CHANGELOG.md` is for users of the desktop app and the API, not for developers of Tracky Mouse.
+
+Do not update the changelog for refactors or other developer-facing changes like adding a debug flag or a new script.
+
+Even if it's a user-facing change, do not add an entry to the changelog if it is a change to a feature that will be new in the next release.
+
+Update existing entries in the Unreleased section if applicable, for instance "Removed X" + "Added back Y from X" = "Removed X, except for Y".
+
+If a fix is made, an applicable caveat may be removed, for instance "Added X, but Y is broken" + "Fixed Y" = "Added X". No mention of the fix should remain, since the bug was never released.
+
+Write for a broad audience and limit technical jargon. Try to make it clear which part of the project is affected. 
+
+Updates to the changelog should be made in the same commit as the code changes.
 
 ## Committing
 
