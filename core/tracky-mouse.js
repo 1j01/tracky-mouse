@@ -613,6 +613,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 	} catch (e) {
 		console.warn("Could not load translations for TrackyMouse UI:", e);
 	}
+	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
+	const isRTL = rtlLanguages.includes(locale);
 	const t = (s) => translations[s] ?? s;
 	// console.trace("Initializing UI with locale", locale);
 
@@ -1567,6 +1569,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
+	uiContainer.classList.toggle("tracky-mouse-rtl", isRTL);
+	uiContainer.dir = isRTL ? "rtl" : "ltr";
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("Start")}</button>
@@ -4214,6 +4218,7 @@ TrackyMouse.initScreenOverlay = () => {
 	document.body.appendChild(fragment);
 
 	const message = document.getElementById("tracky-mouse-screen-overlay-message");
+	message.dir = "auto";
 
 	const inputFeedbackCanvas = document.createElement("canvas");
 	inputFeedbackCanvas.style.position = "absolute";

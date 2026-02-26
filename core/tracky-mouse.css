@@ -65,6 +65,11 @@
 	accent-color: rgb(191, 36, 234);
 }
 
+.tracky-mouse-ui.tracky-mouse-rtl {
+	direction: rtl;
+	text-align: right;
+}
+
 .tracky-mouse-canvas {
 	max-width: 100%;
 	object-fit: scale-down;
@@ -86,7 +91,7 @@
 .tracky-mouse-start-stop-button::after {
 	content: "(" attr(aria-keyshortcuts) ")";
 	opacity: 0.6;
-	margin-left: 0.5em;
+	margin-inline-start: 0.5em;
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
