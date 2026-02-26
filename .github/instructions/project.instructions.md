@@ -22,9 +22,15 @@ When adding a new development script in `scripts`, add it to `eslint.config.js` 
 
 Translations for both core and desktop app are stored in `core/locales/$lang/translation.json`.
 
-After adding or changing localizable strings, run `npx i18next-cli extract`, then look at the git diff and add translations for any new strings. Then run `npx i18next-cli status` to verify translation completeness.
+After adding or changing localizable strings:
+- Run `npx i18next-cli extract`
+- Look at the git diff and add translations for any new strings.
+- Then run `npx i18next-cli status` to verify translation completeness.
 
-To add a new language, run in the terminal `NEW_LANG=<ISO language code>; mkdir -p core/locales/$NEW_LANG; cp core/locales/en/translation.json core/locales/$NEW_LANG; npm run update-locales`, then look at `core/locales/$NEW_LANG/translation.json` and patch it to add translations for all the strings. Finally, run `npx i18next-cli status` to verify translation completeness.
+To add a new language:
+- Run `npm run new-locale -- $NEW_LANG`
+- Replace every translation value in `core/locales/$NEW_LANG/translation.json` with a localized string, while preserving the keys.
+- You are not done until every string is localized. Do not ask for confirmation before starting translating. If I ask for a new language, I am assigning you the task of translation.
 
 ## Changelog
 
