@@ -73,6 +73,7 @@
 		"pointerleave",
 		"pointermove",
 		"pointerup",
+		"reinit",
 		"rescap",
 		"retarget",
 		"retargeted",
