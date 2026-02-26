@@ -6,6 +6,7 @@ export default defineConfig({
 		"es",
 		"de",
 		"it",
+		"fr",
 	],
 	extract: {
 		input: "{core,desktop-app}/**/*.{js,jsx,ts,tsx}",

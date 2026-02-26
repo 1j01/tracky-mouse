@@ -581,7 +581,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		locale = locale.split("-")[0];
 	}
 	// TODO: sync list automatically
-	const availableLanguages = ["en", "es", "de", "it"];
+	const availableLanguages = ["en", "es", "de", "it", "fr"];
 	// Fallback to a valid dropdown value for unsupported locales
 	if (!availableLanguages.includes(locale)) {
 		locale = "en";
@@ -1072,6 +1072,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						{ value: "es", label: t("Spanish") },
 						{ value: "de", label: t("German") },
 						{ value: "it", label: t("Italian") },
+						{ value: "fr", label: t("French") },
 					],
 					default: locale,
 					handleSettingChange: () => {
