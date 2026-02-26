@@ -9,6 +9,8 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+console.log("preload-app-window.js", "process.windowsStore:", process.windowsStore, "process", process);
+const externalAutoUpdates = !!process.windowsStore;
 
 contextBridge.exposeInMainWorld("electronAPI", {
 	moveMouse: (x, y) => {
@@ -44,6 +46,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	// isPackaged: app.isPackaged, // can't require electron's app module here
 	// isPackaged: !!process.defaultApp, // nope, doesn't exist
 	getIsPackaged: () => ipcRenderer.invoke('getIsPackaged'),
+
+	externalAutoUpdates,
+	// getExternalAutoUpdates: () => ipcRenderer.invoke('getExternalAutoUpdates'),
 
 	openCameraSettings: (deviceId) => {
 		return ipcRenderer.invoke('openCameraSettings', deviceId);

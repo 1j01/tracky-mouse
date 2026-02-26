@@ -2015,7 +2015,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					key: "checkForUpdates",
 					type: "checkbox",
 					default: true,
-					visible: () => isDesktopApp,
+					visible: () => isDesktopApp && !window.electronAPI.externalAutoUpdates,
 					description: t("If enabled, Tracky Mouse will automatically check for updates when it starts."),
 					// description: t("Notifies you of new versions of Tracky Mouse."),
 					// description: t("Notifies you when a new version of Tracky Mouse is available."),

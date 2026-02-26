@@ -49,6 +49,9 @@ const { parser } = require('./cli.js');
 const { getVersion } = require('./version.js');
 const { checkForUpdates } = require('./auto-updater.js');
 
+const externalAutoUpdates = !!process.windowsStore;
+console.log("externalAutoUpdates:", externalAutoUpdates, "process.windowsStore:", process.windowsStore);
+
 // Compare command line arguments:
 // - unpackaged (in development):      "path/to/electron.exe" "." "maybe/a/file.png"
 // - packaged (usually in production): "path/to/jspaint.exe" "maybe/a/file.png"
@@ -663,7 +666,7 @@ app.on('ready', async () => {
 	}
 	createWindow();
 
-	if (activeSettings.checkForUpdates !== false) {
+	if (activeSettings.checkForUpdates !== false && !externalAutoUpdates) {
 		checkForUpdates({
 			currentVersion: app.getVersion(),
 			skippedVersion: activeSettings.skippedUpdateVersion,
