@@ -573,6 +573,8 @@ TrackyMouse.cleanupDwellClicking = function () {
 
 TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 
+	const isDesktopApp = !!window.electronAPI;
+
 	let translations = {};
 	let locale = navigator.language || "en";
 	// Transform en-US to en, etc.
@@ -1857,7 +1859,7 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 						{ value: "off", label: t("Off"), description: t("Disable clicking. Use with an external switch or programs that provide their own dwell clicking.") },
 					],
 					default: "dwell",
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					description: t("Choose how to perform mouse clicks."),
 				},
 				{
@@ -1869,7 +1871,7 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 					key: "swapMouseButtons",
 					type: "checkbox",
 					default: false,
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					description: t(`Switches the left and right mouse buttons.
 Useful if your system's mouse buttons are swapped.
 Could also be used to right click with the dwell clicker in a pinch.`),
@@ -1892,7 +1894,7 @@ Could also be used to right click with the dwell clicker in a pinch.`),
 						max: t("Easy to click"),
 					},
 					default: 0, // TODO: increase default
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
 					// description: t("Locks mouse movement during the start of a click to prevent accidental dragging."),
 					// description: t(`Prevents mouse movement for the specified time after a click starts.
@@ -1927,7 +1929,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					className: "tracky-mouse-open-camera-settings",
 					key: "openCameraSettings",
 					type: "button",
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					onClick: async () => {
 						let knownCameras = {};
 						try {
@@ -2003,7 +2005,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					key: "runAtLogin",
 					type: "checkbox",
 					default: false,
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					description: t("If enabled, Tracky Mouse will automatically start when you log into your computer."),
 					// description: t("Makes Tracky Mouse start automatically when you log into your computer."),
 				},
@@ -2013,7 +2015,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					key: "checkForUpdates",
 					type: "checkbox",
 					default: true,
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					description: t("If enabled, Tracky Mouse will automatically check for updates when it starts."),
 					// description: t("Notifies you of new versions of Tracky Mouse."),
 					// description: t("Notifies you when a new version of Tracky Mouse is available."),
@@ -2097,9 +2099,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	function buildSettingGroupUI(group) {
 		const detailsEl = document.createElement("details");
 		// detailsEl.className = "tracky-mouse-settings-group";
-		// TODO: recursive check for platform - or just define platform on groups
-		if (group.settings.every(setting => setting.platform === "desktop")) {
-			detailsEl.classList.add("tracky-mouse-desktop-only");
+		// TODO: recursive check for visibility - or just define visible() on groups
+		if (group.settings.every(setting => setting.visible?.() === false)) {
+			detailsEl.hidden = true;
 		}
 		const summaryEl = document.createElement("summary");
 		summaryEl.textContent = group.label;
@@ -2167,8 +2169,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				<button class="${setting.className}">${setting.label}</button>
 			`;
 		}
-		if (setting.platform === "desktop") {
-			rowEl.classList.add("tracky-mouse-desktop-only");
+		if (setting.visible?.() === false) {
+			rowEl.hidden = true;
 		}
 
 		if (setting.description) {
@@ -2261,10 +2263,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		window.electronAPI.getIsPackaged().then((isPackaged) => {
 			runAtLoginCheckbox.disabled = !isPackaged;
 		});
-	} else {
-		for (const elementToHide of uiContainer.querySelectorAll('.tracky-mouse-desktop-only')) {
-			elementToHide.hidden = true;
-		}
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
