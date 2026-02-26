@@ -43,4 +43,14 @@ function t(s) {
 	return translations && Object.prototype.hasOwnProperty.call(translations, s) ? translations[s] : s;
 }
 
-module.exports = { setLocale, t, getLocale: () => currentLocale };
+// This is outside of electron-main.js because i18next-cli can't parse top-level return statements,
+// as used in that file, as far as I know.
+function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
+	return isManualTakeback ?
+		t("Will resume after mouse stops moving.") :
+		enabled ?
+			t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
+			t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
+}
+
+module.exports = { setLocale, t, getLocale: () => currentLocale, getScreenOverlayMessageText };

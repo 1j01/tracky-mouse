@@ -78,5 +78,16 @@ module.exports = [
 			},
 			"sourceType": "commonjs"
 		},
+	},
+	{
+		"files": [
+			"desktop-app/src/electron-main/electron-main.js",
+		],
+		"rules": {
+			"id-denylist": ["error",
+				// Disallow translation function because i18next-cli extract can't parse this file due to top-level return.
+				"t"
+			],
+		},
 	}
 ];
