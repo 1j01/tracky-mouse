@@ -72,7 +72,7 @@ const config = {
 			const min = Number(target.min);
 			const max = Number(target.max);
 			const style = window.getComputedStyle(target);
-			const isRTL = !vertical && style.direction === "rtl";
+			const isRTL = style.direction === "rtl";
 			const fraction = vertical
 				? (y - rect.top) / rect.height
 				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
