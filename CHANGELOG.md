@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **General > Language**: choose between English, Italian, German, Spanish, French, Dutch, Korean, Traditional Chinese, Hindi, Bengali, Arabic, and Japanese (with more to come!)
+- **General > Language**: choose between English, Italian, German, Spanish, French, Dutch, Korean, Traditional Chinese, Hindi, Bengali, Arabic, and Japanese (with more to come!) ([issue #59](https://github.com/1j01/tracky-mouse/issues/59))
 - Added two simplified "Open mouth to click" modes ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
   - **Open mouth to click (simple)**: Left click by opening mouth. Closing both eyes still prevents clicks. Recommended mode to avoid accidental clicks.
   - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
@@ -24,11 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - It will now show a dialog if importing/exporting settings fails.
 - Tracky Mouse will no longer get stuck "enabled" if it fails to access the camera. The Start/Stop button should always toggle when clicked.
 - In case a specific camera has been selected, but the camera device ID has changed or the camera is no longer plugged in,
-  previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.")
+  previously it showed an irrelevant error message ("Webcam does not support the required resolution. Please change your settings.") ([issue #122](https://github.com/1j01/tracky-mouse/issues/122))
   - It will now fall back to matching a camera by name in case the device ID has changed.
   - It will show a more appropriate error message if it still can't find the camera.
 - In case a specific camera has been selected, but permissions have been revoked,
-  in which case the browser gives a fake list of devices and requesting a real device ID will not work:
+  in which case the browser gives a fake list of devices and requesting a real device ID will not work: ([issue #122](https://github.com/1j01/tracky-mouse/issues/122))
   - It will now request access to any camera and then when granted (at which point it can see the real list of devices) it will request access to the configured device.
   - This may cause multiple permission prompts in a row unless you specify to allow all cameras in the first prompt.
 - It will now show a slightly more general error message for `AbortError`, since this error can be received for reasons other than the camera being used by another program, and simply trying again can work in some cases.
