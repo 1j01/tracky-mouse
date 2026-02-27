@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - This may cause multiple permission prompts in a row unless you specify to allow all cameras in the first prompt.
 - It will now show a slightly more general error message for `AbortError`, since this error can be received for reasons other than the camera being used by another program, and simply trying again can work in some cases.
 - The `dispose` method of TrackyMouse UI now correctly stops the animation loop.
+- Fixed a warning about canvas image data performance.
 
 ## [2.3.0] - 2026-02-14
 

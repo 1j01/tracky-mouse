@@ -2266,7 +2266,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
-	var ctx = canvas.getContext('2d');
+	var ctx = canvas.getContext('2d', { willReadFrequently: true });
 
 	var debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
