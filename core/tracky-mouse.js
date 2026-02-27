@@ -1893,7 +1893,7 @@ Could also be used to right click with the dwell clicker in a pinch.`),
 						min: t("Easy to drag"),
 						max: t("Easy to click"),
 					},
-					default: 0, // TODO: increase default
+					default: 800,
 					visible: () => isDesktopApp,
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
 					// description: t("Locks mouse movement during the start of a click to prevent accidental dragging."),

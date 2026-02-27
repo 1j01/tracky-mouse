@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed "Open mouth to click" mode to "Open mouth to click (with eye modifiers)"
+- Increased default "Delay before drag" to 800ms to make it easier to click. This was never meant to default to zero. ([issue #118])(https://github.com/1j01/tracky-mouse/issues/118)
+  - If you've changed any setting, this new default will not take effect.
 
 ### Added
 
