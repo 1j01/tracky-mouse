@@ -257,7 +257,7 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 ## Quality Assurance
 
-- Run `npm run lint` to check for spelling and code issues.
+- Run `npm run lint` to check for spelling, code, and localization issues.
 - There are no tests yet.
 
 ## Release Process
