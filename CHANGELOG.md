@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.4.0] - 2026-02-28
+
 ### Changed
 
 - Renamed "Open mouth to click" mode to "Open mouth to click (with eye modifiers)"
@@ -233,7 +237,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/1j01/tracky-mouse/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/1j01/tracky-mouse/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/1j01/tracky-mouse/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/1j01/tracky-mouse/compare/v2.0.0...v2.1.0

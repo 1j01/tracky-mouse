@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "tracky-mouse-website",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Website for Tracky Mouse",
   "devDependencies": {
     "gh-pages": "^6.1.1",
