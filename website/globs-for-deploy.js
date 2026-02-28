@@ -26,6 +26,7 @@ exports.include = [
 	"demo.js",
 	"core/tracky-mouse.css",
 	"core/tracky-mouse.js",
+	"core/locales/*/translation.json",
 	"core/lib/clmtrackr.js",
 	"core/lib/jsfeat-min.js",
 	"core/lib/no-eval.js",
