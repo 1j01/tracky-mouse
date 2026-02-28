@@ -71,11 +71,12 @@ const config = {
 				rect.height > rect.width;
 			const min = Number(target.min);
 			const max = Number(target.max);
-			target.value = (
-				vertical ?
-					(y - rect.top) / rect.height :
-					(x - rect.left) / rect.width
-			) * (max - min) + min;
+			const style = window.getComputedStyle(target);
+			const isRTL = style.direction === "rtl";
+			const fraction = vertical
+				? (y - rect.top) / rect.height
+				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
+			target.value = fraction * (max - min) + min;
 			target.dispatchEvent(new Event("input", { bubbles: true }));
 			target.dispatchEvent(new Event("change", { bubbles: true }));
 		} else {
@@ -105,12 +106,14 @@ const dwellClicker = TrackyMouse.initDwellClicking(config);
 // I guess eventually it should just be a "clicking" config
 // since the other clicking modes should be supported in the demo.
 // For now, observe aria-pressed attribute as a hack
-const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 const observer = new MutationObserver(() => {
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started;
 });
-observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
+// observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
+// The UI can now be re-initialized when switching languages, creating a new button
+observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
 
 
 // Source: https://stackoverflow.com/a/54492696/2624876

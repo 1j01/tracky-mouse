@@ -1,4 +1,5 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
+
 const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
@@ -26,13 +27,20 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		`${TrackyMouse.dependenciesRoot}/lib/no-eval.js`, // generated with eval-is-evil.html, this instruments clmtrackr.js so I don't need unsafe-eval in the CSP
 		`${TrackyMouse.dependenciesRoot}/lib/clmtrackr.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/face_mesh/face_mesh.js`,
-		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 		`${TrackyMouse.dependenciesRoot}/lib/OneEuroFilter.js`,
+	];
+	// face-landmarks-detection.min.js depends on face_mesh.js
+	// avoid sporadic "TypeError: o.Facemesh is not a constructor" by loading face-landmarks-detection after face_mesh.js
+	// TODO: preload in parallel?
+	const moreScriptFiles = [
+		`${TrackyMouse.dependenciesRoot}/lib/face-landmarks-detection.min.js`,
 	];
 	if (statsJs) {
 		scriptFiles.push(`${TrackyMouse.dependenciesRoot}/lib/stats.js`);
 	}
-	return Promise.all(scriptFiles.map(loadScript));
+	return Promise.all(scriptFiles.map(loadScript)).then(() => {
+		return Promise.all(moreScriptFiles.map(loadScript));
+	});
 };
 
 const isSelectorValid = ((dummyElement) =>
@@ -62,77 +70,81 @@ const initDwellClicking = (config) => {
 		- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
 		- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`).
 	*/
+
+	/** translation placeholder */
+	const t = (s) => s;
+
 	if (typeof config !== "object") {
-		throw new Error("configuration object required for initDwellClicking");
+		throw new Error(t("configuration object required for initDwellClicking"));
 	}
 	if (config.targets === undefined) {
-		throw new Error("config.targets is required (must be a CSS selector)");
+		throw new Error(t("config.targets is required (must be a CSS selector)"));
 	}
 	if (typeof config.targets !== "string") {
-		throw new Error("config.targets must be a string (a CSS selector)");
+		throw new Error(t("config.targets must be a string (a CSS selector)"));
 	}
 	if (!isSelectorValid(config.targets)) {
-		throw new Error("config.targets is not a valid CSS selector");
+		throw new Error(t("config.targets is not a valid CSS selector"));
 	}
 	if (config.click === undefined) {
-		throw new Error("config.click is required");
+		throw new Error(t("config.click is required"));
 	}
 	if (typeof config.click !== "function") {
-		throw new Error("config.click must be a function");
+		throw new Error(t("config.click must be a function"));
 	}
 	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
-		throw new Error("config.shouldDrag must be a function");
+		throw new Error(t("config.shouldDrag must be a function"));
 	}
 	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
-		throw new Error("config.noCenter must be a function");
+		throw new Error(t("config.noCenter must be a function"));
 	}
 	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
-		throw new Error("config.isEquivalentTarget must be a function");
+		throw new Error(t("config.isEquivalentTarget must be a function"));
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
-		throw new Error("config.dwellClickEvenIfPaused must be a function");
+		throw new Error(t("config.dwellClickEvenIfPaused must be a function"));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
-		throw new Error("config.beforeDispatch must be a function");
+		throw new Error(t("config.beforeDispatch must be a function"));
 	}
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
-		throw new Error("config.afterDispatch must be a function");
+		throw new Error(t("config.afterDispatch must be a function"));
 	}
 	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
-		throw new Error("config.beforePointerDownDispatch must be a function");
+		throw new Error(t("config.beforePointerDownDispatch must be a function"));
 	}
 	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
-		throw new Error("config.isHeld must be a function");
+		throw new Error(t("config.isHeld must be a function"));
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
-			throw new Error("config.retarget must be an array of objects");
+			throw new Error(t("config.retarget must be an array of objects"));
 		}
 		for (let i = 0; i < config.retarget.length; i++) {
 			const rule = config.retarget[i];
 			if (typeof rule !== "object") {
-				throw new Error("config.retarget must be an array of objects");
+				throw new Error(t("config.retarget must be an array of objects"));
 			}
 			if (rule.from === undefined) {
-				throw new Error(`config.retarget[${i}].from is required`);
+				throw new Error(t("config.retarget[%0].from is required").replace("%0", i));
 			}
 			if (rule.to === undefined) {
-				throw new Error(`config.retarget[${i}].to is required (although can be null to ignore the element)`);
+				throw new Error(t("config.retarget[%0].to is required (although can be null to ignore the element)").replace("%0", i));
 			}
 			if (rule.withinMargin !== undefined && typeof rule.withinMargin !== "number") {
-				throw new Error(`config.retarget[${i}].withinMargin must be a number`);
+				throw new Error(t("config.retarget[%0].withinMargin must be a number").replace("%0", i));
 			}
 			if (typeof rule.from !== "string" && typeof rule.from !== "function" && !(rule.from instanceof Element)) {
-				throw new Error(`config.retarget[${i}].from must be a CSS selector string, an Element, or a function`);
+				throw new Error(t("config.retarget[%0].from must be a CSS selector string, an Element, or a function").replace("%0", i));
 			}
 			if (typeof rule.to !== "string" && typeof rule.to !== "function" && !(rule.to instanceof Element) && rule.to !== null) {
-				throw new Error(`config.retarget[${i}].to must be a CSS selector string, an Element, a function, or null`);
+				throw new Error(t("config.retarget[%0].to must be a CSS selector string, an Element, a function, or null").replace("%0", i));
 			}
 			if (typeof rule.from === "string" && !isSelectorValid(rule.from)) {
-				throw new Error(`config.retarget[${i}].from is not a valid CSS selector`);
+				throw new Error(t("config.retarget[%0].from is not a valid CSS selector").replace("%0", i));
 			}
 			if (typeof rule.to === "string" && !isSelectorValid(rule.to)) {
-				throw new Error(`config.retarget[${i}].to is not a valid CSS selector`);
+				throw new Error(t("config.retarget[%0].to is not a valid CSS selector").replace("%0", i));
 			}
 		}
 	}
@@ -559,27 +571,1025 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse.init = function (div, { statsJs = false } = {}) {
+TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
+
+	const isDesktopApp = !!window.electronAPI;
+
+	let translations = {};
+	let locale = navigator.language || "en";
+	// Transform en-US to en, etc.
+	// We don't support variants yet
+	if (locale.includes("-")) {
+		locale = locale.split("-")[0];
+	}
+	const availableLanguages = [
+		// GENERATED by scripts/update-locales.js
+		"ar", "bn", "de", "en", "es", "fr", "hi", "it", "ja", "ko", "nl", "zh"
+		// END GENERATED
+	];
+	// Fallback to a valid dropdown value for unsupported locales
+	if (!availableLanguages.includes(locale)) {
+		locale = "en";
+	}
+	try {
+		// Load settings early so that they can be used to define settings (among other things)
+		// It's a bit hacky to load them twice but yeah
+		// (Actually in the desktop app it's even more hacky because I
+		// added code in electron-app.html to load the settings via the electron API
+		// and populate localStorage so that this code will work)
+		const settingsJSON = localStorage.getItem("tracky-mouse-settings");
+		if (settingsJSON) {
+			locale = JSON.parse(settingsJSON)?.globalSettings?.language || locale;
+		}
+		if (locale !== "en") {
+			// synchronous XHR baby!
+			const request = new XMLHttpRequest();
+			request.open("GET", `${TrackyMouse.dependenciesRoot}/locales/${locale}/translation.json`, false);
+			request.send(null);
+			if (request.status === 200) {
+				translations = JSON.parse(request.responseText);
+			} else {
+				console.warn(`Could not load translations for locale ${locale} (status ${request.status})`);
+			}
+		}
+	} catch (e) {
+		console.warn("Could not load translations for TrackyMouse UI:", e);
+	}
+	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
+	const isRTL = rtlLanguages.includes(locale);
+	const t = (s) => translations[s] ?? s;
+	// console.trace("Initializing UI with locale", locale);
+
+	// spell-checker:disable
+	const languageNames = {
+		// "639-1": [["ISO language name"], ["Native name (endonym)"]],
+		ab: [["Abkhazian"], ["Аҧсуа Бызшәа", "Аҧсшәа"]],
+		aa: [["Afar"], ["Afaraf"]],
+		af: [["Afrikaans"], ["Afrikaans"]],
+		ak: [["Akan"], ["Akan"]],
+		sq: [["Albanian"], ["Shqip"]],
+		am: [["Amharic"], ["አማርኛ"]],
+		ar: [["Arabic"], ["العربية"]],
+		an: [["Aragonese"], ["Aragonés"]],
+		hy: [["Armenian"], ["Հայերեն"]],
+		as: [["Assamese"], ["অসমীয়া"]],
+		av: [["Avaric"], ["Авар МацӀ", "МагӀарул МацӀ"]],
+		ae: [["Avestan"], ["Avesta"]],
+		ay: [["Aymara"], ["Aymar Aru"]],
+		az: [["Azerbaijani"], ["Azərbaycan Dili"]],
+		bm: [["Bambara"], ["Bamanankan"]],
+		ba: [["Bashkir"], ["Башҡорт Теле"]],
+		eu: [["Basque"], ["Euskara", "Euskera"]],
+		be: [["Belarusian"], ["Беларуская Мова"]],
+		bn: [["Bengali"], ["বাংলা"]],
+		bh: [["Bihari Languages"], ["भोजपुरी"]],
+		bi: [["Bislama"], ["Bislama"]],
+		bs: [["Bosnian"], ["Bosanski Jezik"]],
+		br: [["Breton"], ["Brezhoneg"]],
+		bg: [["Bulgarian"], ["Български Език"]],
+		my: [["Burmese"], ["ဗမာစာ"]],
+		ca: [["Catalan", "Valencian"], ["Català", "Valencià"]],
+		ch: [["Chamorro"], ["Chamoru"]],
+		ce: [["Chechen"], ["Нохчийн Мотт"]],
+		ny: [["Chichewa", "Chewa", "Nyanja"], ["ChiCheŵa", "Chinyanja"]],
+		// zh: [["Chinese"], ["中文", "Zhōngwén", "汉语", "漢語"]],
+		// The ISO 639-1 code "zh" doesn't refer to Traditional Chinese specifically,
+		// but we want to show the distinction between Chinese varieties in the Language menu,
+		// so this is overly specific for now.
+		// @TODO: do this cleaner by establishing a mapping between ISO codes (such as "zh") and default language IDs (such as "zh-traditional")
+		zh: [["Traditional Chinese"], ["繁體中文", "傳統中文", "正體中文", "繁体中文"]],
+		"zh-traditional": [["Traditional Chinese"], ["繁體中文", "傳統中文", "正體中文", "繁体中文"]], // made-up ID, not real ISO 639-1
+		"zh-simplified": [["Simplified Chinese"], ["简体中文"]], // made-up ID, not real ISO 639-1
+		cv: [["Chuvash"], ["Чӑваш Чӗлхи"]],
+		kw: [["Cornish"], ["Kernewek"]],
+		co: [["Corsican"], ["Corsu", "Lingua Corsa"]],
+		cr: [["Cree"], ["ᓀᐦᐃᔭᐍᐏᐣ"]],
+		hr: [["Croatian"], ["Hrvatski Jezik"]],
+		cs: [["Czech"], ["Čeština", "Český Jazyk"]],
+		da: [["Danish"], ["Dansk"]],
+		dv: [["Divehi", "Dhivehi", "Maldivian"], ["ދިވެހި"]],
+		nl: [["Dutch", "Flemish"], ["Nederlands", "Vlaams"]],
+		dz: [["Dzongkha"], ["རྫོང་ཁ"]],
+		en: [["English"], ["English"]],
+		eo: [["Esperanto"], ["Esperanto"]],
+		et: [["Estonian"], ["Eesti", "Eesti Keel"]],
+		ee: [["Ewe"], ["Eʋegbe"]],
+		fo: [["Faroese"], ["Føroyskt"]],
+		fj: [["Fijian"], ["Vosa Vakaviti"]],
+		fi: [["Finnish"], ["Suomi", "Suomen Kieli"]],
+		fr: [["French"], ["Français", "Langue Française"]],
+		ff: [["Fulah"], ["Fulfulde", "Pulaar", "Pular"]],
+		gl: [["Galician"], ["Galego"]],
+		ka: [["Georgian"], ["ქართული"]],
+		de: [["German"], ["Deutsch"]],
+		el: [["Greek"], ["Ελληνικά"]],
+		gn: [["Guarani"], ["Avañe'ẽ"]],
+		gu: [["Gujarati"], ["ગુજરાતી"]],
+		ht: [["Haitian", "Haitian Creole"], ["Kreyòl Ayisyen"]],
+		ha: [["Hausa"], ["هَوُسَ"]],
+		he: [["Hebrew"], ["עברית"]],
+		hz: [["Herero"], ["Otjiherero"]],
+		hi: [["Hindi"], ["हिन्दी", "हिंदी"]],
+		ho: [["Hiri Motu"], ["Hiri Motu"]],
+		hu: [["Hungarian"], ["Magyar"]],
+		ia: [["Interlingua"], ["Interlingua"]],
+		id: [["Indonesian"], ["Bahasa Indonesia"]],
+		ie: [["Interlingue", "Occidental"], ["Interlingue", "Occidental"]],
+		ga: [["Irish"], ["Gaeilge"]],
+		ig: [["Igbo"], ["Asụsụ Igbo"]],
+		ik: [["Inupiaq"], ["Iñupiaq", "Iñupiatun"]],
+		io: [["Ido"], ["Ido"]],
+		is: [["Icelandic"], ["Íslenska"]],
+		it: [["Italian"], ["Italiano"]],
+		iu: [["Inuktitut"], ["ᐃᓄᒃᑎᑐᑦ"]],
+		ja: [["Japanese"], ["日本語", "にほんご"]],
+		jv: [["Javanese"], ["ꦧꦱꦗꦮ", "Basa Jawa"]],
+		kl: [["Kalaallisut", "Greenlandic"], ["Kalaallisut", "Kalaallit Oqaasii"]],
+		kn: [["Kannada"], ["ಕನ್ನಡ"]],
+		kr: [["Kanuri"], ["Kanuri"]],
+		ks: [["Kashmiri"], ["कश्मीरी", "كشميري‎"]],
+		kk: [["Kazakh"], ["Қазақ Тілі"]],
+		km: [["Central Khmer"], ["ខ្មែរ", "ខេមរភាសា", "ភាសាខ្មែរ"]],
+		ki: [["Kikuyu", "Gikuyu"], ["Gĩkũyũ"]],
+		rw: [["Kinyarwanda"], ["Ikinyarwanda"]],
+		ky: [["Kirghiz", "Kyrgyz"], ["Кыргызча", "Кыргыз Тили"]],
+		kv: [["Komi"], ["Коми Кыв"]],
+		kg: [["Kongo"], ["Kikongo"]],
+		ko: [["Korean"], ["한국어"]],
+		ku: [["Kurdish"], ["Kurdî", "کوردی‎"]],
+		kj: [["Kuanyama", "Kwanyama"], ["Kuanyama"]],
+		la: [["Latin"], ["Latine", "Lingua Latina"]],
+		lb: [["Luxembourgish", "Letzeburgesch"], ["Lëtzebuergesch"]],
+		lg: [["Ganda"], ["Luganda"]],
+		li: [["Limburgan", "Limburger", "Limburgish"], ["Limburgs"]],
+		ln: [["Lingala"], ["Lingála"]],
+		lo: [["Lao"], ["ພາສາລາວ"]],
+		lt: [["Lithuanian"], ["Lietuvių Kalba"]],
+		lu: [["Luba-Katanga"], ["Kiluba"]],
+		lv: [["Latvian"], ["Latviešu Valoda"]],
+		gv: [["Manx"], ["Gaelg", "Gailck"]],
+		mk: [["Macedonian"], ["Македонски Јазик"]],
+		mg: [["Malagasy"], ["Fiteny Malagasy"]],
+		ms: [["Malay"], ["Bahasa Melayu", "بهاس ملايو‎"]],
+		ml: [["Malayalam"], ["മലയാളം"]],
+		mt: [["Maltese"], ["Malti"]],
+		mi: [["Maori"], ["Te Reo Māori"]],
+		mr: [["Marathi"], ["मराठी"]],
+		mh: [["Marshallese"], ["Kajin M̧ajeļ"]],
+		mn: [["Mongolian"], ["Монгол Хэл"]],
+		na: [["Nauru"], ["Dorerin Naoero"]],
+		nv: [["Navajo", "Navaho"], ["Diné Bizaad"]],
+		nd: [["North Ndebele"], ["IsiNdebele"]],
+		ne: [["Nepali"], ["नेपाली"]],
+		ng: [["Ndonga"], ["Owambo"]],
+		nb: [["Norwegian Bokmål"], ["Norsk Bokmål"]],
+		nn: [["Norwegian Nynorsk"], ["Norsk Nynorsk"]],
+		no: [["Norwegian"], ["Norsk"]],
+		ii: [["Sichuan Yi", "Nuosu"], ["ꆈꌠ꒿", "Nuosuhxop"]],
+		nr: [["South Ndebele"], ["IsiNdebele"]],
+		oc: [["Occitan"], ["Occitan", "Lenga d'Òc"]],
+		oj: [["Ojibwa"], ["ᐊᓂᔑᓈᐯᒧᐎᓐ"]],
+		cu: [["Church Slavic", "Old Slavonic", "Church Slavonic", "Old Bulgarian", "Old Church Slavonic"], ["Ѩзыкъ Словѣньскъ"]],
+		om: [["Oromo"], ["Afaan Oromoo"]],
+		or: [["Oriya"], ["ଓଡ଼ିଆ"]],
+		os: [["Ossetian", "Ossetic"], ["Ирон Æвзаг"]],
+		pa: [["Punjabi", "Panjabi"], ["ਪੰਜਾਬੀ", "پنجابی‎"]],
+		pi: [["Pali"], ["पालि", "पाळि"]],
+		fa: [["Persian"], ["فارسی"]],
+		pl: [["Polish"], ["Język Polski", "Polszczyzna"]],
+		ps: [["Pashto", "Pushto"], ["پښتو"]],
+		pt: [["Portuguese"], ["Português"]],
+		"pt-br": [["Brazilian Portuguese"], ["Português Brasileiro"]],
+		"pt-pt": [["Portuguese (Portugal)"], ["Português De Portugal"]],
+		qu: [["Quechua"], ["Runa Simi", "Kichwa"]],
+		rm: [["Romansh"], ["Rumantsch Grischun"]],
+		rn: [["Rundi"], ["Ikirundi"]],
+		ro: [["Romanian", "Moldavian", "Moldovan"], ["Română"]],
+		ru: [["Russian"], ["Русский"]],
+		sa: [["Sanskrit"], ["संस्कृतम्"]],
+		sc: [["Sardinian"], ["Sardu"]],
+		sd: [["Sindhi"], ["सिन्धी", "سنڌي، سندھی‎"]],
+		se: [["Northern Sami"], ["Davvisámegiella"]],
+		sm: [["Samoan"], ["Gagana Fa'a Samoa"]],
+		sg: [["Sango"], ["Yângâ Tî Sängö"]],
+		sr: [["Serbian"], ["Српски Језик"]],
+		gd: [["Gaelic", "Scottish Gaelic"], ["Gàidhlig"]],
+		sn: [["Shona"], ["ChiShona"]],
+		si: [["Sinhala", "Sinhalese"], ["සිංහල"]],
+		sk: [["Slovak"], ["Slovenčina", "Slovenský Jazyk"]],
+		sl: [["Slovenian"], ["Slovenski Jezik", "Slovenščina"]],
+		so: [["Somali"], ["Soomaaliga", "Af Soomaali"]],
+		st: [["Southern Sotho"], ["Sesotho"]],
+		es: [["Spanish", "Castilian"], ["Español"]],
+		su: [["Sundanese"], ["Basa Sunda"]],
+		sw: [["Swahili"], ["Kiswahili"]],
+		ss: [["Swati"], ["SiSwati"]],
+		sv: [["Swedish"], ["Svenska"]],
+		ta: [["Tamil"], ["தமிழ்"]],
+		te: [["Telugu"], ["తెలుగు"]],
+		tg: [["Tajik"], ["Тоҷикӣ", "Toçikī", "تاجیکی‎"]],
+		th: [["Thai"], ["ไทย"]],
+		ti: [["Tigrinya"], ["ትግርኛ"]],
+		bo: [["Tibetan"], ["བོད་ཡིག"]],
+		tk: [["Turkmen"], ["Türkmen", "Түркмен"]],
+		tl: [["Tagalog"], ["Wikang Tagalog"]],
+		tn: [["Tswana"], ["Setswana"]],
+		to: [["Tonga"], ["Faka Tonga"]],
+		tr: [["Turkish"], ["Türkçe"]],
+		ts: [["Tsonga"], ["Xitsonga"]],
+		tt: [["Tatar"], ["Татар Теле", "Tatar Tele"]],
+		tw: [["Twi"], ["Twi"]],
+		ty: [["Tahitian"], ["Reo Tahiti"]],
+		ug: [["Uighur", "Uyghur"], ["ئۇيغۇرچە‎", "Uyghurche"]],
+		uk: [["Ukrainian"], ["Українська"]],
+		ur: [["Urdu"], ["اردو"]],
+		uz: [["Uzbek"], ["Oʻzbek", "Ўзбек", "أۇزبېك‎"]],
+		ve: [["Venda"], ["Tshivenḓa"]],
+		vi: [["Vietnamese"], ["Tiếng Việt"]],
+		vo: [["Volapük"], ["Volapük"]],
+		wa: [["Walloon"], ["Walon"]],
+		cy: [["Welsh"], ["Cymraeg"]],
+		wo: [["Wolof"], ["Wollof"]],
+		fy: [["Western Frisian"], ["Frysk"]],
+		xh: [["Xhosa"], ["IsiXhosa"]],
+		yi: [["Yiddish"], ["ייִדיש"]],
+		yo: [["Yoruba"], ["Yorùbá"]],
+		za: [["Zhuang", "Chuang"], ["Saɯ Cueŋƅ", "Saw Cuengh"]],
+		zu: [["Zulu"], ["IsiZulu"]],
+	};
+
+
+	var languageToDefaultRegion = {
+		aa: "ET",
+		ab: "GE",
+		abr: "GH",
+		ace: "ID",
+		ach: "UG",
+		ada: "GH",
+		ady: "RU",
+		ae: "IR",
+		aeb: "TN",
+		af: "ZA",
+		agq: "CM",
+		aho: "IN",
+		ak: "GH",
+		akk: "IQ",
+		aln: "XK",
+		alt: "RU",
+		am: "ET",
+		amo: "NG",
+		aoz: "ID",
+		apd: "TG",
+		ar: "EG",
+		arc: "IR",
+		"arc-Nbat": "JO",
+		"arc-Palm": "SY",
+		arn: "CL",
+		aro: "BO",
+		arq: "DZ",
+		ary: "MA",
+		arz: "EG",
+		as: "IN",
+		asa: "TZ",
+		ase: "US",
+		ast: "ES",
+		atj: "CA",
+		av: "RU",
+		awa: "IN",
+		ay: "BO",
+		az: "AZ",
+		"az-Arab": "IR",
+		ba: "RU",
+		bal: "PK",
+		ban: "ID",
+		bap: "NP",
+		bar: "AT",
+		bas: "CM",
+		bax: "CM",
+		bbc: "ID",
+		bbj: "CM",
+		bci: "CI",
+		be: "BY",
+		bej: "SD",
+		bem: "ZM",
+		bew: "ID",
+		bez: "TZ",
+		bfd: "CM",
+		bfq: "IN",
+		bft: "PK",
+		bfy: "IN",
+		bg: "BG",
+		bgc: "IN",
+		bgn: "PK",
+		bgx: "TR",
+		bhb: "IN",
+		bhi: "IN",
+		bhk: "PH",
+		bho: "IN",
+		bi: "VU",
+		bik: "PH",
+		bin: "NG",
+		bjj: "IN",
+		bjn: "ID",
+		bjt: "SN",
+		bkm: "CM",
+		bku: "PH",
+		blt: "VN",
+		bm: "ML",
+		bmq: "ML",
+		bn: "BD",
+		bo: "CN",
+		bpy: "IN",
+		bqi: "IR",
+		bqv: "CI",
+		br: "FR",
+		bra: "IN",
+		brh: "PK",
+		brx: "IN",
+		bs: "BA",
+		bsq: "LR",
+		bss: "CM",
+		bto: "PH",
+		btv: "PK",
+		bua: "RU",
+		buc: "YT",
+		bug: "ID",
+		bum: "CM",
+		bvb: "GQ",
+		byn: "ER",
+		byv: "CM",
+		bze: "ML",
+		ca: "ES",
+		cch: "NG",
+		ccp: "BD",
+		ce: "RU",
+		ceb: "PH",
+		cgg: "UG",
+		ch: "GU",
+		chk: "FM",
+		chm: "RU",
+		cho: "US",
+		chp: "CA",
+		chr: "US",
+		cja: "KH",
+		cjm: "VN",
+		ckb: "IQ",
+		co: "FR",
+		cop: "EG",
+		cps: "PH",
+		cr: "CA",
+		crh: "UA",
+		crj: "CA",
+		crk: "CA",
+		crl: "CA",
+		crm: "CA",
+		crs: "SC",
+		cs: "CZ",
+		csb: "PL",
+		csw: "CA",
+		ctd: "MM",
+		cu: "RU",
+		"cu-Glag": "BG",
+		cv: "RU",
+		cy: "GB",
+		da: "DK",
+		dak: "US",
+		dar: "RU",
+		dav: "KE",
+		dcc: "IN",
+		de: "DE",
+		den: "CA",
+		dgr: "CA",
+		dje: "NE",
+		dnj: "CI",
+		doi: "IN",
+		dsb: "DE",
+		dtm: "ML",
+		dtp: "MY",
+		dty: "NP",
+		dua: "CM",
+		dv: "MV",
+		dyo: "SN",
+		dyu: "BF",
+		dz: "BT",
+		ebu: "KE",
+		ee: "GH",
+		efi: "NG",
+		egl: "IT",
+		egy: "EG",
+		eky: "MM",
+		el: "GR",
+		en: "US",
+		"en-Shaw": "GB",
+		es: "ES",
+		esu: "US",
+		et: "EE",
+		ett: "IT",
+		eu: "ES",
+		ewo: "CM",
+		ext: "ES",
+		fa: "IR",
+		fan: "GQ",
+		ff: "SN",
+		"ff-Adlm": "GN",
+		ffm: "ML",
+		fi: "FI",
+		fia: "SD",
+		fil: "PH",
+		fit: "SE",
+		fj: "FJ",
+		fo: "FO",
+		fon: "BJ",
+		fr: "FR",
+		frc: "US",
+		frp: "FR",
+		frr: "DE",
+		frs: "DE",
+		fub: "CM",
+		fud: "WF",
+		fuf: "GN",
+		fuq: "NE",
+		fur: "IT",
+		fuv: "NG",
+		fvr: "SD",
+		fy: "NL",
+		ga: "IE",
+		gaa: "GH",
+		gag: "MD",
+		gan: "CN",
+		gay: "ID",
+		gbm: "IN",
+		gbz: "IR",
+		gcr: "GF",
+		gd: "GB",
+		gez: "ET",
+		ggn: "NP",
+		gil: "KI",
+		gjk: "PK",
+		gju: "PK",
+		gl: "ES",
+		glk: "IR",
+		gn: "PY",
+		gom: "IN",
+		gon: "IN",
+		gor: "ID",
+		gos: "NL",
+		got: "UA",
+		grc: "CY",
+		"grc-Linb": "GR",
+		grt: "IN",
+		gsw: "CH",
+		gu: "IN",
+		gub: "BR",
+		guc: "CO",
+		gur: "GH",
+		guz: "KE",
+		gv: "IM",
+		gvr: "NP",
+		gwi: "CA",
+		ha: "NG",
+		hak: "CN",
+		haw: "US",
+		haz: "AF",
+		he: "IL",
+		hi: "IN",
+		hif: "FJ",
+		hil: "PH",
+		hlu: "TR",
+		hmd: "CN",
+		hnd: "PK",
+		hne: "IN",
+		hnj: "LA",
+		hnn: "PH",
+		hno: "PK",
+		ho: "PG",
+		hoc: "IN",
+		hoj: "IN",
+		hr: "HR",
+		hsb: "DE",
+		hsn: "CN",
+		ht: "HT",
+		hu: "HU",
+		hy: "AM",
+		hz: "NA",
+		ia: "FR",
+		iba: "MY",
+		ibb: "NG",
+		id: "ID",
+		ife: "TG",
+		ig: "NG",
+		ii: "CN",
+		ik: "US",
+		ikt: "CA",
+		ilo: "PH",
+		in: "ID",
+		inh: "RU",
+		is: "IS",
+		it: "IT",
+		iu: "CA",
+		iw: "IL",
+		izh: "RU",
+		ja: "JP",
+		jam: "JM",
+		jgo: "CM",
+		ji: "UA",
+		jmc: "TZ",
+		jml: "NP",
+		jut: "DK",
+		jv: "ID",
+		jw: "ID",
+		ka: "GE",
+		kaa: "UZ",
+		kab: "DZ",
+		kac: "MM",
+		kaj: "NG",
+		kam: "KE",
+		kao: "ML",
+		kbd: "RU",
+		kby: "NE",
+		kcg: "NG",
+		kck: "ZW",
+		kde: "TZ",
+		kdh: "TG",
+		kdt: "TH",
+		kea: "CV",
+		ken: "CM",
+		kfo: "CI",
+		kfr: "IN",
+		kfy: "IN",
+		kg: "CD",
+		kge: "ID",
+		kgp: "BR",
+		kha: "IN",
+		khb: "CN",
+		khn: "IN",
+		khq: "ML",
+		kht: "IN",
+		khw: "PK",
+		ki: "KE",
+		kiu: "TR",
+		kj: "NA",
+		kjg: "LA",
+		kk: "KZ",
+		"kk-Arab": "CN",
+		kkj: "CM",
+		kl: "GL",
+		kln: "KE",
+		km: "KH",
+		kmb: "AO",
+		kn: "IN",
+		knf: "SN",
+		ko: "KR",
+		koi: "RU",
+		kok: "IN",
+		kos: "FM",
+		kpe: "LR",
+		krc: "RU",
+		kri: "SL",
+		krj: "PH",
+		krl: "RU",
+		kru: "IN",
+		ks: "IN",
+		ksb: "TZ",
+		ksf: "CM",
+		ksh: "DE",
+		ku: "TR",
+		"ku-Arab": "IQ",
+		kum: "RU",
+		kv: "RU",
+		kvr: "ID",
+		kvx: "PK",
+		kw: "GB",
+		kxm: "TH",
+		kxp: "PK",
+		ky: "KG",
+		"ky-Arab": "CN",
+		"ky-Latn": "TR",
+		la: "VA",
+		lab: "GR",
+		lad: "IL",
+		lag: "TZ",
+		lah: "PK",
+		laj: "UG",
+		lb: "LU",
+		lbe: "RU",
+		lbw: "ID",
+		lcp: "CN",
+		lep: "IN",
+		lez: "RU",
+		lg: "UG",
+		li: "NL",
+		lif: "NP",
+		"lif-Limb": "IN",
+		lij: "IT",
+		lis: "CN",
+		ljp: "ID",
+		lki: "IR",
+		lkt: "US",
+		lmn: "IN",
+		lmo: "IT",
+		ln: "CD",
+		lo: "LA",
+		lol: "CD",
+		loz: "ZM",
+		lrc: "IR",
+		lt: "LT",
+		ltg: "LV",
+		lu: "CD",
+		lua: "CD",
+		luo: "KE",
+		luy: "KE",
+		luz: "IR",
+		lv: "LV",
+		lwl: "TH",
+		lzh: "CN",
+		lzz: "TR",
+		mad: "ID",
+		maf: "CM",
+		mag: "IN",
+		mai: "IN",
+		mak: "ID",
+		man: "GM",
+		"man-Nkoo": "GN",
+		mas: "KE",
+		maz: "MX",
+		mdf: "RU",
+		mdh: "PH",
+		mdr: "ID",
+		men: "SL",
+		mer: "KE",
+		mfa: "TH",
+		mfe: "MU",
+		mg: "MG",
+		mgh: "MZ",
+		mgo: "CM",
+		mgp: "NP",
+		mgy: "TZ",
+		mh: "MH",
+		mi: "NZ",
+		min: "ID",
+		mis: "IQ",
+		mk: "MK",
+		ml: "IN",
+		mls: "SD",
+		mn: "MN",
+		"mn-Mong": "CN",
+		mni: "IN",
+		mnw: "MM",
+		moe: "CA",
+		moh: "CA",
+		mos: "BF",
+		mr: "IN",
+		mrd: "NP",
+		mrj: "RU",
+		mro: "BD",
+		ms: "MY",
+		mt: "MT",
+		mtr: "IN",
+		mua: "CM",
+		mus: "US",
+		mvy: "PK",
+		mwk: "ML",
+		mwr: "IN",
+		mwv: "ID",
+		mxc: "ZW",
+		my: "MM",
+		myv: "RU",
+		myx: "UG",
+		myz: "IR",
+		mzn: "IR",
+		na: "NR",
+		nan: "CN",
+		nap: "IT",
+		naq: "NA",
+		nb: "NO",
+		nch: "MX",
+		nd: "ZW",
+		ndc: "MZ",
+		nds: "DE",
+		ne: "NP",
+		new: "NP",
+		ng: "NA",
+		ngl: "MZ",
+		nhe: "MX",
+		nhw: "MX",
+		nij: "ID",
+		niu: "NU",
+		njo: "IN",
+		nl: "NL",
+		nmg: "CM",
+		nn: "NO",
+		nnh: "CM",
+		no: "NO",
+		nod: "TH",
+		noe: "IN",
+		non: "SE",
+		nqo: "GN",
+		nr: "ZA",
+		nsk: "CA",
+		nso: "ZA",
+		nus: "SS",
+		nv: "US",
+		nxq: "CN",
+		ny: "MW",
+		nym: "TZ",
+		nyn: "UG",
+		nzi: "GH",
+		oc: "FR",
+		om: "ET",
+		or: "IN",
+		os: "GE",
+		osa: "US",
+		otk: "MN",
+		pa: "IN",
+		"pa-Arab": "PK",
+		pag: "PH",
+		pal: "IR",
+		"pal-Phlp": "CN",
+		pam: "PH",
+		pap: "AW",
+		pau: "PW",
+		pcd: "FR",
+		pcm: "NG",
+		pdc: "US",
+		pdt: "CA",
+		peo: "IR",
+		pfl: "DE",
+		phn: "LB",
+		pka: "IN",
+		pko: "KE",
+		pl: "PL",
+		pms: "IT",
+		pnt: "GR",
+		pon: "FM",
+		pra: "PK",
+		prd: "IR",
+		ps: "AF",
+		pt: "PT", //"BR",
+		puu: "GA",
+		qu: "PE",
+		quc: "GT",
+		qug: "EC",
+		raj: "IN",
+		rcf: "RE",
+		rej: "ID",
+		rgn: "IT",
+		ria: "IN",
+		rif: "MA",
+		rjs: "NP",
+		rkt: "BD",
+		rm: "CH",
+		rmf: "FI",
+		rmo: "CH",
+		rmt: "IR",
+		rmu: "SE",
+		rn: "BI",
+		rng: "MZ",
+		ro: "RO",
+		rob: "ID",
+		rof: "TZ",
+		rtm: "FJ",
+		ru: "RU",
+		rue: "UA",
+		rug: "SB",
+		rw: "RW",
+		rwk: "TZ",
+		ryu: "JP",
+		sa: "IN",
+		saf: "GH",
+		sah: "RU",
+		saq: "KE",
+		sas: "ID",
+		sat: "IN",
+		sav: "SN",
+		saz: "IN",
+		sbp: "TZ",
+		sc: "IT",
+		sck: "IN",
+		scn: "IT",
+		sco: "GB",
+		scs: "CA",
+		sd: "PK",
+		"sd-Deva": "IN",
+		"sd-Khoj": "IN",
+		"sd-Sind": "IN",
+		sdc: "IT",
+		sdh: "IR",
+		se: "NO",
+		sef: "CI",
+		seh: "MZ",
+		sei: "MX",
+		ses: "ML",
+		sg: "CF",
+		sga: "IE",
+		sgs: "LT",
+		shi: "MA",
+		shn: "MM",
+		si: "LK",
+		sid: "ET",
+		sk: "SK",
+		skr: "PK",
+		sl: "SI",
+		sli: "PL",
+		sly: "ID",
+		sm: "WS",
+		sma: "SE",
+		smj: "SE",
+		smn: "FI",
+		smp: "IL",
+		sms: "FI",
+		sn: "ZW",
+		snk: "ML",
+		so: "SO",
+		sou: "TH",
+		sq: "AL",
+		sr: "RS",
+		srb: "IN",
+		srn: "SR",
+		srr: "SN",
+		srx: "IN",
+		ss: "ZA",
+		ssy: "ER",
+		st: "ZA",
+		stq: "DE",
+		su: "ID",
+		suk: "TZ",
+		sus: "GN",
+		sv: "SE",
+		sw: "TZ",
+		swb: "YT",
+		swc: "CD",
+		swg: "DE",
+		swv: "IN",
+		sxn: "ID",
+		syl: "BD",
+		syr: "IQ",
+		szl: "PL",
+		ta: "IN",
+		taj: "NP",
+		tbw: "PH",
+		tcy: "IN",
+		tdd: "CN",
+		tdg: "NP",
+		tdh: "NP",
+		te: "IN",
+		tem: "SL",
+		teo: "UG",
+		tet: "TL",
+		tg: "TJ",
+		"tg-Arab": "PK",
+		th: "TH",
+		thl: "NP",
+		thq: "NP",
+		thr: "NP",
+		ti: "ET",
+		tig: "ER",
+		tiv: "NG",
+		tk: "TM",
+		tkl: "TK",
+		tkr: "AZ",
+		tkt: "NP",
+		tl: "PH",
+		tly: "AZ",
+		tmh: "NE",
+		tn: "ZA",
+		to: "TO",
+		tog: "MW",
+		tpi: "PG",
+		tr: "TR",
+		tru: "TR",
+		trv: "TW",
+		ts: "ZA",
+		tsd: "GR",
+		tsf: "NP",
+		tsg: "PH",
+		tsj: "BT",
+		tt: "RU",
+		ttj: "UG",
+		tts: "TH",
+		ttt: "AZ",
+		tum: "MW",
+		tvl: "TV",
+		twq: "NE",
+		txg: "CN",
+		ty: "PF",
+		tyv: "RU",
+		tzm: "MA",
+		udm: "RU",
+		ug: "CN",
+		"ug-Cyrl": "KZ",
+		uga: "SY",
+		uk: "UA",
+		uli: "FM",
+		umb: "AO",
+		und: "US",
+		unr: "IN",
+		"unr-Deva": "NP",
+		unx: "IN",
+		ur: "PK",
+		uz: "UZ",
+		"uz-Arab": "AF",
+		vai: "LR",
+		ve: "ZA",
+		vec: "IT",
+		vep: "RU",
+		vi: "VN",
+		vic: "SX",
+		vls: "BE",
+		vmf: "DE",
+		vmw: "MZ",
+		vot: "RU",
+		vro: "EE",
+		vun: "TZ",
+		wa: "BE",
+		wae: "CH",
+		wal: "ET",
+		war: "PH",
+		wbp: "AU",
+		wbq: "IN",
+		wbr: "IN",
+		wls: "WF",
+		wni: "KM",
+		wo: "SN",
+		wtm: "IN",
+		wuu: "CN",
+		xav: "BR",
+		xcr: "TR",
+		xh: "ZA",
+		xlc: "TR",
+		xld: "TR",
+		xmf: "GE",
+		xmn: "CN",
+		xmr: "SD",
+		xna: "SA",
+		xnr: "IN",
+		xog: "UG",
+		xpr: "IR",
+		xsa: "YE",
+		xsr: "NP",
+		yao: "MZ",
+		yap: "FM",
+		yav: "CM",
+		ybb: "CM",
+		yo: "NG",
+		yrl: "BR",
+		yua: "MX",
+		yue: "HK",
+		"yue-Hans": "CN",
+		za: "CN",
+		zag: "SD",
+		zdj: "KM",
+		zea: "NL",
+		zgh: "MA",
+		zh: "CN",
+		"zh-Bopo": "TW",
+		"zh-Hanb": "TW",
+		"zh-Hant": "TW",
+		zlm: "TG",
+		zmi: "MY",
+		zu: "ZA",
+		zza: "TR",
+	};
+
+	function getLanguageEmoji(locale) {
+		var split = locale.toUpperCase().split(/-|_/);
+		var lang = split.shift();
+		var code = split.pop();
+
+		if (!/^[A-Z]{2}$/.test(code)) {
+			code = languageToDefaultRegion[lang.toLowerCase()];
+		}
+
+		if (!code) {
+			return "";
+		}
+
+		const a = String.fromCodePoint(code.codePointAt(0) - 0x41 + 0x1F1E6);
+		const b = String.fromCodePoint(code.codePointAt(1) - 0x41 + 0x1F1E6);
+		return a + b;
+	}
 
 	var uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
+	uiContainer.classList.toggle("tracky-mouse-rtl", isRTL);
+	uiContainer.dir = isRTL ? "rtl" : "ltr";
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
-			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">Start</button>
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("Start")}</button>
 		</div>
 		<div class="tracky-mouse-canvas-container-container">
 			<div class="tracky-mouse-canvas-container">
 				<div class="tracky-mouse-canvas-overlay">
-					<button class="tracky-mouse-use-camera-button">Allow Camera Access</button>
-					<!--<button class="tracky-mouse-use-camera-button">Use my camera</button>-->
-					<button class="tracky-mouse-use-demo-footage-button" hidden>Use demo footage</button>
+					<button class="tracky-mouse-use-camera-button">${t("Allow Camera Access")}</button>
+					<!--<button class="tracky-mouse-use-camera-button">${t("Use my camera")}</button>-->
+					<button class="tracky-mouse-use-demo-footage-button" hidden>${t("Use demo footage")}</button>
 					<div class="tracky-mouse-error-message" role="alert" hidden></div>
 				</div>
 				<canvas class="tracky-mouse-canvas"></canvas>
 			</div>
 		</div>
 		<p class="tracky-mouse-desktop-app-download-message">
-			You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.
+			${t('You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.')}
 		</p>
 	`;
 	if (!div) {
@@ -602,10 +1612,10 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 	const settingsCategories = [
 		{
 			type: "group",
-			label: "Cursor Movement",
+			label: t("Cursor Movement"),
 			settings: [
 				{
-					label: "Tilt influence",
+					label: t("Tilt influence"),
 					className: "tracky-mouse-tilt-influence",
 					key: "headTrackingTiltInfluence",
 					settingValueToInputValue: (settingValue) => settingValue * 100,
@@ -615,20 +1625,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					max: 100,
 					default: 0,
 					labels: {
-						// min: "Optical flow", // too technical
-						// min: "Point tracking", // still technical but at least it's terminology we're already using
-						min: "Point tracking (2D)",
-						// max: "Head tilt",
-						max: "Head tilt (3D)",
+						// min: t("Optical flow"), // too technical
+						// min: t("Point tracking"), // still technical but at least it's terminology we're already using
+						min: t("Point tracking (2D)"),
+						// max: t("Head tilt"),
+						max: t("Head tilt (3D)"),
 					},
-					// description: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
-					description: `Blends between using point tracking (2D) and detected head tilt (3D).
+					// description: t("Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed."),
+					description: t(`Blends between using point tracking (2D) and detected head tilt (3D).
 - At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
 - At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
-- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`,
+- In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.`),
 				},
 				{
-					label: "Motion threshold",
+					label: t("Motion threshold"),
 					className: "tracky-mouse-min-distance",
 					key: "headTrackingMinDistance",
 					type: "slider",
@@ -636,20 +1646,20 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 					max: 10,
 					default: 0,
 					labels: {
-						min: "Free",
-						max: "Steady",
+						min: t("Free"),
+						max: t("Steady"),
 					},
-					description: "Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor.",
-					// description: "Movement less than this distance in pixels will be ignored.",
-					// description: "Speed in pixels/frame required to move the cursor.",
+					description: t("Minimum distance to move the cursor in one frame, in pixels. Helps to fully stop the cursor."),
+					// description: t("Movement less than this distance in pixels will be ignored."),
+					// description: t("Speed in pixels/frame required to move the cursor."),
 				},
 				{
 					type: "group",
-					label: "Point tracking",
+					label: t("Point tracking"),
 					disabled: () => s.headTrackingTiltInfluence === 1,
 					settings: [
 						{
-							label: "Horizontal sensitivity",
+							label: t("Horizontal sensitivity"),
 							className: "tracky-mouse-sensitivity-x",
 							key: "headTrackingSensitivityX",
 							settingValueToInputValue: (settingValue) => settingValue * 1000,
@@ -659,13 +1669,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 25,
 							labels: {
-								min: "Slow",
-								max: "Fast",
+								min: t("Slow"),
+								max: t("Fast"),
 							},
-							description: "Speed of cursor movement in response to horizontal head movement.",
+							description: t("Speed of cursor movement in response to horizontal head movement."),
 						},
 						{
-							label: "Vertical sensitivity",
+							label: t("Vertical sensitivity"),
 							className: "tracky-mouse-sensitivity-y",
 							key: "headTrackingSensitivityY",
 							settingValueToInputValue: (settingValue) => settingValue * 1000,
@@ -675,13 +1685,13 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 50,
 							labels: {
-								min: "Slow",
-								max: "Fast",
+								min: t("Slow"),
+								max: t("Fast"),
 							},
-							description: "Speed of cursor movement in response to vertical head movement.",
+							description: t("Speed of cursor movement in response to vertical head movement."),
 						},
 						// {
-						// 	label: "Smoothing",
+						// 	label: t("Smoothing"),
 						// 	className: "tracky-mouse-smoothing",
 						// 	key: "headTrackingSmoothing",
 						// 	type: "slider",
@@ -689,8 +1699,8 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// 	max: 100,
 						// 	default: 50,
 						// 	labels: {
-						// 		min: "Linear", // or "Direct", "Raw", "None"
-						// 		max: "Smooth", // or "Smoothed"
+						// 		min: t("Linear"), // or "Direct", "Raw", "None"
+						// 		max: t("Smooth"), // or "Smoothed"
 						// 	},
 						// },
 
@@ -703,7 +1713,7 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 						// Should it be swapped? What does other software with acceleration control look like?
 						// In Windows it's just a checkbox apparently, but it could go as far as a custom curve editor.
 						{
-							label: "Acceleration",
+							label: t("Acceleration"),
 							className: "tracky-mouse-acceleration",
 							key: "headTrackingAcceleration",
 							settingValueToInputValue: (settingValue) => settingValue * 100,
@@ -713,23 +1723,23 @@ TrackyMouse.init = function (div, { statsJs = false } = {}) {
 							max: 100,
 							default: 50,
 							labels: {
-								min: "Linear", // or "Direct", "Raw"
-								max: "Smooth",
+								min: t("Linear"), // or "Direct", "Raw"
+								max: t("Smooth"),
 							},
-							// description: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.",
-							// description: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.",
-							description: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
-Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`,
+							// description: t("Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly."),
+							// description: t("Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor."),
+							description: t(`Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
+Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`),
 						},
 					],
 				},
 				{
 					type: "group",
-					label: "Head tilt calibration",
+					label: t("Head tilt calibration"),
 					disabled: () => s.headTrackingTiltInfluence === 0,
 					settings: [
 						{
-							label: "Horizontal tilt range",
+							label: t("Horizontal tilt range"),
 							className: "tracky-mouse-head-tilt-yaw-range",
 							key: "headTiltYawRange",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -739,16 +1749,16 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 90,
 							default: 60,
 							labels: {
-								min: "Little neck movement",
-								max: "Large neck movement",
+								min: t("Little neck movement"),
+								max: t("Large neck movement"),
 							},
-							// description: "Range of horizontal head tilt that moves the cursor from one side of the screen to the other.",
-							// description: "How much you need to tilt your head left and right to reach the edges of the screen.",
-							// description: "How much you need to tilt your head left or right to reach the edge of the screen.",
-							description: "Controls how much you need to tilt your head left or right to reach the edge of the screen.",
+							// description: t("Range of horizontal head tilt that moves the cursor from one side of the screen to the other."),
+							// description: t("How much you need to tilt your head left and right to reach the edges of the screen."),
+							// description: t("How much you need to tilt your head left or right to reach the edge of the screen."),
+							description: t("Controls how much you need to tilt your head left or right to reach the edge of the screen."),
 						},
 						{
-							label: "Vertical tilt range",
+							label: t("Vertical tilt range"),
 							className: "tracky-mouse-head-tilt-pitch-range",
 							key: "headTiltPitchRange",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -758,17 +1768,17 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 60,
 							default: 25,
 							labels: {
-								min: "Little neck movement",
-								max: "Large neck movement",
+								min: t("Little neck movement"),
+								max: t("Large neck movement"),
 							},
-							// description: "Range of vertical head tilt required to move the cursor from the top to the bottom of the screen.",
-							// description: "How much you need to tilt your head up and down to reach the edges of the screen.",
-							// description: "How much you need to tilt your head up or down to reach the edge of the screen.",
-							description: "Controls how much you need to tilt your head up or down to reach the edge of the screen.",
+							// description: t("Range of vertical head tilt required to move the cursor from the top to the bottom of the screen."),
+							// description: t("How much you need to tilt your head up and down to reach the edges of the screen."),
+							// description: t("How much you need to tilt your head up or down to reach the edge of the screen."),
+							description: t("Controls how much you need to tilt your head up or down to reach the edge of the screen."),
 						},
 						{
 							// label: "Horizontal tilt offset",
-							label: "Horizontal cursor offset",
+							label: t("Horizontal cursor offset"),
 							className: "tracky-mouse-head-tilt-yaw-offset",
 							key: "headTiltYawOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -778,8 +1788,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 45,
 							default: 0,
 							labels: {
-								min: "Left",
-								max: "Right",
+								min: t("Left"),
+								max: t("Right"),
 							},
 							// TODO: how to describe this??
 							// Specifically, how to disambiguate which direction is which / which way to adjust it?
@@ -787,15 +1797,15 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							// Since it's opposite, even though it's technically yaw (angle units), it's easier to think of as moving the cursor.
 							// Hence I've renamed the setting.
 							// A later update might change the definitions and include a settings file format upgrade step.
-							// description: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.",
-							// description: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.",
+							// description: t("Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible."),
+							// description: t("Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible."),
 							// TODO: should this say "horizontal" in the (main part of the) description?
-							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
-⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`,
+							description: t(`Adjusts the position of the cursor when the camera sees the head facing straight ahead.
+⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`),
 						},
 						{
 							// label: "Vertical tilt offset",
-							label: "Vertical cursor offset",
+							label: t("Vertical cursor offset"),
 							className: "tracky-mouse-head-tilt-pitch-offset",
 							key: "headTiltPitchOffset",
 							settingValueToInputValue: (settingValue) => settingValue * 180 / Math.PI,
@@ -805,11 +1815,11 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							max: 30,
 							default: 2.5,
 							labels: {
-								min: "Down",
-								max: "Up",
+								min: t("Down"),
+								max: t("Up"),
 							},
-							// description: "Adjusts the center position of vertical head tilt.",
-							description: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.`,
+							// description: t("Adjusts the center position of vertical head tilt."),
+							description: t("Adjusts the position of the cursor when the camera sees the head facing straight ahead."),
 						},
 					],
 				},
@@ -829,40 +1839,42 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 		// which awkwardly affects what mouse button serenade-driver sends; this doesn't affect the web version.
 		{
 			type: "group",
-			label: "Clicking",
+			label: t("Clicking"),
 			settings: [
 				{
-					label: "Clicking mode:", // TODO: ":"?
+					label: t("Clicking mode:"), // TODO: ":"?
 					className: "tracky-mouse-clicking-mode",
 					key: "clickingMode",
 					type: "dropdown",
 					options: [
-						{ value: "dwell", label: "Dwell to click" },
-						{ value: "blink", label: "Wink to click" },
-						{ value: "open-mouth", label: "Open mouth to click" },
-						{ value: "off", label: "Off" },
+						{ value: "dwell", label: t("Dwell to click"), description: t("Hold the cursor in place for a short time to click.") },
+						{ value: "blink", label: t("Wink to click"), description: t("Close one eye to click. Left eye for left click, right eye for right click.") },
+						// TODO: clarify that ooh works better than ah
+						// "open wide" refers to height, but could be misinterpreted as opposite advice - a wide mouth shape when narrow works better
+						// "open wide" is also perhaps unnecessary considering detection is improved... but who knows. maybe someone will try opening their mouth only slightly and expect it to work
+						// Some people may understand "tall and narrow" better than "ooh rather than ah" and visa-versa
+						{ value: "open-mouth-simple", label: t("Open mouth to click (simple)"), description: t("Open your mouth wide to click. At least one eye must be open to click.") },
+						{ value: "open-mouth-ignoring-eyes", label: t("Open mouth to click (ignoring eyes)"), description: t("Open your mouth wide to click. Eye state is ignored.") },
+						{ value: "open-mouth", label: t("Open mouth to click (with eye modifiers)"), description: t("Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.") },
+						{ value: "off", label: t("Off"), description: t("Disable clicking. Use with an external switch or programs that provide their own dwell clicking.") },
 					],
 					default: "dwell",
-					platform: "desktop",
-					description: `Choose how to perform mouse clicks.
-- Dwell to click: Hold the cursor in place for a short time to click.
-- Wink to click: Close one eye to click. Left eye for left click, right eye for right click.
-- Open mouth to click: Open your mouth wide to click. If left eye is closed, it's a right click; if right eye is closed, it's a middle click.
-- Off: Disable clicking. Use with an external switch or programs that provide their own dwell clicking.`,
+					visible: () => isDesktopApp,
+					description: t("Choose how to perform mouse clicks."),
 				},
 				{
 					// on Windows, currently, when buttons are swapped at the system level, it affects serenade-driver's click()
 					// "swap" is purposefully generic language so we don't have to know what system-level setting is
 					// (also this may be seen as a weirdly named/designed option for right-clicking with the dwell clicker)
-					label: "Swap mouse buttons",
+					label: t("Swap mouse buttons"),
 					className: "tracky-mouse-swap-mouse-buttons",
 					key: "swapMouseButtons",
 					type: "checkbox",
 					default: false,
-					platform: "desktop",
-					description: `Switches the left and right mouse buttons.
+					visible: () => isDesktopApp,
+					description: t(`Switches the left and right mouse buttons.
 Useful if your system's mouse buttons are swapped.
-Could also be used to right click with the dwell clicker in a pinch.`,
+Could also be used to right click with the dwell clicker in a pinch.`),
 				},
 
 				// This setting could called "click stabilization", "drag delay", "delay before dragging", "click drag delay", "drag prevention", etc.
@@ -871,33 +1883,33 @@ Could also be used to right click with the dwell clicker in a pinch.`,
 				// at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
 				// and it might complicate the design of the slider labeling.
 				{
-					label: "Delay before dragging&nbsp;&nbsp;&nbsp;", // TODO: avoid non-breaking space hack
+					label: t("Delay before dragging&nbsp;&nbsp;&nbsp;"), // TODO: avoid non-breaking space hack
 					className: "tracky-mouse-delay-before-dragging",
 					key: "delayBeforeDragging",
 					type: "slider",
 					min: 0,
 					max: 1000,
 					labels: {
-						min: "Easy to drag",
-						max: "Easy to click",
+						min: t("Easy to drag"),
+						max: t("Easy to click"),
 					},
-					default: 0, // TODO: increase default
-					platform: "desktop",
+					default: 800,
+					visible: () => isDesktopApp,
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
-					// description: "Locks mouse movement during the start of a click to prevent accidental dragging.",
-					// description: `Prevents mouse movement for the specified time after a click starts.
-					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
-					description: `Locks mouse movement for the given duration during the start of a click.
-You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`,
+					// description: t("Locks mouse movement during the start of a click to prevent accidental dragging."),
+					// description: t(`Prevents mouse movement for the specified time after a click starts.
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`),
+					description: t(`Locks mouse movement for the given duration during the start of a click.
+You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`),
 				},
 			],
 		},
 		{
 			type: "group",
-			label: "Video",
+			label: t("Video"),
 			settings: [
 				{
-					label: "Camera source",
+					label: t("Camera source"),
 					className: "tracky-mouse-camera-select",
 					key: "cameraDeviceId",
 					handleSettingChange: () => {
@@ -905,63 +1917,63 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					},
 					type: "dropdown",
 					options: [
-						{ value: "", label: "Default" },
+						{ value: "", label: t("Default") },
 					],
 					default: "",
-					// description: "Select which camera to use for head tracking.",
-					description: "Selects which camera is used for head tracking.",
+					// description: t("Select which camera to use for head tracking."),
+					description: t("Selects which camera is used for head tracking."),
 				},
 				// TODO: move this inline with the camera source dropdown?
 				{
-					label: "Open Camera Settings",
+					label: t("Open Camera Settings"),
 					className: "tracky-mouse-open-camera-settings",
 					key: "openCameraSettings",
 					type: "button",
-					platform: "desktop",
+					visible: () => isDesktopApp,
 					onClick: async () => {
 						let knownCameras = {};
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							alert("Failed to open camera settings:\n" + "Failed to parse known cameras from localStorage:\n" + error.message);
+							alert(t("Failed to open camera settings:\n") + t("Failed to parse known cameras from localStorage:\n") + error.message);
 							return;
 						}
 
 						const activeStream = cameraVideo.srcObject;
 						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
-						const selectedDeviceName = knownCameras[activeDeviceId]?.name || "Default";
+						const selectedDeviceName = knownCameras[activeDeviceId]?.name || t("Default");
 
 						try {
 							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
 							if (result?.error) {
-								alert("Failed to open camera settings:\n" + result.error);
+								alert(t("Failed to open camera settings:\n") + result.error);
 							}
 						} catch (error) {
-							alert("Failed to open camera settings:\n" + error.message);
+							alert(t("Failed to open camera settings:\n") + error.message);
 						}
 					},
-					// description: "Open your camera's system settings window to adjust properties like brightness and contrast.",
-					// description: "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.",
-					description: "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.",
+					// description: t("Open your camera's system settings window to adjust properties like brightness and contrast."),
+					// description: t("Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure."),
+					description: t("Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure."),
 				},
 				// TODO: try moving this to the corner of the camera view, so it's clearer it applies only to the camera view
 				{
-					label: "Mirror",
+					label: t("Mirror"),
 					className: "tracky-mouse-mirror",
 					key: "mirror",
 					type: "checkbox",
 					default: true,
-					description: "Mirrors the camera view horizontally.",
+					description: t("Mirrors the camera view horizontally."),
 				},
 			]
 		},
 		{
 			type: "group",
-			label: "General",
+			label: t("General"),
 			settings: [
 				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
 				{
-					label: "Start enabled",
+					label: t("Start enabled"),
 					className: "tracky-mouse-start-enabled",
 					key: "startEnabled",
 					afterInitialLoad: () => { // TODO: does this hook make sense? right now it's the only usage. could this code not just be called later?
@@ -969,10 +1981,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					},
 					type: "checkbox",
 					default: false,
-					description: "If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.",
-					// description: "Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.",
-					// description: "Makes Tracky Mouse active as soon as it's launched.",
-					// description: "Automatically starts Tracky Mouse as soon as it's run.",
+					description: t("If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched."),
+					// description: t("Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready."),
+					// description: t("Makes Tracky Mouse active as soon as it's launched."),
+					// description: t("Automatically starts Tracky Mouse as soon as it's run."),
 				},
 				{
 					// For "experimental" label:
@@ -980,33 +1992,55 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// - I considered adding "⚠︎" but it feels a little too alarming
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
-					label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
+					label: t("Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)"),
 					className: "tracky-mouse-close-eyes-to-toggle",
 					key: "closeEyesToToggle",
 					type: "checkbox",
 					default: false,
-					description: "If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.",
+					description: t("If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds."),
 				},
 				{
-					label: "Run at login",
+					label: t("Run at login"),
 					className: "tracky-mouse-run-at-login",
 					key: "runAtLogin",
 					type: "checkbox",
 					default: false,
-					platform: "desktop",
-					description: "If enabled, Tracky Mouse will automatically start when you log into your computer.",
-					// description: "Makes Tracky Mouse start automatically when you log into your computer.",
+					visible: () => isDesktopApp,
+					description: t("If enabled, Tracky Mouse will automatically start when you log into your computer."),
+					// description: t("Makes Tracky Mouse start automatically when you log into your computer."),
 				},
 				{
-					label: "Check for updates",
+					label: t("Check for updates"),
 					className: "tracky-mouse-check-for-updates",
 					key: "checkForUpdates",
 					type: "checkbox",
 					default: true,
-					platform: "desktop",
-					description: "If enabled, Tracky Mouse will automatically check for updates when it starts.",
-					// description: "Notifies you of new versions of Tracky Mouse.",
-					// description: "Notifies you when a new version of Tracky Mouse is available.",
+					visible: () => isDesktopApp,
+					description: t("If enabled, Tracky Mouse will automatically check for updates when it starts."),
+					// description: t("Notifies you of new versions of Tracky Mouse."),
+					// description: t("Notifies you when a new version of Tracky Mouse is available."),
+				},
+				{
+					label: t("Language"),
+					className: "tracky-mouse-language",
+					key: "language",
+					type: "dropdown",
+					options: availableLanguages.map(lang => ({ value: lang, label: `${getLanguageEmoji(lang)} ${languageNames[lang]?.[1]?.[0] || lang} (${languageNames[lang]?.[0]?.[0] || "?"})` })),
+					default: locale,
+					handleSettingChange: () => {
+						// console.trace("handleSettingChange for language setting");
+						// HACK: update localStorage because it's what's used to determine the language
+						// This is needed for the desktop app which otherwise saves to a file not localStorage
+						try {
+							localStorage.setItem("tracky-mouse-settings", JSON.stringify(serializeSettings()));
+						} catch (error) {
+							console.error("Error saving options to localStorage:", error);
+							return;
+						}
+						reinit();
+					},
+					description: t("Select the language for the Tracky Mouse interface."),
+					// description: t("Changes the language Tracky Mouse is displayed in."),
 				},
 			],
 		},
@@ -1065,9 +2099,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	function buildSettingGroupUI(group) {
 		const detailsEl = document.createElement("details");
 		// detailsEl.className = "tracky-mouse-settings-group";
-		// TODO: recursive check for platform - or just define platform on groups
-		if (group.settings.every(setting => setting.platform === "desktop")) {
-			detailsEl.classList.add("tracky-mouse-desktop-only");
+		// TODO: recursive check for visibility - or just define visible() on groups
+		if (group.settings.every(setting => setting.visible?.() === false)) {
+			detailsEl.hidden = true;
 		}
 		const summaryEl = document.createElement("summary");
 		summaryEl.textContent = group.label;
@@ -1127,13 +2161,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					${optionsHtml}
 				</select>
 			`;
+			if (setting.options.some(option => option.description)) {
+				setting.description += t("\n\nOptions:\n") + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
+			}
 		} else if (setting.type === "button") {
 			rowEl.innerHTML = `
 				<button class="${setting.className}">${setting.label}</button>
 			`;
 		}
-		if (setting.platform === "desktop") {
-			rowEl.classList.add("tracky-mouse-desktop-only");
+		if (setting.visible?.() === false) {
+			rowEl.hidden = true;
 		}
 
 		if (setting.description) {
@@ -1226,14 +2263,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		window.electronAPI.getIsPackaged().then((isPackaged) => {
 			runAtLoginCheckbox.disabled = !isPackaged;
 		});
-	} else {
-		for (const elementToHide of uiContainer.querySelectorAll('.tracky-mouse-desktop-only')) {
-			elementToHide.hidden = true;
-		}
 	}
 
 	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
-	var ctx = canvas.getContext('2d');
+	var ctx = canvas.getContext('2d', { willReadFrequently: true });
 
 	var debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
@@ -1498,10 +2531,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		return { promise, resolve, reject };
 	}
 
-	let matchedCameraIdDeferred = createDeferred();
-	let populateCameraList = () => { };
+	let populateCameraList = () => { return Promise.resolve(); };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
 		populateCameraList = () => {
+			let matchedCameraIdDeferred = createDeferred();
 			navigator.mediaDevices.enumerateDevices().then((devices) => {
 				const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
@@ -1532,14 +2565,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 				const defaultOption = document.createElement("option");
 				defaultOption.value = "";
-				defaultOption.text = "Default";
+				defaultOption.text = t("Default");
 				cameraSelect.appendChild(defaultOption);
 
 				let matchingDeviceId = "";
 				for (const device of videoDevices) {
 					const option = document.createElement('option');
 					option.value = device.deviceId;
-					option.text = device.label || `Camera ${cameraSelect.length}`;
+					option.text = device.label || t("Camera %0").replace("%0", cameraSelect.length);
 					cameraSelect.appendChild(option);
 					if (device.deviceId === s.cameraDeviceId) {
 						matchingDeviceId = device.deviceId;
@@ -1557,7 +2590,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const option = document.createElement("option");
 					option.value = s.cameraDeviceId;
 					const knownInfo = knownCameras[s.cameraDeviceId];
-					option.text = knownInfo ? `${knownInfo.name} (Unavailable)` : "Unavailable camera";
+					option.text = knownInfo ? `${knownInfo.name} (${t("Unavailable")})` : t("Unavailable camera");
 					cameraSelect.appendChild(option);
 					cameraSelect.value = s.cameraDeviceId;
 				} else {
@@ -1565,6 +2598,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				}
 				matchedCameraIdDeferred.resolve(matchingDeviceId);
 			});
+			return matchedCameraIdDeferred.promise;
 		};
 		populateCameraList();
 		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
@@ -1618,8 +2652,78 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		updateStartStopButton();
 	};
 
-	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent) => {
+	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
+		// Phases:
+		// 1. "tryPreferredCamera"
+		//    Use the configured device ID to try to access the preferred camera.
+		//    If the permission has been revoked, the browser may
+		//    switch to a mode where `enumerateDevices` gives FAKE data
+		//    and `getUserMedia` will fail with OverconstrainedError
+		//    when trying to access a real device
+		//    (without even triggering a permission prompt that might
+		//    lead to getting the real list of devices.)
+		// 2. "justGetPermission"
+		//    Request any camera in order to get camera permission
+		//    in general and get real data from `enumerateDevices`
+		//    in phase 3.
+		//    Close the stream immediately, as it may not be the
+		//    stream we want, and we can't tell, as far I know.
+		//    Then populate the camera list with real data.
+		// 3. "retryPreferredCamera"
+		//    Now that we have a real list of devices,
+		//    and are allowed to access real devices,
+		//    try again with a specific device ID.
+		//    If there's a match by name and not ID, we use that.
+		//
+		// Q: Why not get rid of phase 1? Shouldn't 2+3 handle it?
+		// In Electron, closing the stream and re-requesting access
+		// often gives a "camera in use" error.
+		// Plus, _ideally_ phase 1 means it can connect faster in browsers.
+		// However, phase 1 may only get OverconstrainedError in browsers
+		// as it's implemented.
+		// We could get rid of phase 1 in browsers, basically separating the flows.
+		// But...
+		// I wonder if revoking camera access is what changes device IDs,
+		// and if device IDs changing is what gives OverconstrainedError,
+		// not the "fake device list" behavior. Is it perhaps only hiding labels in that mode,
+		// but separately permanently scrambling IDs as a single event?
+		// If device IDs are changed, storing the new device ID to try in phase 1
+		// might make phase 1 work as an optimization in browsers.
+		//
+		// Q: If Electron has such a problem, would it not occur in the later phases?
+		// Phase 2+3 should never occur in Electron.
+		// In fact, we can guard against this.
+		// Although, if phase 2+3 are only enterred on failure,
+		// it can't really be a problem, can it?
+		//
+		// Q: Will this cause unnecessary prompts?
+		// In the case of one existing camera, no.
+		// In the case that there are multiple existing cameras,
+		// and the user grants access to a different one than is configured,
+		// it may cause an extra prompt.
+		// In Firefox, you can choose to allow all cameras with a checkbox.
+		// If you check that box, or select the matching camera before clicking Allow,
+		// there should be only one prompt.
+		//
+		// Q: Why not use a library for this?
+		// The mic-check package uses a similar approach, but seems to
+		// encourage a pattern where nice error handling is applied
+		// only to a "just get permission" equivalent phase,
+		// whereas by using recursion or separating out the error handling
+		// into a function, one can handle errors nicely always.
+		// mic-check provides only the one phase, and presumably
+		// is meant for a two-phase solution.
+		//
+		// Q: What happens if there are multiple overlapping calls to `useCamera`?
+		// I don't know. TODO: test this.
+		//
+		// P.S. I gave a talk about this at Rubber Duck Conf 2026
+		// You can view the slides here: https://websim.com/@1j01/ughaaaaaa
+
 		await settingsLoadedPromise;
+
+		const phase = optionsOrEvent.phase ?? "tryPreferredCamera";
+
 		const constraints = {
 			audio: false,
 			video: {
@@ -1628,12 +2732,32 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				facingMode: "user",
 			}
 		};
-		const deviceIdToTry = optionsOrEvent?.retryWithCameraDeviceId ?? s.cameraDeviceId;
+		const deviceIdToTry = phase === "retryPreferredCamera" ?
+			optionsOrEvent.retryWithCameraDeviceId :
+			phase === "tryPreferredCamera" ?
+				s.cameraDeviceId :
+				"";
 		if (deviceIdToTry) {
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
-		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+		console.log("TrackyMouse.useCamera phase", phase, "constraints", constraints);
+		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
+			if (phase === "justGetPermission") {
+				for (const track of stream.getTracks()) {
+					track.stop();
+				}
+				// This is giving me User Gesture Hinged Access and Async Authorization Asking Attempt Absorption Anxiety,
+				// or "UGHAaAAAAAA" (I'm coining that term)
+				// (Look I made a presentation about it: https://websim.com/@1j01/ughaaaaaa)
+				const matchedCameraId = await populateCameraList();
+				if (matchedCameraId) {
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId, phase: "retryPreferredCamera" });
+				} else {
+					TrackyMouse.useCamera({ retryWithCameraDeviceId: "", phase: "retryPreferredCamera" });
+				}
+				return;
+			}
 			populateCameraList();
 			reset();
 
@@ -1641,53 +2765,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
-
-			// OverconstrainedError can be caused by `deviceId` not matching,
-			// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
-			// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
-			// Note: (Not sure about ConstraintNotSatisfiedError here)
+			console.log("TrackyMouse.useCamera phase", phase, "error", error);
 			if (
+				phase === "tryPreferredCamera" &&
 				(error.name === "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") &&
-				constraints.video.deviceId?.exact
+				!window.electronAPI
 			) {
-				// This is giving me User Gesture Hinged Access And Access Attempt Absorption Anxiety,
-				// or "UGHAaAAAA" (I'm coining that term)
-				const matchedCameraId = await matchedCameraIdDeferred.promise;
-				if (matchedCameraId) {
-					// TODO: make sure matchedCameraId !== deviceIdToTry
-					TrackyMouse.useCamera({ retryWithCameraDeviceId: matchedCameraId });
-				} else {
-					// TODO: unify code branches for error handling
-
-					// TODO: handle case where permission is no longer granted,
-					// and enumerateDevices returns a fake list
-					// and getUserMedia fails with OverconstrainedError when passed a real deviceId because it's not in the fake list
-					// It's possible we could connect to the device without the user having to change the device
-					// in the dropdown (twice, in case they want a non-default camera)
-					// by first calling getUserMedia with no deviceId constraint, then closing the stream,
-					// then enumerating devices (and updating the dropdown with the real info)
-					// and calling getUserMedia again with the deviceId from the settings.
-					// The user should only need to respond to a permissions prompt once.
-
-					console.error(error, { matchedCameraId, "s.cameraDeviceId": s.cameraDeviceId, knownCameras: JSON.parse(localStorage.getItem("tracky-mouse-known-cameras") || "{}"), videoDevices: await navigator.mediaDevices.enumerateDevices() });
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
-					errorMessage.textContent = "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.";
-					// It's awkward but that's my best attempt at conveying how you may need to proceed
-					// without complicated description of how/why the dropdown might be populated with
-					// fake information until a camera stream is successfully opened.
-					errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
-					errorMessage.hidden = false;
-				}
+				TrackyMouse.useCamera({ phase: "justGetPermission" });
 				return;
 			}
-
-			console.log(error);
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
-				errorMessage.textContent = "No camera found. Please make sure you have a camera connected and enabled.";
+				errorMessage.textContent = t("No camera found. Please make sure you have a camera connected and enabled.");
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
 				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
@@ -1695,7 +2784,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
 				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
 				// or "1 camera source detected" preceding it)
-				errorMessage.textContent = "Webcam is already in use. Please make sure you have no other programs using the camera.";
+				errorMessage.textContent = t("Webcam is already in use. Please make sure you have no other programs using the camera.");
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
@@ -1703,7 +2792,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
 				// I really hope that isn't the problem.
 				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
-				errorMessage.textContent = "Please make sure no other programs are using the camera and try again.";
+				errorMessage.textContent = t("Please make sure no other programs are using the camera and try again.");
 				// A more honest/helpful message might be:
 				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
 				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
@@ -1712,19 +2801,33 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// because sometimes that's enough.
 			} else if (error.name == "OverconstrainedError" || error.name == "ConstraintNotSatisfiedError") {
 				// constraints cannot be satisfied by available devices
-				// NOTE: handled above
-				errorMessage.textContent = `Webcam does not support the required resolution. Please change your settings.`;
+
+				// OverconstrainedError can be caused by `deviceId` not matching,
+				// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
+				// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
+				if (constraints.video.deviceId?.exact) {
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
+					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
+					errorMessage.textContent = t("The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.");
+					// It's awkward but that's my best attempt at conveying how you may need to proceed
+					// without complicated description of how/why the dropdown might be populated with
+					// fake information until a camera stream is successfully opened.
+				} else {
+					errorMessage.textContent = t("Webcam does not support the required resolution. Please change your settings.");
+				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
-				errorMessage.textContent = "Permission denied. Please enable access to the camera.";
+				errorMessage.textContent = t("Permission denied. Please enable access to the camera.");
 			} else if (error.name == "TypeError") {
 				// empty constraints object
-				errorMessage.textContent = `Something went wrong accessing the camera. (${error.name}: ${error.message})`;
+				errorMessage.textContent = `${t("Something went wrong accessing the camera.")} (${error.name}: ${error.message})`;
 			} else {
 				// other errors
-				errorMessage.textContent = `Something went wrong accessing the camera. Please try again. (${error.name}: ${error.message})`;
+				errorMessage.textContent = `${t("Something went wrong accessing the camera. Please try again.")} (${error.name}: ${error.message})`;
 			}
-			errorMessage.textContent = `⚠️ ${errorMessage.textContent}`;
+			errorMessage.textContent = `${t("⚠️ ")}${errorMessage.textContent}`;
 			errorMessage.hidden = false;
 		});
 	};
@@ -2387,11 +3490,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								clickButton = 2;
 							}
 						}
-						// TODO: maybe split into a "simple"/mouth-only mode vs "with eye modifiers" mode?
-						// (or just hold out for a full I/O binding system)
-						if (s.clickingMode === "open-mouth") {
+						if (s.clickingMode === "open-mouth-ignoring-eyes") {
+							mouthInfo.used = true;
+							if (mouthInfo.thresholdMet) {
+								clickButton = 0;
+							}
+						}
+						if (s.clickingMode === "open-mouth" || s.clickingMode === "open-mouth-simple") {
 							mouthInfo.used = true;
 							blinkInfo.used = true;
+							const allowModifiers = s.clickingMode !== "open-mouth-simple";
 							// Modifiers with eye closing trigger different buttons,
 							// making this a three-button mouse.
 							// (Eyebrow raising could be another alternative modifier.)
@@ -2399,9 +3507,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// so you can continue to scroll a webpage without trying to
 							// read with one eye closed (for example).
 							if (mouthInfo.thresholdMet && !prevMouthOpen) {
-								if (blinkInfo.rightEye.active) {
+								if (blinkInfo.rightEye.active && allowModifiers) {
 									mouseButtonUntilMouthCloses = 1;
-								} else if (blinkInfo.leftEye.active) {
+								} else if (blinkInfo.leftEye.active && allowModifiers) {
 									mouseButtonUntilMouthCloses = 2;
 								} else if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
 									mouseButtonUntilMouthCloses = -1;
@@ -2416,7 +3524,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									mouthInfo.active = false;
 									// TODO: show eyes as yellow too regardless of eye state?
 								}
-								// TODO: DRY mapping
+							}
+							// In the mode with modifiers, it's helpful to preview a click's modifiers,
+							// but in simple mode, it may be confusing to show any active state
+							// when you're not clicking.
+							if (mouthInfo.thresholdMet || s.clickingMode === "open-mouth-simple") {
+								// TODO: DRY mapping (deduplicate the association of eyes to buttons)
 								blinkInfo.rightEye.active = clickButton === 1;
 								blinkInfo.leftEye.active = clickButton === 2;
 							}
@@ -2500,9 +3613,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const textYStart = -10;
 
 
-					const pitchText = `Pitch: ${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
-					const yawText = `Yaw:   ${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
-					const rollText = `Roll:  ${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
+					const pitchText = t("Pitch: ") + `${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
+					const yawText = t("Yaw:   ") + `${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
+					const rollText = t("Roll:  ") + `${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
 
 					const boxWidth = Math.max(
 						ctx.measureText(pitchText).width,
@@ -2890,9 +4003,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.lineWidth = 3;
 			ctx.font = "20px sans-serif";
 			ctx.beginPath();
-			const text3 = "Face convergence score: " + ((useFacemesh && facemeshPrediction) ? "N/A" : faceConvergence.toFixed(4));
-			const text1 = "Face tracking score: " + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
-			const text2 = "Points based on score: " + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
+			const text3 = t("Face convergence score: ") + ((useFacemesh && facemeshPrediction) ? t("N/A") : faceConvergence.toFixed(4));
+			const text1 = t("Face tracking score: ") + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
+			const text2 = t("Points based on score: ") + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
 			ctx.strokeText(text1, 50, 50);
 			ctx.fillText(text1, 50, 50);
 			ctx.strokeText(text2, 50, 70);
@@ -2914,7 +4027,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false (at least in some version of Electron (v12 I think, when I tested it), on Ubuntu, with XFCE)
-	setInterval(function animationLoop() {
+	const iid = setInterval(function animationLoop() {
 		draw(!paused || document.visibilityState === "visible");
 	}, 15);
 
@@ -2932,10 +4045,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 	const updateStartStopButton = () => {
 		if (paused) {
-			startStopButton.textContent = "Start";
+			startStopButton.textContent = t("Start");
 			startStopButton.setAttribute("aria-pressed", "false");
 		} else {
-			startStopButton.textContent = "Stop";
+			startStopButton.textContent = t("Stop");
 			startStopButton.setAttribute("aria-pressed", "true");
 		}
 	};
@@ -2960,8 +4073,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	// Try to handle both the global and local shortcuts
 	// If the global shortcut successfully registered, keydown shouldn't occur for the shortcut, right?
 	// I hope there's no cross-platform issue with this.
+	let removeShortcutListener = null;
 	if (window.electronAPI) {
-		window.electronAPI.onShortcut(handleShortcut);
+		removeShortcutListener = window.electronAPI.onShortcut(handleShortcut);
 	}
 	const handleKeydown = (event) => {
 		// Same shortcut as the global shortcut in the electron app
@@ -2972,6 +4086,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	addEventListener("keydown", handleKeydown);
 
 	return {
+		_element: uiContainer,
+		_setPaused(value) {
+			paused = value;
+			updatePaused();
+		},
+		_getPaused() {
+			return paused;
+		},
+		_waitForSettingsLoaded() {
+			return settingsLoadedPromise;
+		},
 		dispose() {
 			// TODO: re-structure so that cleanup can succeed even if initialization fails
 			// OOP would help with this, by storing references in an object, but it doesn't necessarily
@@ -2979,6 +4104,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// Wouldn't need to change the API that way.
 			// (Would also be easy to maintain backwards compatibility while switching to using a class,
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
+
+			clearInterval(iid);
 
 			// stopping camera stream is important, not sure about other resetting
 			reset();
@@ -3001,6 +4128,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 			removeEventListener("keydown", handleKeydown);
 
+			removeShortcutListener?.();
+
 			// This is a little awkward, reversing the initialization based on a possibly-preexisting element
 			// Could save and restore innerHTML but that won't restore event listeners, references, etc.
 			// and may not even be desired if the HTML was placeholder text mentioning it not yet being initialized for example.
@@ -3010,6 +4139,154 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				uiContainer.remove();
 			}
 		},
+	};
+};
+
+// Wrapper that manages an inner instance and recreates it when the language is changed.
+TrackyMouse.init = function (div, opts = {}) {
+	let inner = null;
+
+	// UI state saving could be cleaner as part of the inner instance idk
+	// Or, you know, ideally we update the UI text reactively without
+	// stopping/starting the camera stream etc. when switching languages.
+	const saveUIState = () => {
+		const paused = inner._getPaused();
+		const collapsibles = inner._element.querySelectorAll("details");
+		const openStates = Array.from(collapsibles).map(c => c.open);
+		const scrollables = inner._element.querySelectorAll("*");
+		const scrollPositions = Array.from(scrollables).map(s => [s.scrollLeft, s.scrollTop]);
+		const focusedElementSelector = Array.from(document.activeElement?.classList || []).map(c => `.${c}`).join("");
+		return { paused, openStates, scrollPositions, focusedElementSelector };
+	};
+	const restoreUIState = ({ paused, openStates, scrollPositions, focusedElementSelector }) => {
+		inner._waitForSettingsLoaded().then(() => {
+			inner._setPaused(paused);
+		});
+		// assuming DOM structure doesn't change
+		const collapsibles = inner._element.querySelectorAll("details");
+		for (let i = 0; i < collapsibles.length; i++) {
+			collapsibles[i].open = openStates[i];
+		}
+		const scrollables = inner._element.querySelectorAll("*");
+		for (let i = 0; i < scrollables.length; i++) {
+			const [scrollLeft, scrollTop] = scrollPositions[i];
+			scrollables[i].scrollLeft = scrollLeft;
+			scrollables[i].scrollTop = scrollTop;
+		}
+		if (focusedElementSelector) {
+			const elementToFocus = inner._element.querySelector(focusedElementSelector);
+			elementToFocus?.focus();
+		}
+	};
+	const reinit = () => {
+		const uiState = saveUIState();
+		inner.dispose();
+		createInner();
+		restoreUIState(uiState);
+	};
+
+	const createInner = () => {
+		inner = TrackyMouse._initInner(div, opts, reinit);
+	};
+
+	createInner();
+
+	return {
+		dispose() {
+			inner.dispose();
+		},
+	};
+
+};
+
+TrackyMouse.initScreenOverlay = () => {
+
+	const template = `
+		<div class="tracky-mouse-absolute-center">
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
+				<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+			</div>
+			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
+				<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
+			</div>
+		</div>
+		<div id="tracky-mouse-screen-overlay-message"></div>
+	`;
+	const fragment = document.createRange().createContextualFragment(template);
+	document.body.appendChild(fragment);
+
+	const message = document.getElementById("tracky-mouse-screen-overlay-message");
+	message.dir = "auto";
+
+	const inputFeedbackCanvas = document.createElement("canvas");
+	inputFeedbackCanvas.style.position = "absolute";
+	inputFeedbackCanvas.style.top = "0";
+	inputFeedbackCanvas.style.left = "0";
+	inputFeedbackCanvas.style.pointerEvents = "none";
+	inputFeedbackCanvas.width = 32;
+	inputFeedbackCanvas.height = 32;
+	document.body.appendChild(inputFeedbackCanvas);
+	const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
+	function drawInputFeedback({ inputFeedback, isEnabled }) {
+		const { blinkInfo, mouthInfo } = inputFeedback;
+		inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
+		if (!isEnabled) {
+			return;
+		}
+		// draw meters for blink and mouth openness
+		// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
+		// (Ideally it should stay on top of the taskbar and context menus all the time
+		// 	but that's another issue: https://github.com/1j01/tracky-mouse/issues/14)
+		const drawMeter = (x, yCenter, width, height, { active, thresholdMet }) => {
+			inputFeedbackCtx.fillStyle = active ? "red" : thresholdMet ? "yellow" : "cyan";
+			inputFeedbackCtx.fillRect(x, yCenter - height / 2, width, height);
+		};
+		if (blinkInfo?.used) {
+			for (const eye of [blinkInfo.leftEye, blinkInfo.rightEye]) {
+				drawMeter(eye === blinkInfo.leftEye ? 5 : 20, 5, 10, Math.max(2, 20 * eye.heightRatio), eye);
+			}
+		}
+		if (mouthInfo?.used) {
+			drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
+		}
+	}
+
+	function updateMousePos(x, y) {
+		// inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
+		// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
+		inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
+	}
+
+	function update(data) {
+		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset } = data;
+
+		message.style.bottom = `${bottomOffset}px`;
+
+		// Other diagnostics in the future would be stuff like:
+		// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
+		// - bad lighting conditions
+		// see: https://github.com/1j01/tracky-mouse/issues/26
+
+		document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
+		document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound);
+
+		message.innerText = messageText;
+
+		if (!isEnabled && !isManualTakeback) {
+			// Fade out the message after a little while so it doesn't get in the way.
+			// TODO: make sure animation isn't interrupted by inputFeedback updates.
+			message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
+		} else {
+			message.style.animation = "";
+			message.style.opacity = "1";
+		}
+
+		drawInputFeedback(data);
+	}
+
+	return {
+		update,
+		updateMousePos,
 	};
 };
 
