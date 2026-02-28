@@ -9,15 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed "Open mouth to click" mode to "Open mouth to click (with eye modifiers)"
-- Increased default "Delay before drag" to 800ms to make it easier to click. This was never meant to default to zero. ([issue #118](https://github.com/1j01/tracky-mouse/issues/118))
+- Increased default "Delay before drag" time to 800ms to make it easier to click without dragging. This was never meant to default to zero, although zero is sometimes useful. ([issue #118](https://github.com/1j01/tracky-mouse/issues/118))
   - If you've changed any setting, this new default will not take effect.
 
 ### Added
 
 - **General > Language**: choose between English, Italian, German, Spanish, French, Dutch, Korean, Traditional Chinese, Hindi, Bengali, Arabic, and Japanese (with more to come!) ([issue #59](https://github.com/1j01/tracky-mouse/issues/59))
-- Added two simplified "Open mouth to click" modes ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
-  - **Open mouth to click (simple)**: Left click by opening mouth. Closing both eyes still prevents clicks. Recommended mode to avoid accidental clicks.
-  - **Open mouth to click (ignoring eyes)**: Left click by opening mouth. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
+- Added two simplified variants of "Open mouth to click" mode ([issue #126](https://github.com/1j01/tracky-mouse/issues/126))
+  - **Open mouth to click (simple)**: Left click only. Clicks may be prevented if both eyes are closed. Recommended mode to avoid accidental clicks.
+  - **Open mouth to click (ignoring eyes)**: Left click only. Eye state is fully ignored. This may be preferred if blink detection is not working correctly.
 - In the API, introduced an UNSTABLE method `TrackyMouse.initScreenOverlay` (working towards bringing more features from the desktop app to the web experience; see [issue #72](https://github.com/1j01/tracky-mouse/issues/72))
 
 ### Fixed
