@@ -86,6 +86,12 @@ async function release() {
 	}
 	run(`npm version ${version} --no-git-tag-version`);
 
+	// This updates some version numbers in package locks that are missed by `npm version`
+	// Feels kinda overkill though...
+	// These aren't really version numbers that _matter_, per se,
+	// it's just annoying seeing them change incidentally when installing later.
+	run(`npm run install-all`);
+
 	// Some of these sub-scripts check package.json version
 	// and they must see the updated version number to proceed.
 	delete require.cache[require.resolve("../../package.json")];
