@@ -65,9 +65,10 @@ module.exports = {
 
 			log("🔧 Fixing broken symlinks in packaged app...");
 
-			const { unlink } = require('fs').promises;
+			const { unlink, mkdir } = require('fs').promises;
 			const { dirname, join } = require('path');
 			const { execSync } = require('child_process');
+			const { extract } = require('tar');
 			const modulesToCopy = ['tracky-mouse'];
 			for (const moduleName of modulesToCopy) {
 				const sourcePath = dirname(require.resolve(join(moduleName, 'package.json')));
@@ -78,9 +79,16 @@ module.exports = {
 				const tarballName = execSync(`npm pack ${sourcePath}`, { cwd: sourceAppRoot }).toString().trim();
 				const tarballPath = join(sourceAppRoot, tarballName);
 				log(`Created tarball: ${tarballPath}`);
-				log(`Installing tarball into ${buildPath}`);
-				// TODO: avoid undocumented --prefix parameter https://github.com/npm/cli/issues/1368#issuecomment-1241076700
-				execSync(`npm install --no-save ${tarballPath} --prefix ${buildPath}`);
+				// --prefix parameter is undocumented https://github.com/npm/cli/issues/1368#issuecomment-1241076700
+				// and this command would install not just the tarball but ALL DEPENDENCIES, including those that have been pruned
+				// log(`Installing tarball into ${buildPath}`);
+				// execSync(`npm install --no-save ${tarballPath} --prefix ${buildPath}`, { stdio: "inherit" });
+				// tar command isn't available on Windows (or doesn't handle Windows paths, or doesn't work the same)
+				// log(`Extracting tarball into ${join(buildPath, 'node_modules')}`);
+				// execSync(`tar -xzf ${tarballPath} -C ${join(buildPath, 'node_modules')}`, { stdio: "inherit" });
+				log(`Extracting tarball to ${destPath}`);
+				await mkdir(destPath);
+				await extract({ file: tarballPath, C: destPath, strip: 1 });
 				log(`Removing tarball: ${tarballPath}`);
 				await unlink(tarballPath);
 			}

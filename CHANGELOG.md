@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - It will now show a slightly more general error message for `AbortError`, since this error can be received for reasons other than the camera being used by another program, and simply trying again can work in some cases.
 - The `dispose` method of TrackyMouse UI now correctly stops the animation loop.
 - Fixed a warning about canvas image data performance.
+- Fixed bloated desktop app build size (the last release got extra bloated ironically while trying to fix some of the bloat; now it should be much smaller)
 
 ## [2.3.0] - 2026-02-14
 

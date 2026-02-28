@@ -70,6 +70,7 @@
     "@electron-forge/maker-zip": "^7.11.1",
     "@electron-forge/publisher-github": "^7.11.1",
     "@reforged/maker-appimage": "^5.2.0",
-    "electron": "20.0.1"
+    "electron": "20.0.1",
+    "tar": "^7.5.9"
   }
 }
