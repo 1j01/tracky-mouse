@@ -616,7 +616,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		console.warn("Could not load translations for TrackyMouse UI:", e);
 	}
 	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
-	const isRTL = rtlLanguages.includes(locale);
+	const isRTL = rtlLanguages.includes(locale.split("-")[0]);
 	const t = (s) => translations[s] ?? s;
 	// console.trace("Initializing UI with locale", locale);
 
