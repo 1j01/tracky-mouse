@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Не вдалося отримати оновлення з git.",
   "Cursor Movement": "Рух курсора",
   "Default": "За замовчуванням",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Затримка перед перетягуванням\u00a0\u00a0\u00a0",
+  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Затримка перед перетягуванням&nbsp;&nbsp;&nbsp;",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Визначає, чи базується рух курсора на 3D‑нахилі голови, чи на 2D‑русі обличчя у відеопотоці.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Вимкнути клацання. Використовуйте з зовнішнім перемикачем або програмами, що мають власне утримувальне клацання.",
   "Down": "Вниз",
