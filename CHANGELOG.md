@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, and Greek language options in the General > Language settings.
+- Added Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, Norwegian, and Greek language options in the General > Language settings.
 
 ## [2.4.0] - 2026-02-28
 
