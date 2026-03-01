@@ -31,6 +31,8 @@ To add a new language:
 - Run `npm run new-locale -- $NEW_LANG`
 - Replace every translation value in `core/locales/$NEW_LANG/translation.json` with a localized string, while preserving the keys.
 - You are not done until every string is localized. Do not ask for confirmation before starting translating. If I ask for a new language, I am assigning you the task of translation.
+- Update the changelog.
+- Do not substitute your own process. Do not bother inspecting the i18n setup. The above steps are specifically all I want you to do for this task. All the strings to translate will be in the copied file.
 
 ## Changelog
 
