@@ -620,6 +620,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 	const t = (s) => translations[s] ?? s;
 	// console.trace("Initializing UI with locale", locale);
 
+	// language name mappings marked with * may not be ISO 639-1
 	// spell-checker:disable
 	const languageNames = {
 		// "639-1": [["ISO language name"], ["Native name (endonym)"]],
@@ -630,7 +631,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		sq: [["Albanian"], ["Shqip"]],
 		am: [["Amharic"], ["አማርኛ"]],
 		ar: [["Arabic"], ["العربية"]],
-		"ar-EG": [["Egyptian Arabic"], ["العربية المصرية"]],
+		"ar-EG": [["Egyptian Arabic"], ["العربية المصرية"]],//*
 		an: [["Aragonese"], ["Aragonés"]],
 		hy: [["Armenian"], ["Հայերեն"]],
 		as: [["Assamese"], ["অসমীয়া"]],
@@ -652,7 +653,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		ca: [["Catalan", "Valencian"], ["Català", "Valencià"]],
 		ch: [["Chamorro"], ["Chamoru"]],
 		ce: [["Chechen"], ["Нохчийн Мотт"]],
-		ceb: [["Cebuano"], ["Binisayâ", "Cebuano"]],
+		ceb: [["Cebuano"], ["Bisayâ", "Binisayâ"]],//*
 		ny: [["Chichewa", "Chewa", "Nyanja"], ["ChiCheŵa", "Chinyanja"]],
 		// zh: [["Chinese"], ["中文", "Zhōngwén", "汉语", "漢語"]],
 		// The ISO 639-1 code "zh" doesn't refer to Traditional Chinese specifically,
@@ -660,8 +661,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		// so this is overly specific for now.
 		// @TODO: do this cleaner by establishing a mapping between ISO codes (such as "zh") and default language IDs (such as "zh-traditional")
 		zh: [["Traditional Chinese"], ["繁體中文", "傳統中文", "正體中文", "繁体中文"]],
-		"zh-traditional": [["Traditional Chinese"], ["繁體中文", "傳統中文", "正體中文", "繁体中文"]], // made-up ID, not real ISO 639-1
-		"zh-simplified": [["Simplified Chinese"], ["简体中文"]], // made-up ID, not real ISO 639-1
+		"zh-traditional": [["Traditional Chinese"], ["繁體中文", "傳統中文", "正體中文", "繁体中文"]], //*
+		"zh-simplified": [["Simplified Chinese"], ["简体中文"]], //*
 		cv: [["Chuvash"], ["Чӑваш Чӗлхи"]],
 		kw: [["Cornish"], ["Kernewek"]],
 		co: [["Corsican"], ["Corsu", "Lingua Corsa"]],
