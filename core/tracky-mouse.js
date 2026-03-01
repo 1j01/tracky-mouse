@@ -621,6 +621,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 	// console.trace("Initializing UI with locale", locale);
 
 	// language name mappings marked with * may not be ISO 639-1
+	// they may be ISO 639-3 or bespoke
 	// spell-checker:disable
 	const languageNames = {
 		// "639-1": [["ISO language name"], ["Native name (endonym)"]],
@@ -762,8 +763,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		pl: [["Polish"], ["Język Polski", "Polszczyzna"]],
 		ps: [["Pashto", "Pushto"], ["پښتو"]],
 		pt: [["Portuguese"], ["Português"]],
-		"pt-br": [["Brazilian Portuguese"], ["Português Brasileiro"]],
-		"pt-pt": [["Portuguese (Portugal)"], ["Português De Portugal"]],
+		"pt-BR": [["Brazilian Portuguese"], ["Português Brasileiro"]],
+		"pt-PT": [["Portuguese (Portugal)"], ["Português De Portugal"]],
 		qu: [["Quechua"], ["Runa Simi", "Kichwa"]],
 		rm: [["Romansh"], ["Rumantsch Grischun"]],
 		rn: [["Rundi"], ["Ikirundi"]],
@@ -811,6 +812,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		vi: [["Vietnamese"], ["Tiếng Việt"]],
 		vo: [["Volapük"], ["Volapük"]],
 		wa: [["Walloon"], ["Walon"]],
+		war: [["Waray"], ["Winaray"]],//*
 		cy: [["Welsh"], ["Cymraeg"]],
 		wo: [["Wolof"], ["Wollof"]],
 		fy: [["Western Frisian"], ["Frysk"]],
