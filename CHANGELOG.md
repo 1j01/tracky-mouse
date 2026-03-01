@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Added
+
+- Added Portuguese language option in the General > Language settings.
 
 ## [2.4.0] - 2026-02-28
 
