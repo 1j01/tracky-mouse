@@ -30,10 +30,10 @@ After adding or changing localizable English strings (not when adding a new lang
 To add a new language:
 - Run `npm run new-locale -- $NEW_LANG`
 - Replace every translation value in `core/locales/$NEW_LANG/translation.json` with a localized string, while preserving the keys.
-- You are not done until every string is localized. Do not ask for confirmation before starting translating. If I ask for a new language, I am assigning you the task of translation.
 - Update the changelog.
 - Run `npm run lint`
-- Commit with "Add [Some Language] locale" with the AI prompt in the description but no AI explanation part.
+- Commit with "Add [Some Language] locale" with the AI prompt in the description (but no AI explanation part).
+- You are not done until every string is localized, lint passes, and it's committed. Do not ask for confirmation before starting translating. If I ask for a new language, I am assigning you the task of translation.
 - Do not substitute your own process. Do not bother inspecting the i18n setup. The above steps are specifically all I want you to do for this task.
 - All the English strings to translate will be in the copied file. Do not bother inspecting the `en/translation.json` which will be identical. Do not inspect other languages for reference, even related languages.
 
