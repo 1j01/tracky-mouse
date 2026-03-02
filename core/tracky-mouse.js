@@ -1558,7 +1558,12 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		zza: "TR",
 	};
 
-	function getLanguageEmoji(locale) {
+	function getLanguageFlagEmoji(locale) {
+
+		if (locale === "emoji") {
+			return "🏳️‍🌈";
+		}
+
 		var split = locale.toUpperCase().split(/-|_/);
 		var lang = split.shift();
 		var code = split.pop();
@@ -2032,7 +2037,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					className: "tracky-mouse-language",
 					key: "language",
 					type: "dropdown",
-					options: availableLanguages.map(lang => ({ value: lang, label: `${getLanguageEmoji(lang)} ${languageNames[lang]?.[1]?.[0] || lang} (${languageNames[lang]?.[0]?.[0] || "?"})` })),
+					options: availableLanguages.map(lang => ({ value: lang, label: `${getLanguageFlagEmoji(lang)} ${languageNames[lang]?.[1]?.[0] || lang} (${languageNames[lang]?.[0]?.[0] || "?"})` })),
 					default: locale,
 					handleSettingChange: () => {
 						// console.trace("handleSettingChange for language setting");
