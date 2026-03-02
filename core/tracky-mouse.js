@@ -642,6 +642,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		az: [["Azerbaijani"], ["Azərbaycan Dili"]],
 		bm: [["Bambara"], ["Bamanankan"]],
 		ba: [["Bashkir"], ["Башҡорт Теле"]],
+		emoji: [["Emoji"], ["😃📝"]],//*
 		eu: [["Basque"], ["Euskara", "Euskera"]],
 		be: [["Belarusian"], ["Беларуская Мова"]],
 		bn: [["Bengali"], ["বাংলা"]],
