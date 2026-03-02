@@ -33,7 +33,7 @@ To add a new language:
 - Update the changelog.
 - Run `npm run lint`
 - Commit with "Add [Some Language] locale" with the AI prompt in the description (but no AI explanation part).
-- You are not done until every string is localized, lint passes, and it's committed. Do not ask for confirmation before starting translating. If I ask for a new language, I am assigning you the task of translation.
+- If I ask for a new language, I am assigning you the task of translation. You are not done until every string is localized, lint passes, and you've committed the changes. Do not ask for confirmation before starting translating or before committing.
 - Do not substitute your own process. Do not bother inspecting the i18n setup. The above steps are specifically all I want you to do for this task.
 - All the English strings to translate will be in the copied file. Do not bother inspecting the `en/translation.json` which will be identical. Do not inspect other languages for reference, even related languages.
 
