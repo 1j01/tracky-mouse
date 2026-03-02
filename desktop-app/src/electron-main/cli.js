@@ -54,7 +54,6 @@ const parser = new ArgumentParser({
 // 	action: "append",
 // });
 
-// TODO: Need to decide how to handle toggling mouse movement vs dwell clicking...
 parser.add_argument("--start", {
 	help: t("Start head tracking."),
 	action: "store_true",
