@@ -743,6 +743,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 		mh: [["Marshallese"], ["Kajin M̧ajeļ"]],
 		mn: [["Mongolian"], ["Монгол Хэл"]],
 		na: [["Nauru"], ["Dorerin Naoero"]],
+		nan: [["Minnan", "Taiwanese Hokkien"], ["閩南語", "闽南语", "Bàn-lâm-gú", "Bân-lâm-gí"]],//* (technically Hokkien is a branch of Minnan; also idk what names are preferred)
 		nv: [["Navajo", "Navaho"], ["Diné Bizaad"]],
 		nd: [["North Ndebele"], ["IsiNdebele"]],
 		ne: [["Nepali"], ["नेपाली"]],
