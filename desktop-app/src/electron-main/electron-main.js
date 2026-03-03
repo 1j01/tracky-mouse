@@ -45,7 +45,6 @@ if (process.platform === 'win32') {
 
 // From this point on, third party modules can be required now without risking interfering with the installer.
 
-const { parser } = require('./cli.js');
 const { getVersion } = require('./version.js');
 const { checkForUpdates } = require('./auto-updater.js');
 
@@ -54,6 +53,23 @@ const { checkForUpdates } = require('./auto-updater.js');
 // - packaged (usually in production): "path/to/jspaint.exe" "maybe/a/file.png"
 const { isPackaged } = app;
 const argsArray = process.argv.slice(isPackaged ? 1 : 2);
+
+const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
+const formatName = "tracky-mouse-settings";
+const formatVersion = 1;
+
+const { setLocale, getScreenOverlayMessageText } = require('./i18n.js');
+
+// Load settings early for CLI localization
+try {
+	loadLanguageSettingSync();
+} catch (error) {
+	console.error("Error loading settings synchronously during startup:", error);
+}
+
+// File cli.js must be loaded after locale is loaded, with how it's set up right now.
+const { parser } = require('./cli.js');
+
 // Note: this may exit the app, if the user runs `tracky-mouse --help`.
 const args = parser.parse_args(argsArray);
 
@@ -206,7 +222,6 @@ function updateScreenScaleFactor() {
 }
 
 const { updateMenu } = require("./menus.js");
-const { setLocale, getScreenOverlayMessageText } = require('./i18n.js');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -217,11 +232,6 @@ app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
 let activeSettings = {};
 
 let enabled = true;
-
-const settingsFile = path.join(app.getPath('userData'), 'tracky-mouse-settings.json');
-const formatName = "tracky-mouse-settings";
-const formatVersion = 1;
-
 async function loadSettings() {
 	let data;
 	try {
@@ -250,6 +260,43 @@ async function loadSettings() {
 		throw new Error(`Unsupported settings file format version (${settings.formatVersion}). This version of the app only supports up to format version ${formatVersion}.`);
 	}
 	deserializeSettings(settings);
+}
+
+// TODO: DRY with loadSettings
+// Could use a { sync: true, languageOnly: true } options object
+// or could split out the shared functionality into a helper function
+// like handleFormatUpgrade(settings)
+function loadLanguageSettingSync() {
+	let data;
+	try {
+		data = require('fs').readFileSync(settingsFile, 'utf8');
+	} catch (error) {
+		if (error.code === 'ENOENT') {
+			return;
+		}
+		throw error;
+	}
+	const settings = JSON.parse(data);
+	if (settings.formatName !== formatName) {
+		throw new Error("Settings file format name doesn't match");
+	}
+	// Upgrade settings here
+	// e.g.:
+	// if (settings.formatVersion === 0) {
+	// 	settings.formatVersion++;
+	// 	settings.newSettingName = settings.someOldSettingName;
+	// 	delete settings.someOldSettingName;
+	// }
+	if (settings.formatVersion < formatVersion) {
+		throw new Error(`Unsupported settings file format version. There is no upgrade path from ${settings.formatVersion} to ${formatVersion}.`);
+	}
+	if (settings.formatVersion > formatVersion) {
+		throw new Error(`Unsupported settings file format version (${settings.formatVersion}). This version of the app only supports up to format version ${formatVersion}.`);
+	}
+	// deserializeSettings(settings);
+	if (settings.globalSettings.language !== undefined) {
+		setLocale(settings.globalSettings.language);
+	}
 }
 async function saveSettings() {
 	await fs.writeFile(settingsFile, JSON.stringify(serializeSettings(), null, '\t'));

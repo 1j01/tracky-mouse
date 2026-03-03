@@ -1,7 +1,6 @@
 const { ArgumentParser, SUPPRESS /*, RawDescriptionHelpFormatter*/ } = require("argparse");
 
-/** translation placeholder */
-const t = (s) => s;
+const { t } = require('./i18n');
 
 const parser = new ArgumentParser({
 	prog: "tracky-mouse",

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Portuguese, Brazilian Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, Norwegian, Slovak, Greek, Slovenian, Simplified Chinese, Waray, Chechen, Catalan, Serbian, Croatian, Tatar, Romanian, Basque, Emoji, Malay, Minnan, and Esperanto language options in the General > Language settings.
+- The CLI is now partially localized. This uses the in-app language setting.
 
 ## [2.4.0] - 2026-02-28
 
