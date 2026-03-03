@@ -226,7 +226,12 @@ const { updateMenu } = require("./menus.js");
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
-app.commandLine.appendSwitch("--disable-gpu-process-crash-limit");
+app.commandLine.appendSwitch("disable-gpu-process-crash-limit");
+// Allow auto-scrolling with middle click on platforms other than Windows.
+// This makes it easier to navigate the settings when using Tracky Mouse's
+// "Open mouth to click (with eye gestures)" mode, since Tracky Mouse doesn't currently
+// provide a way to trigger mouse wheel events, but it does let you middle click.
+app.commandLine.appendSwitch("enable-blink-features", "MiddleClickAutoscroll");
 
 
 let activeSettings = {};
