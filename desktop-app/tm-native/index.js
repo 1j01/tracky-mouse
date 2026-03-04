@@ -7,21 +7,19 @@
 // On other platforms it is a no-op.
 
 if (process.platform === "win32") {
-  try {
-    module.exports = require("./build/Release/tracky_mouse_native.node");
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn("Failed to load tracky-mouse-native module; cursor visibility workaround disabled.", error);
-    module.exports = {
-      ensureCursorVisible() {
-        return false;
-      },
-    };
-  }
+	try {
+		module.exports = require("./build/Release/tracky_mouse_native.node");
+	} catch (_error) {
+		module.exports = {
+			ensureCursorVisible() {
+				return false;
+			},
+		};
+	}
 } else {
-  module.exports = {
-    ensureCursorVisible() {
-      return false;
-    },
-  };
+	module.exports = {
+		ensureCursorVisible() {
+			return false;
+		},
+	};
 }
