@@ -430,7 +430,13 @@ const createWindow = () => {
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
-		const curPos = await getMouseLocation();
+		let curPos;
+		try {
+			curPos = await getMouseLocation();
+		} catch (error) {
+			console.error("Error getting mouse location from native helper (moveMouse):", error);
+			return;
+		}
 		curPos.x /= screenScaleFactor;
 		curPos.y /= screenScaleFactor;
 		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
@@ -477,7 +483,12 @@ const createWindow = () => {
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
 		let initialPos;
 		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
-			initialPos = await getMouseLocation();
+			try {
+				initialPos = await getMouseLocation();
+			} catch (error) {
+				console.error("Error getting mouse location from native helper (notifyToggleState):", error);
+				// Without an initial position, just avoid modifying mousePosHistory based on it.
+			}
 			initialPos.x /= screenScaleFactor;
 			initialPos.y /= screenScaleFactor;
 		}

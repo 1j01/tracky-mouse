@@ -5,6 +5,7 @@ const readline = require("readline");
 let child = null;
 let nextId = 1;
 const pending = new Map();
+let fatalError = null;
 
 function getBinaryPath() {
 	const exe = process.platform === "win32" ? "tm-native.exe" : "tm-native";
@@ -21,11 +22,20 @@ function getBinaryPath() {
 }
 
 function ensureChild() {
+	if (fatalError) {
+		throw fatalError;
+	}
 	if (child && !child.killed) {
 		return;
 	}
 	const binPath = getBinaryPath();
-	child = spawn(binPath, [], { stdio: ["pipe", "pipe", "inherit"] });
+	try {
+		child = spawn(binPath, [], { stdio: ["pipe", "pipe", "inherit"] });
+	} catch (error) {
+		fatalError = error;
+		child = null;
+		throw error;
+	}
 
 	const rl = readline.createInterface({ input: child.stdout });
 	rl.on("line", (line) => {
@@ -48,10 +58,24 @@ function ensureChild() {
 		}
 	});
 
+	child.on("error", (error) => {
+		if (!fatalError) {
+			fatalError = error;
+		}
+		for (const { reject } of pending.values()) {
+			reject(error);
+		}
+		pending.clear();
+		child = null;
+	});
+
 	child.on("exit", (code, signal) => {
 		const err = new Error(
 			`tm-native process exited with ${signal || code}`,
 		);
+		if (!fatalError) {
+			fatalError = err;
+		}
 		for (const { reject } of pending.values()) {
 			reject(err);
 		}
@@ -62,9 +86,14 @@ function ensureChild() {
 
 function sendCommand(cmd, payload) {
 	return new Promise((resolve, reject) => {
-		ensureChild();
-		if (!child || !child.stdin) {
-			reject(new Error("tm-native process not available"));
+		try {
+			ensureChild();
+		} catch (error) {
+			reject(error);
+			return;
+		}
+		if (!child || !child.stdin || child.stdin.destroyed) {
+			reject(fatalError || new Error("tm-native process not available"));
 			return;
 		}
 		const id = nextId++;
