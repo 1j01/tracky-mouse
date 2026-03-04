@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- Desktop app now uses a separate native helper process written in Go (using robotgo) for mouse control instead of the serenade-driver Node.js module. This should reduce installation issues related to native Node.js build tools and make it easier to support future platform-specific improvements.
 
 ## [2.4.0] - 2026-02-28
 

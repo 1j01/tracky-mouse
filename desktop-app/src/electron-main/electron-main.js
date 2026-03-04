@@ -196,7 +196,13 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 // Normal app behavior continues here.
 
 const windowStateKeeper = require('electron-window-state');
-const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+const {
+	setMouseLocation: setMouseLocationWithoutTracking,
+	getMouseLocation,
+	click,
+	mouseDown,
+	mouseUp,
+} = require('../native-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
