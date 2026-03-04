@@ -214,6 +214,9 @@ function updateScreenScaleFactor() {
 const { updateMenu } = require("./menus.js");
 const { setLocale, getScreenOverlayMessageText } = require('./i18n.js');
 
+let nativeMouseAvailable = true;
+let nativeMouseErrorShown = false;
+
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
 // Note, if Ctrl + Alt + F2 doesn't get you back, try Ctrl+Alt+F7.)
@@ -428,13 +431,26 @@ const createWindow = () => {
 		});
 	};
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
+		if (!nativeMouseAvailable) {
+			return;
+		}
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		let curPos;
 		try {
 			curPos = await getMouseLocation();
 		} catch (error) {
-			console.error("Error getting mouse location from native helper (moveMouse):", error);
+			if (!nativeMouseErrorShown) {
+				console.error("Error getting mouse location from native helper (moveMouse):", error);
+				if (app.isReady()) {
+					dialog.showErrorBox(
+						"Tracky Mouse native helper not available",
+						"The native helper process (tm-native) could not be started. Mouse control is disabled.\n\nIf you're running from source, make sure Go is installed and run `go build` in desktop-app/tm-native.",
+					);
+				}
+				nativeMouseErrorShown = true;
+			}
+			nativeMouseAvailable = false;
 			return;
 		}
 		curPos.x /= screenScaleFactor;
@@ -483,14 +499,25 @@ const createWindow = () => {
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
 		let initialPos;
 		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
-			try {
-				initialPos = await getMouseLocation();
-			} catch (error) {
-				console.error("Error getting mouse location from native helper (notifyToggleState):", error);
-				// Without an initial position, just avoid modifying mousePosHistory based on it.
+			if (nativeMouseAvailable) {
+				try {
+					initialPos = await getMouseLocation();
+					initialPos.x /= screenScaleFactor;
+					initialPos.y /= screenScaleFactor;
+				} catch (error) {
+					if (!nativeMouseErrorShown) {
+						console.error("Error getting mouse location from native helper (notifyToggleState):", error);
+						if (app.isReady()) {
+							dialog.showErrorBox(
+								"Tracky Mouse native helper not available",
+								"The native helper process (tm-native) could not be started. Mouse control is disabled.\n\nIf you're running from source, make sure Go is installed and run `go build` in desktop-app/tm-native.",
+							);
+						}
+						nativeMouseErrorShown = true;
+					}
+					nativeMouseAvailable = false;
+				}
 			}
-			initialPos.x /= screenScaleFactor;
-			initialPos.y /= screenScaleFactor;
 		}
 		enabled = nowEnabled;
 		updateDwellClicking();
