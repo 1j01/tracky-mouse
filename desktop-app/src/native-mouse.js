@@ -1,5 +1,6 @@
 const { spawn } = require("child_process");
 const path = require("path");
+const fs = require("fs");
 const readline = require("readline");
 
 let child = null;
@@ -15,10 +16,12 @@ function getBinaryPath() {
 	}
 	// 2. Development: run from source tree (desktop-app/tm-native)
 	const devPath = path.join(__dirname, "..", "tm-native", exe);
+	if (fs.existsSync(devPath)) {
+		return devPath;
+	}
 	// 3. Packaged: Electron Forge copies tm-native into resources as an extraResource
 	const resourcesPath = process.resourcesPath || path.join(__dirname, "..", "..", "..");
-	const prodPath = path.join(resourcesPath, exe);
-	return process.env.NODE_ENV === "development" ? devPath : prodPath;
+	return path.join(resourcesPath, exe);
 }
 
 function ensureChild() {
