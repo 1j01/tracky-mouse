@@ -213,7 +213,12 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
-const nativeHelpers = require('tracky-mouse-native');
+let nativeHelpers = { ensureCursorVisible() { return false; } };
+try {
+	nativeHelpers = require('tracky-mouse-native');
+} catch (error) {
+	console.warn('Failed to load tracky-mouse-native module; cursor visibility workaround disabled.', error);
+}
 const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
