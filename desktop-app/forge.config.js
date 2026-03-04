@@ -1,7 +1,6 @@
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 /** For maker-deb, this has to match name from package.json of the desktop app */
 const executableName = os.platform() === "linux" ? "tracky-mouse-electron" : "tracky-mouse";
@@ -53,20 +52,6 @@ module.exports = {
 		// https://electron.github.io/packager/main/interfaces/Options.html#darwinDarkModeSupport
 	},
 	hooks: {
-		packageBeforeCopy: async () => {
-			// Build the Go-based native helper (tm-native) before packaging.
-			// Assumes Go toolchain is installed in the build environment.
-			const tmNativeDir = path.join(__dirname, 'tm-native');
-			const outputName = process.platform === 'win32' ? 'tm-native.exe' : 'tm-native';
-			const buildCmd = `go build -o ${outputName}`;
-			console.log('[tm-native] Building native helper with:', buildCmd, 'in', tmNativeDir);
-			try {
-				execSync(buildCmd, { cwd: tmNativeDir, stdio: 'inherit' });
-			} catch (error) {
-				console.error('[tm-native] Failed to build native helper:', error);
-				throw error;
-			}
-		},
 		// (The exact hook time is not necessarily important
 		// but I wanted these to be separate hooks.)
 		packageAfterCopy: async (_forgeConfig, buildPath) => {

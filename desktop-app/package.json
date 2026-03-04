@@ -46,10 +46,11 @@
   "homepage": "https://trackymouse.js.org/",
   "main": "src/electron-main/electron-main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "build-tm-native": "node ../scripts/build-tm-native.js",
+    "start": "node ../scripts/build-tm-native.js --allow-failure && electron-forge start",
+    "package": "node ../scripts/build-tm-native.js && electron-forge package",
+    "make": "node ../scripts/build-tm-native.js && electron-forge make",
+    "publish": "node ../scripts/build-tm-native.js && electron-forge publish"
   },
   "dependencies": {
     "@sentry/electron": "^5.11.0",

@@ -59,6 +59,7 @@ module.exports = [
 			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",
 			"desktop-app/forge.config.js",
+			"scripts/build-tm-native.js",
 			"scripts/copy-with-review.js",
 			"scripts/list-ipc-events.js",
 			"scripts/update-cli-docs.js",
