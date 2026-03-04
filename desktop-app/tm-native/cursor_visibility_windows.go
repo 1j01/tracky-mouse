@@ -4,28 +4,56 @@ package main
 
 import (
 	"syscall"
-
-	"github.com/go-vgo/robotgo"
+	"unsafe"
 )
 
 var (
-	user32         = syscall.NewLazyDLL("user32.dll")
-	procShowCursor = user32.NewProc("ShowCursor")
+	user32          = syscall.NewLazyDLL("user32.dll")
+	procShowCursor  = user32.NewProc("ShowCursor")
+	procSendInput   = user32.NewProc("SendInput")
 )
+
+const (
+	inputMouse      = 0
+	mouseeventfMove = 0x0001
+)
+
+type mouseInput struct {
+	dx, dy         int32
+	mouseData      uint32
+	dwFlags        uint32
+	time           uint32
+	dwExtraInfo    uintptr
+}
+
+type input struct {
+	type_ uint32
+	mi    mouseInput
+}
 
 // ensureCursorVisible tries to force the system cursor to be visibly drawn.
 //
-// In some situations on Windows the cursor is only drawn after there has been
-// real mouse movement. To mimic this, we "nudge" the cursor by setting its
-// position to its current location, which generates a synthetic mouse move
-// event without actually moving it on screen.
+// On Windows, the cursor may not appear until there has been real mouse
+// movement. To approximate this, we inject a small relative mouse move via
+// SendInput, which tends to wake up the cursor drawing without relying on
+// robotgo's higher-level helpers.
 //
 // We also call ShowCursor(TRUE) a few times as a best-effort fallback in case
 // the cursor was explicitly hidden via the Win32 ShowCursor counter.
 func ensureCursorVisible() {
-	// Wake the cursor by re-setting its current position.
-	x, y := robotgo.Location()
-	robotgo.Move(x, y)
+	// Inject a tiny relative mouse move.
+	var inp input
+	inp.type_ = inputMouse
+	inp.mi = mouseInput{
+		dx:      1,
+		dy:      0,
+		dwFlags: mouseeventfMove,
+	}
+	procSendInput.Call(
+		1,
+		uintptr(unsafe.Pointer(&inp)),
+		unsafe.Sizeof(inp),
+	)
 
 	// Additionally, try to bump the ShowCursor counter into a visible state.
 	for i := 0; i < 16; i++ {

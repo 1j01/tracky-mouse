@@ -18,7 +18,7 @@ Requests:
 - `{ "id": 3, "cmd": "click", "button": "left" }`
 - `{ "id": 4, "cmd": "mouseDown", "button": "left" }`
 - `{ "id": 5, "cmd": "mouseUp", "button": "left" }`
-- `{ "id": 6, "cmd": "ensureCursorVisible" }` (On Windows, simulates a small mouse movement to make the cursor visible; no-op on other platforms)
+- `{ "id": 6, "cmd": "ensureCursorVisible" }` (On Windows, injects a small mouse move event to make the cursor visible; no-op on other platforms)
 
 Responses:
 
