@@ -215,44 +215,6 @@ const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
-// On Windows after logon, the cursor can remain invisible until the first
-// relative mouse move from a hardware device. When using "Run at login",
-// this can leave users without a visible cursor even though Tracky Mouse
-// is moving it. To avoid requiring a physical mouse wiggle, send a small
-// synthetic relative mouse move via the Win32 API, using ffi.
-let sendSyntheticRelativeMouseMoveIfNeeded = () => { };
-if (process.platform === 'win32') {
-	try {
-		// Lazy-load ffi so non-Windows platforms are unaffected if the module
-		// is missing, and to keep Windows-specific code isolated.
-		const ffi = require('ffi-napi');
-
-		const user32 = ffi.Library('user32', {
-			// VOID mouse_event(DWORD dwFlags, DWORD dx, DWORD dy, DWORD dwData, ULONG_PTR dwExtraInfo);
-			mouse_event: ['void', ['uint32', 'int32', 'int32', 'uint32', 'ulonglong']],
-		});
-
-		const MOUSEEVENTF_MOVE = 0x0001;
-		let hasSentSyntheticMove = false;
-
-		sendSyntheticRelativeMouseMoveIfNeeded = () => {
-			if (hasSentSyntheticMove) {
-				return;
-			}
-			hasSentSyntheticMove = true;
-			try {
-				// Nudge the cursor by one pixel and back using relative movement.
-				user32.mouse_event(MOUSEEVENTF_MOVE, 0, 1, 0, 0);
-				user32.mouse_event(MOUSEEVENTF_MOVE, 0, -1, 0, 0);
-			} catch (error) {
-				console.error("Failed to send synthetic mouse move to show cursor:", error);
-			}
-		};
-	} catch (error) {
-		console.error("Failed to initialize Windows cursor visibility helper:", error);
-	}
-}
-
 let screenScaleFactor = 1;
 function updateScreenScaleFactor() {
 	// Must wait for ready event before calling this
@@ -768,11 +730,6 @@ app.on('ready', async () => {
 	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {
 		updateScreenScaleFactor();
 	});
-
-	// On Windows, make sure the cursor becomes visible after logon even if
-	// no physical mouse has been moved yet, by sending a small relative
-	// mouse move via the Win32 API before Tracky Mouse starts moving it.
-	sendSyntheticRelativeMouseMoveIfNeeded();
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');
