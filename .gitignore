@@ -105,6 +105,13 @@ typings/
 # Electron-Forge
 out/
 
+#################
+# Go build artefacts
+#################
+
+desktop-app/tm-native/tm-native
+desktop-app/tm-native/tm-native.exe
+
 
 #################
 # Mac OS
