@@ -16,6 +16,7 @@ export default defineConfig({
 			"**/out/**",
 			"**/dist/**",
 			"**/build/**",
+			"**/bin/**",
 			"**/private/**",
 			"**/electron-main.js", // uses top-level return
 		],

@@ -1,5 +1,7 @@
 private/
 dist/
+build/
+bin/
 localazy.keys.json
 
 # Blender

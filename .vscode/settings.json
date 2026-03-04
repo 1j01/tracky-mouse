@@ -7,6 +7,8 @@
 		"**/node_modules": true,
 		"**/out": true,
 		"**/dist": true,
+		"**/build": true,
+		"**/bin": true,
 	},
 	// This affects Find In Files (Ctrl+Shift+F) but also Go To File (Ctrl+P) and
 	// the new Quick Search (experimental), which I've been using a lot since it was released.

@@ -8,6 +8,8 @@ module.exports = [
 			"**/node_modules",
 			"**/out",
 			"**/dist",
+			"**/build",
+			"**/bin",
 			"**/lib",
 			"**/.*",
 		],

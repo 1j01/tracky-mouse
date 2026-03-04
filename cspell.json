@@ -4,6 +4,8 @@
 		"lib",
 		"out",
 		"dist",
+		"build",
+		"bin",
 		"images",
 		"locales",
 		"CNAME"

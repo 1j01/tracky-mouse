@@ -1,6 +1,8 @@
 exports.exclude = [
 	"**/node_modules/**",
 	"**/dist/**",
+	"**/build/**",
+	"**/bin/**",
 	"**/*.log",
 	"**/.**",
 	"**/package-lock.json",

@@ -12,7 +12,13 @@ const projectRoot = path.join(__dirname, '../desktop-app');
 const files = glob.sync(['**/*.{js,ts,html}'], {
 	cwd: projectRoot,
 	absolute: true,
-	ignore: ['**/node_modules/**', '**/dist/**', '**/out/**']
+	ignore: [
+		'**/node_modules/**',
+		'**/dist/**',
+		'**/build/**',
+		'**/bin/**',
+		'**/out/**',
+	]
 });
 
 const ipcPatterns = [

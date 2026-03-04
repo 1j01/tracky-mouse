@@ -28,7 +28,13 @@ const path = require('path');
 const files = glob.sync(['**/*.*'], {
 	cwd: process.cwd(),
 	absolute: true,
-	ignore: ['**/node_modules/**', '**/dist/**', '**/out/**']
+	ignore: [
+		'**/node_modules/**',
+		'**/dist/**',
+		'**/build/**',
+		'**/bin/**',
+		'**/out/**',
+	]
 });
 for (const file of files) {
 	if (filesWithDownloadLinks.some(f => path.resolve(f) === path.resolve(file))) {
