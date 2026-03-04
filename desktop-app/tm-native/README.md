@@ -18,6 +18,7 @@ Requests:
 - `{ "id": 3, "cmd": "click", "button": "left" }`
 - `{ "id": 4, "cmd": "mouseDown", "button": "left" }`
 - `{ "id": 5, "cmd": "mouseUp", "button": "left" }`
+ - `{ "id": 6, "cmd": "ensureCursorVisible" }` (Windows only; no-op on other platforms)
 
 Responses:
 

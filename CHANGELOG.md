@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Desktop app now uses a separate native helper process written in Go (using robotgo) for mouse control instead of the serenade-driver Node.js module. This should reduce installation issues related to native Node.js build tools and make it easier to support future platform-specific improvements.
 
+### Fixed
+
+- On Windows, when Tracky Mouse starts at login (or when you toggle tracking on), it now forces the mouse cursor to be visible in case another application had previously hidden it.
+
 ## [2.4.0] - 2026-02-28
 
 ### Changed

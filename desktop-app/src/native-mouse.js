@@ -140,10 +140,15 @@ async function mouseUp(button) {
 	await sendCommand("mouseUp", { button });
 }
 
+async function ensureCursorVisible() {
+	await sendCommand("ensureCursorVisible", {});
+}
+
 module.exports = {
 	setMouseLocation,
 	getMouseLocation,
 	click,
 	mouseDown,
 	mouseUp,
+	ensureCursorVisible,
 };

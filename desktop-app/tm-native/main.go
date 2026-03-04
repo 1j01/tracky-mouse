@@ -80,6 +80,9 @@ func main() {
 			}
 			robotgo.Toggle(button, "up")
 			writeOK(&writeMu, writer, req.ID, 0, 0)
+		case "ensureCursorVisible":
+			ensureCursorVisible()
+			writeOK(&writeMu, writer, req.ID, 0, 0)
 		default:
 			writeError(&writeMu, writer, req.ID, fmt.Errorf("unknown command: %s", req.Cmd))
 		}

@@ -202,6 +202,7 @@ const {
 	click,
 	mouseDown,
 	mouseUp,
+	ensureCursorVisible,
 } = require('../native-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
@@ -530,6 +531,13 @@ const createWindow = () => {
 			// Avoid false positive for manual takeback.
 			if (initialPos) {
 				mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
+			}
+			if (process.platform === 'win32') {
+				try {
+					await ensureCursorVisible();
+				} catch (error) {
+					console.error("Error ensuring cursor is visible:", error);
+				}
 			}
 		}
 	});
