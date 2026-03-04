@@ -8,11 +8,16 @@ const pending = new Map();
 
 function getBinaryPath() {
 	const exe = process.platform === "win32" ? "tm-native.exe" : "tm-native";
-	// Development: run from source tree
+	// 1. Explicit override for testing or non-standard layouts
+	if (process.env.TM_NATIVE_PATH) {
+		return process.env.TM_NATIVE_PATH;
+	}
+	// 2. Development: run from source tree (desktop-app/tm-native)
 	const devPath = path.join(__dirname, "..", "tm-native", exe);
-	// Packaged: place binary next to app.asar
-	const prodPath = path.join(process.resourcesPath || path.join(__dirname, "..", ".."), exe);
-	return process.env.TM_NATIVE_PATH || devPath || prodPath;
+	// 3. Packaged: Electron Forge copies tm-native into resources as an extraResource
+	const resourcesPath = process.resourcesPath || path.join(__dirname, "..", "..", "..");
+	const prodPath = path.join(resourcesPath, exe);
+	return process.env.NODE_ENV === "development" ? devPath : prodPath;
 }
 
 function ensureChild() {
