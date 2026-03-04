@@ -10,6 +10,7 @@ if (process.platform === "win32") {
 	try {
 		module.exports = require("./build/Release/tracky_mouse_native.node");
 	} catch (_error) {
+		console.warn("Failed to load tracky-mouse-native module; cursor visibility workaround disabled.", _error);
 		module.exports = {
 			ensureCursorVisible() {
 				return false;
