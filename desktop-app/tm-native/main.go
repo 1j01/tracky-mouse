@@ -55,6 +55,9 @@ func main() {
 			if button == "" {
 				button = "left"
 			}
+			if button == "middle" {
+				button = "center"
+			}
 			robotgo.Click(button)
 			writeOK(&writeMu, writer, req.ID, 0, 0)
 		case "mouseDown":
@@ -62,12 +65,18 @@ func main() {
 			if button == "" {
 				button = "left"
 			}
+			if button == "middle" {
+				button = "center"
+			}
 			robotgo.Toggle(button)
 			writeOK(&writeMu, writer, req.ID, 0, 0)
 		case "mouseUp":
 			button := req.Button
 			if button == "" {
 				button = "left"
+			}
+			if button == "middle" {
+				button = "center"
 			}
 			robotgo.Toggle(button, "up")
 			writeOK(&writeMu, writer, req.ID, 0, 0)
