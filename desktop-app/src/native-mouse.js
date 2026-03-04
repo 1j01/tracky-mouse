@@ -20,8 +20,12 @@ function getBinaryPath() {
 		return devPath;
 	}
 	// 3. Packaged: Electron Forge copies tm-native into resources as an extraResource
-	const resourcesPath = process.resourcesPath || path.join(__dirname, "..", "..", "..");
-	return path.join(resourcesPath, exe);
+	// In development, process.resourcesPath points into electron/dist/resources and
+	// will not contain tm-native, so treat missing devPath as "not available".
+	if (!process.resourcesPath || process.resourcesPath.includes(path.join("node_modules", "electron", "dist", "resources"))) {
+		return null;
+	}
+	return path.join(process.resourcesPath, exe);
 }
 
 function ensureChild() {
@@ -32,6 +36,10 @@ function ensureChild() {
 		return;
 	}
 	const binPath = getBinaryPath();
+	if (!binPath || !fs.existsSync(binPath)) {
+		fatalError = new Error("tm-native binary not found; mouse control helper is unavailable.");
+		throw fatalError;
+	}
 	try {
 		child = spawn(binPath, [], { stdio: ["pipe", "pipe", "inherit"] });
 	} catch (error) {
