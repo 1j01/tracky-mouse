@@ -1,0 +1,8 @@
+{
+  "name": "tracky-mouse-native",
+  "version": "1.0.0",
+  "description": "Native helpers for the Tracky Mouse desktop app",
+  "private": true,
+  "main": "index.js",
+  "gypfile": true
+}

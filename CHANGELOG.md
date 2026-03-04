@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The CLI is now partially localized. This uses the in-app language setting.
 - Enabled auto-scrolling with middle click in the desktop app on platforms other than Windows. This makes it easier to navigate the settings when using Tracky Mouse's "Open mouth to click (with eye gestures)" mode, since Tracky Mouse doesn't currently provide mouse wheel scrolling, but it does let you middle click.
 
+### Fixed
+
+- On Windows, when Tracky Mouse is configured to "Run at login", the mouse cursor will now become visible automatically without needing to move a physical mouse.
+
 ## [2.4.0] - 2026-02-28
 
 ### Changed

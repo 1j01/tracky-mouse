@@ -213,6 +213,7 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+const nativeHelpers = require('tracky-mouse-native');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
@@ -237,6 +238,7 @@ app.commandLine.appendSwitch("enable-blink-features", "MiddleClickAutoscroll");
 let activeSettings = {};
 
 let enabled = true;
+let ensuredCursorVisible = false;
 async function loadSettings() {
 	let data;
 	try {
@@ -377,6 +379,20 @@ function deserializeSettings(settings) {
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
 async function setMouseLocationTracky(x, y) {
+	if (process.platform === 'win32' && !ensuredCursorVisible) {
+		ensuredCursorVisible = true;
+		try {
+			// On Windows after logon when using "Run at login", the cursor can
+			// remain invisible until the user physically moves a mouse.
+			// Calling ShowCursor() does NOT fix this (tested), but a tiny
+			// relative mouse move does, so we trigger one here once.
+			if (nativeHelpers && typeof nativeHelpers.ensureCursorVisible === 'function') {
+				nativeHelpers.ensureCursorVisible();
+			}
+		} catch (error) {
+			console.warn('Failed to ensure cursor visibility via native helper:', error);
+		}
+	}
 	const time = performance.now();
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
