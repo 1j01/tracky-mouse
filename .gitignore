@@ -43,6 +43,10 @@ coverage
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
+# Native helper build output
+desktop-app/tm-native/build/
+desktop-app/tm-native/bin/
+
 # Dependency directories
 node_modules/
 jspm_packages/
