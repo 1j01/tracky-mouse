@@ -213,6 +213,7 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+const { ensureInitialRelativeMouseMove } = require('./win-relative-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
@@ -381,6 +382,11 @@ async function setMouseLocationTracky(x, y) {
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
+	// On Windows after login, the cursor can remain invisible until there
+	// has been at least one relative mouse move. serenade-driver only
+	// exposes absolute movement, so we issue a tiny relative move once
+	// per session via a small native helper before the first absolute move.
+	ensureInitialRelativeMouseMove();
 	await setMouseLocationWithoutTracking(x * screenScaleFactor, y * screenScaleFactor);
 }
 function pruneMousePosHistory() {
