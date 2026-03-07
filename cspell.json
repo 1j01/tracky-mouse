@@ -8,6 +8,7 @@
 		"bin",
 		"images",
 		"locales",
+		"private",
 		"CNAME"
 	],
 	"words": [

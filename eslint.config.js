@@ -11,6 +11,7 @@ module.exports = [
 			"**/build",
 			"**/bin",
 			"**/lib",
+			"**/private",
 			"**/.*",
 		],
 	},
