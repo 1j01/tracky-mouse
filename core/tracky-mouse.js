@@ -2519,7 +2519,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	};
 	const loadOptions = async (initialLoad = false) => {
 		if (window.electronAPI) {
-			deserializeSettings(await window.electronAPI.getOptions(), initialLoad);
+			// Desktop app: start from any saved settings in the main process,
+			// then, on first load, push the renderer's canonical defaults back
+			// so the main process has the same effective settings (and can
+			// correctly drive features like dwell clicking on first run).
+			const stored = await window.electronAPI.getOptions();
+			deserializeSettings(stored, initialLoad);
+			if (initialLoad && (!stored || !stored.globalSettings || Object.keys(stored.globalSettings).length === 0)) {
+				setOptions(serializeSettings());
+			}
 		} else {
 			try {
 				if (localStorage.getItem("tracky-mouse-settings")) {
