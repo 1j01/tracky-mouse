@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.5.0] - 2026-03-07
+
 ### Added
 
 - Added Portuguese, Brazilian Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, Norwegian, Slovak, Greek, Slovenian, Simplified Chinese, Waray, Chechen, Catalan, Serbian, Croatian, Tatar, Romanian, Basque, Emoji, Malay, Minnan, Esperanto, Uzbek, Armenian, and Bulgarian language options in the General > Language dropdown, bringing the total count of languages from 12 to 60.
@@ -247,7 +251,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/1j01/tracky-mouse/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/1j01/tracky-mouse/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/1j01/tracky-mouse/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/1j01/tracky-mouse/compare/v2.1.0...v2.2.0

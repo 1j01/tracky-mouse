@@ -25,13 +25,12 @@ Then `source ~/.bashrc` or restart your terminal to access the `tracky-mouse` co
 ```HELP_OUTPUT
 usage: tracky-mouse [-h] [--start] [--stop] [-v]
 
-Control your mouse hands-free. This CLI controls the running Tracky Mouse app.
-It's meant for external programs like a voice command system to toggle Tracky
-Mouse and adjust settings on the fly.
+🖱️ 🚫🙌 😎. 🧑🏻‍💻🆑💬➡️🏃‍➡️⦟𝄈ᵓ]⊐. 🎙️🧠🤖 ➡️ 🧑🏻‍💻🆑 ➡️ ⦟𝄈ᵓ]⊐
+▶️/⏹️/🔧.
 
 optional arguments:
   -h, --help     show this help message and exit
-  --start        Start head tracking.
-  --stop         Stop head tracking.
-  -v, --version  Show the version number.
+  --start        ▶️ 🧑🖱️
+  --stop         ⏹️ 🧑🖱️
+  -v, --version  📤 ⦟𝄈ᵓ]⊐ 📦🔢
 ```
