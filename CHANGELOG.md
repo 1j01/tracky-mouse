@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Portuguese, Brazilian Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, Norwegian, Slovak, Greek, Slovenian, Simplified Chinese, Waray, Chechen, Catalan, Serbian, Croatian, Tatar, Romanian, Basque, Emoji, Malay, Minnan, and Esperanto language options in the General > Language settings.
+- Added Portuguese, Brazilian Portuguese, Russian, Indonesian, Urdu, Marathi, Vietnamese, Telugu, Hausa, Turkish, Punjabi, Swahili, Tagalog, Tamil, Persian, Thai, Javanese, Gujarati, Cebuano, Swedish, Polish, Egyptian Arabic, Ukrainian, Czech, Danish, Finnish, Hebrew, Hungarian, Norwegian, Slovak, Greek, Slovenian, Simplified Chinese, Waray, Chechen, Catalan, Serbian, Croatian, Tatar, Romanian, Basque, Emoji, Malay, Minnan, Esperanto, and Uzbek language options in the General > Language settings.
 - The CLI is now partially localized. This uses the in-app language setting.
 - Enabled auto-scrolling with middle click in the desktop app on platforms other than Windows. This makes it easier to navigate the settings when using Tracky Mouse's "Open mouth to click (with eye gestures)" mode, since Tracky Mouse doesn't currently provide mouse wheel scrolling, but it does let you middle click.
 
