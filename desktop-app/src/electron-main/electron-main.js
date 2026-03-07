@@ -378,15 +378,15 @@ function deserializeSettings(settings) {
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
 async function setMouseLocationTracky(x, y) {
+	// On Windows, ensure the cursor is visible when using "Run at login".
+	// The cursor starts invisible at login and remains invisible when sending absolute mouse moves.
+	// ShowCursor() also does not work to show the cursor, but a relative mouse move does.
+	ensureInitialRelativeMouseMove();
+
 	const time = performance.now();
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
-	// On Windows after login, the cursor can remain invisible until there
-	// has been at least one relative mouse move. serenade-driver only
-	// exposes absolute movement, so we issue a tiny relative move once
-	// per session via a small native helper before the first absolute move.
-	ensureInitialRelativeMouseMove();
 	await setMouseLocationWithoutTracking(x * screenScaleFactor, y * screenScaleFactor);
 }
 function pruneMousePosHistory() {

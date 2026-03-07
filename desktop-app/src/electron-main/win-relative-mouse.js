@@ -1,4 +1,12 @@
-'use strict';
+// Wrapper for a native module that issues a relative mouse move using SendInput.
+// This is to ensure the cursor is made visible when you start controlling the computer with Tracky Mouse
+// when using "Run at login", since the cursor is otherwise invisible until you physically jostle the mouse.
+// Note: Calling the Win32 ShowCursor API does NOT make the cursor visible in this case.
+// I've tested this using AutoHotKey, logging out and in with the mouse unplugged.
+
+// NOTE: this code is AI generated, so don't put much weight on the implementation details.
+// There's surely some weirdness in here, such as the conditional require here, and function naming,
+// but I wanted a quick fix for the issue.
 
 const bindings = process.platform === 'win32' ? require('bindings') : null;
 
@@ -17,9 +25,6 @@ function loadNative() {
 	}
 
 	try {
-		// This native helper issues a single relative mouse move using SendInput.
-		// Note: Calling the Win32 ShowCursor API does NOT reliably make the cursor
-		// visible at login for this app; that has been tested.
 		native = bindings('win_relative_mouse');
 	} catch (error) {
 		console.error('Failed to load win_relative_mouse native module. Relative mouse move workaround will be skipped.', error);

@@ -1,3 +1,6 @@
+// NOTE: this code is AI generated, so don't put much weight on the implementation details,
+// such as the architectural decision to put this code straight in the desktop-app folder.
+
 #include <node_api.h>
 
 #ifdef _WIN32
