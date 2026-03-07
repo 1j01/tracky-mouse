@@ -64,6 +64,7 @@ module.exports = [
 			"scripts/copy-with-review.js",
 			"scripts/list-ipc-events.js",
 			"scripts/update-cli-docs.js",
+			"scripts/new-locale.js",
 			"scripts/update-locales.js",
 			"scripts/release/update-msix-package-version.js",
 			"scripts/release/update-dl-links.js",
