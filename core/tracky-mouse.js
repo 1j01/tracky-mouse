@@ -1562,6 +1562,13 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 
 		if (locale === "emoji") {
 			return "🏳️‍🌈";
+		} else if (locale === "eo") {
+			// return "🏴🟩";
+			return "🟩";
+			// return `<svg viewBox="0 0 600 400" height="20">
+			// 	<path fill="#FFF" d="m0,0h202v202H0"/>
+			// 	<path fill="#090" d="m0,200H200V0H600V400H0m58-243 41-126 41,126-107-78h133"/>
+			// </svg>`;
 		}
 
 		var split = locale.toUpperCase().split(/-|_/);
