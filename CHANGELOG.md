@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - On Windows, when Tracky Mouse is set to run at login, the mouse cursor should now appear as soon as Tracky Mouse starts moving it, without needing to move a physical mouse.
+- Fixed custom menus like File > Import Settings missing on first run (or until a setting was changed) since the last release.
 
 ## [2.4.0] - 2026-02-28
 

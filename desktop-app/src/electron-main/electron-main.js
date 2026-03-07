@@ -720,6 +720,9 @@ app.on('ready', async () => {
 		return;
 	}
 	createWindow();
+	// Ensure the custom menus exist when language is not set (i.e. first run)
+	// This is computationally redundant when language is already set (handled in deserializeSettings)
+	updateMenu();
 
 	if (activeSettings.checkForUpdates !== false) {
 		checkForUpdates({
