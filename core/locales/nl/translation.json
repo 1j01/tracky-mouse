@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Updates konden niet van git worden opgehaald.",
   "Cursor Movement": "Cursorbeweging",
   "Default": "Standaard",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Vertraging voor slepen&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Vertraging voor slepen",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Bepaalt of de cursorbeweging is gebaseerd op 3D-hoofdknik of 2D-beweging van het gezicht in het camerabeeld.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Schakel klikken uit. Gebruik dit met een externe schakelaar of programma's die hun eigen dwell-klikken aanbieden.",
   "Down": "Omlaag",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Hindi makuha ang mga update mula sa git.",
   "Cursor Movement": "Galaw ng cursor",
   "Default": "Default",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Antala bago mag-drag&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Antala bago mag-drag",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Tinutukoy kung ang galaw ng cursor ay nakabatay sa 3D na pag-ikot ng ulo o 2D na galaw ng mukha sa camera feed.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "I-disable ang pag-click. Gamitin kasama ng panlabas na switch o programang may sarili nilang dwell clicking.",
   "Down": "Pababa",

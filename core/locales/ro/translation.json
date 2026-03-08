@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Nu s‑au putut prelua actualizările din git.",
   "Cursor Movement": "Mișcarea cursorului",
   "Default": "Implicit",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Întârziere înainte de glisare&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Întârziere înainte de glisare",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Determină dacă mișcarea cursorului se bazează pe înclinarea 3D a capului sau pe mișcarea 2D a feței în imaginea camerei.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Dezactivează clicurile. Folosiți împreună cu un comutator extern sau programe care oferă propriul lor clic prin menținere (dwell clicking).",
   "Down": "Jos",

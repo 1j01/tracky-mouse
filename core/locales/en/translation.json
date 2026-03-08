@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Couldn't fetch updates from git.",
   "Cursor Movement": "Cursor Movement",
   "Default": "Default",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Delay before dragging&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Delay before dragging",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.",
   "Down": "Down",

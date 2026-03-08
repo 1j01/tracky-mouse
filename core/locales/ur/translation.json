@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "گِٹ سے تازہ کاریاں حاصل نہیں کی جا سکیں۔",
   "Cursor Movement": "کرسر کی حرکت",
   "Default": "ڈیفالٹ",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "کھینچنے سے پہلے تاخیر&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "کھینچنے سے پہلے تاخیر",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "یہ طے کرتا ہے کہ کرسر کی حرکت 3D سر کی جھکاؤ پر مبنی ہو یا کیمرے کی تصویر میں چہرے کی 2D حرکت پر۔",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "کلک کرنا بند کر دیں۔ اسے بیرونی سوئچ یا اُن پروگراموں کے ساتھ استعمال کریں جو اپنا ڈویل کلک فراہم کرتے ہیں۔",
   "Down": "نیچے",

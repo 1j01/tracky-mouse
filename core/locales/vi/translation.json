@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Không thể lấy bản cập nhật từ git.",
   "Cursor Movement": "Chuyển động con trỏ",
   "Default": "Mặc định",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Độ trễ trước khi kéo&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Độ trễ trước khi kéo",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Xác định việc di chuyển con trỏ dựa trên độ nghiêng đầu 3D hay chuyển động khuôn mặt 2D trong khung hình.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Tắt chức năng nhấp. Dùng với công tắc bên ngoài hoặc các chương trình tự cung cấp chức năng nhấp giữ (dwell).",
   "Down": "Xuống",

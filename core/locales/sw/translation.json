@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Haikuweza kuleta masasisho kutoka git.",
   "Cursor Movement": "Mwendo wa kishale",
   "Default": "Chaguo msingi",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Kuchelewa kabla ya kuvuta&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Kuchelewa kabla ya kuvuta",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Huaamua kama mwendo wa kishale utatokana na kuinamisha kichwa kwa 3D au mwendo wa 2D wa uso kwenye mwonekano wa kamera.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Zima kubofya. Tumia pamoja na swichi ya nje au programu zinazotoa kubofya kwa kusubiri (dwell) kwao wenyewe.",
   "Down": "Chini",

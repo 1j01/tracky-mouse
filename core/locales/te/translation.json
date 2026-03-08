@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git నుండి నవీకరణలను పొందలేకపోయాం.",
   "Cursor Movement": "కర్సర్ కదలిక",
   "Default": "డిఫాల్ట్",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "డ్రాగ్ చేయడానికి ముందు ఆలస్యం&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "డ్రాగ్ చేయడానికి ముందు ఆలస్యం",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "కర్సర్ కదలిక 3D తల వంపు ఆధారంగా ఉందా, లేక కెమెరా ఫీడ్‌లోని ముఖం 2D కదలిక ఆధారంగా ఉందా అనే దాన్ని నిర్ణయిస్తుంది.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "క్లిక్ చేయడాన్ని నిలిపివేయండి. బాహ్య స్విచ్ లేదా తమ స్వంత dwell క్లిక్‌ను అందించే ప్రోగ్రామ్‌లతో ఉపయోగించండి.",
   "Down": "కింద",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Ezin izan dira eguneraketak jaitsi git‑etik.",
   "Cursor Movement": "Kurtsorearen mugimendua",
   "Default": "Lehenetsia",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Arrastatu aurreko atzerapena&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Arrastatu aurreko atzerapena",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Kurtsorearen mugimendua buruaren 3D inklinazioan edo aurpegiaren 2D mugimenduan oinarritzen den zehazten du.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Desgaitu klik egitea. Erabili kanpoko etengailu batekin edo berezko egonaldi‑klika (dwell clicking) eskaintzen duten programekin.",
   "Down": "Behera",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git から更新を取得できませんでした。",
   "Cursor Movement": "カーソルの動き",
   "Default": "デフォルト",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "ドラッグ開始までの遅延&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "ドラッグ開始までの遅延",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "カーソル移動を、頭の 3D の傾きに基づかせるか、カメラ映像内の顔の 2D の動きに基づかせるかを決定します。",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "クリックを無効にします。外部スイッチや独自のドウェルクリック機能を持つプログラムと組み合わせて使用してください。",
   "Down": "下",

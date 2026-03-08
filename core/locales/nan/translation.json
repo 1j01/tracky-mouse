@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "無法度對 git 提著更新。",
   "Cursor Movement": "游標移動",
   "Default": "預設",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "開始拖曳 ê 延遲時間&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "開始拖曳 ê 延遲時間",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "決定游標是照 3D 頭殼傾斜，抑是照攝影機畫面內面 ê 2D 面部移動來行。",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "關閉內建 ê 點擊功能。會當配合外部開關抑是其他提供停留點擊 ê 程式來使用。",
   "Down": "落",

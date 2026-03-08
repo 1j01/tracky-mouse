@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Git'ten güncellemeler alınamadı.",
   "Cursor Movement": "İmleç Hareketi",
   "Default": "Varsayılan",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Sürüklemeden önce gecikme&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Sürüklemeden önce gecikme",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "İmleç hareketinin 3D baş eğimine mi yoksa kamera görüntüsündeki yüzün 2D hareketine mi dayanacağını belirler.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Tıklamayı devre dışı bırakır. Harici bir anahtar veya kendi bekleme-tıklama özelliğini sağlayan programlarla kullanın.",
   "Down": "Aşağı",

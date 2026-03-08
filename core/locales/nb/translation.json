@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Kunne ikke hente oppdateringer fra git.",
   "Cursor Movement": "Pekerbevegelse",
   "Default": "Standard",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Forsinkelse før dra&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Forsinkelse før dra",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Bestemmer om pekerbevegelsen skal baseres på 3D-hodetilt eller 2D-bevegelse i ansiktet i kamerabildet.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Deaktiver klikking. Brukes sammen med en ekstern bryter eller programmer som har sin egen hvileklikking.",
   "Down": "Ned",

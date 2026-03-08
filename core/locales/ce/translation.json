@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Git тӀадабахь дӀайоаш хьажа хьалде дац.",
   "Cursor Movement": "Курсорийн дӀаьлла",
   "Default": "Стандарт",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "ТӀехь дӀоьхургаш йолу къайла хьажа&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "ТӀехь дӀоьхургаш йолу къайла хьажа",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "ДӀайо, курсорийн дӀаьлла ю 3D хиларг хиран тӀехь ю девкъа, юкъкъе 2D чураш тӀехь видеохь.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Клик хийцар тӀетта. ДӀаьхахьехь тӀекъан кхеташ юкъе программаш тӀехь, цуьнан къастор клик хьажа.",
   "Down": "Низ",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git இலிருந்து புதுப்பிப்புகளைப் பெற முடியவில்லை.",
   "Cursor Movement": "சுட்டி இயக்கம்",
   "Default": "இயல்புநிலை",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "இழுக்கும் முன் தாமதம்&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "இழுக்கும் முன் தாமதம்",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "சுட்டி இயக்கம் 3D தலையின் சாய்வை அடிப்படையாகக் கொண்டதா அல்லது கேமரா காட்சியில் முகத்தின் 2D இயக்கத்தை அடிப்படையாகக் கொண்டதா என்பதை நிர்ணயிக்கிறது.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "கிளிக் செய்வதை முடக்குகிறது. வெளிப்புற ஸ்விட்ச் அல்லது தனியாக dwell clicking வழங்கும் நிரல்களுடன் பயன்படுத்தவும்.",
   "Down": "கீழே",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Kunne ikke hente opdateringer fra Git.",
   "Cursor Movement": "Markørbevægelse",
   "Default": "Standard",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Forsinkelse før trækning&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Forsinkelse før trækning",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Bestemmer om markørbevægelse er baseret på 3D‑hovedhældning eller 2D‑bevægelse af ansigtet i kamerabilledet.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Deaktiverer klikning. Bruges sammen med en ekstern kontakt eller programmer, der har deres egen dwell‑klikning.",
   "Down": "Ned",

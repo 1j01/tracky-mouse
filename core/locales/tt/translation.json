@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Git тан яңартуларны алу мөмкин булмады.",
   "Cursor Movement": "Курсор хәрәкәте",
   "Default": "Үзлекле",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Өстерәү алдыннан тоткарлык&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Өстерәү алдыннан тоткарлык",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Курсор хәрәкәте 3D баш авышуынамы, әллә камера күренешендәге 2D йөз хәрәкәтенә нигезләнүен билгели.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Басуны сүндерү. Тышкы төймә белән яки үзенең көтү‑басу (dwell clicking) функциясе булган программалар белән кулланыгыз.",
   "Down": "Аска",

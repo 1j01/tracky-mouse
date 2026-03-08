@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git માંથી અપડેટ લેવા નિષ્ફળ.",
   "Cursor Movement": "કર્સર હલનચલન",
   "Default": "મૂળભૂત",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "ડ્રેગ કરતા પહેલાં વિલંબ&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "ડ્રેગ કરતા પહેલાં વિલંબ",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "નક્કી કરે છે કે કર્સરનું હલનચલન 3D માથું ઝુકાવવામાં આધારિત છે કે કેમેરા ફીડમાં ચહેરાના 2D હલનચલનમાં.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "ક્લિકિંગ નિષ્ક્રિય કરો. બાહ્ય સ્વીચ અથવા પોતાની ડ્વેલ ક્લિકિંગ સુવિધા ધરાવતા પ્રોગ્રામ સાથે ઉપયોગ કરો.",
   "Down": "નીચે",

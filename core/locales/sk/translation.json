@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Nepodarilo sa získať aktualizácie z gitu.",
   "Cursor Movement": "Pohyb kurzora",
   "Default": "Predvolené",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Oneskorenie pred ťahaním&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Oneskorenie pred ťahaním",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Určuje, či sa kurzor pohybuje na základe 3D náklonu hlavy alebo 2D pohybu tváre v zábere kamery.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Zakáže klikanie. Použite s externým spínačom alebo programami, ktoré poskytujú vlastné klikanie pri podržaní.",
   "Down": "Dole",

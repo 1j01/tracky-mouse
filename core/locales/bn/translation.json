@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git থেকে আপডেট আনা যায়নি।",
   "Cursor Movement": "কার্সর চলাচল",
   "Default": "ডিফল্ট",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "ড্র্যাগ করার আগে বিলম্ব&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "ড্র্যাগ করার আগে বিলম্ব",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "কার্সর চলাচল 3D মাথা কাতের উপর ভিত্তি করে হবে নাকি ক্যামেরা ফিডে মুখের 2D গতির উপর, তা নির্ধারণ করে।",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "ক্লিকিং বন্ধ রাখুন। বাহ্যিক সুইচ বা নিজস্ব ডুয়েল ক্লিকার যুক্ত প্রোগ্রামের সাথে ব্যবহার করুন।",
   "Down": "নিচে",

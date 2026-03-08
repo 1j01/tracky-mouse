@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Չհաջողվեց git‑ից բերել թարմացումները։",
   "Cursor Movement": "Կուրսորի շարժում",
   "Default": "Լռելյայն",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Ուշացում մինչև քաշելը&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Ուշացում մինչև քաշելը",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Սահմանում է՝ կուրսորի շարժումը հիմնված է գլխի 3D թեքության, թե տեսախցիկի կադրում դեմքի 2D շարժման վրա։",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Անջատում է սեղմումները։ Օգտագործեք արտաքին կոճակների կամ սեփական սպասող սեղմում (dwell click) տրամադրող ծրագրերի հետ։",
   "Down": "Ներքև",

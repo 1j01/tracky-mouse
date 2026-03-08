@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Git’dan yangilanishlarni olish imkoni bo‘lmadi.",
   "Cursor Movement": "Kursor harakati",
   "Default": "Standart",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Tortishni boshlashdan oldingi kechikish\u00a0\u00a0\u00a0",
+  "Delay before dragging": "Tortishni boshlashdan oldingi kechikish\u00a0\u00a0\u00a0",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Kursor harakati boshning 3D egilishiga asoslanadimi yoki kameradagi yuzning 2D harakatiga asoslanadimi, shuni belgilaydi.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Bosishni o‘chirib qo‘yadi. Tashqi tugma yoki o‘zining kutib bosish funksiyasiga ega dasturlar bilan birga foydalaning.",
   "Down": "Pastga",

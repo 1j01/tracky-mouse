@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "git에서 업데이트를 가져오지 못했습니다.",
   "Cursor Movement": "커서 움직임",
   "Default": "기본값",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "드래그 전 지연&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "드래그 전 지연",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "커서 움직임을 3D 머리 기울기 기준으로 할지, 카메라 영상에서 얼굴의 2D 움직임 기준으로 할지 결정합니다.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "클릭을 비활성화합니다. 외부 스위치나 자체 dwell 클릭 기능이 있는 프로그램과 함께 사용하세요.",
   "Down": "아래",

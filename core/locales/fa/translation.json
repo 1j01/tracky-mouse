@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "نمی‌توان به‌روزرسانی‌ها را از گیت دریافت کرد.",
   "Cursor Movement": "حرکت نشان‌گر",
   "Default": "پیش‌فرض",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "تأخیر قبل از کشیدن&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "تأخیر قبل از کشیدن",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "مشخص می‌کند حرکت نشان‌گر بر اساس خم شدن سه‌بعدی سر باشد یا حرکت دوبعدی صورت در تصویر دوربین.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "کلیک کردن را غیرفعال می‌کند. با کلیدهای کمکی بیرونی یا برنامه‌هایی که کلیک توقفی (dwell click) خودشان را دارند استفاده کنید.",
   "Down": "پایین",

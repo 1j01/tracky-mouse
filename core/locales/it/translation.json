@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Impossibile recuperare aggiornamenti da Git.",
   "Cursor Movement": "Movimento del cursore",
   "Default": "Predefinito",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Ritardo prima del trascinamento&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Ritardo prima del trascinamento",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Determina se il movimento del cursore si basa sull'inclinazione 3D della testa o sul movimento 2D del volto nel feed della fotocamera.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Disabilita i clic. Usare con un interruttore esterno o programmi che forniscono il proprio dwell clicking.",
   "Down": "Giù",

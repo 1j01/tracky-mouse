@@ -1902,7 +1902,7 @@ Could also be used to right click with the dwell clicker in a pinch.`),
 				// at the end of the slider, although you shouldn't need to do that to effectively avoid dragging when trying to click,
 				// and it might complicate the design of the slider labeling.
 				{
-					label: t("Delay before dragging&nbsp;&nbsp;&nbsp;"), // TODO: avoid non-breaking space hack
+					label: t("Delay before dragging"),
 					className: "tracky-mouse-delay-before-dragging",
 					key: "delayBeforeDragging",
 					type: "slider",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Δεν ήταν δυνατή η λήψη ενημερώσεων από το Git.",
   "Cursor Movement": "Κίνηση δρομέα",
   "Default": "Προεπιλογή",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Καθυστέρηση πριν το σύρσιμο&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Καθυστέρηση πριν το σύρσιμο",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Καθορίζει αν η κίνηση του δρομέα βασίζεται σε τρισδιάστατη κλίση κεφαλιού ή σε δισδιάστατη κίνηση του προσώπου στην εικόνα της κάμερας.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Απενεργοποιεί τα κλικ. Χρησιμοποιήστε το με εξωτερικό διακόπτη ή προγράμματα που παρέχουν δική τους λειτουργία dwell‑κλικ.",
   "Down": "Κάτω",

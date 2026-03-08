@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Päivitysten noutaminen gitistä epäonnistui.",
   "Cursor Movement": "Osoittimen liike",
   "Default": "Oletus",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Viive ennen vetämistä&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Viive ennen vetämistä",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Määrittää, perustuuko osoittimen liike pään 3D-kallistukseen vai kasvojen 2D-liikkeeseen kamerakuvassa.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Poistaa napsauttamisen käytöstä. Käytä yhdessä ulkoisen kytkimen tai ohjelmien kanssa, jotka tarjoavat oman katseenvaraisen napsautuksen.",
   "Down": "Alas",

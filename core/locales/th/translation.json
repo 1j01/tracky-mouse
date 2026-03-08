@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "ไม่สามารถดึงการอัปเดตจาก git ได้",
   "Cursor Movement": "การเคลื่อนที่ของเคอร์เซอร์",
   "Default": "ค่าเริ่มต้น",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "หน่วงเวลาก่อนเริ่มลาก&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "หน่วงเวลาก่อนเริ่มลาก",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "กำหนดว่าการเคลื่อนที่ของเคอร์เซอร์อ้างอิงจากการเอียงศีรษะแบบ 3D หรือการเคลื่อนที่ใบหน้าแบบ 2D ในภาพจากกล้อง",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "ปิดการคลิก ใช้ร่วมกับสวิตช์ภายนอกหรือโปรแกรมที่มีระบบคลิกด้วยการค้างของตนเอง",
   "Down": "ลง",

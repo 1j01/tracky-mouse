@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Nem sikerült a frissítéseket lekérni a Gitből.",
   "Cursor Movement": "Kurzor mozgása",
   "Default": "Alapértelmezett",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Késleltetés húzás előtt&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Késleltetés húzás előtt",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Meghatározza, hogy a kurzor mozgása a fej 3D-s dőlésén vagy az arcon lévő pontok 2D-s elmozdulásán alapuljon.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Kattintás letiltása. Külső kapcsolóval vagy saját kattintáskezelést biztosító programokkal való használatra.",
   "Down": "Le",

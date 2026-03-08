@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Ora bisa njupuk panganyaran saka git.",
   "Cursor Movement": "Gerakan kursor",
   "Default": "Default",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Tundha sakdurungé narik&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Tundha sakdurungé narik",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Nentokaké apa gerakan kursor adhedhasar miringé endhas 3D utawa gerakan pasuryan 2D ing gambar kamera.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Pateni klik. Gunakna karo saklar njaba utawa program sing nduwèni klik tahan dhéwé.",
   "Down": "Mudhun",

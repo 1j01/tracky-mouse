@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Ne eblis elŝuti ĝisdatigojn el git.",
   "Cursor Movement": "Movado de kursoro",
   "Default": "Defaŭlto",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Prokrasto antaŭ treni\u00a0\u00a0\u00a0",
+  "Delay before dragging": "Prokrasto antaŭ treni\u00a0\u00a0\u00a0",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Difinas ĉu la movado de la kursoro baziĝas sur 3D-kapklino aŭ 2D-movo de la vizaĝo en la videofluo.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Malŝaltas alklakadon. Uzu kun ekstera ŝaltilo aŭ programoj kiuj disponigas propran daŭreman alklakadon.",
   "Down": "Malsupren",

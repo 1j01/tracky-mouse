@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Konnte keine Updates von Git abrufen.",
   "Cursor Movement": "Cursor-Bewegung",
   "Default": "Standard",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Verzögerung vor dem Ziehen&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Verzögerung vor dem Ziehen",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Legt fest, ob die Cursorbewegung auf 3D-Kopfneigung oder 2D-Gesichtsbewegung im Kamerabild basiert.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Klicken deaktivieren. Mit einem externen Schalter oder Programmen verwenden, die eigenes Dwell-Clicking anbieten.",
   "Down": "Unten",

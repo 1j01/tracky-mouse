@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Не удалось получить обновления из git.",
   "Cursor Movement": "Движение курсора",
   "Default": "По умолчанию",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Задержка перед перетаскиванием&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Задержка перед перетаскиванием",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Определяет, основано ли движение курсора на 3D‑наклоне головы или на 2D‑движении лица в кадре.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Отключает щелчки. Используйте с внешним переключателем или программами со своим режимом щелчка по удержанию.",
   "Down": "Вниз",

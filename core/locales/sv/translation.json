@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Kunde inte hämta uppdateringar från git.",
   "Cursor Movement": "Markörrörelse",
   "Default": "Standard",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Fördröjning innan dragning&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Fördröjning innan dragning",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Avgör om markörrörelsen baseras på 3D‑huvudlutning eller 2D‑rörelse av ansiktet i kamerabilden.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Inaktivera klickning. Används med en extern brytare eller program som har egen dwell‑klickning.",
   "Down": "Ner",

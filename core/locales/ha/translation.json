@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Ba a iya samo sabuntawa daga git ba.",
   "Cursor Movement": "Motsin sigifa",
   "Default": "Na asali",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Jinkiri kafin ja&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Jinkiri kafin ja",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Yana tantance ko motsin sigifa ya dogara ne da lanƙwasawar kai a 3D, ko kuma motsin fuska na 2D a cikin hoton kyamara.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Kashe danna. Yi amfani da shi tare da maɓallin waje ko shirye-shiryen da ke da nasu danna na tsayawa (dwell).",
   "Down": "Kasa",

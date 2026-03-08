@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "معرفناش نجيب التحديثات من git.",
   "Cursor Movement": "حركة المؤشر",
   "Default": "افتراضي",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "تأخير قبل السحب&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "تأخير قبل السحب",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "بيحدّد إذا كانت حركة المؤشر معتمدة على إمالة الرأس ثلاثية الأبعاد، ولا حركة الوِش ثنائية الأبعاد في صورة الكاميرا.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "إيقاف النقر. استخدمه مع مفتاح خارجي أو برامج بتوفّر نقر بالتثبيت (dwell clicking) بنفسها.",
   "Down": "تحت",

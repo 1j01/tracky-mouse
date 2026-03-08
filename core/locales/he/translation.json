@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "לא ניתן היה למשוך עדכונים מ-Git.",
   "Cursor Movement": "תנועת הסמן",
   "Default": "ברירת מחדל",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "השהיה לפני גרירה&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "השהיה לפני גרירה",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "קובע אם תנועת הסמן מבוססת על הטיית ראש בתלת־ממד, או על תנועת פנים דו־ממדית בתצוגת המצלמה.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "השבת לחיצות. מיועד לשימוש עם מתג חיצוני או תוכנות שמספקות מנגנון לחיצה משלהן.",
   "Down": "למטה",

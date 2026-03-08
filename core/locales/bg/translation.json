@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Неуспешно изтегляне на обновления от git.",
   "Cursor Movement": "Движение на курсора",
   "Default": "По подразбиране",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Забавяне преди влачене&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Забавяне преди влачене",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Определя дали движението на курсора да се базира на 3D наклон на главата или на 2D движение на лицето в кадъра.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Изключва щракването. Използвайте с външен превключвател или програми, които осигуряват собствено задържано щракване (dwell clicking).",
   "Down": "Надолу",

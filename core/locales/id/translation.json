@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Tidak dapat mengambil pembaruan dari git.",
   "Cursor Movement": "Pergerakan kursor",
   "Default": "Default",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Jeda sebelum menyeret&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Jeda sebelum menyeret",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Menentukan apakah pergerakan kursor didasarkan pada kemiringan kepala 3D atau gerakan wajah 2D pada gambar kamera.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Nonaktifkan klik. Gunakan bersama sakelar eksternal atau program yang menyediakan klik tahan sendiri.",
   "Down": "Turun",

@@ -57,7 +57,7 @@
   "Couldn't fetch updates from git.": "Ni bilo mogoče pridobiti posodobitev iz gita.",
   "Cursor Movement": "Premikanje kazalca",
   "Default": "Privzeto",
-  "Delay before dragging&nbsp;&nbsp;&nbsp;": "Zakasnitev pred vlečenjem&nbsp;&nbsp;&nbsp;",
+  "Delay before dragging": "Zakasnitev pred vlečenjem",
   "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.": "Določa, ali je premikanje kazalca osnovano na 3D nagibu glave ali na 2D gibanju obraza v sliki kamere.",
   "Disable clicking. Use with an external switch or programs that provide their own dwell clicking.": "Onemogoči klikanje. Uporabite z zunanjim stikalom ali programi, ki nudijo lastno zadrževalno klikanje.",
   "Down": "Dol",
