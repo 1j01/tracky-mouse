@@ -109,6 +109,7 @@
 .tracky-mouse-ui .tracky-mouse-label-text {
 	display: inline-block;
 	min-width: 150px;
+	margin-inline-end: 10px;
 }
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider {
