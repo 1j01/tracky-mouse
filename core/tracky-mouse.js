@@ -3646,13 +3646,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						{ label: t("Roll:"), value: `${(headTilt.roll * 180 / Math.PI).toFixed(1)}°` },
 					];
 					const labelWidths = headTiltRows.map(row => ctx.measureText(row.label).width);
-					const valueWidths = headTiltRows.map(row => ctx.measureText(row.value).width);
 					const maxLabelWidth = Math.max(...labelWidths);
-					const maxValueWidth = Math.max(...valueWidths);
+					const valueColumnTemplate = "-180.0°";
+					const maxValueWidth = ctx.measureText(valueColumnTemplate).width;
 					const labelToValueGap = 10;
 					const boxPadding = 10;
 					const boxWidth = boxPadding * 2 + maxLabelWidth + labelToValueGap + maxValueWidth;
 					const boxHeight = textLineHeight * headTiltRows.length;
+					const valueColumnRightOffset = boxPadding + maxLabelWidth + labelToValueGap + maxValueWidth;
 
 					// Calculate screen coordinates for the text box
 					let screenX = s.mirror ? canvas.width - cx : cx;
@@ -3681,7 +3682,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						const row = headTiltRows[i];
 						const baselineY = dy + textLineHeight * (i + 1);
 						const labelX = dx + boxPadding;
-						const valueX = labelX + maxLabelWidth + labelToValueGap;
+						const valueTextWidth = ctx.measureText(row.value).width;
+						const valueRightX = dx + valueColumnRightOffset;
+						const valueX = valueRightX - valueTextWidth;
 						ctx.strokeText(row.label, labelX, baselineY);
 						ctx.fillText(row.label, labelX, baselineY);
 						ctx.strokeText(row.value, valueX, baselineY);
