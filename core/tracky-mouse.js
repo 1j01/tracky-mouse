@@ -1954,7 +1954,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							alert(t("Failed to open camera settings:\n") + t("Failed to parse known cameras from localStorage:\n") + error.message);
+							alert(t("Failed to open camera settings:") + "\n" + t("Failed to parse known cameras from localStorage:") + "\n" + error.message);
 							return;
 						}
 
@@ -1965,10 +1965,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
 							if (result?.error) {
-								alert(t("Failed to open camera settings:\n") + result.error);
+								alert(t("Failed to open camera settings:") + "\n" + result.error);
 							}
 						} catch (error) {
-							alert(t("Failed to open camera settings:\n") + error.message);
+							alert(t("Failed to open camera settings:") + "\n" + error.message);
 						}
 					},
 					// description: t("Open your camera's system settings window to adjust properties like brightness and contrast."),
@@ -2181,7 +2181,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				</select>
 			`;
 			if (setting.options.some(option => option.description)) {
-				setting.description += t("\n\nOptions:\n") + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
+				setting.description += "\n\n" + t("Options:") + "\n" + setting.options.map(option => `• ${option.label}${option.description ? `: ${option.description}` : ''}`).join("\n");
 			}
 		} else if (setting.type === "button") {
 			rowEl.innerHTML = `
@@ -2854,7 +2854,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// other errors
 				errorMessage.textContent = `${t("Something went wrong accessing the camera. Please try again.")} (${error.name}: ${error.message})`;
 			}
-			errorMessage.textContent = `${t("⚠️ ")}${errorMessage.textContent}`;
+			errorMessage.textContent = `${t("⚠️")} ${errorMessage.textContent}`;
 			errorMessage.hidden = false;
 		});
 	};
@@ -3640,17 +3640,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const textYStart = -10;
 
 
-					const pitchText = t("Pitch: ") + `${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°`;
-					const yawText = t("Yaw:   ") + `${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°`;
-					const rollText = t("Roll:  ") + `${(headTilt.roll * 180 / Math.PI).toFixed(1)}°`;
-
-					const boxWidth = Math.max(
-						ctx.measureText(pitchText).width,
-						ctx.measureText(yawText).width,
-						ctx.measureText(rollText).width
-					);
-					const boxHeight = textLineHeight * 3;
-					const padding = 10;
+					const headTiltRows = [
+						{ label: t("Pitch:"), value: `${(headTilt.pitch * 180 / Math.PI).toFixed(1)}°` },
+						{ label: t("Yaw:"), value: `${(headTilt.yaw * 180 / Math.PI).toFixed(1)}°` },
+						{ label: t("Roll:"), value: `${(headTilt.roll * 180 / Math.PI).toFixed(1)}°` },
+					];
+					const labelWidths = headTiltRows.map(row => ctx.measureText(row.label).width);
+					const valueWidths = headTiltRows.map(row => ctx.measureText(row.value).width);
+					const maxLabelWidth = Math.max(...labelWidths);
+					const maxValueWidth = Math.max(...valueWidths);
+					const labelToValueGap = 10;
+					const boxPadding = 10;
+					const boxWidth = boxPadding * 2 + maxLabelWidth + labelToValueGap + maxValueWidth;
+					const boxHeight = textLineHeight * headTiltRows.length;
 
 					// Calculate screen coordinates for the text box
 					let screenX = s.mirror ? canvas.width - cx : cx;
@@ -3675,12 +3677,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const dx = textScreenX - screenNoseX;
 					const dy = textScreenY - screenNoseY;
 
-					ctx.strokeText(pitchText, dx, dy);
-					ctx.fillText(pitchText, dx, dy);
-					ctx.strokeText(yawText, dx, dy + textLineHeight);
-					ctx.fillText(yawText, dx, dy + textLineHeight);
-					ctx.strokeText(rollText, dx, dy + textLineHeight * 2);
-					ctx.fillText(rollText, dx, dy + textLineHeight * 2);
+					for (let i = 0; i < headTiltRows.length; i++) {
+						const row = headTiltRows[i];
+						const baselineY = dy + textLineHeight * (i + 1);
+						const labelX = dx + boxPadding;
+						const valueX = labelX + maxLabelWidth + labelToValueGap;
+						ctx.strokeText(row.label, labelX, baselineY);
+						ctx.fillText(row.label, labelX, baselineY);
+						ctx.strokeText(row.value, valueX, baselineY);
+						ctx.fillText(row.value, valueX, baselineY);
+					}
 
 					ctx.restore();
 
@@ -4030,9 +4036,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.lineWidth = 3;
 			ctx.font = "20px sans-serif";
 			ctx.beginPath();
-			const text3 = t("Face convergence score: ") + ((useFacemesh && facemeshPrediction) ? t("N/A") : faceConvergence.toFixed(4));
-			const text1 = t("Face tracking score: ") + ((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4);
-			const text2 = t("Points based on score: ") + ((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4);
+			const text3 = `${t("Face convergence score:")} ${((useFacemesh && facemeshPrediction) ? t("N/A") : faceConvergence.toFixed(4))}`;
+			const text1 = `${t("Face tracking score:")} ${((useFacemesh && facemeshPrediction) ? facemeshPrediction.faceInViewConfidence : faceScore).toFixed(4)}`;
+			const text2 = `${t("Points based on score:")} ${((useFacemesh && facemeshPrediction) ? pointsBasedOnFaceInViewConfidence : pointsBasedOnFaceScore).toFixed(4)}`;
 			ctx.strokeText(text1, 50, 50);
 			ctx.fillText(text1, 50, 50);
 			ctx.strokeText(text2, 50, 70);

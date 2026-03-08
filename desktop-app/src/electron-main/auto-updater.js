@@ -187,7 +187,7 @@ module.exports = {
 						type: 'info',
 						title: t('Update Available'),
 						message: `${t("A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.").replace("%0", latestVersion).replace("%1", currentVersion)}` +
-							(repoRoot ? t('\n\nSince this is a git repository, the update can be pulled directly.') : ''),
+							(repoRoot ? "\n\n" + t('Since this is a git repository, the update can be pulled directly.') : ''),
 						buttons,
 						defaultId: 0,
 						cancelId: 1

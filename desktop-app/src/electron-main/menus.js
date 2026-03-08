@@ -76,7 +76,7 @@ function createMenu() {
 						try {
 							await copyFile(settingsPath, filePath);
 						} catch (error) {
-							await dialog.showErrorBox(t('Export Settings'), t('Failed to export settings.\n\n') + error.message);
+							await dialog.showErrorBox(t('Export Settings'), t('Failed to export settings.') + '\n\n' + error.message);
 						}
 					},
 				},
@@ -98,7 +98,7 @@ function createMenu() {
 						try {
 							json = await readFile(filePath, 'utf8');
 						} catch (error) {
-							await dialog.showErrorBox(t('Import Settings'), t('Failed to read selected file.\n\n') + error.message);
+							await dialog.showErrorBox(t('Import Settings'), t('Failed to read selected file.') + '\n\n' + error.message);
 							return;
 						}
 						// Backup settings
@@ -110,7 +110,7 @@ function createMenu() {
 							if (error.code === 'ENOENT') {
 								console.log('Never mind, no existing settings to backup.');
 							} else {
-								await dialog.showErrorBox(t('Import Settings'), t('Failed to backup current settings before import.\n\n') + error.message);
+								await dialog.showErrorBox(t('Import Settings'), t('Failed to backup current settings before import.') + '\n\n' + error.message);
 								return;
 							}
 						}
@@ -119,7 +119,7 @@ function createMenu() {
 						try {
 							await writeFile(settingsPath, json);
 						} catch (error) {
-							await dialog.showErrorBox(t('Import Settings'), t('Failed to import settings.\n\n') + error.message);
+							await dialog.showErrorBox(t('Import Settings'), t('Failed to import settings.') + '\n\n' + error.message);
 							return;
 						}
 						// Reload settings
