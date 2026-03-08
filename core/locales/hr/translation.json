@@ -1,6 +1,4 @@
 {
-  "Options:": "Opcije:",
-  "Since this is a git repository, the update can be pulled directly.": "Budući da je ovo git repozitorij, nadopuna se može povući izravno.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Dostupna je nova verzija Tracky Mousea: %0\n\nTrenutačno koristite verziju %1.",
   "About Tracky Mouse": "O Tracky Mouseu",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Otvara dijaloški okvir sustavskih postavki za odabranu kameru radi podešavanja svojstava poput autofokusa i autoekspozicije.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Otvara prozor sustavskih postavki vaše kamere za podešavanje svojstava poput autofokusa i autoekspozicije.",
   "Optical flow": "Optički protok",
+  "Options:": "Opcije:",
   "Outputs the current value of an option.": "Ispisuje trenutačnu vrijednost opcije.",
   "Permission denied. Please enable access to the camera.": "Dopuštenje je odbijeno. Omogućite pristup kameri.",
   "Pitch:": "Nagib (pitch):",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Odaberite koju kameru koristiti za praćenje glave.",
   "Selects which camera is used for head tracking.": "Određuje koja se kamera koristi za praćenje glave.",
   "Show the version number.": "Prikaži broj verzije.",
+  "Since this is a git repository, the update can be pulled directly.": "Budući da je ovo git repozitorij, nadopuna se može povući izravno.",
   "Skip this version": "Preskoči ovu verziju",
   "Slow": "Sporo",
   "Smooth": "Glatko",

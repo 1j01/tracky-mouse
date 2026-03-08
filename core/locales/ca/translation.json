@@ -1,6 +1,4 @@
 {
-  "Options:": "Opcions:",
-  "Since this is a git repository, the update can be pulled directly.": "Com que això és un repositori de git, es pot descarregar l'actualització directament amb un git pull.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Hi ha disponible una nova versió de Tracky Mouse: %0\n\nAra mateix estàs fent servir la versió %1.",
   "About Tracky Mouse": "Quant a Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Obre el diàleg de configuració del sistema per a la càmera seleccionada, per ajustar propietats com l'autofocus i l'autoexposició.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Obre la finestra de configuració del sistema per a la càmera per ajustar propietats com l'autofocus i l'autoexposició.",
   "Optical flow": "Flux òptic",
+  "Options:": "Opcions:",
   "Outputs the current value of an option.": "Mostra el valor actual d'una opció.",
   "Permission denied. Please enable access to the camera.": "Permís denegat. Habilita l'accés a la càmera.",
   "Pitch:": "Inclinació (pitch):",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Selecciona quina càmera s'utilitza per al seguiment del cap.",
   "Selects which camera is used for head tracking.": "Selecciona quina càmera s'utilitza per al seguiment del cap.",
   "Show the version number.": "Mostra el número de versió.",
+  "Since this is a git repository, the update can be pulled directly.": "Com que això és un repositori de git, es pot descarregar l'actualització directament amb un git pull.",
   "Skip this version": "Omet aquesta versió",
   "Slow": "Lent",
   "Smooth": "Suau",

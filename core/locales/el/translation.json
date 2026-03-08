@@ -1,6 +1,4 @@
 {
-  "Options:": "Επιλογές:",
-  "Since this is a git repository, the update can be pulled directly.": "Επειδή αυτό είναι αποθετήριο git, η ενημέρωση μπορεί να τραβηχτεί απευθείας.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Μια νέα έκδοση του Tracky Mouse είναι διαθέσιμη: %0\n\nΑυτή τη στιγμή χρησιμοποιείτε την έκδοση %1.",
   "About Tracky Mouse": "Σχετικά με το Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Ανοίγει το παράθυρο ρυθμίσεων συστήματος για την επιλεγμένη κάμερα, για ρύθμιση ιδιοτήτων όπως αυτόματη εστίαση και αυτόματη έκθεση.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Ανοίγει το παράθυρο ρυθμίσεων συστήματος της κάμερας για ρύθμιση ιδιοτήτων όπως αυτόματη εστίαση και αυτόματη έκθεση.",
   "Optical flow": "Οπτική ροή",
+  "Options:": "Επιλογές:",
   "Outputs the current value of an option.": "Εμφανίζει την τρέχουσα τιμή μιας επιλογής.",
   "Permission denied. Please enable access to the camera.": "Δεν επιτρέπεται η πρόσβαση. Ενεργοποιήστε την πρόσβαση στην κάμερα.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Επιλέξτε ποια κάμερα θα χρησιμοποιείται για παρακολούθηση κεφαλιού.",
   "Selects which camera is used for head tracking.": "Καθορίζει ποια κάμερα χρησιμοποιείται για παρακολούθηση κεφαλιού.",
   "Show the version number.": "Εμφανίζει τον αριθμό έκδοσης.",
+  "Since this is a git repository, the update can be pulled directly.": "Επειδή αυτό είναι αποθετήριο git, η ενημέρωση μπορεί να τραβηχτεί απευθείας.",
   "Skip this version": "Παράβλεψη αυτής της έκδοσης",
   "Slow": "Αργό",
   "Smooth": "Ομαλό",

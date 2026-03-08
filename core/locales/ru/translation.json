@@ -1,6 +1,4 @@
 {
-  "Options:": "Параметры:",
-  "Since this is a git repository, the update can be pulled directly.": "Поскольку это репозиторий git, обновление можно получить напрямую.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Доступна новая версия Tracky Mouse: %0\n\nСейчас используется версия %1.",
   "About Tracky Mouse": "О программе Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Открывает системный диалог настроек для выбранной камеры, чтобы настроить автофокус, автоэкспозицию и т. п.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Открывает системное окно настроек вашей камеры для регулировки автофокуса, автоэкспозиции и др.",
   "Optical flow": "Оптический поток",
+  "Options:": "Параметры:",
   "Outputs the current value of an option.": "Выводит текущее значение параметра.",
   "Permission denied. Please enable access to the camera.": "Доступ запрещён. Разрешите доступ к камере.",
   "Pitch:": "Наклон:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Выберите, какую камеру использовать для отслеживания головы.",
   "Selects which camera is used for head tracking.": "Определяет, какая камера используется для отслеживания головы.",
   "Show the version number.": "Показать номер версии.",
+  "Since this is a git repository, the update can be pulled directly.": "Поскольку это репозиторий git, обновление можно получить напрямую.",
   "Skip this version": "Пропустить эту версию",
   "Slow": "Медленно",
   "Smooth": "Плавно",

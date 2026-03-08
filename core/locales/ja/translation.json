@@ -1,6 +1,4 @@
 {
-  "Options:": "オプション:",
-  "Since this is a git repository, the update can be pulled directly.": "これは git リポジトリなので、更新は直接プルできます。",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse の新しいバージョンが利用できます: %0\n\n現在のバージョンは %1 です。",
   "About Tracky Mouse": "Tracky Mouse について",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "選択したカメラのシステム設定ダイアログを開き、オートフォーカスや自動露出などの設定を行います。",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "カメラのシステム設定ウィンドウを開き、オートフォーカスや自動露出などの設定を行います。",
   "Optical flow": "オプティカルフロー",
+  "Options:": "オプション:",
   "Outputs the current value of an option.": "オプションの現在の値を出力します。",
   "Permission denied. Please enable access to the camera.": "権限が拒否されました。カメラへのアクセスを有効にしてください。",
   "Pitch:": "ピッチ:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "頭のトラッキングに使用するカメラを選択します。",
   "Selects which camera is used for head tracking.": "頭のトラッキングに使用するカメラを選択します。",
   "Show the version number.": "バージョン番号を表示します。",
+  "Since this is a git repository, the update can be pulled directly.": "これは git リポジトリなので、更新は直接プルできます。",
   "Skip this version": "このバージョンをスキップ",
   "Slow": "遅い",
   "Smooth": "なめらか",

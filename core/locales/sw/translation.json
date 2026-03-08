@@ -1,6 +1,4 @@
 {
-  "Options:": "Chaguo:",
-  "Since this is a git repository, the update can be pulled directly.": "Kwa kuwa hii ni hifadhi ya git, sasisho linaweza kuvutwa moja kwa moja.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Toleo jipya la Tracky Mouse linapatikana: %0\n\nKwa sasa unatumia toleo %1.",
   "About Tracky Mouse": "Kuhusu Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Hufungua kisanduku cha mazungumzo cha mipangilio ya mfumo kwa kamera uliyoteua, ili kurekebisha sifa kama umakini wa moja kwa moja na utoaji mwanga wa moja kwa moja.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Hufungua dirisha la mipangilio ya mfumo kwa kamera yako ili kurekebisha sifa kama umakini wa moja kwa moja na utoaji mwanga wa moja kwa moja.",
   "Optical flow": "Mtiririko wa kuona (optical flow)",
+  "Options:": "Chaguo:",
   "Outputs the current value of an option.": "Hutoa thamani ya sasa ya chaguo.",
   "Permission denied. Please enable access to the camera.": "Ruhusa imekataliwa. Tafadhali wezesha ufikiaji wa kamera.",
   "Pitch:": "Kuelekea juu/chini:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Chagua ni kamera ipi utumie kwa ufuatiliaji wa kichwa.",
   "Selects which camera is used for head tracking.": "Huchagua ni kamera ipi inatumika kwa ufuatiliaji wa kichwa.",
   "Show the version number.": "Onyesha nambari ya toleo.",
+  "Since this is a git repository, the update can be pulled directly.": "Kwa kuwa hii ni hifadhi ya git, sasisho linaweza kuvutwa moja kwa moja.",
   "Skip this version": "Ruka toleo hili",
   "Slow": "Polepole",
   "Smooth": "Laini",

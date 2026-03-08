@@ -1,6 +1,4 @@
 {
-  "Options:": "Opzioni:",
-  "Since this is a git repository, the update can be pulled directly.": "Poiché questo è un repository Git, l'aggiornamento può essere scaricato direttamente.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Una nuova versione di Tracky Mouse è disponibile: %0\n\nStai usando attualmente la versione %1.",
   "About Tracky Mouse": "Informazioni su Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Apre la finestra di impostazioni di sistema per la fotocamera selezionata, per regolare proprietà come autofocus e auto-esposizione.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Apre la finestra di sistema della tua fotocamera per regolare proprietà come autofocus e auto-esposizione.",
   "Optical flow": "Flusso ottico",
+  "Options:": "Opzioni:",
   "Outputs the current value of an option.": "Mostra il valore corrente di un'opzione.",
   "Permission denied. Please enable access to the camera.": "Permesso negato. Abilita l'accesso alla fotocamera.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Seleziona quale fotocamera usare per il tracciamento della testa.",
   "Selects which camera is used for head tracking.": "Seleziona la fotocamera usata per il tracciamento della testa.",
   "Show the version number.": "Mostra il numero di versione.",
+  "Since this is a git repository, the update can be pulled directly.": "Poiché questo è un repository Git, l'aggiornamento può essere scaricato direttamente.",
   "Skip this version": "Salta questa versione",
   "Slow": "Lento",
   "Smooth": "Liscio",

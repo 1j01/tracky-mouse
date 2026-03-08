@@ -1,6 +1,4 @@
 {
-  "Options:": "ตัวเลือก:",
-  "Since this is a git repository, the update can be pulled directly.": "เนื่องจากนี่เป็นที่เก็บ git การอัปเดตสามารถดึงได้โดยตรง",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "มี Tracky Mouse เวอร์ชันใหม่แล้ว: %0\n\nขณะนี้คุณใช้เวอร์ชัน %1",
   "About Tracky Mouse": "เกี่ยวกับ Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "เปิดหน้าต่างการตั้งค่าระบบของกล้องที่เลือก เพื่อปรับคุณสมบัติต่าง ๆ เช่น โฟกัสอัตโนมัติและรับแสงอัตโนมัติ",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "เปิดหน้าต่างการตั้งค่าระบบของกล้องเพื่อปรับคุณสมบัติต่าง ๆ เช่น โฟกัสอัตโนมัติและรับแสงอัตโนมัติ",
   "Optical flow": "ออปติคอลโฟลว์",
+  "Options:": "ตัวเลือก:",
   "Outputs the current value of an option.": "แสดงค่าปัจจุบันของตัวเลือก",
   "Permission denied. Please enable access to the camera.": "ไม่ได้รับสิทธิ์ โปรดเปิดใช้งานการเข้าถึงกล้อง",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "เลือกกล้องที่จะใช้สำหรับการติดตามศีรษะ",
   "Selects which camera is used for head tracking.": "เลือกว่ากล้องใดใช้สำหรับการติดตามศีรษะ",
   "Show the version number.": "แสดงหมายเลขเวอร์ชัน",
+  "Since this is a git repository, the update can be pulled directly.": "เนื่องจากนี่เป็นที่เก็บ git การอัปเดตสามารถดึงได้โดยตรง",
   "Skip this version": "ข้ามเวอร์ชันนี้",
   "Slow": "ช้า",
   "Smooth": "นุ่มนวล",

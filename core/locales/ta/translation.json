@@ -1,6 +1,4 @@
 {
-  "Options:": "விருப்பங்கள்:",
-  "Since this is a git repository, the update can be pulled directly.": "இது git களஞ்சியம் என்பதால், புதுப்பிப்பை நேரடியாகப் பெறலாம்.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse இன் புதிய பதிப்பு கிடைக்கிறது: %0\n\nநீங்கள் தற்போது பயன்படுத்தும் பதிப்பு %1.",
   "About Tracky Mouse": "Tracky Mouse பற்றி",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "தேர்ந்தெடுக்கப்பட்ட கேமராவிற்கான கணினி அமைப்புகள் உரையாடல் சாளரத்தைத் திறந்து, auto‑focus மற்றும் auto‑exposure போன்ற பண்புகளை மாற்றுகிறது.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "உங்கள் கேமராவிற்கான கணினி அமைப்புகள் சாளரத்தைத் திறந்து, auto‑focus மற்றும் auto‑exposure போன்ற பண்புகளை மாற்றுகிறது.",
   "Optical flow": "ஆப்டிக்கல் ஃப்ளோ",
+  "Options:": "விருப்பங்கள்:",
   "Outputs the current value of an option.": "ஒரு விருப்பத்தின் தற்போதைய மதிப்பை வெளியிடுகிறது.",
   "Permission denied. Please enable access to the camera.": "அனுமதி மறுக்கப்பட்டது. கேமரா அணுகலை இயக்கவும்.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "தலையை கண்காணிக்க எந்த கேமராவைப் பயன்படுத்த வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்.",
   "Selects which camera is used for head tracking.": "தலையை கண்காணிக்க எந்த கேமரா பயன்படுத்தப்பட வேண்டும் என்பதைக் குறிக்கிறது.",
   "Show the version number.": "பதிப்பு எண்ணை காட்டவும்.",
+  "Since this is a git repository, the update can be pulled directly.": "இது git களஞ்சியம் என்பதால், புதுப்பிப்பை நேரடியாகப் பெறலாம்.",
   "Skip this version": "இந்த பதிப்பைத் தவிர்க்கவும்",
   "Slow": "மெதுவாக",
   "Smooth": "மென்மையான",

@@ -1,6 +1,4 @@
 {
-  "Options:": "Opties:",
-  "Since this is a git repository, the update can be pulled directly.": "Omdat dit een git-repository is, kan de update direct worden opgehaald.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Er is een nieuwe versie van Tracky Mouse beschikbaar: %0\n\nJe gebruikt nu versie %1.",
   "About Tracky Mouse": "Over Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Opent het systeeminstellingen-dialoogvenster voor de geselecteerde camera om eigenschappen zoals autofocus en autobelichting aan te passen.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Opent het systeeminstellingenvenster voor je camera om eigenschappen zoals autofocus en autobelichting aan te passen.",
   "Optical flow": "Optische stroom",
+  "Options:": "Opties:",
   "Outputs the current value of an option.": "Geeft de huidige waarde van een optie weer.",
   "Permission denied. Please enable access to the camera.": "Toegang geweigerd. Schakel de cameratoegang in.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Selecteer welke camera je wilt gebruiken voor hoofdtracking.",
   "Selects which camera is used for head tracking.": "Bepaalt welke camera wordt gebruikt voor hoofdtracking.",
   "Show the version number.": "Toon het versienummer.",
+  "Since this is a git repository, the update can be pulled directly.": "Omdat dit een git-repository is, kan de update direct worden opgehaald.",
   "Skip this version": "Deze versie overslaan",
   "Slow": "Langzaam",
   "Smooth": "Vloeiend",

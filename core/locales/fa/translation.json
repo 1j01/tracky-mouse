@@ -1,6 +1,4 @@
 {
-  "Options:": "گزینه‌ها:",
-  "Since this is a git repository, the update can be pulled directly.": "از آن‌جا که این یک مخزن گیت است، به‌روزرسانی را می‌توان مستقیماً دریافت کرد.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "نسخه‌ی جدیدی از Tracky Mouse در دسترس است: %0\n\nشما هم‌اکنون از نسخه‌ی %1 استفاده می‌کنید.",
   "About Tracky Mouse": "درباره‌ی Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "گفت‌وگوی تنظیمات سیستم را برای دوربین انتخاب‌شده باز می‌کند تا ویژگی‌هایی مثل فوکوس خودکار و نوردهی خودکار را تنظیم کنید.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "پنجره‌ی تنظیمات سیستم را برای دوربین شما باز می‌کند تا ویژگی‌هایی مثل فوکوس خودکار و نوردهی خودکار را تنظیم کنید.",
   "Optical flow": "جریان نوری (Optical flow)",
+  "Options:": "گزینه‌ها:",
   "Outputs the current value of an option.": "مقدار فعلی یک گزینه را نمایش می‌دهد.",
   "Permission denied. Please enable access to the camera.": "اجازه رد شد. لطفاً دسترسی به دوربین را فعال کنید.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "دوربینی را که برای ردیابی سر باید استفاده شود انتخاب کنید.",
   "Selects which camera is used for head tracking.": "مشخص می‌کند برای ردیابی سر از کدام دوربین استفاده شود.",
   "Show the version number.": "نمایش شماره نسخه.",
+  "Since this is a git repository, the update can be pulled directly.": "از آن‌جا که این یک مخزن گیت است، به‌روزرسانی را می‌توان مستقیماً دریافت کرد.",
   "Skip this version": "رد کردن این نسخه",
   "Slow": "کند",
   "Smooth": "هموار",

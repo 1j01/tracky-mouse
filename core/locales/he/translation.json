@@ -1,6 +1,4 @@
 {
-  "Options:": "אפשרויות:",
-  "Since this is a git repository, the update can be pulled directly.": "מכיוון שזה מאגר Git, ניתן למשוך את העדכון ישירות.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "קיימת גרסה חדשה של Tracky Mouse: %0\n\nכעת אתה משתמש בגרסה %1.",
   "About Tracky Mouse": "על Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "פותח את חלון הגדרות המערכת עבור המצלמה שנבחרה, כדי להתאים מאפיינים כמו פוקוס אוטומטי וחשיפה אוטומטית.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "פותח את חלון הגדרות המערכת עבור המצלמה שלך כדי להתאים מאפיינים כמו פוקוס אוטומטי וחשיפה אוטומטית.",
   "Optical flow": "זרימה אופטית",
+  "Options:": "אפשרויות:",
   "Outputs the current value of an option.": "פולט את הערך הנוכחי של האפשרות.",
   "Permission denied. Please enable access to the camera.": "הגישה נדחתה. אנא אפשר גישה למצלמה.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "בחר באיזו מצלמה להשתמש למעקב אחרי הראש.",
   "Selects which camera is used for head tracking.": "בוחר איזו מצלמה תשמש למעקב אחרי הראש.",
   "Show the version number.": "הצג את מספר הגרסה.",
+  "Since this is a git repository, the update can be pulled directly.": "מכיוון שזה מאגר Git, ניתן למשוך את העדכון ישירות.",
   "Skip this version": "דלג על גרסה זו",
   "Slow": "איטי",
   "Smooth": "חלק",

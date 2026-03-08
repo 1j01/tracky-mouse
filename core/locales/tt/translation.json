@@ -1,6 +1,4 @@
 {
-  "Options:": "Көйләүләр:",
-  "Since this is a git repository, the update can be pulled directly.": "Бу git репозиториясе булганга, яңартуны турыдан‑туры ала аласыз.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouseның яңа %0 версиясе бар.\n\nХәзер %1 версиясен кулланасыз.",
   "About Tracky Mouse": "Tracky Mouse турында",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Сайланган камера өчен автофокус, автоэкспозиция кебек параметрларны көйләү өчен систем көйләүләре тәрәзәсен ача.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Камера өчен автофокус, автоэкспозиция кебек параметрларны көйләү өчен систем көйләүләре тәрәзәсен ача.",
   "Optical flow": "Оптик агым",
+  "Options:": "Көйләүләр:",
   "Outputs the current value of an option.": "Көйләүнең хәзерге кыйммәтен күрсәтә.",
   "Permission denied. Please enable access to the camera.": "Рөхсәт юк. Камерага керүгә рөхсәт бирегез.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Баш хәрәкәтен күзәтү өчен кайсы камераны кулланырга икәнен сайлагыз.",
   "Selects which camera is used for head tracking.": "Баш хәрәкәтен күзәтү өчен кулланыла торган камераны сайлый.",
   "Show the version number.": "Версия номерын күрсәтү.",
+  "Since this is a git repository, the update can be pulled directly.": "Бу git репозиториясе булганга, яңартуны турыдан‑туры ала аласыз.",
   "Skip this version": "Бу версияне калдырып китү",
   "Slow": "Әкрен",
   "Smooth": "Йомшартылган",

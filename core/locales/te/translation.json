@@ -1,6 +1,4 @@
 {
-  "Options:": "ఎంపికలు:",
-  "Since this is a git repository, the update can be pulled directly.": "ఇది git రిపోజిటరీ కావడంతో, నవీకరణను నేరుగా పొందవచ్చు.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse యొక్క కొత్త వెర్షన్ అందుబాటులో ఉంది: %0\n\nమీరు ప్రస్తుతం %1 వెర్షన్‌ను ఉపయోగిస్తున్నారు.",
   "About Tracky Mouse": "Tracky Mouse గురించి",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "ఎంచుకున్న కెమెరా కోసం సిస్టమ్ సెట్టింగ్‌ల డైలాగ్‌ను తెరిచి ఆటో-ఫోకస్ మరియు ఆటో-ఎక్స్‌పోజర్ వంటి గుణాలను సర్దుబాటు చేయడానికి అనుమతిస్తుంది.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "మీ కెమెరా కోసం సిస్టమ్ సెట్టింగ్‌ల విండోను తెరిచి ఆటో-ఫోకస్ మరియు ఆటో-ఎక్స్‌పోజర్ వంటి గుణాలను సర్దుబాటు చేయడానికి అనుమతిస్తుంది.",
   "Optical flow": "ఆప్టికల్ ఫ్లో",
+  "Options:": "ఎంపికలు:",
   "Outputs the current value of an option.": "ఒక ఎంపిక ప్రస్తుత విలువను చూపిస్తుంది.",
   "Permission denied. Please enable access to the camera.": "అనుమతి నిరాకరించబడింది. దయచేసి కెమెరా యాక్సెస్‌ను ఎనేబుల్ చేయండి.",
   "Pitch:": "పిచ్:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "తల ట్రాకింగ్ కోసం ఏ కెమెరాను ఉపయోగించాలో ఎంచుకోండి.",
   "Selects which camera is used for head tracking.": "తల ట్రాకింగ్ కోసం ఉపయోగించబడే కెమెరాను ఎంచుకుంటుంది.",
   "Show the version number.": "వెర్షన్ నంబర్‌ను చూపించండి.",
+  "Since this is a git repository, the update can be pulled directly.": "ఇది git రిపోజిటరీ కావడంతో, నవీకరణను నేరుగా పొందవచ్చు.",
   "Skip this version": "ఈ వెర్షన్‌ను దాటవేయండి",
   "Slow": "నెమ్మదిగా",
   "Smooth": "మృదువుగా",

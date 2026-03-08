@@ -1,6 +1,4 @@
 {
-  "Options:": "الخيارات:",
-  "Since this is a git repository, the update can be pulled directly.": "بما إن ده مستودع git، تقدر تسحب التحديث مباشرة.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "في إصدار جديد من Tracky Mouse متوفر: %0\n\nأنت حالياً بتستخدم الإصدار %1.",
   "About Tracky Mouse": "عن Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "يفتح مربع حوار إعدادات النظام للكاميرا المختارة، عشان تعدّل خصائص زي التركيز التلقائي والتعرّض التلقائي.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "يفتح نافذة إعدادات النظام للكاميرا عشان تعدّل خصائص زي التركيز التلقائي والتعرّض التلقائي.",
   "Optical flow": "التتبّع البصري (Optical flow)",
+  "Options:": "الخيارات:",
   "Outputs the current value of an option.": "يعرضلك القيمة الحالية للإعداد.",
   "Permission denied. Please enable access to the camera.": "السماح مرفوض. من فضلك فعّل صلاحية الوصول للكاميرا.",
   "Pitch:": "إمالة للأمام/للخلف:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "اختار الكاميرا اللي هتستخدمها لتتبّع الرأس.",
   "Selects which camera is used for head tracking.": "بتحدّد الكاميرا اللي هتستخدم لتتبّع الرأس.",
   "Show the version number.": "عرض رقم الإصدار.",
+  "Since this is a git repository, the update can be pulled directly.": "بما إن ده مستودع git، تقدر تسحب التحديث مباشرة.",
   "Skip this version": "تجاهُل الإصدار ده",
   "Slow": "بطيء",
   "Smooth": "سلس",

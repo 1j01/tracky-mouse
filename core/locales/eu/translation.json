@@ -1,6 +1,4 @@
 {
-  "Options:": "Aukerak:",
-  "Since this is a git repository, the update can be pulled directly.": "Hau git biltegi bat denez, eguneraketa zuzenean jaitsi daiteke.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse‑en bertsio berria dago erabilgarri: %0\n\nUne honetan %1 bertsioa erabiltzen ari zara.",
   "About Tracky Mouse": "Tracky Mouse buruz",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Hautatutako kameraren sistemaren ezarpenen elkarrizketa‑koadroa irekitzen du, auto‑fokua eta auto‑esposizioa bezalako propietateak doitzeko.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Zure kameraren sistemaren ezarpen‑leihoa irekitzen du, auto‑fokua eta auto‑esposizioa bezalako propietateak doitzeko.",
   "Optical flow": "Fluxu optikoa",
+  "Options:": "Aukerak:",
   "Outputs the current value of an option.": "Aukera baten uneko balioa erakusten du.",
   "Permission denied. Please enable access to the camera.": "Baimena ukatua. Gaitu kamerara sarbidea, mesedez.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Hautatu buru‑jarraipenerako zein kamera erabili.",
   "Selects which camera is used for head tracking.": "Buru‑jarraipenerako erabiliko den kamera hautatzen du.",
   "Show the version number.": "Erakutsi bertsio‑zenbakia.",
+  "Since this is a git repository, the update can be pulled directly.": "Hau git biltegi bat denez, eguneraketa zuzenean jaitsi daiteke.",
   "Skip this version": "Saltatu bertsio hau",
   "Slow": "Motel",
   "Smooth": "Leuna",

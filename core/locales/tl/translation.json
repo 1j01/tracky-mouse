@@ -1,6 +1,4 @@
 {
-  "Options:": "Mga opsyon:",
-  "Since this is a git repository, the update can be pulled directly.": "Dahil ito ay isang git repository, maaaring direktang kunin ang update.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "May bagong bersyon ng Tracky Mouse: %0\n\nKasalukuyan mong ginagamit ang bersyong %1.",
   "About Tracky Mouse": "Tungkol sa Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Binubuksan ang system settings dialog para sa napiling kamera upang baguhin ang mga katangian tulad ng auto-focus at auto-exposure.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Binubuksan ang window ng system settings ng kamera upang baguhin ang mga katangian tulad ng auto-focus at auto-exposure.",
   "Optical flow": "Optical flow",
+  "Options:": "Mga opsyon:",
   "Outputs the current value of an option.": "Ipinapakita ang kasalukuyang halaga ng isang opsyon.",
   "Permission denied. Please enable access to the camera.": "Tinanggihan ang pahintulot. Paki-enable ang access sa kamera.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Piliin kung aling kamera ang gagamitin para sa head tracking.",
   "Selects which camera is used for head tracking.": "Tinutukoy kung aling kamera ang gagamitin para sa head tracking.",
   "Show the version number.": "Ipakita ang numero ng bersyon.",
+  "Since this is a git repository, the update can be pulled directly.": "Dahil ito ay isang git repository, maaaring direktang kunin ang update.",
   "Skip this version": "Laktawan ang bersyong ito",
   "Slow": "Mabagal",
   "Smooth": "Makinis",

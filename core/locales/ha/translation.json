@@ -1,6 +1,4 @@
 {
-  "Options:": "Zaɓuɓɓuka:",
-  "Since this is a git repository, the update can be pulled directly.": "Domin wannan ma'ajiyar git ce, ana iya ɗaukar sabuntawa kai tsaye.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Sabuwar sigar Tracky Mouse tana samuwa: %0\n\nA halin yanzu kana amfani da sigar %1.",
   "About Tracky Mouse": "Game da Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Yana buɗe taga saitunan tsarin kyamara da aka zaɓa domin daidaita abubuwa kamar auto-focus da auto-exposure.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Yana buɗe taga saitunan tsarin kyamararka domin daidaita abubuwa kamar auto-focus da auto-exposure.",
   "Optical flow": "Gudun gani (optical flow)",
+  "Options:": "Zaɓuɓɓuka:",
   "Outputs the current value of an option.": "Yana nuna darajar da ake da ita na wani zaɓi.",
   "Permission denied. Please enable access to the camera.": "An ƙi izini. Don Allah ka kunna damar amfani da kyamara.",
   "Pitch:": "Lanƙwasawa:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Zaɓi wacce kyamara za a yi amfani da ita don bin diddigin kai.",
   "Selects which camera is used for head tracking.": "Yana zaɓar wacce kyamara ake amfani da ita don bin diddigin kai.",
   "Show the version number.": "Nuna lambar sigar.",
+  "Since this is a git repository, the update can be pulled directly.": "Domin wannan ma'ajiyar git ce, ana iya ɗaukar sabuntawa kai tsaye.",
   "Skip this version": "Tsallake wannan sigar",
   "Slow": "A hankali",
   "Smooth": "Mai laushi",

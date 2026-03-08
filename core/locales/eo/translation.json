@@ -1,6 +1,4 @@
 {
-  "Options:": "Opcioj:",
-  "Since this is a git repository, the update can be pulled directly.": "Ĉar ĉi tio estas git-deponejo, la ĝisdatigo povas esti eltirita rekte.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Nova versio de Tracky Mouse disponeblas: %0\n\nVi nun uzas la version %1.",
   "About Tracky Mouse": "Pri Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Malfermas la sisteman agord-dialogon por la elektita fotilo, por ĝustigi ecojn kiel aŭtomata fokuso kaj aŭtomata ekspozicio.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Malfermas la sisteman agord-fenestron por via fotilo por ĝustigi ecojn kiel aŭtomata fokuso kaj aŭtomata ekspozicio.",
   "Optical flow": "Optika fluo",
+  "Options:": "Opcioj:",
   "Outputs the current value of an option.": "Eligas la nunan valoron de agordo.",
   "Permission denied. Please enable access to the camera.": "Permeso rifuzita. Bonvolu ebligi aliron al la fotilo.",
   "Pitch:": "Klinangulo:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Elektu kiun fotilon uzi por kap-spurado.",
   "Selects which camera is used for head tracking.": "Elektas kiu fotilo estas uzata por kap-spurado.",
   "Show the version number.": "Montri la versian numeron.",
+  "Since this is a git repository, the update can be pulled directly.": "Ĉar ĉi tio estas git-deponejo, la ĝisdatigo povas esti eltirita rekte.",
   "Skip this version": "Preterlasi ĉi tiun version",
   "Slow": "Malrapida",
   "Smooth": "Glata",

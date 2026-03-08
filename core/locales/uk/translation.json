@@ -1,6 +1,4 @@
 {
-  "Options:": "Параметри:",
-  "Since this is a git repository, the update can be pulled directly.": "Оскільки це git-репозиторій, оновлення можна отримати безпосередньо.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Доступна нова версія Tracky Mouse: %0\n\nЗараз ви використовуєте версію %1.",
   "About Tracky Mouse": "Про Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Відкриває системне вікно налаштувань вибраної камери для зміни автофокусу, автоекспозиції тощо.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Відкриває системне вікно налаштувань камери для зміни автофокусу, автоекспозиції тощо.",
   "Optical flow": "Оптичний потік",
+  "Options:": "Параметри:",
   "Outputs the current value of an option.": "Виводить поточне значення параметра.",
   "Permission denied. Please enable access to the camera.": "Доступ заборонено. Увімкніть доступ до камери.",
   "Pitch:": "Крен:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Виберіть, яку камеру використовувати для відстеження голови.",
   "Selects which camera is used for head tracking.": "Визначає, яка камера використовується для відстеження голови.",
   "Show the version number.": "Показати номер версії.",
+  "Since this is a git repository, the update can be pulled directly.": "Оскільки це git-репозиторій, оновлення можна отримати безпосередньо.",
   "Skip this version": "Пропустити цю версію",
   "Slow": "Повільно",
   "Smooth": "Плавно",

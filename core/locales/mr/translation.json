@@ -1,6 +1,4 @@
 {
-  "Options:": "पर्याय:",
-  "Since this is a git repository, the update can be pulled directly.": "हे git रेपॉझिटरी असल्यामुळे, अपडेट थेट पुल करू शकता.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse ची नवी आवृत्ती उपलब्ध आहे: %0\n\nसध्या तुम्ही आवृत्ती %1 वापरत आहात.",
   "About Tracky Mouse": "Tracky Mouse बद्दल",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "निवडलेल्या कॅमेऱ्यासाठी सिस्टम सेटिंग्ज डायलॉग उघडते, जिथे ऑटो‑फोकस आणि ऑटो‑एक्सपोजरसारखे गुणधर्म बदलू शकता.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "तुमच्या कॅमेऱ्यासाठी सिस्टम सेटिंग्ज विंडो उघडते, जिथे ऑटो‑फोकस आणि ऑटो‑एक्सपोजरसारखे गुणधर्म बदलू शकता.",
   "Optical flow": "ऑप्टिकल फ्लो",
+  "Options:": "पर्याय:",
   "Outputs the current value of an option.": "दिलेल्या पर्यायाचे सध्याचे मूल्य दाखवते.",
   "Permission denied. Please enable access to the camera.": "परवानगी नाकारली. कृपया कॅमेरा ऍक्सेस सक्षम करा.",
   "Pitch:": "पिच:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "हेड ट्रॅकिंगसाठी कोणता कॅमेरा वापरायचा ते निवडा.",
   "Selects which camera is used for head tracking.": "हेड ट्रॅकिंगसाठी कोणता कॅमेरा वापरला जाईल ते निवडतो.",
   "Show the version number.": "आवृत्ती क्रमांक दाखवा.",
+  "Since this is a git repository, the update can be pulled directly.": "हे git रेपॉझिटरी असल्यामुळे, अपडेट थेट पुल करू शकता.",
   "Skip this version": "ही आवृत्ती वगळा",
   "Slow": "हळू",
   "Smooth": "स्मूद",

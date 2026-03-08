@@ -1,6 +1,4 @@
 {
-  "Options:": "اختیارات:",
-  "Since this is a git repository, the update can be pulled directly.": "چونکہ یہ ایک گِٹ ذخیرہ ہے، تازہ کاری براہِ راست حاصل کی جا سکتی ہے۔",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "ٹریکی ماؤس کا نیا ورژن دستیاب ہے: %0\n\nآپ اس وقت ورژن %1 استعمال کر رہے ہیں۔",
   "About Tracky Mouse": "ٹریکی ماؤس کے بارے میں",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "منتخب کیمرے کے لیے سسٹم سیٹنگز کا ڈائیلاگ کھولتا ہے، تاکہ آٹو فوکس اور آٹو ایکسپوژر جیسی خصوصیات کو ایڈجسٹ کیا جا سکے۔",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "آپ کے کیمرے کے لیے سسٹم سیٹنگز کی ونڈو کھولتا ہے، تاکہ آٹو فوکس اور آٹو ایکسپوژر جیسی خصوصیات کو ایڈجسٹ کیا جا سکے۔",
   "Optical flow": "آپٹیکل فلو",
+  "Options:": "اختیارات:",
   "Outputs the current value of an option.": "کسی اختیار کی موجودہ قدر ظاہر کرتا ہے۔",
   "Permission denied. Please enable access to the camera.": "اجازت مسترد کر دی گئی۔ براہِ کرم کیمرے تک رسائی فعال کریں۔",
   "Pitch:": "جھکاؤ:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "سر کی ٹریکنگ کے لیے کون سا کیمرہ استعمال کرنا ہے، منتخب کریں۔",
   "Selects which camera is used for head tracking.": "یہ طے کرتا ہے کہ سر کی ٹریکنگ کے لیے کون سا کیمرہ استعمال ہو گا۔",
   "Show the version number.": "ورژن نمبر دکھائیں۔",
+  "Since this is a git repository, the update can be pulled directly.": "چونکہ یہ ایک گِٹ ذخیرہ ہے، تازہ کاری براہِ راست حاصل کی جا سکتی ہے۔",
   "Skip this version": "اس ورژن کو چھوڑ دیں",
   "Slow": "آہستہ",
   "Smooth": "ہموار",

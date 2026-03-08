@@ -1,6 +1,4 @@
 {
-  "Options:": "Opțiuni:",
-  "Since this is a git repository, the update can be pulled directly.": "Deoarece acesta este un depozit git, actualizarea poate fi preluată direct.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Este disponibilă o nouă versiune Tracky Mouse: %0.\n\nÎn prezent folosiți versiunea %1.",
   "About Tracky Mouse": "Despre Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Deschide dialogul de setări de sistem pentru camera selectată, pentru a ajusta proprietăți precum focalizarea automată și expunerea automată.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Deschide fereastra de setări de sistem pentru camera dvs., pentru a ajusta proprietăți precum focalizarea automată și expunerea automată.",
   "Optical flow": "Flux optic",
+  "Options:": "Opțiuni:",
   "Outputs the current value of an option.": "Afișează valoarea curentă a unei opțiuni.",
   "Permission denied. Please enable access to the camera.": "Permisiune refuzată. Vă rugăm să permiteți accesul la cameră.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Selectați ce cameră să fie folosită pentru urmărirea capului.",
   "Selects which camera is used for head tracking.": "Selectează ce cameră este folosită pentru urmărirea capului.",
   "Show the version number.": "Afișează numărul versiunii.",
+  "Since this is a git repository, the update can be pulled directly.": "Deoarece acesta este un depozit git, actualizarea poate fi preluată direct.",
   "Skip this version": "Omite această versiune",
   "Slow": "Încet",
   "Smooth": "Neted",

@@ -1,6 +1,4 @@
 {
-  "Options:": "選項：",
-  "Since this is a git repository, the update can be pulled directly.": "因為這是 git 儲存庫，更新會當直接用 git 提著來。",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "有新的 Tracky Mouse 版本：%0\n\n汝今用著 ê 是第 %1 版。",
   "About Tracky Mouse": "關於 Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "開啟揀著 ê 攝影機 ê 系統設定視窗，會當調整自動對焦、自動曝光等參數。",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "開啟攝影機 ê 系統設定視窗，來調整自動對焦、自動曝光等參數。",
   "Optical flow": "光流追蹤",
+  "Options:": "選項：",
   "Outputs the current value of an option.": "顯示這个選項現在 ê 數值。",
   "Permission denied. Please enable access to the camera.": "權限予拒絕。請允許程式使用攝影機。",
   "Pitch:": "仰俯：",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "揀欲用哪一个攝影機來做頭殼追蹤。",
   "Selects which camera is used for head tracking.": "設定欲用哪一个攝影機做頭殼追蹤。",
   "Show the version number.": "顯示版本號碼。",
+  "Since this is a git repository, the update can be pulled directly.": "因為這是 git 儲存庫，更新會當直接用 git 提著來。",
   "Skip this version": "略過這个版本",
   "Slow": "慢",
   "Smooth": "平順",

@@ -1,6 +1,4 @@
 {
-  "Options:": "Seçenekler:",
-  "Since this is a git repository, the update can be pulled directly.": "Bu bir git deposu olduğundan, güncelleme doğrudan çekilebilir.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse'un yeni bir sürümü mevcut: %0\n\nŞu anda %1 sürümünü kullanıyorsunuz.",
   "About Tracky Mouse": "Tracky Mouse Hakkında",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Seçili kamera için otomatik odaklama ve otomatik pozlama gibi özellikleri ayarlamak üzere sistem ayarları iletişim kutusunu açar.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Kameranız için otomatik odaklama ve otomatik pozlama gibi özellikleri ayarlamak üzere sistem ayarları penceresini açar.",
   "Optical flow": "Optik akış",
+  "Options:": "Seçenekler:",
   "Outputs the current value of an option.": "Bir seçeneğin mevcut değerini gösterir.",
   "Permission denied. Please enable access to the camera.": "İzin reddedildi. Lütfen kameraya erişimi etkinleştirin.",
   "Pitch:": "Eğim:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Baş takibi için hangi kameranın kullanılacağını seçin.",
   "Selects which camera is used for head tracking.": "Baş takibi için hangi kameranın kullanılacağını belirler.",
   "Show the version number.": "Sürüm numarasını göster.",
+  "Since this is a git repository, the update can be pulled directly.": "Bu bir git deposu olduğundan, güncelleme doğrudan çekilebilir.",
   "Skip this version": "Bu sürümü atla",
   "Slow": "Yavaş",
   "Smooth": "Düzgün",

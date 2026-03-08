@@ -1,6 +1,4 @@
 {
-  "Options:": "বিকল্পসমূহ:",
-  "Since this is a git repository, the update can be pulled directly.": "এটি একটি git রিপোজিটরি হওয়ায়, আপডেট সরাসরি টেনে নেওয়া যেতে পারে।",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse-এর একটি নতুন সংস্করণ উপলব্ধ: %0\n\nআপনি বর্তমানে %1 সংস্করণটি ব্যবহার করছেন।",
   "About Tracky Mouse": "Tracky Mouse সম্পর্কে",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "নির্বাচিত ক্যামেরার জন্য সিস্টেম সেটিংস ডায়ালগ খুলে, যেখানে অটো-ফোকাস ও অটো-এক্সপোজারের মতো বৈশিষ্ট্য সামঞ্জস্য করতে পারবেন।",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "আপনার ক্যামেরার জন্য সিস্টেম সেটিংস উইন্ডো খুলে, যেখানে অটো-ফোকাস ও অটো-এক্সপোজারের মতো বৈশিষ্ট্য সামঞ্জস্য করতে পারবেন।",
   "Optical flow": "অপটিক্যাল ফ্লো",
+  "Options:": "বিকল্পসমূহ:",
   "Outputs the current value of an option.": "কোনো বিকল্পের বর্তমান মান দেখায়।",
   "Permission denied. Please enable access to the camera.": "অনুমতি অস্বীকৃত। অনুগ্রহ করে ক্যামেরা ব্যবহারের অনুমতি দিন।",
   "Pitch:": "পিচ:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "মাথা ট্র্যাকিংয়ের জন্য কোন ক্যামেরা ব্যবহার করবেন তা নির্বাচন করুন।",
   "Selects which camera is used for head tracking.": "মাথা ট্র্যাকিংয়ের জন্য কোন ক্যামেরা ব্যবহার হবে তা নির্ধারণ করে।",
   "Show the version number.": "সংস্করণ নম্বর দেখায়।",
+  "Since this is a git repository, the update can be pulled directly.": "এটি একটি git রিপোজিটরি হওয়ায়, আপডেট সরাসরি টেনে নেওয়া যেতে পারে।",
   "Skip this version": "এই সংস্করণটি এড়িয়ে যান",
   "Slow": "ধীরে",
   "Smooth": "মসৃণ",

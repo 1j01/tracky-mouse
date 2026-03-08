@@ -1,6 +1,4 @@
 {
-  "Options:": "Opsi:",
-  "Since this is a git repository, the update can be pulled directly.": "Amarga iki repositori git, panganyaran bisa ditarik langsung.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Versi anyar Tracky Mouse kasedhiya: %0\n\nSaiki panjenengan nganggo versi %1.",
   "About Tracky Mouse": "Babagan Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Mbukak dialog pangaturan sistem kanggo kamera sing dipilih, kanggo nyetel kaya auto-focus lan auto-exposure.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Mbukak jendhela pangaturan sistem kamera kanggo nyetel kaya auto-focus lan auto-exposure.",
   "Optical flow": "Aliran optik",
+  "Options:": "Opsi:",
   "Outputs the current value of an option.": "Nampilake nilai saiki saka siji opsi.",
   "Permission denied. Please enable access to the camera.": "Ijin ditolak. Mangga uripna akses kamera.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Pilih kamera endi sing arep digunakaké kanggo pelacakan endhas.",
   "Selects which camera is used for head tracking.": "Milih kamera sing digunakaké kanggo pelacakan endhas.",
   "Show the version number.": "Tampilna nomer versi.",
+  "Since this is a git repository, the update can be pulled directly.": "Amarga iki repositori git, panganyaran bisa ditarik langsung.",
   "Skip this version": "Liwati versi iki",
   "Slow": "Alon",
   "Smooth": "Alus",

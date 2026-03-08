@@ -1,6 +1,4 @@
 {
-  "Options:": "Tùy chọn:",
-  "Since this is a git repository, the update can be pulled directly.": "Vì đây là kho git nên bạn có thể kéo bản cập nhật trực tiếp.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Có bản Tracky Mouse mới: %0\n\nBạn đang dùng phiên bản %1.",
   "About Tracky Mouse": "Giới thiệu Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Mở hộp thoại cài đặt hệ thống cho camera đã chọn để chỉnh các thuộc tính như tự động lấy nét, tự động phơi sáng.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Mở cửa sổ cài đặt hệ thống cho camera của bạn để chỉnh các thuộc tính như tự động lấy nét, tự động phơi sáng.",
   "Optical flow": "Dòng quang học",
+  "Options:": "Tùy chọn:",
   "Outputs the current value of an option.": "Hiển thị giá trị hiện tại của một tùy chọn.",
   "Permission denied. Please enable access to the camera.": "Quyền bị từ chối. Hãy cho phép truy cập camera.",
   "Pitch:": "Độ cúi/ngửa:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Chọn camera để theo dõi đầu.",
   "Selects which camera is used for head tracking.": "Chọn camera được dùng để theo dõi đầu.",
   "Show the version number.": "Hiển thị số phiên bản.",
+  "Since this is a git repository, the update can be pulled directly.": "Vì đây là kho git nên bạn có thể kéo bản cập nhật trực tiếp.",
   "Skip this version": "Bỏ qua phiên bản này",
   "Slow": "Chậm",
   "Smooth": "Mượt",

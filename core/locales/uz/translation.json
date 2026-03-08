@@ -1,6 +1,4 @@
 {
-  "Options:": "Parametrlar:",
-  "Since this is a git repository, the update can be pulled directly.": "Bu git repozitoriyasi bo‘lgani uchun, yangilanishni to‘g‘ridan‑to‘g‘ri tortib olishingiz mumkin.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse’ning yangi versiyasi mavjud: %0\n\nHozir %1 versiyasidan foydalanmoqdasiz.",
   "About Tracky Mouse": "Tracky Mouse haqida",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Tanlangan kamera uchun avtofokus va avtoekspozitsiya kabi parametrlarni sozlashga imkon beruvchi tizim sozlamalari dialogini ochadi.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Kamera uchun avtofokus va avtoekspozitsiya kabi parametrlarni sozlashga imkon beruvchi tizim sozlamalari oynasini ochadi.",
   "Optical flow": "Optik oqim",
+  "Options:": "Parametrlar:",
   "Outputs the current value of an option.": "Parametrning joriy qiymatini chiqaradi.",
   "Permission denied. Please enable access to the camera.": "Ruxsat berilmadi. Kameraga kirishga ruxsat bering.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Boshni kuzatish uchun qaysi kameradan foydalanilishini tanlang.",
   "Selects which camera is used for head tracking.": "Boshni kuzatish uchun qaysi kamera ishlatilishini tanlaydi.",
   "Show the version number.": "Versiya raqamini ko‘rsatadi.",
+  "Since this is a git repository, the update can be pulled directly.": "Bu git repozitoriyasi bo‘lgani uchun, yangilanishni to‘g‘ridan‑to‘g‘ri tortib olishingiz mumkin.",
   "Skip this version": "Bu versiyani o‘tkazib yuborish",
   "Slow": "Sekin",
   "Smooth": "Silliq",

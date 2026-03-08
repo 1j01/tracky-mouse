@@ -1,6 +1,4 @@
 {
-  "Options:": "Alternativ:",
-  "Since this is a git repository, the update can be pulled directly.": "Eftersom det här är ett git-arkiv kan uppdateringen hämtas direkt.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "En ny version av Tracky Mouse finns tillgänglig: %0\n\nDu använder för närvarande version %1.",
   "About Tracky Mouse": "Om Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Öppnar systeminställningsdialogen för den valda kameran för att justera egenskaper som autofokus och autoexponering.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Öppnar systeminställningsfönstret för din kamera för att justera egenskaper som autofokus och autoexponering.",
   "Optical flow": "Optiskt flöde",
+  "Options:": "Alternativ:",
   "Outputs the current value of an option.": "Visar det aktuella värdet för ett alternativ.",
   "Permission denied. Please enable access to the camera.": "Åtkomst nekad. Aktivera åtkomst till kameran.",
   "Pitch:": "Pitch:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Välj vilken kamera som ska användas för huvudspårning.",
   "Selects which camera is used for head tracking.": "Väljer vilken kamera som används för huvudspårning.",
   "Show the version number.": "Visa versionsnummer.",
+  "Since this is a git repository, the update can be pulled directly.": "Eftersom det här är ett git-arkiv kan uppdateringen hämtas direkt.",
   "Skip this version": "Hoppa över den här versionen",
   "Slow": "Långsam",
   "Smooth": "Mjuk",

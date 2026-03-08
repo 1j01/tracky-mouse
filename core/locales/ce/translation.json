@@ -1,6 +1,4 @@
 {
-  "Options:": "Параметраш:",
-  "Since this is a git repository, the update can be pulled directly.": "ХӀокху репозиторий git ю, цунан хьалха берш дойлахь шна цуьнан хьехкар барах яцна (git pull).",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse цуьнан керла кхочуш версия е: %0\n\nХӀинца хьо дӀачу версиаш ю: %1.",
   "About Tracky Mouse": "Tracky Mouse хӀакъан хаам",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Хьажа камера системан параметраш диалог дӀаяккха, автофокус / автоэкспозици тӀе хьажорца.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Хьан камера системан параметраш агӀо дӀаяккха, автофокус, автоэкспозици тӀехь кхетиша до.",
   "Optical flow": "Оптическ потогӀа",
+  "Options:": "Параметраш:",
   "Outputs the current value of an option.": "ХӀинца параметран тӀаьххьара гӀо.",
   "Permission denied. Please enable access to the camera.": "ХӀокху ю хьажа хаам дац. Камера хьажа кхочуш йа.",
   "Pitch:": "Питч:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Хилар слежени дехар камера хьажа хила, цу тӀетоха.",
   "Selects which camera is used for head tracking.": "Хилар слежени дехар камера хьажа хилар тӀетоха.",
   "Show the version number.": "Верси номер къастийна.",
+  "Since this is a git repository, the update can be pulled directly.": "ХӀокху репозиторий git ю, цунан хьалха берш дойлахь шна цуьнан хьехкар барах яцна (git pull).",
   "Skip this version": "ХӀокху версия йу дехь таро хилахь",
   "Slow": "Оьшу",
   "Smooth": "Лахар",

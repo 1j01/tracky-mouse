@@ -1,6 +1,4 @@
 {
-  "Options:": "⚙️:",
-  "Since this is a git repository, the update can be pulled directly.": "🐙 💪 🧲🆙",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "🆕 ⦟𝄈ᵓ]⊐ 📦 %0\n\n👴📦 %1",
   "About Tracky Mouse": "ℹ️ ⦟𝄈ᵓ]⊐",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "🚀 💻📷⚙️ (🎚️📷🔎, 🎚️📸)",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "🚀 💻📷⚙️ (🎚️📷🔎, 🎚️📸)",
   "Optical flow": "📷📍🌊",
+  "Options:": "⚙️:",
   "Outputs the current value of an option.": "📤⚙️🔢",
   "Permission denied. Please enable access to the camera.": "🚫📷. 🙏✅📷",
   "Pitch:": "🙂‍↕️:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "📷❓ (📷,📷,📷) ➡️ 🧑🔍",
   "Selects which camera is used for head tracking.": "📷❓ (📷,📷,📷) ➡️ 🧑🔍",
   "Show the version number.": "📤 ⦟𝄈ᵓ]⊐ 📦🔢",
+  "Since this is a git repository, the update can be pulled directly.": "🐙 💪 🧲🆙",
   "Skip this version": "⏭️",
   "Slow": "🐌",
   "Smooth": "🧈",

@@ -1,6 +1,4 @@
 {
-  "Options:": "Options :",
-  "Since this is a git repository, the update can be pulled directly.": "Puisqu'il s'agit d'un dépôt git, la mise à jour peut être récupérée directement.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Une nouvelle version de Tracky Mouse est disponible : %0\n\nVous utilisez actuellement la version %1.",
   "About Tracky Mouse": "À propos de Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Ouvre la boîte de dialogue des paramètres système pour la caméra sélectionnée, afin d'ajuster des propriétés telles que la mise au point automatique et l'exposition automatique.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Ouvre la fenêtre des paramètres système de votre caméra pour ajuster des propriétés telles que la mise au point automatique et l'exposition automatique.",
   "Optical flow": "Flux optique",
+  "Options:": "Options :",
   "Outputs the current value of an option.": "Affiche la valeur actuelle d'une option.",
   "Permission denied. Please enable access to the camera.": "Permission refusée. Veuillez autoriser l'accès à la caméra.",
   "Pitch:": "Tangage :",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Sélectionnez la caméra à utiliser pour le suivi de la tête.",
   "Selects which camera is used for head tracking.": "Sélectionne la caméra utilisée pour le suivi de la tête.",
   "Show the version number.": "Afficher le numéro de version.",
+  "Since this is a git repository, the update can be pulled directly.": "Puisqu'il s'agit d'un dépôt git, la mise à jour peut être récupérée directement.",
   "Skip this version": "Ignorer cette version",
   "Slow": "Lent",
   "Smooth": "Lisse",

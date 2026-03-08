@@ -1,6 +1,4 @@
 {
-  "Options:": "Կարգավորումներ․",
-  "Since this is a git repository, the update can be pulled directly.": "Քանի որ սա git պահոց է, թարմացումը կարող եք անմիջապես քաշել (pull)։",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse-ի նոր տարբերակ է հասանելի՝ %0\n\nՆերկայում դուք օգտագործում եք %1 տարբերակը։",
   "About Tracky Mouse": "Tracky Mouse-ի մասին",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Բացում է ընտրված տեսախցիկի համակարգային կարգավորումների պատուհանը՝ կարգավորելու համար ավտոֆոկուսը, ավտոճांडակումն ու այլ հատկություններ։",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Բացում է ձեր տեսախցիկի համակարգային կարգավորումների պատուհանը՝ կարգավորելու համար ավտոֆոկուսը, ավտոճանդակումն ու նմանատիպ հատկությունները։",
   "Optical flow": "Օպտիկական հոսք",
+  "Options:": "Կարգավորումներ․",
   "Outputs the current value of an option.": "Ցուցադրում է տվյալ կարգավորման ներկայիս արժեքը։",
   "Permission denied. Please enable access to the camera.": "Մուտքը արգելված է։ Խնդրում ենք թույլատրել մուտքը տեսախցիկին։",
   "Pitch:": "Ծռություն (pitch)․",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Ընտրեք, թե որ տեսախցիկն օգտագործել գլխի հետևման համար։",
   "Selects which camera is used for head tracking.": "Որոշում է, թե որ տեսախցիկն է օգտագործվում գլխի հետևման համար։",
   "Show the version number.": "Ցուցադրել տարբերակի համարը։",
+  "Since this is a git repository, the update can be pulled directly.": "Քանի որ սա git պահոց է, թարմացումը կարող եք անմիջապես քաշել (pull)։",
   "Skip this version": "Բաց թողնել այս տարբերակը",
   "Slow": "Դանդաղ",
   "Smooth": "Հարթ",

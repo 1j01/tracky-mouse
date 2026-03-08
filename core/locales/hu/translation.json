@@ -1,6 +1,4 @@
 {
-  "Options:": "Beállítások:",
-  "Since this is a git repository, the update can be pulled directly.": "Mivel ez egy git-tárhely, a frissítés közvetlenül letölthető.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Elérhető a Tracky Mouse új verziója: %0\n\nJelenleg a(z) %1 verziót használod.",
   "About Tracky Mouse": "A Tracky Mouse-ról",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Megnyitja a kiválasztott kamera rendszerbeállításait, hogy például az automatikus fókuszt és expozíciót módosíthasd.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Megnyitja a kamera rendszerbeállításainak ablakát, hogy például az automatikus fókuszt és expozíciót módosíthasd.",
   "Optical flow": "Optikai áramlás",
+  "Options:": "Beállítások:",
   "Outputs the current value of an option.": "Kiírja egy beállítás aktuális értékét.",
   "Permission denied. Please enable access to the camera.": "Hozzáférés megtagadva. Engedélyezd a kamera használatát.",
   "Pitch:": "Bólogatás (pitch):",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Válaszd ki, melyik kamerát használja a rendszer a fejed követésére.",
   "Selects which camera is used for head tracking.": "Beállítja, melyik kamera szolgál a fejed követésére.",
   "Show the version number.": "A verziószám megjelenítése.",
+  "Since this is a git repository, the update can be pulled directly.": "Mivel ez egy git-tárhely, a frissítés közvetlenül letölthető.",
   "Skip this version": "Verzió kihagyása",
   "Slow": "Lassú",
   "Smooth": "Simított",

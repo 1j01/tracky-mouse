@@ -1,6 +1,4 @@
 {
-  "Options:": "विकल्प:",
-  "Since this is a git repository, the update can be pulled directly.": "क्योंकि यह एक git रिपॉज़िटरी है, आप अपडेट सीधे `git pull` से ले सकते हैं।",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Tracky Mouse का एक नया संस्करण उपलब्ध है: %0\n\nआप अभी संस्करण %1 का उपयोग कर रहे हैं।",
   "About Tracky Mouse": "Tracky Mouse के बारे में",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "चुने गए कैमरे के लिए सिस्टम सेटिंग्स डायलॉग खोलता है, जहाँ आप ऑटो‑फोकस और ऑटो‑एक्सपोज़र जैसी सेटिंग बदल सकते हैं।",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "आपके कैमरे के लिए सिस्टम सेटिंग्स विंडो खोलता है, जहाँ आप ऑटो‑फोकस और ऑटो‑एक्सपोज़र जैसी सेटिंग बदल सकते हैं।",
   "Optical flow": "ऑप्टिकल फ्लो",
+  "Options:": "विकल्प:",
   "Outputs the current value of an option.": "किसी विकल्प का मौजूदा मान दिखाता है।",
   "Permission denied. Please enable access to the camera.": "अनुमति अस्वीकृत। कृपया कैमरा उपयोग की अनुमति दें।",
   "Pitch:": "पिच:",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "सिर ट्रैकिंग के लिए कौन‑सा कैमरा उपयोग करना है, चुनें।",
   "Selects which camera is used for head tracking.": "यह चुनता है कि सिर ट्रैकिंग के लिए कौन‑सा कैमरा उपयोग होगा।",
   "Show the version number.": "संस्करण संख्या दिखाएँ।",
+  "Since this is a git repository, the update can be pulled directly.": "क्योंकि यह एक git रिपॉज़िटरी है, आप अपडेट सीधे `git pull` से ले सकते हैं।",
   "Skip this version": "यह संस्करण छोड़ें",
   "Slow": "धीमा",
   "Smooth": "स्मूद",

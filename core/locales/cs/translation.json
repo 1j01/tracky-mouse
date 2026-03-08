@@ -1,6 +1,4 @@
 {
-  "Options:": "Možnosti:",
-  "Since this is a git repository, the update can be pulled directly.": "Protože se jedná o git repozitář, aktualizaci lze stáhnout přímo.",
   "⚠️": "⚠️",
   "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.": "Je k dispozici nová verze Tracky Mouse: %0\n\nAktuálně používáte verzi %1.",
   "About Tracky Mouse": "O aplikaci Tracky Mouse",
@@ -137,6 +135,7 @@
   "Opens the system settings dialog for the selected camera, to adjust properties like auto-focus and auto-exposure.": "Otevře systémové dialogové okno nastavení vybrané kamery, kde můžete upravit například automatické ostření a expozici.",
   "Opens the system settings window for your camera to adjust properties like auto-focus and auto-exposure.": "Otevře systémové okno nastavení kamery, kde můžete upravit například automatické ostření a expozici.",
   "Optical flow": "Optický tok",
+  "Options:": "Možnosti:",
   "Outputs the current value of an option.": "Vypíše aktuální hodnotu daného nastavení.",
   "Permission denied. Please enable access to the camera.": "Přístup odepřen. Povolte prosím přístup ke kameře.",
   "Pitch:": "Náklon (pitch):",
@@ -158,6 +157,7 @@
   "Select which camera to use for head tracking.": "Vyberte, kterou kameru použít pro sledování hlavy.",
   "Selects which camera is used for head tracking.": "Určuje, která kamera se používá pro sledování hlavy.",
   "Show the version number.": "Zobrazí číslo verze.",
+  "Since this is a git repository, the update can be pulled directly.": "Protože se jedná o git repozitář, aktualizaci lze stáhnout přímo.",
   "Skip this version": "Přeskočit tuto verzi",
   "Slow": "Pomalé",
   "Smooth": "Hladké",
