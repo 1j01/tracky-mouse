@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Fixed
+
+- Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
 
 ## [2.5.0] - 2026-03-07
 
