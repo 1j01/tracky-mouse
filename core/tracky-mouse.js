@@ -3663,7 +3663,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					let textScreenY = screenY + textYStart;
 
 					// Clamp to canvas bounds
-					textScreenX = Math.max(padding, Math.min(canvas.width - boxWidth - padding, textScreenX));
+					textScreenX = Math.max(boxPadding, Math.min(canvas.width - boxWidth - boxPadding, textScreenX));
 					textScreenY = Math.max(textLineHeight, Math.min(canvas.height - boxHeight + textLineHeight, textScreenY));
 
 					ctx.save();
