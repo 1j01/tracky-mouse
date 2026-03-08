@@ -1748,7 +1748,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 							// description: t("Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly."),
 							// description: t("Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor."),
 							description: t(`Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
-Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto- calibration.`),
+Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto-calibration.`),
 						},
 					],
 				},
