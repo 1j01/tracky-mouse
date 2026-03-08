@@ -2,9 +2,7 @@ const { dialog, shell, net, app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { execFile } = require('child_process');
-
-/** translation placeholder */
-const t = (s) => s;
+const { t } = require('./i18n');
 
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;

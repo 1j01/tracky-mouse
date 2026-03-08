@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
+- The desktop app's update checking dialogs now respect the selected language.
 
 ## [2.5.0] - 2026-03-07
 
