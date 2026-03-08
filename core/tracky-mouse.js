@@ -90,31 +90,31 @@ const initDwellClicking = (config) => {
 		throw new Error(t("config.click is required"));
 	}
 	if (typeof config.click !== "function") {
-		throw new Error(t("config.click must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.click"));
 	}
 	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
-		throw new Error(t("config.shouldDrag must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.shouldDrag"));
 	}
 	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
-		throw new Error(t("config.noCenter must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.noCenter"));
 	}
 	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
-		throw new Error(t("config.isEquivalentTarget must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.isEquivalentTarget"));
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
-		throw new Error(t("config.dwellClickEvenIfPaused must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.dwellClickEvenIfPaused"));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
-		throw new Error(t("config.beforeDispatch must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.beforeDispatch"));
 	}
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
-		throw new Error(t("config.afterDispatch must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.afterDispatch"));
 	}
 	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
-		throw new Error(t("config.beforePointerDownDispatch must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.beforePointerDownDispatch"));
 	}
 	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
-		throw new Error(t("config.isHeld must be a function"));
+		throw new Error(t("%0 must be a function").replace("%0", "config.isHeld"));
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
