@@ -72,79 +72,130 @@ const initDwellClicking = (config) => {
 	*/
 
 	/** translation placeholder */
-	const t = (s) => s;
+	const t = (key, options) => {
+		const defaultValue = options && options.defaultValue;
+		// During core library development, this is only used for extraction.
+		// Prefer the defaultValue so the call site stays close to runtime text.
+		return defaultValue || key;
+	};
 
 	if (typeof config !== "object") {
-		throw new Error(t("configuration object required for initDwellClicking"));
+		throw new Error(t("core.dwellClicking.errors.configObjectRequired", {
+			defaultValue: "configuration object required for initDwellClicking",
+		}));
 	}
 	if (config.targets === undefined) {
-		throw new Error(t("config.targets is required (must be a CSS selector)"));
+		throw new Error(t("core.dwellClicking.errors.targetsRequired", {
+			defaultValue: "config.targets is required (must be a CSS selector)",
+		}));
 	}
 	if (typeof config.targets !== "string") {
-		throw new Error(t("config.targets must be a string (a CSS selector)"));
+		throw new Error(t("core.dwellClicking.errors.targetsMustBeString", {
+			defaultValue: "config.targets must be a string (a CSS selector)",
+		}));
 	}
 	if (!isSelectorValid(config.targets)) {
-		throw new Error(t("config.targets is not a valid CSS selector"));
+		throw new Error(t("core.dwellClicking.errors.targetsInvalidSelector", {
+			defaultValue: "config.targets is not a valid CSS selector",
+		}));
 	}
 	if (config.click === undefined) {
-		throw new Error(t("config.click is required"));
+		throw new Error(t("core.dwellClicking.errors.clickRequired", {
+			defaultValue: "config.click is required",
+		}));
 	}
 	if (typeof config.click !== "function") {
-		throw new Error(t("config.click must be a function"));
+		throw new Error(t("core.dwellClicking.errors.clickMustBeFunction", {
+			defaultValue: "config.click must be a function",
+		}));
 	}
 	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
-		throw new Error(t("config.shouldDrag must be a function"));
+		throw new Error(t("core.dwellClicking.errors.shouldDragMustBeFunction", {
+			defaultValue: "config.shouldDrag must be a function",
+		}));
 	}
 	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
-		throw new Error(t("config.noCenter must be a function"));
+		throw new Error(t("core.dwellClicking.errors.noCenterMustBeFunction", {
+			defaultValue: "config.noCenter must be a function",
+		}));
 	}
 	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
-		throw new Error(t("config.isEquivalentTarget must be a function"));
+		throw new Error(t("core.dwellClicking.errors.isEquivalentTargetMustBeFunction", {
+			defaultValue: "config.isEquivalentTarget must be a function",
+		}));
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
-		throw new Error(t("config.dwellClickEvenIfPaused must be a function"));
+		throw new Error(t("core.dwellClicking.errors.dwellClickEvenIfPausedMustBeFunction", {
+			defaultValue: "config.dwellClickEvenIfPaused must be a function",
+		}));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
-		throw new Error(t("config.beforeDispatch must be a function"));
+		throw new Error(t("core.dwellClicking.errors.beforeDispatchMustBeFunction", {
+			defaultValue: "config.beforeDispatch must be a function",
+		}));
 	}
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
-		throw new Error(t("config.afterDispatch must be a function"));
+		throw new Error(t("core.dwellClicking.errors.afterDispatchMustBeFunction", {
+			defaultValue: "config.afterDispatch must be a function",
+		}));
 	}
 	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
-		throw new Error(t("config.beforePointerDownDispatch must be a function"));
+		throw new Error(t("core.dwellClicking.errors.beforePointerDownDispatchMustBeFunction", {
+			defaultValue: "config.beforePointerDownDispatch must be a function",
+		}));
 	}
 	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
-		throw new Error(t("config.isHeld must be a function"));
+		throw new Error(t("core.dwellClicking.errors.isHeldMustBeFunction", {
+			defaultValue: "config.isHeld must be a function",
+		}));
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {
-			throw new Error(t("config.retarget must be an array of objects"));
+			throw new Error(t("core.dwellClicking.errors.retargetMustBeArray", {
+				defaultValue: "config.retarget must be an array of objects",
+			}));
 		}
 		for (let i = 0; i < config.retarget.length; i++) {
 			const rule = config.retarget[i];
 			if (typeof rule !== "object") {
-				throw new Error(t("config.retarget must be an array of objects"));
+				throw new Error(t("core.dwellClicking.errors.retargetMustBeArray", {
+					defaultValue: "config.retarget must be an array of objects",
+				}));
 			}
 			if (rule.from === undefined) {
-				throw new Error(t("config.retarget[%0].from is required").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetFromRequired", {
+					defaultValue: "config.retarget[%0].from is required",
+				}).replace("%0", i));
 			}
 			if (rule.to === undefined) {
-				throw new Error(t("config.retarget[%0].to is required (although can be null to ignore the element)").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetToRequired", {
+					defaultValue: "config.retarget[%0].to is required (although can be null to ignore the element)",
+				}).replace("%0", i));
 			}
 			if (rule.withinMargin !== undefined && typeof rule.withinMargin !== "number") {
-				throw new Error(t("config.retarget[%0].withinMargin must be a number").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetWithinMarginMustBeNumber", {
+					defaultValue: "config.retarget[%0].withinMargin must be a number",
+				}).replace("%0", i));
 			}
 			if (typeof rule.from !== "string" && typeof rule.from !== "function" && !(rule.from instanceof Element)) {
-				throw new Error(t("config.retarget[%0].from must be a CSS selector string, an Element, or a function").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetFromInvalidType", {
+					defaultValue: "config.retarget[%0].from must be a CSS selector string, an Element, or a function",
+				}).replace("%0", i));
 			}
 			if (typeof rule.to !== "string" && typeof rule.to !== "function" && !(rule.to instanceof Element) && rule.to !== null) {
-				throw new Error(t("config.retarget[%0].to must be a CSS selector string, an Element, a function, or null").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetToInvalidType", {
+					defaultValue: "config.retarget[%0].to must be a CSS selector string, an Element, a function, or null",
+				}).replace("%0", i));
 			}
 			if (typeof rule.from === "string" && !isSelectorValid(rule.from)) {
-				throw new Error(t("config.retarget[%0].from is not a valid CSS selector").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetFromInvalidSelector", {
+					defaultValue: "config.retarget[%0].from is not a valid CSS selector",
+				}).replace("%0", i));
 			}
 			if (typeof rule.to === "string" && !isSelectorValid(rule.to)) {
-				throw new Error(t("config.retarget[%0].to is not a valid CSS selector").replace("%0", i));
+				throw new Error(t("core.dwellClicking.errors.retargetToInvalidSelector", {
+					defaultValue: "config.retarget[%0].to is not a valid CSS selector",
+				}).replace("%0", i));
 			}
 		}
 	}
@@ -617,7 +668,24 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 	}
 	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
 	const isRTL = rtlLanguages.includes(locale.split("-")[0]);
-	const t = (s) => translations[s] ?? s;
+	const t = (key, options) => {
+		const defaultValue = options && options.defaultValue;
+		// Prefer translation by key if present (for semantic keys).
+		if (translations && Object.prototype.hasOwnProperty.call(translations, key)) {
+			return translations[key];
+		}
+		// Migration fallback: if we have a defaultValue, try the old
+		// style where the English string itself is the key.
+		if (
+			defaultValue &&
+			translations &&
+			Object.prototype.hasOwnProperty.call(translations, defaultValue)
+		) {
+			return translations[defaultValue];
+		}
+		// Fall back to defaultValue, then to key.
+		return defaultValue || (translations[key] ?? key);
+	};
 	// console.trace("Initializing UI with locale", locale);
 
 	// language name mappings marked with * may not be ISO 639-1
