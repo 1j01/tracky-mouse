@@ -10,6 +10,7 @@ exports.exclude = [
 	"**/README.md",
 	"globs-for-deploy.js",
 	"core/copy-deps.js",
+	"core/locales/**/*.md",
 	"images/*.blend",
 	"images/*.icns",
 ];
