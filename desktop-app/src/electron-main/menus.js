@@ -23,14 +23,14 @@ app.getVersion = () =>
 
 function createMenu() {
 	const aboutItem = {
-		label: t('About Tracky Mouse'),
+		label: t('desktop.menu.help.aboutTrackyMouse', { defaultValue: 'About Tracky Mouse' }),
 		click: async () => {
 			const openAboutWindow = require('about-window').default;
 			openAboutWindow({
 				icon_path: join(__dirname, '../../images/tracky-mouse-logo-512.png'),
 				bug_report_url: 'https://github.com/1j01/tracky-mouse/issues',
 				homepage: 'https://trackymouse.js.org',
-				description: t('Control your computer with your webcam.'),
+				description: t('desktop.menu.help.aboutDescription', { defaultValue: 'Control your computer with your webcam.' }),
 				license: 'MIT',
 			});
 		},
@@ -59,38 +59,41 @@ function createMenu() {
 			: []),
 		// { role: 'fileMenu' }
 		{
-			label: t('File'),
+			label: t('desktop.menu.file.label', { defaultValue: 'File' }),
 			submenu: [
 				{
-					label: t('Export Settings'),
+					label: t('desktop.menu.file.exportSettings.label', { defaultValue: 'Export Settings' }),
 					click: async () => {
 						const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 						const defaultPath = join(app.getPath('documents'), 'tracky-mouse-settings.json');
 						const { filePath } = await dialog.showSaveDialog({
-							title: t('Export Settings'),
-							buttonLabel: t('Export'),
+							title: t('desktop.menu.file.exportSettings.label', { defaultValue: 'Export Settings' }),
+							buttonLabel: t('desktop.settings.export.buttonLabel', { defaultValue: 'Export' }),
 							defaultPath,
-							filters: [{ name: t('JSON'), extensions: ['json'] }],
+							filters: [{ name: t('desktop.common.jsonFileType', { defaultValue: 'JSON' }), extensions: ['json'] }],
 						});
 						if (!filePath) return;
 						try {
 							await copyFile(settingsPath, filePath);
 						} catch (error) {
-							await dialog.showErrorBox(t('Export Settings'), t('Failed to export settings.') + '\n\n' + error.message);
+							await dialog.showErrorBox(
+								t('desktop.menu.file.exportSettings.label', { defaultValue: 'Export Settings' }),
+								t('desktop.settings.export.errors.exportFailed', { defaultValue: 'Failed to export settings.' }) + '\n\n' + error.message,
+							);
 						}
 					},
 				},
 				{
-					label: t('Import Settings'),
+					label: t('desktop.menu.file.importSettings.label', { defaultValue: 'Import Settings' }),
 					click: async () => {
 						const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 						const defaultPath = app.getPath('documents');
 						const { canceled, filePaths } = await dialog.showOpenDialog({
-							title: t('Import Settings'),
-							buttonLabel: t('Import'),
+							title: t('desktop.menu.file.importSettings.label', { defaultValue: 'Import Settings' }),
+							buttonLabel: t('desktop.settings.import.buttonLabel', { defaultValue: 'Import' }),
 							defaultPath,
 							properties: ['openFile'],
-							filters: [{ name: t('JSON'), extensions: ['json'] }],
+							filters: [{ name: t('desktop.common.jsonFileType', { defaultValue: 'JSON' }), extensions: ['json'] }],
 						});
 						if (canceled) return;
 						const [filePath] = filePaths;
@@ -98,7 +101,10 @@ function createMenu() {
 						try {
 							json = await readFile(filePath, 'utf8');
 						} catch (error) {
-							await dialog.showErrorBox(t('Import Settings'), t('Failed to read selected file.') + '\n\n' + error.message);
+							await dialog.showErrorBox(
+								t('desktop.menu.file.importSettings.label', { defaultValue: 'Import Settings' }),
+								t('desktop.settings.import.errors.readSelectedFile', { defaultValue: 'Failed to read selected file.' }) + '\n\n' + error.message,
+							);
 							return;
 						}
 						// Backup settings
@@ -110,7 +116,10 @@ function createMenu() {
 							if (error.code === 'ENOENT') {
 								console.log('Never mind, no existing settings to backup.');
 							} else {
-								await dialog.showErrorBox(t('Import Settings'), t('Failed to backup current settings before import.') + '\n\n' + error.message);
+								await dialog.showErrorBox(
+									t('desktop.menu.file.importSettings.label', { defaultValue: 'Import Settings' }),
+									t('desktop.settings.import.errors.backupBeforeImport', { defaultValue: 'Failed to backup current settings before import.' }) + '\n\n' + error.message,
+								);
 								return;
 							}
 						}
@@ -119,7 +128,10 @@ function createMenu() {
 						try {
 							await writeFile(settingsPath, json);
 						} catch (error) {
-							await dialog.showErrorBox(t('Import Settings'), t('Failed to import settings.') + '\n\n' + error.message);
+							await dialog.showErrorBox(
+								t('desktop.menu.file.importSettings.label', { defaultValue: 'Import Settings' }),
+								t('desktop.settings.import.errors.importFailed', { defaultValue: 'Failed to import settings.' }) + '\n\n' + error.message,
+							);
 							return;
 						}
 						// Reload settings
@@ -134,7 +146,7 @@ function createMenu() {
 		},
 		// { role: 'editMenu' }
 		{
-			label: t('Edit'),
+			label: t('desktop.menu.edit.label', { defaultValue: 'Edit' }),
 			submenu: [
 				{ role: 'undo' },
 				{ role: 'redo' },
@@ -149,7 +161,7 @@ function createMenu() {
 						{ role: 'selectAll' },
 						{ type: 'separator' },
 						{
-							label: t('Speech'),
+								label: t('desktop.menu.edit.speech.label', { defaultValue: 'Speech' }),
 							submenu: [
 								{ role: 'startSpeaking' },
 								{ role: 'stopSpeaking' }
@@ -165,13 +177,13 @@ function createMenu() {
 		},
 		// { role: 'viewMenu' }
 		{
-			label: t('View'),
+			label: t('desktop.menu.view.label', { defaultValue: 'View' }),
 			submenu: [
 				{ role: 'reload' },
 				{ role: 'forceReload' },
 				{ role: 'toggleDevTools' },
 				{
-					label: t('Toggle Developer Tools (Screen Overlay)'),
+						label: t('desktop.menu.view.toggleOverlayDevTools', { defaultValue: 'Toggle Developer Tools (Screen Overlay)' }),
 					click: async () => {
 						const { BrowserWindow } = require('electron');
 						// XXX: localization hazard: relying on the untranslated window title
@@ -193,7 +205,7 @@ function createMenu() {
 		},
 		// { role: 'windowMenu' }
 		{
-			label: t('Window'),
+			label: t('desktop.menu.window.label', { defaultValue: 'Window' }),
 			submenu: [
 				{ role: 'minimize' },
 				{ role: 'zoom' },
@@ -213,14 +225,14 @@ function createMenu() {
 			role: 'help',
 			submenu: [
 				{
-					label: t('Home Page'),
+					label: t('desktop.menu.help.homePage', { defaultValue: 'Home Page' }),
 					click: async () => {
 						const { shell } = require('electron');
 						await shell.openExternal('https://trackymouse.js.org');
 					},
 				},
 				{
-					label: t('GitHub Repository'),
+					label: t('desktop.menu.help.githubRepository', { defaultValue: 'GitHub Repository' }),
 					click: async () => {
 						const { shell } = require('electron');
 						await shell.openExternal('https://github.com/1j01/tracky-mouse');

@@ -4,7 +4,7 @@ const path = require('path');
 const { execFile } = require('child_process');
 
 /** translation placeholder */
-const t = (s) => s;
+const t = (key, options) => (options && options.defaultValue) || key;
 
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
@@ -181,13 +181,27 @@ module.exports = {
 					// Wording options: "Update Git Repo", "Update via Git", "Update from Git", or just "Update"?
 					// (formerly "Pull Tag")
 					const buttons = repoRoot
-						? [t('Update from Git'), t('Remind me later'), t('Skip this version')]
-						: [t('Download'), t('Remind me later'), t('Skip this version')];
+						? [
+							t('desktop.update.buttons.updateFromGit', { defaultValue: 'Update from Git' }),
+							t('desktop.update.buttons.remindMeLater', { defaultValue: 'Remind me later' }),
+							t('desktop.update.buttons.skipThisVersion', { defaultValue: 'Skip this version' }),
+						]
+						: [
+							t('desktop.update.buttons.download', { defaultValue: 'Download' }),
+							t('desktop.update.buttons.remindMeLater', { defaultValue: 'Remind me later' }),
+							t('desktop.update.buttons.skipThisVersion', { defaultValue: 'Skip this version' }),
+						];
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
-						title: t('Update Available'),
-						message: `${t("A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.").replace("%0", latestVersion).replace("%1", currentVersion)}` +
-							(repoRoot ? "\n\n" + t('Since this is a git repository, the update can be pulled directly.') : ''),
+						title: t('desktop.update.dialogs.available.title', { defaultValue: 'Update Available' }),
+						message: `${t('desktop.update.dialogs.available.message', {
+							defaultValue: 'A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.',
+						}).replace('%0', latestVersion).replace('%1', currentVersion)}` +
+							(repoRoot
+								? '\n\n' + t('desktop.update.dialogs.available.gitHint', {
+									defaultValue: 'Since this is a git repository, the update can be pulled directly.',
+								})
+								: ''),
 						buttons,
 						defaultId: 0,
 						cancelId: 1
@@ -205,9 +219,14 @@ module.exports = {
 
 								const { response: restartChoice } = await dialog.showMessageBox({
 									type: 'info',
-									title: t('Update Successful'),
-									message: `${t("Checked out %0. Restart the app to use the updated version.").replace("%0", latestVersion)}`,
-									buttons: [t('Restart Now'), t('Later')],
+									title: t('desktop.update.dialogs.success.title', { defaultValue: 'Update Successful' }),
+									message: `${t('desktop.update.dialogs.success.message', {
+										defaultValue: 'Checked out %0. Restart the app to use the updated version.',
+									}).replace('%0', latestVersion)}`,
+									buttons: [
+										t('desktop.update.buttons.restartNow', { defaultValue: 'Restart Now' }),
+										t('desktop.update.buttons.later', { defaultValue: 'Later' }),
+									],
 									defaultId: 0,
 									cancelId: 1
 								});
@@ -220,10 +239,16 @@ module.exports = {
 								return;
 							} catch (error) {
 								const friendlyMessage = {
-									fetch: t("Couldn't fetch updates from git."),
-									checkout: t("Couldn't checkout the latest version in the local git repository. You may have uncommitted changes."),
-									install: t("Failed to install dependencies for the new version after checking it out from git.")
-								}[step] ?? t("An error occurred while updating from git.");
+									fetch: t('desktop.update.errors.fetch', { defaultValue: "Couldn't fetch updates from git." }),
+									checkout: t('desktop.update.errors.checkout', {
+										defaultValue:
+											"Couldn't checkout the latest version in the local git repository. You may have uncommitted changes.",
+									}),
+									install: t('desktop.update.errors.install', {
+										defaultValue:
+											'Failed to install dependencies for the new version after checking it out from git.',
+									}),
+								}[step] ?? t('desktop.update.errors.generic', { defaultValue: 'An error occurred while updating from git.' });
 								console.error(`Error during git update at step "${step}":`, friendlyMessage, error);
 								try {
 									const Sentry = require("@sentry/electron/main");
@@ -235,9 +260,12 @@ module.exports = {
 								}
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
-									title: t('Update Failed'),
+									title: t('desktop.update.dialogs.failed.title', { defaultValue: 'Update Failed' }),
 									message: `${friendlyMessage}\n\n${error.message}`,
-									buttons: [t('Open download page'), t('Close')],
+									buttons: [
+										t('desktop.update.buttons.openDownloadPage', { defaultValue: 'Open download page' }),
+										t('desktop.update.buttons.close', { defaultValue: 'Close' }),
+									],
 									defaultId: 0,
 									cancelId: 1
 								});

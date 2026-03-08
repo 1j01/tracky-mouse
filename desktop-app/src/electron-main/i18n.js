@@ -36,22 +36,50 @@ function setLocale(locale) {
 
 /**
  * Translate a string
- * @param {string} s
+ * @param {string} key
+ * @param {{ defaultValue?: string }} [options]
  * @returns {string}
  */
-function t(s) {
-	return translations && Object.prototype.hasOwnProperty.call(translations, s) ? translations[s] : s;
+function t(key, options) {
+	const defaultValue = options && options.defaultValue;
+
+	// Prefer a translation for the semantic key, if present.
+	if (translations && Object.prototype.hasOwnProperty.call(translations, key)) {
+		return translations[key];
+	}
+
+	// Migration fallback: if we have a defaultValue, try the old style where
+	// the English string itself is the key in translation.json.
+	if (
+		defaultValue &&
+		translations &&
+		Object.prototype.hasOwnProperty.call(translations, defaultValue)
+	) {
+		return translations[defaultValue];
+	}
+
+	// Fall back to the defaultValue, then to the key.
+	return defaultValue || key;
 }
 
 // This is outside of electron-main.js because i18next-cli can't parse top-level return statements,
 // as used in that file, as far as I know.
 function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 	return isManualTakeback ?
-		t("Will resume after mouse stops moving.") :
-		typeof enabled !== "boolean" ? t("Press %0 to toggle Tracky Mouse.").replace("%0", "F9") :
+		t("desktop.overlay.resumeAfterMouseStops", {
+			defaultValue: "Will resume after mouse stops moving.",
+		}) :
+		typeof enabled !== "boolean" ?
+			t("desktop.overlay.togglePrompt.generic", {
+				defaultValue: "Press %0 to toggle Tracky Mouse.",
+			}).replace("%0", "F9") :
 			enabled ?
-				t("Press %0 to disable Tracky Mouse.").replace("%0", "F9") :
-				t("Press %0 to enable Tracky Mouse.").replace("%0", "F9");
+				t("desktop.overlay.togglePrompt.disable", {
+					defaultValue: "Press %0 to disable Tracky Mouse.",
+				}).replace("%0", "F9") :
+				t("desktop.overlay.togglePrompt.enable", {
+					defaultValue: "Press %0 to enable Tracky Mouse.",
+				}).replace("%0", "F9");
 }
 
 module.exports = { setLocale, t, getLocale: () => currentLocale, getScreenOverlayMessageText };

@@ -4,7 +4,9 @@ const { t } = require('./i18n');
 
 const parser = new ArgumentParser({
 	prog: "tracky-mouse",
-	description: t("Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly."),
+	description: t("desktop.cli.description", {
+		defaultValue: "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly.",
+	}),
 	// 	epilog: `Configuration Options (for use with --set, --adjust, and --get):
 	// - "startEnabled"              default: false  controls whether head tracking is enabled when the app starts.
 	// - "runAtLogin"                default: false  controls whether the app starts when you log in.
@@ -54,19 +56,19 @@ const parser = new ArgumentParser({
 // });
 
 parser.add_argument("--start", {
-	help: t("Start head tracking."),
+	help: t("desktop.cli.options.start.help", { defaultValue: "Start head tracking." }),
 	action: "store_true",
 });
 
 parser.add_argument("--stop", {
-	help: t("Stop head tracking."),
+	help: t("desktop.cli.options.stop.help", { defaultValue: "Stop head tracking." }),
 	action: "store_true",
 });
 
 parser.add_argument("-v", "--version", {
 	// action: "version",
 	// version: require("../../package.json").version,
-	help: t("Show the version number."),
+	help: t("desktop.cli.options.version.help", { defaultValue: "Show the version number." }),
 	action: "store_true",
 });
 
