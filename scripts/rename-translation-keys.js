@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const rootDir = path.join(__dirname, "..");
+const thisScriptPath = path.resolve(__filename);
 const ignoredDirNames = new Set(["node_modules", "out", ".git"]);
 const excludedSourceDirs = new Set(["core/lib"]);
 const sourceRoots = [
@@ -280,13 +281,16 @@ function collectFilesRecursively(dirPath, predicate, results = []) {
 }
 
 function listSourceFiles() {
-	const sourceFiles = sourceRoots.flatMap((dirPath) => collectFilesRecursively(dirPath, (filePath) => filePath.endsWith(".js")));
+	const sourceFiles = sourceRoots.flatMap((dirPath) => collectFilesRecursively(
+		dirPath,
+		(filePath) => filePath.endsWith(".js") && path.resolve(filePath) !== thisScriptPath,
+	));
 	for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
 		if (!entry.isFile()) {
 			continue;
 		}
 		const fullPath = path.join(rootDir, entry.name);
-		if (fullPath.endsWith(".js") || fullPath.endsWith(".ts")) {
+		if ((fullPath.endsWith(".js") || fullPath.endsWith(".ts")) && path.resolve(fullPath) !== thisScriptPath) {
 			sourceFiles.push(fullPath);
 		}
 	}
