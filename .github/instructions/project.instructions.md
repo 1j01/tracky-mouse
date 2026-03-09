@@ -65,4 +65,4 @@ AI prompt: "<verbatim copy of the message requesting the changes>"
 AI description: "<reasoning behind the changes>"
 ```
 
-Run `npm run lint` before committing. (This includes eslint and spell checking and `i18next-cli status`.)
+Run `npm run lint` before committing. (This includes eslint and spell checking and `i18next-cli status`, so you don't need to run those separately.)
