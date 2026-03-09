@@ -36,11 +36,12 @@ function setLocale(locale) {
 
 /**
  * Translate a string
- * @param {string} s
+ * @param {string} key
+ * @param {{ defaultValue?: string }} [options]
  * @returns {string}
  */
-function t(s) {
-	return translations && Object.prototype.hasOwnProperty.call(translations, s) ? translations[s] : s;
+function t(key, options = {}) {
+	return translations && Object.prototype.hasOwnProperty.call(translations, key) ? translations[key] : (options.defaultValue ?? key);
 }
 
 // This is outside of electron-main.js because i18next-cli can't parse top-level return statements,
