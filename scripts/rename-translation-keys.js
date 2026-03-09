@@ -34,12 +34,12 @@ const keyMap = Object.fromEntries([
 	["You can control your entire computer with the <a href=\"https://trackymouse.js.org/\">TrackyMouse</a> desktop app.", "ui.desktopAppPromo.message"],
 	["Cursor Movement", "settings.sections.cursorMovement.label"],
 	["Tilt influence", "settings.tiltInfluence.label"],
-	["Optical flow", "settings.tiltInfluence.sliderMinOpticalFlow"],
+	["Optical flow", "settings.tiltInfluence.sliderMin.alt1"],
 	["Point tracking", "settings.pointTracking.label"],
-	["Point tracking (2D)", "settings.tiltInfluence.sliderMinPointTracking2d"],
-	["Head tilt", "settings.tiltInfluence.sliderMaxHeadTilt"],
-	["Head tilt (3D)", "settings.tiltInfluence.sliderMaxHeadTilt3d"],
-	["Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.", "settings.tiltInfluence.descriptionShort"],
+	["Point tracking (2D)", "settings.tiltInfluence.sliderMin"],
+	["Head tilt", "settings.tiltInfluence.sliderMax.alt1"],
+	["Head tilt (3D)", "settings.tiltInfluence.sliderMax"],
+	["Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed.", "settings.tiltInfluence.description.alt1"],
 	[`Blends between using point tracking (2D) and detected head tilt (3D).
 - At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
 - At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
@@ -60,8 +60,8 @@ const keyMap = Object.fromEntries([
 	["Linear", "settings.shared.sliderMinLinear"],
 	["Smooth", "settings.shared.sliderMaxSmooth"],
 	["Acceleration", "settings.pointTracking.acceleration.label"],
-	["Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.", "settings.pointTracking.acceleration.descriptionLegacy"],
-	["Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.", "settings.pointTracking.acceleration.descriptionAlternate"],
+	["Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly.", "settings.pointTracking.acceleration.description.alt1"],
+	["Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor.", "settings.pointTracking.acceleration.description.alt2"],
 	[`Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
 Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto-calibration.`, "settings.pointTracking.acceleration.description"],
 	["Head tilt calibration", "settings.sections.headTiltCalibration.label"],
@@ -80,15 +80,15 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 	["Horizontal cursor offset", "settings.headTilt.horizontalOffset.label"],
 	["Left", "settings.shared.directionLeft"],
 	["Right", "settings.shared.directionRight"],
-	["Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.", "settings.headTilt.horizontalOffset.descriptionLegacy"],
-	["Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.", "settings.headTilt.horizontalOffset.descriptionAlternate"],
+	["Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible.", "settings.headTilt.horizontalOffset.description.alt1"],
+	["Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible.", "settings.headTilt.horizontalOffset.description.alt2"],
 	["Adjusts the position of the cursor when the camera sees the head facing straight ahead.", "settings.headTilt.offset.description"],
 	[`Adjusts the position of the cursor when the camera sees the head facing straight ahead.
 ⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷`, "settings.headTilt.horizontalOffset.description"],
 	["Vertical cursor offset", "settings.headTilt.verticalOffset.label"],
 	["Down", "settings.shared.directionDown"],
 	["Up", "settings.shared.directionUp"],
-	["Adjusts the center position of vertical head tilt.", "settings.headTilt.verticalOffset.descriptionLegacy"],
+	["Adjusts the center position of vertical head tilt.", "settings.headTilt.offset.description.alt1"],
 	["Clicking", "settings.sections.clicking.label"],
 	["Clicking mode:", "settings.clickingMode.label"],
 	["Dwell to click", "settings.clickingMode.dwell.label"],
@@ -111,17 +111,17 @@ Could also be used to right click with the dwell clicker in a pinch.`, "settings
 	["Delay before dragging", "settings.delayBeforeDragging.label"],
 	["Easy to drag", "settings.delayBeforeDragging.sliderMin"],
 	["Easy to click", "settings.delayBeforeDragging.sliderMax"],
-	["Locks mouse movement during the start of a click to prevent accidental dragging.", "settings.delayBeforeDragging.descriptionLegacy"],
+	["Locks mouse movement during the start of a click to prevent accidental dragging.", "settings.delayBeforeDragging.description.alt1"],
 	[`Prevents mouse movement for the specified time after a click starts.
-You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.descriptionAlternate"],
+You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.description.alt2"],
 	[`Prevents mouse movement for the specified time after a click starts.
-					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.descriptionAlternate"],
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.description.alt2"],
 	[`Locks mouse movement for the given duration during the start of a click.
 You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.description"],
 	["Video", "settings.sections.video.label"],
 	["Camera source", "settings.cameraSource.label"],
 	["Default", "common.default"],
-	["Select which camera to use for head tracking.", "settings.cameraSource.descriptionLegacy"],
+	["Select which camera to use for head tracking.", "settings.cameraSource.description.alt1"],
 	["Selects which camera is used for head tracking.", "settings.cameraSource.description"],
 	["Open Camera Settings", "settings.openCameraSettings.label"],
 	["Failed to open camera settings:", "settings.openCameraSettings.errorOpen"],
@@ -134,21 +134,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	["General", "settings.sections.general.label"],
 	["Start enabled", "settings.startEnabled.label"],
 	["If enabled, Tracky Mouse will start controlling the cursor as soon as it's launched.", "settings.startEnabled.description"],
-	["Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.", "settings.startEnabled.descriptionAlternate"],
-	["Makes Tracky Mouse active as soon as it's launched.", "settings.startEnabled.descriptionImmediate"],
-	["Automatically starts Tracky Mouse as soon as it's run.", "settings.startEnabled.descriptionAutomatic"],
+	["Makes Tracky Mouse active when launched. Otherwise, you can start it manually when you're ready.", "settings.startEnabled.description.alt1"],
+	["Makes Tracky Mouse active as soon as it's launched.", "settings.startEnabled.description.alt2"],
+	["Automatically starts Tracky Mouse as soon as it's run.", "settings.startEnabled.description.alt3"],
 	["Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)", "settings.closeEyesToToggle.label"],
 	["If enabled, you can start or stop mouse control by holding both your eyes shut for a few seconds.", "settings.closeEyesToToggle.description"],
 	["Run at login", "settings.runAtLogin.label"],
 	["If enabled, Tracky Mouse will automatically start when you log into your computer.", "settings.runAtLogin.description"],
-	["Makes Tracky Mouse start automatically when you log into your computer.", "settings.runAtLogin.descriptionAlternate"],
+	["Makes Tracky Mouse start automatically when you log into your computer.", "settings.runAtLogin.description.alt1"],
 	["Check for updates", "settings.checkForUpdates.label"],
 	["If enabled, Tracky Mouse will automatically check for updates when it starts.", "settings.checkForUpdates.description"],
-	["Notifies you of new versions of Tracky Mouse.", "settings.checkForUpdates.descriptionAlternate"],
-	["Notifies you when a new version of Tracky Mouse is available.", "settings.checkForUpdates.descriptionAvailable"],
+	["Notifies you of new versions of Tracky Mouse.", "settings.checkForUpdates.description.alt1"],
+	["Notifies you when a new version of Tracky Mouse is available.", "settings.checkForUpdates.description.alt2"],
 	["Language", "settings.language.label"],
 	["Select the language for the Tracky Mouse interface.", "settings.language.description"],
-	["Changes the language Tracky Mouse is displayed in.", "settings.language.descriptionAlternate"],
+	["Changes the language Tracky Mouse is displayed in.", "settings.language.description.alt1"],
 	["Options:", "settings.options.label"],
 	["Camera %0", "video.cameraSource.cameraNumber"],
 	["Unavailable", "common.unavailable"],
@@ -218,6 +218,28 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	["Update Failed", "desktop.updater.updateFailed.title"],
 	["Open download page", "desktop.updater.action.openDownloadPage"],
 	["Close", "common.close"],
+]);
+
+const semanticKeyRenameMap = Object.fromEntries([
+	["settings.tiltInfluence.sliderMinOpticalFlow", "settings.tiltInfluence.sliderMin.alt1"],
+	["settings.tiltInfluence.sliderMinPointTracking2d", "settings.tiltInfluence.sliderMin"],
+	["settings.tiltInfluence.sliderMaxHeadTilt", "settings.tiltInfluence.sliderMax.alt1"],
+	["settings.tiltInfluence.sliderMaxHeadTilt3d", "settings.tiltInfluence.sliderMax"],
+	["settings.tiltInfluence.descriptionShort", "settings.tiltInfluence.description.alt1"],
+	["settings.pointTracking.acceleration.descriptionLegacy", "settings.pointTracking.acceleration.description.alt1"],
+	["settings.pointTracking.acceleration.descriptionAlternate", "settings.pointTracking.acceleration.description.alt2"],
+	["settings.headTilt.horizontalOffset.descriptionLegacy", "settings.headTilt.horizontalOffset.description.alt1"],
+	["settings.headTilt.horizontalOffset.descriptionAlternate", "settings.headTilt.horizontalOffset.description.alt2"],
+	["settings.headTilt.verticalOffset.descriptionLegacy", "settings.headTilt.offset.description.alt1"],
+	["settings.delayBeforeDragging.descriptionLegacy", "settings.delayBeforeDragging.description.alt1"],
+	["settings.cameraSource.descriptionLegacy", "settings.cameraSource.description.alt1"],
+	["settings.startEnabled.descriptionAlternate", "settings.startEnabled.description.alt1"],
+	["settings.startEnabled.descriptionImmediate", "settings.startEnabled.description.alt2"],
+	["settings.startEnabled.descriptionAutomatic", "settings.startEnabled.description.alt3"],
+	["settings.runAtLogin.descriptionAlternate", "settings.runAtLogin.description.alt1"],
+	["settings.checkForUpdates.descriptionAlternate", "settings.checkForUpdates.description.alt1"],
+	["settings.checkForUpdates.descriptionAvailable", "settings.checkForUpdates.description.alt2"],
+	["settings.language.descriptionAlternate", "settings.language.description.alt1"],
 ]);
 
 const todoCallPattern = /t\("@TODO_KEY",\s*\{\s*defaultValue:\s*("(?:[^"\\]|\\[\s\S])*"|'(?:[^'\\]|\\[\s\S])*'|`(?:[^`\\]|\\[\s\S])*`)\s*\}\)/g;
@@ -298,6 +320,21 @@ function printModeSummary({ renameSource, renameLocales, apply }) {
 	}
 }
 
+function replaceQuotedValue(content, oldValue, newValue) {
+	let nextContent = content;
+	let replacementCount = 0;
+	for (const quote of ['"', "'"]) {
+		const oldLiteral = `${quote}${oldValue}${quote}`;
+		const newLiteral = `${quote}${newValue}${quote}`;
+		if (nextContent.includes(oldLiteral)) {
+			const count = nextContent.split(oldLiteral).length - 1;
+			nextContent = nextContent.split(oldLiteral).join(newLiteral);
+			replacementCount += count;
+		}
+	}
+	return { nextContent, replacementCount };
+}
+
 function replaceTodoKeysInSource({ apply }) {
 	const files = listSourceFiles();
 	const missing = [];
@@ -332,6 +369,38 @@ function replaceTodoKeysInSource({ apply }) {
 	return changesByFile;
 }
 
+function renameSemanticKeysInSource({ apply }) {
+	const files = listSourceFiles();
+	const changesByFile = {};
+	for (const filePath of files) {
+		const content = fs.readFileSync(filePath, "utf8");
+		let nextContent = content;
+		let replacementCount = 0;
+		for (const [oldKey, newKey] of Object.entries(semanticKeyRenameMap)) {
+			const result = replaceQuotedValue(nextContent, oldKey, newKey);
+			nextContent = result.nextContent;
+			replacementCount += result.replacementCount;
+		}
+		if (nextContent !== content) {
+			changesByFile[normalizeRelativePath(filePath)] = replacementCount;
+			if (apply) {
+				fs.writeFileSync(filePath, nextContent, "utf8");
+			}
+		}
+	}
+	return changesByFile;
+}
+
+function mergeChangeCounts(...changeMaps) {
+	const merged = {};
+	for (const changeMap of changeMaps) {
+		for (const [filePath, count] of Object.entries(changeMap)) {
+			merged[filePath] = (merged[filePath] || 0) + count;
+		}
+	}
+	return merged;
+}
+
 function renameLocaleKeys({ apply }) {
 	const localeFiles = listLocaleFiles();
 	const changesByFile = {};
@@ -342,7 +411,8 @@ function renameLocaleKeys({ apply }) {
 		let changed = false;
 		let replacementCount = 0;
 		for (const [oldKey, value] of Object.entries(translations)) {
-			const newKey = keyMap[oldKey] ?? oldKey;
+			const semanticKey = keyMap[oldKey] ?? oldKey;
+			const newKey = semanticKeyRenameMap[semanticKey] ?? semanticKey;
 			if (newKey !== oldKey) {
 				changed = true;
 				replacementCount += 1;
@@ -373,7 +443,10 @@ function main() {
 		process.exit(1);
 	}
 	printModeSummary({ renameSource, renameLocales, apply });
-	const sourceChanges = renameSource ? replaceTodoKeysInSource({ apply }) : {};
+	const sourceChanges = renameSource ? mergeChangeCounts(
+		replaceTodoKeysInSource({ apply }),
+		renameSemanticKeysInSource({ apply }),
+	) : {};
 	const localeChanges = renameLocales ? renameLocaleKeys({ apply }) : {};
 	if (renameSource) {
 		console.log(`Source files to ${apply ? "update" : "update (dry run)"}: ${Object.keys(sourceChanges).length}`);
