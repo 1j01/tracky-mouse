@@ -179,13 +179,13 @@ module.exports = {
 					// Wording options: "Update Git Repo", "Update via Git", "Update from Git", or just "Update"?
 					// (formerly "Pull Tag")
 					const buttons = repoRoot
-						? [t('Update from Git'), t('Remind me later'), t('Skip this version')]
-						: [t('Download'), t('Remind me later'), t('Skip this version')];
+						? [t("@TODO_KEY", { defaultValue: 'Update from Git' }), t("@TODO_KEY", { defaultValue: 'Remind me later' }), t("@TODO_KEY", { defaultValue: 'Skip this version' })]
+						: [t("@TODO_KEY", { defaultValue: 'Download' }), t("@TODO_KEY", { defaultValue: 'Remind me later' }), t("@TODO_KEY", { defaultValue: 'Skip this version' })];
 					const { response: buttonIndex } = await dialog.showMessageBox({
 						type: 'info',
-						title: t('Update Available'),
-						message: `${t("A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1.").replace("%0", latestVersion).replace("%1", currentVersion)}` +
-							(repoRoot ? "\n\n" + t('Since this is a git repository, the update can be pulled directly.') : ''),
+						title: t("@TODO_KEY", { defaultValue: 'Update Available' }),
+						message: `${t("@TODO_KEY", { defaultValue: "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1." }).replace("%0", latestVersion).replace("%1", currentVersion)}` +
+							(repoRoot ? "\n\n" + t("@TODO_KEY", { defaultValue: 'Since this is a git repository, the update can be pulled directly.' }) : ''),
 						buttons,
 						defaultId: 0,
 						cancelId: 1
@@ -203,9 +203,9 @@ module.exports = {
 
 								const { response: restartChoice } = await dialog.showMessageBox({
 									type: 'info',
-									title: t('Update Successful'),
-									message: `${t("Checked out %0. Restart the app to use the updated version.").replace("%0", latestVersion)}`,
-									buttons: [t('Restart Now'), t('Later')],
+									title: t("@TODO_KEY", { defaultValue: 'Update Successful' }),
+									message: `${t("@TODO_KEY", { defaultValue: "Checked out %0. Restart the app to use the updated version." }).replace("%0", latestVersion)}`,
+									buttons: [t("@TODO_KEY", { defaultValue: 'Restart Now' }), t("@TODO_KEY", { defaultValue: 'Later' })],
 									defaultId: 0,
 									cancelId: 1
 								});
@@ -218,10 +218,10 @@ module.exports = {
 								return;
 							} catch (error) {
 								const friendlyMessage = {
-									fetch: t("Couldn't fetch updates from git."),
-									checkout: t("Couldn't checkout the latest version in the local git repository. You may have uncommitted changes."),
-									install: t("Failed to install dependencies for the new version after checking it out from git.")
-								}[step] ?? t("An error occurred while updating from git.");
+									fetch: t("@TODO_KEY", { defaultValue: "Couldn't fetch updates from git." }),
+									checkout: t("@TODO_KEY", { defaultValue: "Couldn't checkout the latest version in the local git repository. You may have uncommitted changes." }),
+									install: t("@TODO_KEY", { defaultValue: "Failed to install dependencies for the new version after checking it out from git." })
+								}[step] ?? t("@TODO_KEY", { defaultValue: "An error occurred while updating from git." });
 								console.error(`Error during git update at step "${step}":`, friendlyMessage, error);
 								try {
 									const Sentry = require("@sentry/electron/main");
@@ -233,9 +233,9 @@ module.exports = {
 								}
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
 									type: 'error',
-									title: t('Update Failed'),
+									title: t("@TODO_KEY", { defaultValue: 'Update Failed' }),
 									message: `${friendlyMessage}\n\n${error.message}`,
-									buttons: [t('Open download page'), t('Close')],
+									buttons: [t("@TODO_KEY", { defaultValue: 'Open download page' }), t("@TODO_KEY", { defaultValue: 'Close' })],
 									defaultId: 0,
 									cancelId: 1
 								});
