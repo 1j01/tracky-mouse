@@ -1,8 +1,15 @@
 const fs = require("fs");
 const path = require("path");
-const fg = require("fast-glob");
 
 const rootDir = path.join(__dirname, "..");
+const ignoredDirNames = new Set(["node_modules", "out", ".git"]);
+const excludedSourceDirs = new Set(["core/lib"]);
+const sourceRoots = [
+	path.join(rootDir, "core"),
+	path.join(rootDir, "desktop-app", "src"),
+	path.join(rootDir, "scripts"),
+	path.join(rootDir, "website"),
+];
 
 const keyMap = Object.fromEntries([
 	["configuration object required for initDwellClicking", "api.errors.configRequired"],
@@ -107,6 +114,8 @@ Could also be used to right click with the dwell clicker in a pinch.`, "settings
 	["Locks mouse movement during the start of a click to prevent accidental dragging.", "settings.delayBeforeDragging.descriptionLegacy"],
 	[`Prevents mouse movement for the specified time after a click starts.
 You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.descriptionAlternate"],
+	[`Prevents mouse movement for the specified time after a click starts.
+					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.descriptionAlternate"],
 	[`Locks mouse movement for the given duration during the start of a click.
 You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.`, "settings.delayBeforeDragging.description"],
 	["Video", "settings.sections.video.label"],
@@ -217,34 +226,88 @@ function evaluateLiteral(literal) {
 	return Function(`"use strict"; return (${literal});`)();
 }
 
-function replaceTodoKeysInSource() {
-	const files = fg.sync([
-		"core/**/*.js",
-		"desktop-app/src/**/*.js",
-		"scripts/**/*.js",
-		"website/**/*.js",
-		"*.js",
-		"*.ts",
-	], {
-		cwd: rootDir,
-		absolute: true,
-		ignore: [
-			"**/node_modules/**",
-			"core/lib/**",
-			"desktop-app/bin/**",
-			"desktop-app/build/**",
-			"**/out/**",
-			"website/core/**",
-			"website/images/**",
-		],
-	});
+function normalizeRelativePath(filePath) {
+	return path.relative(rootDir, filePath).split(path.sep).join("/");
+}
+
+function shouldIgnoreDirectory(dirPath) {
+	if (fs.lstatSync(dirPath).isSymbolicLink()) {
+		return true;
+	}
+	const relativePath = normalizeRelativePath(dirPath);
+	if (excludedSourceDirs.has(relativePath)) {
+		return true;
+	}
+	return ignoredDirNames.has(path.basename(dirPath));
+}
+
+function collectFilesRecursively(dirPath, predicate, results = []) {
+	for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
+		const fullPath = path.join(dirPath, entry.name);
+		if (entry.isDirectory()) {
+			if (!shouldIgnoreDirectory(fullPath)) {
+				collectFilesRecursively(fullPath, predicate, results);
+			}
+			continue;
+		}
+		if (entry.isFile() && predicate(fullPath)) {
+			results.push(fullPath);
+		}
+	}
+	return results;
+}
+
+function listSourceFiles() {
+	const sourceFiles = sourceRoots.flatMap((dirPath) => collectFilesRecursively(dirPath, (filePath) => filePath.endsWith(".js")));
+	for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
+		if (!entry.isFile()) {
+			continue;
+		}
+		const fullPath = path.join(rootDir, entry.name);
+		if (fullPath.endsWith(".js") || fullPath.endsWith(".ts")) {
+			sourceFiles.push(fullPath);
+		}
+	}
+	return sourceFiles;
+}
+
+function listLocaleFiles() {
+	const localesDir = path.join(rootDir, "core", "locales");
+	return fs.readdirSync(localesDir, { withFileTypes: true })
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => path.join(localesDir, entry.name, "translation.json"))
+		.filter((filePath) => fs.existsSync(filePath));
+}
+
+function formatPlan(changesByFile) {
+	return Object.entries(changesByFile)
+		.sort(([fileA], [fileB]) => fileA.localeCompare(fileB))
+		.map(([filePath, count]) => `- ${filePath}: ${count} replacement${count === 1 ? "" : "s"}`)
+		.join("\n");
+}
+
+function printModeSummary({ renameSource, renameLocales, apply }) {
+	console.log(apply ? "Mode: APPLY" : "Mode: DRY RUN (no files will be modified)");
+	if (renameSource) {
+		console.log(`Source roots: ${sourceRoots.map(normalizeRelativePath).join(", ")}, plus top-level *.js/*.ts`);
+		console.log(`Excluded source dirs: ${Array.from(excludedSourceDirs).join(", ") || "(none)"}`);
+		console.log("Symlinked directories are skipped.");
+	}
+	if (renameLocales) {
+		console.log("Locale files: core/locales/*/translation.json");
+	}
+}
+
+function replaceTodoKeysInSource({ apply }) {
+	const files = listSourceFiles();
 	const missing = [];
-	let updatedFiles = 0;
+	const changesByFile = {};
 	for (const filePath of files) {
 		const content = fs.readFileSync(filePath, "utf8");
 		if (!content.includes("@TODO_KEY")) {
 			continue;
 		}
+		let replacementCount = 0;
 		const nextContent = content.replace(todoCallPattern, (match, literal) => {
 			const oldKey = evaluateLiteral(literal);
 			const newKey = keyMap[oldKey];
@@ -252,60 +315,81 @@ function replaceTodoKeysInSource() {
 				missing.push({ filePath, oldKey });
 				return match;
 			}
+			replacementCount += 1;
 			return `t(${JSON.stringify(newKey)}, { defaultValue: ${literal} })`;
 		});
 		if (nextContent !== content) {
-			fs.writeFileSync(filePath, nextContent, "utf8");
-			updatedFiles += 1;
+			changesByFile[normalizeRelativePath(filePath)] = replacementCount;
+			if (apply) {
+				fs.writeFileSync(filePath, nextContent, "utf8");
+			}
 		}
 	}
 	if (missing.length > 0) {
-		const lines = missing.map(({ filePath, oldKey }) => `${path.relative(rootDir, filePath)} -> ${JSON.stringify(oldKey)}`);
+		const lines = missing.map(({ filePath, oldKey }) => `${normalizeRelativePath(filePath)} -> ${JSON.stringify(oldKey)}`);
 		throw new Error(`Missing semantic key mappings:\n${lines.join("\n")}`);
 	}
-	return updatedFiles;
+	return changesByFile;
 }
 
-function renameLocaleKeys() {
-	const localeFiles = fg.sync(["core/locales/*/translation.json"], {
-		cwd: rootDir,
-		absolute: true,
-	});
-	let updatedFiles = 0;
+function renameLocaleKeys({ apply }) {
+	const localeFiles = listLocaleFiles();
+	const changesByFile = {};
 	for (const filePath of localeFiles) {
 		const content = fs.readFileSync(filePath, "utf8");
 		const translations = JSON.parse(content);
 		const renamed = {};
 		let changed = false;
+		let replacementCount = 0;
 		for (const [oldKey, value] of Object.entries(translations)) {
 			const newKey = keyMap[oldKey] ?? oldKey;
 			if (newKey !== oldKey) {
 				changed = true;
+				replacementCount += 1;
 			}
 			if (Object.prototype.hasOwnProperty.call(renamed, newKey)) {
-				throw new Error(`Duplicate target key ${newKey} while processing ${path.relative(rootDir, filePath)}`);
+				throw new Error(`Duplicate target key ${newKey} while processing ${normalizeRelativePath(filePath)}`);
 			}
 			renamed[newKey] = value;
 		}
 		if (changed) {
-			fs.writeFileSync(filePath, `${JSON.stringify(renamed, null, 2)}\n`, "utf8");
-			updatedFiles += 1;
+			changesByFile[normalizeRelativePath(filePath)] = replacementCount;
+			if (apply) {
+				fs.writeFileSync(filePath, `${JSON.stringify(renamed, null, 2)}\n`, "utf8");
+			}
 		}
 	}
-	return updatedFiles;
+	return changesByFile;
 }
 
 function main() {
 	const args = new Set(process.argv.slice(2));
 	const renameSource = args.has("--source");
 	const renameLocales = args.has("--locales");
+	const apply = args.has("--apply");
 	if (!renameSource && !renameLocales) {
-		console.error("Usage: node scripts/rename-translation-keys.js --source --locales");
+		console.error("Usage: node scripts/rename-translation-keys.js [--source] [--locales] [--apply]");
+		console.error("By default the script performs a dry run and prints the files it would change.");
 		process.exit(1);
 	}
-	const updatedSourceFiles = renameSource ? replaceTodoKeysInSource() : 0;
-	const updatedLocaleFiles = renameLocales ? renameLocaleKeys() : 0;
-	console.log(`Updated ${updatedSourceFiles} source file(s) and ${updatedLocaleFiles} locale file(s).`);
+	printModeSummary({ renameSource, renameLocales, apply });
+	const sourceChanges = renameSource ? replaceTodoKeysInSource({ apply }) : {};
+	const localeChanges = renameLocales ? renameLocaleKeys({ apply }) : {};
+	if (renameSource) {
+		console.log(`Source files to ${apply ? "update" : "update (dry run)"}: ${Object.keys(sourceChanges).length}`);
+		if (Object.keys(sourceChanges).length > 0) {
+			console.log(formatPlan(sourceChanges));
+		}
+	}
+	if (renameLocales) {
+		console.log(`Locale files to ${apply ? "update" : "update (dry run)"}: ${Object.keys(localeChanges).length}`);
+		if (Object.keys(localeChanges).length > 0) {
+			console.log(formatPlan(localeChanges));
+		}
+	}
+	if (!apply) {
+		console.log("Dry run complete. Re-run with --apply to write these changes.");
+	}
 }
 
 main();
