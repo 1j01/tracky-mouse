@@ -1,9 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const fg = require("fast-glob");
 
 const rootDir = path.join(__dirname, "..");
 const thisScriptPath = path.resolve(__filename);
-const ignoredDirNames = new Set(["node_modules", "out", ".git"]);
+// Removed unused ignoredDirNames
 const excludedSourceDirs = new Set(["core/lib"]);
 const sourceRoots = [
 	path.join(rootDir, "core"),
@@ -253,48 +254,30 @@ function normalizeRelativePath(filePath) {
 	return path.relative(rootDir, filePath).split(path.sep).join("/");
 }
 
-function shouldIgnoreDirectory(dirPath) {
-	if (fs.lstatSync(dirPath).isSymbolicLink()) {
-		return true;
-	}
-	const relativePath = normalizeRelativePath(dirPath);
-	if (excludedSourceDirs.has(relativePath)) {
-		return true;
-	}
-	return ignoredDirNames.has(path.basename(dirPath));
-}
 
-function collectFilesRecursively(dirPath, predicate, results = []) {
-	for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
-		const fullPath = path.join(dirPath, entry.name);
-		if (entry.isDirectory()) {
-			if (!shouldIgnoreDirectory(fullPath)) {
-				collectFilesRecursively(fullPath, predicate, results);
-			}
-			continue;
-		}
-		if (entry.isFile() && predicate(fullPath)) {
-			results.push(fullPath);
-		}
-	}
-	return results;
-}
 
 function listSourceFiles() {
-	const sourceFiles = sourceRoots.flatMap((dirPath) => collectFilesRecursively(
-		dirPath,
-		(filePath) => filePath.endsWith(".js") && path.resolve(filePath) !== thisScriptPath,
-	));
-	for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
-		if (!entry.isFile()) {
-			continue;
-		}
-		const fullPath = path.join(rootDir, entry.name);
-		if ((fullPath.endsWith(".js") || fullPath.endsWith(".ts")) && path.resolve(fullPath) !== thisScriptPath) {
-			sourceFiles.push(fullPath);
-		}
-	}
-	return sourceFiles;
+	// Use fast-glob for efficient file discovery
+	const patterns = sourceRoots.map((dirPath) => {
+		// Exclude core/lib and ignored dirs
+		const rel = path.relative(rootDir, dirPath).replace(/\\/g, "/");
+		return `${rel.replace(/\/$/, "")}/**/*.js`;
+	});
+	// Exclude core/lib and ignored dirs
+	const ignore = [
+		"core/lib/**",
+		"**/node_modules/**",
+		"**/out/**",
+		"**/.git/**",
+	];
+	const files = fg.sync(patterns, {
+		cwd: rootDir,
+		ignore,
+		absolute: true,
+		followSymbolicLinks: false,
+	});
+	// Exclude this script itself
+	return files.filter((filePath) => path.resolve(filePath) !== thisScriptPath);
 }
 
 function listLocaleFiles() {
