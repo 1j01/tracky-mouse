@@ -4,13 +4,9 @@ const fg = require("fast-glob");
 
 const rootDir = path.join(__dirname, "..");
 const thisScriptPath = path.resolve(__filename);
-// Removed unused ignoredDirNames
-const excludedSourceDirs = new Set(["core/lib"]);
 const sourceRoots = [
 	path.join(rootDir, "core"),
 	path.join(rootDir, "desktop-app", "src"),
-	path.join(rootDir, "scripts"),
-	path.join(rootDir, "website"),
 ];
 
 const keyMap = Object.fromEntries([
@@ -257,13 +253,10 @@ function normalizeRelativePath(filePath) {
 
 
 function listSourceFiles() {
-	// Use fast-glob for efficient file discovery
 	const patterns = sourceRoots.map((dirPath) => {
-		// Exclude core/lib and ignored dirs
 		const rel = path.relative(rootDir, dirPath).replace(/\\/g, "/");
 		return `${rel.replace(/\/$/, "")}/**/*.js`;
 	});
-	// Exclude core/lib and ignored dirs
 	const ignore = [
 		"core/lib/**",
 		"**/node_modules/**",
@@ -276,8 +269,7 @@ function listSourceFiles() {
 		absolute: true,
 		followSymbolicLinks: false,
 	});
-	// Exclude this script itself
-	return files.filter((filePath) => path.resolve(filePath) !== thisScriptPath);
+	return files;
 }
 
 function listLocaleFiles() {
@@ -299,7 +291,6 @@ function printModeSummary({ renameSource, renameLocales, apply }) {
 	console.log(apply ? "Mode: APPLY" : "Mode: DRY RUN (no files will be modified)");
 	if (renameSource) {
 		console.log(`Source roots: ${sourceRoots.map(normalizeRelativePath).join(", ")}, plus top-level *.js/*.ts`);
-		console.log(`Excluded source dirs: ${Array.from(excludedSourceDirs).join(", ") || "(none)"}`);
 		console.log("Symlinked directories are skipped.");
 	}
 	if (renameLocales) {
