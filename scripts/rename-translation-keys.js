@@ -3,11 +3,6 @@ const path = require("path");
 const fg = require("fast-glob");
 
 const rootDir = path.join(__dirname, "..");
-const thisScriptPath = path.resolve(__filename);
-const sourceRoots = [
-	path.join(rootDir, "core"),
-	path.join(rootDir, "desktop-app", "src"),
-];
 
 const keyMap = Object.fromEntries([
 	["configuration object required for initDwellClicking", "api.errors.configRequired"],
@@ -232,10 +227,10 @@ function normalizeRelativePath(filePath) {
 
 
 function listSourceFiles() {
-	const patterns = sourceRoots.map((dirPath) => {
-		const rel = path.relative(rootDir, dirPath).replace(/\\/g, "/");
-		return `${rel.replace(/\/$/, "")}/**/*.js`;
-	});
+	const patterns = [
+		"core/**/*.js",
+		"desktop-app/src/**/*.js",
+	];
 	const ignore = [
 		"core/lib/**",
 		"**/node_modules/**",
@@ -268,13 +263,6 @@ function formatPlan(changesByFile) {
 
 function printModeSummary({ renameSource, renameLocales, apply }) {
 	console.log(apply ? "Mode: APPLY" : "Mode: DRY RUN (no files will be modified)");
-	if (renameSource) {
-		console.log(`Source roots: ${sourceRoots.map(normalizeRelativePath).join(", ")}, plus top-level *.js/*.ts`);
-		console.log("Symlinked directories are skipped.");
-	}
-	if (renameLocales) {
-		console.log("Locale files: core/locales/*/translation.json");
-	}
 }
 
 function replaceTodoKeysInSource({ apply }) {
