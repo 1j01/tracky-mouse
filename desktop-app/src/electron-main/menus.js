@@ -23,14 +23,14 @@ app.getVersion = () =>
 
 function createMenu() {
 	const aboutItem = {
-		label: t("@TODO_KEY", { defaultValue: 'About Tracky Mouse' }),
+		label: t("desktop.about.title", { defaultValue: 'About Tracky Mouse' }),
 		click: async () => {
 			const openAboutWindow = require('about-window').default;
 			openAboutWindow({
 				icon_path: join(__dirname, '../../images/tracky-mouse-logo-512.png'),
 				bug_report_url: 'https://github.com/1j01/tracky-mouse/issues',
 				homepage: 'https://trackymouse.js.org',
-				description: t("@TODO_KEY", { defaultValue: 'Control your computer with your webcam.' }),
+				description: t("desktop.about.description", { defaultValue: 'Control your computer with your webcam.' }),
 				license: 'MIT',
 			});
 		},
@@ -59,38 +59,38 @@ function createMenu() {
 			: []),
 		// { role: 'fileMenu' }
 		{
-			label: t("@TODO_KEY", { defaultValue: 'File' }),
+			label: t("desktop.menu.file", { defaultValue: 'File' }),
 			submenu: [
 				{
-					label: t("@TODO_KEY", { defaultValue: 'Export Settings' }),
+					label: t("desktop.menu.exportSettings", { defaultValue: 'Export Settings' }),
 					click: async () => {
 						const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 						const defaultPath = join(app.getPath('documents'), 'tracky-mouse-settings.json');
 						const { filePath } = await dialog.showSaveDialog({
-							title: t("@TODO_KEY", { defaultValue: 'Export Settings' }),
-							buttonLabel: t("@TODO_KEY", { defaultValue: 'Export' }),
+							title: t("desktop.menu.exportSettings", { defaultValue: 'Export Settings' }),
+							buttonLabel: t("desktop.menu.export", { defaultValue: 'Export' }),
 							defaultPath,
-							filters: [{ name: t("@TODO_KEY", { defaultValue: 'JSON' }), extensions: ['json'] }],
+							filters: [{ name: t("common.fileTypeJson", { defaultValue: 'JSON' }), extensions: ['json'] }],
 						});
 						if (!filePath) return;
 						try {
 							await copyFile(settingsPath, filePath);
 						} catch (error) {
-							await dialog.showErrorBox(t("@TODO_KEY", { defaultValue: 'Export Settings' }), t("@TODO_KEY", { defaultValue: 'Failed to export settings.' }) + '\n\n' + error.message);
+							await dialog.showErrorBox(t("desktop.menu.exportSettings", { defaultValue: 'Export Settings' }), t("desktop.menu.exportSettingsError", { defaultValue: 'Failed to export settings.' }) + '\n\n' + error.message);
 						}
 					},
 				},
 				{
-					label: t("@TODO_KEY", { defaultValue: 'Import Settings' }),
+					label: t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }),
 					click: async () => {
 						const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 						const defaultPath = app.getPath('documents');
 						const { canceled, filePaths } = await dialog.showOpenDialog({
-							title: t("@TODO_KEY", { defaultValue: 'Import Settings' }),
-							buttonLabel: t("@TODO_KEY", { defaultValue: 'Import' }),
+							title: t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }),
+							buttonLabel: t("desktop.menu.import", { defaultValue: 'Import' }),
 							defaultPath,
 							properties: ['openFile'],
-							filters: [{ name: t("@TODO_KEY", { defaultValue: 'JSON' }), extensions: ['json'] }],
+							filters: [{ name: t("common.fileTypeJson", { defaultValue: 'JSON' }), extensions: ['json'] }],
 						});
 						if (canceled) return;
 						const [filePath] = filePaths;
@@ -98,7 +98,7 @@ function createMenu() {
 						try {
 							json = await readFile(filePath, 'utf8');
 						} catch (error) {
-							await dialog.showErrorBox(t("@TODO_KEY", { defaultValue: 'Import Settings' }), t("@TODO_KEY", { defaultValue: 'Failed to read selected file.' }) + '\n\n' + error.message);
+							await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importReadError", { defaultValue: 'Failed to read selected file.' }) + '\n\n' + error.message);
 							return;
 						}
 						// Backup settings
@@ -110,7 +110,7 @@ function createMenu() {
 							if (error.code === 'ENOENT') {
 								console.log('Never mind, no existing settings to backup.');
 							} else {
-								await dialog.showErrorBox(t("@TODO_KEY", { defaultValue: 'Import Settings' }), t("@TODO_KEY", { defaultValue: 'Failed to backup current settings before import.' }) + '\n\n' + error.message);
+								await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importBackupError", { defaultValue: 'Failed to backup current settings before import.' }) + '\n\n' + error.message);
 								return;
 							}
 						}
@@ -119,7 +119,7 @@ function createMenu() {
 						try {
 							await writeFile(settingsPath, json);
 						} catch (error) {
-							await dialog.showErrorBox(t("@TODO_KEY", { defaultValue: 'Import Settings' }), t("@TODO_KEY", { defaultValue: 'Failed to import settings.' }) + '\n\n' + error.message);
+							await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importError", { defaultValue: 'Failed to import settings.' }) + '\n\n' + error.message);
 							return;
 						}
 						// Reload settings
@@ -134,7 +134,7 @@ function createMenu() {
 		},
 		// { role: 'editMenu' }
 		{
-			label: t("@TODO_KEY", { defaultValue: 'Edit' }),
+			label: t("desktop.menu.edit", { defaultValue: 'Edit' }),
 			submenu: [
 				{ role: 'undo' },
 				{ role: 'redo' },
@@ -149,7 +149,7 @@ function createMenu() {
 						{ role: 'selectAll' },
 						{ type: 'separator' },
 						{
-							label: t("@TODO_KEY", { defaultValue: 'Speech' }),
+							label: t("desktop.menu.speech", { defaultValue: 'Speech' }),
 							submenu: [
 								{ role: 'startSpeaking' },
 								{ role: 'stopSpeaking' }
@@ -165,13 +165,13 @@ function createMenu() {
 		},
 		// { role: 'viewMenu' }
 		{
-			label: t("@TODO_KEY", { defaultValue: 'View' }),
+			label: t("desktop.menu.view", { defaultValue: 'View' }),
 			submenu: [
 				{ role: 'reload' },
 				{ role: 'forceReload' },
 				{ role: 'toggleDevTools' },
 				{
-					label: t("@TODO_KEY", { defaultValue: 'Toggle Developer Tools (Screen Overlay)' }),
+					label: t("desktop.menu.toggleScreenOverlayDevtools", { defaultValue: 'Toggle Developer Tools (Screen Overlay)' }),
 					click: async () => {
 						const { BrowserWindow } = require('electron');
 						// XXX: localization hazard: relying on the untranslated window title
@@ -193,7 +193,7 @@ function createMenu() {
 		},
 		// { role: 'windowMenu' }
 		{
-			label: t("@TODO_KEY", { defaultValue: 'Window' }),
+			label: t("desktop.menu.window", { defaultValue: 'Window' }),
 			submenu: [
 				{ role: 'minimize' },
 				{ role: 'zoom' },
@@ -213,14 +213,14 @@ function createMenu() {
 			role: 'help',
 			submenu: [
 				{
-					label: t("@TODO_KEY", { defaultValue: 'Home Page' }),
+					label: t("desktop.menu.homePage", { defaultValue: 'Home Page' }),
 					click: async () => {
 						const { shell } = require('electron');
 						await shell.openExternal('https://trackymouse.js.org');
 					},
 				},
 				{
-					label: t("@TODO_KEY", { defaultValue: 'GitHub Repository' }),
+					label: t("desktop.menu.githubRepository", { defaultValue: 'GitHub Repository' }),
 					click: async () => {
 						const { shell } = require('electron');
 						await shell.openExternal('https://github.com/1j01/tracky-mouse');
