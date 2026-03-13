@@ -4,7 +4,7 @@ const { t } = require('./i18n');
 
 const parser = new ArgumentParser({
 	prog: "tracky-mouse",
-	description: t("cli.description", { defaultValue: "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly." }),
+	description: t("@TODO_KEY", { defaultValue: "Control your mouse hands-free. This CLI controls the running Tracky Mouse app. It's meant for external programs like a voice command system to toggle Tracky Mouse and adjust settings on the fly." }),
 	// 	epilog: `Configuration Options (for use with --set, --adjust, and --get):
 	// - "startEnabled"              default: false  controls whether head tracking is enabled when the app starts.
 	// - "runAtLogin"                default: false  controls whether the app starts when you log in.
@@ -27,46 +27,46 @@ const parser = new ArgumentParser({
 
 // Should this support loading by name or by file path? Should it have two separate options?
 // parser.add_argument("--profile", {
-// 	help: t("cli.args.profile.description", { defaultValue: "The settings profile to use." }),
+// 	help: t("@TODO_KEY", { defaultValue: "The settings profile to use." }),
 // 	nargs: 1,
 // 	metavar: "PROFILE",
 // });
 
 // parser.add_argument("--set", {
-// 	help: t("cli.args.set.description", { defaultValue: "Change an option to a particular value. (Also outputs the new value, which may be constrained to some limits.)" }),
+// 	help: t("@TODO_KEY", { defaultValue: "Change an option to a particular value. (Also outputs the new value, which may be constrained to some limits.)" }),
 // 	nargs: 2,
 // 	metavar: ["OPTION", "VALUE"],
 // 	action: "append",
 // });
 
 // parser.add_argument("--adjust", {
-// 	help: t("cli.args.adjust.description", { defaultValue: "Adjust an option by an amount relative to its current value. (Also outputs the new value, which may be constrained to some limits.)" }),
+// 	help: t("@TODO_KEY", { defaultValue: "Adjust an option by an amount relative to its current value. (Also outputs the new value, which may be constrained to some limits.)" }),
 // 	nargs: 2,
 // 	metavar: ["OPTION", "DELTA"],
 // 	action: "append",
 // });
 
 // parser.add_argument("--get", {
-// 	help: t("cli.args.get.description", { defaultValue: "Outputs the current value of an option." }),
+// 	help: t("@TODO_KEY", { defaultValue: "Outputs the current value of an option." }),
 // 	nargs: 1,
 // 	metavar: "OPTION",
 // 	action: "append",
 // });
 
 parser.add_argument("--start", {
-	help: t("cli.args.start.description", { defaultValue: "Start head tracking." }),
+	help: t("@TODO_KEY", { defaultValue: "Start head tracking." }),
 	action: "store_true",
 });
 
 parser.add_argument("--stop", {
-	help: t("cli.args.stop.description", { defaultValue: "Stop head tracking." }),
+	help: t("@TODO_KEY", { defaultValue: "Stop head tracking." }),
 	action: "store_true",
 });
 
 parser.add_argument("-v", "--version", {
 	// action: "version",
 	// version: require("../../package.json").version,
-	help: t("cli.args.version.description", { defaultValue: "Show the version number." }),
+	help: t("@TODO_KEY", { defaultValue: "Show the version number." }),
 	action: "store_true",
 });
 
