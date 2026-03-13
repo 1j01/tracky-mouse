@@ -218,27 +218,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	["Close", "common.close"],
 ]);
 
-const semanticKeyRenameMap = Object.fromEntries([
-	["settings.tiltInfluence.sliderMinOpticalFlow", "settings.tiltInfluence.sliderMin.alt1"],
-	["settings.tiltInfluence.sliderMinPointTracking2d", "settings.tiltInfluence.sliderMin"],
-	["settings.tiltInfluence.sliderMaxHeadTilt", "settings.tiltInfluence.sliderMax.alt1"],
-	["settings.tiltInfluence.sliderMaxHeadTilt3d", "settings.tiltInfluence.sliderMax"],
-	["settings.tiltInfluence.descriptionShort", "settings.tiltInfluence.description.alt1"],
-	["settings.pointTracking.acceleration.descriptionLegacy", "settings.pointTracking.acceleration.description.alt1"],
-	["settings.pointTracking.acceleration.descriptionAlternate", "settings.pointTracking.acceleration.description.alt2"],
-	["settings.headTilt.horizontalOffset.descriptionLegacy", "settings.headTilt.horizontalOffset.description.alt1"],
-	["settings.headTilt.horizontalOffset.descriptionAlternate", "settings.headTilt.horizontalOffset.description.alt2"],
-	["settings.headTilt.verticalOffset.descriptionLegacy", "settings.headTilt.offset.description.alt1"],
-	["settings.delayBeforeDragging.descriptionLegacy", "settings.delayBeforeDragging.description.alt1"],
-	["settings.cameraSource.descriptionLegacy", "settings.cameraSource.description.alt1"],
-	["settings.startEnabled.descriptionAlternate", "settings.startEnabled.description.alt1"],
-	["settings.startEnabled.descriptionImmediate", "settings.startEnabled.description.alt2"],
-	["settings.startEnabled.descriptionAutomatic", "settings.startEnabled.description.alt3"],
-	["settings.runAtLogin.descriptionAlternate", "settings.runAtLogin.description.alt1"],
-	["settings.checkForUpdates.descriptionAlternate", "settings.checkForUpdates.description.alt1"],
-	["settings.checkForUpdates.descriptionAvailable", "settings.checkForUpdates.description.alt2"],
-	["settings.language.descriptionAlternate", "settings.language.description.alt1"],
-]);
 
 const todoCallPattern = /t\("@TODO_KEY",\s*\{\s*defaultValue:\s*("(?:[^"\\]|\\[\s\S])*"|'(?:[^'\\]|\\[\s\S])*'|`(?:[^`\\]|\\[\s\S])*`)\s*\}\)/g;
 
@@ -298,21 +277,6 @@ function printModeSummary({ renameSource, renameLocales, apply }) {
 	}
 }
 
-function replaceQuotedValue(content, oldValue, newValue) {
-	let nextContent = content;
-	let replacementCount = 0;
-	for (const quote of ['"', "'"]) {
-		const oldLiteral = `${quote}${oldValue}${quote}`;
-		const newLiteral = `${quote}${newValue}${quote}`;
-		if (nextContent.includes(oldLiteral)) {
-			const count = nextContent.split(oldLiteral).length - 1;
-			nextContent = nextContent.split(oldLiteral).join(newLiteral);
-			replacementCount += count;
-		}
-	}
-	return { nextContent, replacementCount };
-}
-
 function replaceTodoKeysInSource({ apply }) {
 	const files = listSourceFiles();
 	const missing = [];
@@ -347,38 +311,6 @@ function replaceTodoKeysInSource({ apply }) {
 	return changesByFile;
 }
 
-function renameSemanticKeysInSource({ apply }) {
-	const files = listSourceFiles();
-	const changesByFile = {};
-	for (const filePath of files) {
-		const content = fs.readFileSync(filePath, "utf8");
-		let nextContent = content;
-		let replacementCount = 0;
-		for (const [oldKey, newKey] of Object.entries(semanticKeyRenameMap)) {
-			const result = replaceQuotedValue(nextContent, oldKey, newKey);
-			nextContent = result.nextContent;
-			replacementCount += result.replacementCount;
-		}
-		if (nextContent !== content) {
-			changesByFile[normalizeRelativePath(filePath)] = replacementCount;
-			if (apply) {
-				fs.writeFileSync(filePath, nextContent, "utf8");
-			}
-		}
-	}
-	return changesByFile;
-}
-
-function mergeChangeCounts(...changeMaps) {
-	const merged = {};
-	for (const changeMap of changeMaps) {
-		for (const [filePath, count] of Object.entries(changeMap)) {
-			merged[filePath] = (merged[filePath] || 0) + count;
-		}
-	}
-	return merged;
-}
-
 function renameLocaleKeys({ apply }) {
 	const localeFiles = listLocaleFiles();
 	const changesByFile = {};
@@ -389,8 +321,7 @@ function renameLocaleKeys({ apply }) {
 		let changed = false;
 		let replacementCount = 0;
 		for (const [oldKey, value] of Object.entries(translations)) {
-			const semanticKey = keyMap[oldKey] ?? oldKey;
-			const newKey = semanticKeyRenameMap[semanticKey] ?? semanticKey;
+			const newKey = keyMap[oldKey] ?? oldKey;
 			if (newKey !== oldKey) {
 				changed = true;
 				replacementCount += 1;
@@ -421,10 +352,7 @@ function main() {
 		process.exit(1);
 	}
 	printModeSummary({ renameSource, renameLocales, apply });
-	const sourceChanges = renameSource ? mergeChangeCounts(
-		replaceTodoKeysInSource({ apply }),
-		renameSemanticKeysInSource({ apply }),
-	) : {};
+	const sourceChanges = renameSource ? replaceTodoKeysInSource({ apply }) : {};
 	const localeChanges = renameLocales ? renameLocaleKeys({ apply }) : {};
 	if (renameSource) {
 		console.log(`Source files to ${apply ? "update" : "update (dry run)"}: ${Object.keys(sourceChanges).length}`);
