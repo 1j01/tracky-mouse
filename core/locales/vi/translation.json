@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "cần có config.click",
   "api.errors.configRequired": "cần đối tượng cấu hình cho initDwellClicking",
-  "api.errors.notAFunction": "%0 phải là một hàm",
+  "api.errors.functionRequired": "%0 phải là một hàm",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from không phải là bộ chọn CSS hợp lệ",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from phải là chuỗi bộ chọn CSS, một Element hoặc một hàm",
   "api.errors.retargetFromRequired": "cần có config.retarget[%0].from",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "الخيار ‎config.click‎ مطلوب.",
   "api.errors.configRequired": "كائن إعدادات مطلوب لـ ‎initDwellClicking‎.",
-  "api.errors.notAFunction": "يجب أن يكون ‎%0‎ دالة.",
+  "api.errors.functionRequired": "يجب أن يكون ‎%0‎ دالة.",
   "api.errors.retargetFromInvalidSelector": "‎config.retarget[%0].from‎ ليس محدِّد CSS صالحًا.",
   "api.errors.retargetFromInvalidType": "يجب أن يكون ‎config.retarget[%0].from‎ سلسلة لمحدِّد CSS أو عنصرًا أو دالة.",
   "api.errors.retargetFromRequired": "الحقل ‎config.retarget[%0].from‎ مطلوب.",

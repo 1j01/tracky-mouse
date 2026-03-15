@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click je povinné",
   "api.errors.configRequired": "Pro initDwellClicking je vyžadován konfigurační objekt",
-  "api.errors.notAFunction": "%0 musí být funkce",
+  "api.errors.functionRequired": "%0 musí být funkce",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from není platný CSS selektor",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from musí být řetězec s CSS selektorem, prvek nebo funkce",
   "api.errors.retargetFromRequired": "config.retarget[%0].from je povinné",

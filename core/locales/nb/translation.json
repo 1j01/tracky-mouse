@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click er påkrevd",
   "api.errors.configRequired": "det kreves et konfigurasjonsobjekt for initDwellClicking",
-  "api.errors.notAFunction": "%0 må være en funksjon",
+  "api.errors.functionRequired": "%0 må være en funksjon",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from er ikke en gyldig CSS-selektor",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from må være en CSS-selektorstreng, et Element eller en funksjon",
   "api.errors.retargetFromRequired": "config.retarget[%0].from er påkrevd",

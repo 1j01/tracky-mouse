@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click inahitajika",
   "api.errors.configRequired": "kitu cha usanidi kinahitajika kwa initDwellClicking",
-  "api.errors.notAFunction": "%0 lazima iwe kazi (function)",
+  "api.errors.functionRequired": "%0 lazima iwe kazi (function)",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from si kichagua cha CSS halali",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from lazima iwe nukuu ya kichagua cha CSS, Element, au kazi",
   "api.errors.retargetFromRequired": "config.retarget[%0].from inahitajika",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click beharrezkoa da",
   "api.errors.configRequired": "konfigurazio objektu bat behar da initDwellClicking funtziorako",
-  "api.errors.notAFunction": "%0 funtzio bat izan behar da",
+  "api.errors.functionRequired": "%0 funtzio bat izan behar da",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from ez da CSS hautatzaile baliozkoa",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from CSS hautatzaile katea, Element edo funtzio bat izan behar da",
   "api.errors.retargetFromRequired": "config.retarget[%0].from beharrezkoa da",

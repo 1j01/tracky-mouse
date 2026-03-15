@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click-ը պարտադիր է",
   "api.errors.configRequired": "initDwellClicking-ի համար անհրաժեշտ է կազմաձևման օբյեկտ (configuration object)",
-  "api.errors.notAFunction": "%0-ը պետք է ֆունկցիա լինի",
+  "api.errors.functionRequired": "%0-ը պետք է ֆունկցիա լինի",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from-ը վավեր CSS ընտրիչ չէ",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from-ը պետք է լինի CSS ընտրիչ տող, տարր (Element) կամ ֆունկցիա",
   "api.errors.retargetFromRequired": "config.retarget[%0].from-ը պարտադիր է",

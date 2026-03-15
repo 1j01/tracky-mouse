@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click ю хьажа дӀаяккхар дан",
   "api.errors.configRequired": "initDwellClicking дӀаяккхар configuration-объект хьажа дӀаяккхар дан",
-  "api.errors.notAFunction": "%0 функци болу кхочун ю",
+  "api.errors.functionRequired": "%0 функци болу кхочун ю",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from дӀаболуш CSS-селектор йу цуьнан",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from CSS-селекторийн стринг, элемент юьйина, ю функци болу кхочун ю",
   "api.errors.retargetFromRequired": "config.retarget[%0].from хьажа дӀаяккхар дан",

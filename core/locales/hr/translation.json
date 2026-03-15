@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click je obavezan",
   "api.errors.configRequired": "Za initDwellClicking potreban je konfiguracijski objekt",
-  "api.errors.notAFunction": "%0 mora biti funkcija",
+  "api.errors.functionRequired": "%0 mora biti funkcija",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from nije valjan CSS selektor",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from mora biti CSS selektor (niz), Element ili funkcija",
   "api.errors.retargetFromRequired": "config.retarget[%0].from je obavezan",

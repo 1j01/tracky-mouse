@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "נדרש config.click",
   "api.errors.configRequired": "נדרש אובייקט תצורה עבור initDwellClicking",
-  "api.errors.notAFunction": "%0 חייב להיות פונקציה",
+  "api.errors.functionRequired": "%0 חייב להיות פונקציה",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from אינו בורר CSS תקין",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from חייב להיות מחרוזת בורר CSS, אלמנט או פונקציה",
   "api.errors.retargetFromRequired": "נדרש config.retarget[%0].from",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click الزامی است",
   "api.errors.configRequired": "برای initDwellClicking یک شئ پیکربندی لازم است",
-  "api.errors.notAFunction": "%0 باید یک تابع باشد",
+  "api.errors.functionRequired": "%0 باید یک تابع باشد",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from یک انتخاب‌گر معتبر CSS نیست",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from باید یک رشته‌ی انتخاب‌گر CSS، یک عنصر (Element) یا یک تابع باشد",
   "api.errors.retargetFromRequired": "config.retarget[%0].from الزامی است",

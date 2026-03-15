@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "a config.click megadása kötelező",
   "api.errors.configRequired": "a initDwellClicking használatához konfigurációs objektum szükséges",
-  "api.errors.notAFunction": "a %0 értékének függvénynek kell lennie",
+  "api.errors.functionRequired": "a %0 értékének függvénynek kell lennie",
   "api.errors.retargetFromInvalidSelector": "a config.retarget[%0].from nem érvényes CSS-szelektor",
   "api.errors.retargetFromInvalidType": "a config.retarget[%0].from értékének CSS-szelektor sztringnek, DOM-elemeknek vagy függvénynek kell lennie",
   "api.errors.retargetFromRequired": "a config.retarget[%0].from megadása kötelező",

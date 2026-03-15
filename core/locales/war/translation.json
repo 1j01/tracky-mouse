@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click kinahanglan pun-on",
   "api.errors.configRequired": "configuration object kinahanglan para ha initDwellClicking",
-  "api.errors.notAFunction": "%0 kinahanglan usa nga function",
+  "api.errors.functionRequired": "%0 kinahanglan usa nga function",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from diri balido nga CSS selector",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from kinahanglan usa nga CSS selector string, Element, o function",
   "api.errors.retargetFromRequired": "config.retarget[%0].from kinahanglan pun-on",

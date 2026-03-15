@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "Ang config.click kay gikinahanglan",
   "api.errors.configRequired": "Gikinahanglan ang configuration object para sa initDwellClicking",
-  "api.errors.notAFunction": "Ang %0 kinahanglang usa ka function",
+  "api.errors.functionRequired": "Ang %0 kinahanglang usa ka function",
   "api.errors.retargetFromInvalidSelector": "Ang config.retarget[%0].from dili balidong CSS selector",
   "api.errors.retargetFromInvalidType": "Ang config.retarget[%0].from kinahanglang usa ka CSS selector string, Element, o function",
   "api.errors.retargetFromRequired": "Ang config.retarget[%0].from gikinahanglan",

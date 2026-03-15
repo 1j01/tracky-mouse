@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click diperlukan",
   "api.errors.configRequired": "objek konfigurasi diperlukan untuk initDwellClicking",
-  "api.errors.notAFunction": "%0 mestilah satu fungsi",
+  "api.errors.functionRequired": "%0 mestilah satu fungsi",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from bukan pemilih CSS yang sah",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from mestilah rentetan pemilih CSS, Element, atau fungsi",
   "api.errors.retargetFromRequired": "config.retarget[%0].from diperlukan",

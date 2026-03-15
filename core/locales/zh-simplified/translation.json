@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "必须提供 config.click",
   "api.errors.configRequired": "initDwellClicking 需要配置对象",
-  "api.errors.notAFunction": "%0 必须是一个函数",
+  "api.errors.functionRequired": "%0 必须是一个函数",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from 不是有效的 CSS 选择器",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from 必须是 CSS 选择器字符串、Element 或函数",
   "api.errors.retargetFromRequired": "必须提供 config.retarget[%0].from",

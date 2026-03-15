@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click は必須です",
   "api.errors.configRequired": "initDwellClicking には設定オブジェクトが必要です",
-  "api.errors.notAFunction": "%0 は関数でなければなりません",
+  "api.errors.functionRequired": "%0 は関数でなければなりません",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from は有効な CSS セレクターではありません",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from は CSS セレクター文字列、要素、または関数でなければなりません",
   "api.errors.retargetFromRequired": "config.retarget[%0].from は必須です",

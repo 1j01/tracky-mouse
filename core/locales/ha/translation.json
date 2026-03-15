@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click yana da tilas",
   "api.errors.configRequired": "Ana buƙatar abin saitawa (configuration object) don initDwellClicking",
-  "api.errors.notAFunction": "%0 dole ne aiki ne (function)",
+  "api.errors.functionRequired": "%0 dole ne aiki ne (function)",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from ba ingantaccen zaɓin CSS ba ne",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from dole ne ya zama rubutun mai zaɓin CSS, ko abun HTML, ko aiki (function)",
   "api.errors.retargetFromRequired": "config.retarget[%0].from yana da tilas",

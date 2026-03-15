@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click є обов’язковим",
   "api.errors.configRequired": "для initDwellClicking потрібен об’єкт конфігурації",
-  "api.errors.notAFunction": "%0 має бути функцією",
+  "api.errors.functionRequired": "%0 має бути функцією",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from не є дійсним CSS‑селектором",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from має бути рядком із CSS‑селектором, елементом або функцією",
   "api.errors.retargetFromRequired": "config.retarget[%0].from є обов’язковим",

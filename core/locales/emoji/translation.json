@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "⚙️ config.click 🔎🥺",
   "api.errors.configRequired": "initDwellClicking(⚙️): ⚙️🔎🥺",
-  "api.errors.notAFunction": "⚙️ %0 🏷️🟰📜 🙏",
+  "api.errors.functionRequired": "⚙️ %0 🏷️🟰📜 🙏",
   "api.errors.retargetFromInvalidSelector": "⚙️ config.retarget[%0].from 🟰 CSS selector 🙏",
   "api.errors.retargetFromInvalidType": "⚙️ config.retarget[%0].from 🟰 CSS selector / Element / function",
   "api.errors.retargetFromRequired": "⚙️ config.retarget[%0].from 🔎🥺",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "必須設定 config.click",
   "api.errors.configRequired": "initDwellClicking 愛傳入設定物件",
-  "api.errors.notAFunction": "%0 愛是函式",
+  "api.errors.functionRequired": "%0 愛是函式",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from 無是正確 ê CSS 選擇器",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from 愛是 CSS 選擇器字串、Element，抑是函式",
   "api.errors.retargetFromRequired": "config.retarget[%0].from 是必要 ê",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click estas postulata",
   "api.errors.configRequired": "Agorda objekto estas bezonata por initDwellClicking",
-  "api.errors.notAFunction": "%0 devas esti funkcio",
+  "api.errors.functionRequired": "%0 devas esti funkcio",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from ne estas valida CSS-elektilo",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from devas esti ĉeno kun CSS-elektilo, elemento aŭ funkcio",
   "api.errors.retargetFromRequired": "config.retarget[%0].from estas postulata",

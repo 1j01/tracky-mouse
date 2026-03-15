@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click ज़रूरी है",
   "api.errors.configRequired": "initDwellClicking के लिए कॉन्फ़िगरेशन ऑब्जेक्ट ज़रूरी है",
-  "api.errors.notAFunction": "%0 एक फ़ंक्शन होना चाहिए",
+  "api.errors.functionRequired": "%0 एक फ़ंक्शन होना चाहिए",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from एक मान्य CSS सेलेक्टर नहीं है",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from CSS सेलेक्टर स्ट्रिंग, एक Element, या एक फ़ंक्शन होना चाहिए",
   "api.errors.retargetFromRequired": "config.retarget[%0].from ज़रूरी है",

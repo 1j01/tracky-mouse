@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click jest wymagane",
   "api.errors.configRequired": "do initDwellClicking wymagany jest obiekt konfiguracyjny",
-  "api.errors.notAFunction": "%0 musi być funkcją",
+  "api.errors.functionRequired": "%0 musi być funkcją",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from nie jest prawidłowym selektorem CSS",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from musi być ciągiem z selektorem CSS, elementem lub funkcją",
   "api.errors.retargetFromRequired": "config.retarget[%0].from jest wymagane",

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click vaaditaan",
   "api.errors.configRequired": "initDwellClickingiä varten vaaditaan määritysobjekti",
-  "api.errors.notAFunction": "%0in on oltava funktio",
+  "api.errors.functionRequired": "%0in on oltava funktio",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from ei ole kelvollinen CSS-valitsin",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].fromin on oltava CSS-valitsinmerkkijono, Element tai funktio",
   "api.errors.retargetFromRequired": "config.retarget[%0].from on pakollinen",

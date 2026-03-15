@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "Το config.click είναι υποχρεωτικό",
   "api.errors.configRequired": "Απαιτείται αντικείμενο ρυθμίσεων για το initDwellClicking",
-  "api.errors.notAFunction": "Το %0 πρέπει να είναι συνάρτηση",
+  "api.errors.functionRequired": "Το %0 πρέπει να είναι συνάρτηση",
   "api.errors.retargetFromInvalidSelector": "Το config.retarget[%0].from δεν είναι έγκυρος επιλογέας CSS",
   "api.errors.retargetFromInvalidType": "Το config.retarget[%0].from πρέπει να είναι συμβολοσειρά επιλογέα CSS, στοιχείο ή συνάρτηση",
   "api.errors.retargetFromRequired": "Το config.retarget[%0].from είναι υποχρεωτικό",

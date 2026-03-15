@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "ต้องระบุ config.click",
   "api.errors.configRequired": "ต้องมีออบเจ็กต์การตั้งค่าสำหรับ initDwellClicking",
-  "api.errors.notAFunction": "%0 ต้องเป็นฟังก์ชัน",
+  "api.errors.functionRequired": "%0 ต้องเป็นฟังก์ชัน",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from ไม่ใช่ตัวเลือก CSS ที่ถูกต้อง",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from ต้องเป็นสตริงตัวเลือก CSS, Element หรือฟังก์ชัน",
   "api.errors.retargetFromRequired": "ต้องระบุ config.retarget[%0].from",

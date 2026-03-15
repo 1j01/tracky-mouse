@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click gereklidir",
   "api.errors.configRequired": "initDwellClicking için yapılandırma nesnesi gereklidir",
-  "api.errors.notAFunction": "%0 bir fonksiyon olmalıdır",
+  "api.errors.functionRequired": "%0 bir fonksiyon olmalıdır",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from geçerli bir CSS seçicisi değildir",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from bir CSS seçici metni, bir Element veya bir fonksiyon olmalıdır",
   "api.errors.retargetFromRequired": "config.retarget[%0].from gereklidir",

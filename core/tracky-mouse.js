@@ -90,31 +90,31 @@ const initDwellClicking = (config) => {
 		throw new Error(t("api.errors.clickRequired", { defaultValue: "config.click is required" }));
 	}
 	if (typeof config.click !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.click"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.click"));
 	}
 	if (config.shouldDrag !== undefined && typeof config.shouldDrag !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.shouldDrag"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.shouldDrag"));
 	}
 	if (config.noCenter !== undefined && typeof config.noCenter !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.noCenter"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.noCenter"));
 	}
 	if (config.isEquivalentTarget !== undefined && typeof config.isEquivalentTarget !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.isEquivalentTarget"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.isEquivalentTarget"));
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.dwellClickEvenIfPaused"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.dwellClickEvenIfPaused"));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.beforeDispatch"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.beforeDispatch"));
 	}
 	if (config.afterDispatch !== undefined && typeof config.afterDispatch !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.afterDispatch"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.afterDispatch"));
 	}
 	if (config.beforePointerDownDispatch !== undefined && typeof config.beforePointerDownDispatch !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.beforePointerDownDispatch"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.beforePointerDownDispatch"));
 	}
 	if (config.isHeld !== undefined && typeof config.isHeld !== "function") {
-		throw new Error(t("api.errors.notAFunction", { defaultValue: "%0 must be a function" }).replace("%0", "config.isHeld"));
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.isHeld"));
 	}
 	if (config.retarget !== undefined) {
 		if (!Array.isArray(config.retarget)) {

@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click este obligatoriu",
   "api.errors.configRequired": "obiect de configurare necesar pentru initDwellClicking",
-  "api.errors.notAFunction": "%0 trebuie să fie o funcție",
+  "api.errors.functionRequired": "%0 trebuie să fie o funcție",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from nu este un selector CSS valid",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from trebuie să fie un șir selector CSS, un Element sau o funcție",
   "api.errors.retargetFromRequired": "config.retarget[%0].from este obligatoriu",

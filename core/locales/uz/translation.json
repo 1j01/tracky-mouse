@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click majburiy parametr",
   "api.errors.configRequired": "initDwellClicking uchun konfiguratsiya obyekti talab qilinadi",
-  "api.errors.notAFunction": "%0 funksiyasi bo‘lishi kerak",
+  "api.errors.functionRequired": "%0 funksiyasi bo‘lishi kerak",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from haqiqiy CSS selektori emas",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from CSS selektori qatori, Element yoki funksiya bo‘lishi kerak",
   "api.errors.retargetFromRequired": "config.retarget[%0].from majburiy",

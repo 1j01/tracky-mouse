@@ -1,7 +1,7 @@
 {
   "api.errors.clickRequired": "config.click таләп ителә",
   "api.errors.configRequired": "initDwellClicking өчен конфигурация объекты кирәк",
-  "api.errors.notAFunction": "%0 функция булырга тиеш",
+  "api.errors.functionRequired": "%0 функция булырга тиеш",
   "api.errors.retargetFromInvalidSelector": "config.retarget[%0].from дөрес CSS селектор түгел",
   "api.errors.retargetFromInvalidType": "config.retarget[%0].from CSS селектор юлы, элемент яки функция булырга тиеш",
   "api.errors.retargetFromRequired": "config.retarget[%0].from таләп ителә",
