@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Buruaren inklinazioa",
   "settings.tiltInfluence.sliderMin": "Puntu‑jarraipena (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Fluxu optikoa",
+  "settings.tiltInfluence.sliderMin.alt2": "Puntu‑jarraipena",
   "ui.camera.allowAccess": "Baimendu kamerara sarbidea",
   "ui.camera.useDemoFootage": "Erabili demo bideoa",
   "ui.camera.useMyCamera": "Erabili nire kamera",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Κλίση κεφαλιού",
   "settings.tiltInfluence.sliderMin": "Παρακολούθηση σημείων (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Οπτική ροή",
+  "settings.tiltInfluence.sliderMin.alt2": "Παρακολούθηση σημείων",
   "ui.camera.allowAccess": "Να επιτρέπεται η πρόσβαση στην κάμερα",
   "ui.camera.useDemoFootage": "Χρήση δοκιμαστικού βίντεο",
   "ui.camera.useMyCamera": "Χρήση της κάμεράς μου",

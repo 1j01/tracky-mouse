@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Kapklino",
   "settings.tiltInfluence.sliderMin": "Punkt-spurado (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optika fluo",
+  "settings.tiltInfluence.sliderMin.alt2": "Punkt-spurado",
   "ui.camera.allowAccess": "Permesi aliron al fotilo",
   "ui.camera.useDemoFootage": "Uzi demonstra filmeton",
   "ui.camera.useMyCamera": "Uzi mian fotilon",

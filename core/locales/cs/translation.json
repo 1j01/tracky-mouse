@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Naklonění hlavy",
   "settings.tiltInfluence.sliderMin": "Sledování bodů (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optický tok",
+  "settings.tiltInfluence.sliderMin.alt2": "Sledování bodů",
   "ui.camera.allowAccess": "Povolit přístup ke kameře",
   "ui.camera.useDemoFootage": "Použít ukázkové video",
   "ui.camera.useMyCamera": "Použít mou kameru",

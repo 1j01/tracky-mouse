@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Наклон головы",
   "settings.tiltInfluence.sliderMin": "Отслеживание точек (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Оптический поток",
+  "settings.tiltInfluence.sliderMin.alt2": "Отслеживание точек",
   "ui.camera.allowAccess": "Разрешить доступ к камере",
   "ui.camera.useDemoFootage": "Использовать демонстрационное видео",
   "ui.camera.useMyCamera": "Использовать мою камеру",

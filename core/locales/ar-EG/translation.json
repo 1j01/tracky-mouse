@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "إمالة الرأس",
   "settings.tiltInfluence.sliderMin": "تتبّع النقاط (ثنائي الأبعاد)",
   "settings.tiltInfluence.sliderMin.alt1": "التتبّع البصري (Optical flow)",
+  "settings.tiltInfluence.sliderMin.alt2": "تتبّع النقاط",
   "ui.camera.allowAccess": "السماح بالوصول للكاميرا",
   "ui.camera.useDemoFootage": "استخدم فيديو تجريبي",
   "ui.camera.useMyCamera": "استخدم كاميرتي",

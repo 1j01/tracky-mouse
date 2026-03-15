@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "سر کی جھکاؤ",
   "settings.tiltInfluence.sliderMin": "پوائنٹ ٹریکنگ (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "آپٹیکل فلو",
+  "settings.tiltInfluence.sliderMin.alt2": "پوائنٹ ٹریکنگ",
   "ui.camera.allowAccess": "کیمرے تک رسائی کی اجازت دیں",
   "ui.camera.useDemoFootage": "ڈیمو ویڈیو استعمال کریں",
   "ui.camera.useMyCamera": "میرا کیمرہ استعمال کریں",

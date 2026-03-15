@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Baş eğimi",
   "settings.tiltInfluence.sliderMin": "Nokta takibi (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optik akış",
+  "settings.tiltInfluence.sliderMin.alt2": "Nokta takibi",
   "ui.camera.allowAccess": "Kameraya İzin Ver",
   "ui.camera.useDemoFootage": "Demo görüntüyü kullan",
   "ui.camera.useMyCamera": "Kameramı kullan",

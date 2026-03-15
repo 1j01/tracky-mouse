@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Нахил голови",
   "settings.tiltInfluence.sliderMin": "Відстеження точок (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Оптичний потік",
+  "settings.tiltInfluence.sliderMin.alt2": "Відстеження точок",
   "ui.camera.allowAccess": "Дозволити доступ до камери",
   "ui.camera.useDemoFootage": "Використати демозапис",
   "ui.camera.useMyCamera": "Використати мою камеру",

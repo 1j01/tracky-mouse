@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Độ nghiêng đầu",
   "settings.tiltInfluence.sliderMin": "Theo dõi điểm (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Dòng quang học",
+  "settings.tiltInfluence.sliderMin.alt2": "Theo dõi điểm",
   "ui.camera.allowAccess": "Cho phép truy cập camera",
   "ui.camera.useDemoFootage": "Dùng video demo",
   "ui.camera.useMyCamera": "Dùng camera của tôi",

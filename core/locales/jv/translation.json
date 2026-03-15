@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Miringé endhas",
   "settings.tiltInfluence.sliderMin": "Pelacakan titik (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Aliran optik",
+  "settings.tiltInfluence.sliderMin.alt2": "Pelacakan titik",
   "ui.camera.allowAccess": "Paring ijin akses kamera",
   "ui.camera.useDemoFootage": "Gunakna video conto",
   "ui.camera.useMyCamera": "Gunakna kameraku",

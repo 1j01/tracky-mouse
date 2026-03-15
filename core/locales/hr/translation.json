@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Nagib glave",
   "settings.tiltInfluence.sliderMin": "Praćenje točaka (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optički protok",
+  "settings.tiltInfluence.sliderMin.alt2": "Praćenje točaka",
   "ui.camera.allowAccess": "Dopusti pristup kameri",
   "ui.camera.useDemoFootage": "Koristi demo snimku",
   "ui.camera.useMyCamera": "Koristi moju kameru",

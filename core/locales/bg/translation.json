@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Наклон на главата",
   "settings.tiltInfluence.sliderMin": "Проследяване по точки (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Оптичен поток",
+  "settings.tiltInfluence.sliderMin.alt2": "Проследяване по точки",
   "ui.camera.allowAccess": "Разреши достъп до камерата",
   "ui.camera.useDemoFootage": "Използвай демо видео",
   "ui.camera.useMyCamera": "Използвай моята камера",

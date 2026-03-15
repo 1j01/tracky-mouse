@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Pään kallistus",
   "settings.tiltInfluence.sliderMin": "Pisteiden seuranta (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optinen virtaus",
+  "settings.tiltInfluence.sliderMin.alt2": "Pisteiden seuranta",
   "ui.camera.allowAccess": "Salli kameran käyttö",
   "ui.camera.useDemoFootage": "Käytä demovideota",
   "ui.camera.useMyCamera": "Käytä omaa kameraa",

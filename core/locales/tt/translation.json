@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Баш авышуы",
   "settings.tiltInfluence.sliderMin": "Нокта күзәтүе (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Оптик агым",
+  "settings.tiltInfluence.sliderMin.alt2": "Нокта күзәтүе",
   "ui.camera.allowAccess": "Камерага рөхсәт бирү",
   "ui.camera.useDemoFootage": "Демо‑видео куллану",
   "ui.camera.useMyCamera": "Үземнең камераны куллану",

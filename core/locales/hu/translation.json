@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Fej dőlése",
   "settings.tiltInfluence.sliderMin": "Pontkövetés (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optikai áramlás",
+  "settings.tiltInfluence.sliderMin.alt2": "Pontkövetés",
   "ui.camera.allowAccess": "Kameraengedély megadása",
   "ui.camera.useDemoFootage": "Demófelvétel használata",
   "ui.camera.useMyCamera": "Saját kamera használata",

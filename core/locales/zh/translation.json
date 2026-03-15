@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "頭部傾斜",
   "settings.tiltInfluence.sliderMin": "點追蹤（2D）",
   "settings.tiltInfluence.sliderMin.alt1": "光流",
+  "settings.tiltInfluence.sliderMin.alt2": "點追蹤",
   "ui.camera.allowAccess": "允許存取攝影機",
   "ui.camera.useDemoFootage": "使用示範影片",
   "ui.camera.useMyCamera": "使用我的攝影機",

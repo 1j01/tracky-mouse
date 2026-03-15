@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Hodetilt",
   "settings.tiltInfluence.sliderMin": "Punktsporing (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optisk flyt",
+  "settings.tiltInfluence.sliderMin.alt2": "Punktsporing",
   "ui.camera.allowAccess": "Tillat kameratilgang",
   "ui.camera.useDemoFootage": "Bruk demovideo",
   "ui.camera.useMyCamera": "Bruk kameraet mitt",

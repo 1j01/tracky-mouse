@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "মাথা কাত",
   "settings.tiltInfluence.sliderMin": "পয়েন্ট ট্র্যাকিং (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "অপটিক্যাল ফ্লো",
+  "settings.tiltInfluence.sliderMin.alt2": "পয়েন্ট ট্র্যাকিং",
   "ui.camera.allowAccess": "ক্যামেরা ব্যবহারের অনুমতি দিন",
   "ui.camera.useDemoFootage": "ডেমো ফুটেজ ব্যবহার করুন",
   "ui.camera.useMyCamera": "আমার ক্যামেরা ব্যবহার করুন",

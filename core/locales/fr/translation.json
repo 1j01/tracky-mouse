@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Inclinaison de la tête",
   "settings.tiltInfluence.sliderMin": "Suivi de points (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Flux optique",
+  "settings.tiltInfluence.sliderMin.alt2": "Suivi de points",
   "ui.camera.allowAccess": "Autoriser l'accès à la caméra",
   "ui.camera.useDemoFootage": "Utiliser des images de démonstration",
   "ui.camera.useMyCamera": "Utiliser ma caméra",

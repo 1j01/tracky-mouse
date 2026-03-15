@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Hoofdknik",
   "settings.tiltInfluence.sliderMin": "Punttracking (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optische stroom",
+  "settings.tiltInfluence.sliderMin.alt2": "Punttracking",
   "ui.camera.allowAccess": "Cameratoegang toestaan",
   "ui.camera.useDemoFootage": "Demovideo gebruiken",
   "ui.camera.useMyCamera": "Mijn camera gebruiken",

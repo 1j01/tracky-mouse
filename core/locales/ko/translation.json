@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "머리 기울기",
   "settings.tiltInfluence.sliderMin": "포인트 추적(2D)",
   "settings.tiltInfluence.sliderMin.alt1": "광학 흐름",
+  "settings.tiltInfluence.sliderMin.alt2": "포인트 추적",
   "ui.camera.allowAccess": "카메라 접근 허용",
   "ui.camera.useDemoFootage": "데모 영상 사용",
   "ui.camera.useMyCamera": "내 카메라 사용",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "خم شدن سر",
   "settings.tiltInfluence.sliderMin": "ردیابی نقطه‌ای (۲بعدی)",
   "settings.tiltInfluence.sliderMin.alt1": "جریان نوری (Optical flow)",
+  "settings.tiltInfluence.sliderMin.alt2": "ردیابی نقطه‌ای",
   "ui.camera.allowAccess": "اجازه‌ی دسترسی به دوربین",
   "ui.camera.useDemoFootage": "استفاده از ویدیوی نمایشی",
   "ui.camera.useMyCamera": "استفاده از دوربین من",

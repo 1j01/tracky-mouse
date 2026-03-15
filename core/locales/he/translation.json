@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "הטיית ראש",
   "settings.tiltInfluence.sliderMin": "מעקב נקודות (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "זרימה אופטית",
+  "settings.tiltInfluence.sliderMin.alt2": "מעקב נקודות",
   "ui.camera.allowAccess": "אפשר גישה למצלמה",
   "ui.camera.useDemoFootage": "השתמש בקטע וידאו לדוגמה",
   "ui.camera.useMyCamera": "השתמש במצלמה שלי",

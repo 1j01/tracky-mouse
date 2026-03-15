@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Hovedhældning",
   "settings.tiltInfluence.sliderMin": "Punkts­sporing (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optisk flow",
+  "settings.tiltInfluence.sliderMin.alt2": "Punkts­sporing",
   "ui.camera.allowAccess": "Tillad adgang til kamera",
   "ui.camera.useDemoFootage": "Brug demovideo",
   "ui.camera.useMyCamera": "Brug mit kamera",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Գլխի թեքություն",
   "settings.tiltInfluence.sliderMin": "Կետի հետևում (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Օպտիկական հոսք",
+  "settings.tiltInfluence.sliderMin.alt2": "Կետի հետևում",
   "ui.camera.allowAccess": "Թույլատրել տեսախցիկի մուտքը",
   "ui.camera.useDemoFootage": "Օգտագործել տեսաղբյուրի օրինակային ձայնագրությունը",
   "ui.camera.useMyCamera": "Օգտագործել իմ տեսախցիկը",

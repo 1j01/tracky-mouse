@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Kuinamisha kichwa",
   "settings.tiltInfluence.sliderMin": "Ufuatiliaji wa pointi (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Mtiririko wa kuona (optical flow)",
+  "settings.tiltInfluence.sliderMin.alt2": "Ufuatiliaji wa pointi",
   "ui.camera.allowAccess": "Ruhusu Ufikiaji wa Kamera",
   "ui.camera.useDemoFootage": "Tumia video ya mfano",
   "ui.camera.useMyCamera": "Tumia kamera yangu",

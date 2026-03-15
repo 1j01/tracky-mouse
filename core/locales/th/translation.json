@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "การเอียงศีรษะ",
   "settings.tiltInfluence.sliderMin": "การติดตามจุด (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "ออปติคอลโฟลว์",
+  "settings.tiltInfluence.sliderMin.alt2": "การติดตามจุด",
   "ui.camera.allowAccess": "อนุญาตการเข้าถึงกล้อง",
   "ui.camera.useDemoFootage": "ใช้วิดีโอตัวอย่าง",
   "ui.camera.useMyCamera": "ใช้กล้องของฉัน",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Huvudlutning",
   "settings.tiltInfluence.sliderMin": "Punktspårning (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optiskt flöde",
+  "settings.tiltInfluence.sliderMin.alt2": "Punktspårning",
   "ui.camera.allowAccess": "Tillåt kameratillgång",
   "ui.camera.useDemoFootage": "Använd demovideo",
   "ui.camera.useMyCamera": "Använd min kamera",

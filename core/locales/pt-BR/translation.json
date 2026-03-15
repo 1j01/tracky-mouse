@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Inclinação da cabeça",
   "settings.tiltInfluence.sliderMin": "Rastreamento por pontos (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Fluxo óptico",
+  "settings.tiltInfluence.sliderMin.alt2": "Rastreamento por pontos",
   "ui.camera.allowAccess": "Permitir acesso à câmera",
   "ui.camera.useDemoFootage": "Usar vídeo de demonstração",
   "ui.camera.useMyCamera": "Usar minha câmera",

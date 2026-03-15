@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "頭の傾き",
   "settings.tiltInfluence.sliderMin": "ポイントトラッキング（2D）",
   "settings.tiltInfluence.sliderMin.alt1": "オプティカルフロー",
+  "settings.tiltInfluence.sliderMin.alt2": "ポイントトラッキング",
   "ui.camera.allowAccess": "カメラへのアクセスを許可",
   "ui.camera.useDemoFootage": "デモ映像を使用",
   "ui.camera.useMyCamera": "自分のカメラを使用",

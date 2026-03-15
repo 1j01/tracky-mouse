@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Хиларг хиран",
   "settings.tiltInfluence.sliderMin": "Точкаш тӀехь слежени (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Оптическ потогӀа",
+  "settings.tiltInfluence.sliderMin.alt2": "Точкаш тӀехь слежени",
   "ui.camera.allowAccess": "Камера хьажа даӀ",
   "ui.camera.useDemoFootage": "Демо-видео хьажа",
   "ui.camera.useMyCamera": "Со камера хьажа",

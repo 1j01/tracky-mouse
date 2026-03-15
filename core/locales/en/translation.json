@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Head tilt",
   "settings.tiltInfluence.sliderMin": "Point tracking (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optical flow",
+  "settings.tiltInfluence.sliderMin.alt2": "Point tracking",
   "ui.camera.allowAccess": "Allow Camera Access",
   "ui.camera.useDemoFootage": "Use demo footage",
   "ui.camera.useMyCamera": "Use my camera",

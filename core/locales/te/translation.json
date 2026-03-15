@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "తల వంపు",
   "settings.tiltInfluence.sliderMin": "పాయింట్ ట్రాకింగ్ (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "ఆప్టికల్ ఫ్లో",
+  "settings.tiltInfluence.sliderMin.alt2": "పాయింట్ ట్రాకింగ్",
   "ui.camera.allowAccess": "కెమెరా యాక్సెస్‌ను అనుమతించండి",
   "ui.camera.useDemoFootage": "డెమో ఫుటేజ్‌ను ఉపయోగించండి",
   "ui.camera.useMyCamera": "నా కెమెరాను ఉపయోగించండి",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Inclinació del cap",
   "settings.tiltInfluence.sliderMin": "Seguiment de punts (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Flux òptic",
+  "settings.tiltInfluence.sliderMin.alt2": "Seguiment de punts",
   "ui.camera.allowAccess": "Permet l'accés a la càmera",
   "ui.camera.useDemoFootage": "Fes servir un vídeo de demostració",
   "ui.camera.useMyCamera": "Fes servir la meva càmera",

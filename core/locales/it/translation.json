@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Inclinazione della testa",
   "settings.tiltInfluence.sliderMin": "Tracciamento punti (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Flusso ottico",
+  "settings.tiltInfluence.sliderMin.alt2": "Tracciamento punti",
   "ui.camera.allowAccess": "Consenti accesso alla fotocamera",
   "ui.camera.useDemoFootage": "Usa filmato demo",
   "ui.camera.useMyCamera": "Usa la mia fotocamera",

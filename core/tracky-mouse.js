@@ -1645,7 +1645,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 					default: 0,
 					labels: {
 						// min: t("settings.tiltInfluence.sliderMin.alt1", { defaultValue: "Optical flow" }), // too technical
-						// min: t("settings.sections.pointTracking.label", { defaultValue: "Point tracking" }), // still technical but at least it's terminology we're already using
+						// min: t("settings.tiltInfluence.sliderMin.alt2", { defaultValue: "Point tracking" }), // still technical but at least it's terminology we're already using
 						min: t("settings.tiltInfluence.sliderMin", { defaultValue: "Point tracking (2D)" }),
 						// max: t("settings.tiltInfluence.sliderMax.alt1", { defaultValue: "Head tilt" }),
 						max: t("settings.tiltInfluence.sliderMax", { defaultValue: "Head tilt (3D)" }),

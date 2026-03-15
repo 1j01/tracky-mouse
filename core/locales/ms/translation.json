@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Condongan kepala",
   "settings.tiltInfluence.sliderMin": "Penjejakan titik (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Aliran optik",
+  "settings.tiltInfluence.sliderMin.alt2": "Penjejakan titik",
   "ui.camera.allowAccess": "Benarkan Akses Kamera",
   "ui.camera.useDemoFootage": "Gunakan rakaman demo",
   "ui.camera.useMyCamera": "Gunakan kamera saya",

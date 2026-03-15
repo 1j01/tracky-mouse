@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "सिर झुकाव",
   "settings.tiltInfluence.sliderMin": "पॉइंट ट्रैकिंग (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "ऑप्टिकल फ्लो",
+  "settings.tiltInfluence.sliderMin.alt2": "पॉइंट ट्रैकिंग",
   "ui.camera.allowAccess": "कैमरा उपयोग की अनुमति दें",
   "ui.camera.useDemoFootage": "डेमो फुटेज का उपयोग करें",
   "ui.camera.useMyCamera": "मेरा कैमरा उपयोग करें",

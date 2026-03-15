@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "தலையின் சாய்வு",
   "settings.tiltInfluence.sliderMin": "புள்ளி கண்காணிப்பு (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "ஆப்டிக்கல் ஃப்ளோ",
+  "settings.tiltInfluence.sliderMin.alt2": "புள்ளி கண்காணிப்பு",
   "ui.camera.allowAccess": "கேமரா அணுகலை அனுமதிக்கவும்",
   "ui.camera.useDemoFootage": "டெமோ வீடியோவைப் பயன்படுத்தவும்",
   "ui.camera.useMyCamera": "என் கேமராவைப் பயன்படுத்தவும்",

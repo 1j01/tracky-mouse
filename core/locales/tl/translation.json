@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Pag-ikot ng ulo",
   "settings.tiltInfluence.sliderMin": "Point tracking (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Optical flow",
+  "settings.tiltInfluence.sliderMin.alt2": "Point tracking",
   "ui.camera.allowAccess": "Payagan ang access sa kamera",
   "ui.camera.useDemoFootage": "Gumamit ng demo footage",
   "ui.camera.useMyCamera": "Gamitin ang aking kamera",

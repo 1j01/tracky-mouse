@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Przechylenie głowy",
   "settings.tiltInfluence.sliderMin": "Śledzenie punktów (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Przepływ optyczny",
+  "settings.tiltInfluence.sliderMin.alt2": "Śledzenie punktów",
   "ui.camera.allowAccess": "Zezwól na dostęp do kamery",
   "ui.camera.useDemoFootage": "Użyj materiału demonstracyjnego",
   "ui.camera.useMyCamera": "Użyj mojej kamery",

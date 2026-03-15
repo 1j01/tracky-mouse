@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Înclinare cap",
   "settings.tiltInfluence.sliderMin": "Urmărire pe puncte (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Flux optic",
+  "settings.tiltInfluence.sliderMin.alt2": "Urmărire pe puncte",
   "ui.camera.allowAccess": "Permite accesul la cameră",
   "ui.camera.useDemoFootage": "Folosește filmare demo",
   "ui.camera.useMyCamera": "Folosește camera mea",

@@ -179,6 +179,7 @@
   "settings.tiltInfluence.sliderMax.alt1": "Lanƙwasawar kai",
   "settings.tiltInfluence.sliderMin": "Bin diddigin maki (2D)",
   "settings.tiltInfluence.sliderMin.alt1": "Gudun gani (optical flow)",
+  "settings.tiltInfluence.sliderMin.alt2": "Bin diddigin maki",
   "ui.camera.allowAccess": "Bada damar amfani da kyamara",
   "ui.camera.useDemoFootage": "Yi amfani da hoton gwaji",
   "ui.camera.useMyCamera": "Yi amfani da kyamarata",
