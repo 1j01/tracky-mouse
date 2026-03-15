@@ -1920,7 +1920,10 @@ Could also be used to right click with the dwell clicker in a pinch.` }),
 					visible: () => isDesktopApp,
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
 					// description: t("settings.delayBeforeDragging.description.alt1", { defaultValue: "Locks mouse movement during the start of a click to prevent accidental dragging." }),
-					// description: t("settings.delayBeforeDragging.description.alt2", { defaultValue: `Prevents mouse movement for the specified time after a click starts.
+					// Throwing a // in here so it's not detected by i18next-cli, whereas the others are allowed
+					// simply because it wasn't previously detected and translated
+					// due to being both commented out and multiline (though multiline and commented out t() calls are separately supported)
+					// description: t//("settings.delayBeforeDragging.description.alt2", { defaultValue: `Prevents mouse movement for the specified time after a click starts.
 					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.` }),
 					description: t("settings.delayBeforeDragging.description", {
 						defaultValue: `Locks mouse movement for the given duration during the start of a click.
