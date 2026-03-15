@@ -132,7 +132,7 @@ const initDwellClicking = (config) => {
 				throw new Error(t("api.errors.retargetToRequired", { defaultValue: "config.retarget[%0].to is required (although can be null to ignore the element)" }).replace("%0", i));
 			}
 			if (rule.withinMargin !== undefined && typeof rule.withinMargin !== "number") {
-				throw new Error(t("api.errors.retargetWithinMarginMustBeNumber", { defaultValue: "config.retarget[%0].withinMargin must be a number" }).replace("%0", i));
+				throw new Error(t("api.errors.numberRequired", { defaultValue: "%0 must be a number" }).replace("%0", `config.retarget[${i}].withinMargin`));
 			}
 			if (typeof rule.from !== "string" && typeof rule.from !== "function" && !(rule.from instanceof Element)) {
 				throw new Error(t("api.errors.retargetFromInvalidType", { defaultValue: "config.retarget[%0].from must be a CSS selector string, an Element, or a function" }).replace("%0", i));
