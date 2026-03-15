@@ -72,7 +72,7 @@ const initDwellClicking = (config) => {
 	*/
 
 	/** translation placeholder */
-	const t = (s) => s;
+	const t = (key, options = {}) => options.defaultValue ?? key;
 
 	if (typeof config !== "object") {
 		throw new Error(t("@TODO_KEY", { defaultValue: "configuration object required for initDwellClicking" }));
@@ -617,7 +617,7 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 	}
 	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
 	const isRTL = rtlLanguages.includes(locale.split("-")[0]);
-	const t = (s) => translations[s] ?? s;
+	const t = (key, options = {}) => translations[key] ?? options.defaultValue ?? key;
 	// console.trace("Initializing UI with locale", locale);
 
 	// language name mappings marked with * may not be ISO 639-1
