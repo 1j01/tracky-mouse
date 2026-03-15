@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "依分數選取的點數：",
   "desktop.about.description": "使用網路攝影機控制你的電腦。",
   "desktop.about.title": "關於 Tracky Mouse",
+  "desktop.importSettings.title": "匯入設定",
   "desktop.menu.edit": "編輯",
   "desktop.menu.export": "匯出",
   "desktop.menu.exportSettings": "匯出設定",

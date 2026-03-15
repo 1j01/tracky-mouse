@@ -86,7 +86,7 @@ function createMenu() {
 						const settingsPath = join(app.getPath('userData'), 'tracky-mouse-settings.json');
 						const defaultPath = app.getPath('documents');
 						const { canceled, filePaths } = await dialog.showOpenDialog({
-							title: t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }),
+							title: t("desktop.importSettings.title", { defaultValue: 'Import Settings' }),
 							buttonLabel: t("desktop.menu.import", { defaultValue: 'Import' }),
 							defaultPath,
 							properties: ['openFile'],
@@ -98,7 +98,7 @@ function createMenu() {
 						try {
 							json = await readFile(filePath, 'utf8');
 						} catch (error) {
-							await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importReadError", { defaultValue: 'Failed to read selected file.' }) + '\n\n' + error.message);
+							await dialog.showErrorBox(t("desktop.importSettings.title", { defaultValue: 'Import Settings' }), t("desktop.menu.importReadError", { defaultValue: 'Failed to read selected file.' }) + '\n\n' + error.message);
 							return;
 						}
 						// Backup settings
@@ -110,7 +110,7 @@ function createMenu() {
 							if (error.code === 'ENOENT') {
 								console.log('Never mind, no existing settings to backup.');
 							} else {
-								await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importBackupError", { defaultValue: 'Failed to backup current settings before import.' }) + '\n\n' + error.message);
+								await dialog.showErrorBox(t("desktop.importSettings.title", { defaultValue: 'Import Settings' }), t("desktop.menu.importBackupError", { defaultValue: 'Failed to backup current settings before import.' }) + '\n\n' + error.message);
 								return;
 							}
 						}
@@ -119,7 +119,7 @@ function createMenu() {
 						try {
 							await writeFile(settingsPath, json);
 						} catch (error) {
-							await dialog.showErrorBox(t("desktop.menu.importSettings", { defaultValue: 'Import Settings' }), t("desktop.menu.importError", { defaultValue: 'Failed to import settings.' }) + '\n\n' + error.message);
+							await dialog.showErrorBox(t("desktop.importSettings.title", { defaultValue: 'Import Settings' }), t("desktop.menu.importError", { defaultValue: 'Failed to import settings.' }) + '\n\n' + error.message);
 							return;
 						}
 						// Reload settings

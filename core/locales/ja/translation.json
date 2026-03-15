@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "スコアに基づくポイント数:",
   "desktop.about.description": "ウェブカメラでコンピューターを操作します。",
   "desktop.about.title": "Tracky Mouse について",
+  "desktop.importSettings.title": "設定のインポート",
   "desktop.menu.edit": "編集",
   "desktop.menu.export": "エクスポート",
   "desktop.menu.exportSettings": "設定のエクスポート",

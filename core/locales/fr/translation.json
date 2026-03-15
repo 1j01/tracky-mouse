@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "Points basés sur le score :",
   "desktop.about.description": "Contrôlez votre ordinateur avec votre webcam.",
   "desktop.about.title": "À propos de Tracky Mouse",
+  "desktop.importSettings.title": "Importer les paramètres",
   "desktop.menu.edit": "Modifier",
   "desktop.menu.export": "Exporter",
   "desktop.menu.exportSettings": "Exporter les paramètres",

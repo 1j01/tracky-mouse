@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "Pontok az értékelés alapján:",
   "desktop.about.description": "Irányítsd a számítógépedet a webkameráddal.",
   "desktop.about.title": "A Tracky Mouse-ról",
+  "desktop.importSettings.title": "Beállítások importálása",
   "desktop.menu.edit": "Szerkesztés",
   "desktop.menu.export": "Exportálás",
   "desktop.menu.exportSettings": "Beállítások exportálása",

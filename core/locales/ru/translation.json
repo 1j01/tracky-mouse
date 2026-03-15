@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "Точек на основе оценки:",
   "desktop.about.description": "Управляйте компьютером с помощью веб‑камеры.",
   "desktop.about.title": "О программе Tracky Mouse",
+  "desktop.importSettings.title": "Импорт настроек",
   "desktop.menu.edit": "Правка",
   "desktop.menu.export": "Экспорт",
   "desktop.menu.exportSettings": "Экспорт настроек",

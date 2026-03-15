@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "จำนวนจุดตามคะแนน:",
   "desktop.about.description": "ควบคุมคอมพิวเตอร์ของคุณด้วยเว็บแคม",
   "desktop.about.title": "เกี่ยวกับ Tracky Mouse",
+  "desktop.importSettings.title": "นำเข้าการตั้งค่า",
   "desktop.menu.edit": "แก้ไข",
   "desktop.menu.export": "ส่งออก",
   "desktop.menu.exportSettings": "ส่งออกการตั้งค่า",

@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "基于评分的点数：",
   "desktop.about.description": "用摄像头控制你的电脑。",
   "desktop.about.title": "关于 Tracky Mouse",
+  "desktop.importSettings.title": "导入设置",
   "desktop.menu.edit": "编辑",
   "desktop.menu.export": "导出",
   "desktop.menu.exportSettings": "导出设置",

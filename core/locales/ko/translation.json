@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "점수 기준 포인트 수:",
   "desktop.about.description": "웹캠으로 컴퓨터를 제어하세요.",
   "desktop.about.title": "Tracky Mouse 정보",
+  "desktop.importSettings.title": "설정 가져오기",
   "desktop.menu.edit": "편집",
   "desktop.menu.export": "내보내기",
   "desktop.menu.exportSettings": "설정 내보내기",

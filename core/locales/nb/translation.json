@@ -33,6 +33,7 @@
   "debug.pointsBasedOnScore": "Punkter basert på poengsum:",
   "desktop.about.description": "Styr datamaskinen med webkameraet ditt.",
   "desktop.about.title": "Om Tracky Mouse",
+  "desktop.importSettings.title": "Importer innstillinger",
   "desktop.menu.edit": "Rediger",
   "desktop.menu.export": "Eksporter",
   "desktop.menu.exportSettings": "Eksporter innstillinger",
