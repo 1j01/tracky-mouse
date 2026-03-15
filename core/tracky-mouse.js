@@ -1651,7 +1651,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 						max: t("settings.tiltInfluence.sliderMax", { defaultValue: "Head tilt (3D)" }),
 					},
 					// description: t("settings.tiltInfluence.description.alt1", { defaultValue: "Determines whether cursor movement is based on 3D head tilt, or 2D motion of the face in the camera feed." }),
-					description: t("settings.tiltInfluence.description", { defaultValue: `Blends between using point tracking (2D) and detected head tilt (3D).
+					description: t("settings.tiltInfluence.description", {
+						defaultValue: `Blends between using point tracking (2D) and detected head tilt (3D).
 - At 0% it will use only point tracking. This moves the cursor according to visible movement of 2D points on your face within the camera's view, so it responds to both head rotation and translation.
 - At 100% it will use only head tilt. This uses an estimate of your face's orientation in 3D space, and ignores head translation. Note that this is smoothed, so it's not as responsive as point tracking. In this mode you never need to recenter by pushing the cursor to the edge of the screen.
 - In between it will behave like an automatic calibration, subtly adjusting the point tracking to match the head tilt. This works by slowing down mouse movement that is moving away from the position that would be expected based on the head tilt, and (only past 80% on the slider) actively moving towards it.` }),
@@ -1747,7 +1748,8 @@ TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
 							},
 							// description: t("settings.pointTracking.acceleration.description.alt1", { defaultValue: "Higher acceleration makes the cursor move faster when the head moves quickly, and slower when the head moves slowly." }),
 							// description: t("settings.pointTracking.acceleration.description.alt2", { defaultValue: "Makes the cursor move extra fast for quick head movements, and extra slow for slow head movements. Helps to stabilize the cursor." }),
-							description: t("settings.pointTracking.acceleration.description", { defaultValue: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
+							description: t("settings.pointTracking.acceleration.description", {
+								defaultValue: `Makes the cursor move relatively fast for quick head movements, and relatively slow for slow head movements.
 Helps to stabilize the cursor. However, when using point tracking in combination with head tilt, a lower value may work better since head tilt is linear, and you want the point tracking to roughly match the head tracking for it to act as a seamless auto-calibration.` }),
 						},
 					],
@@ -1819,7 +1821,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 							// description: t("settings.headTilt.horizontalOffset.description.alt1", { defaultValue: "Adjusts the center position of horizontal head tilt. Not recommended. Move the camera instead if possible." }),
 							// description: t("settings.headTilt.horizontalOffset.description.alt2", { defaultValue: "Adjusts the center position of horizontal head tilt. This horizontal offset is not recommended. Move the camera instead if possible." }),
 							// TODO: should this say "horizontal" in the (main part of the) description?
-							description: t("settings.headTilt.horizontalOffset.description", { defaultValue: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
+							description: t("settings.headTilt.horizontalOffset.description", {
+								defaultValue: `Adjusts the position of the cursor when the camera sees the head facing straight ahead.
 ⚠️ This horizontal offset is not recommended. Move the camera instead if possible. 📷` }),
 						},
 						{
@@ -1891,7 +1894,8 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 					type: "checkbox",
 					default: false,
 					visible: () => isDesktopApp,
-					description: t("settings.swapMouseButtons.description", { defaultValue: `Switches the left and right mouse buttons.
+					description: t("settings.swapMouseButtons.description", {
+						defaultValue: `Switches the left and right mouse buttons.
 Useful if your system's mouse buttons are swapped.
 Could also be used to right click with the dwell clicker in a pinch.` }),
 				},
@@ -1918,7 +1922,8 @@ Could also be used to right click with the dwell clicker in a pinch.` }),
 					// description: t("settings.delayBeforeDragging.description.alt1", { defaultValue: "Locks mouse movement during the start of a click to prevent accidental dragging." }),
 					// description: t("settings.delayBeforeDragging.description.alt2", { defaultValue: `Prevents mouse movement for the specified time after a click starts.
 					// You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.` }),
-					description: t("settings.delayBeforeDragging.description", { defaultValue: `Locks mouse movement for the given duration during the start of a click.
+					description: t("settings.delayBeforeDragging.description", {
+						defaultValue: `Locks mouse movement for the given duration during the start of a click.
 You may want to turn this off if you're drawing on a canvas, or increase it if you find yourself accidentally dragging when you try to click.` }),
 				},
 			],
