@@ -6,15 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Manual takeback (temporary pause when you move the mouse) may require more mouse movement to trigger now, due to changes in measurement frequency
+
 ### Added
 
 - The heads-up display (screen overlay) will now hide within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
-  - Note: this currently uses only the head tracking based mouse position, and not the system mouse position, so it's not useful during manual mouse control, but this will be addressed before release.
 
 ### Fixed
 
 - Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
 - The desktop app's update checking dialogs now respect the selected language.
+- Mouse movement latency should be improved (unmeasured)
 
 ## [2.5.0] - 2026-03-07
 

@@ -477,11 +477,28 @@ const createWindow = () => {
 			inputFeedback,
 			bottomOffset,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
+			systemMousePosition: mousePosHistory.length ? mousePosHistory[mousePosHistory.length - 1].point : null,
 		});
 	};
-	ipcMain.on('moveMouse', async (_event, x, y, time) => {
-		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
-		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
+
+	let mousePosTid;
+	async function updateMousePosAndHandleManualTakebackLoop() {
+		// This uses setTimeout instead of setInterval to avoid a possible buildup of queued getMouseLocation requests
+		try {
+			await updateMousePosAndHandleManualTakeback();
+		} catch (error) {
+			console.error("Error in updateMousePosAndHandleManualTakeback:", error);
+		} finally {
+			mousePosTid = setTimeout(updateMousePosAndHandleManualTakebackLoop, 100);
+		}
+	}
+	updateMousePosAndHandleManualTakebackLoop();
+
+	async function updateMousePosAndHandleManualTakeback() {
+		// Experimental: separated getMouseLocation out from `ipcMain.on('moveMouse', ...)`
+		// to minimize latency, and to keep updating system mouse position
+		// for the purpose of hiding the HUD near the mouse.
+		// This separates logic for pausing/resuming camera-based control out from the camera-based control itself.
 		const curPos = await getMouseLocation();
 		curPos.x /= screenScaleFactor;
 		curPos.y /= screenScaleFactor;
@@ -518,11 +535,17 @@ const createWindow = () => {
 		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			// Note: there's no await here, not necessarily for a particular reason,
 			// although maybe it's better to send the 'moveMouse' event as soon as possible?
-			setMouseLocationTracky(x, y);
+			// setMouseLocationTracky(x, y);
 		}
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
-
+	}
+	ipcMain.on('moveMouse', async (_event, x, y, time) => {
+		if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
+			// Note: there's no await here, not necessarily for a particular reason,
+			// although maybe it's better to send the 'moveMouse' event as soon as possible?
+			setMouseLocationTracky(x, y);
+		}
 		screenOverlayWindow.webContents.send('moveMouse', x, y, time);
 	});
 
