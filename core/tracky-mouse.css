@@ -189,6 +189,37 @@
 	text-align: center;
 	color: white;
 	padding: 5px;
+	animation: tracky-mouse-jello-vertical 1s ease 0s 1 normal none;
+}
+
+@keyframes tracky-mouse-jello-vertical {
+	0% {
+		transform: scale3d(calc(calc(3 + 1) / 4), calc(calc(3 + 1) / 4), 1);
+	}
+
+	30% {
+		transform: scale3d(calc(calc(3 + 0.75) / 4), calc(calc(3 + 1.25) / 4), 1);
+	}
+
+	40% {
+		transform: scale3d(calc(calc(3 + 1.25) / 4), calc(calc(3 + 0.75) / 4), 1);
+	}
+
+	50% {
+		transform: scale3d(calc(calc(3 + 0.85) / 4), calc(calc(3 + 1.15) / 4), 1);
+	}
+
+	65% {
+		transform: scale3d(calc(calc(3 + 1.05) / 4), calc(calc(3 + 0.95) / 4), 1);
+	}
+
+	75% {
+		transform: scale3d(calc(calc(3 + 0.95) / 4), calc(calc(3 + 1.05) / 4), 1);
+	}
+
+	100% {
+		transform: scale3d(calc(calc(3 + 1) / 4), calc(calc(3 + 1) / 4), 1);
+	}
 }
 
 /* Screen overlay in electron app */

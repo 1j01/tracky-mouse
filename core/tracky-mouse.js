@@ -2687,6 +2687,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		updateStartStopButton();
 	};
 
+	let showedCameraError = false;
 	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
 		// Phases:
 		// 1. "tryPreferredCamera"
@@ -2864,6 +2865,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 			errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${errorMessage.textContent}`;
 			errorMessage.hidden = false;
+			// Play CSS animation only on retries
+			errorMessage.style.animation = "none";
+			if (showedCameraError) {
+				void errorMessage.offsetWidth; // trigger reflow to allow restarting animation
+				errorMessage.style.animation = "";
+			}
+			showedCameraError = true;
 		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - The heads-up display (screen overlay) will now hide within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
+- The camera access error message will now animate to give visual feedback that something is happening in case the same error message is shown.
 
 ### Fixed
 
