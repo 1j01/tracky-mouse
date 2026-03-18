@@ -541,6 +541,22 @@ const createWindow = () => {
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 	}
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
+
+		// Legacy behavior maintainence
+		// Syncronize the mouse position polling with the 'moveMouse' event
+		// so that the movement threshold (`thresholdToRegainControl`)
+		// is based on the time between 'mouseMove' events as before
+		// TODO: Could remove this to reduce latency, and clarify the units for the threshold,
+		// especially between the paused and unpaused states, which are currently different
+		// due to this legacy behavior maintainence,
+		// but will need to adjust the threshold to match the polling interval.
+		// Note the relatively large setTimeout duration,
+		// which should be long enough that a moveMouse event comes in
+		// before the timeout unless Tracky Mouse becomes paused.
+		clearTimeout(mousePosTid);
+		await updateMousePosAndHandleManualTakeback();
+		mousePosTid = setTimeout(updateMousePosAndHandleManualTakebackLoop, 500);
+
 		if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
 			// Note: there's no await here, not necessarily for a particular reason,
 			// although maybe it's better to send the 'moveMouse' event as soon as possible?
