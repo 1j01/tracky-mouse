@@ -4302,16 +4302,10 @@ TrackyMouse.initScreenOverlay = () => {
 		// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
 		inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
 
-		const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
-		const maskImage = `radial-gradient(circle at ${x}px ${y}px, transparent 0, transparent 50px, rgba(0, 0, 0, 0.85) 140px, rgba(0, 0, 0, 1) 200px, rgba(0, 0, 0, 1) 100%)`;
-		for (const el of hideNearCursorEls) {
-			el.style.webkitMaskImage = maskImage;
-			el.style.maskImage = maskImage;
-		}
 	}
 
 	function update(data) {
-		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset } = data;
+		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset, systemMousePosition } = data;
 
 		message.style.bottom = `${bottomOffset}px`;
 
@@ -4335,6 +4329,16 @@ TrackyMouse.initScreenOverlay = () => {
 		}
 
 		drawInputFeedback(data);
+
+		if (systemMousePosition) {
+			const { x, y } = systemMousePosition;
+			const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
+			const maskImage = `radial-gradient(circle at ${x}px ${y}px, transparent 0, transparent 50px, rgba(0, 0, 0, 0.85) 140px, rgba(0, 0, 0, 1) 200px, rgba(0, 0, 0, 1) 100%)`;
+			for (const el of hideNearCursorEls) {
+				el.style.webkitMaskImage = maskImage;
+				el.style.maskImage = maskImage;
+			}
+		}
 	}
 
 	return {

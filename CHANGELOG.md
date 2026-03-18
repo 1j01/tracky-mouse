@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - The heads-up display (screen overlay) will now hide within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
-  - Note: this currently uses only the head tracking based mouse position, and not the system mouse position, so it's not useful during manual mouse control, but this will be addressed before release.
 
 ### Fixed
 

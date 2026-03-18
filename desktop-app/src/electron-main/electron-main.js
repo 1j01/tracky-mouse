@@ -466,22 +466,50 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
 	let primaryDisplay = screen.getPrimaryDisplay();
+	let systemMousePosition = null;
 	const updateDwellClickingAndHUD = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
-		screenOverlayWindow.webContents.send('overlayUpdate', {
+		screenOverlayWindow?.webContents.send('overlayUpdate', {
 			isEnabled: enabled && !isManualTakeback,
 			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
 			inputFeedback,
 			bottomOffset,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
+			systemMousePosition,
 		});
 	};
+
+	let monitorMousePositionTid = null;
+	async function monitorMousePosition() {
+		try {
+			const pos = await getMouseLocation();
+			systemMousePosition = { x: pos.x / screenScaleFactor, y: pos.y / screenScaleFactor };
+		} catch (error) {
+			console.error("Error getting mouse position:", error);
+		}
+		try {
+			// Update hide-HUD-near-cursor effect
+			updateDwellClickingAndHUD();
+		} catch (error) {
+			console.error("Error updating overlay (with new mouse position):", error);
+		}
+		clearTimeout(monitorMousePositionTid);
+		monitorMousePositionTid = setTimeout(monitorMousePosition, 10);
+	}
+	monitorMousePosition();
+
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
+		// Update: I have done a test of extracting this. It works but note that it may change the
+		// effective scale of `thresholdToRegainControl` if the frequency of mouse position measurements changes.
+		// There is now the monitorMousePosition loop which could be merged with this
+		// (It was this hide-HUD-near-cursor feature that had me trying extracting this, but I decided to make it a separate loop for now,
+		// to preserve the behaviorof `thresholdToRegainControl` and introduce the hide-HUD-near-cursor feature with minimal code changes.
+		// The downside being `getMouseLocation` is called in multiple loops in parallel.)
 		const curPos = await getMouseLocation();
 		curPos.x /= screenScaleFactor;
 		curPos.y /= screenScaleFactor;
