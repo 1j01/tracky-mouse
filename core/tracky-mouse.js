@@ -4264,6 +4264,8 @@ TrackyMouse.initScreenOverlay = () => {
 	const message = document.getElementById("tracky-mouse-screen-overlay-message");
 	message.dir = "auto";
 
+	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
+
 	const inputFeedbackCanvas = document.createElement("canvas");
 	inputFeedbackCanvas.style.position = "absolute";
 	inputFeedbackCanvas.style.top = "0";
@@ -4332,7 +4334,7 @@ TrackyMouse.initScreenOverlay = () => {
 
 		if (systemMousePosition) {
 			const { x, y } = systemMousePosition;
-			const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
+			// TODO: optimize CSS parsing by using CSS variables?
 			const maskImage = `radial-gradient(circle at ${x}px ${y}px, transparent 0, transparent 50px, rgba(0, 0, 0, 0.85) 140px, rgba(0, 0, 0, 1) 200px, rgba(0, 0, 0, 1) 100%)`;
 			for (const el of hideNearCursorEls) {
 				el.style.webkitMaskImage = maskImage;
