@@ -3905,9 +3905,36 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
 			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
 
-			var distance = Math.hypot(movementX, movementY);
-			var deltaX = accelerate(movementX * s.headTrackingSensitivityX, distance);
-			var deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
+			// Circularly-preserving acceleration:
+			// average acceleration along many axes to avoid squarish movement.
+			// This may be excessively complex compared to an exact geometric solution.
+			const numAngles = 20;
+			let sumDeltaX = 0;
+			let sumDeltaY = 0;
+			// Apply sensitivity settings
+			const movementXScaled = movementX * s.headTrackingSensitivityX;
+			const movementYScaled = movementY * s.headTrackingSensitivityY;
+			for (let i = 0; i < numAngles; i++) {
+				const angle = (Math.PI / numAngles) * i;
+				const cos = Math.cos(angle);
+				const sin = Math.sin(angle);
+				// Rotate movement vector
+				const rotated = {
+					x: movementXScaled * cos + movementYScaled * sin,
+					y: -movementXScaled * sin + movementYScaled * cos
+				};
+				// Apply acceleration in rotated coordinate space
+				const acceleratedX = accelerate(rotated.x, Math.hypot(rotated.x, rotated.y));
+				const acceleratedY = accelerate(rotated.y, Math.hypot(rotated.x, rotated.y));
+				// Rotate back
+				const sampleDeltaX = acceleratedX * cos - acceleratedY * sin;
+				const sampleDeltaY = acceleratedX * sin + acceleratedY * cos;
+
+				sumDeltaX += sampleDeltaX;
+				sumDeltaY += sampleDeltaY;
+			}
+			let deltaX = sumDeltaX / numAngles;
+			let deltaY = sumDeltaY / numAngles;
 
 			if (s.headTrackingTiltInfluence > 0) {
 				const yawRange = [
