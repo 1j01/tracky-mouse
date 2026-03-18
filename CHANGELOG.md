@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
+- Head tracking movement is now more circularly balanced: diagonal movement is no longer weaker than horizontal/vertical movement, making it easier to reach screen corners and draw smooth circles. ([issue #46](https://github.com/1j01/tracky-mouse/issues/46))
 - The desktop app's update checking dialogs now respect the selected language.
 - The "searching for head" icon will no longer show before connecting to a camera.
 
