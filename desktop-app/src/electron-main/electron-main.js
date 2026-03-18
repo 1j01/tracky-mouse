@@ -523,7 +523,12 @@ const createWindow = () => {
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 				updateDwellClicking();
 			}, regainControlForTime);
-			updateDwellClicking();
+			// `regainControlTimeout` is also a flag controlling the dwell clicker
+			// when `updateDwellClicking` is called.
+			// `updateDwellClicking` is now unconditionally called at the bottom of this function
+			// to update the HUD (it should be named `updateDwellClickingAndHUD`)
+			// updateDwellClicking();
+
 			// Prevent immediately returning to manual control after switching to camera control
 			// based on head movement while in manual control mode.
 			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
@@ -539,6 +544,10 @@ const createWindow = () => {
 		}
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
+
+		// Update "hide HUD near cursor" effect
+		// AND importantly, dwell clicker state (sometimes)
+		updateDwellClicking();
 	}
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
 
