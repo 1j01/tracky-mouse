@@ -466,7 +466,7 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
 	let primaryDisplay = screen.getPrimaryDisplay();
-	const updateDwellClicking = () => {
+	const updateDwellClickingAndHUD = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
@@ -504,9 +504,9 @@ const createWindow = () => {
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
 				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
-				updateDwellClicking();
+				updateDwellClickingAndHUD();
 			}, regainControlForTime);
-			updateDwellClicking();
+			updateDwellClickingAndHUD();
 			// Prevent immediately returning to manual control after switching to camera control
 			// based on head movement while in manual control mode.
 			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
@@ -534,7 +534,7 @@ const createWindow = () => {
 			initialPos.y /= screenScaleFactor;
 		}
 		enabled = nowEnabled;
-		updateDwellClicking();
+		updateDwellClickingAndHUD();
 
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
@@ -547,7 +547,7 @@ const createWindow = () => {
 	});
 	ipcMain.on('updateInputFeedback', (_event, data) => {
 		inputFeedback = data;
-		updateDwellClicking();
+		updateDwellClickingAndHUD();
 	});
 
 
@@ -700,7 +700,7 @@ const createWindow = () => {
 				height: primaryDisplay.bounds.height,
 			});
 		}
-		updateDwellClicking();
+		updateDwellClickingAndHUD();
 	});
 
 	// screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
