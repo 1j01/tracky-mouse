@@ -10,7 +10,14 @@ await TrackyMouse.loadDependencies();
 // but may violate the principle of least surprise.
 // I could accept an options object with mutually exclusive options
 // to `extend`, `replace`, or `appendTo`.
+
 TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
+
+// Legitimate integration: Screen Overlay (HUD)
+let screenOverlay = null;
+if (TrackyMouse.initScreenOverlay) {
+	screenOverlay = TrackyMouse.initScreenOverlay();
+}
 
 // This example is based off of how JS Paint uses the Tracky Mouse API.
 // It's simplified a bit, but includes various settings.
@@ -174,6 +181,43 @@ TrackyMouse.onPointerMove = (x, y) => {
 		cancelable: true,
 	}));
 	target.dispatchEvent(event);
+	// Update Screen Overlay HUD position
+	if (screenOverlay && screenOverlay.updateMousePos) {
+		screenOverlay.updateMousePos(x, y);
+	}
+	// Update Screen Overlay HUD state to match electron app
+	if (screenOverlay && screenOverlay.update) {
+		const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+		const started = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
+		// Manual takeback: not implemented in web demo, so always false
+		const isManualTakeback = false;
+		// Message logic copied from electron app
+		let messageText;
+		if (isManualTakeback) {
+			messageText = "Will resume after mouse stops moving.";
+		} else if (typeof started !== "boolean") {
+			messageText = "Press F9 to toggle Tracky Mouse.";
+		} else if (started) {
+			messageText = "Press F9 to disable Tracky Mouse.";
+		} else {
+			messageText = "Press F9 to enable Tracky Mouse.";
+		}
+		// Input feedback: placeholder, could be wired to real tracking state
+		const inputFeedback = {
+			headNotFound: false,
+			blinkInfo: { used: false },
+			mouthInfo: { used: false },
+		};
+		screenOverlay.update({
+			isEnabled: started && !isManualTakeback,
+			isManualTakeback,
+			clickingMode: "dwell", // not used in overlay, but matches electron app
+			inputFeedback,
+			bottomOffset: 0,
+			messageText,
+			systemMousePosition: { x, y },
+		});
+	}
 };
 
 // Archery mini-game
