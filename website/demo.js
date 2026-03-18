@@ -153,34 +153,7 @@ const getEventOptions = ({ x, y }) => {
 	};
 };
 let last_el_over = null;
-TrackyMouse.onPointerMove = (x, y) => {
-	const target = document.elementFromPoint(x, y) || document.body;
-	if (target !== last_el_over) {
-		if (last_el_over) {
-			const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
-				button: 0,
-				buttons: 1,
-				bubbles: false,
-				cancelable: false,
-			}));
-			last_el_over.dispatchEvent(event);
-		}
-		const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 1,
-			bubbles: false,
-			cancelable: false,
-		}));
-		target.dispatchEvent(event);
-		last_el_over = target;
-	}
-	const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
-		button: 0,
-		buttons: 1,
-		bubbles: true,
-		cancelable: true,
-	}));
-	target.dispatchEvent(event);
+function updateScreenOverlayHUD(x = window.innerWidth / 2, y = window.innerHeight - 40) {
 	// Update Screen Overlay HUD position
 	if (screenOverlay && screenOverlay.updateMousePos) {
 		screenOverlay.updateMousePos(x, y);
@@ -218,7 +191,48 @@ TrackyMouse.onPointerMove = (x, y) => {
 			systemMousePosition: { x, y },
 		});
 	}
+}
+
+TrackyMouse.onPointerMove = (x, y) => {
+	const target = document.elementFromPoint(x, y) || document.body;
+	if (target !== last_el_over) {
+		if (last_el_over) {
+			const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
+				button: 0,
+				buttons: 1,
+				bubbles: false,
+				cancelable: false,
+			}));
+			last_el_over.dispatchEvent(event);
+		}
+		const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: false,
+			cancelable: false,
+		}));
+		target.dispatchEvent(event);
+		last_el_over = target;
+	}
+	const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
+		button: 0,
+		buttons: 1,
+		bubbles: true,
+		cancelable: true,
+	}));
+	target.dispatchEvent(event);
+	updateScreenOverlayHUD(x, y);
 };
+
+// Initial HUD update on load
+updateScreenOverlayHUD();
+
+// Update HUD when toggling start/stop
+document.addEventListener("click", (e) => {
+	if (e.target && e.target.classList.contains("tracky-mouse-start-stop-button")) {
+		setTimeout(() => updateScreenOverlayHUD(), 0);
+	}
+});
 
 // Archery mini-game
 const archery_game = document.getElementById("archery-demo");
