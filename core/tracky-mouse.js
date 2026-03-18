@@ -4246,6 +4246,7 @@ TrackyMouse.init = function (div, opts = {}) {
 TrackyMouse.initScreenOverlay = () => {
 
 	const template = `
+	<div class="tracky-mouse-hide-near-cursor">
 		<div class="tracky-mouse-absolute-center">
 			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
 				<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
@@ -4255,6 +4256,7 @@ TrackyMouse.initScreenOverlay = () => {
 			</div>
 		</div>
 		<div id="tracky-mouse-screen-overlay-message"></div>
+	</div>
 	`;
 	const fragment = document.createRange().createContextualFragment(template);
 	document.body.appendChild(fragment);
@@ -4299,6 +4301,13 @@ TrackyMouse.initScreenOverlay = () => {
 		// inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
 		// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
 		inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
+
+		const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
+		const maskImage = `radial-gradient(circle at ${x}px ${y}px, transparent 0, transparent 50px, rgba(0, 0, 0, 0.85) 140px, rgba(0, 0, 0, 1) 200px, rgba(0, 0, 0, 1) 100%)`;
+		for (const el of hideNearCursorEls) {
+			el.style.webkitMaskImage = maskImage;
+			el.style.maskImage = maskImage;
+		}
 	}
 
 	function update(data) {
