@@ -466,6 +466,7 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
 	let primaryDisplay = screen.getPrimaryDisplay();
+	let systemMousePosition = null;
 	const updateDwellClicking = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
@@ -477,7 +478,7 @@ const createWindow = () => {
 			inputFeedback,
 			bottomOffset,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
-			systemMousePosition: mousePosHistory.length ? mousePosHistory[mousePosHistory.length - 1].point : null,
+			systemMousePosition,
 		});
 	};
 
@@ -502,6 +503,7 @@ const createWindow = () => {
 		const curPos = await getMouseLocation();
 		curPos.x /= screenScaleFactor;
 		curPos.y /= screenScaleFactor;
+		systemMousePosition = { x: curPos.x, y: curPos.y };
 		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
 		// since setMouseLocation is asynchronous,
 		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
