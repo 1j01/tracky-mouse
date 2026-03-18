@@ -4314,8 +4314,8 @@ TrackyMouse.initScreenOverlay = () => {
 		// - bad lighting conditions
 		// see: https://github.com/1j01/tracky-mouse/issues/26
 
-		document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback);
-		document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound);
+		document.body.classList.toggle("tracky-mouse-manual-takeback", isManualTakeback ?? false);
+		document.body.classList.toggle("tracky-mouse-head-not-found", inputFeedback.headNotFound ?? false);
 
 		message.innerText = messageText;
 

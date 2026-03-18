@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
 - The desktop app's update checking dialogs now respect the selected language.
+- The "searching for head" icon will no longer show before connecting to a camera.
 
 ## [2.5.0] - 2026-03-07
 
