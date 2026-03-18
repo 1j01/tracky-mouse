@@ -571,7 +571,13 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse._initInner = function (div, { statsJs = false }, reinit) {
+TrackyMouse._initInner = function (div, initOptions, reinit) {
+
+	const {
+		statsJs = false,
+		updateInputFeedback = window.electronAPI?.updateInputFeedback,
+		// TODO: manage all of electronAPI similarly?
+	} = initOptions;
 
 	const isDesktopApp = !!window.electronAPI;
 
@@ -3605,13 +3611,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			pointTracker.update(imageData);
 		}
 
-		if (window.electronAPI) {
-			window.electronAPI.updateInputFeedback({
-				headNotFound: !face && !facemeshPrediction,
-				blinkInfo,
-				mouthInfo,
-			});
-		}
+		updateInputFeedback?.({
+			headNotFound: !face && !facemeshPrediction,
+			blinkInfo,
+			mouthInfo,
+		});
 
 		if (facemeshPrediction) {
 			ctx.fillStyle = "red";
@@ -4275,7 +4279,8 @@ TrackyMouse.initScreenOverlay = () => {
 	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
 
 	const inputFeedbackCanvas = document.createElement("canvas");
-	inputFeedbackCanvas.style.position = "absolute";
+	inputFeedbackCanvas.style.position = "fixed";
+	inputFeedbackCanvas.style.zIndex = "899990"; // just below .tracky-mouse-pointer
 	inputFeedbackCanvas.style.top = "0";
 	inputFeedbackCanvas.style.left = "0";
 	inputFeedbackCanvas.style.pointerEvents = "none";

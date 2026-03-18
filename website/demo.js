@@ -4,13 +4,30 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+let inputFeedback = {};
+let systemMousePosition = {};
+addEventListener("pointermove", (event) => {
+	systemMousePosition = { x: event.clientX, y: event.clientY };
+	updateHUD();
+});
+
+const initOptions = {
+	updateInputFeedback: (data) => {
+		inputFeedback = data;
+		updateHUD();
+	},
+};
+
 // Note: init currently extends the passed element,
 // rather than replacing it or adding a child to it.
 // That is technically the most flexible, I suppose,
 // but may violate the principle of least surprise.
 // I could accept an options object with mutually exclusive options
 // to `extend`, `replace`, or `appendTo`.
-TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
+TrackyMouse.init(document.getElementById("tracky-mouse-demo"), initOptions);
+
+// UNSTABLE API
+const screenOverlay = TrackyMouse.initScreenOverlay();
 
 // This example is based off of how JS Paint uses the Tracky Mouse API.
 // It's simplified a bit, but includes various settings.
@@ -110,6 +127,7 @@ const observer = new MutationObserver(() => {
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started;
+	updateHUD();
 });
 // observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
 // The UI can now be re-initialized when switching languages, creating a new button
@@ -147,6 +165,7 @@ const getEventOptions = ({ x, y }) => {
 };
 let last_el_over = null;
 TrackyMouse.onPointerMove = (x, y) => {
+	screenOverlay.updateMousePos(x, y); // UNSTABLE API
 	const target = document.elementFromPoint(x, y) || document.body;
 	if (target !== last_el_over) {
 		if (last_el_over) {
@@ -175,6 +194,38 @@ TrackyMouse.onPointerMove = (x, y) => {
 	}));
 	target.dispatchEvent(event);
 };
+
+function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
+	// TODO: share message logic with desktop app and support localization here
+	/** translation placeholder */
+	const t = (key, options = {}) => options.defaultValue ?? key;
+	return isManualTakeback ?
+		t("hud.willResumeAfterMouseStops", { defaultValue: "Will resume after mouse stops moving." }) :
+		typeof enabled !== "boolean" ? t("hud.pressToToggle", { defaultValue: "Press %0 to toggle Tracky Mouse." }).replace("%0", "F9") :
+			enabled ?
+				t("hud.pressToDisable", { defaultValue: "Press %0 to disable Tracky Mouse." }).replace("%0", "F9") :
+				t("hud.pressToEnable", { defaultValue: "Press %0 to enable Tracky Mouse." }).replace("%0", "F9");
+}
+
+function updateHUD() {
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
+	// TODO: implement manual takeback in web version
+	// https://github.com/1j01/tracky-mouse/issues/72
+	const isManualTakeback = false;
+	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
+	// UNSTABLE API
+	screenOverlay.update({
+		isEnabled: enabled && !isManualTakeback,
+		isManualTakeback,
+		clickingMode: "dwell", // activeSettings.clickingMode, TODO: support other clicking modes in web version
+		inputFeedback,
+		bottomOffset,
+		messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
+		systemMousePosition,
+	});
+}
+updateHUD();
 
 // Archery mini-game
 import("./archery-mini-game.js");
