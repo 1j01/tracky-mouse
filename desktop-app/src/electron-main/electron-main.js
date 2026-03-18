@@ -471,6 +471,12 @@ const createWindow = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
+		if (!screenOverlayWindow) {
+			// edge case: during close,
+			// updating in loop
+			return;
+		}
+
 		screenOverlayWindow.webContents.send('overlayUpdate', {
 			isEnabled: enabled && !isManualTakeback,
 			isManualTakeback,
@@ -485,6 +491,11 @@ const createWindow = () => {
 	let mousePosTid;
 	async function updateMousePosAndHandleManualTakebackLoop() {
 		// This uses setTimeout instead of setInterval to avoid a possible buildup of queued getMouseLocation requests
+
+		if (!screenOverlayWindow) {
+			return;
+		}
+
 		try {
 			await updateMousePosAndHandleManualTakeback();
 		} catch (error) {
