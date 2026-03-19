@@ -4,6 +4,15 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+let inputFeedback = {};
+
+const initOptions = {
+	updateInputFeedback: (data) => {
+		inputFeedback = data;
+		updateHUD();
+	},
+};
+
 // Note: init currently extends the passed element,
 // rather than replacing it or adding a child to it.
 // That is technically the most flexible, I suppose,
@@ -11,6 +20,7 @@ await TrackyMouse.loadDependencies();
 // I could accept an options object with mutually exclusive options
 // to `extend`, `replace`, or `appendTo`.
 TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
+
 
 const screenOverlay = TrackyMouse.initScreenOverlay();
 
@@ -112,6 +122,7 @@ const observer = new MutationObserver(() => {
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started;
+	updateHUD();
 });
 // observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
 // The UI can now be re-initialized when switching languages, creating a new button
@@ -176,8 +187,10 @@ TrackyMouse.onPointerMove = (x, y) => {
 		cancelable: true,
 	}));
 	target.dispatchEvent(event);
-	// Update HUD
-	screenOverlay.updateMousePos(x, y);
+};
+
+function updateHUD() {
+	// screenOverlay.updateMousePos(x, y);
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
 	// TODO: implement manual takeback in web version
@@ -191,12 +204,6 @@ TrackyMouse.onPointerMove = (x, y) => {
 	} else if (started === false) {
 		messageText = "Press F9 to enable Tracky Mouse.";
 	}
-	// TODO: real input feedback
-	const inputFeedback = {
-		headNotFound: false,
-		blinkInfo: { used: false },
-		mouthInfo: { used: false },
-	};
 	screenOverlay.update({
 		isEnabled: started && !isManualTakeback,
 		isManualTakeback,
@@ -204,9 +211,10 @@ TrackyMouse.onPointerMove = (x, y) => {
 		inputFeedback,
 		bottomOffset: 0,
 		messageText,
-		systemMousePosition: { x, y },
+		// systemMousePosition: { x, y },
 	});
-};
+}
+updateHUD();
 
 // Archery mini-game
 import("./archery-mini-game.js");
