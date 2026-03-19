@@ -2364,13 +2364,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var blinkInfo;
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
-	// For head tilt smoothing: a bank of filters at different angles for each axis
-	var headTiltFilterBanks = {
-		pitch: null,
-		yaw: null,
-		roll: null
-	};
-	var headTiltFilterBankAngles = 12; // Number of filters/angles in the bank
+	// For head tilt smoothing: a bank of filters at different angles in the pitch/yaw plane
+	var headTiltFilterBank = null; // Array of OneEuroFilter for pitch/yaw 2D smoothing
+	var headTiltFilterBankAngles = 12; // Number of angles in the bank
 	var headTiltFilterBankParams = {
 		freq: 60,
 		mincutoff: 0.01,
@@ -3368,32 +3364,36 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 								if (typeof OneEuroFilter !== "undefined") {
 									const timestamp = performance.now() / 1000;
-									// Initialize filter banks if needed
-									for (const axis of ["pitch", "yaw", "roll"]) {
-										if (!headTiltFilterBanks[axis]) {
-											headTiltFilterBanks[axis] = [];
-											for (let i = 0; i < headTiltFilterBankAngles; i++) {
-												headTiltFilterBanks[axis].push(
-													new OneEuroFilter(
-														headTiltFilterBankParams.freq,
-														headTiltFilterBankParams.mincutoff,
-														headTiltFilterBankParams.beta,
-														headTiltFilterBankParams.dcutoff
-													)
-												);
-											}
-										}
-									}
-									// Apply the bank of filters at different angles and average the results
-									for (const axis of ["pitch", "yaw", "roll"]) {
-										let sum = 0;
+									// Initialize filter bank if needed
+									if (!headTiltFilterBank) {
+										headTiltFilterBank = [];
 										for (let i = 0; i < headTiltFilterBankAngles; i++) {
-											// Optionally, use a slightly different value for each filter (e.g., add a small offset/noise or rotate in a virtual space)
-											// For now, just use the same value for all filters, but this is where angle-specific logic could go
-											sum += headTiltFilterBanks[axis][i].filter(headTilt[axis], timestamp);
+											headTiltFilterBank.push(
+												new OneEuroFilter(
+													headTiltFilterBankParams.freq,
+													headTiltFilterBankParams.mincutoff,
+													headTiltFilterBankParams.beta,
+													headTiltFilterBankParams.dcutoff
+												)
+											);
 										}
-										headTilt[axis] = sum / headTiltFilterBankAngles;
 									}
+									// Apply the bank of filters at different angles in the pitch/yaw plane and average the results
+									let sumPitch = 0;
+									let sumYaw = 0;
+									for (let i = 0; i < headTiltFilterBankAngles; i++) {
+										const angle = (Math.PI * 2 / headTiltFilterBankAngles) * i;
+										// Project (pitch, yaw) onto this angle
+										const projected = headTilt.pitch * Math.cos(angle) + headTilt.yaw * Math.sin(angle);
+										// Filter the projected value
+										const filtered = headTiltFilterBank[i].filter(projected, timestamp);
+										// Reconstruct pitch and yaw components
+										sumPitch += filtered * Math.cos(angle);
+										sumYaw   += filtered * Math.sin(angle);
+									}
+									headTilt.pitch = sumPitch / headTiltFilterBankAngles;
+									headTilt.yaw   = sumYaw   / headTiltFilterBankAngles;
+									// Roll is filtered independently (if needed)
 								}
 							}
 						}
