@@ -134,6 +134,35 @@ const inputSimulator = {
 			target.value = fraction * (max - min) + min;
 			target.dispatchEvent(new Event("input", { bubbles: true }));
 			target.dispatchEvent(new Event("change", { bubbles: true }));
+		} else if (target.matches("option")) {
+			const dropdown = target.closest("select");
+			if (dropdown) {
+				dropdown.value = target.value;
+				dropdown.removeAttribute("size");
+				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+				dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+			}
+		} else if (target.matches("select")) {
+			// Special handling for dropdowns
+			// Idea from https://stackoverflow.com/a/19652333
+			// TODO: don't assume size attribute is not used normally on the page
+			// TODO: use a [temporary] wrapper element for positioning to simulate flyout behavior
+			if (target.getAttribute("size")) {
+				// Fallback logic assuming all options are the same height
+				// Do any browsers actually not give you <option> elements with document.getElementFromPoint?
+				// I assumed they wouldn't when I wrote this, but it's great that they do, or Firefox does at least
+				const rect = target.getBoundingClientRect();
+				const fraction = (y - rect.top) / rect.height;
+				target.value = target.options[Math.floor(fraction * target.options.length)].value;
+				target.removeAttribute("size");
+				target.dispatchEvent(new Event("input", { bubbles: true }));
+				target.dispatchEvent(new Event("change", { bubbles: true }));
+			} else {
+				target.setAttribute("size", String(target.options.length));
+				target.addEventListener("blur", () => {
+					target.removeAttribute("size");
+				}, { once: true });
+			}
 		} else {
 			// Normal click
 			target.click();
@@ -192,6 +221,8 @@ const config = {
 		button:not([disabled]),
 		input,
 		textarea,
+		select,
+		select option,
 		label,
 		a,
 		details summary,
