@@ -5,6 +5,11 @@ TrackyMouse.dependenciesRoot = "./core";
 await TrackyMouse.loadDependencies();
 
 let inputFeedback = {};
+let systemMousePosition = {};
+addEventListener("mousemove", (event) => {
+	systemMousePosition = { x: event.clientX, y: event.clientY };
+	updateHUD();
+});
 
 const initOptions = {
 	updateInputFeedback: (data) => {
@@ -19,7 +24,7 @@ const initOptions = {
 // but may violate the principle of least surprise.
 // I could accept an options object with mutually exclusive options
 // to `extend`, `replace`, or `appendTo`.
-TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
+TrackyMouse.init(document.getElementById("tracky-mouse-demo"), initOptions);
 
 
 const screenOverlay = TrackyMouse.initScreenOverlay();
@@ -211,7 +216,7 @@ function updateHUD() {
 		inputFeedback,
 		bottomOffset: 0,
 		messageText,
-		// systemMousePosition: { x, y },
+		systemMousePosition,
 	});
 }
 updateHUD();
