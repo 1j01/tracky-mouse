@@ -27,6 +27,7 @@ exports.include = [
 	"tracky-mouse-homepage.css",
 	"tracky-mouse-goodies-page.css",
 	"demo.js",
+	"archery-mini-game.js",
 	"core/tracky-mouse.css",
 	"core/tracky-mouse.js",
 	"core/locales/*/translation.json",
