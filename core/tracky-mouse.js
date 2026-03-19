@@ -1887,7 +1887,7 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 						{ value: "off", label: t("settings.clickingMode.off.label", { defaultValue: "Off" }), description: t("settings.clickingMode.off.description", { defaultValue: "Disable clicking. Use with an external switch or programs that provide their own dwell clicking." }) },
 					],
 					default: "dwell",
-					visible: () => isDesktopApp,
+					// visible: () => isDesktopApp,
 					description: t("settings.clickingMode.description", { defaultValue: "Choose how to perform mouse clicks." }),
 				},
 				{
