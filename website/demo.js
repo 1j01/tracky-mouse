@@ -11,10 +11,137 @@ addEventListener("pointermove", (event) => {
 	updateHUD();
 });
 
+// Source: https://stackoverflow.com/a/54492696/2624876
+function getCurrentRotation(el) {
+	const st = window.getComputedStyle(el, null);
+	const tm = st.getPropertyValue("-webkit-transform") ||
+		st.getPropertyValue("-moz-transform") ||
+		st.getPropertyValue("-ms-transform") ||
+		st.getPropertyValue("-o-transform") ||
+		st.getPropertyValue("transform") ||
+		"none";
+	if (tm !== "none") {
+		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
+		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
+	}
+	return 0;
+}
+
+// Pointer event simulation logic should be built into tracky-mouse in the future.
+// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
+// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
+const getEventOptions = ({ x, y }) => {
+	return {
+		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
+		clientX: x,
+		clientY: y,
+		pointerId: 1234567890, // a special value so other code can detect these simulated events
+		pointerType: "mouse",
+		isPrimary: true,
+	};
+};
+
+const inputSimulator = {
+	buttonStates: {
+		left: false,
+		right: false,
+		middle: false,
+	},
+	lastElOver: null,
+	pointerMove(x, y) {
+		const target = document.elementFromPoint(x, y) || document.body;
+		if (target !== this.lastElOver) {
+			if (this.lastElOver) {
+				const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
+					button: 0,
+					buttons: 1,
+					bubbles: false,
+					cancelable: false,
+				}));
+				this.lastElOver.dispatchEvent(event);
+			}
+			const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
+				button: 0,
+				buttons: 1,
+				bubbles: false,
+				cancelable: false,
+			}));
+			target.dispatchEvent(event);
+			this.lastElOver = target;
+		}
+		const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+	},
+	pointerDown(target, x, y) {
+		const event = new PointerEvent("pointerdown", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+	},
+	pointerUp(target, x, y) {
+		const event = new PointerEvent("pointerup", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 0,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+	},
+	setMouseButtonState(buttonIndex, pressed) {
+		if (this.buttonStates[buttonIndex] !== pressed) {
+			const { x, y } = systemMousePosition;
+			const target = document.elementFromPoint(x, y) || document.body;
+			if (pressed) {
+				this.pointerDown(target, x, y);
+			} else {
+				this.pointerUp(target, x, y);
+			}
+			this.buttonStates[buttonIndex] = pressed;
+		}
+	},
+	click(target, x, y) {
+		if (target.matches("input[type='range']")) {
+			// Special handling for sliders
+			const rect = target.getBoundingClientRect();
+			const vertical =
+				target.getAttribute("orient") === "vertical" ||
+				(getCurrentRotation(target) !== 0) ||
+				rect.height > rect.width;
+			const min = Number(target.min);
+			const max = Number(target.max);
+			const style = window.getComputedStyle(target);
+			const isRTL = style.direction === "rtl";
+			const fraction = vertical
+				? (y - rect.top) / rect.height
+				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
+			target.value = fraction * (max - min) + min;
+			target.dispatchEvent(new Event("input", { bubbles: true }));
+			target.dispatchEvent(new Event("change", { bubbles: true }));
+		} else {
+			// Normal click
+			target.click();
+			if (target.matches("input, textarea")) {
+				target.focus();
+			}
+		}
+	},
+};
+
 const initOptions = {
 	updateInputFeedback: (data) => {
 		inputFeedback = data;
 		updateHUD();
+	},
+	setMouseButtonState: (buttonIndex, pressed) => {
+		inputSimulator.setMouseButtonState(buttonIndex, pressed);
 	},
 };
 
@@ -134,64 +261,8 @@ const observer = new MutationObserver(() => {
 observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
 
 
-// Source: https://stackoverflow.com/a/54492696/2624876
-function getCurrentRotation(el) {
-	const st = window.getComputedStyle(el, null);
-	const tm = st.getPropertyValue("-webkit-transform") ||
-		st.getPropertyValue("-moz-transform") ||
-		st.getPropertyValue("-ms-transform") ||
-		st.getPropertyValue("-o-transform") ||
-		st.getPropertyValue("transform") ||
-		"none";
-	if (tm !== "none") {
-		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
-		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
-	}
-	return 0;
-}
-
-// Pointer event simulation logic should be built into tracky-mouse in the future.
-// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
-// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
-const getEventOptions = ({ x, y }) => {
-	return {
-		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
-		clientX: x,
-		clientY: y,
-		pointerId: 1234567890, // a special value so other code can detect these simulated events
-		pointerType: "mouse",
-		isPrimary: true,
-	};
-};
-let last_el_over = null;
 TrackyMouse.onPointerMove = (x, y) => {
-	const target = document.elementFromPoint(x, y) || document.body;
-	if (target !== last_el_over) {
-		if (last_el_over) {
-			const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
-				button: 0,
-				buttons: 1,
-				bubbles: false,
-				cancelable: false,
-			}));
-			last_el_over.dispatchEvent(event);
-		}
-		const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 1,
-			bubbles: false,
-			cancelable: false,
-		}));
-		target.dispatchEvent(event);
-		last_el_over = target;
-	}
-	const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
-		button: 0,
-		buttons: 1,
-		bubbles: true,
-		cancelable: true,
-	}));
-	target.dispatchEvent(event);
+	inputSimulator.pointerMove(x, y);
 };
 
 function updateHUD() {
