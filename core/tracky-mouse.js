@@ -2364,7 +2364,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var blinkInfo;
 	var mouthInfo;
 	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
-	var headTiltFilters = { pitch: null, yaw: null, roll: null };
+	// For head tilt smoothing: a bank of filters at different angles for each axis
+	var headTiltFilterBanks = {
+		pitch: null,
+		yaw: null,
+		roll: null
+	};
+	var headTiltFilterBankAngles = 12; // Number of filters/angles in the bank
+	var headTiltFilterBankParams = {
+		freq: 60,
+		mincutoff: 0.01,
+		beta: 5.0,
+		dcutoff: 0.7
+	};
 	var lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
 	// ## State related to switching between head trackers
 	var useClmTracking = true;
@@ -3356,17 +3368,31 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 								if (typeof OneEuroFilter !== "undefined") {
 									const timestamp = performance.now() / 1000;
-									if (!headTiltFilters.pitch) {
-										const freq = 60;
-										const mincutoff = 0.01;
-										const beta = 5.0;
-										const dcutoff = 0.7;
-										for (const axis of ["pitch", "yaw", "roll"]) {
-											headTiltFilters[axis] = new OneEuroFilter(freq, mincutoff, beta, dcutoff);
+									// Initialize filter banks if needed
+									for (const axis of ["pitch", "yaw", "roll"]) {
+										if (!headTiltFilterBanks[axis]) {
+											headTiltFilterBanks[axis] = [];
+											for (let i = 0; i < headTiltFilterBankAngles; i++) {
+												headTiltFilterBanks[axis].push(
+													new OneEuroFilter(
+														headTiltFilterBankParams.freq,
+														headTiltFilterBankParams.mincutoff,
+														headTiltFilterBankParams.beta,
+														headTiltFilterBankParams.dcutoff
+													)
+												);
+											}
 										}
 									}
+									// Apply the bank of filters at different angles and average the results
 									for (const axis of ["pitch", "yaw", "roll"]) {
-										headTilt[axis] = headTiltFilters[axis].filter(headTilt[axis], timestamp);
+										let sum = 0;
+										for (let i = 0; i < headTiltFilterBankAngles; i++) {
+											// Optionally, use a slightly different value for each filter (e.g., add a small offset/noise or rotate in a virtual space)
+											// For now, just use the same value for all filters, but this is where angle-specific logic could go
+											sum += headTiltFilterBanks[axis][i].filter(headTilt[axis], timestamp);
+										}
+										headTilt[axis] = sum / headTiltFilterBankAngles;
 									}
 								}
 							}
