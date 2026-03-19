@@ -4279,7 +4279,8 @@ TrackyMouse.initScreenOverlay = () => {
 	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
 
 	const inputFeedbackCanvas = document.createElement("canvas");
-	inputFeedbackCanvas.style.position = "absolute";
+	inputFeedbackCanvas.style.position = "fixed";
+	inputFeedbackCanvas.style.zIndex = "10000";
 	inputFeedbackCanvas.style.top = "0";
 	inputFeedbackCanvas.style.left = "0";
 	inputFeedbackCanvas.style.pointerEvents = "none";
