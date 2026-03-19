@@ -4,6 +4,8 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+let dwellClicker = null;
+let activeSettings = {};
 let inputFeedback = {};
 let systemMousePosition = {};
 addEventListener("pointermove", (event) => {
@@ -11,11 +13,164 @@ addEventListener("pointermove", (event) => {
 	updateHUD();
 });
 
+// Source: https://stackoverflow.com/a/54492696/2624876
+function getCurrentRotation(el) {
+	const st = window.getComputedStyle(el, null);
+	const tm = st.getPropertyValue("-webkit-transform") ||
+		st.getPropertyValue("-moz-transform") ||
+		st.getPropertyValue("-ms-transform") ||
+		st.getPropertyValue("-o-transform") ||
+		st.getPropertyValue("transform") ||
+		"none";
+	if (tm !== "none") {
+		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
+		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
+	}
+	return 0;
+}
+
+// Pointer event simulation logic should be built into tracky-mouse in the future.
+// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
+// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
+const getEventOptions = ({ x, y }) => {
+	return {
+		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
+		clientX: x,
+		clientY: y,
+		pointerId: 1234567890, // a special value so other code can detect these simulated events
+		pointerType: "mouse",
+		isPrimary: true,
+	};
+};
+
+const inputSimulator = {
+	buttonStates: {
+		left: false,
+		right: false,
+		middle: false,
+	},
+	lastElOver: null,
+	pointerMove(x, y) {
+		const target = document.elementFromPoint(x, y) || document.body;
+		if (target !== this.lastElOver) {
+			if (this.lastElOver) {
+				const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
+					button: 0,
+					buttons: 1,
+					bubbles: false,
+					cancelable: false,
+				}));
+				this.lastElOver.dispatchEvent(event);
+			}
+			const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
+				button: 0,
+				buttons: 1,
+				bubbles: false,
+				cancelable: false,
+			}));
+			target.dispatchEvent(event);
+			this.lastElOver = target;
+		}
+		const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+	},
+	pointerDown(target, x, y) {
+		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture)
+		const event = new PointerEvent("pointerdown", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+		this.pointerDownElement = target;
+	},
+	pointerUp(target, x, y) {
+		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture), event cancelation
+		const event = new PointerEvent("pointerup", Object.assign(getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 0,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+		if (this.pointerDownElement === target) {
+			this.click(target, x, y);
+		}
+		this.pointerDownElement = null;
+	},
+	setMouseButtonState(buttonIndex, pressed) {
+		if (this.buttonStates[buttonIndex] !== pressed) {
+			const { x, y } = systemMousePosition;
+			const target = document.elementFromPoint(x, y) || document.body;
+			if (pressed) {
+				this.pointerDown(target, x, y);
+			} else {
+				this.pointerUp(target, x, y);
+			}
+			this.buttonStates[buttonIndex] = pressed;
+		}
+	},
+	click(target, x, y) {
+		if (target.matches("input[type='range']")) {
+			// Special handling for sliders
+			const rect = target.getBoundingClientRect();
+			const vertical =
+				target.getAttribute("orient") === "vertical" ||
+				(getCurrentRotation(target) !== 0) ||
+				rect.height > rect.width;
+			const min = Number(target.min);
+			const max = Number(target.max);
+			const style = window.getComputedStyle(target);
+			const isRTL = style.direction === "rtl";
+			const fraction = vertical
+				? (y - rect.top) / rect.height
+				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
+			target.value = fraction * (max - min) + min;
+			target.dispatchEvent(new Event("input", { bubbles: true }));
+			target.dispatchEvent(new Event("change", { bubbles: true }));
+		} else {
+			// Normal click
+			target.click();
+			if (target.matches("input, textarea")) {
+				target.focus();
+			}
+		}
+	},
+};
+
 const initOptions = {
+	// All of these options are UNSTABLE
 	updateInputFeedback: (data) => {
 		inputFeedback = data;
 		updateHUD();
 	},
+	setMouseButtonState: (buttonIndex, pressed) => {
+		inputSimulator.setMouseButtonState(buttonIndex, pressed);
+	},
+	handleSettingsUpdate: (settings) => {
+		// Sync settings from UI to `activeSettings`
+		// This is not a very clean way of accessing settings.
+		// TODO: DRY with deserializeSettings in electron-main.js
+		// and avoid conflating serialized/deserialized settings
+		// or provide a cleaner way of accessing active settings
+		if ("globalSettings" in settings) {
+			for (const key in settings.globalSettings) {
+				if (settings.globalSettings[key] !== undefined) {
+					activeSettings[key] = settings.globalSettings[key];
+				}
+			}
+			if ("clickingMode" in settings.globalSettings) {
+				updateDwellClickingEnabled();
+			}
+		}
+	},
+	clickingModeSupported: true,
 };
 
 // Note: init currently extends the passed element,
@@ -79,30 +234,7 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
-		if (target.matches("input[type='range']")) {
-			// Special handling for sliders
-			const rect = target.getBoundingClientRect();
-			const vertical =
-				target.getAttribute("orient") === "vertical" ||
-				(getCurrentRotation(target) !== 0) ||
-				rect.height > rect.width;
-			const min = Number(target.min);
-			const max = Number(target.max);
-			const style = window.getComputedStyle(target);
-			const isRTL = style.direction === "rtl";
-			const fraction = vertical
-				? (y - rect.top) / rect.height
-				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
-			target.value = fraction * (max - min) + min;
-			target.dispatchEvent(new Event("input", { bubbles: true }));
-			target.dispatchEvent(new Event("change", { bubbles: true }));
-		} else {
-			// Normal click
-			target.click();
-			if (target.matches("input, textarea")) {
-				target.focus();
-			}
-		}
+		inputSimulator.click(target, x, y);
 	},
 	// Handle untrusted gestures specially in external code.
 	// Somewhere else, for example, you might do something like:
@@ -115,7 +247,7 @@ const config = {
 	beforeDispatch: () => { window.untrusted_gesture = true; },
 	afterDispatch: () => { window.untrusted_gesture = false; },
 };
-const dwellClicker = TrackyMouse.initDwellClicking(config);
+dwellClicker = TrackyMouse.initDwellClicking(config);
 
 // Integrate the Dwell Clicker and the UI's enabled state
 // TODO: expose an event for when the UI toggles on/off
@@ -124,75 +256,29 @@ const dwellClicker = TrackyMouse.initDwellClicking(config);
 // since the other clicking modes should be supported in the demo.
 // For now, observe aria-pressed attribute as a hack
 const observer = new MutationObserver(() => {
-	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
-	const started = toggleButton.getAttribute("aria-pressed") === "true";
-	dwellClicker.paused = !started;
-	updateHUD();
+	updateDwellClickingEnabled();
 });
 // observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
 // The UI can now be re-initialized when switching languages, creating a new button
 observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
 
-
-// Source: https://stackoverflow.com/a/54492696/2624876
-function getCurrentRotation(el) {
-	const st = window.getComputedStyle(el, null);
-	const tm = st.getPropertyValue("-webkit-transform") ||
-		st.getPropertyValue("-moz-transform") ||
-		st.getPropertyValue("-ms-transform") ||
-		st.getPropertyValue("-o-transform") ||
-		st.getPropertyValue("transform") ||
-		"none";
-	if (tm !== "none") {
-		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
-		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
-	}
-	return 0;
+function updateDwellClickingEnabled() {
+	// This function can be called during the call to TrackyMouse.init
+	// We could maybe init the dwell clicker before the UI to avoid the awkwardness of this early return and `dwellClicker` being non-constant.
+	// But eventually the dwell clicker will be built in to the UI (albeit still configurable),
+	// as the UI needs to manage different clicking modes, and this is a ridiculous amount of "glue code"
+	// to support the basic features of Tracky Mouse.
+	if (!dwellClicker) return;
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+	const started = toggleButton.getAttribute("aria-pressed") === "true";
+	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell";
+	updateHUD();
 }
+updateDwellClickingEnabled();
 
-// Pointer event simulation logic should be built into tracky-mouse in the future.
-// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
-// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
-const getEventOptions = ({ x, y }) => {
-	return {
-		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
-		clientX: x,
-		clientY: y,
-		pointerId: 1234567890, // a special value so other code can detect these simulated events
-		pointerType: "mouse",
-		isPrimary: true,
-	};
-};
-let last_el_over = null;
 TrackyMouse.onPointerMove = (x, y) => {
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
-	const target = document.elementFromPoint(x, y) || document.body;
-	if (target !== last_el_over) {
-		if (last_el_over) {
-			const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
-				button: 0,
-				buttons: 1,
-				bubbles: false,
-				cancelable: false,
-			}));
-			last_el_over.dispatchEvent(event);
-		}
-		const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 1,
-			bubbles: false,
-			cancelable: false,
-		}));
-		target.dispatchEvent(event);
-		last_el_over = target;
-	}
-	const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
-		button: 0,
-		buttons: 1,
-		bubbles: true,
-		cancelable: true,
-	}));
-	target.dispatchEvent(event);
+	inputSimulator.pointerMove(x, y);
 };
 
 function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
@@ -218,7 +304,7 @@ function updateHUD() {
 	screenOverlay.update({
 		isEnabled: enabled && !isManualTakeback,
 		isManualTakeback,
-		clickingMode: "dwell", // activeSettings.clickingMode, TODO: support other clicking modes in web version
+		clickingMode: activeSettings.clickingMode,
 		inputFeedback,
 		bottomOffset,
 		messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),

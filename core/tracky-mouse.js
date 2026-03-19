@@ -575,8 +575,17 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const {
 		statsJs = false,
+		// Unstable
 		updateInputFeedback = window.electronAPI?.updateInputFeedback,
-		// TODO: manage all of electronAPI similarly?
+		// Unstable
+		setMouseButtonState = window.electronAPI?.setMouseButtonState,
+		// Unstable
+		handleSettingsUpdate,
+		// Unstable
+		clickingModeSupported = false,
+		// TODO: manage all of electronAPI similarly? well, setOptions is already a function in scope here,
+		// and it's not like we want to expose all electronAPI as part of the public API necessarily
+		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
 
 	const isDesktopApp = !!window.electronAPI;
@@ -1887,7 +1896,7 @@ Helps to stabilize the cursor. However, when using point tracking in combination
 						{ value: "off", label: t("settings.clickingMode.off.label", { defaultValue: "Off" }), description: t("settings.clickingMode.off.description", { defaultValue: "Disable clicking. Use with an external switch or programs that provide their own dwell clicking." }) },
 					],
 					default: "dwell",
-					visible: () => isDesktopApp,
+					visible: () => isDesktopApp || clickingModeSupported,
 					description: t("settings.clickingMode.description", { defaultValue: "Choose how to perform mouse clicks." }),
 				},
 				{
@@ -2509,6 +2518,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			func();
 		}
 
+		// Unstable hook
+		handleSettingsUpdate?.(settings);
 	}
 	const formatVersion = 1;
 	const formatName = "tracky-mouse-settings";
@@ -2537,6 +2548,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				console.error(e);
 			}
 		}
+		// Unstable hook
+		handleSettingsUpdate?.(options);
 	};
 	const loadOptions = async (initialLoad = false) => {
 		if (window.electronAPI) {
@@ -3584,13 +3597,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							}
 						}
 
-						// TODO: implement these clicking modes for the web library version
-						// and unhide the "Clicking mode" setting in the UI
-						// https://github.com/1j01/tracky-mouse/issues/72
 						const buttonNames = ["left", "middle", "right"];
 						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
 							if ((clickButton === buttonIndex) !== buttonStates[buttonNames[buttonIndex]]) {
-								window.electronAPI?.setMouseButtonState(buttonIndex, clickButton === buttonIndex);
+								setMouseButtonState(buttonIndex, clickButton === buttonIndex);
 								buttonStates[buttonNames[buttonIndex]] = clickButton === buttonIndex;
 								if ((clickButton === buttonIndex)) {
 									lastMouseDownTime = performance.now();
