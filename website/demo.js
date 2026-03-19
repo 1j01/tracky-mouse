@@ -262,6 +262,7 @@ observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, 
 
 
 TrackyMouse.onPointerMove = (x, y) => {
+	screenOverlay.updateMousePos(x, y);
 	inputSimulator.pointerMove(x, y);
 };
 
