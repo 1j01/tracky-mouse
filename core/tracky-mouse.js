@@ -4261,10 +4261,10 @@ TrackyMouse.initScreenOverlay = () => {
 	<div class="tracky-mouse-hide-near-cursor">
 		<div class="tracky-mouse-absolute-center">
 			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
-				<img src="../images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+				<img src="${TrackyMouse.dependenciesRoot}/images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
 			</div>
 			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
-				<img src="../images/head-not-found.svg" alt="head not found" width="128" height="128">
+				<img src="${TrackyMouse.dependenciesRoot}/images/head-not-found.svg" alt="head not found" width="128" height="128">
 			</div>
 		</div>
 		<div id="tracky-mouse-screen-overlay-message"></div>

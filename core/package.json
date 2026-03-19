@@ -49,6 +49,7 @@
     "tracky-mouse.js",
     "tracky-mouse.css",
     "locales/",
+    "images/",
     "lib/"
   ],
   "devDependencies": {
