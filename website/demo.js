@@ -105,6 +105,32 @@ const inputSimulator = {
 		this.pointerDownElement = null;
 	},
 	setMouseButtonState(buttonIndex, pressed) {
+		if (buttonIndex !== 0) {
+			// TODO: support right clicking (context menu), MMB auto-scrolling, MMB to open links in a new tab
+			// For now, show a little note that fades away, at the cursor
+			if (!pressed) {
+				return;
+			}
+			const { x, y } = systemMousePosition;
+			const note = document.createElement("div");
+			// note.textContent = "Non-primary click not supported in demo";
+			note.textContent = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
+			// note.textContent = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
+			note.style.position = "fixed";
+			note.style.left = `${x}px`;
+			note.style.top = `${y}px`;
+			note.style.background = "rgba(0, 0, 0, 0.7)";
+			note.style.color = "white";
+			note.style.padding = "2px 5px";
+			note.style.borderRadius = "3px";
+			note.style.pointerEvents = "none";
+			note.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 2s";
+			document.body.appendChild(note);
+			setTimeout(() => {
+				note.remove();
+			}, 4000);
+			return;
+		}
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = systemMousePosition;
 			const target = document.elementFromPoint(x, y) || document.body;
