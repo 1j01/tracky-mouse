@@ -13,36 +13,9 @@ addEventListener("pointermove", (event) => {
 	updateHUD();
 });
 
-// Source: https://stackoverflow.com/a/54492696/2624876
-function getCurrentRotation(el) {
-	const st = window.getComputedStyle(el, null);
-	const tm = st.getPropertyValue("-webkit-transform") ||
-		st.getPropertyValue("-moz-transform") ||
-		st.getPropertyValue("-ms-transform") ||
-		st.getPropertyValue("-o-transform") ||
-		st.getPropertyValue("transform") ||
-		"none";
-	if (tm !== "none") {
-		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
-		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
-	}
-	return 0;
-}
-
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
-// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
-const getEventOptions = ({ x, y }) => {
-	return {
-		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
-		clientX: x,
-		clientY: y,
-		pointerId: 1234567890, // a special value so other code can detect these simulated events
-		pointerType: "mouse",
-		isPrimary: true,
-	};
-};
-
+// as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
 const inputSimulator = {
 	buttonStates: {
 		left: false,
@@ -50,11 +23,36 @@ const inputSimulator = {
 		middle: false,
 	},
 	lastElOver: null,
+	getEventOptions({ x, y }) {
+		return {
+			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
+			clientX: x,
+			clientY: y,
+			pointerId: 1234567890, // a special value so other code can detect these simulated events
+			pointerType: "mouse",
+			isPrimary: true,
+		};
+	},
+	getCurrentRotation(el) {
+		// Source: https://stackoverflow.com/a/54492696/2624876
+		const st = window.getComputedStyle(el, null);
+		const tm = st.getPropertyValue("-webkit-transform") ||
+			st.getPropertyValue("-moz-transform") ||
+			st.getPropertyValue("-ms-transform") ||
+			st.getPropertyValue("-o-transform") ||
+			st.getPropertyValue("transform") ||
+			"none";
+		if (tm !== "none") {
+			const [a, b] = tm.split('(')[1].split(')')[0].split(',');
+			return Math.round(Math.atan2(a, b) * (180 / Math.PI));
+		}
+		return 0;
+	},
 	pointerMove(x, y) {
 		const target = document.elementFromPoint(x, y) || document.body;
 		if (target !== this.lastElOver) {
 			if (this.lastElOver) {
-				const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
+				const event = new PointerEvent("pointerleave", Object.assign(this.getEventOptions({ x, y }), {
 					button: 0,
 					buttons: 1,
 					bubbles: false,
@@ -62,7 +60,7 @@ const inputSimulator = {
 				}));
 				this.lastElOver.dispatchEvent(event);
 			}
-			const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
+			const event = new PointerEvent("pointerenter", Object.assign(this.getEventOptions({ x, y }), {
 				button: 0,
 				buttons: 1,
 				bubbles: false,
@@ -71,7 +69,7 @@ const inputSimulator = {
 			target.dispatchEvent(event);
 			this.lastElOver = target;
 		}
-		const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
+		const event = new PointerEvent("pointermove", Object.assign(this.getEventOptions({ x, y }), {
 			button: 0,
 			buttons: 1,
 			bubbles: true,
@@ -81,7 +79,7 @@ const inputSimulator = {
 	},
 	pointerDown(target, x, y) {
 		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture)
-		const event = new PointerEvent("pointerdown", Object.assign(getEventOptions({ x, y }), {
+		const event = new PointerEvent("pointerdown", Object.assign(this.getEventOptions({ x, y }), {
 			button: 0,
 			buttons: 1,
 			bubbles: true,
@@ -92,7 +90,7 @@ const inputSimulator = {
 	},
 	pointerUp(target, x, y) {
 		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture), event cancelation
-		const event = new PointerEvent("pointerup", Object.assign(getEventOptions({ x, y }), {
+		const event = new PointerEvent("pointerup", Object.assign(this.getEventOptions({ x, y }), {
 			button: 0,
 			buttons: 0,
 			bubbles: true,
@@ -148,7 +146,7 @@ const inputSimulator = {
 			const rect = target.getBoundingClientRect();
 			const vertical =
 				target.getAttribute("orient") === "vertical" ||
-				(getCurrentRotation(target) !== 0) ||
+				(this.getCurrentRotation(target) !== 0) ||
 				rect.height > rect.width;
 			const min = Number(target.min);
 			const max = Number(target.max);
