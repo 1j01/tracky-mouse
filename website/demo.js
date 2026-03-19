@@ -6,7 +6,7 @@ await TrackyMouse.loadDependencies();
 
 let inputFeedback = {};
 let systemMousePosition = {};
-addEventListener("mousemove", (event) => {
+addEventListener("pointermove", (event) => {
 	systemMousePosition = { x: event.clientX, y: event.clientY };
 	updateHUD();
 });
