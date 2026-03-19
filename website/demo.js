@@ -195,7 +195,6 @@ TrackyMouse.onPointerMove = (x, y) => {
 };
 
 function updateHUD() {
-	// screenOverlay.updateMousePos(x, y);
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
 	// TODO: implement manual takeback in web version
