@@ -2554,23 +2554,39 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		handleSettingsUpdate?.(options);
 	};
 	const loadOptions = async (initialLoad = false) => {
+		// Desktop app: start from any saved settings in the main process,
+		// then, on first load, push the renderer's canonical defaults back
+		// so the main process has the same effective settings (and can
+		// correctly drive features like dwell clicking on first run).
+		// Web demo: similarly needs canonical defaults pushed to
+		// correctly enable dwell clicking on first run,
+		// now that it supports multiple clicking modes.
+		// General API usage: does not yet support multiple clicking modes
+		// (there's a lot of glue code in the demo)
+		// but we only call handleSettingsUpdate if it exists.
+		let stored;
 		if (window.electronAPI) {
-			// Desktop app: start from any saved settings in the main process,
-			// then, on first load, push the renderer's canonical defaults back
-			// so the main process has the same effective settings (and can
-			// correctly drive features like dwell clicking on first run).
-			const stored = await window.electronAPI.getOptions();
-			deserializeSettings(stored, initialLoad);
-			if (initialLoad && (!stored || !stored.globalSettings || Object.keys(stored.globalSettings).length === 0)) {
-				setOptions(serializeSettings());
-			}
+			stored = await window.electronAPI.getOptions();
 		} else {
 			try {
 				if (localStorage.getItem("tracky-mouse-settings")) {
-					deserializeSettings(JSON.parse(localStorage.getItem("tracky-mouse-settings")), initialLoad);
+					stored = JSON.parse(localStorage.getItem("tracky-mouse-settings"));
 				}
 			} catch (e) {
 				console.error(e);
+				return;
+			}
+		}
+		if (stored) {
+			deserializeSettings(stored, initialLoad);
+		}
+		if (initialLoad && (!stored || !stored.globalSettings || Object.keys(stored.globalSettings).length === 0)) {
+			// We could just call setOptions in both cases,
+			// but do we want to save to localStorage initially? Maybe not.
+			if (window.electronAPI) {
+				setOptions(serializeSettings()); // (includes handleSettingsUpdate)
+			} else {
+				handleSettingsUpdate?.(serializeSettings());
 			}
 		}
 	};
