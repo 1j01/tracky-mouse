@@ -170,7 +170,8 @@ const inputSimulator = {
 			// Special handling for dropdowns
 			// Idea from https://stackoverflow.com/a/19652333
 			// TODO: don't assume size attribute is not used normally on the page
-			// TODO: use a [temporary] wrapper element for positioning to simulate flyout behavior
+			// TODO: use a (possibly temporary) wrapper element for positioning to simulate flyout behavior
+			// (or perhaps negative margins?)
 			if (target.getAttribute("size")) {
 				// Fallback logic assuming all options are the same height
 				// Do any browsers actually not give you <option> elements with document.getElementFromPoint?
@@ -183,8 +184,14 @@ const inputSimulator = {
 				target.dispatchEvent(new Event("change", { bubbles: true }));
 			} else {
 				target.setAttribute("size", String(target.options.length));
+				target.focus();
 				target.addEventListener("blur", () => {
 					target.removeAttribute("size");
+				}, { once: true });
+				addEventListener("pointerdown", (event) => {
+					if (!event.target?.closest || !event.target.closest("select")) {
+						target.removeAttribute("size");
+					}
 				}, { once: true });
 			}
 		} else {
