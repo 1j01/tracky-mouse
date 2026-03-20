@@ -18,9 +18,9 @@ addEventListener("pointermove", (event) => {
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
 const inputSimulator = {
 	buttonStates: {
-		left: false,
-		right: false,
-		middle: false,
+		0: false,
+		1: false,
+		2: false,
 	},
 	lastElOver: null,
 	getEventOptions({ x, y }) {
@@ -77,70 +77,62 @@ const inputSimulator = {
 		}));
 		target.dispatchEvent(event);
 	},
-	pointerDown(target, x, y) {
-		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture)
+	pointerDown(target, x, y, buttonIndex = 0) {
+		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
+		this.buttonStates[buttonIndex] = true;
 		const event = new PointerEvent("pointerdown", Object.assign(this.getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 1,
+			button: buttonIndex,
+			buttons: this.buttonStates[0] * 1 + this.buttonStates[1] * 2 + this.buttonStates[2] * 4,
 			bubbles: true,
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 	},
-	pointerUp(target, x, y) {
-		// TODO: handle other buttons, nuance to moving across elements (nested elements, pointer capture), event cancelation
+	pointerUp(target, x, y, buttonIndex = 0) {
+		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
+		this.buttonStates[buttonIndex] = false;
 		const event = new PointerEvent("pointerup", Object.assign(this.getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 0,
+			button: buttonIndex,
+			buttons: this.buttonStates[0] * 1 + this.buttonStates[1] * 2 + this.buttonStates[2] * 4,
 			bubbles: true,
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
-		if (this.pointerDownElement === target) {
-			this.click(target, x, y);
+		if (buttonIndex === 0) {
+			if (this.pointerDownElement === target) {
+				this.click(target, x, y);
+			}
+		} else if (buttonIndex === 2) {
+			this.showContextMenu(target, x, y);
 		}
 		this.pointerDownElement = null;
 	},
 	setMouseButtonState(buttonIndex, pressed) {
-		if (buttonIndex !== 0) {
-			// TODO: support right clicking (context menu), MMB auto-scrolling, MMB to open links in a new tab
+		if (buttonIndex !== 0 && buttonIndex !== 2) {
+			// TODO: support MMB auto-scrolling, MMB to open links in a new tab
 			// For now, show a little note that fades away, at the cursor
 			if (!pressed) {
 				return;
 			}
-			const { x, y } = systemMousePosition;
-			const note = document.createElement("div");
-			// note.textContent = "Non-primary click not supported in demo";
-			note.textContent = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
-			// note.textContent = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
-			note.style.position = "fixed";
-			note.style.left = `${x}px`;
-			note.style.top = `${y}px`;
-			note.style.background = "rgba(0, 0, 0, 0.7)";
-			note.style.color = "white";
-			note.style.padding = "2px 5px";
-			note.style.borderRadius = "3px";
-			note.style.pointerEvents = "none";
-			note.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 2s";
-			document.body.appendChild(note);
-			setTimeout(() => {
-				note.remove();
-			}, 4000);
+			// const message = "Non-primary click not supported in demo";
+			const message = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
+			// const message = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
+			// const message = "Middle mouse button pressed"
+			this.showToast(message);
 			return;
 		}
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = systemMousePosition;
 			const target = document.elementFromPoint(x, y) || document.body;
 			if (pressed) {
-				this.pointerDown(target, x, y);
+				this.pointerDown(target, x, y, buttonIndex);
 			} else {
-				this.pointerUp(target, x, y);
+				this.pointerUp(target, x, y, buttonIndex);
 			}
-			this.buttonStates[buttonIndex] = pressed;
 		}
 	},
-	openDropdown(dropdown) {
+	openDropdown(dropdown, { focus = true } = {}) {
 		// I got the idea to use size attribute from https://stackoverflow.com/a/19652333
 		// However, changing the select element itself can cause issues
 		// such as wonky layouts (not designed with tall select elements in mind)
@@ -149,6 +141,7 @@ const inputSimulator = {
 		// Thus, it's better to create a clone of the select element.
 		const flyout = dropdown.cloneNode(true);
 		flyout.value = dropdown.value;
+		flyout.style.cssText = ""; // don't propagate styles (such as opacity 0 for context menu backing select)
 		flyout.setAttribute("size", String(flyout.options.length));
 		dropdown._flyout = flyout;
 		flyout._dropdown = dropdown;
@@ -159,7 +152,10 @@ const inputSimulator = {
 
 		// Work around broken "max size of any option times number of options" native sizing behavior
 		// (The languages menu contains options of varying height, especially for Javanese)
-		const totalOptionsListHeight = [...flyout.options].reduce((acc, option) => acc + option.offsetHeight, 0);
+		// const totalOptionsListHeight = [...flyout.options].reduce((acc, option) => acc + option.offsetHeight, 0);
+		// Summing offsetHeight doesn't account for margin, as used in separators in context menus
+		// Using two getBoundingClientRect calls we can easily account for margins except on first/last options
+		const totalOptionsListHeight = flyout.options[flyout.options.length - 1].getBoundingClientRect().bottom - flyout.options[0].getBoundingClientRect().top;
 		const style = getComputedStyle(flyout);
 		const verticalBorderAndPadding =
 			parseFloat(style.paddingTop) +
@@ -182,10 +178,12 @@ const inputSimulator = {
 		}
 		flyout.style.maxHeight = "100vh";
 
-		flyout.focus();
-		flyout.addEventListener("blur", () => {
-			this.closeDropdown(dropdown);
-		}, { once: true });
+		if (focus) {
+			flyout.focus();
+			flyout.addEventListener("blur", () => {
+				this.closeDropdown(dropdown);
+			}, { once: true });
+		}
 		flyout.addEventListener("keydown", (event) => {
 			if (event.key === "Escape" || event.key === "Enter") {
 				this.closeDropdown(dropdown);
@@ -267,6 +265,114 @@ const inputSimulator = {
 				target.focus();
 			}
 		}
+	},
+	showContextMenu(target, x, y) {
+		const commands = ["copy", "cut", "paste", "delete", "selectAll", "undo", "redo"];
+		const supportedCommands = commands.filter(cmd => document.queryCommandSupported(cmd));
+		const enabledCommands = supportedCommands.filter(cmd => document.queryCommandEnabled(cmd));
+		console.log({ supportedCommands, enabledCommands });
+
+		const execCommandItem = (label, command) => {
+			return {
+				label,
+				visible: supportedCommands.includes(command),
+				enabled: enabledCommands.includes(command),
+				action: () => document.execCommand(command),
+			};
+		};
+
+		const menuItems = [
+			// TODO: avoid executing first item when dismissing context menu
+			// For now, include a no-op first item
+			{ label: '' }, // not enabled: false so that another item isn't highlighted with a gray background
+
+			{
+				label: 'Open Link in New Tab',
+				visible: target.matches("a[href]"),
+				action: () => {
+					const a = target?.closest('a');
+					if (a?.href) {
+						return !!window.open(a.href, '_blank');
+					}
+				}
+			},
+			{ separator: true, visible: target.matches("a[href]") },
+
+			execCommandItem('Copy', 'copy'),
+			execCommandItem('Cut', 'cut'),
+			execCommandItem('Paste', 'paste'),
+			execCommandItem('Delete', 'delete'),
+			execCommandItem('Select All', 'selectAll'),
+
+		];
+
+		// Create an invisible select element for context menu positioning, in order to reuse the dropdown code
+		const select = document.createElement('select');
+		select.style.position = 'fixed';
+		select.style.left = `${x}px`;
+		const height = 16; // arbitrary (but maybe not zero? and should be accounted for if it's not zero)
+		select.style.height = `${height}px`;
+		select.style.top = `${y - height}px`;
+		select.style.opacity = '0';
+		select.style.pointerEvents = 'none';
+		select.tabIndex = -1;
+
+		for (const item of menuItems) {
+			if (item.visible === false) {
+				continue;
+			}
+			const option = document.createElement('option');
+			option.textContent = item.label;
+			option.disabled = item.enabled === false || item.separator === true;
+			if (!item.label) {
+				option.style.fontSize = '0';
+			}
+			if (item.separator) {
+				option.style.borderTop = '1px solid #ccc';
+				option.style.fontSize = '4px';
+				option.style.marginTop = '4px';
+			}
+			select.appendChild(option);
+			option._menuItem = item;
+		}
+
+		document.body.appendChild(select);
+		// technically the dropdown should have focus, but
+		// 1. this is an interface to allow for (virtual-)mouse-only access, so keyboard is not so important
+		// 2. I think it's more important to keep showing the selection you're about to copy/cut/delete
+		target.focus();
+		this.openDropdown(select, { focus: false });
+
+		select.addEventListener("change", () => {
+			const item = select.options[select.selectedIndex]._menuItem;
+			select.remove();
+			target.focus();
+			if (item.action && item.enabled !== false) {
+				const result = item.action();
+				this.showToast(item.label + (result === false ? " not allowed" : ""));
+			}
+		}, { once: true });
+
+		// FIXME: menu can be stuck open
+	},
+	showToast(message, position = systemMousePosition) {
+		const { x, y } = position;
+		const toast = document.createElement("div");
+		toast.textContent = message;
+		toast.style.position = "fixed";
+		toast.style.left = `${x}px`;
+		toast.style.top = `${y}px`;
+		toast.style.background = "rgba(0, 0, 0, 0.7)";
+		toast.style.color = "white";
+		toast.style.padding = "2px 5px";
+		toast.style.borderRadius = "3px";
+		toast.style.pointerEvents = "none";
+		// TODO: rename CSS animation to be a little more generic
+		toast.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 2s";
+		document.body.appendChild(toast);
+		setTimeout(() => {
+			toast.remove();
+		}, 4000);
 	},
 };
 
