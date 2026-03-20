@@ -166,8 +166,7 @@ const inputSimulator = {
 			this.closeDropdown(dropdown);
 		}, { once: true });
 		addEventListener("pointerdown", (event) => {
-			// FIXME: clicking on a different dropdown should still close the first one
-			if (!event.target?.closest || !event.target.closest("select")) {
+			if (!event.target?.closest || !event.target.closest("select") || event.target.closest("select") !== dropdown) {
 				this.closeDropdown(dropdown);
 			}
 		}, { once: true });
