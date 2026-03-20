@@ -143,13 +143,30 @@ const inputSimulator = {
 	openDropdown(dropdown) {
 		// Idea to use size attribute from https://stackoverflow.com/a/19652333
 		dropdown.setAttribute("size", String(dropdown.options.length));
-		dropdown.style.marginBottom = `${-[...dropdown.options].reduce((acc, option) => acc + option.offsetHeight, 0)}px`;
+
+		// TODO: use a clone of the select element for the flyout instead of modifying it in place,
+		// to fix issues with the dropdown being cut off by containers
+		// TODO: handle opening upwards or both directions as needed, limited to the full page height
+		const totalOptionsListHeight = [...dropdown.options].reduce((acc, option) => acc + option.offsetHeight, 0);
+		dropdown.style.marginBottom = `${-totalOptionsListHeight}px`;
 		dropdown.style.zIndex = "100";
+
+		// Work around broken "max size of any option times number of options" native sizing behavior
+		// (The languages menu contains options of varying height, especially for Javanese)
+		const style = getComputedStyle(dropdown);
+		const verticalBorderAndPadding =
+			parseFloat(style.paddingTop) +
+			parseFloat(style.paddingBottom) +
+			parseFloat(style.borderTopWidth) +
+			parseFloat(style.borderBottomWidth);
+		dropdown.style.height = `${totalOptionsListHeight + verticalBorderAndPadding}px`;
+
 		dropdown.focus();
 		dropdown.addEventListener("blur", () => {
 			this.closeDropdown(dropdown);
 		}, { once: true });
 		addEventListener("pointerdown", (event) => {
+			// FIXME: clicking on a different dropdown should still close the first one
 			if (!event.target?.closest || !event.target.closest("select")) {
 				this.closeDropdown(dropdown);
 			}
@@ -159,6 +176,7 @@ const inputSimulator = {
 		dropdown.removeAttribute("size");
 		dropdown.style.marginBottom = "";
 		dropdown.style.zIndex = "";
+		dropdown.style.height = "";
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
