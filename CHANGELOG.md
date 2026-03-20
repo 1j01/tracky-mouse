@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- In the web version, the cursor is now shown as the Tracky Mouse logo. <img src="images/tracky-mouse-logo.svg" height="32">
+
 ### Added
 
 - The heads-up display (screen overlay) will now hide within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
