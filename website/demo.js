@@ -141,8 +141,10 @@ const inputSimulator = {
 		}
 	},
 	openDropdown(dropdown) {
-		// Idea from https://stackoverflow.com/a/19652333
+		// Idea to use size attribute from https://stackoverflow.com/a/19652333
 		dropdown.setAttribute("size", String(dropdown.options.length));
+		dropdown.style.marginBottom = `${-[...dropdown.options].reduce((acc, option) => acc + option.offsetHeight, 0)}px`;
+		dropdown.style.zIndex = "100";
 		dropdown.focus();
 		dropdown.addEventListener("blur", () => {
 			this.closeDropdown(dropdown);
@@ -155,6 +157,8 @@ const inputSimulator = {
 	},
 	closeDropdown(dropdown) {
 		dropdown.removeAttribute("size");
+		dropdown.style.marginBottom = "";
+		dropdown.style.zIndex = "";
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
@@ -185,8 +189,6 @@ const inputSimulator = {
 		} else if (target.matches("select")) {
 			// Special handling for dropdowns
 			// TODO: don't assume size attribute is not used normally on the page
-			// TODO: use a (possibly temporary) wrapper element for positioning to simulate flyout behavior
-			// (or perhaps negative margins?)
 			if (target.getAttribute("size")) {
 				// Fallback logic assuming all options are the same height
 				// Do any browsers actually not give you <option> elements with document.getElementFromPoint?
