@@ -7,9 +7,9 @@ await TrackyMouse.loadDependencies();
 let dwellClicker = null;
 let activeSettings = {};
 let inputFeedback = {};
-let systemMousePosition = {};
+let mousePosition = {};
 addEventListener("pointermove", (event) => {
-	systemMousePosition = { x: event.clientX, y: event.clientY };
+	mousePosition = { x: event.clientX, y: event.clientY };
 	updateHUD();
 });
 
@@ -123,7 +123,7 @@ const inputSimulator = {
 			return;
 		}
 		if (this.buttonStates[buttonIndex] !== pressed) {
-			const { x, y } = systemMousePosition;
+			const { x, y } = mousePosition;
 			const target = document.elementFromPoint(x, y) || document.body;
 			if (pressed) {
 				this.pointerDown(target, x, y, buttonIndex);
@@ -355,7 +355,7 @@ const inputSimulator = {
 
 		// FIXME: menu can be stuck open
 	},
-	showToast(message, position = systemMousePosition) {
+	showToast(message, position = mousePosition) {
 		const { x, y } = position;
 		const toast = document.createElement("div");
 		toast.textContent = message;
@@ -542,7 +542,7 @@ function updateHUD() {
 		inputFeedback,
 		bottomOffset,
 		messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
-		systemMousePosition,
+		systemMousePosition: mousePosition,
 	});
 }
 updateHUD();
