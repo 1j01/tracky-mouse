@@ -141,41 +141,63 @@ const inputSimulator = {
 		}
 	},
 	openDropdown(dropdown) {
-		// Idea to use size attribute from https://stackoverflow.com/a/19652333
-		dropdown.setAttribute("size", String(dropdown.options.length));
+		// I got the idea to use size attribute from https://stackoverflow.com/a/19652333
+		// However, changing the select element itself can cause issues
+		// such as wonky layouts (not designed with tall select elements in mind)
+		// or, even if using margin-bottom to simulate a flyout, the dropdown
+		// will always be cut off by containers with overflow: hidden or overflow: auto.
+		// Thus, it's better to create a clone of the select element.
+		const flyout = dropdown.cloneNode(true);
+		flyout.value = dropdown.value;
+		flyout.setAttribute("size", String(flyout.options.length));
+		dropdown._flyout = flyout;
+		flyout._dropdown = dropdown;
 
-		// TODO: use a clone of the select element for the flyout instead of modifying it in place,
-		// to fix issues with the dropdown being cut off by containers
-		// TODO: handle opening upwards or both directions as needed, limited to the full page height
-		const totalOptionsListHeight = [...dropdown.options].reduce((acc, option) => acc + option.offsetHeight, 0);
-		dropdown.style.marginBottom = `${-totalOptionsListHeight}px`;
-		dropdown.style.zIndex = "100";
+		document.body.append(flyout);
+
+		flyout.style.zIndex = "100";
 
 		// Work around broken "max size of any option times number of options" native sizing behavior
 		// (The languages menu contains options of varying height, especially for Javanese)
-		const style = getComputedStyle(dropdown);
+		const totalOptionsListHeight = [...flyout.options].reduce((acc, option) => acc + option.offsetHeight, 0);
+		const style = getComputedStyle(flyout);
 		const verticalBorderAndPadding =
 			parseFloat(style.paddingTop) +
 			parseFloat(style.paddingBottom) +
 			parseFloat(style.borderTopWidth) +
 			parseFloat(style.borderBottomWidth);
-		dropdown.style.height = `${totalOptionsListHeight + verticalBorderAndPadding}px`;
+		flyout.style.height = `${totalOptionsListHeight + verticalBorderAndPadding}px`;
 
-		dropdown.focus();
-		dropdown.addEventListener("blur", () => {
+		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
+		const dropdownRect = dropdown.getBoundingClientRect();
+		flyout.style.position = "fixed";
+		flyout.style.top = `${dropdownRect.bottom}px`;
+		flyout.style.left = `${dropdownRect.left}px`;
+		flyout.style.width = `${dropdownRect.width}px`;
+		if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
+			flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
+		}
+		if (flyout.getBoundingClientRect().top < 0) {
+			flyout.style.top = "0px";
+		}
+		flyout.style.maxHeight = "100vh";
+
+		flyout.focus();
+		flyout.addEventListener("blur", () => {
 			this.closeDropdown(dropdown);
 		}, { once: true });
 		addEventListener("pointerdown", (event) => {
-			if (!event.target?.closest || !event.target.closest("select") || event.target.closest("select") !== dropdown) {
+			if (!event.target?.closest || !event.target.closest("select") || event.target.closest("select") !== flyout) {
 				this.closeDropdown(dropdown);
 			}
 		}, { once: true });
 	},
 	closeDropdown(dropdown) {
-		dropdown.removeAttribute("size");
-		dropdown.style.marginBottom = "";
-		dropdown.style.zIndex = "";
-		dropdown.style.height = "";
+		dropdown.value = dropdown._flyout.value;
+		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+		dropdown._flyout?.remove();
+		dropdown._flyout = null;
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
@@ -196,16 +218,17 @@ const inputSimulator = {
 			target.dispatchEvent(new Event("input", { bubbles: true }));
 			target.dispatchEvent(new Event("change", { bubbles: true }));
 		} else if (target.matches("option")) {
-			const dropdown = target.closest("select");
-			if (dropdown) {
-				dropdown.value = target.value;
-				this.closeDropdown(dropdown);
-				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
-				dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+			const select = target.closest("select");
+			if (select) {
+				select.value = target.value;
+				if (select._dropdown) {
+					this.closeDropdown(select._dropdown);
+				}
+				select.dispatchEvent(new Event("input", { bubbles: true }));
+				select.dispatchEvent(new Event("change", { bubbles: true }));
 			}
 		} else if (target.matches("select")) {
 			// Special handling for dropdowns
-			// TODO: don't assume size attribute is not used normally on the page
 			if (target.getAttribute("size")) {
 				// Fallback logic assuming all options are the same height
 				// Do any browsers actually not give you <option> elements with document.getElementFromPoint?
@@ -213,9 +236,13 @@ const inputSimulator = {
 				const rect = target.getBoundingClientRect();
 				const fraction = (y - rect.top) / rect.height;
 				target.value = target.options[Math.floor(fraction * target.options.length)].value;
-				this.closeDropdown(target);
+				if (target._dropdown) {
+					this.closeDropdown(target._dropdown);
+				}
 				target.dispatchEvent(new Event("input", { bubbles: true }));
 				target.dispatchEvent(new Event("change", { bubbles: true }));
+			} else if (target._flyout) {
+				this.closeDropdown(target);
 			} else {
 				this.openDropdown(target);
 			}
