@@ -367,8 +367,7 @@ const inputSimulator = {
 		toast.style.padding = "2px 5px";
 		toast.style.borderRadius = "3px";
 		toast.style.pointerEvents = "none";
-		// TODO: rename CSS animation to be a little more generic
-		toast.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 2s";
+		toast.style.animation = "tracky-mouse-fade-out 2s ease-in-out forwards 2s";
 		document.body.appendChild(toast);
 		setTimeout(() => {
 			toast.remove();

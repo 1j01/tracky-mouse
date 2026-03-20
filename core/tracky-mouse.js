@@ -4359,7 +4359,7 @@ TrackyMouse.initScreenOverlay = () => {
 		if (!isEnabled && !isManualTakeback) {
 			// Fade out the message after a little while so it doesn't get in the way.
 			// TODO: make sure animation isn't interrupted by inputFeedback updates.
-			message.style.animation = "tracky-mouse-screen-overlay-message-fade-out 2s ease-in-out forwards 10s";
+			message.style.animation = "tracky-mouse-fade-out 2s ease-in-out forwards 10s";
 		} else {
 			message.style.animation = "";
 			message.style.opacity = "1";
