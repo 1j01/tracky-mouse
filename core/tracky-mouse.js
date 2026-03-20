@@ -4052,8 +4052,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
-					pointerEl.style.left = `${mouseX}px`;
-					pointerEl.style.top = `${mouseY}px`;
+					pointerEl.style.left = `${Math.floor(mouseX)}px`;
+					pointerEl.style.top = `${Math.floor(mouseY)}px`;
 				}
 				if (TrackyMouse.onPointerMove) {
 					TrackyMouse.onPointerMove(mouseX, mouseY);
