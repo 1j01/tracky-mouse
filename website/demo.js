@@ -196,7 +196,7 @@ const inputSimulator = {
 			dropdown.dispatchEvent(new Event("input", { bubbles: true }));
 		});
 		addEventListener("pointerdown", (event) => {
-			if (!event.target?.closest || !event.target.closest("select") || event.target.closest("select") !== flyout) {
+			if (!event.target?.closest || !event.target.closest("select") || (event.target.closest("select") !== flyout && event.target.closest("select") !== dropdown)) {
 				this.closeDropdown(dropdown);
 			}
 		}, { once: true });
