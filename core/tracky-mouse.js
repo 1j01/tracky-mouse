@@ -1932,7 +1932,7 @@ Could also be used to right click with the dwell clicker in a pinch.` }),
 						max: t("settings.delayBeforeDragging.sliderMax", { defaultValue: "Easy to click" }),
 					},
 					default: 800,
-					visible: () => isDesktopApp,
+					visible: () => isDesktopApp || clickingModeSupported,
 					disabled: () => s.clickingMode === "off" || s.clickingMode === "dwell",
 					// description: t("settings.delayBeforeDragging.description.alt1", { defaultValue: "Locks mouse movement during the start of a click to prevent accidental dragging." }),
 					// Throwing a // in here so it's not detected by i18next-cli, whereas the others are allowed
