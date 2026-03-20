@@ -401,6 +401,12 @@ const initOptions = {
 			}
 		}
 	},
+	notifyToggleState: () => {
+		// Integrate the Dwell Clicker and the UI's enabled state
+		// TODO: make the init API create/manage the dwell clicker,
+		// and accept clicking configuration
+		updateDwellClickingEnabled();
+	},
 	clickingModeSupported: true,
 };
 
@@ -481,19 +487,6 @@ const config = {
 	afterDispatch: () => { window.untrusted_gesture = false; },
 };
 dwellClicker = TrackyMouse.initDwellClicking(config);
-
-// Integrate the Dwell Clicker and the UI's enabled state
-// TODO: expose an event for when the UI toggles on/off
-// and/or make the init API accept a dwell clicking config...
-// I guess eventually it should just be a "clicking" config
-// since the other clicking modes should be supported in the demo.
-// For now, observe aria-pressed attribute as a hack
-const observer = new MutationObserver(() => {
-	updateDwellClickingEnabled();
-});
-// observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
-// The UI can now be re-initialized when switching languages, creating a new button
-observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
 
 function updateDwellClickingEnabled() {
 	// This function can be called during the call to TrackyMouse.init

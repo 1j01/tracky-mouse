@@ -580,6 +580,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// Unstable
 		setMouseButtonState = window.electronAPI?.setMouseButtonState,
 		// Unstable
+		notifyToggleState = window.electronAPI?.notifyToggleState,
+		// Unstable
 		handleSettingsUpdate,
 		// Unstable
 		clickingModeSupported = false,
@@ -4136,9 +4138,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			pointerEl.style.display = "none";
 		}
 		updateStartStopButton();
-		if (window.electronAPI) {
-			window.electronAPI.notifyToggleState(!paused);
-		}
+		notifyToggleState?.(!paused);
 	};
 	const handleShortcut = (shortcutType) => {
 		if (shortcutType === "toggle-tracking") {
