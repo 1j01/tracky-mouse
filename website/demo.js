@@ -193,16 +193,18 @@ const inputSimulator = {
 		}, { once: true });
 	},
 	closeDropdown(dropdown) {
-		if (!dropdown._flyout) {
+		if (!dropdown._flyout || this._closingDropdown) {
 			return;
 		}
+		this._closingDropdown = true;
 		if (dropdown._flyout.value !== dropdown.value) {
 			dropdown.value = dropdown._flyout.value;
 			dropdown.dispatchEvent(new Event("input", { bubbles: true }));
 			dropdown.dispatchEvent(new Event("change", { bubbles: true }));
 		}
-		dropdown._flyout.remove();
+		dropdown._flyout.remove(); // Can trigger blur event in Chromium-based browsers
 		dropdown._flyout = null;
+		this._closingDropdown = false;
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
