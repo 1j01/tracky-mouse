@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - In the web version, the cursor is now shown as the Tracky Mouse logo. <img src="images/tracky-mouse-logo.svg" height="32">
+- In browsers that support the permissions API, the camera will be enabled immediately if permission has already been granted.
 
 ### Added
 

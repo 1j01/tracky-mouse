@@ -4107,6 +4107,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		TrackyMouse.useDemoFootage();
 	} else if (window.electronAPI) {
 		TrackyMouse.useCamera();
+	} else {
+		// Passively querying the camera permission isn't supported in all browsers,
+		// hence some of the complex logic in useCamera, but when it is,
+		// we can connect to the camera right away if the permission is already granted.
+		// This speeds up the development cycle, at the very least.
+		navigator.permissions?.query?.({ name: "camera" }).then((status) => {
+			if (status.state === "granted") {
+				TrackyMouse.useCamera();
+			}
+		}, (error) => {
+			console.log("Error querying permissions:", error);
+		});
 	}
 
 	const updateStartStopButton = () => {
