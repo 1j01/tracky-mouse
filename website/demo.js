@@ -157,6 +157,11 @@ const inputSimulator = window.inputSimulator = {
 
 		let highlightIndex = dropdown.selectedIndex;
 		const buttons = [];
+		function updateHighlightStyles() {
+			for (let optionIndex = 0; optionIndex < buttons.length; optionIndex++) {
+				buttons[optionIndex].style.backgroundColor = highlightIndex === optionIndex ? "#e0e0e0" : "transparent";
+			}
+		}
 
 		for (let optionIndex = 0; optionIndex < dropdown.options.length; optionIndex++) {
 			const option = dropdown.options[optionIndex];
@@ -175,14 +180,10 @@ const inputSimulator = window.inputSimulator = {
 			button.style.cssText += option.style.cssText;
 
 			// Hover effect
-			button.style.backgroundColor = highlightIndex === optionIndex ? "#e0e0e0" : "transparent";
 			button.addEventListener("pointerenter", () => {
 				if (button.disabled) return;
-				if (buttons[highlightIndex]) {
-					buttons[highlightIndex].style.backgroundColor = "transparent";
-				}
 				highlightIndex = buttons.indexOf(button);
-				button.style.backgroundColor = "#e0e0e0";
+				updateHighlightStyles();
 			});
 			button.addEventListener("click", () => {
 				if (button.disabled) return;
@@ -193,6 +194,7 @@ const inputSimulator = window.inputSimulator = {
 
 			buttons.push(button);
 		}
+		updateHighlightStyles();
 
 		document.body.append(flyout, dropdownDisplayButton);
 
@@ -242,12 +244,9 @@ const inputSimulator = window.inputSimulator = {
 			const dy = (event.key === "ArrowDown") - (event.key === "ArrowUp");
 			if (dy !== 0 || dx !== 0) {
 				const newIndex = highlightIndex === -1 ? 0 : ((highlightIndex + dy + buttons.length) % buttons.length);
-				if (highlightIndex !== -1) {
-					buttons[highlightIndex].style.backgroundColor = "transparent";
-				}
-				buttons[newIndex].style.backgroundColor = "#e0e0e0";
-				buttons[newIndex].scrollIntoView({ block: "nearest" });
 				highlightIndex = newIndex;
+				updateHighlightStyles();
+				buttons[newIndex].scrollIntoView({ block: "nearest" });
 				this.dropdownValueToBeWhenClosed.set(dropdown, buttons[newIndex].dataset.value);
 				dropdownDisplayButton.value = buttons[newIndex].dataset.value;
 				event.preventDefault();
