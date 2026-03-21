@@ -92,20 +92,31 @@ const inputSimulator = window.inputSimulator = {
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		// Text selection support for input/textarea only
-		if (buttonIndex === 0 && (target.matches('input[type="text"], textarea'))) {
-			// Start selection
-			this.selectionAnchor = { target, x, y };
-			this.selectionActive = true;
-			// Focus the input/textarea
-			target.focus();
-			// Set caret position based on click
-			const pos = this.getCaretPositionFromPoint(target, x, y);
-			if (pos !== null) {
-				target.setSelectionRange(pos, pos);
+		if (buttonIndex === 0) {
+			if (target.matches('input[type="text"], textarea')) {
+				// Start selection for input/textarea
+				this.selectionAnchor = { target, x, y };
+				this.selectionActive = true;
+				target.focus();
+				const pos = this.getCaretPositionFromPoint(target, x, y);
+				if (pos !== null) {
+					target.setSelectionRange(pos, pos);
+				}
+			} else {
+				// Start selection for page content
+				this.selectionAnchor = { target, x, y };
+				this.selectionActive = true;
+				// Set selection anchor using Range API
+				const sel = window.getSelection();
+				if (sel) {
+					sel.removeAllRanges();
+					const range = document.caretPositionFromPoint?.(x, y) || document.caretRangeFromPoint?.(x, y);
+					if (range) {
+						sel.collapse(range.offsetNode, range.offset);
+					}
+				}
 			}
 		}
-		// For other elements, do not clear window.getSelection(); allow native selection
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -117,12 +128,39 @@ const inputSimulator = window.inputSimulator = {
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
-		// Text selection drag support
+		// Text selection drag support for input/textarea
 		if (this.selectionActive && this.selectionAnchor && this.selectionAnchor.target === target && (target.matches('input[type="text"], textarea'))) {
 			const anchorPos = this.getCaretPositionFromPoint(target, this.selectionAnchor.x, this.selectionAnchor.y);
 			const focusPos = this.getCaretPositionFromPoint(target, x, y);
 			if (anchorPos !== null && focusPos !== null) {
 				target.setSelectionRange(anchorPos, focusPos);
+			}
+		}
+		// Text selection drag support for page content
+		if (this.selectionActive && this.selectionAnchor && !(target.matches('input[type="text"], textarea'))) {
+			const sel = window.getSelection();
+			if (sel) {
+				const anchorRange = document.caretPositionFromPoint?.(this.selectionAnchor.x, this.selectionAnchor.y) || document.caretRangeFromPoint?.(this.selectionAnchor.x, this.selectionAnchor.y);
+				const focusRange = document.caretPositionFromPoint?.(x, y) || document.caretRangeFromPoint?.(x, y);
+				if (anchorRange && focusRange) {
+					sel.removeAllRanges();
+					const range = document.createRange();
+					range.setStart(anchorRange.offsetNode, anchorRange.offset);
+					range.setEnd(focusRange.offsetNode, focusRange.offset);
+					sel.addRange(range);
+				}
+			}
+		}
+		// Text selection drag support
+		if (this.selectionActive && this.selectionAnchor) {
+			if (this.selectionAnchor.target === target && (target.matches('input[type="text"], textarea'))) {
+				const anchorPos = this.getCaretPositionFromPoint(target, this.selectionAnchor.x, this.selectionAnchor.y);
+				const focusPos = this.getCaretPositionFromPoint(target, x, y);
+				if (anchorPos !== null && focusPos !== null) {
+					target.setSelectionRange(anchorPos, focusPos);
+				}
+			} else {
+				// Finalize selection for page content (no-op, selection already set in pointerMove)
 			}
 		}
 		if (buttonIndex === 0) {
