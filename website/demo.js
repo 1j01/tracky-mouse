@@ -77,6 +77,21 @@ const inputSimulator = window.inputSimulator = {
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
+
+		// TODO: support double click, triple click selection behaviors, dragging selection
+		// TODO: avoid starting selection in links or other draggable/interactive elements
+		if (this.textSelectionStart && this.buttonStates[0]) {
+			const textSelectionEnd = this.caretPositionFromPoint(x, y);
+			const selection = window.getSelection();
+			if (textSelectionEnd && selection) {
+				selection.setBaseAndExtent(
+					this.textSelectionStart.offsetNode,
+					this.textSelectionStart.offset,
+					textSelectionEnd.offsetNode,
+					textSelectionEnd.offset,
+				);
+			}
+		}
 	},
 	pointerDown(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
@@ -90,9 +105,8 @@ const inputSimulator = window.inputSimulator = {
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
-		// TODO: support text selection
 		window.getSelection()?.removeAllRanges();
+		this.textSelectionStart = this.caretPositionFromPoint(x, y);
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -456,6 +470,21 @@ const inputSimulator = window.inputSimulator = {
 		setTimeout(() => {
 			toast.remove();
 		}, 4000);
+	},
+	caretPositionFromPoint: (x, y) => {
+		// Firefox (standard)
+		if (document.caretPositionFromPoint) {
+			return document.caretPositionFromPoint(x, y);
+		}
+		// Chrome/Edge/Safari (non-standard)
+		if (document.caretRangeFromPoint) {
+			const range = document.caretRangeFromPoint(x, y);
+			if (range) {
+				return { offsetNode: range.startContainer, offset: range.startOffset };
+			}
+			return null;
+		}
+		throw new Error('Neither caretPositionFromPoint nor caretRangeFromPoint is supported.');
 	},
 };
 
