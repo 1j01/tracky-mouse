@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const cliMdPath = path.join(__dirname, '..', 'CLI.md');
-const command = 'npx tracky-mouse --help';
+const command = 'npx tracky-mouse --help --cli-lang en';
 console.log("Updating CLI.md with latest --help output from the CLI...");
 console.log("Running command:", command);
 const cliHelpOutput = execSync(command).toString().trim();

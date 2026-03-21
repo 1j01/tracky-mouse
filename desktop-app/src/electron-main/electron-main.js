@@ -273,6 +273,25 @@ async function loadSettings() {
 // or could split out the shared functionality into a helper function
 // like handleFormatUpgrade(settings)
 function loadLanguageSettingSync() {
+	// Handle --cli-lang <lang> and --cli-lang=<lang>
+	const cliLangArg = process.argv.find(arg => arg === "--cli-lang" || arg.startsWith("--cli-lang="));
+	if (cliLangArg) {
+		let lang;
+		if (cliLangArg === "--cli-lang") {
+			const langIndex = process.argv.indexOf("--cli-lang");
+			if (langIndex !== -1 && process.argv[langIndex + 1]) {
+				lang = process.argv[langIndex + 1];
+			}
+		} else if (cliLangArg.startsWith("--cli-lang=")) {
+			lang = cliLangArg.split("=")[1];
+		}
+		if (lang) {
+			setLocale(lang);
+			return;
+		}
+	}
+
+	// Handle settings file
 	let data;
 	try {
 		data = require('fs').readFileSync(settingsFile, 'utf8');

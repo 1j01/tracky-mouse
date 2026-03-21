@@ -53,6 +53,12 @@ const parser = new ArgumentParser({
 // 	action: "append",
 // });
 
+parser.add_argument("--cli-lang", {
+	help: t("cli.args.cli-lang.description", { defaultValue: "Specify the language used by the CLI." }),
+	nargs: 1,
+	metavar: "LANG",
+});
+
 parser.add_argument("--start", {
 	help: t("cli.args.start.description", { defaultValue: "Start head tracking." }),
 	action: "store_true",
