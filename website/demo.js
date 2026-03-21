@@ -159,7 +159,8 @@ const inputSimulator = window.inputSimulator = {
 		const buttons = [];
 		function updateHighlightStyles() {
 			for (let optionIndex = 0; optionIndex < buttons.length; optionIndex++) {
-				buttons[optionIndex].style.backgroundColor = highlightIndex === optionIndex ? "#e0e0e0" : "transparent";
+				buttons[optionIndex].style.backgroundColor = highlightIndex === optionIndex ? "Highlight" : "transparent";
+				buttons[optionIndex].style.color = highlightIndex === optionIndex ? "HighlightText" : "";
 			}
 		}
 
