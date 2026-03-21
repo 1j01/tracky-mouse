@@ -137,6 +137,7 @@ const inputSimulator = window.inputSimulator = {
 	dropdownValueWhenOpened: new WeakMap(),
 	dropdownValueToBeWhenClosed: new WeakMap(),
 	dropdownToDisplayButton: new WeakMap(),
+	dropdownAnimationFrameId: null,
 	openDropdown(dropdown, { focus = true } = {}) {
 		if (this.dropdownToFlyout.has(dropdown)) {
 			return; // avoid double opening or failing to send input/change events due to dropdownValueWhenOpened being updated while dropdown is open
@@ -212,23 +213,26 @@ const inputSimulator = window.inputSimulator = {
 		flyout.style.boxSizing = "border-box";
 
 		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
-		// TODO: reposition as page is scrolled etc.
-		const dropdownRect = dropdown.getBoundingClientRect();
-		dropdownDisplayButton.style.position = "fixed";
-		dropdownDisplayButton.style.top = `${dropdownRect.top}px`;
-		dropdownDisplayButton.style.left = `${dropdownRect.left}px`;
-		dropdownDisplayButton.style.width = `${dropdownRect.width}px`;
-		flyout.style.position = "fixed";
-		flyout.style.top = `${dropdownRect.bottom}px`;
-		flyout.style.left = `${dropdownRect.left}px`;
-		flyout.style.width = `${dropdownRect.width}px`;
-		if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
-			flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
-		}
-		if (flyout.getBoundingClientRect().top < 0) {
-			flyout.style.top = "0px";
-		}
-		flyout.style.maxHeight = "100vh";
+		const positionElements = () => {
+			const dropdownRect = dropdown.getBoundingClientRect();
+			dropdownDisplayButton.style.position = "fixed";
+			dropdownDisplayButton.style.top = `${dropdownRect.top}px`;
+			dropdownDisplayButton.style.left = `${dropdownRect.left}px`;
+			dropdownDisplayButton.style.width = `${dropdownRect.width}px`;
+			flyout.style.position = "fixed";
+			flyout.style.top = `${dropdownRect.bottom}px`;
+			flyout.style.left = `${dropdownRect.left}px`;
+			flyout.style.width = `${dropdownRect.width}px`;
+			if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
+				flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
+			}
+			if (flyout.getBoundingClientRect().top < 0) {
+				flyout.style.top = "0px";
+			}
+			flyout.style.maxHeight = "100vh";
+			this.dropdownAnimationFrameId = requestAnimationFrame(positionElements);
+		};
+		positionElements();
 
 		flyout.tabIndex = 0;
 		if (focus) {
@@ -261,6 +265,7 @@ const inputSimulator = window.inputSimulator = {
 		}, { once: true });
 	},
 	closeDropdown(dropdown) {
+		cancelAnimationFrame(this.dropdownAnimationFrameId);
 		const flyout = this.dropdownToFlyout.get(dropdown);
 		const dropdownDisplayButton = this.dropdownToDisplayButton.get(dropdown);
 		if (!flyout || this._closingDropdown) {
