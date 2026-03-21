@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets ஒரு string (CSS selector) ஆக இருக்க வேண்டும்",
   "api.errors.targetsRequired": "config.targets அவசியம் நிரப்பப்பட வேண்டும் (CSS selector ஆக இருக்க வேண்டும்)",
   "cli.args.adjust.description": "ஒரு விருப்பத்தை அதன் தற்போதைய மதிப்பை அடிப்படையாகக் கொண்டு மாற்றுகிறது. (புதிய மதிப்பையும் காட்டும்; அது சில வரம்புகளால் கட்டுப்படுத்தப்பட்டிருக்கலாம்.)",
+  "cli.args.cli-lang.description": "CLI பயன்படுத்தும் மொழியை குறிப்பிடவும்.",
   "cli.args.get.description": "ஒரு விருப்பத்தின் தற்போதைய மதிப்பை வெளியிடுகிறது.",
   "cli.args.profile.description": "எந்த அமைப்பு சுயவிவரத்தை (profile) பயன்படுத்த வேண்டும்.",
   "cli.args.set.description": "ஒரு விருப்பத்தை குறிப்பிட்ட மதிப்பாக மாற்றுகிறது. (புதிய மதிப்பையும் காட்டும்; அது சில வரம்புகளால் கட்டுப்படுத்தப்பட்டிருக்கலாம்.)",

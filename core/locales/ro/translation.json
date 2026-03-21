@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets trebuie să fie un șir (selector CSS)",
   "api.errors.targetsRequired": "config.targets este obligatoriu (trebuie să fie un selector CSS)",
   "cli.args.adjust.description": "Ajustează o opțiune cu o valoare relativă la valoarea ei curentă. (Afișează și noua valoare, care poate fi limitată la anumite intervale.)",
+  "cli.args.cli-lang.description": "Specificați limba utilizată de CLI.",
   "cli.args.get.description": "Afișează valoarea curentă a unei opțiuni.",
   "cli.args.profile.description": "Profilul de setări care va fi folosit.",
   "cli.args.set.description": "Schimbă o opțiune la o valoare specifică. (Afișează și noua valoare, care poate fi limitată la anumite intervale.)",

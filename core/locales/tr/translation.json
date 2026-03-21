@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets bir metin (CSS seçicisi) olmalıdır",
   "api.errors.targetsRequired": "config.targets gereklidir (bir CSS seçicisi olmalıdır)",
   "cli.args.adjust.description": "Bir seçeneği mevcut değerine göre belirli bir miktarda ayarlar. (Ayrıca, bazı sınırlara kısıtlanmış olabilecek yeni değeri de gösterir.)",
+  "cli.args.cli-lang.description": "CLI tarafından kullanılan dili belirtin.",
   "cli.args.get.description": "Bir seçeneğin mevcut değerini gösterir.",
   "cli.args.profile.description": "Kullanılacak ayar profili.",
   "cli.args.set.description": "Bir seçeneği belirli bir değere ayarlar. (Ayrıca, bazı sınırlara kısıtlanmış olabilecek yeni değeri de gösterir.)",

@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets devas esti ĉeno (CSS-elektilo)",
   "api.errors.targetsRequired": "config.targets estas postulata (devas esti CSS-elektilo)",
   "cli.args.adjust.description": "Ĝustigu agordon per kvanto relativa al ĝia nuna valoro. (Ankaŭ eligas la novan valoron, kiu eble estas limigita.)",
+  "cli.args.cli-lang.description": "Specifu la lingvon uzatan de la CLI.",
   "cli.args.get.description": "Eligas la nunan valoron de agordo.",
   "cli.args.profile.description": "La agorda profilo uzenda.",
   "cli.args.set.description": "Ŝanĝu agordon al specifa valoro. (Ankaŭ eligas la novan valoron, kiu eble estas limigita.)",

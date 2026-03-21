@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets phải là một chuỗi (bộ chọn CSS)",
   "api.errors.targetsRequired": "cần có config.targets (phải là bộ chọn CSS)",
   "cli.args.adjust.description": "Điều chỉnh một tùy chọn theo tỷ lệ so với giá trị hiện tại. (Cũng hiển thị giá trị mới, có thể bị giới hạn trong một khoảng.)",
+  "cli.args.cli-lang.description": "Chỉ định ngôn ngữ được sử dụng bởi CLI.",
   "cli.args.get.description": "Hiển thị giá trị hiện tại của một tùy chọn.",
   "cli.args.profile.description": "Hồ sơ cài đặt sẽ dùng.",
   "cli.args.set.description": "Đặt một tùy chọn thành giá trị cụ thể. (Cũng hiển thị giá trị mới, có thể bị giới hạn bởi một số ràng buộc.)",

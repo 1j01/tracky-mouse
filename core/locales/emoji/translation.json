@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "⚙️ config.targets 🏷️🟰🔤 🙏 (CSS selector 🙏)",
   "api.errors.targetsRequired": "⚙️ config.targets 🔎🥺 (CSS selector 🙏)",
   "cli.args.adjust.description": "🆕⚙️🔢🟰⚙️🔢➕📥🔢 (📤🟰🆕🔢)",
+  "cli.args.cli-lang.description": "🌐🗣️ CLI language",
   "cli.args.get.description": "📤⚙️🔢",
   "cli.args.profile.description": "⚙️👤 (⚙️⚙️⚙️⚙️)",
   "cli.args.set.description": "🆕⚙️🔢🟰📥🔢 (📤🟰🆕🔢)",

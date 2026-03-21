@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets는 문자열(CSS 선택자)이어야 합니다",
   "api.errors.targetsRequired": "config.targets가 필요합니다(CSS 선택자여야 함)",
   "cli.args.adjust.description": "현재 값에서 상대적으로 옵션 값을 조정합니다. (제한 범위 안에서 새 값이 출력됩니다.)",
+  "cli.args.cli-lang.description": "CLI에서 사용할 언어를 지정합니다.",
   "cli.args.get.description": "현재 옵션 값을 출력합니다.",
   "cli.args.profile.description": "사용할 설정 프로필입니다.",
   "cli.args.set.description": "옵션을 지정한 값으로 설정합니다. (제한 범위 안에서 새 값이 출력됩니다.)",

@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets は文字列（CSS セレクター）でなければなりません",
   "api.errors.targetsRequired": "config.targets は必須です（CSS セレクターでなければなりません）",
   "cli.args.adjust.description": "現在の値に対して相対的な量だけオプションを調整します。（必要に応じて制限された新しい値も出力します。）",
+  "cli.args.cli-lang.description": "CLI で使用する言語を指定します。",
   "cli.args.get.description": "オプションの現在の値を出力します。",
   "cli.args.profile.description": "使用する設定プロファイルです。",
   "cli.args.set.description": "オプションを特定の値に変更します。（必要に応じて制限された新しい値も出力します。）",

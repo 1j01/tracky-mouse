@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets skal være en streng (en CSS‑vælger)",
   "api.errors.targetsRequired": "config.targets er påkrævet (skal være en CSS‑vælger)",
   "cli.args.adjust.description": "Justerer en indstilling med et beløb i forhold til den nuværende værdi. (Viser også den nye værdi, som kan være begrænset af nogle grænser.)",
+  "cli.args.cli-lang.description": "Angiv det sprog, der bruges af CLI.",
   "cli.args.get.description": "Viser den aktuelle værdi af en indstilling.",
   "cli.args.profile.description": "Den indstillingsprofil, der skal bruges.",
   "cli.args.set.description": "Ændrer en indstilling til en bestemt værdi. (Viser også den nye værdi, som kan være begrænset af nogle grænser.)",

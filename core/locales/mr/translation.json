@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets हे स्ट्रिंग (CSS सिलेक्टर) असणे आवश्यक आहे",
   "api.errors.targetsRequired": "config.targets आवश्यक आहे (CSS सिलेक्टर असणे गरजेचे आहे)",
   "cli.args.adjust.description": "एखादा पर्याय त्याच्या सध्याच्या मूल्याच्या मानाने बदलतो. (नवीन मूल्य देखील दाखवले जाईल, जे काही मर्यादांमध्ये बसवले जाऊ शकते.)",
+  "cli.args.cli-lang.description": "CLI द्वारे वापरली जाणारी भाषा निर्दिष्ट करा.",
   "cli.args.get.description": "दिलेल्या पर्यायाचे सध्याचे मूल्य दाखवते.",
   "cli.args.profile.description": "कोणता सेटिंग्ज प्रोफाइल वापरायचा.",
   "cli.args.set.description": "एखादा पर्याय विशिष्ट मूल्यावर सेट करतो. (नवीन मूल्य देखील दाखवतो, जे काही मर्यादांमध्ये बसवले जाऊ शकते.)",

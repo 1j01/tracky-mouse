@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets kudu string (selektor CSS)",
   "api.errors.targetsRequired": "config.targets dibutuhake (kudu selektor CSS)",
   "cli.args.adjust.description": "Ngatur siji opsi adhedhasar saka nilai saiki. (Uga nampilake nilai anyar, sing bisa wae diwatesi dening sawetara watesan.)",
+  "cli.args.cli-lang.description": "Tuduhake basa sing digunakake dening CLI.",
   "cli.args.get.description": "Nampilake nilai saiki saka siji opsi.",
   "cli.args.profile.description": "Profil pangaturan sing arep digunakaké.",
   "cli.args.set.description": "Ngganti siji opsi menyang nilai tartamtu. (Uga nampilake nilai anyar, sing bisa wae diwatesi dening sawetara watesan.)",

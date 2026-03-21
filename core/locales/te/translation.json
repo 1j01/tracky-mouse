@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets ఒక స్ట్రింగ్ (CSS సెలెక్టర్) కావాలి",
   "api.errors.targetsRequired": "config.targets అవసరం (CSS సెలెక్టర్ కావాలి)",
   "cli.args.adjust.description": "దాని ప్రస్తుత విలువకు సంబంధించి ఒక ఎంపికను సర్దుబాటు చేయండి. (కొన్ని పరిమితులలో నిలిపివేయబడే కొత్త విలువను కూడా చూపిస్తుంది.)",
+  "cli.args.cli-lang.description": "CLI ఉపయోగించే భాషను పేర్కొనండి.",
   "cli.args.get.description": "ఒక ఎంపిక ప్రస్తుత విలువను చూపిస్తుంది.",
   "cli.args.profile.description": "ఉపయోగించాల్సిన సెట్టింగ్‌ల ప్రొఫైల్.",
   "cli.args.set.description": "ఒక ఎంపికను ప్రత్యేక విలువకు మార్చండి. (కొన్ని పరిమితులకే బంధించబడే కొత్త విలువను కూడా చూపిస్తుంది.)",

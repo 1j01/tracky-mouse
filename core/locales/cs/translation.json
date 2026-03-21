@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets musí být řetězec (CSS selektor)",
   "api.errors.targetsRequired": "config.targets je povinné (musí být CSS selektor)",
   "cli.args.adjust.description": "Upraví nastavení o hodnotu relativní k aktuální hodnotě. (Také vypíše novou hodnotu, která může být omezená určitými limity.)",
+  "cli.args.cli-lang.description": "Určete jazyk používaný CLI.",
   "cli.args.get.description": "Vypíše aktuální hodnotu daného nastavení.",
   "cli.args.profile.description": "Profil nastavení, který se má použít.",
   "cli.args.set.description": "Nastaví volbu na konkrétní hodnotu. (Také vypíše novou hodnotu, která může být omezená určitými limity.)",

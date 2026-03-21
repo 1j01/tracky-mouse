@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets юл (CSS селектор) булырга тиеш",
   "api.errors.targetsRequired": "config.targets таләп ителә (CSS селектор булырга тиеш)",
   "cli.args.adjust.description": "Көйләүне хәзерге кыйммәтенә чагыштырмача үзгәртү. (Чикләүләргә буйсынган булырга мөмкин булган яңа кыйммәтне дә күрсәтә.)",
+  "cli.args.cli-lang.description": "CLI куллана торган телне күрсәтегез.",
   "cli.args.get.description": "Көйләүнең хәзерге кыйммәтен күрсәтә.",
   "cli.args.profile.description": "Кулланылачак көйләү профиле.",
   "cli.args.set.description": "Көйләүне билгеле бер кыйммәткә үзгәртү. (Чикләүләргә буйсынган булырга мөмкин булган яңа кыйммәтне дә күрсәтә.)",

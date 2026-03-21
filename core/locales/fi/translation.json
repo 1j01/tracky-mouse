@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targetsin on oltava merkkijono (CSS-valitsin)",
   "api.errors.targetsRequired": "config.targets on pakollinen (sen on oltava CSS-valitsin)",
   "cli.args.adjust.description": "Säätää asetusta määrällä suhteessa sen nykyiseen arvoon. (Tulostaa myös uuden arvon, joka voidaan rajoittaa tietyille rajoille.)",
+  "cli.args.cli-lang.description": "Määritä CLI:n käyttämä kieli.",
   "cli.args.get.description": "Tulostaa asetuksen nykyisen arvon.",
   "cli.args.profile.description": "Käytettävä asetusten profiili.",
   "cli.args.set.description": "Asettaa asetuksen tiettyyn arvoon. (Tulostaa myös uuden arvon, joka voidaan rajoittaa tietyille rajoille.)",

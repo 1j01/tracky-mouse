@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets mestilah rentetan (pemilih CSS)",
   "api.errors.targetsRequired": "config.targets diperlukan (mestilah pemilih CSS)",
   "cli.args.adjust.description": "Laras pilihan mengikut amaun berbanding nilai semasanya. (Juga memaparkan nilai baharu, yang mungkin dihadkan oleh sesetengah had.)",
+  "cli.args.cli-lang.description": "Tentukan bahasa yang digunakan oleh CLI.",
   "cli.args.get.description": "Mengeluarkan nilai semasa sesuatu pilihan.",
   "cli.args.profile.description": "Profil tetapan untuk digunakan.",
   "cli.args.set.description": "Tukar sesuatu pilihan kepada nilai tertentu. (Juga memaparkan nilai baharu, yang mungkin dihadkan oleh sesetengah had.)",

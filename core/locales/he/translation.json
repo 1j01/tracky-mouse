@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets חייב להיות מחרוזת (בורר CSS)",
   "api.errors.targetsRequired": "נדרש config.targets (חייב להיות בורר CSS)",
   "cli.args.adjust.description": "מכוונן אפשרות בסכום יחסי לערך הנוכחי שלה. (פולט גם את הערך החדש, שעשוי להיות מוגבל בתחום מסוים.)",
+  "cli.args.cli-lang.description": "ציין את השפה שבה ישתמש CLI.",
   "cli.args.get.description": "פולט את הערך הנוכחי של האפשרות.",
   "cli.args.profile.description": "פרופיל ההגדרות לשימוש.",
   "cli.args.set.description": "משנה אפשרות לערך מסוים. (פולט גם את הערך החדש, שעשוי להיות מוגבל בתחום מסוים.)",

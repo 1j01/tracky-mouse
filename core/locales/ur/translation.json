@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets ایک سٹرنگ (CSS سلیکٹر) ہونا چاہیے",
   "api.errors.targetsRequired": "config.targets ضروری ہے (یہ CSS سلیکٹر ہونا چاہیے)",
   "cli.args.adjust.description": "کسی اختیار کو اس کی موجودہ قدر کے نسبت ایک مقدار سے تبدیل کریں۔ (نئی قدر بھی دکھائی جائے گی، جو کچھ حدود کے اندر محدود ہو سکتی ہے۔)",
+  "cli.args.cli-lang.description": "CLI کی زبان منتخب کریں۔",
   "cli.args.get.description": "کسی اختیار کی موجودہ قدر ظاہر کرتا ہے۔",
   "cli.args.profile.description": "وہ سیٹنگز پروفائل جو استعمال ہونا ہے۔",
   "cli.args.set.description": "کسی اختیار کو ایک خاص قدر پر سیٹ کریں۔ (نئی قدر بھی دکھائی جائے گی، جو کچھ حدود کے اندر محدود ہو سکتی ہے۔)",

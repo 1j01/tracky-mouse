@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "a config.targets értékének sztringnek kell lennie (CSS-szelektor)",
   "api.errors.targetsRequired": "a config.targets megadása kötelező (CSS-szelektornak kell lennie)",
   "cli.args.adjust.description": "Egy beállítás módosítása az aktuális értékéhez viszonyított mennyiséggel. (A program kiírja az új értéket is, amely bizonyos határok közé lehet szorítva.)",
+  "cli.args.cli-lang.description": "Adja meg a CLI által használt nyelvet.",
   "cli.args.get.description": "Kiírja egy beállítás aktuális értékét.",
   "cli.args.profile.description": "A használni kívánt beállításprofil.",
   "cli.args.set.description": "Beállít egy opciót egy adott értékre. (A program kiírja az új értéket is, amely bizonyos határok közé lehet szorítva.)",

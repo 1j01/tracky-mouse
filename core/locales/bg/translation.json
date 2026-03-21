@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets трябва да е низ (CSS селектор)",
   "api.errors.targetsRequired": "config.targets е задължителен (трябва да е CSS селектор)",
   "cli.args.adjust.description": "Променя дадена настройка с величина спрямо текущата ѝ стойност (и показва новата стойност, която може да бъде ограничена в определени граници).",
+  "cli.args.cli-lang.description": "Задава езика на CLI интерфейса.",
   "cli.args.get.description": "Показва текущата стойност на дадена настройка.",
   "cli.args.profile.description": "Профил с настройки, който да се използва.",
   "cli.args.set.description": "Задава конкретна стойност на дадена настройка (и показва новата стойност, която може да бъде ограничена в определени граници).",

@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets mora biti string (CSS selektor)",
   "api.errors.targetsRequired": "config.targets je obavezan (mora biti CSS selektor)",
   "cli.args.adjust.description": "Podesi opciju za iznos u odnosu na trenutnu vrednost. (Takođe ispisuje novu vrednost, koja može biti ograničena nekim granicama.)",
+  "cli.args.cli-lang.description": "Одредите језик који користи CLI.",
   "cli.args.get.description": "Ispisuje trenutnu vrednost opcije.",
   "cli.args.profile.description": "Profil podešavanja koji će se koristiti.",
   "cli.args.set.description": "Promeni opciju na određenu vrednost. (Takođe ispisuje novu vrednost, koja može biti ograničena nekim granicama.)",

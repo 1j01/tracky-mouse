@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets 愛是一條字串（CSS 選擇器）",
   "api.errors.targetsRequired": "config.targets 是必要 ê（愛是 CSS 選擇器）",
   "cli.args.adjust.description": "按目前數值來調整設定 ê 數量。（閣會顯示新數值，可能有受上限下限 ê 限制。）",
+  "cli.args.cli-lang.description": "指定 CLI 使用 ê 語言。",
   "cli.args.get.description": "顯示這个選項現在 ê 數值。",
   "cli.args.profile.description": "欲使用 ê 設定檔。",
   "cli.args.set.description": "將設定直接改做指定 ê 數值。（閣會顯示新數值，可能會受限制。）",

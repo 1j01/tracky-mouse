@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets لازم يكون نص (محدّد CSS)",
   "api.errors.targetsRequired": "config.targets مطلوب (لازم يكون محدّد CSS)",
   "cli.args.adjust.description": "عدّل الإعداد بنسبة بالنسبة لقيمته الحالية. (وبيظهرلك القيمة الجديدة، حتى لو متقيّدة بحدود.)",
+  "cli.args.cli-lang.description": "يحدد لغة واجهة سطر الأوامر (CLI).",
   "cli.args.get.description": "يعرضلك القيمة الحالية للإعداد.",
   "cli.args.profile.description": "ملف الإعدادات اللي هيتستخدم.",
   "cli.args.set.description": "غيّر الإعداد لقيمة معيّنة. (وبيظهرلك القيمة الجديدة، حتى لو مقيدة بحدود.)",

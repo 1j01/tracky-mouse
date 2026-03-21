@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets 必须是字符串（CSS 选择器）",
   "api.errors.targetsRequired": "必须提供 config.targets（必须是 CSS 选择器）",
   "cli.args.adjust.description": "按相对当前值的变化量调整某个选项。（同时输出新值，新值可能会被限制在一定范围内。）",
+  "cli.args.cli-lang.description": "指定 CLI 使用的语言。",
   "cli.args.get.description": "输出某个选项的当前值。",
   "cli.args.profile.description": "要使用的设置配置。",
   "cli.args.set.description": "将某个选项设置为指定的值。（同时输出新值，新值可能会被限制在一定范围内。）",

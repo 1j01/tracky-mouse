@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets kate bat izan behar da (CSS hautatzailea)",
   "api.errors.targetsRequired": "config.targets beharrezkoa da (CSS hautatzailea izan behar du)",
   "cli.args.adjust.description": "Aukera bat uneko balioarekiko kopuru erlatibo batekin doitzen du. (Balio berria ere erakusten du; balio hori muga jakin batzuetara mugatuta egon daiteke.)",
+  "cli.args.cli-lang.description": "Zehaztu CLI-k erabiliko duen hizkuntza.",
   "cli.args.get.description": "Aukera baten uneko balioa erakusten du.",
   "cli.args.profile.description": "Erabiliko den ezarpen‑profila.",
   "cli.args.set.description": "Aukera baten balioa zehaztutako balio batera aldatzen du. (Balio berria ere erakusten du; balio hori muga jakin batzuetara mugatuta egon daiteke.)",

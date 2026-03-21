@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets moet een tekenreeks zijn (een CSS-selector)",
   "api.errors.targetsRequired": "config.targets is vereist (moet een CSS-selector zijn)",
   "cli.args.adjust.description": "Pas een optie aan met een waarde ten opzichte van de huidige waarde. (Geeft ook de nieuwe waarde weer, die mogelijk binnen bepaalde grenzen wordt gehouden.)",
+  "cli.args.cli-lang.description": "Geef de taal op die door de CLI wordt gebruikt.",
   "cli.args.get.description": "Geeft de huidige waarde van een optie weer.",
   "cli.args.profile.description": "Het te gebruiken instellingenprofiel.",
   "cli.args.set.description": "Stel een optie in op een specifieke waarde. (Geeft ook de nieuwe waarde weer, die mogelijk binnen bepaalde grenzen wordt gehouden.)",

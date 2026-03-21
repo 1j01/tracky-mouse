@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets lazima iwe nukuu (kichagua cha CSS)",
   "api.errors.targetsRequired": "config.targets inahitajika (lazima iwe kichagua cha CSS)",
   "cli.args.adjust.description": "Rekebisha chaguo kwa kiasi fulani kulingana na thamani yake ya sasa. (Inaonyesha pia thamani mpya, ambayo inaweza kuwa imewekewa mipaka fulani.)",
+  "cli.args.cli-lang.description": "Taja lugha inayotumiwa na CLI.",
   "cli.args.get.description": "Hutoa thamani ya sasa ya chaguo.",
   "cli.args.profile.description": "Profaili ya mipangilio ya kutumia.",
   "cli.args.set.description": "Badilisha chaguo kuwa thamani fulani. (Inaonyesha pia thamani mpya, ambayo inaweza kuwa imewekewa mipaka fulani.)",

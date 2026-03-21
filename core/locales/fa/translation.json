@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets باید یک رشته (انتخاب‌گر CSS) باشد",
   "api.errors.targetsRequired": "config.targets الزامی است (باید یک انتخاب‌گر CSS باشد)",
   "cli.args.adjust.description": "یک گزینه را بر اساس مقدار فعلی‌اش تغییر می‌دهد. (مقدار جدید را هم نمایش می‌دهد؛ این مقدار ممکن است به برخی محدودیت‌ها مقید باشد.)",
+  "cli.args.cli-lang.description": "زبان مورد استفاده توسط CLI را مشخص کنید.",
   "cli.args.get.description": "مقدار فعلی یک گزینه را نمایش می‌دهد.",
   "cli.args.profile.description": "نمایه‌ی تنظیماتی که باید استفاده شود.",
   "cli.args.set.description": "یک گزینه را به مقدار مشخصی تغییر می‌دهد. (مقدار جدید را هم نمایش می‌دهد؛ این مقدار ممکن است به برخی محدودیت‌ها مقید باشد.)",

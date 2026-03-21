@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "Ang config.targets kinahanglang string (usa ka CSS selector)",
   "api.errors.targetsRequired": "Ang config.targets gikinahanglan (kinahanglang usa ka CSS selector)",
   "cli.args.adjust.description": "Usba ang usa ka opsyon base sa kasamtangang kantidad niini. (Ipakita usab ang bag-ong kantidad, nga basin naa sa piho nga limitasyon.)",
+  "cli.args.cli-lang.description": "Ibutang ang pinulongan nga gamiton sa CLI.",
   "cli.args.get.description": "Ipakita ang kasamtangang kantidad sa usa ka opsyon.",
   "cli.args.profile.description": "Ang profile sa mga setting nga gamiton.",
   "cli.args.set.description": "Ibutang ang usa ka opsyon sa piho nga kantidad. (Ipakita usab ang bag-ong kantidad, nga basin naa sa piho nga limitasyon.)",

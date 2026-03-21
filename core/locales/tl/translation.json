@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "Ang config.targets ay kailangang string (isang CSS selector)",
   "api.errors.targetsRequired": "Kinakailangan ang config.targets (kailangang isang CSS selector)",
   "cli.args.adjust.description": "Inaayos ang isang opsyon ayon sa kasalukuyang halaga nito. (Ipinapakita rin ang bagong halaga, na maaaring limitado sa ilang saklaw.)",
+  "cli.args.cli-lang.description": "Tukuyin ang wika na gagamitin ng CLI.",
   "cli.args.get.description": "Ipinapakita ang kasalukuyang halaga ng isang opsyon.",
   "cli.args.profile.description": "Aling profile ng mga setting ang gagamitin.",
   "cli.args.set.description": "Itakda ang isang opsyon sa isang partikular na halaga. (Ipinapakita rin ang bagong halaga, na maaaring limitado sa ilang saklaw.)",

@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets-ը պետք է լինի տող (CSS ընտրիչ)",
   "api.errors.targetsRequired": "config.targets-ը պարտադիր է (պետք է լինի CSS ընտրիչ)",
   "cli.args.adjust.description": "Կարգավորումը փոխում է դրա ներկայիս արժեքից հարաբերական քանակով (և ցուցադրում է նոր արժեքը, որը կարող է սահմանափակված լինել որոշ սահմաններով)։",
+  "cli.args.cli-lang.description": "Նշեք CLI-ի օգտագործած լեզուն։",
   "cli.args.get.description": "Ցուցադրում է տվյալ կարգավորման ներկայիս արժեքը։",
   "cli.args.profile.description": "Կարգավորումների այն պրոֆիլը, որը պետք է օգտագործել։",
   "cli.args.set.description": "Տրված կարգավորումը փոփոխում է որոշակի արժեքի (և ցուցադրում է նոր արժեքը, որը կարող է սահմանափակված լինել որոշ սահմաններով)։",

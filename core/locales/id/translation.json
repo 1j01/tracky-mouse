@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets harus berupa string (sebuah selektor CSS)",
   "api.errors.targetsRequired": "config.targets wajib diisi (harus berupa selektor CSS)",
   "cli.args.adjust.description": "Mengatur sebuah opsi dengan nilai relatif terhadap nilai saat ini. (Juga menampilkan nilai baru, yang mungkin dibatasi.)",
+  "cli.args.cli-lang.description": "Tentukan bahasa yang digunakan oleh CLI.",
   "cli.args.get.description": "Menampilkan nilai saat ini dari sebuah opsi.",
   "cli.args.profile.description": "Profil pengaturan yang akan digunakan.",
   "cli.args.set.description": "Mengubah sebuah opsi ke nilai tertentu. (Juga menampilkan nilai baru, yang mungkin dibatasi.)",

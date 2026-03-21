@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets стринг болу кхочун ю (CSS-селектор)",
   "api.errors.targetsRequired": "config.targets хьажа дӀаяккхар дан (CSS-селектор болу кхочун ю)",
   "cli.args.adjust.description": "Параметр тӀехь хӀинца дӀахӀоттаман тӀаьххьара чура хьажорг. (Кхин хӀоттаман тӀаьххьара гӀо, цуьнца хьалха лимиташ боцуш ю).",
+  "cli.args.cli-lang.description": "CLI-а цуьнан мотт хьо цуьнан.",
   "cli.args.get.description": "ХӀинца параметран тӀаьххьара гӀо.",
   "cli.args.profile.description": "Хьажа параметран профиль.",
   "cli.args.set.description": "Параметр дац юха тӀаьххьаре тӀехь дӀахӀоттам. (Кхин хӀоттаман тӀаьххьара гӀойта, цуьнан лимиташ бай кхин.)",

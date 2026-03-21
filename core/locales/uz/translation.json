@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets qator (CSS selektori) bo‘lishi kerak",
   "api.errors.targetsRequired": "config.targets majburiy (CSS selektori bo‘lishi kerak)",
   "cli.args.adjust.description": "Parametrni joriy qiymatiga nisbatan o‘zgartiring. (Natijada cheklovlarga ega bo‘lishi mumkin bo‘lgan yangi qiymat ham chiqariladi.)",
+  "cli.args.cli-lang.description": "CLI tomonidan ishlatiladigan tilni belgilang.",
   "cli.args.get.description": "Parametrning joriy qiymatini chiqaradi.",
   "cli.args.profile.description": "Foydalaniladigan sozlamalar profili.",
   "cli.args.set.description": "Parametrni aniq qiymatga o‘zgartiring. (Shuningdek, cheklovlarga ega bo‘lishi mumkin bo‘lgan yangi qiymat chiqariladi.)",

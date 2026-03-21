@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets muss ein String (ein CSS-Selektor) sein",
   "api.errors.targetsRequired": "config.targets ist erforderlich (muss ein CSS-Selektor sein)",
   "cli.args.adjust.description": "Ändere eine Option relativ zu ihrem aktuellen Wert. (Gibt auch den neuen Wert aus, der begrenzt sein kann.)",
+  "cli.args.cli-lang.description": "Geben Sie die von der CLI verwendete Sprache an.",
   "cli.args.get.description": "Gibt den aktuellen Wert einer Option aus.",
   "cli.args.profile.description": "Zu verwendendes Einstellungsprofil.",
   "cli.args.set.description": "Setzt eine Option auf einen bestimmten Wert. (Gibt auch den neuen, ggf. begrenzten Wert aus.)",

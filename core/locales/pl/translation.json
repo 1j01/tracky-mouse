@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets musi być ciągiem tekstowym (selektorem CSS)",
   "api.errors.targetsRequired": "config.targets jest wymagane (musi być selektorem CSS)",
   "cli.args.adjust.description": "Dostosuj opcję o wartość względną względem jej bieżącej wartości. (Zwraca także nową wartość, która może być ograniczona pewnymi limitami.)",
+  "cli.args.cli-lang.description": "Określ język używany przez CLI.",
   "cli.args.get.description": "Zwraca bieżącą wartość opcji.",
   "cli.args.profile.description": "Profil ustawień do użycia.",
   "cli.args.set.description": "Ustawia opcję na określoną wartość. (Zwraca także nową wartość, która może być ograniczona pewnymi limitami.)",

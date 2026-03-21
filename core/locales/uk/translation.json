@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets має бути рядком (CSS‑селектором)",
   "api.errors.targetsRequired": "config.targets є обов’язковим (має бути CSS‑селектором)",
   "cli.args.adjust.description": "Змінити параметр на величину відносно його поточного значення (нове значення може бути обмежене певними межами).",
+  "cli.args.cli-lang.description": "Вкажіть мову, яку використовує CLI.",
   "cli.args.get.description": "Виводить поточне значення параметра.",
   "cli.args.profile.description": "Профіль налаштувань, який потрібно використати.",
   "cli.args.set.description": "Змінити параметр на конкретне значення (нове значення може бути обмежене певними межами).",

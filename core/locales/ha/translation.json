@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets dole ne rubutu ne (mai zaɓin CSS)",
   "api.errors.targetsRequired": "config.targets yana da tilas (dole ne ya zama zaɓin CSS)",
   "cli.args.adjust.description": "Daidaici zaɓi ne gwargwadon darajar da yake yanzu. (Hakanan yana nuna sabuwar darajar, wadda za a iya takaita ta zuwa wasu iyaka.)",
+  "cli.args.cli-lang.description": "Sanya harshen da CLI zai yi amfani da shi.",
   "cli.args.get.description": "Yana nuna darajar da ake da ita na wani zaɓi.",
   "cli.args.profile.description": "Bayanan saituna da za a yi amfani da su.",
   "cli.args.set.description": "Canza wani zaɓi zuwa takamaiman daraja. (Hakanan yana nuna sabuwar darajar, wadda za a iya takaita ta zuwa wasu iyaka.)",

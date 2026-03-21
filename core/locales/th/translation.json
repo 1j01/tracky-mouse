@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets ต้องเป็นสตริง (ตัวเลือก CSS)",
   "api.errors.targetsRequired": "ต้องระบุ config.targets (ต้องเป็นตัวเลือก CSS)",
   "cli.args.adjust.description": "ปรับตัวเลือกโดยเพิ่มหรือลดจากค่าปัจจุบัน (และจะแสดงค่าที่ตั้งใหม่ ซึ่งอาจถูกจำกัดอยู่ในช่วงที่กำหนด)",
+  "cli.args.cli-lang.description": "ระบุภาษาที่ใช้โดย CLI",
   "cli.args.get.description": "แสดงค่าปัจจุบันของตัวเลือก",
   "cli.args.profile.description": "โปรไฟล์การตั้งค่าที่จะใช้",
   "cli.args.set.description": "ตั้งค่าตัวเลือกให้เป็นค่าที่กำหนด (และจะแสดงค่าที่ตั้งใหม่ ซึ่งอาจถูกจำกัดอยู่ในช่วงที่กำหนด)",

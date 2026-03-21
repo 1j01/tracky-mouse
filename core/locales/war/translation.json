@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets kinahanglan usa nga string (usa nga CSS selector)",
   "api.errors.targetsRequired": "config.targets kinahanglan pun-on (kinahanglan CSS selector)",
   "cli.args.adjust.description": "I-igo an usa nga opsyon hin kadamo nga nakabasar ha yana nga kantidad hito. (Gin-gawas liwat an bag-o nga kantidad, nga bangin may-ada mga limitasyon.)",
+  "cli.args.cli-lang.description": "Ibutang an yinaknan nga gagamiton han CLI.",
   "cli.args.get.description": "Gin-gawas an yana nga kantidad han usa nga opsyon.",
   "cli.args.profile.description": "An profile han mga setting nga gagamiton.",
   "cli.args.set.description": "Usba an usa nga opsyon ngadto hin espesipiko nga kantidad. (Gin-gawas liwat an bag-o nga kantidad, nga bangin may-ada limitasyon.)",

@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets musí byť reťazec (CSS selektor)",
   "api.errors.targetsRequired": "config.targets je povinný (musí byť CSS selektor)",
   "cli.args.adjust.description": "Upraví možnosť o hodnotu relatívnu k jej aktuálnej hodnote. (Zároveň vypíše novú hodnotu, ktorá môže byť obmedzená rozsahom.)",
+  "cli.args.cli-lang.description": "Určte jazyk používaný CLI.",
   "cli.args.get.description": "Vypíše aktuálnu hodnotu možnosti.",
   "cli.args.profile.description": "Profil nastavení, ktorý sa má použiť.",
   "cli.args.set.description": "Zmení možnosť na konkrétnu hodnotu. (Zároveň vypíše novú hodnotu, ktorá môže byť obmedzená rozsahom.)",

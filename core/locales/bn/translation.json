@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets অবশ্যই একটি স্ট্রিং (CSS সিলেক্টর) হতে হবে",
   "api.errors.targetsRequired": "config.targets প্রয়োজন (একটি CSS সিলেক্টর হতে হবে)",
   "cli.args.adjust.description": "কোনো বিকল্পকে তার বর্তমান মানের তুলনায় একটি নির্দিষ্ট পরিমাণে পরিবর্তন করুন। (নতুন মানটিও দেখায়, যা কিছু সীমার মধ্যে সীমাবদ্ধ থাকতে পারে।)",
+  "cli.args.cli-lang.description": "CLI ইন্টারফেসের ভাষা নির্ধারণ করে।",
   "cli.args.get.description": "কোনো বিকল্পের বর্তমান মান দেখায়।",
   "cli.args.profile.description": "যে সেটিং প্রোফাইলটি ব্যবহার করবেন।",
   "cli.args.set.description": "কোনো বিকল্পকে নির্দিষ্ট মানে পরিবর্তন করুন। (নতুন মানটিও দেখায়, যা কিছু সীমার মধ্যে সীমাবদ্ধ থাকতে পারে।)",

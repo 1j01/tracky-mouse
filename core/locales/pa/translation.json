@@ -14,6 +14,7 @@
   "api.errors.targetsMustBeSelectorString": "config.targets ਇੱਕ ਸਤਰ (CSS ਸਿਲੈਕਟਰ) ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
   "api.errors.targetsRequired": "config.targets ਲੋੜੀਂਦਾ ਹੈ (CSS ਸਿਲੈਕਟਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ)",
   "cli.args.adjust.description": "ਕਿਸੇ ਚੋਣ ਨੂੰ ਇਸਦੀ ਮੌਜੂਦਾ ਕੀਮਤ ਦੇ ਸਬੰਧ ਵਿੱਚ ਬਦਲੋ। (ਨਵੀਂ ਕੀਮਤ ਵੀ ਦਿਖਾਈ ਜਾਂਦੀ ਹੈ, ਜੋ ਕੁਝ ਹੱਦਾਂ ਤੱਕ ਸੀਮਤ ਹੋ ਸਕਦੀ ਹੈ।)",
+  "cli.args.cli-lang.description": "CLI ਵੱਲੋਂ ਵਰਤੀ ਜਾਣ ਵਾਲੀ ਭਾਸ਼ਾ ਨਿਰਧਾਰਤ ਕਰੋ।",
   "cli.args.get.description": "ਕਿਸੇ ਚੋਣ ਦੀ ਮੌਜੂਦਾ ਕੀਮਤ ਦਿਖਾਂਦਾ ਹੈ।",
   "cli.args.profile.description": "ਵਰਤੋਂ ਲਈ ਸੈਟਿੰਗਾਂ ਪ੍ਰੋਫਾਈਲ।",
   "cli.args.set.description": "ਕਿਸੇ ਚੋਣ ਨੂੰ ਖ਼ਾਸ ਕੀਮਤ 'ਤੇ ਸੈੱਟ ਕਰੋ। (ਨਵੀਂ ਕੀਮਤ ਵੀ ਦਿਖਾਈ ਜਾਂਦੀ ਹੈ, ਜੋ ਕੁਝ ਹੱਦਾਂ ਤੱਕ ਸੀਮਤ ਹੋ ਸਕਦੀ ਹੈ।)",
