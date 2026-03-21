@@ -49,6 +49,7 @@ const inputSimulator = window.inputSimulator = {
 		return 0;
 	},
 	pointerMove(x, y) {
+		// TODO: handle persistent button state
 		const target = document.elementFromPoint(x, y) || document.body;
 		if (target !== this.lastElOver) {
 			if (this.lastElOver) {
@@ -88,6 +89,10 @@ const inputSimulator = window.inputSimulator = {
 		}));
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
+
+		// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
+		// TODO: support text selection
+		window.getSelection()?.removeAllRanges();
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -104,7 +109,15 @@ const inputSimulator = window.inputSimulator = {
 				this.click(target, x, y);
 			}
 		} else if (buttonIndex === 2) {
-			this.showContextMenu(target, x, y);
+			const contextMenuEvent = new MouseEvent("contextmenu", Object.assign(this.getEventOptions({ x, y }), {
+				button: buttonIndex,
+				bubbles: true,
+				cancelable: true,
+			}));
+			const contextMenuEventResult = target.dispatchEvent(contextMenuEvent);
+			if (contextMenuEventResult) {
+				this.showContextMenu(target, x, y);
+			}
 		}
 		this.pointerDownElement = null;
 	},
@@ -132,17 +145,34 @@ const inputSimulator = window.inputSimulator = {
 			}
 		}
 	},
-	dropdownToFlyout: new WeakMap(),
-	flyoutToDropdown: new WeakMap(),
+	dropdownToCloseFunction: new WeakMap(),
 	openDropdown(dropdown, { focus = true } = {}) {
+		if (this.dropdownToCloseFunction.has(dropdown)) {
+			return; // avoid double opening
+		}
+
 		const flyout = document.createElement("ul");
-		this.dropdownToFlyout.set(dropdown, flyout);
-		this.flyoutToDropdown.set(flyout, dropdown);
 
-		let highlightIndex = -1;
+		// fake button displayed on top just in case you use arrow keys, because the value shouldn't change in the original select
+		// (an alternative hack might be to override `value` with a getter)
+		const dropdownDisplayButton = dropdown.cloneNode(true);
+		dropdownDisplayButton.value = dropdown.value;
+		dropdownDisplayButton.style.pointerEvents = "none";
+
+		const dropdownValueWhenOpened = dropdown.value;
+		let dropdownValueToBeWhenClosed = dropdown.value;
+
+		let highlightIndex = dropdown.selectedIndex;
 		const buttons = [];
+		function updateHighlightStyles() {
+			for (let optionIndex = 0; optionIndex < buttons.length; optionIndex++) {
+				buttons[optionIndex].style.backgroundColor = highlightIndex === optionIndex ? "Highlight" : "transparent";
+				buttons[optionIndex].style.color = highlightIndex === optionIndex ? "HighlightText" : "";
+			}
+		}
 
-		for (const option of dropdown.options) {
+		for (let optionIndex = 0; optionIndex < dropdown.options.length; optionIndex++) {
+			const option = dropdown.options[optionIndex];
 			const li = document.createElement("li");
 			flyout.append(li);
 			const button = document.createElement("button");
@@ -158,51 +188,57 @@ const inputSimulator = window.inputSimulator = {
 			button.style.cssText += option.style.cssText;
 
 			// Hover effect
-			// assuming no background by default, so enforce it for consistency
-			button.style.backgroundColor = "transparent";
 			button.addEventListener("pointerenter", () => {
 				if (button.disabled) return;
-				if (buttons[highlightIndex]) {
-					buttons[highlightIndex].style.backgroundColor = "transparent";
-				}
 				highlightIndex = buttons.indexOf(button);
-				button.style.backgroundColor = "#e0e0e0";
+				updateHighlightStyles();
 			});
 			button.addEventListener("click", () => {
 				if (button.disabled) return;
-				dropdown.value = button.dataset.value;
+				dropdownValueToBeWhenClosed = button.dataset.value;
+				dropdownDisplayButton.value = button.dataset.value;
 				this.closeDropdown(dropdown);
 			});
 
 			buttons.push(button);
 		}
+		updateHighlightStyles();
 
-		document.body.append(flyout);
+		document.body.append(flyout, dropdownDisplayButton);
 
 		flyout.style.zIndex = "100";
 		flyout.style.overflow = "auto";
 		flyout.style.background = "white";
 		flyout.style.color = "black";
 		flyout.style.border = "1px solid gray";
+		flyout.style.outline = "0";
 		flyout.style.padding = "0";
 		flyout.style.margin = "0";
 		flyout.style.listStyle = "none";
 		flyout.style.boxSizing = "border-box";
 
 		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
-		// TODO: reposition as page is scrolled etc.
-		const dropdownRect = dropdown.getBoundingClientRect();
-		flyout.style.position = "fixed";
-		flyout.style.top = `${dropdownRect.bottom}px`;
-		flyout.style.left = `${dropdownRect.left}px`;
-		flyout.style.width = `${dropdownRect.width}px`;
-		if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
-			flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
-		}
-		if (flyout.getBoundingClientRect().top < 0) {
-			flyout.style.top = "0px";
-		}
-		flyout.style.maxHeight = "100vh";
+		let animationFrameId = null;
+		const positionElements = () => {
+			const dropdownRect = dropdown.getBoundingClientRect();
+			dropdownDisplayButton.style.position = "fixed";
+			dropdownDisplayButton.style.top = `${dropdownRect.top}px`;
+			dropdownDisplayButton.style.left = `${dropdownRect.left}px`;
+			dropdownDisplayButton.style.width = `${dropdownRect.width}px`;
+			flyout.style.position = "fixed";
+			flyout.style.top = `${dropdownRect.bottom}px`;
+			flyout.style.left = `${dropdownRect.left}px`;
+			flyout.style.width = `${dropdownRect.width}px`;
+			if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
+				flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
+			}
+			if (flyout.getBoundingClientRect().top < 0) {
+				flyout.style.top = "0px";
+			}
+			flyout.style.maxHeight = "100vh";
+			animationFrameId = requestAnimationFrame(positionElements);
+		};
+		positionElements();
 
 		flyout.tabIndex = 0;
 		if (focus) {
@@ -220,39 +256,51 @@ const inputSimulator = window.inputSimulator = {
 			const dy = (event.key === "ArrowDown") - (event.key === "ArrowUp");
 			if (dy !== 0 || dx !== 0) {
 				const newIndex = highlightIndex === -1 ? 0 : ((highlightIndex + dy + buttons.length) % buttons.length);
-				if (highlightIndex !== -1) {
-					buttons[highlightIndex].style.backgroundColor = "transparent";
-				}
-				buttons[newIndex].style.backgroundColor = "#e0e0e0";
-				buttons[newIndex].scrollIntoView({ block: "nearest" });
 				highlightIndex = newIndex;
-				dropdown.value = buttons[newIndex].dataset.value;
-				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+				updateHighlightStyles();
+				buttons[newIndex].scrollIntoView({ block: "nearest" });
+				dropdownValueToBeWhenClosed = buttons[newIndex].dataset.value;
+				dropdownDisplayButton.value = buttons[newIndex].dataset.value;
 				event.preventDefault();
 			}
 		});
-		addEventListener("pointerdown", (event) => {
+		let flyoutPointerDownOutsideHandler;
+		addEventListener("pointerdown", flyoutPointerDownOutsideHandler = (event) => {
 			if (!event.target?.closest || (event.target.closest("ul") !== flyout && event.target.closest("select") !== dropdown)) {
 				this.closeDropdown(dropdown);
 			}
-		}, { once: true });
+		});
+
+		flyout.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
+		});
+
+		const closeFunction = () => {
+
+			cancelAnimationFrame(animationFrameId);
+			removeEventListener("pointerdown", flyoutPointerDownOutsideHandler);
+			if (!flyout || this._closingDropdown) {
+				return;
+			}
+			this._closingDropdown = true; // TODO: should this flag be scoped to each dropdown or stay global?
+			if (dropdownValueWhenOpened !== dropdownValueToBeWhenClosed) {
+				dropdown.value = dropdownValueToBeWhenClosed;
+				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+				dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+			}
+			flyout.remove(); // Can trigger blur event in Chromium-based browsers
+			dropdownDisplayButton.remove();
+			this._closingDropdown = false;
+		};
+		this.dropdownToCloseFunction.set(dropdown, closeFunction);
 	},
 	closeDropdown(dropdown) {
-		const flyout = this.dropdownToFlyout.get(dropdown);
-		if (!flyout || this._closingDropdown) {
-			return;
-		}
-		this._closingDropdown = true;
-		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
-		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
-		flyout.remove(); // Can trigger blur event in Chromium-based browsers
-		this.dropdownToFlyout.delete(dropdown);
-		this.flyoutToDropdown.delete(flyout);
-		this._closingDropdown = false;
+		this.dropdownToCloseFunction.get(dropdown)?.();
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
 			// Special handling for sliders
+			// TODO: support continuous dragging
 			const rect = target.getBoundingClientRect();
 			const vertical =
 				target.getAttribute("orient") === "vertical" ||
@@ -272,9 +320,6 @@ const inputSimulator = window.inputSimulator = {
 			const select = target.closest("select");
 			if (select) {
 				select.value = target.value;
-				if (this.flyoutToDropdown.has(select)) {
-					this.closeDropdown(this.flyoutToDropdown.get(select));
-				}
 				select.dispatchEvent(new Event("input", { bubbles: true }));
 				select.dispatchEvent(new Event("change", { bubbles: true }));
 			}
@@ -286,13 +331,13 @@ const inputSimulator = window.inputSimulator = {
 				// I assumed they wouldn't when I wrote this, but it's great that they do, or Firefox does at least
 				const rect = target.getBoundingClientRect();
 				const fraction = (y - rect.top) / rect.height;
-				target.value = target.options[Math.floor(fraction * target.options.length)].value;
-				if (this.flyoutToDropdown.has(target)) {
-					this.closeDropdown(this.flyoutToDropdown.get(target));
+				const newValue = target.options[Math.floor(fraction * target.options.length)].value;
+				if (newValue !== target.value) {
+					target.value = newValue;
+					target.dispatchEvent(new Event("input", { bubbles: true }));
+					target.dispatchEvent(new Event("change", { bubbles: true }));
 				}
-				target.dispatchEvent(new Event("input", { bubbles: true }));
-				target.dispatchEvent(new Event("change", { bubbles: true }));
-			} else if (this.dropdownToFlyout.has(target)) {
+			} else if (this.dropdownToCloseFunction.has(target)) {
 				this.closeDropdown(target);
 			} else {
 				this.openDropdown(target);
@@ -393,8 +438,6 @@ const inputSimulator = window.inputSimulator = {
 				this.showToast(item.label + (result === false ? " not allowed" : ""));
 			}
 		}, { once: true });
-
-		// FIXME: menu can be stuck open
 	},
 	showToast(message, position = mousePosition) {
 		const { x, y } = position;
