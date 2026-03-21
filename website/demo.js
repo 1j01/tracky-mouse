@@ -16,7 +16,7 @@ addEventListener("pointermove", (event) => {
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
-const inputSimulator = {
+const inputSimulator = window.inputSimulator = {
 	buttonStates: {
 		0: false,
 		1: false,
