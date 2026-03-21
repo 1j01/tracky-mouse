@@ -13,12 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- The heads-up display (screen overlay) will now hide within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
+- The heads-up display (screen overlay) will now fade out within a radius of the cursor, so as not to get in the way of seeing what you're clicking on.
 - The camera access error message will now animate to give visual feedback that something is happening in case the same error message is shown.
+- The demo on the website now supports clicking modes other than dwell clicking, as well as the heads-up display. (This uses unstable APIs for now.)
 
 ### Fixed
 
-- Clarified translations of the "Free" cursor movement option in many languages so it refers to unconstrained movement instead of "free of charge".
+- Clarified translations of "Free" in many languages so it refers to unconstrained movement instead of "free of charge".
 - The desktop app's update checking dialogs now respect the selected language.
 - The "searching for head" icon will no longer show before connecting to a camera.
 
