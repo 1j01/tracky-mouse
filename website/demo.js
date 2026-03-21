@@ -132,6 +132,8 @@ const inputSimulator = {
 			}
 		}
 	},
+	dropdownToFlyout: new WeakMap(),
+	flyoutToDropdown: new WeakMap(),
 	openDropdown(dropdown, { focus = true } = {}) {
 		// I got the idea to use size attribute from https://stackoverflow.com/a/19652333
 		// However, changing the select element itself can cause issues
@@ -143,8 +145,8 @@ const inputSimulator = {
 		flyout.value = dropdown.value;
 		flyout.style.cssText = ""; // don't propagate styles (such as opacity 0 for context menu backing select)
 		flyout.setAttribute("size", String(flyout.options.length));
-		dropdown._flyout = flyout;
-		flyout._dropdown = dropdown;
+		this.dropdownToFlyout.set(dropdown, flyout);
+		this.flyoutToDropdown.set(flyout, dropdown);
 
 		document.body.append(flyout);
 
@@ -200,15 +202,17 @@ const inputSimulator = {
 		}, { once: true });
 	},
 	closeDropdown(dropdown) {
-		if (!dropdown._flyout || this._closingDropdown) {
+		const flyout = this.dropdownToFlyout.get(dropdown);
+		if (!flyout || this._closingDropdown) {
 			return;
 		}
 		this._closingDropdown = true;
-		dropdown.value = dropdown._flyout.value;
+		dropdown.value = flyout.value;
 		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
 		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
-		dropdown._flyout.remove(); // Can trigger blur event in Chromium-based browsers
-		dropdown._flyout = null;
+		flyout.remove(); // Can trigger blur event in Chromium-based browsers
+		this.dropdownToFlyout.delete(dropdown);
+		this.flyoutToDropdown.delete(flyout);
 		this._closingDropdown = false;
 	},
 	click(target, x, y) {
@@ -233,8 +237,8 @@ const inputSimulator = {
 			const select = target.closest("select");
 			if (select) {
 				select.value = target.value;
-				if (select._dropdown) {
-					this.closeDropdown(select._dropdown);
+				if (this.flyoutToDropdown.has(select)) {
+					this.closeDropdown(this.flyoutToDropdown.get(select));
 				}
 				select.dispatchEvent(new Event("input", { bubbles: true }));
 				select.dispatchEvent(new Event("change", { bubbles: true }));
@@ -248,12 +252,12 @@ const inputSimulator = {
 				const rect = target.getBoundingClientRect();
 				const fraction = (y - rect.top) / rect.height;
 				target.value = target.options[Math.floor(fraction * target.options.length)].value;
-				if (target._dropdown) {
-					this.closeDropdown(target._dropdown);
+				if (this.flyoutToDropdown.has(target)) {
+					this.closeDropdown(this.flyoutToDropdown.get(target));
 				}
 				target.dispatchEvent(new Event("input", { bubbles: true }));
 				target.dispatchEvent(new Event("change", { bubbles: true }));
-			} else if (target._flyout) {
+			} else if (this.dropdownToFlyout.has(target)) {
 				this.closeDropdown(target);
 			} else {
 				this.openDropdown(target);
@@ -317,6 +321,7 @@ const inputSimulator = {
 		select.style.pointerEvents = 'none';
 		select.tabIndex = -1;
 
+		const optionToMenuItem = new WeakMap();
 		for (const item of menuItems) {
 			if (item.visible === false) {
 				continue;
@@ -333,7 +338,7 @@ const inputSimulator = {
 				option.style.marginTop = '4px';
 			}
 			select.appendChild(option);
-			option._menuItem = item;
+			optionToMenuItem.set(option, item);
 		}
 
 		document.body.appendChild(select);
@@ -344,7 +349,7 @@ const inputSimulator = {
 		this.openDropdown(select, { focus: false });
 
 		select.addEventListener("change", () => {
-			const item = select.options[select.selectedIndex]._menuItem;
+			const item = optionToMenuItem.get(select.options[select.selectedIndex]);
 			select.remove();
 			target.focus();
 			if (item.action && item.enabled !== false) {
