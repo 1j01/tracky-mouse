@@ -273,9 +273,6 @@ const inputSimulator = window.inputSimulator = {
 			const select = target.closest("select");
 			if (select) {
 				select.value = target.value;
-				if (this.flyoutToDropdown.has(select)) {
-					this.closeDropdown(this.flyoutToDropdown.get(select));
-				}
 				select.dispatchEvent(new Event("input", { bubbles: true }));
 				select.dispatchEvent(new Event("change", { bubbles: true }));
 			}
@@ -288,9 +285,6 @@ const inputSimulator = window.inputSimulator = {
 				const rect = target.getBoundingClientRect();
 				const fraction = (y - rect.top) / rect.height;
 				target.value = target.options[Math.floor(fraction * target.options.length)].value;
-				if (this.flyoutToDropdown.has(target)) {
-					this.closeDropdown(this.flyoutToDropdown.get(target));
-				}
 				target.dispatchEvent(new Event("input", { bubbles: true }));
 				target.dispatchEvent(new Event("change", { bubbles: true }));
 			} else if (this.dropdownToFlyout.has(target)) {
