@@ -104,7 +104,15 @@ const inputSimulator = window.inputSimulator = {
 				this.click(target, x, y);
 			}
 		} else if (buttonIndex === 2) {
-			this.showContextMenu(target, x, y);
+			const contextMenuEvent = new MouseEvent("contextmenu", Object.assign(this.getEventOptions({ x, y }), {
+				button: buttonIndex,
+				bubbles: true,
+				cancelable: true,
+			}));
+			const contextMenuEventResult = target.dispatchEvent(contextMenuEvent);
+			if (contextMenuEventResult) {
+				this.showContextMenu(target, x, y);
+			}
 		}
 		this.pointerDownElement = null;
 	},
@@ -256,6 +264,10 @@ const inputSimulator = window.inputSimulator = {
 			if (!event.target?.closest || (event.target.closest("ul") !== flyout && event.target.closest("select") !== dropdown)) {
 				this.closeDropdown(dropdown);
 			}
+		});
+
+		flyout.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
 		});
 
 		const closeFunction = () => {
@@ -420,8 +432,6 @@ const inputSimulator = window.inputSimulator = {
 				this.showToast(item.label + (result === false ? " not allowed" : ""));
 			}
 		}, { once: true });
-
-		// FIXME: can open menu on top of another menu
 	},
 	showToast(message, position = mousePosition) {
 		const { x, y } = position;
