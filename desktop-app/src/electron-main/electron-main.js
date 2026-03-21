@@ -508,7 +508,7 @@ const createWindow = () => {
 		// effective scale of `thresholdToRegainControl` if the frequency of mouse position measurements changes.
 		// There is now the monitorMousePosition loop which could be merged with this
 		// (It was this hide-HUD-near-cursor feature that had me trying extracting this, but I decided to make it a separate loop for now,
-		// to preserve the behaviorof `thresholdToRegainControl` and introduce the hide-HUD-near-cursor feature with minimal code changes.
+		// to preserve the behavior of `thresholdToRegainControl` and introduce the hide-HUD-near-cursor feature with minimal code changes.
 		// The downside being `getMouseLocation` is called in multiple loops in parallel.)
 		const curPos = await getMouseLocation();
 		curPos.x /= screenScaleFactor;
