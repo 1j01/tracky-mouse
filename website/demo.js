@@ -134,11 +134,17 @@ const inputSimulator = window.inputSimulator = {
 	},
 	dropdownToFlyout: new WeakMap(),
 	flyoutToDropdown: new WeakMap(),
+	dropdownValueWhenOpened: new WeakMap(),
+	dropdownValueToBeWhenClosed: new WeakMap(),
 	openDropdown(dropdown, { focus = true } = {}) {
+		if (this.dropdownToFlyout.has(dropdown)) {
+			return; // avoid double opening or failing to send input/change events due to dropdownValueWhenOpened being updated while dropdown is open
+		}
 		const flyout = document.createElement("ul");
 		this.dropdownToFlyout.set(dropdown, flyout);
 		this.flyoutToDropdown.set(flyout, dropdown);
-
+		this.dropdownValueWhenOpened.set(dropdown, dropdown.value);
+		this.dropdownValueToBeWhenClosed.set(dropdown, dropdown.value);
 		let highlightIndex = -1;
 		const buttons = [];
 
@@ -170,7 +176,7 @@ const inputSimulator = window.inputSimulator = {
 			});
 			button.addEventListener("click", () => {
 				if (button.disabled) return;
-				dropdown.value = button.dataset.value;
+				this.dropdownValueToBeWhenClosed.set(dropdown, button.dataset.value);
 				this.closeDropdown(dropdown);
 			});
 
@@ -227,8 +233,7 @@ const inputSimulator = window.inputSimulator = {
 				buttons[newIndex].style.backgroundColor = "#e0e0e0";
 				buttons[newIndex].scrollIntoView({ block: "nearest" });
 				highlightIndex = newIndex;
-				dropdown.value = buttons[newIndex].dataset.value;
-				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+				this.dropdownValueToBeWhenClosed.set(dropdown, buttons[newIndex].dataset.value);
 				event.preventDefault();
 			}
 		});
@@ -244,11 +249,16 @@ const inputSimulator = window.inputSimulator = {
 			return;
 		}
 		this._closingDropdown = true;
-		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
-		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+		if (this.dropdownValueWhenOpened.get(dropdown) !== this.dropdownValueToBeWhenClosed.get(dropdown)) {
+			dropdown.value = this.dropdownValueToBeWhenClosed.get(dropdown);
+			dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+			dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+		}
 		flyout.remove(); // Can trigger blur event in Chromium-based browsers
 		this.dropdownToFlyout.delete(dropdown);
 		this.flyoutToDropdown.delete(flyout);
+		this.dropdownValueWhenOpened.delete(dropdown);
+		this.dropdownValueToBeWhenClosed.delete(dropdown);
 		this._closingDropdown = false;
 	},
 	click(target, x, y) {
@@ -284,9 +294,12 @@ const inputSimulator = window.inputSimulator = {
 				// I assumed they wouldn't when I wrote this, but it's great that they do, or Firefox does at least
 				const rect = target.getBoundingClientRect();
 				const fraction = (y - rect.top) / rect.height;
-				target.value = target.options[Math.floor(fraction * target.options.length)].value;
-				target.dispatchEvent(new Event("input", { bubbles: true }));
-				target.dispatchEvent(new Event("change", { bubbles: true }));
+				const newValue = target.options[Math.floor(fraction * target.options.length)].value;
+				if (newValue !== target.value) {
+					target.value = newValue;
+					target.dispatchEvent(new Event("input", { bubbles: true }));
+					target.dispatchEvent(new Event("change", { bubbles: true }));
+				}
 			} else if (this.dropdownToFlyout.has(target)) {
 				this.closeDropdown(target);
 			} else {
