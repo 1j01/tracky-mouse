@@ -148,6 +148,7 @@ const inputSimulator = window.inputSimulator = {
 		// (an alternative hack might be to override `value` with a getter)
 		const dropdownDisplayButton = dropdown.cloneNode(true);
 		dropdownDisplayButton.value = dropdown.value;
+		dropdownDisplayButton.style.pointerEvents = "none";
 
 		this.dropdownToFlyout.set(dropdown, flyout);
 		this.flyoutToDropdown.set(flyout, dropdown);
