@@ -16,7 +16,7 @@ addEventListener("pointermove", (event) => {
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
-const inputSimulator = {
+const inputSimulator = window.inputSimulator = {
 	buttonStates: {
 		0: false,
 		1: false,
@@ -135,38 +135,62 @@ const inputSimulator = {
 	dropdownToFlyout: new WeakMap(),
 	flyoutToDropdown: new WeakMap(),
 	openDropdown(dropdown, { focus = true } = {}) {
-		// I got the idea to use size attribute from https://stackoverflow.com/a/19652333
-		// However, changing the select element itself can cause issues
-		// such as wonky layouts (not designed with tall select elements in mind)
-		// or, even if using margin-bottom to simulate a flyout, the dropdown
-		// will always be cut off by containers with overflow: hidden or overflow: auto.
-		// Thus, it's better to create a clone of the select element.
-		const flyout = dropdown.cloneNode(true);
-		flyout.value = dropdown.value;
-		flyout.style.cssText = ""; // don't propagate styles (such as opacity 0 for context menu backing select)
-		flyout.setAttribute("size", String(flyout.options.length));
+		const flyout = document.createElement("ul");
 		this.dropdownToFlyout.set(dropdown, flyout);
 		this.flyoutToDropdown.set(flyout, dropdown);
+
+		let highlightIndex = -1;
+		const buttons = [];
+
+		for (const option of dropdown.options) {
+			const li = document.createElement("li");
+			flyout.append(li);
+			const button = document.createElement("button");
+			button.textContent = option.textContent;
+			button.dataset.value = option.value;
+			button.disabled = option.disabled;
+			li.append(button);
+			button.style.padding = "5px";
+			button.style.border = "none";
+			button.style.width = "100%";
+			button.style.textAlign = "left";
+			button.style.display = "block";
+			button.style.cssText += option.style.cssText;
+
+			// Hover effect
+			// assuming no background by default, so enforce it for consistency
+			button.style.backgroundColor = "transparent";
+			button.addEventListener("pointerenter", () => {
+				if (button.disabled) return;
+				if (buttons[highlightIndex]) {
+					buttons[highlightIndex].style.backgroundColor = "transparent";
+				}
+				highlightIndex = buttons.indexOf(button);
+				button.style.backgroundColor = "#e0e0e0";
+			});
+			button.addEventListener("click", () => {
+				if (button.disabled) return;
+				dropdown.value = button.dataset.value;
+				this.closeDropdown(dropdown);
+			});
+
+			buttons.push(button);
+		}
 
 		document.body.append(flyout);
 
 		flyout.style.zIndex = "100";
-
-		// Work around broken "max size of any option times number of options" native sizing behavior
-		// (The languages menu contains options of varying height, especially for Javanese)
-		// const totalOptionsListHeight = [...flyout.options].reduce((acc, option) => acc + option.offsetHeight, 0);
-		// Summing offsetHeight doesn't account for margin, as used in separators in context menus
-		// Using two getBoundingClientRect calls we can easily account for margins except on first/last options
-		const totalOptionsListHeight = flyout.options[flyout.options.length - 1].getBoundingClientRect().bottom - flyout.options[0].getBoundingClientRect().top;
-		const style = getComputedStyle(flyout);
-		const verticalBorderAndPadding =
-			parseFloat(style.paddingTop) +
-			parseFloat(style.paddingBottom) +
-			parseFloat(style.borderTopWidth) +
-			parseFloat(style.borderBottomWidth);
-		flyout.style.height = `${totalOptionsListHeight + verticalBorderAndPadding}px`;
+		flyout.style.overflow = "auto";
+		flyout.style.background = "white";
+		flyout.style.color = "black";
+		flyout.style.border = "1px solid gray";
+		flyout.style.padding = "0";
+		flyout.style.margin = "0";
+		flyout.style.listStyle = "none";
+		flyout.style.boxSizing = "border-box";
 
 		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
+		// TODO: reposition as page is scrolled etc.
 		const dropdownRect = dropdown.getBoundingClientRect();
 		flyout.style.position = "fixed";
 		flyout.style.top = `${dropdownRect.bottom}px`;
@@ -180,6 +204,7 @@ const inputSimulator = {
 		}
 		flyout.style.maxHeight = "100vh";
 
+		flyout.tabIndex = 0;
 		if (focus) {
 			flyout.focus();
 			flyout.addEventListener("blur", () => {
@@ -187,16 +212,27 @@ const inputSimulator = {
 			}, { once: true });
 		}
 		flyout.addEventListener("keydown", (event) => {
+			// TODO: should Esc/Enter be global? (maybe even arrow keys?)
 			if (event.key === "Escape" || event.key === "Enter") {
 				this.closeDropdown(dropdown);
 			}
-		});
-		flyout.addEventListener("input", () => {
-			dropdown.value = flyout.value;
-			dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+			const dx = (event.key === "ArrowRight") - (event.key === "ArrowLeft");
+			const dy = (event.key === "ArrowDown") - (event.key === "ArrowUp");
+			if (dy !== 0 || dx !== 0) {
+				const newIndex = highlightIndex === -1 ? 0 : ((highlightIndex + dy + buttons.length) % buttons.length);
+				if (highlightIndex !== -1) {
+					buttons[highlightIndex].style.backgroundColor = "transparent";
+				}
+				buttons[newIndex].style.backgroundColor = "#e0e0e0";
+				buttons[newIndex].scrollIntoView({ block: "nearest" });
+				highlightIndex = newIndex;
+				dropdown.value = buttons[newIndex].dataset.value;
+				dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+				event.preventDefault();
+			}
 		});
 		addEventListener("pointerdown", (event) => {
-			if (!event.target?.closest || !event.target.closest("select") || (event.target.closest("select") !== flyout && event.target.closest("select") !== dropdown)) {
+			if (!event.target?.closest || (event.target.closest("ul") !== flyout && event.target.closest("select") !== dropdown)) {
 				this.closeDropdown(dropdown);
 			}
 		}, { once: true });
@@ -207,7 +243,6 @@ const inputSimulator = {
 			return;
 		}
 		this._closingDropdown = true;
-		dropdown.value = flyout.value;
 		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
 		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
 		flyout.remove(); // Can trigger blur event in Chromium-based browsers
@@ -331,6 +366,7 @@ const inputSimulator = {
 			option.disabled = item.enabled === false || item.separator === true;
 			if (!item.label) {
 				option.style.fontSize = '0';
+				option.style.padding = '0';
 			}
 			if (item.separator) {
 				option.style.borderTop = '1px solid #ccc';
