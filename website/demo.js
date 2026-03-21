@@ -136,15 +136,25 @@ const inputSimulator = window.inputSimulator = {
 	flyoutToDropdown: new WeakMap(),
 	dropdownValueWhenOpened: new WeakMap(),
 	dropdownValueToBeWhenClosed: new WeakMap(),
+	dropdownToDisplayButton: new WeakMap(),
 	openDropdown(dropdown, { focus = true } = {}) {
 		if (this.dropdownToFlyout.has(dropdown)) {
 			return; // avoid double opening or failing to send input/change events due to dropdownValueWhenOpened being updated while dropdown is open
 		}
+
 		const flyout = document.createElement("ul");
+
+		// fake button displayed on top just in case you use arrow keys, because the value shouldn't change in the original select
+		// (an alternative hack might be to override `value` with a getter)
+		const dropdownDisplayButton = dropdown.cloneNode(true);
+		dropdownDisplayButton.value = dropdown.value;
+
 		this.dropdownToFlyout.set(dropdown, flyout);
 		this.flyoutToDropdown.set(flyout, dropdown);
 		this.dropdownValueWhenOpened.set(dropdown, dropdown.value);
 		this.dropdownValueToBeWhenClosed.set(dropdown, dropdown.value);
+		this.dropdownToDisplayButton.set(dropdown, dropdownDisplayButton);
+
 		let highlightIndex = -1;
 		const buttons = [];
 
@@ -177,13 +187,14 @@ const inputSimulator = window.inputSimulator = {
 			button.addEventListener("click", () => {
 				if (button.disabled) return;
 				this.dropdownValueToBeWhenClosed.set(dropdown, button.dataset.value);
+				dropdownDisplayButton.value = button.dataset.value;
 				this.closeDropdown(dropdown);
 			});
 
 			buttons.push(button);
 		}
 
-		document.body.append(flyout);
+		document.body.append(flyout, dropdownDisplayButton);
 
 		flyout.style.zIndex = "100";
 		flyout.style.overflow = "auto";
@@ -199,6 +210,10 @@ const inputSimulator = window.inputSimulator = {
 		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
 		// TODO: reposition as page is scrolled etc.
 		const dropdownRect = dropdown.getBoundingClientRect();
+		dropdownDisplayButton.style.position = "fixed";
+		dropdownDisplayButton.style.top = `${dropdownRect.top}px`;
+		dropdownDisplayButton.style.left = `${dropdownRect.left}px`;
+		dropdownDisplayButton.style.width = `${dropdownRect.width}px`;
 		flyout.style.position = "fixed";
 		flyout.style.top = `${dropdownRect.bottom}px`;
 		flyout.style.left = `${dropdownRect.left}px`;
@@ -234,6 +249,7 @@ const inputSimulator = window.inputSimulator = {
 				buttons[newIndex].scrollIntoView({ block: "nearest" });
 				highlightIndex = newIndex;
 				this.dropdownValueToBeWhenClosed.set(dropdown, buttons[newIndex].dataset.value);
+				dropdownDisplayButton.value = buttons[newIndex].dataset.value;
 				event.preventDefault();
 			}
 		});
@@ -245,6 +261,7 @@ const inputSimulator = window.inputSimulator = {
 	},
 	closeDropdown(dropdown) {
 		const flyout = this.dropdownToFlyout.get(dropdown);
+		const dropdownDisplayButton = this.dropdownToDisplayButton.get(dropdown);
 		if (!flyout || this._closingDropdown) {
 			return;
 		}
@@ -255,10 +272,12 @@ const inputSimulator = window.inputSimulator = {
 			dropdown.dispatchEvent(new Event("change", { bubbles: true }));
 		}
 		flyout.remove(); // Can trigger blur event in Chromium-based browsers
+		dropdownDisplayButton.remove();
 		this.dropdownToFlyout.delete(dropdown);
 		this.flyoutToDropdown.delete(flyout);
 		this.dropdownValueWhenOpened.delete(dropdown);
 		this.dropdownValueToBeWhenClosed.delete(dropdown);
+		this.dropdownToDisplayButton.delete(dropdown);
 		this._closingDropdown = false;
 	},
 	click(target, x, y) {
