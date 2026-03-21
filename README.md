@@ -259,6 +259,9 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 
 - Run `npm run lint` to check for spelling, code, and localization issues.
 - There are no tests yet.
+- Make sure to test the first-run state (no settings saved) for both the web and desktop versions often.
+  - Web: `(()=>{ const backup = localStorage["tracky-mouse-settings"]; delete localStorage["tracky-mouse-settings"]; localStorage["tracky-mouse-settings-backup"] = backup; })()`
+  - Desktop (Windows cmd.exe): `move %AppData%\"Tracky Mouse"\tracky-mouse-settings.json %AppData%\"Tracky Mouse"\tracky-mouse-settings.json.bak`
 
 ## Release Process
 
