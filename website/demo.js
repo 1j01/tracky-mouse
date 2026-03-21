@@ -92,7 +92,7 @@ const inputSimulator = window.inputSimulator = {
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		// Text selection support
+		// Text selection support for input/textarea only
 		if (buttonIndex === 0 && (target.matches('input[type="text"], textarea'))) {
 			// Start selection
 			this.selectionAnchor = { target, x, y };
@@ -104,10 +104,8 @@ const inputSimulator = window.inputSimulator = {
 			if (pos !== null) {
 				target.setSelectionRange(pos, pos);
 			}
-		} else {
-			// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
-			window.getSelection()?.removeAllRanges();
 		}
+		// For other elements, do not clear window.getSelection(); allow native selection
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
