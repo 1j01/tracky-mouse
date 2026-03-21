@@ -137,6 +137,7 @@ const inputSimulator = window.inputSimulator = {
 	dropdownValueWhenOpened: new WeakMap(),
 	dropdownValueToBeWhenClosed: new WeakMap(),
 	dropdownToDisplayButton: new WeakMap(),
+	dropdownToFlyoutPointerDownOutsideHandler: new WeakMap(),
 	dropdownAnimationFrameId: null,
 	openDropdown(dropdown, { focus = true } = {}) {
 		if (this.dropdownToFlyout.has(dropdown)) {
@@ -258,14 +259,17 @@ const inputSimulator = window.inputSimulator = {
 				event.preventDefault();
 			}
 		});
-		addEventListener("pointerdown", (event) => {
+		let flyoutPointerDownOutsideHandler;
+		addEventListener("pointerdown", flyoutPointerDownOutsideHandler = (event) => {
 			if (!event.target?.closest || (event.target.closest("ul") !== flyout && event.target.closest("select") !== dropdown)) {
 				this.closeDropdown(dropdown);
 			}
-		}, { once: true });
+		});
+		this.dropdownToFlyoutPointerDownOutsideHandler.set(dropdown, flyoutPointerDownOutsideHandler);
 	},
 	closeDropdown(dropdown) {
 		cancelAnimationFrame(this.dropdownAnimationFrameId);
+		removeEventListener("pointerdown", this.dropdownToFlyoutPointerDownOutsideHandler.get(dropdown));
 		const flyout = this.dropdownToFlyout.get(dropdown);
 		const dropdownDisplayButton = this.dropdownToDisplayButton.get(dropdown);
 		if (!flyout || this._closingDropdown) {
@@ -284,6 +288,7 @@ const inputSimulator = window.inputSimulator = {
 		this.dropdownValueWhenOpened.delete(dropdown);
 		this.dropdownValueToBeWhenClosed.delete(dropdown);
 		this.dropdownToDisplayButton.delete(dropdown);
+		this.dropdownToFlyoutPointerDownOutsideHandler.delete(dropdown);
 		this._closingDropdown = false;
 	},
 	click(target, x, y) {
@@ -427,8 +432,7 @@ const inputSimulator = window.inputSimulator = {
 			}
 		}, { once: true });
 
-		// FIXME: menu can be stuck open when right clicking a menu
-		// or when clicking a menu item that doesn't trigger a change event (disabled items) due to `once`
+		// FIXME: can open menu on top of another menu
 	},
 	showToast(message, position = mousePosition) {
 		const { x, y } = position;
