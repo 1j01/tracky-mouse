@@ -89,6 +89,10 @@ const inputSimulator = window.inputSimulator = {
 		}));
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
+
+		// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
+		// TODO: support text selection
+		window.getSelection()?.removeAllRanges();
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
