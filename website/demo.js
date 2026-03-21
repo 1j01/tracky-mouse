@@ -184,6 +184,7 @@ const inputSimulator = window.inputSimulator = {
 		flyout.style.background = "white";
 		flyout.style.color = "black";
 		flyout.style.border = "1px solid gray";
+		flyout.style.outline = "0";
 		flyout.style.padding = "0";
 		flyout.style.margin = "0";
 		flyout.style.listStyle = "none";
