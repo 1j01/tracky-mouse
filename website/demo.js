@@ -49,6 +49,7 @@ const inputSimulator = window.inputSimulator = {
 		return 0;
 	},
 	pointerMove(x, y) {
+		// TODO: handle persistent button state
 		const target = document.elementFromPoint(x, y) || document.body;
 		if (target !== this.lastElOver) {
 			if (this.lastElOver) {
@@ -295,6 +296,7 @@ const inputSimulator = window.inputSimulator = {
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
 			// Special handling for sliders
+			// TODO: support continuous dragging
 			const rect = target.getBoundingClientRect();
 			const vertical =
 				target.getAttribute("orient") === "vertical" ||
