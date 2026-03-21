@@ -427,7 +427,8 @@ const inputSimulator = window.inputSimulator = {
 			}
 		}, { once: true });
 
-		// FIXME: menu can be stuck open
+		// FIXME: menu can be stuck open when right clicking a menu
+		// or when clicking a menu item that doesn't trigger a change event (disabled items) due to `once`
 	},
 	showToast(message, position = mousePosition) {
 		const { x, y } = position;
