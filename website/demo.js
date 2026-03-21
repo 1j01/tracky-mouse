@@ -155,10 +155,11 @@ const inputSimulator = window.inputSimulator = {
 		this.dropdownValueToBeWhenClosed.set(dropdown, dropdown.value);
 		this.dropdownToDisplayButton.set(dropdown, dropdownDisplayButton);
 
-		let highlightIndex = -1;
+		let highlightIndex = dropdown.selectedIndex;
 		const buttons = [];
 
-		for (const option of dropdown.options) {
+		for (let optionIndex = 0; optionIndex < dropdown.options.length; optionIndex++) {
+			const option = dropdown.options[optionIndex];
 			const li = document.createElement("li");
 			flyout.append(li);
 			const button = document.createElement("button");
@@ -174,8 +175,7 @@ const inputSimulator = window.inputSimulator = {
 			button.style.cssText += option.style.cssText;
 
 			// Hover effect
-			// assuming no background by default, so enforce it for consistency
-			button.style.backgroundColor = "transparent";
+			button.style.backgroundColor = highlightIndex === optionIndex ? "#e0e0e0" : "transparent";
 			button.addEventListener("pointerenter", () => {
 				if (button.disabled) return;
 				if (buttons[highlightIndex]) {
