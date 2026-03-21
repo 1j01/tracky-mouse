@@ -4,13 +4,427 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+let dwellClicker = null;
+let activeSettings = {};
+let inputFeedback = {};
+let mousePosition = {};
+addEventListener("pointermove", (event) => {
+	mousePosition = { x: event.clientX, y: event.clientY };
+	updateHUD();
+});
+
+// Pointer event simulation logic should be built into tracky-mouse in the future.
+// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
+// as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
+const inputSimulator = {
+	buttonStates: {
+		0: false,
+		1: false,
+		2: false,
+	},
+	lastElOver: null,
+	getEventOptions({ x, y }) {
+		return {
+			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
+			clientX: x,
+			clientY: y,
+			pointerId: 1234567890, // a special value so other code can detect these simulated events
+			pointerType: "mouse",
+			isPrimary: true,
+		};
+	},
+	getCurrentRotation(el) {
+		// Source: https://stackoverflow.com/a/54492696/2624876
+		const st = window.getComputedStyle(el, null);
+		const tm = st.getPropertyValue("-webkit-transform") ||
+			st.getPropertyValue("-moz-transform") ||
+			st.getPropertyValue("-ms-transform") ||
+			st.getPropertyValue("-o-transform") ||
+			st.getPropertyValue("transform") ||
+			"none";
+		if (tm !== "none") {
+			const [a, b] = tm.split('(')[1].split(')')[0].split(',');
+			return Math.round(Math.atan2(a, b) * (180 / Math.PI));
+		}
+		return 0;
+	},
+	pointerMove(x, y) {
+		const target = document.elementFromPoint(x, y) || document.body;
+		if (target !== this.lastElOver) {
+			if (this.lastElOver) {
+				const event = new PointerEvent("pointerleave", Object.assign(this.getEventOptions({ x, y }), {
+					button: 0,
+					buttons: 1,
+					bubbles: false,
+					cancelable: false,
+				}));
+				this.lastElOver.dispatchEvent(event);
+			}
+			const event = new PointerEvent("pointerenter", Object.assign(this.getEventOptions({ x, y }), {
+				button: 0,
+				buttons: 1,
+				bubbles: false,
+				cancelable: false,
+			}));
+			target.dispatchEvent(event);
+			this.lastElOver = target;
+		}
+		const event = new PointerEvent("pointermove", Object.assign(this.getEventOptions({ x, y }), {
+			button: 0,
+			buttons: 1,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+	},
+	pointerDown(target, x, y, buttonIndex = 0) {
+		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
+		this.buttonStates[buttonIndex] = true;
+		const event = new PointerEvent("pointerdown", Object.assign(this.getEventOptions({ x, y }), {
+			button: buttonIndex,
+			buttons: this.buttonStates[0] * 1 + this.buttonStates[1] * 2 + this.buttonStates[2] * 4,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+		this.pointerDownElement = target;
+	},
+	pointerUp(target, x, y, buttonIndex = 0) {
+		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
+		this.buttonStates[buttonIndex] = false;
+		const event = new PointerEvent("pointerup", Object.assign(this.getEventOptions({ x, y }), {
+			button: buttonIndex,
+			buttons: this.buttonStates[0] * 1 + this.buttonStates[1] * 2 + this.buttonStates[2] * 4,
+			bubbles: true,
+			cancelable: true,
+		}));
+		target.dispatchEvent(event);
+		if (buttonIndex === 0) {
+			if (this.pointerDownElement === target) {
+				this.click(target, x, y);
+			}
+		} else if (buttonIndex === 2) {
+			this.showContextMenu(target, x, y);
+		}
+		this.pointerDownElement = null;
+	},
+	setMouseButtonState(buttonIndex, pressed) {
+		if (buttonIndex !== 0 && buttonIndex !== 2) {
+			// TODO: support MMB auto-scrolling, MMB to open links in a new tab
+			// For now, show a little note that fades away, at the cursor
+			if (!pressed) {
+				return;
+			}
+			// const message = "Non-primary click not supported in demo";
+			const message = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
+			// const message = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
+			// const message = "Middle mouse button pressed"
+			this.showToast(message);
+			return;
+		}
+		if (this.buttonStates[buttonIndex] !== pressed) {
+			const { x, y } = mousePosition;
+			const target = document.elementFromPoint(x, y) || document.body;
+			if (pressed) {
+				this.pointerDown(target, x, y, buttonIndex);
+			} else {
+				this.pointerUp(target, x, y, buttonIndex);
+			}
+		}
+	},
+	dropdownToFlyout: new WeakMap(),
+	flyoutToDropdown: new WeakMap(),
+	openDropdown(dropdown, { focus = true } = {}) {
+		// I got the idea to use size attribute from https://stackoverflow.com/a/19652333
+		// However, changing the select element itself can cause issues
+		// such as wonky layouts (not designed with tall select elements in mind)
+		// or, even if using margin-bottom to simulate a flyout, the dropdown
+		// will always be cut off by containers with overflow: hidden or overflow: auto.
+		// Thus, it's better to create a clone of the select element.
+		const flyout = dropdown.cloneNode(true);
+		flyout.value = dropdown.value;
+		flyout.style.cssText = ""; // don't propagate styles (such as opacity 0 for context menu backing select)
+		flyout.setAttribute("size", String(flyout.options.length));
+		this.dropdownToFlyout.set(dropdown, flyout);
+		this.flyoutToDropdown.set(flyout, dropdown);
+
+		document.body.append(flyout);
+
+		flyout.style.zIndex = "100";
+
+		// Work around broken "max size of any option times number of options" native sizing behavior
+		// (The languages menu contains options of varying height, especially for Javanese)
+		// const totalOptionsListHeight = [...flyout.options].reduce((acc, option) => acc + option.offsetHeight, 0);
+		// Summing offsetHeight doesn't account for margin, as used in separators in context menus
+		// Using two getBoundingClientRect calls we can easily account for margins except on first/last options
+		const totalOptionsListHeight = flyout.options[flyout.options.length - 1].getBoundingClientRect().bottom - flyout.options[0].getBoundingClientRect().top;
+		const style = getComputedStyle(flyout);
+		const verticalBorderAndPadding =
+			parseFloat(style.paddingTop) +
+			parseFloat(style.paddingBottom) +
+			parseFloat(style.borderTopWidth) +
+			parseFloat(style.borderBottomWidth);
+		flyout.style.height = `${totalOptionsListHeight + verticalBorderAndPadding}px`;
+
+		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
+		const dropdownRect = dropdown.getBoundingClientRect();
+		flyout.style.position = "fixed";
+		flyout.style.top = `${dropdownRect.bottom}px`;
+		flyout.style.left = `${dropdownRect.left}px`;
+		flyout.style.width = `${dropdownRect.width}px`;
+		if (flyout.getBoundingClientRect().bottom > window.innerHeight) {
+			flyout.style.top = `${dropdownRect.top - flyout.getBoundingClientRect().height}px`;
+		}
+		if (flyout.getBoundingClientRect().top < 0) {
+			flyout.style.top = "0px";
+		}
+		flyout.style.maxHeight = "100vh";
+
+		if (focus) {
+			flyout.focus();
+			flyout.addEventListener("blur", () => {
+				this.closeDropdown(dropdown);
+			}, { once: true });
+		}
+		flyout.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" || event.key === "Enter") {
+				this.closeDropdown(dropdown);
+			}
+		});
+		flyout.addEventListener("input", () => {
+			dropdown.value = flyout.value;
+			dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		addEventListener("pointerdown", (event) => {
+			if (!event.target?.closest || !event.target.closest("select") || (event.target.closest("select") !== flyout && event.target.closest("select") !== dropdown)) {
+				this.closeDropdown(dropdown);
+			}
+		}, { once: true });
+	},
+	closeDropdown(dropdown) {
+		const flyout = this.dropdownToFlyout.get(dropdown);
+		if (!flyout || this._closingDropdown) {
+			return;
+		}
+		this._closingDropdown = true;
+		dropdown.value = flyout.value;
+		dropdown.dispatchEvent(new Event("input", { bubbles: true }));
+		dropdown.dispatchEvent(new Event("change", { bubbles: true }));
+		flyout.remove(); // Can trigger blur event in Chromium-based browsers
+		this.dropdownToFlyout.delete(dropdown);
+		this.flyoutToDropdown.delete(flyout);
+		this._closingDropdown = false;
+	},
+	click(target, x, y) {
+		if (target.matches("input[type='range']")) {
+			// Special handling for sliders
+			const rect = target.getBoundingClientRect();
+			const vertical =
+				target.getAttribute("orient") === "vertical" ||
+				(this.getCurrentRotation(target) !== 0) ||
+				rect.height > rect.width;
+			const min = Number(target.min);
+			const max = Number(target.max);
+			const style = window.getComputedStyle(target);
+			const isRTL = style.direction === "rtl";
+			const fraction = vertical
+				? (y - rect.top) / rect.height
+				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
+			target.value = fraction * (max - min) + min;
+			target.dispatchEvent(new Event("input", { bubbles: true }));
+			target.dispatchEvent(new Event("change", { bubbles: true }));
+		} else if (target.matches("option")) {
+			const select = target.closest("select");
+			if (select) {
+				select.value = target.value;
+				if (this.flyoutToDropdown.has(select)) {
+					this.closeDropdown(this.flyoutToDropdown.get(select));
+				}
+				select.dispatchEvent(new Event("input", { bubbles: true }));
+				select.dispatchEvent(new Event("change", { bubbles: true }));
+			}
+		} else if (target.matches("select")) {
+			// Special handling for dropdowns
+			if (target.getAttribute("size")) {
+				// Fallback logic assuming all options are the same height
+				// Do any browsers actually not give you <option> elements with document.getElementFromPoint?
+				// I assumed they wouldn't when I wrote this, but it's great that they do, or Firefox does at least
+				const rect = target.getBoundingClientRect();
+				const fraction = (y - rect.top) / rect.height;
+				target.value = target.options[Math.floor(fraction * target.options.length)].value;
+				if (this.flyoutToDropdown.has(target)) {
+					this.closeDropdown(this.flyoutToDropdown.get(target));
+				}
+				target.dispatchEvent(new Event("input", { bubbles: true }));
+				target.dispatchEvent(new Event("change", { bubbles: true }));
+			} else if (this.dropdownToFlyout.has(target)) {
+				this.closeDropdown(target);
+			} else {
+				this.openDropdown(target);
+			}
+		} else {
+			// Normal click
+			target.click();
+			if (target.matches("input, textarea")) {
+				target.focus();
+			}
+		}
+	},
+	showContextMenu(target, x, y) {
+		const commands = ["copy", "cut", "paste", "delete", "selectAll", "undo", "redo"];
+		const supportedCommands = commands.filter(cmd => document.queryCommandSupported(cmd));
+		const enabledCommands = supportedCommands.filter(cmd => document.queryCommandEnabled(cmd));
+		console.log({ supportedCommands, enabledCommands });
+
+		const execCommandItem = (label, command) => {
+			return {
+				label,
+				visible: supportedCommands.includes(command),
+				enabled: enabledCommands.includes(command),
+				action: () => document.execCommand(command),
+			};
+		};
+
+		const menuItems = [
+			// TODO: avoid executing first item when dismissing context menu
+			// For now, include a no-op first item
+			{ label: '' }, // not enabled: false so that another item isn't highlighted with a gray background
+
+			{
+				label: 'Open Link in New Tab',
+				visible: target.matches("a[href]"),
+				action: () => {
+					const a = target?.closest('a');
+					if (a?.href) {
+						return !!window.open(a.href, '_blank');
+					}
+				}
+			},
+			{ separator: true, visible: target.matches("a[href]") },
+
+			execCommandItem('Copy', 'copy'),
+			execCommandItem('Cut', 'cut'),
+			execCommandItem('Paste', 'paste'),
+			execCommandItem('Delete', 'delete'),
+			execCommandItem('Select All', 'selectAll'),
+
+		];
+
+		// Create an invisible select element for context menu positioning, in order to reuse the dropdown code
+		const select = document.createElement('select');
+		select.style.position = 'fixed';
+		select.style.left = `${x}px`;
+		const height = 16; // arbitrary (but maybe not zero? and should be accounted for if it's not zero)
+		select.style.height = `${height}px`;
+		select.style.top = `${y - height}px`;
+		select.style.opacity = '0';
+		select.style.pointerEvents = 'none';
+		select.tabIndex = -1;
+
+		const optionToMenuItem = new WeakMap();
+		for (const item of menuItems) {
+			if (item.visible === false) {
+				continue;
+			}
+			const option = document.createElement('option');
+			option.textContent = item.label;
+			option.disabled = item.enabled === false || item.separator === true;
+			if (!item.label) {
+				option.style.fontSize = '0';
+			}
+			if (item.separator) {
+				option.style.borderTop = '1px solid #ccc';
+				option.style.fontSize = '4px';
+				option.style.marginTop = '4px';
+			}
+			select.appendChild(option);
+			optionToMenuItem.set(option, item);
+		}
+
+		document.body.appendChild(select);
+		// technically the dropdown should have focus, but
+		// 1. this is an interface to allow for (virtual-)mouse-only access, so keyboard is not so important
+		// 2. I think it's more important to keep showing the selection you're about to copy/cut/delete
+		target.focus();
+		this.openDropdown(select, { focus: false });
+
+		select.addEventListener("change", () => {
+			const item = optionToMenuItem.get(select.options[select.selectedIndex]);
+			select.remove();
+			target.focus();
+			if (item.action && item.enabled !== false) {
+				const result = item.action();
+				this.showToast(item.label + (result === false ? " not allowed" : ""));
+			}
+		}, { once: true });
+
+		// FIXME: menu can be stuck open
+	},
+	showToast(message, position = mousePosition) {
+		const { x, y } = position;
+		const toast = document.createElement("div");
+		toast.textContent = message;
+		toast.style.position = "fixed";
+		toast.style.left = `${x}px`;
+		toast.style.top = `${y}px`;
+		toast.style.background = "rgba(0, 0, 0, 0.7)";
+		toast.style.color = "white";
+		toast.style.padding = "2px 5px";
+		toast.style.borderRadius = "3px";
+		toast.style.pointerEvents = "none";
+		toast.style.animation = "tracky-mouse-fade-out 2s ease-in-out forwards 2s";
+		document.body.appendChild(toast);
+		setTimeout(() => {
+			toast.remove();
+		}, 4000);
+	},
+};
+
+const initOptions = {
+	// All of these options are UNSTABLE
+	updateInputFeedback: (data) => {
+		inputFeedback = data;
+		updateHUD();
+	},
+	setMouseButtonState: (buttonIndex, pressed) => {
+		inputSimulator.setMouseButtonState(buttonIndex, pressed);
+	},
+	handleSettingsUpdate: (settings) => {
+		// Sync settings from UI to `activeSettings`
+		// This is not a very clean way of accessing settings.
+		// TODO: DRY with deserializeSettings in electron-main.js
+		// and avoid conflating serialized/deserialized settings
+		// or provide a cleaner way of accessing active settings
+		if ("globalSettings" in settings) {
+			for (const key in settings.globalSettings) {
+				if (settings.globalSettings[key] !== undefined) {
+					activeSettings[key] = settings.globalSettings[key];
+				}
+			}
+			if ("clickingMode" in settings.globalSettings) {
+				updateDwellClickingEnabled();
+			}
+		}
+	},
+	notifyToggleState: () => {
+		// Integrate the Dwell Clicker and the UI's enabled state
+		// TODO: make the init API create/manage the dwell clicker,
+		// and accept clicking configuration
+		updateDwellClickingEnabled();
+	},
+	clickingModeSupported: true,
+};
+
 // Note: init currently extends the passed element,
 // rather than replacing it or adding a child to it.
 // That is technically the most flexible, I suppose,
 // but may violate the principle of least surprise.
 // I could accept an options object with mutually exclusive options
 // to `extend`, `replace`, or `appendTo`.
-TrackyMouse.init(document.getElementById("tracky-mouse-demo"));
+TrackyMouse.init(document.getElementById("tracky-mouse-demo"), initOptions);
+
+// UNSTABLE API
+const screenOverlay = TrackyMouse.initScreenOverlay();
 
 // This example is based off of how JS Paint uses the Tracky Mouse API.
 // It's simplified a bit, but includes various settings.
@@ -20,6 +434,8 @@ const config = {
 		button:not([disabled]),
 		input,
 		textarea,
+		select,
+		select option,
 		label,
 		a,
 		details summary,
@@ -62,30 +478,7 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
-		if (target.matches("input[type='range']")) {
-			// Special handling for sliders
-			const rect = target.getBoundingClientRect();
-			const vertical =
-				target.getAttribute("orient") === "vertical" ||
-				(getCurrentRotation(target) !== 0) ||
-				rect.height > rect.width;
-			const min = Number(target.min);
-			const max = Number(target.max);
-			const style = window.getComputedStyle(target);
-			const isRTL = style.direction === "rtl";
-			const fraction = vertical
-				? (y - rect.top) / rect.height
-				: (isRTL ? (rect.right - x) / rect.width : (x - rect.left) / rect.width);
-			target.value = fraction * (max - min) + min;
-			target.dispatchEvent(new Event("input", { bubbles: true }));
-			target.dispatchEvent(new Event("change", { bubbles: true }));
-		} else {
-			// Normal click
-			target.click();
-			if (target.matches("input, textarea")) {
-				target.focus();
-			}
-		}
+		inputSimulator.click(target, x, y);
 	},
 	// Handle untrusted gestures specially in external code.
 	// Somewhere else, for example, you might do something like:
@@ -98,319 +491,61 @@ const config = {
 	beforeDispatch: () => { window.untrusted_gesture = true; },
 	afterDispatch: () => { window.untrusted_gesture = false; },
 };
-const dwellClicker = TrackyMouse.initDwellClicking(config);
+dwellClicker = TrackyMouse.initDwellClicking(config);
 
-// Integrate the Dwell Clicker and the UI's enabled state
-// TODO: expose an event for when the UI toggles on/off
-// and/or make the init API accept a dwell clicking config...
-// I guess eventually it should just be a "clicking" config
-// since the other clicking modes should be supported in the demo.
-// For now, observe aria-pressed attribute as a hack
-const observer = new MutationObserver(() => {
+function updateDwellClickingEnabled() {
+	// This function can be called during the call to TrackyMouse.init
+	// We could maybe init the dwell clicker before the UI to avoid the awkwardness of this early return and `dwellClicker` being non-constant.
+	// But eventually the dwell clicker will be built in to the UI (albeit still configurable),
+	// as the UI needs to manage different clicking modes, and this is a ridiculous amount of "glue code"
+	// to support the basic features of Tracky Mouse.
+	if (!dwellClicker) return;
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
-	dwellClicker.paused = !started;
-});
-// observer.observe(toggleButton, { attributes: true, attributeFilter: ["aria-pressed"] });
-// The UI can now be re-initialized when switching languages, creating a new button
-observer.observe(document.querySelector(".tracky-mouse-ui"), { childList: true, attributes: true, attributeFilter: ["aria-pressed"], subtree: true });
+	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell";
+	updateHUD();
+}
+updateDwellClickingEnabled();
 
+TrackyMouse.onPointerMove = (x, y) => {
+	screenOverlay.updateMousePos(x, y); // UNSTABLE API
+	inputSimulator.pointerMove(x, y);
+};
 
-// Source: https://stackoverflow.com/a/54492696/2624876
-function getCurrentRotation(el) {
-	const st = window.getComputedStyle(el, null);
-	const tm = st.getPropertyValue("-webkit-transform") ||
-		st.getPropertyValue("-moz-transform") ||
-		st.getPropertyValue("-ms-transform") ||
-		st.getPropertyValue("-o-transform") ||
-		st.getPropertyValue("transform") ||
-		"none";
-	if (tm !== "none") {
-		const [a, b] = tm.split('(')[1].split(')')[0].split(',');
-		return Math.round(Math.atan2(a, b) * (180 / Math.PI));
-	}
-	return 0;
+function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
+	// TODO: share message logic with desktop app and support localization here
+	/** translation placeholder */
+	const t = (key, options = {}) => options.defaultValue ?? key;
+	return isManualTakeback ?
+		t("hud.willResumeAfterMouseStops", { defaultValue: "Will resume after mouse stops moving." }) :
+		typeof enabled !== "boolean" ? t("hud.pressToToggle", { defaultValue: "Press %0 to toggle Tracky Mouse." }).replace("%0", "F9") :
+			enabled ?
+				t("hud.pressToDisable", { defaultValue: "Press %0 to disable Tracky Mouse." }).replace("%0", "F9") :
+				t("hud.pressToEnable", { defaultValue: "Press %0 to enable Tracky Mouse." }).replace("%0", "F9");
 }
 
-// Pointer event simulation logic should be built into tracky-mouse in the future.
-// These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
-// as well as any other pointermove/pointerenter/pointerleave handlers on the page.
-const getEventOptions = ({ x, y }) => {
-	return {
-		view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
-		clientX: x,
-		clientY: y,
-		pointerId: 1234567890, // a special value so other code can detect these simulated events
-		pointerType: "mouse",
-		isPrimary: true,
-	};
-};
-let last_el_over = null;
-TrackyMouse.onPointerMove = (x, y) => {
-	const target = document.elementFromPoint(x, y) || document.body;
-	if (target !== last_el_over) {
-		if (last_el_over) {
-			const event = new PointerEvent("pointerleave", Object.assign(getEventOptions({ x, y }), {
-				button: 0,
-				buttons: 1,
-				bubbles: false,
-				cancelable: false,
-			}));
-			last_el_over.dispatchEvent(event);
-		}
-		const event = new PointerEvent("pointerenter", Object.assign(getEventOptions({ x, y }), {
-			button: 0,
-			buttons: 1,
-			bubbles: false,
-			cancelable: false,
-		}));
-		target.dispatchEvent(event);
-		last_el_over = target;
-	}
-	const event = new PointerEvent("pointermove", Object.assign(getEventOptions({ x, y }), {
-		button: 0,
-		buttons: 1,
-		bubbles: true,
-		cancelable: true,
-	}));
-	target.dispatchEvent(event);
-};
+function updateHUD() {
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
+	// TODO: implement manual takeback in web version
+	// https://github.com/1j01/tracky-mouse/issues/72
+	const isManualTakeback = false;
+	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
+	// UNSTABLE API
+	screenOverlay.update({
+		isEnabled: enabled && !isManualTakeback,
+		isManualTakeback,
+		clickingMode: activeSettings.clickingMode,
+		inputFeedback,
+		bottomOffset,
+		messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
+		systemMousePosition: mousePosition,
+	});
+}
+updateHUD();
 
 // Archery mini-game
-const archery_game = document.getElementById("archery-demo");
-const archery_scoreboard = document.getElementById("archery-scoreboard");
-const archery_targets = document.querySelectorAll(".archery-target");
-let round;
-const best_times = {
-	with_head_tracker: Infinity,
-	with_dwell_clicker: Infinity,
-	with_dwell_clicker_touch: Infinity, // unlikely, since touch doesn't have hovering (except on a few phones, as a gimmick; dunno if they trigger events with pointerType "touch" for hovering)
-	with_dwell_clicker_pen: Infinity,
-	with_mouse: Infinity,
-	with_touch: Infinity,
-	with_pen: Infinity,
-	with_keyboard: Infinity,
-	with_unknown_input: Infinity,
-};
-function initRound() {
-	round = {
-		used_manual_movement: false, // non-head-tracker mouse movement
-		used_manual_movement_touch: false, // non-head-tracker mouse movement
-		used_manual_movement_pen: false, // non-head-tracker mouse movement
-		used_manual_click: false, // non-dwell clicking
-		used_manual_click_touch: false, // non-dwell clicking
-		used_manual_click_pen: false, // non-dwell clicking
-		used_keyboard: false, // not much of a game, but may be an interesting comparison
-		used_unknown_input: false, // click event despite preventing via keydown/pointerdown
-		start_time: undefined, // set when the first target is hit
-	};
-	for (const archery_target of archery_targets) {
-		archery_target.classList.remove("hit");
-	}
-}
-initRound();
-let last_pointerdown_time = -Infinity;
-archery_game.addEventListener("pointerdown", (event) => {
-	if (event.pointerId !== 1234567890) {
-		// TODO: maybe only set if target was hit; could use a callback (or return value but that would be a little confusing since handleTargetHit looks like an event handler)
-		round.used_manual_click = true;
-		if (event.pointerType === "pen") {
-			round.used_manual_click_pen = true;
-		} else if (event.pointerType === "touch") {
-			round.used_manual_click_touch = true;
-		}
-	}
-	// Don't call `event.preventDefault()` because click will be triggered regardless, but it will prevent text deselection, which is very irritating.
-	handleTargetHit(event);
-	last_pointerdown_time = performance.now();
-});
-archery_game.addEventListener("keydown", (event) => {
-	if (event.key === " " || event.key === "Enter") {
-		event.preventDefault();
-		round.used_keyboard = true;
-		handleTargetHit(event);
-	}
-});
-archery_game.addEventListener("click", (event) => {
-	if (performance.now() - last_pointerdown_time < 100) {
-		return;
-	}
-	round.used_unknown_input = true;
-	handleTargetHit(event);
-});
-archery_game.addEventListener("pointerenter", (event) => {
-	if (event.pointerId === 1234567890) {
-		return;
-	}
-	round.used_manual_movement = true;
-	if (event.pointerType === "pen") {
-		round.used_manual_movement_pen = true;
-	} else if (event.pointerType === "touch") {
-		round.used_manual_movement_touch = true;
-	}
-});
-
-/**
- * @returns {keyof typeof best_times} scoreboard_slot - the slot in the scoreboard for the current input method (the most powerful, if it's ambiguous)
- * 
- * If you for example use the head tracker for one target and then mash Tab+Enter for the rest, that should count as using the keyboard.
- * 
- * Note that pointerType may be "mouse" when using a pen, under some circumstances.
- * It seems I need to enable "Windows Ink" in the Wacom settings (and re-open the tab, not just reload) to get "pen" as the pointerType.
- */
-function get_scoreboard_slot() {
-	if (round.used_keyboard) {
-		// keyboard is the most like cheating, so it goes first
-		return "with_keyboard";
-	} else if (round.used_manual_click_touch) {
-		// next easiest is clicking with touch (it's an absolute input method, and you can see exactly where you're clicking; you could even line up multiple fingers with targets... actually that might even make it more powerful than the keyboard...)
-		return "with_touch";
-	} else if (round.used_manual_click_pen) {
-		// next easiest is clicking with a pen (it's an absolute input method, but you have to look at the cursor to see where you're clicking)
-		return "with_pen";
-	} else if (round.used_manual_click) {
-		// next easiest is clicking with a mouse (it's relative, but precise and familiar)
-		return "with_mouse";
-	} else if (round.used_manual_movement_touch) {
-		// next easiest is moving the mouse but using the dwell clicker (it's precise but slower)
-		// not sure about touch vs pen/mouse in this case, as I don't have a touch screen supporting hover
-		return "with_dwell_clicker_touch";
-	} else if (round.used_manual_movement_pen) {
-		// (see previous comment)
-		return "with_dwell_clicker_pen";
-	} else if (round.used_manual_movement) {
-		// (see previous comment)
-		return "with_dwell_clicker";
-	} else if (round.used_unknown_input) {
-		// this last one is a wild card; it's hard to say whether this condition should be last or first
-		// I imagine some other accessibility feature might trigger this
-		// Can simulate with:
-		// for (const archeryTarget of document.querySelectorAll(".archery-target")) {
-		// 	archeryTarget.dispatchEvent(new PointerEvent("click", { bubbles: true }));
-		// }
-		// Of course, that example is completely cheating, which makes it feel like it should be first,
-		// but I suspect if this occurs outside of a test, it won't be due to cheating.
-		// Of course, the ranking by "easiness" is only in case you mix input methods in a single round.
-		// It might not be the best way to detect a different (unknown) input method.
-		// That is to say, there's a different argument for giving this priority.
-		return "with_unknown_input";
-	} else {
-		return "with_head_tracker";
-	}
-}
-
-const slot_labels = {
-	with_head_tracker: "With Head Tracking",
-	with_dwell_clicker: "With Dwell Clicking", // may be pen, undetectable in some cases
-	with_dwell_clicker_touch: "With Dwell Clicking (Touch)",
-	with_dwell_clicker_pen: "With Dwell Clicking (Pen)",
-	with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"
-	with_touch: "With Touch",
-	with_pen: "With Pen",
-	with_keyboard: "With Keyboard",
-	with_unknown_input: "With Unknown Input",
-};
-
-/**
- * @param {PointerEvent | KeyboardEvent} event 
- */
-function handleTargetHit(event) {
-	if (!event.target.matches(".archery-target")) {
-		return;
-	}
-	if (archery_game.classList.contains("round-over")) {
-		return;
-	}
-	const archery_target = event.target;
-	if (!round.start_time) {
-		initRound(); // reset input detection to ignore spurious hovering before the round starts
-		round.start_time = performance.now();
-		archery_scoreboard.hidden = true;
-	}
-	// after initRound since initRound removes the .hit class
-	archery_target.classList.add("hit");
-	animateTargetHit(archery_target).then(() => {
-		// archery_target.classList.remove("hit");
-	});
-	if (document.querySelectorAll(".archery-target:not(.hit)").length === 0) {
-		const time = (performance.now() - round.start_time) / 1000;
-		archery_scoreboard.hidden = false;
-		archery_scoreboard.textContent = `Time: ${time.toFixed(2)}s`;
-		const slot = get_scoreboard_slot();
-		const new_best = time < best_times[slot];
-		if (new_best) {
-			best_times[slot] = time;
-		}
-		const slot_indicator = document.createElement("p");
-		slot_indicator.textContent = slot_labels[slot];
-		slot_indicator.classList.add("slot-indicator");
-		archery_scoreboard.append(slot_indicator);
-		const best_times_label = document.createElement("p");
-		best_times_label.textContent = `Best times:`;
-		best_times_label.classList.add("best-times-label");
-		archery_scoreboard.append(best_times_label);
-		const ul = document.createElement("ul");
-		archery_scoreboard.append(ul);
-		for (const [id, time] of Object.entries(best_times)) {
-			if (time === Infinity) {
-				continue;
-			}
-			const label = slot_labels[id];
-			const li = document.createElement("li");
-			li.textContent = `${label}: ${time.toFixed(2)}s`;
-			if (slot === id && new_best) {
-				li.classList.add("new-best-time");
-				const new_best = document.createElement("span");
-				new_best.textContent = " New Best!";
-				li.append(new_best);
-			}
-			ul.append(li);
-		}
-		archery_game.classList.add("round-over");
-		setTimeout(() => {
-			for (const archery_target of archery_targets) {
-				for (const animation of archery_target.getAnimations()) {
-					animation.cancel();
-				}
-			}
-			setTimeout(() => {
-				archery_game.classList.remove("round-over");
-				initRound();
-			}, 100);
-		}, 2000);
-	}
-}
-
-/**
- * @param {HTMLButtonElement} archery_target 
- */
-async function animateTargetHit(archery_target) {
-	// archery_target.style.animation = "archery-target-hit 0.5s ease-in-out";
-	// archery_target.addEventListener("animationend", () => {
-	// 	archery_target.style.animation = "";
-	// }, { once: true });
-	const frames = [];
-	let angle = 0;
-	let angularVelocity = 2 + Math.random() * 0.2;
-	for (let t = 0; t < 100; t++) {
-		angularVelocity *= 0.92;
-		angle += angularVelocity;
-		angularVelocity += (Math.sin(angle)) * 0.1;
-		frames.push({
-			transform: `translate(-50%, -50%) rotateX(${angle}rad)`,
-			opacity: Math.min(1, Math.max(0.2, 1 - t / 100 * 4.123456) - Math.cos(angle) * 0.1),
-		});
-	}
-	try {
-		await archery_target.animate(frames, {
-			duration: 10000,
-			easing: "linear",
-			fill: "both",
-		}).finished;
-	} catch (_error) {
-		// ignore cancelation
-	}
-}
+import("./archery-mini-game.js");
 
 // Enhance demo link with smooth scrolling
 document.querySelector('[href="#demo"]').addEventListener('click', function (event) {
