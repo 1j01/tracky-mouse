@@ -1,5 +1,7 @@
 /* global TrackyMouse, electronAPI */
 
+TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
+
 // I like bigButton and I cannot lie
 const bigButton = document.createElement("button");
 bigButton.style.position = "absolute";
