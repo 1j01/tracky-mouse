@@ -12,7 +12,7 @@ No changes here yet.
 
 ### Changed
 
-- In the web version, the cursor is now shown as the Tracky Mouse logo. <img src="images/tracky-mouse-logo.svg" height="32">
+- In the web version, the cursor is now shown as the Tracky Mouse logo. <img src="https://raw.githubusercontent.com/1j01/tracky-mouse/refs/heads/main/images/tracky-mouse-logo.svg" height="32">
 - In browsers that support the permissions API, the camera will be enabled immediately if permission has already been granted.
 
 ### Added
