@@ -23,6 +23,8 @@ const inputSimulator = window.inputSimulator = {
 		2: false,
 	},
 	lastElOver: null,
+	selectionAnchor: null, // { target, x, y }
+	selectionActive: false,
 	getEventOptions({ x, y }) {
 		return {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
@@ -90,9 +92,22 @@ const inputSimulator = window.inputSimulator = {
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
-		// TODO: support text selection
-		window.getSelection()?.removeAllRanges();
+		// Text selection support
+		if (buttonIndex === 0 && (target.matches('input[type="text"], textarea'))) {
+			// Start selection
+			this.selectionAnchor = { target, x, y };
+			this.selectionActive = true;
+			// Focus the input/textarea
+			target.focus();
+			// Set caret position based on click
+			const pos = this.getCaretPositionFromPoint(target, x, y);
+			if (pos !== null) {
+				target.setSelectionRange(pos, pos);
+			}
+		} else {
+			// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
+			window.getSelection()?.removeAllRanges();
+		}
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -104,9 +119,22 @@ const inputSimulator = window.inputSimulator = {
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
+		// Text selection drag support
+		if (this.selectionActive && this.selectionAnchor && this.selectionAnchor.target === target && (target.matches('input[type="text"], textarea'))) {
+			const anchorPos = this.getCaretPositionFromPoint(target, this.selectionAnchor.x, this.selectionAnchor.y);
+			const focusPos = this.getCaretPositionFromPoint(target, x, y);
+			if (anchorPos !== null && focusPos !== null) {
+				target.setSelectionRange(anchorPos, focusPos);
+			}
+		}
 		if (buttonIndex === 0) {
 			if (this.pointerDownElement === target) {
 				this.click(target, x, y);
+			}
+			// End text selection
+			if (this.selectionActive) {
+				this.selectionActive = false;
+				this.selectionAnchor = null;
 			}
 		} else if (buttonIndex === 2) {
 			const contextMenuEvent = new MouseEvent("contextmenu", Object.assign(this.getEventOptions({ x, y }), {
@@ -347,8 +375,39 @@ const inputSimulator = window.inputSimulator = {
 			target.click();
 			if (target.matches("input, textarea")) {
 				target.focus();
+				// Set caret position on click
+				const pos = this.getCaretPositionFromPoint(target, x, y);
+				if (pos !== null) {
+					target.setSelectionRange(pos, pos);
+				}
 			}
 		}
+	},
+
+	// Helper: get caret position from click coordinates for input/textarea
+	getCaretPositionFromPoint(target, x, y) {
+		if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) return null;
+		// For textarea, use document.caretPositionFromPoint or caretRangeFromPoint
+		if (typeof target.setSelectionRange !== 'function') return null;
+		let pos = null;
+		if (target instanceof HTMLTextAreaElement) {
+			const range = document.caretPositionFromPoint?.(x, y) || document.caretRangeFromPoint?.(x, y);
+			if (range) {
+				pos = range.offset;
+			}
+		} else if (target instanceof HTMLInputElement) {
+			// For input[type=text], approximate by dividing width by value length
+			const rect = target.getBoundingClientRect();
+			if (rect.width > 0 && target.value.length > 0) {
+				const relX = x - rect.left;
+				const charWidth = rect.width / target.value.length;
+				pos = Math.round(relX / charWidth);
+				pos = Math.max(0, Math.min(target.value.length, pos));
+			} else {
+				pos = 0;
+			}
+		}
+		return pos;
 	},
 	showContextMenu(target, x, y) {
 		const commands = ["copy", "cut", "paste", "delete", "selectAll", "undo", "redo"];
