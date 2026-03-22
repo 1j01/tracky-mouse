@@ -26,6 +26,8 @@ indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedba
 // TODO: block clicks while autoscrolling with a full-page transparent element,
 // so it doesn't doubly-act when stopping locked autoscroll with a click.
 
+const lockingClickRadius = 10; // pixels
+
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) {
@@ -37,7 +39,7 @@ export const autoscroll = {
 	},
 	pointerUp(_target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) return;
-		if (Math.hypot(x - this._start.x, y - this._start.y) < 5) {
+		if (Math.hypot(x - this._start.x, y - this._start.y) < lockingClickRadius) {
 			return; // lock autoscroll mode until next click
 		}
 		this.stopAutoscroll();
