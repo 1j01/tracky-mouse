@@ -21,7 +21,6 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: conditionally show arrows according to scrollable axes
 // TODO: exponential speed curve
 // TODO: deadzone (zero speed zone)
 // TODO: block clicks while autoscrolling with a full-page transparent element,
@@ -62,11 +61,13 @@ export const autoscroll = {
 		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
 
 		let container = this._start.target;
+		let canScrollX = false;
+		let canScrollY = false;
 		while (container && container !== document.body) {
 			// This initial test gives a false positive on the demo section of the website
 			// Trying an actual scroll seems like a sure test, but could cause performance issues
-			let canScrollX = container.scrollWidth > container.clientWidth;
-			let canScrollY = container.scrollHeight > container.clientHeight;
+			canScrollX = container.scrollWidth > container.clientWidth;
+			canScrollY = container.scrollHeight > container.clientHeight;
 			if (canScrollX || canScrollY) {
 				if (canScrollX) {
 					const oldScrollLeft = container.scrollLeft;
@@ -93,7 +94,15 @@ export const autoscroll = {
 		if (!container || container === document.body) {
 			// container = document.scrollingElement;
 			container = window;
+			canScrollX = document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth;
+			canScrollY = document.scrollingElement.scrollHeight > document.scrollingElement.clientHeight;
 		}
 		container.scrollBy(scrollDelta.x, scrollDelta.y);
+
+		// TODO: update on pointerdown (or ensure pointermove is called on pointerdown)
+		for (const arrow of indicator.querySelectorAll("[data-axis]")) {
+			const axis = arrow.dataset.axis;
+			arrow.style.display = (axis === "x" ? canScrollX : canScrollY) ? "" : "none";
+		}
 	},
 };
