@@ -21,12 +21,12 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: scrolling should happen in a loop, using delta time
-
 const lockingClickRadius = 10; // pixels
-const scrollSpeed = 0.1;
+const scrollSpeed = 0.01;
 const scrollExponent = 1.6;
 const deadZone = 10; // pixels (taxicab distance)
+const maxDeltaTime = 100; // milliseconds
+
 
 // Block clicks with a full-page transparent element while autoscrolling,
 // so it doesn't doubly-act when stopping locked autoscroll with a click.
@@ -46,6 +46,10 @@ clickBlocker.addEventListener("pointerdown", (event) => {
 });
 
 export const autoscroll = {
+	_start: null,
+	_currentScrollDelta: null,
+	_lastTimestamp: null,
+	_animationFrameRequest: null,
 	pointerDown(target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) {
 			this.stopAutoscroll();
@@ -67,10 +71,10 @@ export const autoscroll = {
 		document.body.appendChild(indicator);
 		document.body.appendChild(clickBlocker);
 		this._start = { x, y, target };
-		// Update arrow visibility immediately
-		// Note: pointermove ought to be sent when pointerdown happens
-		// in which case this wouldn't be needed
-		this.pointerMove(target, x, y);
+		this._currentScrollDelta = null;
+		this._lastTimestamp = performance.now();
+		// Update arrow visibility immediately, and start animation loop
+		this.updateAutoscroll();
 	},
 	stopAutoscroll() {
 		this._start = null;
@@ -80,6 +84,8 @@ export const autoscroll = {
 		if (clickBlocker.parentElement) {
 			document.body.removeChild(clickBlocker);
 		}
+		cancelAnimationFrame(this._animationFrameRequest);
+		this._animationFrameRequest = null;
 	},
 	pointerMove(_target, x, y) {
 		if (!this._start) return;
@@ -103,7 +109,9 @@ export const autoscroll = {
 		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
 		scrollDelta.x = Math.sign(scrollDelta.x) * Math.pow(Math.abs(scrollDelta.x), scrollExponent);
 		scrollDelta.y = Math.sign(scrollDelta.y) * Math.pow(Math.abs(scrollDelta.y), scrollExponent);
-
+		this._currentScrollDelta = scrollDelta;
+	},
+	getScrollable() {
 		let container = this._start.target;
 		let canScrollX = false;
 		let canScrollY = false;
@@ -141,11 +149,29 @@ export const autoscroll = {
 			canScrollX = document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth;
 			canScrollY = document.scrollingElement.scrollHeight > document.scrollingElement.clientHeight;
 		}
-		container.scrollBy(scrollDelta.x, scrollDelta.y);
+		return { container, canScrollX, canScrollY };
+	},
+	updateAutoscroll() {
+		const deltaTime = Math.min(maxDeltaTime, performance.now() - this._lastTimestamp);
+		// Note: we could optimize by not calling getScrollable every frame
+		const { container, canScrollX, canScrollY } = this.getScrollable();
+		const scrollDelta = this._currentScrollDelta;
+		if (scrollDelta) {
+			// Note: scrolling might be limited to integers, which could cause it to not scroll at low speeds,
+			// especially at high frame rates,
+			// and affect the accuracy of deltaTime-based movement. We could accumulate fractional scroll
+			// deltas and apply them when they reach a whole pixel.
+			container.scrollBy(scrollDelta.x * deltaTime, scrollDelta.y * deltaTime);
+		}
 
 		for (const arrow of indicator.querySelectorAll("[data-axis]")) {
 			const axis = arrow.dataset.axis;
 			arrow.style.display = (axis === "x" ? canScrollX : canScrollY) ? "" : "none";
 		}
+
+		this._lastTimestamp = performance.now();
+
+		cancelAnimationFrame(this._animationFrameRequest);
+		this._animationFrameRequest = requestAnimationFrame(() => this.updateAutoscroll());
 	},
 };
