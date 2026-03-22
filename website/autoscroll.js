@@ -50,6 +50,9 @@ export const autoscroll = {
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
 		this._start = { x, y, target };
+		// Update arrow visibility immediately
+		// TODO: pointermove should be sent when pointerdown happens
+		this.pointerMove(target, x, y);
 	},
 	stopAutoscroll() {
 		this._start = null;
@@ -101,7 +104,6 @@ export const autoscroll = {
 		}
 		container.scrollBy(scrollDelta.x, scrollDelta.y);
 
-		// TODO: update on pointerdown (or ensure pointermove is called on pointerdown)
 		for (const arrow of indicator.querySelectorAll("[data-axis]")) {
 			const axis = arrow.dataset.axis;
 			arrow.style.display = (axis === "x" ? canScrollX : canScrollY) ? "" : "none";
