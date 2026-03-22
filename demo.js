@@ -1,5 +1,7 @@
 /* global TrackyMouse */
 
+import { autoscroll } from "./autoscroll.js";
+
 TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
@@ -77,6 +79,23 @@ const inputSimulator = window.inputSimulator = {
 			cancelable: true,
 		}));
 		target.dispatchEvent(event);
+
+		// TODO: support double click, triple click selection behaviors, dragging selection
+		// TODO: avoid starting selection in links or other draggable/interactive elements
+		if (this.textSelectionStart && this.buttonStates[0]) {
+			const textSelectionEnd = this.caretPositionFromPoint(x, y);
+			const selection = window.getSelection();
+			if (textSelectionEnd && selection) {
+				selection.setBaseAndExtent(
+					this.textSelectionStart.offsetNode,
+					this.textSelectionStart.offset,
+					textSelectionEnd.offsetNode,
+					textSelectionEnd.offset,
+				);
+			}
+		}
+
+		autoscroll.pointerMove(target, x, y);
 	},
 	pointerDown(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
@@ -90,9 +109,10 @@ const inputSimulator = window.inputSimulator = {
 		target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		// Deselect (since we're providing a context menu with little other than Select All, it's kind of rude not to support deselection)
-		// TODO: support text selection
 		window.getSelection()?.removeAllRanges();
+		this.textSelectionStart = this.caretPositionFromPoint(x, y);
+
+		autoscroll.pointerDown(target, x, y, buttonIndex);
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -120,21 +140,12 @@ const inputSimulator = window.inputSimulator = {
 			}
 		}
 		this.pointerDownElement = null;
+
+		// TODO: support also MMB to open links in a new tab
+
+		autoscroll.pointerUp(target, x, y, buttonIndex);
 	},
 	setMouseButtonState(buttonIndex, pressed) {
-		if (buttonIndex !== 0 && buttonIndex !== 2) {
-			// TODO: support MMB auto-scrolling, MMB to open links in a new tab
-			// For now, show a little note that fades away, at the cursor
-			if (!pressed) {
-				return;
-			}
-			// const message = "Non-primary click not supported in demo";
-			const message = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
-			// const message = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
-			// const message = "Middle mouse button pressed"
-			this.showToast(message);
-			return;
-		}
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = mousePosition;
 			const target = document.elementFromPoint(x, y) || document.body;
@@ -456,6 +467,21 @@ const inputSimulator = window.inputSimulator = {
 		setTimeout(() => {
 			toast.remove();
 		}, 4000);
+	},
+	caretPositionFromPoint: (x, y) => {
+		// Firefox (standard)
+		if (document.caretPositionFromPoint) {
+			return document.caretPositionFromPoint(x, y);
+		}
+		// Chrome/Edge/Safari (non-standard)
+		if (document.caretRangeFromPoint) {
+			const range = document.caretRangeFromPoint(x, y);
+			if (range) {
+				return { offsetNode: range.startContainer, offset: range.startOffset };
+			}
+			return null;
+		}
+		throw new Error('Neither caretPositionFromPoint nor caretRangeFromPoint is supported.');
 	},
 };
 
