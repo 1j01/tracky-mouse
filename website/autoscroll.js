@@ -21,7 +21,6 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: scroll containers, not just the window
 // TODO: conditionally show arrows according to scrollable axes
 // TODO: exponential speed curve
 // TODO: deadzone (zero speed zone)
@@ -60,6 +59,41 @@ export const autoscroll = {
 		if (!this._start) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
 		const scrollSpeed = 0.5;
-		window.scrollBy(diff.x * scrollSpeed, diff.y * scrollSpeed);
+		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
+
+		let container = this._start.target;
+		while (container && container !== document.body) {
+			// This initial test gives a false positive on the demo section of the website
+			// Trying an actual scroll seems like a sure test, but could cause performance issues
+			let canScrollX = container.scrollWidth > container.clientWidth;
+			let canScrollY = container.scrollHeight > container.clientHeight;
+			if (canScrollX || canScrollY) {
+				if (canScrollX) {
+					const oldScrollLeft = container.scrollLeft;
+					container.scrollLeft = 1;
+					if (container.scrollLeft === 0) {
+						canScrollX = false;
+					}
+					container.scrollLeft = oldScrollLeft;
+				}
+				if (canScrollY) {
+					const oldScrollTop = container.scrollTop;
+					container.scrollTop = 1;
+					if (container.scrollTop === 0) {
+						canScrollY = false;
+					}
+					container.scrollTop = oldScrollTop;
+				}
+			}
+			if (canScrollX || canScrollY) {
+				break;
+			}
+			container = container.parentElement;
+		}
+		if (!container || container === document.body) {
+			// container = document.scrollingElement;
+			container = window;
+		}
+		container.scrollBy(scrollDelta.x, scrollDelta.y);
 	},
 };
