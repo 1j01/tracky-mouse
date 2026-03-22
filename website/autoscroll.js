@@ -21,10 +21,11 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: exponential speed curve
+// TODO: scrolling should happen in a loop, using delta time
 
 const lockingClickRadius = 10; // pixels
-const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
+const scrollSpeed = 0.1;
+const scrollExponent = 1.6;
 const deadZone = 10; // pixels (taxicab distance)
 
 // Block clicks with a full-page transparent element while autoscrolling,
@@ -90,7 +91,18 @@ export const autoscroll = {
 		diff.x -= Math.sign(diff.x) * deadZone;
 		diff.y -= Math.sign(diff.y) * deadZone;
 
+		// Note: there's a question of whether to apply the exponent or multiplier first.
+		// I think with exponent after multiplier, adjusting the exponent changes the
+		// average speed less for nominal values of input/exponent/multiplier,
+		// making it more intuitive to tweak the curvature,
+		// but tweaking the multiplier may be more intuitive, at least in a strict mathematical sense,
+		// with the exponent applied first.
+		// The set of curves expressible should be equal.
+		// As an aside, switching between the two orders could be easier if we used one variable
+		// instead of both `diff` and `scrollDelta`. I doubt it would harm clarity.
 		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
+		scrollDelta.x = Math.sign(scrollDelta.x) * Math.pow(Math.abs(scrollDelta.x), scrollExponent);
+		scrollDelta.y = Math.sign(scrollDelta.y) * Math.pow(Math.abs(scrollDelta.y), scrollExponent);
 
 		let container = this._start.target;
 		let canScrollX = false;
