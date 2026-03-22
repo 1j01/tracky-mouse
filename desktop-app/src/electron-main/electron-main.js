@@ -570,7 +570,7 @@ const createWindow = () => {
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		screenOverlayWindow.webContents.send('moveMouse', x, y, time);
+		screenOverlayWindow?.webContents.send('moveMouse', x, y, time);
 	});
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
@@ -789,7 +789,7 @@ app.on('ready', async () => {
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');
-		appWindow.webContents.send("shortcut", "toggle-tracking");
+		appWindow?.webContents.send("shortcut", "toggle-tracking");
 	});
 	if (!success) {
 		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
