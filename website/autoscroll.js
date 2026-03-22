@@ -27,6 +27,7 @@ indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedba
 // so it doesn't doubly-act when stopping locked autoscroll with a click.
 
 const lockingClickRadius = 10; // pixels
+const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
 
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
@@ -59,7 +60,6 @@ export const autoscroll = {
 	pointerMove(_target, x, y) {
 		if (!this._start) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
-		const scrollSpeed = 0.5;
 		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
 
 		let container = this._start.target;
