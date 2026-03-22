@@ -307,6 +307,7 @@ const inputSimulator = window.inputSimulator = {
 	},
 	closeDropdown(dropdown) {
 		this.dropdownToCloseFunction.get(dropdown)?.();
+		this.dropdownToCloseFunction.delete(dropdown);
 	},
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
