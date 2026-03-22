@@ -22,10 +22,10 @@ indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
 // TODO: exponential speed curve
-// TODO: deadzone (zero speed zone)
 
 const lockingClickRadius = 10; // pixels
 const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
+const deadZone = 10; // pixels (taxicab distance)
 
 // Block clicks with a full-page transparent element while autoscrolling,
 // so it doesn't doubly-act when stopping locked autoscroll with a click.
@@ -67,7 +67,8 @@ export const autoscroll = {
 		document.body.appendChild(clickBlocker);
 		this._start = { x, y, target };
 		// Update arrow visibility immediately
-		// TODO: pointermove should be sent when pointerdown happens
+		// Note: pointermove ought to be sent when pointerdown happens
+		// in which case this wouldn't be needed
 		this.pointerMove(target, x, y);
 	},
 	stopAutoscroll() {
@@ -82,6 +83,13 @@ export const autoscroll = {
 	pointerMove(_target, x, y) {
 		if (!this._start) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
+		// Note: Don't return early if within deadzone,
+		// because we still want to update the indicator arrows.
+		if (Math.abs(diff.x) < deadZone) diff.x = 0;
+		if (Math.abs(diff.y) < deadZone) diff.y = 0;
+		diff.x -= Math.sign(diff.x) * deadZone;
+		diff.y -= Math.sign(diff.y) * deadZone;
+
 		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
 
 		let container = this._start.target;
