@@ -23,11 +23,26 @@ indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedba
 
 // TODO: exponential speed curve
 // TODO: deadzone (zero speed zone)
-// TODO: block clicks while autoscrolling with a full-page transparent element,
-// so it doesn't doubly-act when stopping locked autoscroll with a click.
 
 const lockingClickRadius = 10; // pixels
 const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
+
+// Block clicks with a full-page transparent element while autoscrolling,
+// so it doesn't doubly-act when stopping locked autoscroll with a click.
+const clickBlocker = document.createElement("div");
+clickBlocker.style.position = "fixed";
+clickBlocker.style.left = "0";
+clickBlocker.style.top = "0";
+clickBlocker.style.width = "100%";
+clickBlocker.style.height = "100%";
+clickBlocker.style.zIndex = "1000000";
+clickBlocker.style.pointerEvents = "auto"; // default
+clickBlocker.style.backgroundColor = "transparent"; // default (but could override weird CSS ig)
+clickBlocker.addEventListener("pointerdown", (event) => {
+	event.stopPropagation();
+	event.preventDefault();
+	autoscroll.stopAutoscroll();
+});
 
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
@@ -49,6 +64,7 @@ export const autoscroll = {
 		indicator.style.left = `${x}px`;
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
+		document.body.appendChild(clickBlocker);
 		this._start = { x, y, target };
 		// Update arrow visibility immediately
 		// TODO: pointermove should be sent when pointerdown happens
@@ -58,6 +74,9 @@ export const autoscroll = {
 		this._start = null;
 		if (indicator.parentElement) {
 			document.body.removeChild(indicator);
+		}
+		if (clickBlocker.parentElement) {
+			document.body.removeChild(clickBlocker);
 		}
 	},
 	pointerMove(_target, x, y) {
