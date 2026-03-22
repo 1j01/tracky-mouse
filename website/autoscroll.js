@@ -30,6 +30,7 @@ indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedba
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) return;
+		if (target.closest("a")) return;
 		indicator.style.left = `${x}px`;
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
