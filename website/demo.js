@@ -269,7 +269,7 @@ const inputSimulator = window.inputSimulator = {
 				const newIndex = highlightIndex === -1 ? 0 : ((highlightIndex + dy + buttons.length) % buttons.length);
 				highlightIndex = newIndex;
 				updateHighlightStyles();
-				buttons[newIndex].scrollIntoView({ block: "nearest" });
+				buttons[newIndex].scrollIntoView({ block: "nearest", container: "nearest" });
 				dropdownValueToBeWhenClosed = buttons[newIndex].dataset.value;
 				dropdownDisplayButton.value = buttons[newIndex].dataset.value;
 				event.preventDefault();
