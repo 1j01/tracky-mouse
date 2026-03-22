@@ -21,12 +21,13 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: scroll containers, not just the window
-// TODO: conditionally show arrows according to scrollable axes
 // TODO: exponential speed curve
 // TODO: deadzone (zero speed zone)
 // TODO: block clicks while autoscrolling with a full-page transparent element,
 // so it doesn't doubly-act when stopping locked autoscroll with a click.
+
+const lockingClickRadius = 10; // pixels
+const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
 
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
@@ -39,7 +40,7 @@ export const autoscroll = {
 	},
 	pointerUp(_target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) return;
-		if (Math.hypot(x - this._start.x, y - this._start.y) < 5) {
+		if (Math.hypot(x - this._start.x, y - this._start.y) < lockingClickRadius) {
 			return; // lock autoscroll mode until next click
 		}
 		this.stopAutoscroll();
@@ -49,6 +50,9 @@ export const autoscroll = {
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
 		this._start = { x, y, target };
+		// Update arrow visibility immediately
+		// TODO: pointermove should be sent when pointerdown happens
+		this.pointerMove(target, x, y);
 	},
 	stopAutoscroll() {
 		this._start = null;
@@ -59,7 +63,50 @@ export const autoscroll = {
 	pointerMove(_target, x, y) {
 		if (!this._start) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
-		const scrollSpeed = 0.5;
-		window.scrollBy(diff.x * scrollSpeed, diff.y * scrollSpeed);
+		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
+
+		let container = this._start.target;
+		let canScrollX = false;
+		let canScrollY = false;
+		while (container && container !== document.body) {
+			// This initial test gives a false positive on the demo section of the website
+			// Trying an actual scroll seems like a sure test, but could cause performance issues
+			canScrollX = container.scrollWidth > container.clientWidth;
+			canScrollY = container.scrollHeight > container.clientHeight;
+			if (canScrollX || canScrollY) {
+				if (canScrollX) {
+					const oldScrollLeft = container.scrollLeft;
+					container.scrollLeft = 1;
+					if (container.scrollLeft === 0) {
+						canScrollX = false;
+					}
+					container.scrollLeft = oldScrollLeft;
+				}
+				if (canScrollY) {
+					const oldScrollTop = container.scrollTop;
+					container.scrollTop = 1;
+					if (container.scrollTop === 0) {
+						canScrollY = false;
+					}
+					container.scrollTop = oldScrollTop;
+				}
+			}
+			if (canScrollX || canScrollY) {
+				break;
+			}
+			container = container.parentElement;
+		}
+		if (!container || container === document.body) {
+			// container = document.scrollingElement;
+			container = window;
+			canScrollX = document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth;
+			canScrollY = document.scrollingElement.scrollHeight > document.scrollingElement.clientHeight;
+		}
+		container.scrollBy(scrollDelta.x, scrollDelta.y);
+
+		for (const arrow of indicator.querySelectorAll("[data-axis]")) {
+			const axis = arrow.dataset.axis;
+			arrow.style.display = (axis === "x" ? canScrollX : canScrollY) ? "" : "none";
+		}
 	},
 };

@@ -287,7 +287,6 @@ const inputSimulator = window.inputSimulator = {
 		});
 
 		const closeFunction = () => {
-
 			cancelAnimationFrame(animationFrameId);
 			removeEventListener("pointerdown", flyoutPointerDownOutsideHandler);
 			if (!flyout || this._closingDropdown) {
