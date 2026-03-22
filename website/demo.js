@@ -1,5 +1,7 @@
 /* global TrackyMouse */
 
+import { autoscroll } from "./autoscroll.js";
+
 TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
@@ -92,6 +94,8 @@ const inputSimulator = window.inputSimulator = {
 				);
 			}
 		}
+
+		autoscroll.pointerMove(target, x, y);
 	},
 	pointerDown(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
@@ -107,6 +111,8 @@ const inputSimulator = window.inputSimulator = {
 
 		window.getSelection()?.removeAllRanges();
 		this.textSelectionStart = this.caretPositionFromPoint(x, y);
+
+		autoscroll.pointerDown(target, x, y, buttonIndex);
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -134,21 +140,12 @@ const inputSimulator = window.inputSimulator = {
 			}
 		}
 		this.pointerDownElement = null;
+
+		// TODO: support also MMB to open links in a new tab
+
+		autoscroll.pointerUp(target, x, y, buttonIndex);
 	},
 	setMouseButtonState(buttonIndex, pressed) {
-		if (buttonIndex !== 0 && buttonIndex !== 2) {
-			// TODO: support MMB auto-scrolling, MMB to open links in a new tab
-			// For now, show a little note that fades away, at the cursor
-			if (!pressed) {
-				return;
-			}
-			// const message = "Non-primary click not supported in demo";
-			const message = `${buttonIndex === 1 ? "Middle" : "Right"} click (demo)`;
-			// const message = `${buttonIndex === 1 ? "Middle" : "Right"} click works in desktop app`;
-			// const message = "Middle mouse button pressed"
-			this.showToast(message);
-			return;
-		}
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = mousePosition;
 			const target = document.elementFromPoint(x, y) || document.body;
