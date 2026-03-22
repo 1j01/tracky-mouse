@@ -1,6 +1,5 @@
 
 const indicator = document.createElement("div");
-indicator.style.position = "fixed";
 indicator.innerHTML = `
 	<svg width="32" height="32" viewBox="0 0 32 32">
 		<!-- base shape -->
@@ -17,6 +16,10 @@ indicator.innerHTML = `
 		<polygon data-axis="x" points="27,16 22,13 22,19" fill="rgb(0, 0, 0)" />
 	</svg>
 `;
+indicator.style.position = "fixed";
+indicator.style.pointerEvents = "none";
+indicator.style.transform = "translate(-50%, -50%)";
+indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
 // TODO: click and release + drag behavior (in addition to click and drag behavior)
 // TODO: scroll containers, not just the window
