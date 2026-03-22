@@ -21,23 +21,36 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: click and release + drag behavior (in addition to click and drag behavior)
 // TODO: scroll containers, not just the window
 // TODO: conditionally show arrows according to scrollable axes
 // TODO: exponential speed curve
 // TODO: deadzone (zero speed zone)
+// TODO: block clicks while autoscrolling with a full-page transparent element,
+// so it doesn't doubly-act when stopping locked autoscroll with a click.
 
 export const autoscroll = {
 	pointerDown(target, x, y, buttonIndex = 0) {
-		if (buttonIndex !== 1) return;
+		if (buttonIndex !== 1) {
+			this.stopAutoscroll();
+			return;
+		}
 		if (target.closest("a")) return;
+		this.startAutoscroll(target, x, y);
+	},
+	pointerUp(_target, x, y, buttonIndex = 0) {
+		if (buttonIndex !== 1) return;
+		if (Math.hypot(x - this._start.x, y - this._start.y) < 5) {
+			return; // lock autoscroll mode until next click
+		}
+		this.stopAutoscroll();
+	},
+	startAutoscroll(target, x, y) {
 		indicator.style.left = `${x}px`;
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
 		this._start = { x, y, target };
 	},
-	pointerUp(_target, _x, _y, buttonIndex = 0) {
-		if (buttonIndex !== 1) return;
+	stopAutoscroll() {
 		this._start = null;
 		if (indicator.parentElement) {
 			document.body.removeChild(indicator);
@@ -48,5 +61,5 @@ export const autoscroll = {
 		const diff = { x: x - this._start.x, y: y - this._start.y };
 		const scrollSpeed = 0.5;
 		window.scrollBy(diff.x * scrollSpeed, diff.y * scrollSpeed);
-	}
+	},
 };
