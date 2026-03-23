@@ -52,13 +52,15 @@ export function updateGamepadMouse(inputSimulator) {
 	gamepadMousePos.y += yAxis * maxSpeed * deltaTime;
 
 	// Clamp to screen bounds
-	gamepadMousePos.x = Math.max(0, Math.min(window.innerWidth, gamepadMousePos.x));
-	gamepadMousePos.y = Math.max(0, Math.min(window.innerHeight, gamepadMousePos.y));
+	// (1px padding avoids failing to click at the edge of the screen (at least the bottom))
+	gamepadMousePos.x = Math.max(1, Math.min(window.innerWidth - 1, gamepadMousePos.x));
+	gamepadMousePos.y = Math.max(1, Math.min(window.innerHeight - 1, gamepadMousePos.y));
 
 	pointer.style.left = `${gamepadMousePos.x}px`;
 	pointer.style.top = `${gamepadMousePos.y}px`;
 
-	// send pointer events using inputSimulator
+	// Send pointer events
+	// TODO: not constant, only if moved
 	inputSimulator.pointerMove(gamepadMousePos.x, gamepadMousePos.y);
 
 	for (let i = 0; i < gp.buttons.length; i++) {
@@ -66,7 +68,7 @@ export function updateGamepadMouse(inputSimulator) {
 		const pressed = btn.pressed;
 		if (i in gamepadToPointerButtonMap) {
 			const pointerButton = gamepadToPointerButtonMap[i];
-			inputSimulator.setButtonState(pointerButton, pressed);
+			inputSimulator.setMouseButtonState(pointerButton, pressed);
 		}
 		if (pressed && !prevButtons[i]) {
 			nibbleBuffer.push(i);
