@@ -28,6 +28,7 @@ exports.include = [
 	"tracky-mouse-goodies-page.css",
 	"demo.js",
 	"autoscroll.js",
+	"gamepad-mouse.js",
 	"archery-mini-game.js",
 	"core/images/*.svg",
 	"core/tracky-mouse.css",
