@@ -34,6 +34,7 @@
 		"firstrun",
 		"fullscreenable",
 		"Gameface",
+		"gamepadconnected",
 		"grayscale",
 		"guvcview",
 		"handsfree",

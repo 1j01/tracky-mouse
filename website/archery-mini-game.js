@@ -48,6 +48,7 @@ cursor_guard.addEventListener("pointerleave", (event) => {
 let round;
 const best_times = {
 	// TODO: distinguish different TM clicking modes (dwell, wink, open mouth)
+	// as well as gamepad (gamepad-mouse.js)
 	with_head_tracker: Infinity,
 	with_dwell_clicker: Infinity,
 	with_dwell_clicker_touch: Infinity, // unlikely, since touch doesn't have hovering (except on a few phones, as a gimmick; dunno if they trigger events with pointerType "touch" for hovering)

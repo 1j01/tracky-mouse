@@ -194,6 +194,17 @@ updateHUD();
 // Archery mini-game
 import("./archery-mini-game.js");
 
+// Gamepad as mouse support, for comparison in archery mini-game
+window.addEventListener("gamepadconnected", () => {
+	import("./gamepad-mouse.js").then(({ updateGamepadMouse }) => {
+		function gamepadLoop() {
+			updateGamepadMouse();
+			requestAnimationFrame(gamepadLoop);
+		}
+		requestAnimationFrame(gamepadLoop);
+	});
+}, { once: true });
+
 // Enhance demo link with smooth scrolling
 document.querySelector('[href="#demo"]').addEventListener('click', function (event) {
 	event.preventDefault();

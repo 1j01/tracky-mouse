@@ -3,7 +3,12 @@ import { autoscroll } from "./autoscroll.js";
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
+
+/** a special value so other code can detect these simulated events */
+export const TM_POINTER_ID = 1234567890;
+
 export class InputSimulator {
+	pointerId = TM_POINTER_ID;
 	buttonStates = {
 		0: false,
 		1: false,
@@ -16,7 +21,7 @@ export class InputSimulator {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
 			clientX: x,
 			clientY: y,
-			pointerId: 1234567890, // a special value so other code can detect these simulated events
+			pointerId: this.pointerId,
 			pointerType: "mouse",
 			isPrimary: true,
 		};
@@ -106,6 +111,7 @@ export class InputSimulator {
 		}
 		// TODO: allow preventing MMB scroll? but make sure not to break
 		// autoscroll ending behavior
+		// FIXME: using gamepad, it fails to stop autoscroll with MMB because it starts immediately again
 		autoscroll.pointerDown(target, x, y, buttonIndex);
 	}
 	pointerUp(target, x, y, buttonIndex = 0) {
