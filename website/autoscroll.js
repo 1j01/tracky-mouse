@@ -45,6 +45,14 @@ clickBlocker.addEventListener("pointerdown", (event) => {
 	autoscroll.stopAutoscroll();
 });
 
+addEventListener("keydown", (event) => {
+	if (event.key === "Escape" && autoscroll._start) {
+		event.stopPropagation();
+		event.preventDefault();
+		autoscroll.stopAutoscroll();
+	}
+}, { capture: true });
+
 export const autoscroll = {
 	_start: null,
 	_currentScrollDelta: null,
@@ -78,6 +86,8 @@ export const autoscroll = {
 	},
 	stopAutoscroll() {
 		this._start = null;
+		this._currentScrollDelta = null;
+		this._lastTimestamp = null;
 		if (indicator.parentElement) {
 			document.body.removeChild(indicator);
 		}
