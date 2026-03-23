@@ -46,12 +46,47 @@ export function updateGamepadMouse(inputSimulator) {
 	pointer.style.top = `${gamepadMousePos.y}px`;
 
 	// send pointer events using inputSimulator
-	window._temporaryPointerIdOverride = GAMEPAD_POINTER_ID;
 	inputSimulator.pointerMove(gamepadMousePos.x, gamepadMousePos.y);
-	delete window._temporaryPointerIdOverride;
+
+	// detect secret code
+	detectSecretCode(gp);
 }
 
 
-const KONAMI_CODE_NIBBLES = GAMEPAD_POINTER_ID;
+const TARGET_HEX = (879896817424).toString(16);
 
+let nibbleBuffer = [];
+let prevButtons = [];
 
+// Convert nibble array → hex string
+function nibblesToHex(nibbles) {
+	return nibbles.map(n => n.toString(16)).join('');
+}
+
+function detectSecretCode(gp) {
+	gp.buttons.forEach((btn, index) => {
+		const pressed = btn.pressed;
+
+		// detect rising edge (new press only)
+		if (pressed && !prevButtons[index]) {
+			const nibble = index & 0xF; // ensure 0–15
+
+			nibbleBuffer.push(nibble);
+
+			const hex = nibblesToHex(nibbleBuffer);
+			console.log(`Pressed ${index} → nibble ${nibble} → ${hex}`);
+
+			// Trim buffer if it gets longer than target
+			if (hex.length > TARGET_HEX.length) {
+				nibbleBuffer.shift();
+			}
+
+			// Check match
+			if (hex === TARGET_HEX) {
+				console.log("MATCH!");
+			}
+		}
+
+		prevButtons[index] = pressed;
+	});
+}
