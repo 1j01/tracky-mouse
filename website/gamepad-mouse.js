@@ -12,8 +12,21 @@ document.body.appendChild(pointer);
 const deadZone = 0.15;
 const maxSpeed = 1; // pixels per millisecond
 
+const gamepadToPointerButtonMap = {
+	0: 0, // A → left click
+	1: 2, // B → right click
+	2: 1, // X → middle click
+};
 let gamepadMousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let lastTimestamp = null;
+
+let prevButtons = [];
+let nibbleBuffer = [];
+
+let lastPointerId = null;
+window.addEventListener("pointermove", (e) => {
+	lastPointerId = e.pointerId;
+});
 
 export function updateGamepadMouse(inputSimulator) {
 	const gamepads = navigator.getGamepads();
@@ -48,26 +61,18 @@ export function updateGamepadMouse(inputSimulator) {
 	// send pointer events using inputSimulator
 	inputSimulator.pointerMove(gamepadMousePos.x, gamepadMousePos.y);
 
-	accept(gp);
-}
-
-
-let lastPointerId = null;
-window.addEventListener("pointermove", (e) => {
-	lastPointerId = e.pointerId;
-});
-
-let nibbleBuffer = [];
-let prevButtons = [];
-
-function accept(gp) {
-	gp.buttons.forEach((btn, index) => {
+	for (let i = 0; i < gp.buttons.length; i++) {
+		const btn = gp.buttons[i];
 		const pressed = btn.pressed;
-		if (pressed && !prevButtons[index]) {
-			nibbleBuffer.push(index);
+		if (i in gamepadToPointerButtonMap) {
+			const pointerButton = gamepadToPointerButtonMap[i];
+			inputSimulator.setButtonState(pointerButton, pressed);
+		}
+		if (pressed && !prevButtons[i]) {
+			nibbleBuffer.push(i);
 			const hex = nibbleBuffer.map(n => n.toString(16)).join('');
 			const TARGET_HEX = (lastPointerId >>> 0).toString(16) + '10';
-			console.log(`Pressed ${index} → ${hex}; target: ${TARGET_HEX} (from pointerId ${lastPointerId})`);
+			console.log(`Pressed ${i} → ${hex}; target: ${TARGET_HEX} (from pointerId ${lastPointerId})`);
 			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
 			}
@@ -75,7 +80,7 @@ function accept(gp) {
 				console.log("MATCH!!");
 			}
 		}
-
-		prevButtons[index] = pressed;
-	});
+		prevButtons[i] = pressed;
+	}
 }
+
