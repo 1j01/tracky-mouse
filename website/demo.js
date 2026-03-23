@@ -18,13 +18,13 @@ addEventListener("pointermove", (event) => {
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
-const inputSimulator = window.inputSimulator = {
-	buttonStates: {
+class InputSimulator {
+	buttonStates = {
 		0: false,
 		1: false,
 		2: false,
-	},
-	lastElOver: null,
+	};
+	lastElOver = null;
 	getEventOptions({ x, y }) {
 		return {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
@@ -34,7 +34,7 @@ const inputSimulator = window.inputSimulator = {
 			pointerType: "mouse",
 			isPrimary: true,
 		};
-	},
+	}
 	getCurrentRotation(el) {
 		// Source: https://stackoverflow.com/a/54492696/2624876
 		const st = window.getComputedStyle(el, null);
@@ -49,7 +49,7 @@ const inputSimulator = window.inputSimulator = {
 			return Math.round(Math.atan2(a, b) * (180 / Math.PI));
 		}
 		return 0;
-	},
+	}
 	pointerMove(x, y) {
 		// TODO: handle persistent button state
 		const target = this.targetFromPoint(x, y);
@@ -96,7 +96,7 @@ const inputSimulator = window.inputSimulator = {
 		}
 
 		autoscroll.pointerMove(target, x, y);
-	},
+	}
 	pointerDown(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
 		this.buttonStates[buttonIndex] = true;
@@ -120,7 +120,7 @@ const inputSimulator = window.inputSimulator = {
 		// TODO: allow preventing MMB scroll? but make sure not to break
 		// autoscroll ending behavior
 		autoscroll.pointerDown(target, x, y, buttonIndex);
-	},
+	}
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
 		this.buttonStates[buttonIndex] = false;
@@ -151,7 +151,7 @@ const inputSimulator = window.inputSimulator = {
 		// TODO: support also MMB to open links in a new tab
 
 		autoscroll.pointerUp(target, x, y, buttonIndex);
-	},
+	}
 	setMouseButtonState(buttonIndex, pressed) {
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = mousePosition;
@@ -162,8 +162,8 @@ const inputSimulator = window.inputSimulator = {
 				this.pointerUp(target, x, y, buttonIndex);
 			}
 		}
-	},
-	dropdownToCloseFunction: new WeakMap(),
+	}
+	dropdownToCloseFunction = new WeakMap();
 	openDropdown(dropdown, { focus = true } = {}) {
 		if (this.dropdownToCloseFunction.has(dropdown)) {
 			return; // avoid double opening
@@ -310,11 +310,11 @@ const inputSimulator = window.inputSimulator = {
 			this._closingDropdown = false;
 		};
 		this.dropdownToCloseFunction.set(dropdown, closeFunction);
-	},
+	}
 	closeDropdown(dropdown) {
 		this.dropdownToCloseFunction.get(dropdown)?.();
 		this.dropdownToCloseFunction.delete(dropdown);
-	},
+	}
 	click(target, x, y) {
 		if (target.matches("input[type='range']")) {
 			// Special handling for sliders
@@ -367,7 +367,7 @@ const inputSimulator = window.inputSimulator = {
 				target.focus();
 			}
 		}
-	},
+	}
 	showContextMenu(target, x, y) {
 		const commands = ["copy", "cut", "paste", "delete", "selectAll", "undo", "redo"];
 		const supportedCommands = commands.filter(cmd => document.queryCommandSupported(cmd));
@@ -456,7 +456,7 @@ const inputSimulator = window.inputSimulator = {
 				this.showToast(item.label + (result === false ? " not allowed" : ""));
 			}
 		}, { once: true });
-	},
+	}
 	showToast(message, position = mousePosition) {
 		const { x, y } = position;
 		const toast = document.createElement("div");
@@ -474,8 +474,8 @@ const inputSimulator = window.inputSimulator = {
 		setTimeout(() => {
 			toast.remove();
 		}, 4000);
-	},
-	caretPositionFromPoint: (x, y) => {
+	}
+	caretPositionFromPoint(x, y) {
 		// Firefox (standard)
 		if (document.caretPositionFromPoint) {
 			return document.caretPositionFromPoint(x, y);
@@ -489,8 +489,8 @@ const inputSimulator = window.inputSimulator = {
 			return null;
 		}
 		throw new Error('Neither caretPositionFromPoint nor caretRangeFromPoint is supported.');
-	},
-	targetFromPoint: (x, y) => {
+	}
+	targetFromPoint(x, y) {
 		const skip = ".tracky-mouse-click-through, .tracky-mouse-click-through *";
 		const fallback = document.body; // would documentElement make more sense?
 
@@ -508,8 +508,10 @@ const inputSimulator = window.inputSimulator = {
 		}
 
 		return target || fallback;
-	},
-};
+	}
+}
+const inputSimulator = window.inputSimulator = new InputSimulator();
+
 
 const initOptions = {
 	// All of these options are UNSTABLE
