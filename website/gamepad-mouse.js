@@ -1,6 +1,7 @@
 
 // CCDDEFEF is the rhyming scheme of stanza 2 of "Ode" by Arthur O'Shaughnessy
 // and 10 is my initials in leetspeak
+// erq ureevat
 const GAMEPAD_POINTER_ID = 0xCCDDEFEF10;
 
 const pointer = document.createElement("div");
