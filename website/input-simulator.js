@@ -220,6 +220,7 @@ export class InputSimulator {
 		flyout.style.margin = "0";
 		flyout.style.listStyle = "none";
 		flyout.style.boxSizing = "border-box";
+		flyout.style.userSelect = "none";
 
 		// Handle opening downwards, upwards or both directions as needed, limited to the full page height
 		let animationFrameId = null;
@@ -275,6 +276,9 @@ export class InputSimulator {
 			}
 		});
 
+		flyout.addEventListener("pointerdown", (event) => {
+			event.preventDefault(); // prevent starting text selection
+		});
 		flyout.addEventListener("contextmenu", (event) => {
 			event.preventDefault();
 		});
