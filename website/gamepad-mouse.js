@@ -74,7 +74,7 @@ export function updateGamepadMouse(inputSimulator) {
 			nibbleBuffer.push(i);
 			const hex = nibbleBuffer.map(n => n.toString(16)).join('');
 			const TARGET_HEX = (lastPointerId >>> 0).toString(16) + '10';
-			console.log(`Pressed ${i} → ${hex}; target: ${TARGET_HEX} (from pointerId ${lastPointerId})`);
+			console.log(`Pressed ${i}; ${hex} vs ${TARGET_HEX} (from pointerId ${lastPointerId})`);
 			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
 			}
