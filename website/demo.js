@@ -25,6 +25,7 @@ class InputSimulator {
 		2: false,
 	};
 	lastElOver = null;
+	simulatedMousePosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 	getEventOptions({ x, y }) {
 		return {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
@@ -51,6 +52,7 @@ class InputSimulator {
 		return 0;
 	}
 	pointerMove(x, y) {
+		this.simulatedMousePosition = { x, y };
 		// TODO: handle persistent button state
 		const target = this.targetFromPoint(x, y);
 		if (target !== this.lastElOver) {
@@ -154,7 +156,7 @@ class InputSimulator {
 	}
 	setMouseButtonState(buttonIndex, pressed) {
 		if (this.buttonStates[buttonIndex] !== pressed) {
-			const { x, y } = mousePosition;
+			const { x, y } = this.simulatedMousePosition;
 			const target = this.targetFromPoint(x, y);
 			if (pressed) {
 				this.pointerDown(target, x, y, buttonIndex);
@@ -457,7 +459,7 @@ class InputSimulator {
 			}
 		}, { once: true });
 	}
-	showToast(message, position = mousePosition) {
+	showToast(message, position = this.simulatedMousePosition) {
 		const { x, y } = position;
 		const toast = document.createElement("div");
 		toast.textContent = message;
