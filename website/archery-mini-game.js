@@ -1,4 +1,13 @@
 // ARCHERY MINI-GAME
+//
+//        (
+//     () |\       - _                        _
+//     <==|=@        _ >>>--->               (o)
+//     [\ |/       -                         /|\
+//     ||`(                                 / | \
+//     LL 
+//
+//  (ASCII art credit: Marc Leuchtenberger 2002)
 
 // TODO: separate out input categorization logic from the game code
 
