@@ -53,33 +53,23 @@ export function updateGamepadMouse(inputSimulator) {
 }
 
 
+// let lastPointerId = null;
+// window.addEventListener("pointermove", (e) => {
+
 const TARGET_HEX = (879896817424).toString(16);
 
 let nibbleBuffer = [];
 let prevButtons = [];
 
-// Convert nibble array → hex string
-function nibblesToHex(nibbles) {
-	return nibbles.map(n => n.toString(16)).join('');
-}
-
 function detectSecretCode(gp) {
 	gp.buttons.forEach((btn, index) => {
 		const pressed = btn.pressed;
-
-		// detect rising edge (new press only)
 		if (pressed && !prevButtons[index]) {
-			const nibble = index;// & 0xF; // ensure 0–15
-
-			nibbleBuffer.push(nibble);
-
-			const hex = nibblesToHex(nibbleBuffer);
-			console.log(`Pressed ${index} → nibble ${nibble} → ${hex}`);
-
+			nibbleBuffer.push(index);
+			const hex = nibbleBuffer.map(n => n.toString(16)).join('');
 			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
 			}
-
 			if (hex === TARGET_HEX) {
 				console.log("MATCH!");
 			}
