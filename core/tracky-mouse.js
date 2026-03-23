@@ -55,7 +55,7 @@ const dwellClickers = [];
 const initDwellClicking = (config) => {
 	/*
 		Arguments:
-		- `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored.
+		- `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
 		- `config.shouldDrag(el)` (optional): a function that returns true if the element should be dragged rather than simply clicked.
 		- `config.noCenter(el)` (optional): a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
 		- `config.retarget` (optional): an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
@@ -64,6 +64,7 @@ const initDwellClicking = (config) => {
 			- `withinMargin` (optional): a number of pixels within which to consider the mouse over the `to` element. Default to infinity.
 		- `config.isEquivalentTarget(el1, el2)` (optional): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
 		- `config.dwellClickEvenIfPaused(el)` (optional): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
+		- `config.shouldClickThrough(el)` (optional): a function that returns true if the element should be totally ignored, allowing clicking on content behind it. Prefer `pointer-events: none` when possible, which will work for all input methods. Use this only if you need to differentiate input methods. Default: `(el) => el.matches(".tracky-mouse-click-through, .tracky-mouse-click-through *")`
 		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
 		- `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
 		- `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
@@ -103,6 +104,9 @@ const initDwellClicking = (config) => {
 	}
 	if (config.dwellClickEvenIfPaused !== undefined && typeof config.dwellClickEvenIfPaused !== "function") {
 		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.dwellClickEvenIfPaused"));
+	}
+	if (config.shouldClickThrough !== undefined && typeof config.shouldClickThrough !== "function") {
+		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.shouldClickThrough"));
 	}
 	if (config.beforeDispatch !== undefined && typeof config.beforeDispatch !== "function") {
 		throw new Error(t("api.errors.functionRequired", { defaultValue: "%0 must be a function" }).replace("%0", "config.beforeDispatch"));
@@ -148,6 +152,8 @@ const initDwellClicking = (config) => {
 			}
 		}
 	}
+
+	const shouldClickThrough = config.shouldClickThrough ?? ((el) => el.matches(".tracky-mouse-click-through, .tracky-mouse-click-through *"));
 
 	// trackyMouseContainer.querySelector(".tracky-mouse-canvas").classList.add("inset-deep");
 
@@ -222,10 +228,9 @@ const initDwellClicking = (config) => {
 			return null;
 		}
 
-		const skip = ".tracky-mouse-click-through, .tracky-mouse-click-through *";
-		if (target.matches(skip)) {
+		if (shouldClickThrough(target)) {
 			const elements = document.elementsFromPoint(clientX, clientY);
-			target = elements.find(el => !el.matches(skip));
+			target = elements.find(el => !shouldClickThrough(el));
 			if (!target) {
 				return null;
 			}

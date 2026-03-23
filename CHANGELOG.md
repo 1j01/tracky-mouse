@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- The dwell clicker will now ignore elements with the class `tracky-mouse-click-through`, and will click behind them. In most cases `pointer-events: none` can be used instead, but this new class is useful for specifically blocking system mouse interaction without blocking Tracky Mouse.
+- In the dwell clicker API, added `config.shouldClickThrough(el)` hook to allow ignoring elements and clicking behind them.
+  - By default, it will match elements with the class `.tracky-mouse-click-through`.
+  - In most cases `pointer-events: none` can be used instead. The new API is useful for specifically blocking system mouse interaction without blocking Tracky Mouse. This is used in the archery mini-game on the website to temporarily disable system mouse interaction when you're using head tracking, to improve the accuracy of categorizing input methods on the scoreboard.
 
 ## [2.6.0] - 2026-03-21
 
