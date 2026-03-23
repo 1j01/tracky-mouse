@@ -21,10 +21,8 @@ addEventListener("pointermove", (event) => {
 
 const TRACKY_MOUSE_POINTER_ID = 1234567890; // a special value so other code can detect these simulated events
 
-// CCDDEFEF is the rhyming scheme of stanza 2 of "Ode" by Arthur O'Shaughnessy
-// and 10 is my initials in leetspeak
-// erq ureevat
-const GAMEPAD_POINTER_ID = 0xCCDDEFEF10;
+// CCDDEFEF is the rhyming scheme of stanza 2 of "Ode" by Arthur O'Shaughnessy (erq ureevat)
+const GAMEPAD_POINTER_ID = 0xCCDDEFEF;
 
 let _temporaryPointerIdOverride = null;
 

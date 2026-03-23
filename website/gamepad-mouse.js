@@ -66,8 +66,8 @@ function accept(gp) {
 		if (pressed && !prevButtons[index]) {
 			nibbleBuffer.push(index);
 			const hex = nibbleBuffer.map(n => n.toString(16)).join('');
-			const TARGET_HEX = accept.name.slice(1, 3) + (lastPointerId >>> 0).toString(16);
-			console.log(`Pressed ${index} → ${hex}; target: ${TARGET_HEX}`);
+			const TARGET_HEX = (lastPointerId >>> 0).toString(16) + '10';
+			console.log(`Pressed ${index} → ${hex}; target: ${TARGET_HEX} (from pointerId ${lastPointerId})`);
 			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
 			}
