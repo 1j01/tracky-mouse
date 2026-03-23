@@ -22,6 +22,13 @@ const inputSimulator = window.inputSimulator = new InputSimulator();
 
 const initOptions = {
 	// All of these options are UNSTABLE
+	// HUD support and support for clicking modes other than dwell clicking
+	// should eventually be built in by default.
+	// These options glue the systems together which previously
+	// were only desktop app features, as a proof of concept
+	// which is very helpful on the path to bringing it into the API.
+	// If you do decide to copy from this demo, make sure to pin tracky-mouse to
+	// an exact version, and expect breaking changes in any update.
 	updateInputFeedback: (data) => {
 		inputFeedback = data;
 		updateHUD();
