@@ -21,15 +21,35 @@ indicator.style.pointerEvents = "none";
 indicator.style.transform = "translate(-50%, -50%)";
 indicator.style.zIndex = "800000"; // below .tracky-mouse-cursor and inputFeedbackCanvas
 
-// TODO: exponential speed curve
-// TODO: deadzone (zero speed zone)
-// TODO: block clicks while autoscrolling with a full-page transparent element,
-// so it doesn't doubly-act when stopping locked autoscroll with a click.
-
 const lockingClickRadius = 10; // pixels
-const scrollSpeed = 0.5; // scrolled pixels per pixel of distance from start point
+const scrollSpeed = 0.01;
+const scrollExponent = 1.6;
+const deadZone = 10; // pixels (taxicab distance)
+const maxDeltaTime = 100; // milliseconds
+
+
+// Block clicks with a full-page transparent element while autoscrolling,
+// so it doesn't doubly-act when stopping locked autoscroll with a click.
+const clickBlocker = document.createElement("div");
+clickBlocker.style.position = "fixed";
+clickBlocker.style.left = "0";
+clickBlocker.style.top = "0";
+clickBlocker.style.width = "100%";
+clickBlocker.style.height = "100%";
+clickBlocker.style.zIndex = "1000000";
+clickBlocker.style.pointerEvents = "auto"; // default
+clickBlocker.style.backgroundColor = "transparent"; // default (but could override weird CSS ig)
+clickBlocker.addEventListener("pointerdown", (event) => {
+	event.stopPropagation();
+	event.preventDefault();
+	autoscroll.stopAutoscroll();
+});
 
 export const autoscroll = {
+	_start: null,
+	_currentScrollDelta: null,
+	_lastTimestamp: null,
+	_animationFrameRequest: null,
 	pointerDown(target, x, y, buttonIndex = 0) {
 		if (buttonIndex !== 1) {
 			this.stopAutoscroll();
@@ -49,22 +69,49 @@ export const autoscroll = {
 		indicator.style.left = `${x}px`;
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
+		document.body.appendChild(clickBlocker);
 		this._start = { x, y, target };
-		// Update arrow visibility immediately
-		// TODO: pointermove should be sent when pointerdown happens
-		this.pointerMove(target, x, y);
+		this._currentScrollDelta = null;
+		this._lastTimestamp = performance.now();
+		// Update arrow visibility immediately, and start animation loop
+		this.updateAutoscroll();
 	},
 	stopAutoscroll() {
 		this._start = null;
 		if (indicator.parentElement) {
 			document.body.removeChild(indicator);
 		}
+		if (clickBlocker.parentElement) {
+			document.body.removeChild(clickBlocker);
+		}
+		cancelAnimationFrame(this._animationFrameRequest);
+		this._animationFrameRequest = null;
 	},
 	pointerMove(_target, x, y) {
 		if (!this._start) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
-		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
+		// Note: Don't return early if within deadzone,
+		// because we still want to update the indicator arrows.
+		if (Math.abs(diff.x) < deadZone) diff.x = 0;
+		if (Math.abs(diff.y) < deadZone) diff.y = 0;
+		diff.x -= Math.sign(diff.x) * deadZone;
+		diff.y -= Math.sign(diff.y) * deadZone;
 
+		// Note: there's a question of whether to apply the exponent or multiplier first.
+		// I think with exponent after multiplier, adjusting the exponent changes the
+		// average speed less for nominal values of input/exponent/multiplier,
+		// making it more intuitive to tweak the curvature,
+		// but tweaking the multiplier may be more intuitive, at least in a strict mathematical sense,
+		// with the exponent applied first.
+		// The set of curves expressible should be equal.
+		// As an aside, switching between the two orders could be easier if we used one variable
+		// instead of both `diff` and `scrollDelta`. I doubt it would harm clarity.
+		const scrollDelta = { x: diff.x * scrollSpeed, y: diff.y * scrollSpeed };
+		scrollDelta.x = Math.sign(scrollDelta.x) * Math.pow(Math.abs(scrollDelta.x), scrollExponent);
+		scrollDelta.y = Math.sign(scrollDelta.y) * Math.pow(Math.abs(scrollDelta.y), scrollExponent);
+		this._currentScrollDelta = scrollDelta;
+	},
+	getScrollable() {
 		let container = this._start.target;
 		let canScrollX = false;
 		let canScrollY = false;
@@ -102,11 +149,29 @@ export const autoscroll = {
 			canScrollX = document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth;
 			canScrollY = document.scrollingElement.scrollHeight > document.scrollingElement.clientHeight;
 		}
-		container.scrollBy(scrollDelta.x, scrollDelta.y);
+		return { container, canScrollX, canScrollY };
+	},
+	updateAutoscroll() {
+		const deltaTime = Math.min(maxDeltaTime, performance.now() - this._lastTimestamp);
+		// Note: we could optimize by not calling getScrollable every frame
+		const { container, canScrollX, canScrollY } = this.getScrollable();
+		const scrollDelta = this._currentScrollDelta;
+		if (scrollDelta) {
+			// Note: scrolling might be limited to integers, which could cause it to not scroll at low speeds,
+			// especially at high frame rates,
+			// and affect the accuracy of deltaTime-based movement. We could accumulate fractional scroll
+			// deltas and apply them when they reach a whole pixel.
+			container.scrollBy(scrollDelta.x * deltaTime, scrollDelta.y * deltaTime);
+		}
 
 		for (const arrow of indicator.querySelectorAll("[data-axis]")) {
 			const axis = arrow.dataset.axis;
 			arrow.style.display = (axis === "x" ? canScrollX : canScrollY) ? "" : "none";
 		}
+
+		this._lastTimestamp = performance.now();
+
+		cancelAnimationFrame(this._animationFrameRequest);
+		this._animationFrameRequest = requestAnimationFrame(() => this.updateAutoscroll());
 	},
 };

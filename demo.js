@@ -106,12 +106,19 @@ const inputSimulator = window.inputSimulator = {
 			bubbles: true,
 			cancelable: true,
 		}));
-		target.dispatchEvent(event);
+		const result = target.dispatchEvent(event);
 		this.pointerDownElement = target;
 
-		window.getSelection()?.removeAllRanges();
-		this.textSelectionStart = this.caretPositionFromPoint(x, y);
-
+		// TODO: don't deselect when starting autoscroll
+		// TODO: also dispatch mouse* events and let mousedown cancel selection too
+		if (result) {
+			window.getSelection()?.removeAllRanges();
+			this.textSelectionStart = this.caretPositionFromPoint(x, y);
+		} else {
+			this.textSelectionStart = null;
+		}
+		// TODO: allow preventing MMB scroll? but make sure not to break
+		// autoscroll ending behavior
 		autoscroll.pointerDown(target, x, y, buttonIndex);
 	},
 	pointerUp(target, x, y, buttonIndex = 0) {
@@ -269,7 +276,7 @@ const inputSimulator = window.inputSimulator = {
 				const newIndex = highlightIndex === -1 ? 0 : ((highlightIndex + dy + buttons.length) % buttons.length);
 				highlightIndex = newIndex;
 				updateHighlightStyles();
-				buttons[newIndex].scrollIntoView({ block: "nearest" });
+				buttons[newIndex].scrollIntoView({ block: "nearest", container: "nearest" });
 				dropdownValueToBeWhenClosed = buttons[newIndex].dataset.value;
 				dropdownDisplayButton.value = buttons[newIndex].dataset.value;
 				event.preventDefault();
