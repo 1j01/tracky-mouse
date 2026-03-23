@@ -1,8 +1,44 @@
+// ARCHERY MINI-GAME
+
+// TODO: separate out input categorization logic from the game code
+
 const archery_game = document.getElementById("archery-demo");
 const archery_scoreboard = document.getElementById("archery-scoreboard");
 const archery_targets = document.querySelectorAll(".archery-target");
+
+// This "cursor guard" is used to block (and hide) the system cursor
+// when the player is using head tracking, to prevent spuriously
+// categorizing the round as having used manual mouse movement.
+// Without this in place, there was an issue where the animation of the targets
+// could cause pointerenter events on the targets even for a static cursor,
+// which would disqualify the player from the head tracking categories.
+const cursor_guard = document.createElement("div");
+cursor_guard.style.display = "none";
+cursor_guard.style.position = "fixed";
+cursor_guard.style.width = "20px";
+cursor_guard.style.height = "20px";
+cursor_guard.style.backgroundColor = "transparent";
+cursor_guard.style.zIndex = "800000";
+cursor_guard.style.cursor = "none";
+cursor_guard.classList.add("tracky-mouse-click-through"); // only block system cursor, not TM
+document.body.append(cursor_guard);
+let system_mouse_pos = { x: 0, y: 0 };
+addEventListener("pointermove", (event) => {
+	if (event.pointerId !== 1234567890) {
+		system_mouse_pos = { x: event.clientX, y: event.clientY };
+	}
+});
+cursor_guard.addEventListener("pointerleave", (event) => {
+	// In case you decide to use the mouse part way through a round,
+	// or decide to stop playing, don't leave an invisible no clicking region around.
+	if (event.pointerId !== 1234567890) {
+		cursor_guard.style.display = "none";
+	}
+});
+
 let round;
 const best_times = {
+	// TODO: distinguish different TM clicking modes (dwell, wink, open mouth)
 	with_head_tracker: Infinity,
 	with_dwell_clicker: Infinity,
 	with_dwell_clicker_touch: Infinity, // unlikely, since touch doesn't have hovering (except on a few phones, as a gimmick; dunno if they trigger events with pointerType "touch" for hovering)
@@ -25,8 +61,29 @@ function initRound() {
 		used_unknown_input: false, // click event despite preventing via keydown/pointerdown
 		start_time: undefined, // set when the first target is hit
 	};
+	// FIXME: targets can get stuck visibly down
 	for (const archery_target of archery_targets) {
 		archery_target.classList.remove("hit");
+	}
+
+	// Debug: log all changes to `round` object
+	let enableDebug = false;
+	try {
+		if (localStorage.getItem("tracky-mouse-archery-debug") === "true") {
+			enableDebug = true;
+		}
+	} catch (_error) {
+		// ignore localStorage access errors
+	}
+	if (enableDebug) {
+		round = new Proxy(round, {
+			set(target, prop, value) {
+				console.log(`round.${prop} = ${JSON.stringify(value)}`);
+				target[prop] = value;
+				return true;
+			},
+		});
+		console.log("New round");
 	}
 }
 initRound();
@@ -59,17 +116,19 @@ archery_game.addEventListener("click", (event) => {
 	round.used_unknown_input = true;
 	handleTargetHit(event);
 });
-archery_game.addEventListener("pointerenter", (event) => {
-	if (event.pointerId === 1234567890) {
-		return;
-	}
-	round.used_manual_movement = true;
-	if (event.pointerType === "pen") {
-		round.used_manual_movement_pen = true;
-	} else if (event.pointerType === "touch") {
-		round.used_manual_movement_touch = true;
-	}
-});
+for (const archery_target of archery_targets) {
+	archery_target.addEventListener("pointerenter", (event) => {
+		if (event.pointerId === 1234567890) {
+			return;
+		}
+		round.used_manual_movement = true;
+		if (event.pointerType === "pen") {
+			round.used_manual_movement_pen = true;
+		} else if (event.pointerType === "touch") {
+			round.used_manual_movement_touch = true;
+		}
+	});
+}
 
 /**
  * @returns {keyof typeof best_times} scoreboard_slot - the slot in the scoreboard for the current input method (the most powerful, if it's ambiguous)
@@ -125,7 +184,7 @@ const slot_labels = {
 	with_dwell_clicker: "With Dwell Clicking", // may be pen, undetectable in some cases
 	with_dwell_clicker_touch: "With Dwell Clicking (Touch)",
 	with_dwell_clicker_pen: "With Dwell Clicking (Pen)",
-	with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"
+	with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"; TODO: "Mouse*" with a note below could be clearer
 	with_touch: "With Touch",
 	with_pen: "With Pen",
 	with_keyboard: "With Keyboard",
@@ -144,15 +203,21 @@ function handleTargetHit(event) {
 	}
 	const archery_target = event.target;
 	if (!round.start_time) {
-		initRound(); // reset input detection to ignore spurious hovering before the round starts
+		// reset input detection to ignore spurious hovering before the round starts
+		// TODO: include first click's type in the detection
+		// Maybe a better way to avoid "spurious hovering" affecting the detection
+		// would be to keep track of the type of the only the last pointermove (or pointerenter)
+		// before each target is clicked, instead of any time during a round.
+		// This would avoid a bumped mouse disqualifying you from head tracking categories.
+		// Technically it would open it up to combining inputs if you're careful,
+		// but this isn't an e-sport, it's a tech demo.
+		initRound();
 		round.start_time = performance.now();
 		archery_scoreboard.hidden = true;
 	}
 	// after initRound since initRound removes the .hit class
 	archery_target.classList.add("hit");
-	animateTargetHit(archery_target).then(() => {
-		// archery_target.classList.remove("hit");
-	});
+	animateTargetHit(archery_target);
 	if (document.querySelectorAll(".archery-target:not(.hit)").length === 0) {
 		const time = (performance.now() - round.start_time) / 1000;
 		archery_scoreboard.hidden = false;
@@ -199,6 +264,18 @@ function handleTargetHit(event) {
 				initRound();
 			}, 100);
 		}, 2000);
+	}
+
+	if (!round.used_manual_movement) {
+		// If the first target was hit without manual movement,
+		// avoid detecting manual movement later due to target animations
+		// moving in and out of the system cursor's position
+		// by placing an invisible element under the cursor.
+		cursor_guard.style.display = "";
+		cursor_guard.style.left = `${system_mouse_pos.x - cursor_guard.offsetWidth / 2}px`;
+		cursor_guard.style.top = `${system_mouse_pos.y - cursor_guard.offsetHeight / 2}px`;
+	} else {
+		cursor_guard.style.display = "none";
 	}
 }
 

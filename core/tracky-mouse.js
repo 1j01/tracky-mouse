@@ -222,6 +222,15 @@ const initDwellClicking = (config) => {
 			return null;
 		}
 
+		const skip = ".tracky-mouse-click-through, .tracky-mouse-click-through *";
+		if (target.matches(skip)) {
+			const elements = document.elementsFromPoint(clientX, clientY);
+			target = elements.find(el => !el.matches(skip));
+			if (!target) {
+				return null;
+			}
+		}
+
 		let hoverCandidate = {
 			x: clientX,
 			y: clientY,
@@ -365,6 +374,9 @@ const initDwellClicking = (config) => {
 						showOccluderIndicator(apparentHoverCandidate.target);
 					}
 				} else {
+					// TODO: ignore .tracky-mouse-click-through elements here as well
+					// TODO: distinguish occlusion vs moved element (i.e. element is no longer in the elementsFromPoint list)
+					// for example for the archery targets in the demo on the website, which animate
 					let occluder = document.elementFromPoint(hoverCandidate.x, hoverCandidate.y);
 					hoverCandidate = null;
 					deactivateForAtLeast(inactiveAfterInvalidTimespan);

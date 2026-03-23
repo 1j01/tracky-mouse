@@ -52,7 +52,7 @@ const inputSimulator = window.inputSimulator = {
 	},
 	pointerMove(x, y) {
 		// TODO: handle persistent button state
-		const target = document.elementFromPoint(x, y) || document.body;
+		const target = this.targetFromPoint(x, y);
 		if (target !== this.lastElOver) {
 			if (this.lastElOver) {
 				const event = new PointerEvent("pointerleave", Object.assign(this.getEventOptions({ x, y }), {
@@ -155,7 +155,7 @@ const inputSimulator = window.inputSimulator = {
 	setMouseButtonState(buttonIndex, pressed) {
 		if (this.buttonStates[buttonIndex] !== pressed) {
 			const { x, y } = mousePosition;
-			const target = document.elementFromPoint(x, y) || document.body;
+			const target = this.targetFromPoint(x, y);
 			if (pressed) {
 				this.pointerDown(target, x, y, buttonIndex);
 			} else {
@@ -489,6 +489,25 @@ const inputSimulator = window.inputSimulator = {
 			return null;
 		}
 		throw new Error('Neither caretPositionFromPoint nor caretRangeFromPoint is supported.');
+	},
+	targetFromPoint: (x, y) => {
+		const skip = ".tracky-mouse-click-through, .tracky-mouse-click-through *";
+		const fallback = document.body; // would documentElement make more sense?
+
+		let target = document.elementFromPoint(x, y);
+		if (!target) {
+			return fallback;
+		}
+
+		if (target.matches(skip)) {
+			const elements = document.elementsFromPoint(x, y);
+			target = elements.find(el => !el.matches(skip));
+			if (!target) {
+				return fallback;
+			}
+		}
+
+		return target || fallback;
 	},
 };
 

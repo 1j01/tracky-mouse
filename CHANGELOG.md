@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Added
+
+- The dwell clicker will now ignore elements with the class `tracky-mouse-click-through`, and will click behind them. In most cases `pointer-events: none` can be used instead, but this new class is useful for specifically blocking system mouse interaction without blocking Tracky Mouse.
 
 ## [2.6.0] - 2026-03-21
 
