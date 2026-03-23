@@ -69,19 +69,17 @@ function detectSecretCode(gp) {
 
 		// detect rising edge (new press only)
 		if (pressed && !prevButtons[index]) {
-			const nibble = index & 0xF; // ensure 0–15
+			const nibble = index;// & 0xF; // ensure 0–15
 
 			nibbleBuffer.push(nibble);
 
 			const hex = nibblesToHex(nibbleBuffer);
 			console.log(`Pressed ${index} → nibble ${nibble} → ${hex}`);
 
-			// Trim buffer if it gets longer than target
-			if (hex.length > TARGET_HEX.length) {
+			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
 			}
 
-			// Check match
 			if (hex === TARGET_HEX) {
 				console.log("MATCH!");
 			}
