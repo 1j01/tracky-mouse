@@ -1,8 +1,4 @@
 
-// CCDDEFEF is the rhyming scheme of stanza 2 of "Ode" by Arthur O'Shaughnessy
-// and 10 is my initials in leetspeak
-// erq ureevat
-const GAMEPAD_POINTER_ID = 0xCCDDEFEF10;
 
 const pointer = document.createElement("div");
 pointer.id = "gamepad-mouse-pointer";
@@ -10,10 +6,11 @@ pointer.style.position = "fixed";
 pointer.style.pointerEvents = "none";
 pointer.style.transform = "translate(-50%, -50%)";
 pointer.style.zIndex = "800000";
+pointer.textContent = "🎮";
 document.body.appendChild(pointer);
 
 const deadZone = 0.15;
-const maxSpeed = 0.01; // pixels per millisecond
+const maxSpeed = 1; // pixels per millisecond
 
 let gamepadMousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let lastTimestamp = null;
@@ -48,7 +45,13 @@ export function updateGamepadMouse(inputSimulator) {
 	pointer.style.left = `${gamepadMousePos.x}px`;
 	pointer.style.top = `${gamepadMousePos.y}px`;
 
-	// TODO: send pointer events using inputSimulator
+	// send pointer events using inputSimulator
+	window._temporaryPointerIdOverride = GAMEPAD_POINTER_ID;
+	inputSimulator.pointerMove(gamepadMousePos.x, gamepadMousePos.y);
+	delete window._temporaryPointerIdOverride;
 }
+
+
+const KONAMI_CODE_NIBBLES = GAMEPAD_POINTER_ID;
 
 

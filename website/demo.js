@@ -18,6 +18,16 @@ addEventListener("pointermove", (event) => {
 // Pointer event simulation logic should be built into tracky-mouse in the future.
 // These simulated events connect the Tracky Mouse head tracker to the Tracky Mouse dwell clicker,
 // as well as any other pointermove/pointerenter/pointerleave/click handlers on the page.
+
+const TRACKY_MOUSE_POINTER_ID = 1234567890; // a special value so other code can detect these simulated events
+
+// CCDDEFEF is the rhyming scheme of stanza 2 of "Ode" by Arthur O'Shaughnessy
+// and 10 is my initials in leetspeak
+// erq ureevat
+const GAMEPAD_POINTER_ID = 0xCCDDEFEF10;
+
+let _temporaryPointerIdOverride = null;
+
 const inputSimulator = window.inputSimulator = {
 	buttonStates: {
 		0: false,
@@ -30,7 +40,7 @@ const inputSimulator = window.inputSimulator = {
 			view: window, // needed so the browser can calculate offsetX/Y from the clientX/Y
 			clientX: x,
 			clientY: y,
-			pointerId: 1234567890, // a special value so other code can detect these simulated events
+			pointerId: _temporaryPointerIdOverride ?? TRACKY_MOUSE_POINTER_ID,
 			pointerType: "mouse",
 			isPrimary: true,
 		};
@@ -677,6 +687,41 @@ updateHUD();
 
 // Archery mini-game
 import("./archery-mini-game.js");
+
+// Gamepad support for comparison in archery mini-game
+import("./gamepad-mouse.js").then(({ updateGamepadMouse }) => {
+
+	// Total hack to postpone converting inputSimulator into a class
+	// TODO: maybe possibly consider converting inputSimulator into a class
+	const methodCache = {};
+	const gamepadInputSimulator = new Proxy(inputSimulator, {
+		get(target, prop, _receiver) {
+			if (prop in methodCache) {
+				return methodCache[prop];
+			}
+			if (prop in target) {
+				if (typeof target[prop] === "function") {
+					methodCache[prop] = (...args) => {
+						_temporaryPointerIdOverride = GAMEPAD_POINTER_ID;
+						const result = target[prop](...args);
+						_temporaryPointerIdOverride = null;
+						return result;
+					};
+					return methodCache[prop];
+				}
+				return target[prop];
+			}
+		},
+	});
+
+	addEventListener("gamepadconnected", () => {
+		const loop = () => {
+			updateGamepadMouse(gamepadInputSimulator);
+			requestAnimationFrame(loop);
+		};
+		loop();
+	}, { once: true });
+});
 
 // Enhance demo link with smooth scrolling
 document.querySelector('[href="#demo"]').addEventListener('click', function (event) {
