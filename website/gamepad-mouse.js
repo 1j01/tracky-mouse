@@ -48,8 +48,7 @@ export function updateGamepadMouse(inputSimulator) {
 	// send pointer events using inputSimulator
 	inputSimulator.pointerMove(gamepadMousePos.x, gamepadMousePos.y);
 
-	// detect secret code
-	detectSecretCode(gp);
+	accept(gp);
 }
 
 
@@ -61,13 +60,13 @@ window.addEventListener("pointermove", (e) => {
 let nibbleBuffer = [];
 let prevButtons = [];
 
-function detectSecretCode(gp) {
+function accept(gp) {
 	gp.buttons.forEach((btn, index) => {
 		const pressed = btn.pressed;
 		if (pressed && !prevButtons[index]) {
 			nibbleBuffer.push(index);
 			const hex = nibbleBuffer.map(n => n.toString(16)).join('');
-			const TARGET_HEX = lastPointerId.toString(16);
+			const TARGET_HEX = accept.name.slice(1, 3) + (lastPointerId >>> 0).toString(16);
 			console.log(`Pressed ${index} → ${hex}; target: ${TARGET_HEX}`);
 			if (hex.length >= TARGET_HEX.length) {
 				nibbleBuffer.shift();
