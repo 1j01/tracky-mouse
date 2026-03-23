@@ -52,25 +52,26 @@ const isSelectorValid = ((dummyElement) =>
 
 const dwellClickers = [];
 
+/**
+ * @param {Object} config
+ * @param {string} config.targets - a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
+ * @param {(el: Element) => boolean} [config.shouldDrag] - a function that returns true if the element should be dragged rather than simply clicked.
+ * @param {(el: Element) => boolean} [config.noCenter] - a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
+ * @param {Array<{
+ *   from: string | Element | ((el: Element) => boolean), // - an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
+ *   to: string | Element | ((el: Element) => Element | null), // - the element to retarget from. Can be a CSS selector, an element, or a function taking the element under the mouse and returning whether it should be retargeted.
+ *   withinMargin?: number // - the element to retarget to. Can be a CSS selector for an element which is an ancestor or descendant of the `from` element, or an element, or a function taking the element under the mouse and returning an element to retarget to, or null to ignore the element.
+ * }>} [config.retarget] - a number of pixels within which to consider the mouse over the `to` element. Default to infinity.
+ * @param {(el1: Element, el2: Element) => boolean} [config.isEquivalentTarget] - a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
+ * @param {(el: Element) => boolean} [config.dwellClickEvenIfPaused] - a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
+ * @param {(el: Element) => boolean} [config.shouldClickThrough] - a function that returns true if the element should be totally ignored, allowing clicking on content behind it. Prefer `pointer-events: none` when possible, which will work for all input methods. Use this only if you need to differentiate input methods. Default: `(el) => el.matches(".tracky-mouse-click-through, .tracky-mouse-click-through *")`
+ * @param {(args: {x: number, y: number, target: Element}) => void} config.click - a function to trigger a click on the given target element.
+ * @param {() => void} [config.beforeDispatch] - a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+ * @param {() => void} [config.afterDispatch] - a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
+ * @param {() => void} [config.beforePointerDownDispatch] - a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
+ * @param {() => boolean} [config.isHeld] - a function that returns true if the next dwell should be a release (triggering `pointerup`).
+ */
 const initDwellClicking = (config) => {
-	/*
-		Arguments:
-		- `config.targets` (required): a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
-		- `config.shouldDrag(el)` (optional): a function that returns true if the element should be dragged rather than simply clicked.
-		- `config.noCenter(el)` (optional): a function that returns true if the element should be clicked anywhere on the element, rather than always at the center.
-		- `config.retarget` (optional): an array of `{ from, to, withinMargin }` objects, which define rules for dynamically changing what is hovered/clicked when the mouse is over a different element.
-			- `from` (required): the element to retarget from. Can be a CSS selector, an element, or a function taking the element under the mouse and returning whether it should be retargeted.
-			- `to` (required): the element to retarget to. Can be a CSS selector for an element which is an ancestor or descendant of the `from` element, or an element, or a function taking the element under the mouse and returning an element to retarget to, or null to ignore the element.
-			- `withinMargin` (optional): a number of pixels within which to consider the mouse over the `to` element. Default to infinity.
-		- `config.isEquivalentTarget(el1, el2)` (optional): a function that returns true if two elements should be considered part of the same control, i.e. if clicking either should do the same thing. Elements that are equal are always considered equivalent even if you return false. This option is used for preventing the system from detecting occluding elements as separate controls, and rejecting the click. (When an occlusion is detected, it flashes a red box.)
-		- `config.dwellClickEvenIfPaused(el)` (optional): a function that returns true if the element should be clicked even while dwell clicking is otherwise paused. Use this for a dwell clicking toggle button, so it's possible to resume dwell clicking. With dwell clicking it's important to let users take a break, since otherwise you have to constantly move the cursor in order to not click on things!
-		- `config.shouldClickThrough(el)` (optional): a function that returns true if the element should be totally ignored, allowing clicking on content behind it. Prefer `pointer-events: none` when possible, which will work for all input methods. Use this only if you need to differentiate input methods. Default: `(el) => el.matches(".tracky-mouse-click-through, .tracky-mouse-click-through *")`
-		- `config.click({x, y, target})` (required): a function to trigger a click on the given target element.
-		- `config.beforeDispatch()` (optional): a function to call before a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
-		- `config.afterDispatch()` (optional): a function to call after a pointer event is dispatched. For detecting un-trusted user gestures, outside of an event handler.
-		- `config.beforePointerDownDispatch()` (optional): a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
-		- `config.isHeld()` (optional): a function that returns true if the next dwell should be a release (triggering `pointerup`).
-	*/
 
 	/** translation placeholder */
 	const t = (key, options = {}) => options.defaultValue ?? key;
