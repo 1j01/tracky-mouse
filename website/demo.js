@@ -7,7 +7,7 @@ TrackyMouse.dependenciesRoot = "./core";
 await TrackyMouse.loadDependencies();
 
 let dwellClicker = null;
-let activeSettings = {};
+export let activeSettings = {};
 let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {

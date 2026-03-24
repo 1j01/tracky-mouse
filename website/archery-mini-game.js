@@ -9,6 +9,7 @@
 //
 //  (ASCII art credit: Marc Leuchtenberger 2002)
 
+import { activeSettings } from "./demo.js"; // circular dependency
 import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
 import { TM_POINTER_ID } from "./input-simulator.js";
 
@@ -50,8 +51,9 @@ cursor_guard.addEventListener("pointerleave", (event) => {
 
 let round;
 const best_times = {
-	// TODO: distinguish different TM clicking modes (dwell, wink, open mouth)
 	with_head_tracker: Infinity,
+	with_open_mouth: Infinity,
+	with_wink: Infinity,
 	with_dwell_clicker: Infinity,
 	with_dwell_clicker_touch: Infinity, // unlikely, since touch doesn't have hovering (except on a few phones, as a gimmick; dunno if they trigger events with pointerType "touch" for hovering)
 	with_dwell_clicker_pen: Infinity,
@@ -64,6 +66,9 @@ const best_times = {
 };
 function initRound() {
 	round = {
+		// used_head_tracker: false,
+		used_open_mouth: false,
+		used_wink: false,
 		used_manual_movement: false, // non-head-tracker mouse movement
 		used_manual_movement_touch: false, // non-head-tracker mouse movement
 		used_manual_movement_pen: false, // non-head-tracker mouse movement
@@ -140,6 +145,12 @@ archery_game.addEventListener("click", (event) => {
 for (const archery_target of archery_targets) {
 	archery_target.addEventListener("pointerenter", (event) => {
 		if (event.pointerId === TM_POINTER_ID) {
+			const clicking_mode = activeSettings.clickingMode;
+			if (clicking_mode.match(/wink|blink/)) {
+				round.used_wink = true;
+			} else if (clicking_mode.includes("open-mouth")) {
+				round.used_open_mouth = true;
+			}
 			return;
 		}
 		if (event.pointerId === GAMEPAD_POINTER_ID) {
@@ -190,6 +201,10 @@ function get_scoreboard_slot() {
 	} else if (round.used_manual_movement) {
 		// (see previous comment)
 		return "with_dwell_clicker";
+	} else if (round.used_open_mouth) {
+		return "with_open_mouth";
+	} else if (round.used_wink) {
+		return "with_wink";
 	} else if (round.used_unknown_input) {
 		// this last one is a wild card; it's hard to say whether this condition should be last or first
 		// I imagine some other accessibility feature might trigger this
@@ -209,11 +224,18 @@ function get_scoreboard_slot() {
 }
 
 const slot_labels = {
-	with_head_tracker: "With Head Tracking",
-	with_dwell_clicker: "With Dwell Clicking", // may be pen, undetectable in some cases
+	with_head_tracker: "With Dwell Clicking",
+	with_open_mouth: "With Open Mouth Detection",
+	with_wink: "With Blink Detection", // "blink detection" sounds better and looks better (no confusion with "with"; with "wink" with "with", "with wink" will look like "with with" which will will you to think it's a typo)
+	with_dwell_clicker: "With Dwell Clicking (Mouse etc.)", // may be pen, undetectable in some cases
+	// with_head_tracker: "With Head Tracking + Dwell Clicking",
+	// with_open_mouth: "With Head Tracking + Open Mouth Detection",
+	// with_wink: "With Head Tracking + Wink Detection",
+	// with_dwell_clicker: "With Dwell Clicking (+ external movement)", // may be pen, undetectable in some cases
 	with_dwell_clicker_touch: "With Dwell Clicking (Touch)",
 	with_dwell_clicker_pen: "With Dwell Clicking (Pen)",
-	with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"; TODO: "Mouse*" with a note below could be clearer
+	// with_mouse: "With Manual Clicking", // may be pen, undetectable in some cases, hence "manual" instead of "mouse"; TODO: "Mouse*" with a note below could be clearer
+	with_mouse: "With Mouse (etc.)", // may be pen, undetectable in some cases
 	with_touch: "With Touch",
 	with_pen: "With Pen",
 	with_keyboard: "With Keyboard",
