@@ -87,7 +87,7 @@ export class InputSimulator {
 			}
 		}
 
-		autoscroll.pointerMove(target, x, y);
+		autoscroll.pointerMove(target, x, y, this.pointerId);
 	}
 	pointerDown(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture)
@@ -112,7 +112,7 @@ export class InputSimulator {
 		// TODO: allow preventing MMB scroll? but make sure not to break
 		// autoscroll ending behavior
 		// FIXME: using gamepad, it fails to stop autoscroll with MMB because it starts immediately again
-		autoscroll.pointerDown(target, x, y, buttonIndex);
+		autoscroll.pointerDown(target, x, y, buttonIndex, this.pointerId);
 	}
 	pointerUp(target, x, y, buttonIndex = 0) {
 		// TODO: handle nuance to moving across elements (nested elements, pointer capture), event cancellation?
@@ -142,7 +142,7 @@ export class InputSimulator {
 		this.pointerDownElement = null;
 
 		// TODO: support also MMB to open links in a new tab
-		autoscroll.pointerUp(target, x, y, buttonIndex);
+		autoscroll.pointerUp(target, x, y, buttonIndex, this.pointerId);
 	}
 	setMouseButtonState(buttonIndex, pressed) {
 		if (this.buttonStates[buttonIndex] !== pressed) {
