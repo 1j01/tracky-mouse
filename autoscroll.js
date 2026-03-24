@@ -45,32 +45,41 @@ clickBlocker.addEventListener("pointerdown", (event) => {
 	autoscroll.stopAutoscroll();
 });
 
+addEventListener("keydown", (event) => {
+	if (event.key === "Escape" && autoscroll._start) {
+		event.stopPropagation();
+		event.preventDefault();
+		autoscroll.stopAutoscroll();
+	}
+}, { capture: true });
+
 export const autoscroll = {
 	_start: null,
 	_currentScrollDelta: null,
 	_lastTimestamp: null,
 	_animationFrameRequest: null,
-	pointerDown(target, x, y, buttonIndex = 0) {
+	pointerDown(target, x, y, buttonIndex = 0, pointerId) {
 		if (buttonIndex !== 1) {
 			this.stopAutoscroll();
 			return;
 		}
 		if (target.closest("a")) return;
-		this.startAutoscroll(target, x, y);
+		this.startAutoscroll(target, x, y, pointerId);
 	},
-	pointerUp(_target, x, y, buttonIndex = 0) {
-		if (buttonIndex !== 1) return;
+	pointerUp(_target, x, y, buttonIndex = 0, _pointerId) {
+		// Allow any pointer to stop autoscroll, because it's more likely to be annoying if it gets stuck
+		if (buttonIndex !== 1 || !this._start) return;
 		if (Math.hypot(x - this._start.x, y - this._start.y) < lockingClickRadius) {
 			return; // lock autoscroll mode until next click
 		}
 		this.stopAutoscroll();
 	},
-	startAutoscroll(target, x, y) {
+	startAutoscroll(target, x, y, pointerId) {
 		indicator.style.left = `${x}px`;
 		indicator.style.top = `${y}px`;
 		document.body.appendChild(indicator);
 		document.body.appendChild(clickBlocker);
-		this._start = { x, y, target };
+		this._start = { x, y, target, pointerId };
 		this._currentScrollDelta = null;
 		this._lastTimestamp = performance.now();
 		// Update arrow visibility immediately, and start animation loop
@@ -78,6 +87,8 @@ export const autoscroll = {
 	},
 	stopAutoscroll() {
 		this._start = null;
+		this._currentScrollDelta = null;
+		this._lastTimestamp = null;
 		if (indicator.parentElement) {
 			document.body.removeChild(indicator);
 		}
@@ -87,8 +98,9 @@ export const autoscroll = {
 		cancelAnimationFrame(this._animationFrameRequest);
 		this._animationFrameRequest = null;
 	},
-	pointerMove(_target, x, y) {
-		if (!this._start) return;
+	pointerMove(_target, x, y, pointerId) {
+		// Don't allow other pointers to affect autoscroll started by a different pointer
+		if (!this._start || this._start.pointerId !== pointerId) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
 		// Note: Don't return early if within deadzone,
 		// because we still want to update the indicator arrows.
