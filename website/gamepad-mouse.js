@@ -147,6 +147,7 @@ export function updateGamepadMouse() {
 		if (targetingIndicator.remainingDuration <= 0) {
 			el.remove();
 			targetingIndicators.splice(i, 1);
+			return;
 		}
 
 		const target = inputSimulator.targetFromPoint(pagePos.x - window.scrollX, pagePos.y - window.scrollY);
@@ -160,6 +161,7 @@ export function updateGamepadMouse() {
 			inputSimulator.click(target, pagePos.x - window.scrollX, pagePos.y - window.scrollY);
 			el.remove();
 			targetingIndicators.splice(i, 1);
+			return;
 		}
 	};
 }
