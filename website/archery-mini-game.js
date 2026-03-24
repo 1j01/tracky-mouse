@@ -176,6 +176,10 @@ function get_scoreboard_slot() {
 	} else if (round.used_manual_click) {
 		// next easiest is clicking with a mouse (it's relative, but precise and familiar)
 		return "with_mouse";
+	} else if (round.used_gamepad_movement || round.used_gamepad_click) {
+		// not exactly sure of gamepad easiness relative to with_dwell_clicker_touch etc.
+		// but this is clear to detect
+		return "with_gamepad";
 	} else if (round.used_manual_movement_touch) {
 		// next easiest is moving the mouse but using the dwell clicker (it's precise but slower)
 		// not sure about touch vs pen/mouse in this case, as I don't have a touch screen supporting hover
@@ -186,10 +190,6 @@ function get_scoreboard_slot() {
 	} else if (round.used_manual_movement) {
 		// (see previous comment)
 		return "with_dwell_clicker";
-	} else if (round.used_gamepad_movement || round.used_gamepad_click) {
-		// maybe gamepad is easier than the dwell clicker, idk,
-		// i'm just not wanting to mess with "see previous comment" referentiality atm haha
-		return "with_gamepad";
 	} else if (round.used_unknown_input) {
 		// this last one is a wild card; it's hard to say whether this condition should be last or first
 		// I imagine some other accessibility feature might trigger this
