@@ -9,6 +9,9 @@
 //
 //  (ASCII art credit: Marc Leuchtenberger 2002)
 
+import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
+import { TM_POINTER_ID } from "./input-simulator.js";
+
 // TODO: separate out input categorization logic from the game code
 
 const archery_game = document.getElementById("archery-demo");
@@ -48,7 +51,6 @@ cursor_guard.addEventListener("pointerleave", (event) => {
 let round;
 const best_times = {
 	// TODO: distinguish different TM clicking modes (dwell, wink, open mouth)
-	// as well as gamepad (gamepad-mouse.js)
 	with_head_tracker: Infinity,
 	with_dwell_clicker: Infinity,
 	with_dwell_clicker_touch: Infinity, // unlikely, since touch doesn't have hovering (except on a few phones, as a gimmick; dunno if they trigger events with pointerType "touch" for hovering)
@@ -57,6 +59,7 @@ const best_times = {
 	with_touch: Infinity,
 	with_pen: Infinity,
 	with_keyboard: Infinity,
+	with_gamepad: Infinity,
 	with_unknown_input: Infinity,
 };
 function initRound() {
@@ -68,6 +71,8 @@ function initRound() {
 		used_manual_click_touch: false, // non-dwell clicking
 		used_manual_click_pen: false, // non-dwell clicking
 		used_keyboard: false, // not much of a game, but may be an interesting comparison
+		used_gamepad_click: false,
+		used_gamepad_movement: false,
 		used_unknown_input: false, // click event despite preventing via keydown/pointerdown
 		start_time: undefined, // set when the first target is hit
 	};
@@ -99,7 +104,11 @@ function initRound() {
 initRound();
 let last_pointerdown_time = -Infinity;
 archery_game.addEventListener("pointerdown", (event) => {
-	if (event.pointerId !== 1234567890) {
+	if (event.pointerId === GAMEPAD_POINTER_ID) {
+		round.used_gamepad_click = true;
+		return;
+	}
+	if (event.pointerId !== TM_POINTER_ID) {
 		// TODO: maybe only set if target was hit; could use a callback (or return value but that would be a little confusing since handleTargetHit looks like an event handler)
 		round.used_manual_click = true;
 		if (event.pointerType === "pen") {
@@ -123,12 +132,18 @@ archery_game.addEventListener("click", (event) => {
 	if (performance.now() - last_pointerdown_time < 100) {
 		return;
 	}
+	// This seems weird. Wouldn't click be normal for known as well as unknown input methods?
+	// What's the idea with the unknown flag anyways?
 	round.used_unknown_input = true;
 	handleTargetHit(event);
 });
 for (const archery_target of archery_targets) {
 	archery_target.addEventListener("pointerenter", (event) => {
-		if (event.pointerId === 1234567890) {
+		if (event.pointerId === TM_POINTER_ID) {
+			return;
+		}
+		if (event.pointerId === GAMEPAD_POINTER_ID) {
+			round.used_gamepad_movement = true;
 			return;
 		}
 		round.used_manual_movement = true;
@@ -171,6 +186,10 @@ function get_scoreboard_slot() {
 	} else if (round.used_manual_movement) {
 		// (see previous comment)
 		return "with_dwell_clicker";
+	} else if (round.used_gamepad_movement || round.used_gamepad_click) {
+		// maybe gamepad is easier than the dwell clicker, idk,
+		// i'm just not wanting to mess with "see previous comment" referentiality atm haha
+		return "with_gamepad";
 	} else if (round.used_unknown_input) {
 		// this last one is a wild card; it's hard to say whether this condition should be last or first
 		// I imagine some other accessibility feature might trigger this
@@ -198,6 +217,7 @@ const slot_labels = {
 	with_touch: "With Touch",
 	with_pen: "With Pen",
 	with_keyboard: "With Keyboard",
+	with_gamepad: "With Gamepad",
 	with_unknown_input: "With Unknown Input",
 };
 
