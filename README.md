@@ -170,7 +170,7 @@ When deploying with `npm run in-website -- npm run deploy`, it will prompt when 
 
 It will then be deployed to GitHub Pages using the [`gh-pages`](https://www.npmjs.com/package/gh-pages) npm package.
 
-Deploys can be rolled back by force-pushing to the `gh-pages` branch.
+Deploys can be rolled back by force-pushing to the `gh-pages` branch. The command `npm run in-website -- npm run deploy:rollback` rolls back the last deploy.
 
 
 ### Desktop App
