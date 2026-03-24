@@ -404,11 +404,11 @@ export class InputSimulator {
 
 		// Create an invisible select element for context menu positioning, in order to reuse the dropdown code
 		const select = document.createElement('select');
-		select.style.position = 'fixed';
-		select.style.left = `${x}px`;
+		select.style.position = 'absolute';
+		select.style.left = `${x + window.scrollX}px`;
 		const height = 16; // arbitrary (but maybe not zero? and should be accounted for if it's not zero)
 		select.style.height = `${height}px`;
-		select.style.top = `${y - height}px`;
+		select.style.top = `${y - height + window.scrollY}px`;
 		select.style.opacity = '0';
 		select.style.pointerEvents = 'none';
 		select.tabIndex = -1;
