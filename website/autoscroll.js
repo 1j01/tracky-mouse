@@ -66,8 +66,9 @@ export const autoscroll = {
 		if (target.closest("a")) return;
 		this.startAutoscroll(target, x, y, pointerId);
 	},
-	pointerUp(_target, x, y, buttonIndex = 0, pointerId) {
-		if (buttonIndex !== 1) return;
+	pointerUp(_target, x, y, buttonIndex = 0, _pointerId) {
+		// Allow any pointer to stop autoscroll, because it's more likely to be annoying if it gets stuck
+		if (buttonIndex !== 1 || !this._start) return;
 		if (Math.hypot(x - this._start.x, y - this._start.y) < lockingClickRadius) {
 			return; // lock autoscroll mode until next click
 		}
@@ -98,6 +99,7 @@ export const autoscroll = {
 		this._animationFrameRequest = null;
 	},
 	pointerMove(_target, x, y, pointerId) {
+		// Don't allow other pointers to affect autoscroll started by a different pointer
 		if (!this._start || this._start.pointerId !== pointerId) return;
 		const diff = { x: x - this._start.x, y: y - this._start.y };
 		// Note: Don't return early if within deadzone,
