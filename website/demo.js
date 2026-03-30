@@ -10,6 +10,7 @@ await TrackyMouse.loadDependencies();
 
 
 // Allow controlling the mouse, but pause if the mouse is moved normally.
+// TODO: bring this logic into the core
 const thresholdToRegainControl = 10; // in pixels
 const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 let regainControlTimeout = null; // also used to check if we're pausing temporarily
@@ -33,7 +34,7 @@ addEventListener("pointermove", (event) => {
 	if (event.pointerId !== TrackyMouse.pointerId && event.pointerId !== GAMEPAD_POINTER_ID) {
 		systemMousePosition = { ...mousePosition };
 
-		const curPos = systemMousePosition;
+		const curPos = systemMousePosition; // (name used in electron-main.js)
 		pruneMousePosHistory();
 		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
@@ -50,10 +51,8 @@ addEventListener("pointermove", (event) => {
 				regainControlTimeout = null; // used to check if we're pausing
 				console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 				updateDwellClickingEnabled();
-				updateHUD();
 			}, regainControlForTime);
 			updateDwellClickingEnabled();
-			updateHUD();
 			// Prevent immediately returning to manual control after switching to camera control
 			// based on head movement while in manual control mode.
 			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
