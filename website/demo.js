@@ -31,8 +31,39 @@ addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
 	const time = performance.now();
 	if (event.pointerId !== TrackyMouse.pointerId && event.pointerId !== GAMEPAD_POINTER_ID) {
-		mousePosHistory.push({ point: { ...mousePosition }, time });
 		systemMousePosition = { ...mousePosition };
+
+		const curPos = systemMousePosition;
+		pruneMousePosHistory();
+		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+		const distanceMoved = distances.length ? Math.min(...distances) : 0;
+		console.log("distanceMoved", distanceMoved);
+		if (distanceMoved > thresholdToRegainControl) {
+			if (regainControlTimeout === null) {
+				console.log("mousePosHistory", mousePosHistory);
+				console.log("distances", distances);
+				console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+				console.log("Pausing camera control due to manual mouse movement.");
+			}
+			clearTimeout(regainControlTimeout);
+			regainControlTimeout = setTimeout(() => {
+				regainControlTimeout = null; // used to check if we're pausing
+				console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+				updateDwellClickingEnabled();
+				updateHUD();
+			}, regainControlForTime);
+			updateDwellClickingEnabled();
+			updateHUD();
+			// Prevent immediately returning to manual control after switching to camera control
+			// based on head movement while in manual control mode.
+			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
+			// It may be a good idea to split `mousePosHistory` into two arrays,
+			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
+			// in order to handle maintaining manual control differently from switching to manual control,
+			// and/or for clarity of intent.
+			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
+		}
+		mousePosHistory.push({ point: { ...mousePosition }, time });
 	}
 	updateHUD();
 });
@@ -187,40 +218,11 @@ function updateDwellClickingEnabled() {
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	const curPos = systemMousePosition;
-	pruneMousePosHistory();
-	const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
-	const distanceMoved = distances.length ? Math.min(...distances) : 0;
-	console.log("distanceMoved", distanceMoved);
-	if (distanceMoved > thresholdToRegainControl) {
-		if (regainControlTimeout === null) {
-			console.log("mousePosHistory", mousePosHistory);
-			console.log("distances", distances);
-			console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
-			console.log("Pausing camera control due to manual mouse movement.");
-		}
-		clearTimeout(regainControlTimeout);
-		regainControlTimeout = setTimeout(() => {
-			regainControlTimeout = null; // used to check if we're pausing
-			console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
-			updateDwellClickingEnabled();
-			updateHUD();
-		}, regainControlForTime);
-		updateDwellClickingEnabled();
-		updateHUD();
-		// Prevent immediately returning to manual control after switching to camera control
-		// based on head movement while in manual control mode.
-		// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
-		// It may be a good idea to split `mousePosHistory` into two arrays,
-		// say `setMouseLocationHistory` and `getMouseLocationHistory`,
-		// in order to handle maintaining manual control differently from switching to manual control,
-		// and/or for clarity of intent.
-		mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
-	} else if (regainControlTimeout === null /*&& enabled*/) { // (shouldn't really get this event if enabled is false)
-		screenOverlay.updateMousePos(x, y); // UNSTABLE API
-		inputSimulator.pointerMove(x, y);
+	if (regainControlTimeout !== null) {
+		return;
 	}
-
+	screenOverlay.updateMousePos(x, y); // UNSTABLE API
+	inputSimulator.pointerMove(x, y);
 };
 
 function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
