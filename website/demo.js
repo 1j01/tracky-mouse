@@ -78,6 +78,9 @@ const initOptions = {
 		updateHUD();
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
+		if (regainControlTimeout !== null) {
+			return;
+		}
 		inputSimulator.setMouseButtonState(buttonIndex, pressed);
 	},
 	handleSettingsUpdate: (settings) => {
@@ -180,6 +183,9 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
+		if (regainControlTimeout !== null) {
+			return;
+		}
 		inputSimulator.click(target, x, y);
 	},
 	// Handle untrusted gestures specially in external code.
