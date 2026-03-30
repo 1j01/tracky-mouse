@@ -1,5 +1,6 @@
 /* global TrackyMouse */
 
+import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
 import { InputSimulator } from "./input-simulator.js";
 
 TrackyMouse.dependenciesRoot = "./core";
@@ -11,7 +12,7 @@ await TrackyMouse.loadDependencies();
 const thresholdToRegainControl = 10; // in pixels
 const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 let regainControlTimeout = null; // also used to check if we're pausing temporarily
-// let systemMousePosition = null;
+let systemMousePosition = null;
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
 function pruneMousePosHistory() {
@@ -28,7 +29,10 @@ let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
 	const time = performance.now();
-	mousePosHistory.push({ point: { ...mousePosition }, time });
+	if (event.pointerId !== TrackyMouse.pointerId && event.pointerId !== GAMEPAD_POINTER_ID) {
+		mousePosHistory.push({ point: { ...mousePosition }, time });
+		systemMousePosition = { ...mousePosition };
+	}
 	updateHUD();
 });
 
@@ -182,22 +186,22 @@ function updateDwellClickingEnabled() {
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	const curPos = { x, y };
+	const curPos = systemMousePosition;
 	pruneMousePosHistory();
 	const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 	const distanceMoved = distances.length ? Math.min(...distances) : 0;
-	// console.log("distanceMoved", distanceMoved);
+	console.log("distanceMoved", distanceMoved);
 	if (distanceMoved > thresholdToRegainControl) {
-		// if (regainControlTimeout === null) {
-		// 	console.log("mousePosHistory", mousePosHistory);
-		// 	console.log("distances", distances);
-		// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
-		// 	console.log("Pausing camera control due to manual mouse movement.");
-		// }
+		if (regainControlTimeout === null) {
+			console.log("mousePosHistory", mousePosHistory);
+			console.log("distances", distances);
+			console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+			console.log("Pausing camera control due to manual mouse movement.");
+		}
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = setTimeout(() => {
 			regainControlTimeout = null; // used to check if we're pausing
-			// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+			console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 			updateDwellClickingEnabled();
 			updateHUD();
 		}, regainControlForTime);
@@ -233,9 +237,7 @@ function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 function updateHUD() {
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
-	// TODO: implement manual takeback in web version
-	// https://github.com/1j01/tracky-mouse/issues/72
-	const isManualTakeback = false;
+	const isManualTakeback = regainControlTimeout !== null;
 	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
 	// UNSTABLE API
 	screenOverlay.update({
