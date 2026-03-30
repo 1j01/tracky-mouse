@@ -1,7 +1,8 @@
 /* global TrackyMouse */
 
-import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
+// import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
 import { InputSimulator } from "./input-simulator.js";
+const GAMEPAD_POINTER_ID = 1122343409; // avoiding loading gamepad-mouse.js until needed
 
 TrackyMouse.dependenciesRoot = "./core";
 
