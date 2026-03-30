@@ -213,7 +213,7 @@ function updateDwellClickingEnabled() {
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell";
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
-	virtualCursor.style.display = started ? "" : "none";
+	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0";
 	updateHUD();
 }
 updateDwellClickingEnabled();
