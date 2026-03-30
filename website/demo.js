@@ -11,6 +11,7 @@ await TrackyMouse.loadDependencies();
 
 // Allow controlling the mouse, but pause if the mouse is moved normally.
 // TODO: bring this logic into the core
+// https://github.com/1j01/tracky-mouse/issues/72
 const thresholdToRegainControl = 10; // in pixels
 const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
 let regainControlTimeout = null; // also used to check if we're pausing temporarily
