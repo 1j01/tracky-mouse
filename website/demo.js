@@ -241,7 +241,7 @@ function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 function updateHUD() {
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
-	const isManualTakeback = regainControlTimeout !== null;
+	const isManualTakeback = enabled && regainControlTimeout !== null;
 	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
 	// UNSTABLE API
 	screenOverlay.update({
