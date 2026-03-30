@@ -110,13 +110,6 @@ const initOptions = {
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		mousePosHistory.length = 0;
-		// if (nowEnabled) {
-		// 	// Avoid false positive for manual takeback.
-		// 	mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
-		// }
-		// if (systemMousePosition) {
-		// 	mousePosHistory.push({ point: { ...systemMousePosition }, time: performance.now(), from: "notifyToggleState" });
-		// }
 	},
 	clickingModeSupported: true,
 };
