@@ -30,14 +30,15 @@ let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
-	if (event.pointerId !== TrackyMouse.pointerId && event.pointerId !== GAMEPAD_POINTER_ID) {
+	console.log("pointermove", event.pointerId, TM_POINTER_ID, event.isTrusted);
+	if (event.pointerId !== TM_POINTER_ID && event.pointerId !== GAMEPAD_POINTER_ID) {
 		systemMousePosition = { ...mousePosition };
 
 		const curPos = systemMousePosition; // (name used in electron-main.js)
 		pruneMousePosHistory();
 		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
-		console.log("distanceMoved", distanceMoved);
+		console.log("distanceMoved", distanceMoved, "mousePosHistory.length", mousePosHistory.length);
 		if (distanceMoved > thresholdToRegainControl) {
 			if (regainControlTimeout === null) {
 				console.log("mousePosHistory", mousePosHistory);
@@ -117,7 +118,8 @@ const initOptions = {
 		// 	// Avoid false positive for manual takeback.
 		// 	mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		// }
-		mousePosHistory.push({ point: { ...mousePosition }, time: performance.now(), from: "notifyToggleState" });
+		// mousePosHistory.push({ point: { ...mousePosition }, time: performance.now(), from: "notifyToggleState" });
+		mousePosHistory.push({ point: { ...systemMousePosition }, time: performance.now(), from: "notifyToggleState" });
 	},
 	clickingModeSupported: true,
 };
