@@ -1,7 +1,7 @@
 /* global TrackyMouse */
 
 // import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
-import { InputSimulator } from "./input-simulator.js";
+import { InputSimulator, TM_POINTER_ID } from "./input-simulator.js";
 const GAMEPAD_POINTER_ID = 1122343409; // avoiding loading gamepad-mouse.js until needed
 
 TrackyMouse.dependenciesRoot = "./core";
@@ -53,15 +53,8 @@ addEventListener("pointermove", (event) => {
 				updateDwellClickingEnabled();
 			}, regainControlForTime);
 			updateDwellClickingEnabled();
-			// Prevent immediately returning to manual control after switching to camera control
-			// based on head movement while in manual control mode.
-			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
-			// It may be a good idea to split `mousePosHistory` into two arrays,
-			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
-			// in order to handle maintaining manual control differently from switching to manual control,
-			// and/or for clarity of intent.
-			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
 		}
+		mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "pointermove" });
 	}
 	updateHUD();
 });
