@@ -6,12 +6,29 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+
+// Allow controlling the mouse, but pause if the mouse is moved normally.
+const thresholdToRegainControl = 10; // in pixels
+const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
+let regainControlTimeout = null; // also used to check if we're pausing temporarily
+// let systemMousePosition = null;
+const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
+const mousePosHistory = [];
+function pruneMousePosHistory() {
+	const now = performance.now();
+	while (mousePosHistory[0] && now - mousePosHistory[0].time > mousePosHistoryDuration) {
+		mousePosHistory.shift();
+	}
+}
+
 let dwellClicker = null;
 export let activeSettings = {};
 let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
+	const time = performance.now();
+	mousePosHistory.push({ point: { ...mousePosition }, time });
 	updateHUD();
 });
 
@@ -58,6 +75,16 @@ const initOptions = {
 		// TODO: make the init API create/manage the dwell clicker,
 		// and accept clicking configuration
 		updateDwellClickingEnabled();
+
+		// Start immediately if enabled.
+		clearTimeout(regainControlTimeout);
+		regainControlTimeout = null;
+		mousePosHistory.length = 0;
+		// if (nowEnabled) {
+		// 	// Avoid false positive for manual takeback.
+		// 	mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
+		// }
+		mousePosHistory.push({ point: { ...mousePosition }, time: performance.now(), from: "notifyToggleState" });
 	},
 	clickingModeSupported: true,
 };
@@ -155,8 +182,40 @@ function updateDwellClickingEnabled() {
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	screenOverlay.updateMousePos(x, y); // UNSTABLE API
-	inputSimulator.pointerMove(x, y);
+	const curPos = { x, y };
+	pruneMousePosHistory();
+	const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+	const distanceMoved = distances.length ? Math.min(...distances) : 0;
+	// console.log("distanceMoved", distanceMoved);
+	if (distanceMoved > thresholdToRegainControl) {
+		// if (regainControlTimeout === null) {
+		// 	console.log("mousePosHistory", mousePosHistory);
+		// 	console.log("distances", distances);
+		// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+		// 	console.log("Pausing camera control due to manual mouse movement.");
+		// }
+		clearTimeout(regainControlTimeout);
+		regainControlTimeout = setTimeout(() => {
+			regainControlTimeout = null; // used to check if we're pausing
+			// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+			updateDwellClickingEnabled();
+			updateHUD();
+		}, regainControlForTime);
+		updateDwellClickingEnabled();
+		updateHUD();
+		// Prevent immediately returning to manual control after switching to camera control
+		// based on head movement while in manual control mode.
+		// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
+		// It may be a good idea to split `mousePosHistory` into two arrays,
+		// say `setMouseLocationHistory` and `getMouseLocationHistory`,
+		// in order to handle maintaining manual control differently from switching to manual control,
+		// and/or for clarity of intent.
+		mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
+	} else if (regainControlTimeout === null /*&& enabled*/) { // (shouldn't really get this event if enabled is false)
+		screenOverlay.updateMousePos(x, y); // UNSTABLE API
+		inputSimulator.pointerMove(x, y);
+	}
+
 };
 
 function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
