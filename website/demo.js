@@ -30,7 +30,6 @@ let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
-	const time = performance.now();
 	if (event.pointerId !== TrackyMouse.pointerId && event.pointerId !== GAMEPAD_POINTER_ID) {
 		systemMousePosition = { ...mousePosition };
 
@@ -62,7 +61,6 @@ addEventListener("pointermove", (event) => {
 			// and/or for clarity of intent.
 			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
 		}
-		mousePosHistory.push({ point: { ...mousePosition }, time });
 	}
 	updateHUD();
 });
