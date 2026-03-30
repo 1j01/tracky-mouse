@@ -30,7 +30,7 @@ let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
-	console.log("pointermove", event.pointerId, TM_POINTER_ID, event.isTrusted);
+	// console.log("pointermove", event.pointerId, TM_POINTER_ID, event.isTrusted);
 	if (event.pointerId !== TM_POINTER_ID && event.pointerId !== GAMEPAD_POINTER_ID) {
 		systemMousePosition = { ...mousePosition };
 
@@ -38,18 +38,18 @@ addEventListener("pointermove", (event) => {
 		pruneMousePosHistory();
 		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
-		console.log("distanceMoved", distanceMoved, "mousePosHistory", mousePosHistory, "distances", distances);
+		// console.log("distanceMoved", distanceMoved, "mousePosHistory", mousePosHistory, "distances", distances);
 		if (distanceMoved > thresholdToRegainControl) {
-			if (regainControlTimeout === null) {
-				console.log("mousePosHistory", mousePosHistory);
-				console.log("distances", distances);
-				console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
-				console.log("Pausing camera control due to manual mouse movement.");
-			}
+			// if (regainControlTimeout === null) {
+			// 	console.log("mousePosHistory", mousePosHistory);
+			// 	console.log("distances", distances);
+			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+			// 	console.log("Pausing camera control due to manual mouse movement.");
+			// }
 			clearTimeout(regainControlTimeout);
 			regainControlTimeout = setTimeout(() => {
 				regainControlTimeout = null; // used to check if we're pausing
-				console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
 				updateDwellClickingEnabled();
 			}, regainControlForTime);
 			updateDwellClickingEnabled();
