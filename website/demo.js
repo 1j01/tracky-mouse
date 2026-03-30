@@ -206,7 +206,7 @@ function updateDwellClickingEnabled() {
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
 	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell" || regainControlTimeout !== null;
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
-	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0";
+	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0.2";
 	updateHUD();
 }
 updateDwellClickingEnabled();
