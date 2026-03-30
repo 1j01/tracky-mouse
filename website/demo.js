@@ -38,7 +38,7 @@ addEventListener("pointermove", (event) => {
 		pruneMousePosHistory();
 		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
-		console.log("distanceMoved", distanceMoved, "mousePosHistory.length", mousePosHistory.length);
+		console.log("distanceMoved", distanceMoved, "mousePosHistory", mousePosHistory, "distances", distances);
 		if (distanceMoved > thresholdToRegainControl) {
 			if (regainControlTimeout === null) {
 				console.log("mousePosHistory", mousePosHistory);
@@ -114,8 +114,9 @@ const initOptions = {
 		// 	// Avoid false positive for manual takeback.
 		// 	mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		// }
-		// mousePosHistory.push({ point: { ...mousePosition }, time: performance.now(), from: "notifyToggleState" });
-		mousePosHistory.push({ point: { ...systemMousePosition }, time: performance.now(), from: "notifyToggleState" });
+		// if (systemMousePosition) {
+		// 	mousePosHistory.push({ point: { ...systemMousePosition }, time: performance.now(), from: "notifyToggleState" });
+		// }
 	},
 	clickingModeSupported: true,
 };
