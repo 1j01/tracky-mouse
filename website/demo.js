@@ -1,8 +1,6 @@
 /* global TrackyMouse */
 
-// import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
-import { InputSimulator, TM_POINTER_ID } from "./input-simulator.js";
-const GAMEPAD_POINTER_ID = 1122343409; // avoiding loading gamepad-mouse.js until needed
+import { InputSimulator } from "./input-simulator.js";
 
 TrackyMouse.dependenciesRoot = "./core";
 
@@ -31,8 +29,7 @@ let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
-	// console.log("pointermove", event.pointerId, TM_POINTER_ID, event.isTrusted);
-	if (event.pointerId !== TM_POINTER_ID && event.pointerId !== GAMEPAD_POINTER_ID) {
+	if (event.isTrusted) {
 		systemMousePosition = { ...mousePosition };
 
 		const curPos = systemMousePosition; // (name used in electron-main.js)
