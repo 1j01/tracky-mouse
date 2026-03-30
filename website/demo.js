@@ -204,7 +204,7 @@ function updateDwellClickingEnabled() {
 	if (!dwellClicker) return;
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
-	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell";
+	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell" || regainControlTimeout !== null;
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
 	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0";
 	updateHUD();
