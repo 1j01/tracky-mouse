@@ -48,8 +48,10 @@
   "files": [
     "tracky-mouse.js",
     "tracky-mouse.css",
+    "audio.js",
     "locales/",
     "images/",
+    "audio/",
     "lib/"
   ],
   "devDependencies": {

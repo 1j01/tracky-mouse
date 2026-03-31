@@ -14,6 +14,7 @@
 	// the new Quick Search (experimental), which I've been using a lot since it was released.
 	"search.exclude": {
 		"**/images": true,
+		"**/audio": true,
 		"**/lib": true,
 		"**/out": true,
 		// Symbolic link to the core library, causes duplicate/non-canonical search results.

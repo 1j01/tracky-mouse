@@ -52,6 +52,18 @@ const isSelectorValid = ((dummyElement) =>
 
 const dwellClickers = [];
 
+let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
+// Sound effects are disabled by default UNLESS the UI is initialized,
+// in which case there's a setting where you can turn them off.
+// This is a little awkward because the dwell clicker and UI are separate APIs,
+// but I think this is the most sensible thing for now.
+let soundEffectsEnabled = false;
+const playSoundIfEnabled = (...args) => {
+	if (soundEffectsEnabled) {
+		playSound(...args);
+	}
+};
+
 /**
  * @param {Object} config
  * @param {string} config.targets - a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
@@ -409,6 +421,7 @@ const initDwellClicking = (config) => {
 							})
 						));
 						config.afterDispatch?.();
+						playSoundIfEnabled("clickRelease");
 					} else {
 						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
@@ -421,6 +434,7 @@ const initDwellClicking = (config) => {
 						config.afterDispatch?.();
 						if (config.shouldDrag?.(hoverCandidate.target)) {
 							dwellDragging = hoverCandidate.target;
+							playSoundIfEnabled("clickPress");
 						} else {
 							config.beforeDispatch?.();
 							hoverCandidate.target.dispatchEvent(new PointerEvent("pointerup",
@@ -431,6 +445,8 @@ const initDwellClicking = (config) => {
 							));
 							config.click(hoverCandidate);
 							config.afterDispatch?.();
+							playSoundIfEnabled("clickPress");
+							playSoundIfEnabled("clickRelease", { delay: 0.03 }); // fully separating the sounds sounded worse
 						}
 					}
 					hoverCandidate = null;
@@ -607,6 +623,18 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// and it's not like we want to expose all electronAPI as part of the public API necessarily
 		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
+
+	try {
+		import("./audio.js").then((module) => {
+			const { initAudio } = module;
+			initAudio();
+			playSound = module.playSound;
+		}, (e) => {
+			console.warn("Failed to load audio module, click sounds will be disabled:", e);
+		});
+	} catch (e) {
+		console.warn("Failed to load audio support, click sounds will be disabled:", e);
+	}
 
 	const isDesktopApp = !!window.electronAPI;
 
@@ -2033,6 +2061,20 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			type: "group",
 			label: t("settings.sections.general.label", { defaultValue: "General" }),
 			settings: [
+				{
+					label: t("settings.soundEffects.label", { defaultValue: "Sound effects" }),
+					className: "tracky-mouse-sound-effects",
+					key: "soundEffects",
+					type: "checkbox",
+					default: true,
+					afterInitialLoad: () => {
+						soundEffectsEnabled = s.soundEffects;
+					},
+					handleSettingChange: () => {
+						soundEffectsEnabled = s.soundEffects;
+					},
+					description: t("settings.soundEffects.description", { defaultValue: "Plays sounds when you click." }),
+				},
 				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
 				{
 					label: t("settings.startEnabled.label", { defaultValue: "Start enabled" }),
@@ -2532,6 +2574,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				setting._load?.(settings, initialLoad);
 			});
 		}
+		soundEffectsEnabled = s.soundEffects;
 
 		// Now that all settings are loaded, update disabled states
 		for (const func of functionsToUpdateDisabledStates) {
@@ -3635,10 +3678,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						const buttonNames = ["left", "middle", "right"];
 						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
-							if ((clickButton === buttonIndex) !== buttonStates[buttonNames[buttonIndex]]) {
-								setMouseButtonState(buttonIndex, clickButton === buttonIndex);
-								buttonStates[buttonNames[buttonIndex]] = clickButton === buttonIndex;
-								if ((clickButton === buttonIndex)) {
+							const buttonIsActive = clickButton === buttonIndex;
+							if (buttonIsActive !== buttonStates[buttonNames[buttonIndex]]) {
+								setMouseButtonState(buttonIndex, buttonIsActive);
+								buttonStates[buttonNames[buttonIndex]] = buttonIsActive;
+								if (buttonIsActive) {
 									lastMouseDownTime = performance.now();
 								} else {
 									// Limit "Delay Before Dragging" effect to the duration of a click.
@@ -3646,6 +3690,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
 									lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
 								}
+								playSoundIfEnabled(buttonIsActive ? "clickPress" : "clickRelease");
 							}
 						}
 					}, () => {
