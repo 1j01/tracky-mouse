@@ -6,12 +6,54 @@ TrackyMouse.dependenciesRoot = "./core";
 
 await TrackyMouse.loadDependencies();
 
+
+// Allow controlling the mouse, but pause if the mouse is moved normally.
+// TODO: bring this logic into the core
+// https://github.com/1j01/tracky-mouse/issues/72
+const thresholdToRegainControl = 10; // in pixels
+const regainControlForTime = 2000; // in milliseconds, AFTER the mouse hasn't moved for more than mouseMoveRequestHistoryDuration milliseconds (I think)
+let regainControlTimeout = null; // also used to check if we're pausing temporarily
+let systemMousePosition = null;
+const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
+const mousePosHistory = [];
+function pruneMousePosHistory() {
+	const now = performance.now();
+	while (mousePosHistory[0] && now - mousePosHistory[0].time > mousePosHistoryDuration) {
+		mousePosHistory.shift();
+	}
+}
+
 let dwellClicker = null;
 export let activeSettings = {};
 let inputFeedback = {};
 let mousePosition = {};
 addEventListener("pointermove", (event) => {
 	mousePosition = { x: event.clientX, y: event.clientY };
+	if (event.isTrusted) {
+		systemMousePosition = { ...mousePosition };
+
+		const curPos = systemMousePosition; // (name used in electron-main.js)
+		pruneMousePosHistory();
+		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+		const distanceMoved = distances.length ? Math.min(...distances) : 0;
+		// console.log("distanceMoved", distanceMoved, "mousePosHistory", mousePosHistory, "distances", distances);
+		if (distanceMoved > thresholdToRegainControl) {
+			// if (regainControlTimeout === null) {
+			// 	console.log("mousePosHistory", mousePosHistory);
+			// 	console.log("distances", distances);
+			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+			// 	console.log("Pausing camera control due to manual mouse movement.");
+			// }
+			clearTimeout(regainControlTimeout);
+			regainControlTimeout = setTimeout(() => {
+				regainControlTimeout = null; // used to check if we're pausing
+				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+				updateDwellClickingEnabled();
+			}, regainControlForTime);
+			updateDwellClickingEnabled();
+		}
+		mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "pointermove" });
+	}
 	updateHUD();
 });
 
@@ -34,6 +76,9 @@ const initOptions = {
 		updateHUD();
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
+		if (regainControlTimeout !== null) {
+			return;
+		}
 		inputSimulator.setMouseButtonState(buttonIndex, pressed);
 	},
 	handleSettingsUpdate: (settings) => {
@@ -58,6 +103,11 @@ const initOptions = {
 		// TODO: make the init API create/manage the dwell clicker,
 		// and accept clicking configuration
 		updateDwellClickingEnabled();
+
+		// Start immediately if enabled.
+		clearTimeout(regainControlTimeout);
+		regainControlTimeout = null;
+		mousePosHistory.length = 0;
 	},
 	clickingModeSupported: true,
 };
@@ -125,6 +175,9 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
+		if (regainControlTimeout !== null) {
+			return;
+		}
 		inputSimulator.click(target, x, y);
 	},
 	// Handle untrusted gestures specially in external code.
@@ -149,12 +202,17 @@ function updateDwellClickingEnabled() {
 	if (!dwellClicker) return;
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const started = toggleButton.getAttribute("aria-pressed") === "true";
-	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell";
+	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell" || regainControlTimeout !== null;
+	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
+	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0.2";
 	updateHUD();
 }
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
+	if (regainControlTimeout !== null) {
+		return;
+	}
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
 	inputSimulator.pointerMove(x, y);
 };
@@ -174,9 +232,7 @@ function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 function updateHUD() {
 	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
 	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
-	// TODO: implement manual takeback in web version
-	// https://github.com/1j01/tracky-mouse/issues/72
-	const isManualTakeback = false;
+	const isManualTakeback = enabled && regainControlTimeout !== null;
 	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
 	// UNSTABLE API
 	screenOverlay.update({
