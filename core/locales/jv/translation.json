@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Alus",
   "settings.shared.sliderMinLinear": "Linier",
   "settings.shared.sliderMinSlow": "Alon",
+  "settings.soundEffects.description": "Mbunyekake swara nalika sampeyan klik.",
+  "settings.soundEffects.label": "Efek swara",
   "settings.startEnabled.description": "Yen diuripké, Tracky Mouse bakal langsung ngontrol kursor sakcepete diluncuraké.",
   "settings.startEnabled.description.alt1": "Nggawe Tracky Mouse aktif nalika diluncuraké. Yen ora, panjenengan bisa miwiti manual nalika wis siap.",
   "settings.startEnabled.description.alt2": "Nggawe Tracky Mouse langsung aktif sakcepete diluncuraké.",

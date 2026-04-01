@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Laini",
   "settings.shared.sliderMinLinear": "Mstari (linear)",
   "settings.shared.sliderMinSlow": "Polepole",
+  "settings.soundEffects.description": "Inacheza sauti unapobonyeza.",
+  "settings.soundEffects.label": "Athari za sauti",
   "settings.startEnabled.description": "Ikiwa imewezeshwa, Tracky Mouse itaanza kudhibiti kishale mara tu unapoizindua.",
   "settings.startEnabled.description.alt1": "Hufanya Tracky Mouse iwe hai inapozinduliwa. Vinginevyo, unaweza kuianzisha mwenyewe unapokuwa tayari.",
   "settings.startEnabled.description.alt2": "Hufanya Tracky Mouse iwe hai mara tu inapoanzishwa.",

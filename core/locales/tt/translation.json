@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Йомшартылган",
   "settings.shared.sliderMinLinear": "Сызыклы",
   "settings.shared.sliderMinSlow": "Әкрен",
+  "settings.soundEffects.description": "Басканда тавышлар яңгырата.",
+  "settings.soundEffects.label": "Тавыш эффектлары",
   "settings.startEnabled.description": "Әгәр кушылган булса, Tracky Mouse эшләтеп җибәрүгә үк курсор белән идарә итәргә башлый.",
   "settings.startEnabled.description.alt1": "Tracky Mouse эшләтеп җибәрелгәч үк актив була. Юк икән, кирәк булганда кулдан гына башлый аласыз.",
   "settings.startEnabled.description.alt2": "Tracky Mouse эшләтеп җибәрелү белән актив була.",

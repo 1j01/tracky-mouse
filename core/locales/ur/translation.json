@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "ہموار",
   "settings.shared.sliderMinLinear": "لکیری",
   "settings.shared.sliderMinSlow": "آہستہ",
+  "settings.soundEffects.description": "کلک کرنے پر آوازیں چلاتا ہے۔",
+  "settings.soundEffects.label": "آواز کے اثرات",
   "settings.startEnabled.description": "اگر فعال ہو تو، پروگرام چلتے ہی ٹریکی ماؤس فوراً کرسر پر کنٹرول حاصل کر لے گا۔",
   "settings.startEnabled.description.alt1": "جب ٹریکی ماؤس چلایا جائے تو اسے فوراً فعال بنا دیتا ہے، ورنہ آپ جب چاہیں اسے دستی طور پر شروع کر سکتے ہیں۔",
   "settings.startEnabled.description.alt2": "ٹریکی ماؤس کو چلتے ہی فعال بنا دیتا ہے۔",

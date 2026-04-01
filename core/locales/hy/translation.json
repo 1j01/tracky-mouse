@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Հարթ",
   "settings.shared.sliderMinLinear": "Գծային",
   "settings.shared.sliderMinSlow": "Դանդաղ",
+  "settings.soundEffects.description": "Սեղմելիս ձայներ է հնչեցնում:",
+  "settings.soundEffects.label": "Ձայնային էֆեկտներ",
   "settings.startEnabled.description": "Եթե միացված է, Tracky Mouse‑ը կսկսի կառավարել կուրսորը հենց գործարկվելուց հետո։",
   "settings.startEnabled.description.alt1": "Tracky Mouse‑ը գործարկվելուց հետո անմիջապես ակտիվացնում է։ Հակառակ դեպքում կարող եք այն սկսել ձեռքով, երբ պատրաստ եք։",
   "settings.startEnabled.description.alt2": "Tracky Mouse‑ը դարձնում է ակտիվ՝ անմիջապես գործարկվելուց հետո։",

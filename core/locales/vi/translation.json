@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Mượt",
   "settings.shared.sliderMinLinear": "Tuyến tính",
   "settings.shared.sliderMinSlow": "Chậm",
+  "settings.soundEffects.description": "Phát âm thanh khi bạn nhấp chuột.",
+  "settings.soundEffects.label": "Hiệu ứng âm thanh",
   "settings.startEnabled.description": "Khi bật, Tracky Mouse sẽ bắt đầu điều khiển con trỏ ngay khi được khởi chạy.",
   "settings.startEnabled.description.alt1": "Khi khởi chạy, Tracky Mouse sẽ hoạt động ngay. Nếu không, bạn có thể bật thủ công khi sẵn sàng.",
   "settings.startEnabled.description.alt2": "Khi khởi chạy, Tracky Mouse sẽ hoạt động ngay.",

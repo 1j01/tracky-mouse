@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Glata",
   "settings.shared.sliderMinLinear": "Linia",
   "settings.shared.sliderMinSlow": "Malrapida",
+  "settings.soundEffects.description": "Ludas sonojn kiam vi alklakos.",
+  "settings.soundEffects.label": "Sonaj efikoj",
   "settings.startEnabled.description": "Se ebligita, Tracky Mouse ekregos la kursoron tuj kiam ĝi lanĉiĝos.",
   "settings.startEnabled.description.alt1": "Aktivigas Tracky Mouse je lanĉo. Alikaze vi povas startigi ĝin permane kiam vi pretas.",
   "settings.startEnabled.description.alt2": "Faras Tracky Mouse aktiva tuj kiam ĝi estas lanĉita.",

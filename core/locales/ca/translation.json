@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Suau",
   "settings.shared.sliderMinLinear": "Lineal",
   "settings.shared.sliderMinSlow": "Lent",
+  "settings.soundEffects.description": "Reprodueix sons quan feu clic.",
+  "settings.soundEffects.label": "Efectes de so",
   "settings.startEnabled.description": "Si està activat, Tracky Mouse començarà a controlar el cursor tan bon punt s'obri.",
   "settings.startEnabled.description.alt1": "Fa que Tracky Mouse estigui actiu en obrir-se. Si no, el pots iniciar manualment quan vulguis.",
   "settings.startEnabled.description.alt2": "Fa que Tracky Mouse estigui actiu tan bon punt s'obri.",

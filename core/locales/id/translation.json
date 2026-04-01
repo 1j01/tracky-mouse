@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Halus",
   "settings.shared.sliderMinLinear": "Linear",
   "settings.shared.sliderMinSlow": "Lambat",
+  "settings.soundEffects.description": "Memutar suara saat Anda mengklik.",
+  "settings.soundEffects.label": "Efek suara",
   "settings.startEnabled.description": "Jika diaktifkan, Tracky Mouse akan langsung mengendalikan kursor begitu dijalankan.",
   "settings.startEnabled.description.alt1": "Membuat Tracky Mouse aktif saat dijalankan. Jika tidak, Anda dapat menjalankannya secara manual saat siap.",
   "settings.startEnabled.description.alt2": "Membuat Tracky Mouse aktif segera setelah dijalankan.",

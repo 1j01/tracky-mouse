@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "부드럽게",
   "settings.shared.sliderMinLinear": "선형",
   "settings.shared.sliderMinSlow": "느림",
+  "settings.soundEffects.description": "클릭할 때 소리를 재생합니다.",
+  "settings.soundEffects.label": "음향 효과",
   "settings.startEnabled.description": "이 옵션을 켜면 Tracky Mouse를 실행하자마자 커서를 제어하기 시작합니다.",
   "settings.startEnabled.description.alt1": "Tracky Mouse를 실행할 때 자동으로 활성화합니다. 끄면, 준비가 되었을 때 직접 시작할 수 있습니다.",
   "settings.startEnabled.description.alt2": "Tracky Mouse를 실행하는 즉시 활성화합니다.",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Silliq",
   "settings.shared.sliderMinLinear": "Chiziqli",
   "settings.shared.sliderMinSlow": "Sekin",
+  "settings.soundEffects.description": "Bosganingizda ovoz chiqaradi.",
+  "settings.soundEffects.label": "Ovoz effektlari",
   "settings.startEnabled.description": "Yoqqan bo‘lsa, Tracky Mouse ishga tushishi bilanoq kursorni boshqarishni boshlaydi.",
   "settings.startEnabled.description.alt1": "Tracky Mouse ishga tushirilganda darhol faol bo‘ladi. Aks holda, tayyor bo‘lganingizda uni qo‘lda ishga tushirishingiz mumkin.",
   "settings.startEnabled.description.alt2": "Tracky Mouse ishga tushishi bilanoq faol bo‘lishini ta’minlaydi.",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Makinis",
   "settings.shared.sliderMinLinear": "Linear",
   "settings.shared.sliderMinSlow": "Mabagal",
+  "settings.soundEffects.description": "Nagpapatugtog ng mga tunog kapag nag-click ka.",
+  "settings.soundEffects.label": "Mga epekto ng tunog",
   "settings.startEnabled.description": "Kung naka-on, sisimulan ng Tracky Mouse na kontrolin ang cursor sa sandaling ilunsad ito.",
   "settings.startEnabled.description.alt1": "Ginagawang aktibo ang Tracky Mouse kapag ilulunsad. Kung hindi, maaari mo itong simulan nang mano-mano kapag handa ka na.",
   "settings.startEnabled.description.alt2": "Ginagawang aktibo ang Tracky Mouse sa sandaling ilunsad ito.",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "سلس",
   "settings.shared.sliderMinLinear": "خطي",
   "settings.shared.sliderMinSlow": "بطيء",
+  "settings.soundEffects.description": "يُشغِّل أصواتًا عند النقر.",
+  "settings.soundEffects.label": "المؤثرات الصوتية",
   "settings.startEnabled.description": "إذا كان مفعّلًا، سيبدأ Tracky Mouse في التحكّم بالمؤشر بمجرد تشغيله.",
   "settings.startEnabled.description.alt1": "يجعل Tracky Mouse نشطًا عند تشغيله. وإلا فيمكنك تشغيله يدويًا عندما تكون مستعدًا.",
   "settings.startEnabled.description.alt2": "يجعل Tracky Mouse نشطًا بمجرد تشغيله.",

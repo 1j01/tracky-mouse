@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Pehmeä",
   "settings.shared.sliderMinLinear": "Lineaarinen",
   "settings.shared.sliderMinSlow": "Hidas",
+  "settings.soundEffects.description": "Toistaa ääniä, kun napsautat.",
+  "settings.soundEffects.label": "Ääniefektit",
   "settings.startEnabled.description": "Jos käytössä, Tracky Mouse alkaa ohjata osoitinta heti käynnistyessään.",
   "settings.startEnabled.description.alt1": "Asettaa Tracky Mousen aktiiviseksi käynnistettäessä. Muussa tapauksessa voit käynnistää sen manuaalisesti, kun olet valmis.",
   "settings.startEnabled.description.alt2": "Asettaa Tracky Mousen aktiiviseksi heti, kun se käynnistyy.",

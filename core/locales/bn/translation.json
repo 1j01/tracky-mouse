@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "মসৃণ",
   "settings.shared.sliderMinLinear": "রৈখিক",
   "settings.shared.sliderMinSlow": "ধীরে",
+  "settings.soundEffects.description": "আপনি ক্লিক করলে শব্দ বাজে।",
+  "settings.soundEffects.label": "শব্দ প্রভাব",
   "settings.startEnabled.description": "এটি চালু থাকলে, Tracky Mouse চালু হওয়ার সাথে সাথে কার্সর নিয়ন্ত্রণ শুরু করবে।",
   "settings.startEnabled.description.alt1": "Tracky Mouse চালু হওয়ার সাথে সাথে একে সক্রিয় করে। নইলে আপনি প্রস্তুত হলে নিজে থেকে চালু করতে পারবেন।",
   "settings.startEnabled.description.alt2": "Tracky Mouse চালু হওয়া মাত্রই একে সক্রিয় করে।",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Ομαλό",
   "settings.shared.sliderMinLinear": "Γραμμική",
   "settings.shared.sliderMinSlow": "Αργό",
+  "settings.soundEffects.description": "Αναπαράγει ήχους όταν κάνετε κλικ.",
+  "settings.soundEffects.label": "Ηχητικά εφέ",
   "settings.startEnabled.description": "Αν είναι ενεργό, το Tracky Mouse θα αρχίσει να ελέγχει τον δρομέα μόλις εκκινηθεί.",
   "settings.startEnabled.description.alt1": "Κάνει το Tracky Mouse ενεργό κατά την εκκίνηση. Διαφορετικά, μπορείτε να το ξεκινήσετε χειροκίνητα όταν είστε έτοιμοι.",
   "settings.startEnabled.description.alt2": "Κάνει το Tracky Mouse ενεργό μόλις εκκινηθεί.",

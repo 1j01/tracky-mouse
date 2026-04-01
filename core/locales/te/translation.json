@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "మృదువుగా",
   "settings.shared.sliderMinLinear": "లీనియర్",
   "settings.shared.sliderMinSlow": "నెమ్మదిగా",
+  "settings.soundEffects.description": "మీరు క్లిక్ చేసినప్పుడు శబ్దాలు వస్తాయి.",
+  "settings.soundEffects.label": "ధ్వని ప్రభావాలు",
   "settings.startEnabled.description": "ఇది ఎనేబుల్ చేసినట్లయితే, Tracky Mouse ప్రారంభమైన వెంటనే కర్సర్‌ను నియంత్రించడం ప్రారంభిస్తుంది.",
   "settings.startEnabled.description.alt1": "Tracky Mouse ప్రారంభమైన వెంటనే యాక్టివ్‌గా మారేలా చేస్తుంది. లేనిపక్షంలో, మీరు సిద్ధంగా ఉన్నప్పుడు దాన్ని మాన్యువల్‌గా ప్రారంభించవచ్చు.",
   "settings.startEnabled.description.alt2": "Tracky Mouse ప్రారంభమైన వెంటనే యాక్టివ్‌గా మారేలా చేస్తుంది.",

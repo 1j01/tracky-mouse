@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Gładkie",
   "settings.shared.sliderMinLinear": "Liniowe",
   "settings.shared.sliderMinSlow": "Wolne",
+  "settings.soundEffects.description": "Odtwarza dźwięki po kliknięciu.",
+  "settings.soundEffects.label": "Efekty dźwiękowe",
   "settings.startEnabled.description": "Jeśli ta opcja jest włączona, Tracky Mouse zacznie sterować kursorem natychmiast po uruchomieniu.",
   "settings.startEnabled.description.alt1": "Aktywuje Tracky Mouse przy uruchomieniu. W przeciwnym razie możesz włączyć go ręcznie, gdy będziesz gotowy.",
   "settings.startEnabled.description.alt2": "Sprawia, że Tracky Mouse staje się aktywny natychmiast po uruchomieniu.",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Плавно",
   "settings.shared.sliderMinLinear": "Лінійно",
   "settings.shared.sliderMinSlow": "Повільно",
+  "settings.soundEffects.description": "Відтворює звуки при натисканні.",
+  "settings.soundEffects.label": "Звукові ефекти",
   "settings.startEnabled.description": "Якщо ввімкнено, Tracky Mouse почне керувати курсором одразу після запуску.",
   "settings.startEnabled.description.alt1": "Робить Tracky Mouse активним під час запуску. Інакше ви можете запустити його вручну, коли будете готові.",
   "settings.startEnabled.description.alt2": "Робить Tracky Mouse активним одразу після запуску.",

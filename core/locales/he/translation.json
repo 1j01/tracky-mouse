@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "חלק",
   "settings.shared.sliderMinLinear": "לינארי",
   "settings.shared.sliderMinSlow": "איטי",
+  "settings.soundEffects.description": "מנגן צלילים בעת לחיצה.",
+  "settings.soundEffects.label": "אפקטים קוליים",
   "settings.startEnabled.description": "אם מסומן, Tracky Mouse יתחיל לשלוט בסמן מיד עם הפעלתו.",
   "settings.startEnabled.description.alt1": "מפעיל את Tracky Mouse בעת הפתיחה. אחרת, ניתן להפעיל אותו ידנית כשאתה מוכן.",
   "settings.startEnabled.description.alt2": "מפעיל את Tracky Mouse כבר בעת הפתיחה.",

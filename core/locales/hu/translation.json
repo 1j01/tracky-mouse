@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Simított",
   "settings.shared.sliderMinLinear": "Lineáris",
   "settings.shared.sliderMinSlow": "Lassú",
+  "settings.soundEffects.description": "Kattintáskor hangokat játszik le.",
+  "settings.soundEffects.label": "Hangeffektek",
   "settings.startEnabled.description": "Ha engedélyezett, a Tracky Mouse azonnal átveszi a kurzor irányítását, amint elindul.",
   "settings.startEnabled.description.alt1": "A Tracky Mouse indításkor azonnal aktív. Ha ez ki van kapcsolva, kézzel indíthatod el, amikor szeretnéd.",
   "settings.startEnabled.description.alt2": "A Tracky Mouse azonnal aktív lesz indítás után.",

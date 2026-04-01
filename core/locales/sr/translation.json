@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Glatko",
   "settings.shared.sliderMinLinear": "Linearno",
   "settings.shared.sliderMinSlow": "Sporo",
+  "settings.soundEffects.description": "Репродукује звукове када кликнете.",
+  "settings.soundEffects.label": "Звучни ефекти",
   "settings.startEnabled.description": "Ako je uključeno, Tracky Mouse će početi da kontroliše kursor čim se pokrene.",
   "settings.startEnabled.description.alt1": "Čini Tracky Mouse aktivnim pri pokretanju. U suprotnom možeš da ga pokreneš ručno kada budeš spreman.",
   "settings.startEnabled.description.alt2": "Čini Tracky Mouse aktivnim čim se pokrene.",

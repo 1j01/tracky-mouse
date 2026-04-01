@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Jevn",
   "settings.shared.sliderMinLinear": "Lineær",
   "settings.shared.sliderMinSlow": "Sakte",
+  "settings.soundEffects.description": "Spiller av lyder når du klikker.",
+  "settings.soundEffects.label": "Lydeffekter",
   "settings.startEnabled.description": "Hvis aktivert, vil Tracky Mouse begynne å styre pekeren så snart programmet startes.",
   "settings.startEnabled.description.alt1": "Gjør Tracky Mouse aktiv ved oppstart. Ellers kan du starte den manuelt når du er klar.",
   "settings.startEnabled.description.alt2": "Gjør Tracky Mouse aktiv så snart den startes.",

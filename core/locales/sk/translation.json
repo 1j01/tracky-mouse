@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Hladké",
   "settings.shared.sliderMinLinear": "Lineárne",
   "settings.shared.sliderMinSlow": "Pomalé",
+  "settings.soundEffects.description": "Prehráva zvuky pri kliknutí.",
+  "settings.soundEffects.label": "Zvukové efekty",
   "settings.startEnabled.description": "Ak je zapnuté, Tracky Mouse začne ovládať kurzor hneď po spustení.",
   "settings.startEnabled.description.alt1": "Urobí Tracky Mouse aktívnym pri spustení. Inak ho môžete spustiť ručne, keď budete pripravení.",
   "settings.startEnabled.description.alt2": "Urobí Tracky Mouse aktívnym hneď po spustení.",

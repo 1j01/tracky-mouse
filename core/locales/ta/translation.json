@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "மென்மையான",
   "settings.shared.sliderMinLinear": "நேரியல்",
   "settings.shared.sliderMinSlow": "மெதுவாக",
+  "settings.soundEffects.description": "நீங்கள் கிளிக் செய்யும்போது ஒலிகளை இயக்குகிறது.",
+  "settings.soundEffects.label": "ஒலி விளைவுகள்",
   "settings.startEnabled.description": "இதை இயக்கினால், Tracky Mouse தொடங்கியவுடனே சுட்டியை கட்டுப்படுத்தத் தொடங்கும்.",
   "settings.startEnabled.description.alt1": "Tracky Mouse தொடங்கும் நேரத்திலேயே செயல்பாட்டில் இருக்கும். இல்லையெனில், நீங்கள் தயாரானபின் அதை கையால் தொடங்கலாம்.",
   "settings.startEnabled.description.alt2": "Tracky Mouse தொடங்கியவுடனே செயல்பாட்டில் இருக்கும்.",

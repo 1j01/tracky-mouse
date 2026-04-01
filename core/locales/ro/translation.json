@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Neted",
   "settings.shared.sliderMinLinear": "Liniar",
   "settings.shared.sliderMinSlow": "Încet",
+  "settings.soundEffects.description": "Redă sunete când faceți clic.",
+  "settings.soundEffects.label": "Efecte sonore",
   "settings.startEnabled.description": "Dacă este activat, Tracky Mouse va începe să controleze cursorul imediat ce este lansat.",
   "settings.startEnabled.description.alt1": "Face Tracky Mouse activ la lansare. Altfel, îl puteți porni manual atunci când sunteți pregătit.",
   "settings.startEnabled.description.alt2": "Face Tracky Mouse activ imediat ce este lansat.",

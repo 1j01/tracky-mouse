@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Lisse",
   "settings.shared.sliderMinLinear": "Linéaire",
   "settings.shared.sliderMinSlow": "Lent",
+  "settings.soundEffects.description": "Joue des sons lorsque vous cliquez.",
+  "settings.soundEffects.label": "Effets sonores",
   "settings.startEnabled.description": "Si activé, Tracky Mouse commencera à contrôler le curseur dès son lancement.",
   "settings.startEnabled.description.alt1": "Rend Tracky Mouse actif au lancement. Sinon, vous pouvez le démarrer manuellement lorsque vous êtes prêt.",
   "settings.startEnabled.description.alt2": "Rend Tracky Mouse actif dès son lancement.",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Mai laushi",
   "settings.shared.sliderMinLinear": "Layya",
   "settings.shared.sliderMinSlow": "A hankali",
+  "settings.soundEffects.description": "Yana buga sauti lokacin da kuka danna.",
+  "settings.soundEffects.label": "Tasirin sauti",
   "settings.startEnabled.description": "Idan an kunna wannan, Tracky Mouse zai fara sarrafa sigifa da zarar an kunna shi.",
   "settings.startEnabled.description.alt1": "Yana sa Tracky Mouse ya fara aiki da zarar an kunna shi. Idan ba haka ba, za ka iya kunna shi da kanka idan ka shirya.",
   "settings.startEnabled.description.alt2": "Yana sa Tracky Mouse ya kasance a kunne da zarar an kunna shi.",

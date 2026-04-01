@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Hapsay",
   "settings.shared.sliderMinLinear": "Linear",
   "settings.shared.sliderMinSlow": "Hinay",
+  "settings.soundEffects.description": "Nagpatugtog og mga tunog kung mag-klik ka.",
+  "settings.soundEffects.label": "Mga epekto sa tunog",
   "settings.startEnabled.description": "Kung naka-on, diretsong mokontrol sa cursor ang Tracky Mouse inig paglansar sa app.",
   "settings.startEnabled.description.alt1": "Gahimo sa Tracky Mouse nga aktibo inig paglansar. Kung dili, mahimo nimo kini sugdan manwal kung andam na ka.",
   "settings.startEnabled.description.alt2": "Gahimo sa Tracky Mouse nga aktibo dayon inig paglansar.",

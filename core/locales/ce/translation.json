@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Лахар",
   "settings.shared.sliderMinLinear": "Линеар",
   "settings.shared.sliderMinSlow": "Оьшу",
+  "settings.soundEffects.description": "Кликк еш аьзнаш луш ду.",
+  "settings.soundEffects.label": "Аьзнийн эффекташ",
   "settings.startEnabled.description": "Цу функция берина, программ кхочуш хьоьйтехь Tracky Mouse курсор контрол хийца ду.",
   "settings.startEnabled.description.alt1": "Программа кхочуш тӀехь Tracky Mouse активан болу ду. Юкъкъе хӀинца дац, хьо цу бар хьахьараг тӀехь кхочуш йиш до.",
   "settings.startEnabled.description.alt2": "Программа кхочуш хьоьйтехь Tracky Mouse активан хийца ду.",

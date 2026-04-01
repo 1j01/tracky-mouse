@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "平順",
   "settings.shared.sliderMinLinear": "線性",
   "settings.shared.sliderMinSlow": "慢",
+  "settings.soundEffects.description": "Tī lí an-chiap ê sî hoat-chhut siaⁿ-im.",
+  "settings.soundEffects.label": "Siaⁿ-im hāu-kó",
   "settings.startEnabled.description": "開啟後，Tracky Mouse 啟動了馬開始控制游標。",
   "settings.startEnabled.description.alt1": "Tracky Mouse 啟動 ê 時陣就馬變做啟用；若無開這个，汝會當等準備好才閣手動開始。",
   "settings.startEnabled.description.alt2": "Tracky Mouse 啟動了就馬變做啟用狀態。",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "स्मूद",
   "settings.shared.sliderMinLinear": "लिनियर",
   "settings.shared.sliderMinSlow": "धीमा",
+  "settings.soundEffects.description": "क्लिक करने पर ध्वनियाँ बजाता है।",
+  "settings.soundEffects.label": "ध्वनि प्रभाव",
   "settings.startEnabled.description": "सक्रिय होने पर Tracky Mouse शुरू होते ही कर्सर को नियंत्रित करना शुरू कर देगा।",
   "settings.startEnabled.description.alt1": "Tracky Mouse को शुरू होते ही सक्रिय कर देता है। अन्यथा, आप तैयार होने पर इसे मैन्युअली शुरू कर सकते हैं।",
   "settings.startEnabled.description.alt2": "Tracky Mouse को शुरू होते ही सक्रिय कर देता है।",

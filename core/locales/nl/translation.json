@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Vloeiend",
   "settings.shared.sliderMinLinear": "Lineair",
   "settings.shared.sliderMinSlow": "Langzaam",
+  "settings.soundEffects.description": "Speelt geluiden af wanneer u klikt.",
+  "settings.soundEffects.label": "Geluidseffecten",
   "settings.startEnabled.description": "Als dit is ingeschakeld, begint Tracky Mouse de cursor te besturen zodra het programma wordt gestart.",
   "settings.startEnabled.description.alt1": "Maakt Tracky Mouse actief bij het starten. Anders kun je het handmatig starten wanneer je er klaar voor bent.",
   "settings.startEnabled.description.alt2": "Maakt Tracky Mouse actief zodra het programma wordt gestart.",

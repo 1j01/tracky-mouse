@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Düzgün",
   "settings.shared.sliderMinLinear": "Doğrusal",
   "settings.shared.sliderMinSlow": "Yavaş",
+  "settings.soundEffects.description": "Tıkladığınızda sesler çalar.",
+  "settings.soundEffects.label": "Ses efektleri",
   "settings.startEnabled.description": "Etkinleştirilirse, Tracky Mouse başlatılır başlatılmaz imleci kontrol etmeye başlar.",
   "settings.startEnabled.description.alt1": "Tracky Mouse'u başlatıldığı anda etkin hale getirir. Aksi halde, hazır olduğunuzda elle başlatabilirsiniz.",
   "settings.startEnabled.description.alt2": "Tracky Mouse'u başlatıldığı anda etkin hale getirir.",

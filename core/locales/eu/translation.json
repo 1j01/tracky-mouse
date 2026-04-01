@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Leuna",
   "settings.shared.sliderMinLinear": "Lineala",
   "settings.shared.sliderMinSlow": "Motel",
+  "settings.soundEffects.description": "Soinuak jotzen ditu klik egitean.",
+  "settings.soundEffects.label": "Soinu efektuak",
   "settings.startEnabled.description": "Gaituta badago, Tracky Mouse‑ek kurtsorea kontrolatzen hasiko da abiarazi bezain laster.",
   "settings.startEnabled.description.alt1": "Tracky Mouse aktibo jartzen du abiaraztean. Bestela, eskuz abiarazi dezakezu prest zaudenean.",
   "settings.startEnabled.description.alt2": "Tracky Mouse aktibo bihurtzen du abiarazi bezain laster.",

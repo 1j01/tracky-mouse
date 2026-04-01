@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "هموار",
   "settings.shared.sliderMinLinear": "خطی",
   "settings.shared.sliderMinSlow": "کند",
+  "settings.soundEffects.description": "هنگام کلیک کردن صداهایی پخش می‌کند.",
+  "settings.soundEffects.label": "جلوه‌های صوتی",
   "settings.startEnabled.description": "اگر فعال باشد، Tracky Mouse به‌محض اجرا شدن، کنترل نشان‌گر را به‌دست می‌گیرد.",
   "settings.startEnabled.description.alt1": "Tracky Mouse را هنگام اجرا فعال می‌کند؛ در غیر این صورت می‌توانید هر زمان آماده بودید آن را دستی شروع کنید.",
   "settings.startEnabled.description.alt2": "Tracky Mouse را به‌محض اجرا شدن فعال می‌کند.",

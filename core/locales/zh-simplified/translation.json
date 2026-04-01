@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "平滑",
   "settings.shared.sliderMinLinear": "线性",
   "settings.shared.sliderMinSlow": "慢",
+  "settings.soundEffects.description": "点击时播放声音。",
+  "settings.soundEffects.label": "音效",
   "settings.startEnabled.description": "启用后，Tracky Mouse 启动时会立刻开始控制光标。",
   "settings.startEnabled.description.alt1": "使 Tracky Mouse 在启动时即处于启用状态。否则，你可以在准备好时手动启动。",
   "settings.startEnabled.description.alt2": "使 Tracky Mouse 在启动后立即处于启用状态。",

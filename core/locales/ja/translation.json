@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "なめらか",
   "settings.shared.sliderMinLinear": "リニア",
   "settings.shared.sliderMinSlow": "遅い",
+  "settings.soundEffects.description": "クリックすると音が鳴ります。",
+  "settings.soundEffects.label": "効果音",
   "settings.startEnabled.description": "有効にすると、Tracky Mouse 起動直後からカーソル制御を開始します。",
   "settings.startEnabled.description.alt1": "Tracky Mouse を起動時に有効化します。有効にしない場合は、準備ができたときに手動で開始できます。",
   "settings.startEnabled.description.alt2": "Tracky Mouse を起動するとすぐに有効にします。",

@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Mjuk",
   "settings.shared.sliderMinLinear": "Linjär",
   "settings.shared.sliderMinSlow": "Långsam",
+  "settings.soundEffects.description": "Spelar upp ljud när du klickar.",
+  "settings.soundEffects.label": "Ljudeffekter",
   "settings.startEnabled.description": "Om aktiverat börjar Tracky Mouse styra markören så snart appen startas.",
   "settings.startEnabled.description.alt1": "Gör Tracky Mouse aktiv när appen startas. Annars kan du starta den manuellt när du är redo.",
   "settings.startEnabled.description.alt2": "Gör Tracky Mouse aktiv så snart appen startas.",

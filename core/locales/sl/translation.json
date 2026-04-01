@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Gladko",
   "settings.shared.sliderMinLinear": "Linearno",
   "settings.shared.sliderMinSlow": "Počasi",
+  "settings.soundEffects.description": "Predvaja zvoke, ko kliknete.",
+  "settings.soundEffects.label": "Zvočni efekti",
   "settings.startEnabled.description": "Če je omogočeno, bo Tracky Mouse začel upravljati kazalec takoj po zagonu.",
   "settings.startEnabled.description.alt1": "Ob zagonu omogoči Tracky Mouse. V nasprotnem primeru ga lahko zaženete ročno, ko ste pripravljeni.",
   "settings.startEnabled.description.alt2": "Naredi Tracky Mouse aktiven takoj po zagonu.",

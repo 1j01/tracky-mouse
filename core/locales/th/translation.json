@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "นุ่มนวล",
   "settings.shared.sliderMinLinear": "เชิงเส้น",
   "settings.shared.sliderMinSlow": "ช้า",
+  "settings.soundEffects.description": "เล่นเสียงเมื่อคุณคลิก",
+  "settings.soundEffects.label": "เอฟเฟกต์เสียง",
   "settings.startEnabled.description": "หากเปิดใช้ Tracky Mouse จะเริ่มควบคุมเคอร์เซอร์ทันทีที่เปิดโปรแกรม",
   "settings.startEnabled.description.alt1": "ทำให้ Tracky Mouse เริ่มทำงานเมื่อเปิดโปรแกรม มิฉะนั้นคุณสามารถเริ่มเองได้เมื่อพร้อม",
   "settings.startEnabled.description.alt2": "ทำให้ Tracky Mouse ทำงานทันทีที่เปิดโปรแกรม",

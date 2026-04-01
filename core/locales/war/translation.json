@@ -167,6 +167,8 @@
   "settings.shared.sliderMaxSmooth": "Hamok",
   "settings.shared.sliderMinLinear": "Linear",
   "settings.shared.sliderMinSlow": "Mahinay",
+  "settings.soundEffects.description": "Nagpapatugtog han mga tunog kon mag-klik ka.",
+  "settings.soundEffects.label": "Mga epekto han tunog",
   "settings.startEnabled.description": "Kun naka-on, an Tracky Mouse dayon na magkukontrol han kursor pag-abri pa la han app.",
   "settings.startEnabled.description.alt1": "Naghihimo han Tracky Mouse nga aktibo pag-abri. Kun diri, puyde mo hiya sugdon hin kamot kon andam ka na.",
   "settings.startEnabled.description.alt2": "Naghihimo han Tracky Mouse nga aktibo dayon pag-abri han app.",
