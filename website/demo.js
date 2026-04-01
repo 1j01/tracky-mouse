@@ -137,21 +137,21 @@ const config = {
 		a,
 		details summary,
 		.radio-or-checkbox-wrapper,
-		.drawing-canvas,
+		#drawing-pad-demo svg,
 		.window:not(.maximized) .window-titlebar
 	`,
 	// Filter for elements to drag. They must be included in the targets first.
-	// shouldDrag: (target) => (
-	// 	target.matches(".window-titlebar") ||
-	// 	(target.matches(".drawing-canvas") && current_tool.supports_drag)
-	// ),
+	shouldDrag: (target) => (
+		target.matches(".window-titlebar") ||
+		target.matches("#drawing-pad-demo svg") // (... && current_tool.supports_drag)
+	),
 	// Instead of clicking in the center of these elements, click at any point within the element.
 	// This is useful for drag offsets, like for a window titlebar,
 	// and position-based inputs like sliders or color pickers, or a drawing canvas.
 	noCenter: (target) => (
 		target.matches(`
 			input[type="range"],
-			.drawing-canvas,
+			#drawing-pad-demo svg,
 			.window-titlebar
 		`)
 	),
@@ -249,6 +249,11 @@ updateHUD();
 
 // Archery mini-game
 import("./archery-mini-game.js");
+
+// Canvas demo
+import("./drawing-pad-demo.js").then(({ DrawingPad }) => {
+	new DrawingPad("drawing-pad-demo");
+});
 
 // Gamepad as mouse support, for comparison in archery mini-game
 window.addEventListener("gamepadconnected", () => {
