@@ -77,9 +77,9 @@ const initOptions = {
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
 		if (regainControlTimeout !== null) {
-			return;
+			return false;
 		}
-		inputSimulator.setMouseButtonState(buttonIndex, pressed);
+		return inputSimulator.setMouseButtonState(buttonIndex, pressed);
 	},
 	handleSettingsUpdate: (settings) => {
 		// Sync settings from UI to `activeSettings`

@@ -153,7 +153,9 @@ export class InputSimulator {
 			} else {
 				this.pointerUp(target, x, y, buttonIndex);
 			}
+			return true;
 		}
+		return false;
 	}
 	dropdownToCloseFunction = new WeakMap();
 	openDropdown(dropdown, { focus = true } = {}) {
