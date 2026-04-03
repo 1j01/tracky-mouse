@@ -652,7 +652,6 @@ const createWindow = () => {
 		right: false,
 		middle: false,
 	};
-	ipcMain.removeHandler('setMouseButtonState');
 	ipcMain.handle('setMouseButtonState', async (_event, button, down) => {
 		// TODO: make sure the mouse button is released when disabling clicking ability
 		// (including exiting the app, I suppose!)

@@ -3346,7 +3346,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							}
 						}, 500);
 					}, facemeshFirstEstimation ? 20000 : 2000);
-					facemeshEstimateFaces().then(async (predictions) => {
+					facemeshEstimateFaces().then((predictions) => {
 						facemeshEstimating = false;
 						facemeshFirstEstimation = false;
 
@@ -3680,18 +3680,32 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
 							const buttonIsActive = clickButton === buttonIndex;
 							if (buttonIsActive !== buttonStates[buttonNames[buttonIndex]]) {
-								const clickApplied = await setMouseButtonState?.(buttonIndex, buttonIsActive);
-								if (clickApplied) {
-									buttonStates[buttonNames[buttonIndex]] = buttonIsActive;
-									if (buttonIsActive) {
-										lastMouseDownTime = performance.now();
-									} else {
-										// Limit "Delay Before Dragging" effect to the duration of a click.
-										// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
-										// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
-										lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
-									}
-									playSoundIfEnabled(buttonIsActive ? "clickPress" : "clickRelease");
+								// Wait for confirmation of the button state change before playing SFX
+								// but not before updating buttonStates, since we check that in this loop
+								// to decide whether to call setMouseButtonState.
+								// We don't want to send extraneous mouse button changes to the main process,
+								// even if it does track button states itself. If nothing else it's wasted IPC.
+								// That said, an argument could be made for updating lastMouseDownTime later
+								// if the IPC is slow, to extend the time frame for making a simple click
+								// rather than a drag.
+								if (!setMouseButtonState) {
+									console.warn("setMouseButtonState function not provided");
+								} else {
+									const optionalPromise = setMouseButtonState(buttonIndex, buttonIsActive);
+									optionalPromise?.then((changedButtonState) => {
+										if (changedButtonState) {
+											playSoundIfEnabled(buttonIsActive ? "clickPress" : "clickRelease");
+										}
+									});
+								}
+								buttonStates[buttonNames[buttonIndex]] = buttonIsActive;
+								if (buttonIsActive) {
+									lastMouseDownTime = performance.now();
+								} else {
+									// Limit "Delay Before Dragging" effect to the duration of a click.
+									// TODO: consider how this affects releasing a mouse button if two are pressed (not currently possible)
+									// TODO: rename variable, maybe change it to store a cool-down timer? but that would need more state management just for concept clarity
+									lastMouseDownTime = -Infinity; // sorry, making this variable a misnomer
 								}
 							}
 						}
