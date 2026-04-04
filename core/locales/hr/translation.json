@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Zatvorite jedno oko za klik. Lijevo oko za lijevi klik, desno oko za desni klik.",
   "settings.clickingMode.wink.label": "Namigni za klik",
   "settings.closeEyesToToggle.description": "Ako je omogućeno, upravljanje mišem možete pokrenuti ili zaustaviti tako da na nekoliko sekundi zatvorite oba oka.",
-  "settings.closeEyesToToggle.label": "Zatvorite oči za pokretanje/zaustavljanje (<span style=\"border-bottom: 1px dotted;\" title=\"• Trenutačno nema vizualne ni zvučne povratne informacije.\n• Nema postavki za trajanje uključivanja i isključivanja.\n• Na rezultat utječu pogrešna prepoznavanja treptaja, osobito pri pogledu prema dolje.\">Eksperimentalno</span>)",
+  "settings.closeEyesToToggle.label": "Zatvorite oči za pokretanje/zaustavljanje",
   "settings.delayBeforeDragging.description": "Zaključava pomicanje miša tijekom navedenog vremena na početku klika.\nMožda ćete to htjeti isključiti ako crtate na platnu ili povećati ako se dogodi da pri kliku slučajno povlačite.",
   "settings.delayBeforeDragging.description.alt1": "Zaključava pomicanje miša na početku klika kako bi spriječio slučajno povlačenje.",
   "settings.delayBeforeDragging.label": "Odgoda prije povlačenja",

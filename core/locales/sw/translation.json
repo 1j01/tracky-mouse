@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Funga jicho moja ili kubofya. Jicho la kushoto kwa kubofya kushoto, jicho la kulia kwa kubofya kulia.",
   "settings.clickingMode.wink.label": "Peperusha jicho kubofya",
   "settings.closeEyesToToggle.description": "Ikiwa imewezeshwa, unaweza kuanza au kusimamisha udhibiti wa kipanya kwa kufumba macho yako yote kwa sekunde chache.",
-  "settings.closeEyesToToggle.label": "Funga macho kuanza/kusimamisha (<span style=\"border-bottom: 1px dotted;\" title=\"• Kwa sasa hakuna mrejesho wa kuona wala wa sauti.\n• Hakuna mipangilio ya muda wa kuwasha na kuzima.\n• Inaathiriwa na utambuzi wa makosa wa kupepesa macho, hasa unapoangalia chini.\">Jaribio</span>)",
+  "settings.closeEyesToToggle.label": "Funga macho kuanza/kusimamisha",
   "settings.delayBeforeDragging.description": "Hufunga mwendo wa kipanya kwa muda fulani mwanzoni mwa kubofya.\nUnaweza kutaka kuizima ikiwa unachora kwenye turubai, au kuongeza muda ikiwa unajikuta ukivuta bila kukusudia unapojaribu kubofya.",
   "settings.delayBeforeDragging.description.alt1": "Hufunga mwendo wa kipanya mwanzoni mwa kubofya ili kuzuia kuvuta bila kukusudia.",
   "settings.delayBeforeDragging.label": "Kuchelewa kabla ya kuvuta",

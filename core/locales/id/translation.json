@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Tutup satu mata untuk mengeklik. Mata kiri untuk klik kiri, mata kanan untuk klik kanan.",
   "settings.clickingMode.wink.label": "Kedip untuk mengeklik",
   "settings.closeEyesToToggle.description": "Jika diaktifkan, Anda dapat memulai atau menghentikan kendali mouse dengan menutup kedua mata selama beberapa detik.",
-  "settings.closeEyesToToggle.label": "Tutup mata untuk mulai/berhenti (<span style=\"border-bottom: 1px dotted;\" title=\"• Saat ini tidak ada umpan balik visual maupun suara.\n• Tidak ada pengaturan durasi untuk menyalakan dan mematikan.\n• Dapat terpengaruh deteksi kedipan palsu, terutama saat melihat ke bawah.\">Eksperimental</span>)",
+  "settings.closeEyesToToggle.label": "Tutup mata untuk mulai/berhenti",
   "settings.delayBeforeDragging.description": "Mengunci pergerakan mouse selama durasi tertentu di awal klik.\nAnda mungkin ingin mematikannya jika sedang menggambar di kanvas, atau menambah durasinya jika sering tidak sengaja menyeret saat mencoba mengeklik.",
   "settings.delayBeforeDragging.description.alt1": "Mengunci pergerakan mouse di awal klik untuk mencegah seret tidak sengaja.",
   "settings.delayBeforeDragging.label": "Jeda sebelum menyeret",

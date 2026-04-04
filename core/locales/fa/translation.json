@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "برای کلیک یک چشم را ببندید. چشم چپ برای کلیک چپ، چشم راست برای کلیک راست.",
   "settings.clickingMode.wink.label": "چشمک برای کلیک",
   "settings.closeEyesToToggle.description": "اگر فعال باشد، می‌توانید با بستن هر دو چشم برای چند ثانیه، کنترل ماوس را شروع یا متوقف کنید.",
-  "settings.closeEyesToToggle.label": "بستن چشم‌ها برای شروع/توقف (<span style=\"border-bottom: 1px dotted;\" title=\"• در حال حاضر بازخورد دیداری یا شنیداری وجود ندارد.\n• تنظیمی برای مدت‌زمان لازم برای روشن و خاموش شدن وجود ندارد.\n• به تشخیص‌های اشتباه پلک زدن (false positive) حساس است، به‌خصوص هنگام نگاه کردن رو به پایین.\">آزمایشی</span>)",
+  "settings.closeEyesToToggle.label": "بستن چشم‌ها برای شروع/توقف",
   "settings.delayBeforeDragging.description": "در ابتدای کلیک، برای مدت‌زمان مشخصی حرکت ماوس را قفل می‌کند.\nاگر روی بوم نقاشی (canvas) نقاشی می‌کشید شاید بخواهید این گزینه را خاموش کنید، یا اگر هنگام کلیک کردن، ناخواسته درگ می‌کنید می‌توانید این مدت‌زمان را افزایش دهید.",
   "settings.delayBeforeDragging.description.alt1": "در ابتدای کلیک، حرکت ماوس را قفل می‌کند تا از کشیدن تصادفی جلوگیری شود.",
   "settings.delayBeforeDragging.label": "تأخیر قبل از کشیدن",

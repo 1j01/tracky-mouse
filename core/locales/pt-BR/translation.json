@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Feche um olho para clicar. Olho esquerdo para clique esquerdo, olho direito para clique direito.",
   "settings.clickingMode.wink.label": "Piscadela para clicar",
   "settings.closeEyesToToggle.description": "Se ativado, você pode iniciar ou parar o controle do mouse mantendo os dois olhos fechados por alguns segundos.",
-  "settings.closeEyesToToggle.label": "Fechar os olhos para iniciar/parar (<span style=\"border-bottom: 1px dotted;\" title=\"• Atualmente não há retorno visual ou sonoro.\n• Não há configurações para a duração de ligar e desligar.\n• É afetado por piscadas detectadas incorretamente, especialmente ao olhar para baixo.\">Experimental</span>)",
+  "settings.closeEyesToToggle.label": "Fechar os olhos para iniciar/parar",
   "settings.delayBeforeDragging.description": "Trava o movimento do mouse pela duração indicada no início de um clique.\nTalvez você queira desativar isso se estiver desenhando em uma tela ou aumentar se estiver arrastando acidentalmente ao tentar clicar.",
   "settings.delayBeforeDragging.description.alt1": "Trava o movimento do mouse no início de um clique para evitar arrastos acidentais.",
   "settings.delayBeforeDragging.label": "Atraso antes de arrastar",

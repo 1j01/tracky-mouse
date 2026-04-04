@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "หลับตาข้างหนึ่งเพื่อคลิก หลับตาซ้ายสำหรับคลิกซ้าย หลับตาขวาสำหรับคลิกขวา",
   "settings.clickingMode.wink.label": "ขยิบตาเพื่อคลิก",
   "settings.closeEyesToToggle.description": "หากเปิดใช้ คุณสามารถเริ่มหรือหยุดควบคุมเมาส์ได้โดยหลับตาทั้งสองข้างค้างไว้ไม่กี่วินาที",
-  "settings.closeEyesToToggle.label": "หลับตาเพื่อเริ่ม/หยุด (<span style=\"border-bottom: 1px dotted;\" title=\"• ขณะนี้ยังไม่มีการแสดงผลด้วยภาพหรือเสียง\n• ยังไม่มีการตั้งค่าเวลาสำหรับเปิด/ปิด\n• อาจถูกรบกวนจากการตรวจจับการกระพริบตาที่ผิดพลาด โดยเฉพาะเมื่อมองลง\">คุณลักษณะทดลอง</span>)",
+  "settings.closeEyesToToggle.label": "หลับตาเพื่อเริ่ม/หยุด",
   "settings.delayBeforeDragging.description": "ล็อกการเคลื่อนที่ของเมาส์ตามระยะเวลาที่กำหนดในช่วงเริ่มการคลิก\nอาจต้องปิดหากคุณกำลังวาดภาพบนผืนผ้าใบ หรือเพิ่มเวลาหากมักเผลอลากเมื่อพยายามคลิก",
   "settings.delayBeforeDragging.description.alt1": "ล็อกการเคลื่อนที่ของเมาส์ช่วงเริ่มการคลิกเพื่อป้องกันการลากโดยไม่ได้ตั้งใจ",
   "settings.delayBeforeDragging.label": "หน่วงเวลาก่อนเริ่มลาก",

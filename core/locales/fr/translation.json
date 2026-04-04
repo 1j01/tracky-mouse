@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Fermez un œil pour cliquer. Œil gauche pour le clic gauche, œil droit pour le clic droit.",
   "settings.clickingMode.wink.label": "Cligner de l'œil pour cliquer",
   "settings.closeEyesToToggle.description": "Si activé, vous pouvez démarrer ou arrêter le contrôle de la souris en gardant les deux yeux fermés pendant quelques secondes.",
-  "settings.closeEyesToToggle.label": "Fermer les yeux pour démarrer/arrêter (<span style=\"border-bottom: 1px dotted;\" title=\"• Il n'y a actuellement aucun retour visuel ou auditif.\n• Il n'y a pas de paramètres pour la/les durée(s) d'activation et de désactivation.\n• Il est affecté par les fausses détections de clignements, en particulier en regardant vers le bas.\">Expérimental</span>)",
+  "settings.closeEyesToToggle.label": "Fermer les yeux pour démarrer/arrêter",
   "settings.delayBeforeDragging.description": "Verrouille le mouvement de la souris pour la durée donnée au début d'un clic.\nVous voudrez peut-être désactiver cela si vous dessinez sur une toile, ou l'augmenter si vous vous retrouvez à faire glisser accidentellement lorsque vous essayez de cliquer.",
   "settings.delayBeforeDragging.description.alt1": "Verrouille le mouvement de la souris au début d'un clic pour éviter un glissement accidentel.",
   "settings.delayBeforeDragging.label": "Délai avant de faire glisser",

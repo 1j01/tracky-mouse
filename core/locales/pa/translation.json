@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "ਕਲਿੱਕ ਕਰਨ ਲਈ ਇਕ ਅੱਖ ਬੰਦ ਕਰੋ। ਖੱਬੀ ਅੱਖ ਨਾਲ ਖੱਬਾ ਕਲਿੱਕ, ਸੱਜੀ ਅੱਖ ਨਾਲ ਸੱਜਾ ਕਲਿੱਕ।",
   "settings.clickingMode.wink.label": "ਅੱਖ ਮਾਰ ਕੇ ਕਲਿੱਕ ਕਰੋ",
   "settings.closeEyesToToggle.description": "ਜੇ ਇਨੇਬਲ ਹੈ ਤਾਂ ਤੁਸੀਂ ਦੋਵੇਂ ਅੱਖਾਂ ਕੁਝ ਸਕਿੰਟ ਲਈ ਬੰਦ ਰੱਖ ਕੇ ਮਾਊਸ ਕੰਟਰੋਲ ਸ਼ੁਰੂ ਜਾਂ ਬੰਦ ਕਰ ਸਕਦੇ ਹੋ।",
-  "settings.closeEyesToToggle.label": "ਅੱਖਾਂ ਬੰਦ ਕਰਕੇ ਸ਼ੁਰੂ/ਰੋਕੋ (<span style=\"border-bottom: 1px dotted;\" title=\"• ਇਸ ਵੇਲੇ ਕੋਈ ਵੀਜ਼ੂਅਲ ਜਾਂ ਆਵਾਜ਼ ਵਾਲੀ ਫੀਡਬੈਕ ਨਹੀਂ ਹੈ।\n• ਓਨ/ਆਫ਼ ਸਮਿਆਂ ਲਈ ਕੋਈ ਸੈਟਿੰਗ ਨਹੀਂ ਹੈ।\n• ਖ਼ਾਸ ਕਰਕੇ ਹੇਠਾਂ ਵੇਖਦੇ ਸਮੇਂ ਗਲਤ ਪਾਜ਼ੀਟਿਵ ਝਪਕੀ ਪਛਾਣ ਨਾਲ ਪ੍ਰਭਾਵਿਤ ਹੋ ਸਕਦਾ ਹੈ।\">ਪ੍ਰਯੋਗਾਤਮਕ</span>)",
+  "settings.closeEyesToToggle.label": "ਅੱਖਾਂ ਬੰਦ ਕਰਕੇ ਸ਼ੁਰੂ/ਰੋਕੋ",
   "settings.delayBeforeDragging.description": "ਕਲਿੱਕ ਦੀ ਸ਼ੁਰੂਆਤ ਦੌਰਾਨ ਨਿਰਧਾਰਤ ਸਮੇਂ ਲਈ ਮਾਊਸ ਦੀ ਹਰਕਤ ਲੌਕ ਕਰਦਾ ਹੈ।\nਜੇ ਤੁਸੀਂ ਕੈਨਵਸ 'ਤੇ ਡ੍ਰਾਇੰਗ ਕਰ ਰਹੇ ਹੋ ਤਾਂ ਤੁਸੀਂ ਇਸਨੂੰ ਬੰਦ ਕਰਨਾ ਚਾਹੋਗੇ, ਜਾਂ ਜੇ ਤੁਹਾਨੂੰ ਕਲਿੱਕ ਕਰਦੇ ਸਮੇਂ ਅਕਸਰ ਡ੍ਰੈਗ ਹੋ ਜਾਂਦਾ ਹੈ ਤਾਂ ਇਸ ਸਮੇਂ ਨੂੰ ਵਧਾਉਣਾ ਚਾਹੋਗੇ।",
   "settings.delayBeforeDragging.description.alt1": "ਅਣਜਾਣੇ ਵਿੱਚ ਡ੍ਰੈਗ ਹੋਣ ਤੋਂ ਬਚਾਉਣ ਲਈ ਕਲਿੱਕ ਦੀ ਸ਼ੁਰੂਆਤ 'ਤੇ ਮਾਊਸ ਦੀ ਹਰਕਤ ਲੌਕ ਕਰਦਾ ਹੈ।",
   "settings.delayBeforeDragging.label": "ਡ੍ਰੈਗ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਦੇਰੀ",

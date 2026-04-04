@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "એક આંખ બંધ કરીને ક્લિક કરો. ડાબી આંખ ડાબો ક્લિક માટે, જમણી આંખ જમણો ક્લિક માટે.",
   "settings.clickingMode.wink.label": "આંખ મારતાં ક્લિક કરો",
   "settings.closeEyesToToggle.description": "જો સક્રિય હોય, તો તમે બંને આંખો થોડા સેકંડ માટે બંધ રાખીને માઉસ નિયંત્રણ ચાલુ કે બંધ કરી શકો છો.",
-  "settings.closeEyesToToggle.label": "આંખો બંધ કરીને ચાલુ/બંધ કરો (<span style=\"border-bottom: 1px dotted;\" title=\"• હાલ કોઈ દૃશ્ય અથવા અવાજ પ્રતિસાદ નથી.\n• સમયગાળા માટે ચાલુ/બંધ કરવાની સેટિંગ્સ ઉપલબ્ધ નથી.\n• ખોટા બ્લિન્ક ડિટેક્શનથી અસર થાય છે, ખાસ કરીને નીચે જોતી વખતે.\">પ્રયોગાત્મક</span>)",
+  "settings.closeEyesToToggle.label": "આંખો બંધ કરીને ચાલુ/બંધ કરો",
   "settings.delayBeforeDragging.description": "ક્લિકની શરૂઆતમાં નિર્ધારિત સમયગાળા માટે માઉસની હલનચલન બંધ કરે છે.\nતમે કેનવાસ પર રેખાંકન કરતા હોવ તો તેને બંધ કરવા માંગશો, અથવા જો તમે ઘણી વાર ક્લિક કરતાં‑ કરતાં ભૂલથી ડ્રેગ કરો છો તો સમય વધારો.",
   "settings.delayBeforeDragging.description.alt1": "અકસ્માતિક ડ્રેગિંગ ટાળવા માટે ક્લિકની શરૂઆતમાં માઉસની હલનચલન બંધ કરે છે.",
   "settings.delayBeforeDragging.label": "ડ્રેગ કરતા પહેલાં વિલંબ",

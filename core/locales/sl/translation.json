@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Zaprite eno oko za klik. Levo oko za levi klik, desno oko za desni klik.",
   "settings.clickingMode.wink.label": "Pomežikni za klik",
   "settings.closeEyesToToggle.description": "Če je omogočeno, lahko zadržite obe očesi zaprti za nekaj sekund, da zaženete ali ustavite nadzor miške.",
-  "settings.closeEyesToToggle.label": "Zaprite oči za zagon/ustavitev (<span style=\"border-bottom: 1px dotted;\" title=\"• Trenutno ni vizualne ali zvočne povratne informacije.\n• Ni nastavitev za trajanje za vklop/izklop.\n• Na delovanje vplivajo napačne zaznave mežikanja, posebej pri pogledu navzdol.\">Eksperimentalno</span>)",
+  "settings.closeEyesToToggle.label": "Zaprite oči za zagon/ustavitev",
   "settings.delayBeforeDragging.description": "Zaklene premikanje miške za določeno trajanje na začetku klika.\nTo lahko izklopite, če rišete na platnu, ali povečate trajanje, če se vam pogosto zgodi, da pri kliku nehote vlečete.",
   "settings.delayBeforeDragging.description.alt1": "Zaklene premikanje miške na začetku klika, da prepreči nenamerno vlečenje.",
   "settings.delayBeforeDragging.label": "Zakasnitev pred vlečenjem",

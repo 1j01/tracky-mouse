@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Бер күзен йому аша басу. Сул күз ‑ сул басу, уң күз ‑ уң басу.",
   "settings.clickingMode.wink.label": "Күз кысу белән басу",
   "settings.closeEyesToToggle.description": "Әгәр кушылган булса, ике күзеgezне берничә секундка йомып, чикерткеч белән идарәне башларга яки туктатырга мөмкин.",
-  "settings.closeEyesToToggle.label": "Күзләрне йомып башлау/туктату (<span style=\"border-bottom: 1px dotted;\" title=\"• Хәзер визуаль яки тавышлы кире бәйләнеш юк.\n• Күпме вакыт йомып тору көйләүләре әлегә юк.\n• Аеруча аска караганда ялгыш blinka ачыклау йогынты ясарга мөмкин.\">Эксперименталь</span>)",
+  "settings.closeEyesToToggle.label": "Күзләрне йомып башлау/туктату",
   "settings.delayBeforeDragging.description": "Басу башланганда күрсәтелгән вакытка чикерткеч хәрәкәтен бикли.\nӘгәр сез рәсем ясыйсыз икән, моны сүндерергә мөмкин, яки басканда еш кына очраклы өстерәү килеп чыга икән, вакытны арттырырга була.",
   "settings.delayBeforeDragging.description.alt1": "Очраклы өстерәү булмасын өчен, басу башланганда чикерткеч хәрәкәтен бикли.",
   "settings.delayBeforeDragging.label": "Өстерәү алдыннан тоткарлык",

@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "睨一隻目來點擊。睨左目是左鍵，睨右目是右鍵。",
   "settings.clickingMode.wink.label": "睨目點擊",
   "settings.closeEyesToToggle.description": "開啟後，雙目閤緊幾秒鐘就會開始抑是停止控制滑鼠。",
-  "settings.closeEyesToToggle.label": "閤目來開始／停止（<span style=\"border-bottom: 1px dotted;\" title=\"• 這馬無視覺、無聲音提示。\n• 開起閣關閉 ê 時間閣無得調整。\n• 容易予誤判 ê 目睨影響，閣較看落跤 ê 時陣尤加明顯。\">實驗性功能</span>）",
+  "settings.closeEyesToToggle.label": "閤目來開始／停止",
   "settings.delayBeforeDragging.description": "佇開始點擊 ê 頭前，照這个時間鎖住滑鼠 ê 移動。\n若是汝欲佇畫布內面繪圖，會當關掉這个設定；若是常常一點就變做拖曳，會當調較長一寡。",
   "settings.delayBeforeDragging.description.alt1": "佇開始點擊 ê 時陣鎖住滑鼠 ê 移動，防止無小心變做拖曳。",
   "settings.delayBeforeDragging.label": "開始拖曳 ê 延遲時間",

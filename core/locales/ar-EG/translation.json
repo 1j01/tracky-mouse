@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "اقفل عين واحدة عشان تعمل كليك. العين الشمال لكليك شمال، والعين اليمين لكليك يمين.",
   "settings.clickingMode.wink.label": "غمزة للنقر",
   "settings.closeEyesToToggle.description": "لو مفعّل، تقدر تشغّل أو توقّف التحكّم في الماوس إنك تقفل عينك الاتنين كام ثانية.",
-  "settings.closeEyesToToggle.label": "اقفل عينك عشان تشغّل/توقّف (<span style=\"border-bottom: 1px dotted;\" title=\"• حالياً مفيش تنبيه بصري أو صوتي.\n• مفيش إعدادات لمدة الضغط عشان التشغيل أو الإيقاف.\n• ممكن يحصل كشف غلط للرَمش، خصوصاً وإنت باصص لتحت.\">تجريبي</span>)",
+  "settings.closeEyesToToggle.label": "اقفل عينك عشان تشغّل/توقّف",
   "settings.delayBeforeDragging.description": "يوقف حركة الماوس للمدة المحددة في بداية الكليك.\nممكن تحب تقفّله لو بترسم على لوحة (canvas)، أو تزوده لو بتحصل معاك سحبات بالغلط وإنت بتحاول تنقر.",
   "settings.delayBeforeDragging.description.alt1": "يقفل حركة الماوس في بداية الكليك عشان يمنع السحب بالغلط.",
   "settings.delayBeforeDragging.label": "تأخير قبل السحب",

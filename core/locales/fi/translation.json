@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Sulje toinen silmä napsauttaaksesi. Vasen silmä vasemmalle napsautukselle, oikea silmä oikealle napsautukselle.",
   "settings.clickingMode.wink.label": "Iske silmää napsauttaaksesi",
   "settings.closeEyesToToggle.description": "Jos käytössä, voit aloittaa tai lopettaa hiiren ohjauksen pitämällä molemmat silmät suljettuina muutaman sekunnin ajan.",
-  "settings.closeEyesToToggle.label": "Sulje silmät käynnistääksesi tai pysäyttääksesi (<span style=\"border-bottom: 1px dotted;\" title=\"• Tällä hetkellä ei ole visuaalista tai äänipalautetta.\n• Kestoille päälle/pois ei ole erillisiä asetuksia.\n• Toimintaa häiritsevät virheelliset räpäytyksen tunnistukset, erityisesti katsoessa alaspäin.\">Kokeellinen</span>)",
+  "settings.closeEyesToToggle.label": "Sulje silmät käynnistääksesi tai pysäyttääksesi",
   "settings.delayBeforeDragging.description": "Lukitsee hiiren liikkeen annetun ajan napsautuksen alussa.\nVoit halutessasi ottaa tämän pois käytöstä, jos piirrät kankaalle, tai pidentää aikaa, jos huomaat vetäväsi vahingossa yrittäessäsi napsauttaa.",
   "settings.delayBeforeDragging.description.alt1": "Lukitsee hiiren liikkeen napsautuksen alussa estääkseen tahattoman vetämisen.",
   "settings.delayBeforeDragging.label": "Viive ennen vetämistä",

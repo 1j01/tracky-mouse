@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Zavřete jedno oko pro kliknutí. Levé oko pro levé tlačítko, pravé oko pro pravé tlačítko.",
   "settings.clickingMode.wink.label": "Mrknutím kliknout",
   "settings.closeEyesToToggle.description": "Pokud je zapnuto, můžete spustit nebo zastavit ovládání myši podržením obou zavřených očí po několik sekund.",
-  "settings.closeEyesToToggle.label": "Zavřením očí spustit/zastavit (<span style=\"border-bottom: 1px dotted;\" title=\"• Aktuálně nejsou k dispozici žádné vizuální ani zvukové odezvy.\n• Nejsou dostupná nastavení délek podržení pro zapnutí a vypnutí.\n• Funkce je ovlivněna falešným rozpoznáním mrknutí, zejména při pohledu dolů.\">Experimentální</span>)",
+  "settings.closeEyesToToggle.label": "Zavřením očí spustit/zastavit",
   "settings.delayBeforeDragging.description": "Na začátku kliknutí zamyká pohyb myši na zadanou dobu.\nMůžete to vypnout, pokud kreslíte na plátno, nebo dobu prodloužit, pokud při pokusu o kliknutí často omylem táhnete.",
   "settings.delayBeforeDragging.description.alt1": "Na začátku kliknutí zamyká pohyb myši, aby zabránil nechtěnému tažení.",
   "settings.delayBeforeDragging.label": "Prodleva před tažením",

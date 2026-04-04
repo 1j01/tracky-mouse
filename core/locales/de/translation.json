@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Schließen Sie ein Auge zum Klicken. Linkes Auge = Linksklick, rechtes Auge = Rechtsklick.",
   "settings.clickingMode.wink.label": "Zwinkern zum Klicken",
   "settings.closeEyesToToggle.description": "Wenn aktiviert, können Sie die Cursorsteuerung starten/stoppen, indem Sie beide Augen für einige Sekunden schließen.",
-  "settings.closeEyesToToggle.label": "Schließen Sie die Augen zum Starten/Stoppen (<span style=\"border-bottom: 1px dotted;\" title=\"• Es gibt derzeit kein visuelles oder akustisches Feedback.\n• Es gibt keine Einstellungen für Dauer.\n• Es ist anfällig für Fehlinterpretationen beim Blick nach unten.\">Experimentell</span>)",
+  "settings.closeEyesToToggle.label": "Schließen Sie die Augen zum Starten/Stoppen",
   "settings.delayBeforeDragging.description": "Sperrt die Cursorbewegung für die angegebene Dauer beim Start eines Klicks.\nDeaktivieren Sie dies ggf., wenn Sie auf einer Zeichenfläche arbeiten, oder erhöhen Sie den Wert, wenn Sie beim Klicken versehentlich ziehen.",
   "settings.delayBeforeDragging.description.alt1": "Sperrt die Cursorbewegung beim Start eines Klicks, um unbeabsichtigtes Ziehen zu verhindern.",
   "settings.delayBeforeDragging.label": "Verzögerung vor dem Ziehen",

@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Rufe ido ɗaya don danna. Idon hagu don danna hagu, idon dama don danna dama.",
   "settings.clickingMode.wink.label": "Kyalkyali don danna",
   "settings.closeEyesToToggle.description": "Idan an kunna wannan, zaka iya fara ko dakatar da sarrafa linzamin kwamfuta ta rufe idanuwanka biyu na ƴan daƙiƙu.",
-  "settings.closeEyesToToggle.label": "Rufe idanu don farawa/tsayawa (<span style=\"border-bottom: 1px dotted;\" title=\"• A halin yanzu babu saƙo na gani ko na ji.\n• Babu saitunan tsawon lokaci don kunnawa da kashewa.\n• Na iya yin kuskuren gano kyalkyali musammam idan an kalli ƙasa.\">Na gwaji</span>)",
+  "settings.closeEyesToToggle.label": "Rufe idanu don farawa/tsayawa",
   "settings.delayBeforeDragging.description": "Yana kulle motsin linzamin kwamfuta na wani ɗan lokaci a farkon danna.\nZa ka iya kashe wannan idan kana zanen abu a kan allon zane, ko ƙara lokacin idan kana jin kana ja ba tare da niyya ba yayin danna.",
   "settings.delayBeforeDragging.description.alt1": "Yana kulle motsin linzamin kwamfuta a farkon danna domin kauce wa ja ba da gangan ba.",
   "settings.delayBeforeDragging.label": "Jinkiri kafin ja",

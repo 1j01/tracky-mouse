@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Fermu unu okulon por alklaki. Maldekstra okulo por maldekstra klako, dekstra okulo por dekstra klako.",
   "settings.clickingMode.wink.label": "Palpebrumi por alklaki",
   "settings.closeEyesToToggle.description": "Se ebligita, vi povas starti aŭ halti mus-regadon tenante ambaŭ okulojn fermitaj dum kelkaj sekundoj.",
-  "settings.closeEyesToToggle.label": "Fermu la okulojn por starti/halti (<span style=\"border-bottom: 1px dotted;\" title=\"• Nuntempe ne estas vida aŭ sona reagado.\n• Ne ekzistas agordoj por la daŭroj por ŝalti kaj malŝalti.\n• Ĝi estas influita de falsaj pozitivaj palpebrum-detektadoj, precipe kiam vi rigardas malsupren.\">Eksperimenta</span>)",
+  "settings.closeEyesToToggle.label": "Fermu la okulojn por starti/halti",
   "settings.delayBeforeDragging.description": "Ŝlosas la movadon de la muso dum la donita daŭro ĉe la komenco de klako.\nVi eble volos malŝalti ĉi tion se vi desegnas sur kanvaso, aŭ pliigi ĝin se vi hazarde trenadas kiam vi provas alklaki.",
   "settings.delayBeforeDragging.description.alt1": "Ŝlosas la movadon de la muso ĉe la komenco de klako por malhelpi hazardan trenadon.",
   "settings.delayBeforeDragging.label": "Prokrasto antaŭ treni",

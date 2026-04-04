@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Lukk det ene øyet for å klikke. Venstre øye for venstreklikk, høyre øye for høyreklikk.",
   "settings.clickingMode.wink.label": "Blink for å klikke",
   "settings.closeEyesToToggle.description": "Hvis aktivert, kan du starte eller stoppe musestyringen ved å holde begge øynene lukket i noen sekunder.",
-  "settings.closeEyesToToggle.label": "Lukk øynene for å starte/stoppe (<span style=\"border-bottom: 1px dotted;\" title=\"• Det er for øyeblikket ingen visuell eller lydmessig tilbakemelding.\n• Det finnes ingen innstillinger for varighet for å slå av og på.\n• Påvirkes av feilaktig registrering av blunk, spesielt når du ser ned.\">Eksperimentell</span>)",
+  "settings.closeEyesToToggle.label": "Lukk øynene for å starte/stoppe",
   "settings.delayBeforeDragging.description": "Låser musebevegelsen i den angitte varigheten ved starten av et klikk.\nDu kan slå dette av hvis du tegner på et lerret, eller øke varigheten hvis du ofte drar ved et uhell når du prøver å klikke.",
   "settings.delayBeforeDragging.description.alt1": "Låser musebevegelsen i begynnelsen av et klikk for å hindre utilsiktet draing.",
   "settings.delayBeforeDragging.label": "Forsinkelse før dra",

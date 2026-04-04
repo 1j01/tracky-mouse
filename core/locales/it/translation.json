@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Chiudi un occhio per cliccare. Occhio sinistro = clic sinistro, occhio destro = clic destro.",
   "settings.clickingMode.wink.label": "Occhiolino per cliccare",
   "settings.closeEyesToToggle.description": "Se abilitato, puoi avviare o interrompere il controllo del mouse tenendo entrambi gli occhi chiusi per alcuni secondi.",
-  "settings.closeEyesToToggle.label": "Chiudi gli occhi per avviare/fermare (<span style=\"border-bottom: 1px dotted;\" title=\"• Attualmente non ci sono feedback visivi o sonori.\n• Non ci sono impostazioni per le durate.\n• È soggetto a falsi positivi nei lampeggi, specialmente guardando verso il basso.\">Sperimentale</span>)",
+  "settings.closeEyesToToggle.label": "Chiudi gli occhi per avviare/fermare",
   "settings.delayBeforeDragging.description": "Blocca il movimento del mouse per la durata specificata all'inizio di un clic.\nPotresti voler disattivare questa opzione se disegni su una tela, o aumentarla se trascini accidentalmente quando cerchi di cliccare.",
   "settings.delayBeforeDragging.description.alt1": "Blocca il movimento del mouse all'inizio di un clic per evitare trascinamenti accidentali.",
   "settings.delayBeforeDragging.label": "Ritardo prima del trascinamento",

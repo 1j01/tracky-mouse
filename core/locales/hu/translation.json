@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "Kacsints az egyik szemeddel a kattintáshoz. Bal szem – bal kattintás, jobb szem – jobb kattintás.",
   "settings.clickingMode.wink.label": "Kacsintás kattintáshoz",
   "settings.closeEyesToToggle.description": "Ha engedélyezett, néhány másodpercig csukva tartott mindkét szemmel indíthatod vagy leállíthatod az egérvezérlést.",
-  "settings.closeEyesToToggle.label": "Szemek becsukása az indításhoz/leállításhoz (<span style=\"border-bottom: 1px dotted;\" title=\"• Jelenleg nincs vizuális vagy hangvisszajelzés.\n• Nincsenek beállítások a ki- és bekapcsolási idők szabályozására.\n• A hibás pislogásfelismerés befolyásolhatja, főleg lefelé nézéskor.\">Kísérleti</span>)",
+  "settings.closeEyesToToggle.label": "Szemek becsukása az indításhoz/leállításhoz",
   "settings.delayBeforeDragging.description": "A kattintás elején a megadott időre zárolja az egér mozgását.\nHa rajzolsz, lehet, hogy ki akarod kapcsolni, ha pedig gyakran húzol véletlenül, érdemes növelni az időt.",
   "settings.delayBeforeDragging.description.alt1": "A kattintás elején zárolja az egér mozgását a véletlen húzások elkerülésére.",
   "settings.delayBeforeDragging.label": "Késleltetés húzás előtt",

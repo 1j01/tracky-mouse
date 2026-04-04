@@ -2093,7 +2093,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// - I considered adding "⚠︎" but it feels a little too alarming
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
-					label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)" }),
+					// label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)" }),
+					label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop" }),
 					className: "tracky-mouse-close-eyes-to-toggle",
 					key: "closeEyesToToggle",
 					type: "checkbox",

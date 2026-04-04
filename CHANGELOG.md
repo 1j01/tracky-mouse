@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Removed "experimental" label from "Close eyes to start/stop" setting.
+
 ### Added
 
 - In the dwell clicker API, added `config.shouldClickThrough(el)` hook to allow ignoring elements and clicking behind them.

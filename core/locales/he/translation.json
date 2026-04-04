@@ -100,7 +100,7 @@
   "settings.clickingMode.wink.description": "סגור עין אחת כדי ללחוץ. עין שמאל ללחיצה שמאלית, עין ימין ללחיצה ימנית.",
   "settings.clickingMode.wink.label": "קרוץ כדי ללחוץ",
   "settings.closeEyesToToggle.description": "אם מסומן, ניתן להתחיל או להפסיק את שליטת העכבר על ידי עצימת שתי העיניים לכמה שניות.",
-  "settings.closeEyesToToggle.label": "סגור את העיניים כדי להתחיל/להפסיק (<span style=\"border-bottom: 1px dotted;\" title=\"• כרגע אין משוב חזותי או קולי.\n• אין הגדרות לזמני הפעלה וכיבוי.\n• המערכת מושפעת מזיהוי שגוי של מצמוצים, במיוחד במבט מטה.\">ניסיוני</span>)",
+  "settings.closeEyesToToggle.label": "סגור את העיניים כדי להתחיל/להפסיק",
   "settings.delayBeforeDragging.description": "נועל את תנועת העכבר למשך פרק הזמן שנקבע בתחילת הלחיצה.\nניתן לבטל זאת אם מציירים על קנבס, או להגדיל את הזמן אם מתרחשות גרירות לא רצויות בעת ניסיון ללחוץ.",
   "settings.delayBeforeDragging.description.alt1": "נועל את תנועת העכבר בתחילת הלחיצה כדי למנוע גרירה לא רצויה.",
   "settings.delayBeforeDragging.label": "השהיה לפני גרירה",
