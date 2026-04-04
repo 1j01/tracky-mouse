@@ -251,9 +251,14 @@ updateHUD();
 import("./archery-mini-game.js");
 
 // Canvas demo
-import("./drawing-pad-demo.js").then(({ DrawingPad }) => {
-	new DrawingPad("drawing-pad-demo");
-});
+if (location.search.match(/\b(canvas|drawing)\b/)) {
+	import("./drawing-pad-demo.js").then(({ DrawingPad }) => {
+		new DrawingPad("drawing-pad-demo");
+	});
+	for (const element of document.querySelectorAll(".drawing-pad-demo-visibility")) {
+		element.removeAttribute("hidden");
+	}
+}
 
 // Gamepad as mouse support, for comparison in archery mini-game
 window.addEventListener("gamepadconnected", () => {
