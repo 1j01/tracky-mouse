@@ -87,6 +87,7 @@ class SleepSweep {
 
 		this.osc.start();
 
+		this.enabled = false;
 		this.active = false;
 		this.timeOfLastGestureTrigger = 0; // audio context time
 		this.maxEffectDurationAfterGestureTrigger = 2.0; // seconds
@@ -94,6 +95,9 @@ class SleepSweep {
 
 	update(gestureProgress) {
 		const now = this.ctx.currentTime;
+		if (!this.enabled) {
+			this.gain.gain.setTargetAtTime(0, now, 0.05);
+		}
 
 		const effectStartFraction = 0.5;
 
@@ -129,5 +133,9 @@ class SleepSweep {
 		this.gain.gain.setTargetAtTime(0, now + 0.05, nowInSleepMode ? 0.4 : 0.1); // should be <= this.maxEffectDurationAfterGestureTrigger
 
 		this.timeOfLastGestureTrigger = now;
+	}
+
+	setEnabled(enabled) {
+		this.enabled = enabled;
 	}
 }

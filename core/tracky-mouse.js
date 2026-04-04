@@ -3256,6 +3256,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
+		sleepSweep?.setEnabled(s.closeEyesToToggle);
+
 		if (!pointTracker) {
 			return;
 		}
@@ -3647,12 +3649,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							lastTimeWhenAnEyeWasOpen = performance.now();
 						}
 						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
-						sleepSweep.update(sleepGestureProgress);
+						sleepSweep?.update(sleepGestureProgress);
 						if (sleepGestureProgress >= 1) {
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
-								sleepSweep.sleepModeWasToggled(paused);
+								sleepSweep?.sleepModeWasToggled(paused);
 								// TODO: handle edge cases
 								// TODO: try to keep variable names meaningful
 								lastTimeWhenAnEyeWasOpen = Infinity;
