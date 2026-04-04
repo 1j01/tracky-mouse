@@ -97,6 +97,7 @@ class SleepSweep {
 		const now = this.ctx.currentTime;
 		if (!this.enabled) {
 			this.gain.gain.setTargetAtTime(0, now, 0.05);
+			return;
 		}
 
 		const effectStartFraction = 0.5;
