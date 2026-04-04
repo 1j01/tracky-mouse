@@ -3645,13 +3645,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						mouthInfo = detectMouthOpen();
 						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
 							lastTimeWhenAnEyeWasOpen = performance.now();
-							sleepSweep.reset();
 						}
-						if (performance.now() - lastTimeWhenAnEyeWasOpen > 2000) {
+						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
+						sleepSweep.update(sleepGestureProgress);
+						if (sleepGestureProgress >= 1) {
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
-								sleepSweep.toggled(paused);
+								sleepSweep.sleepModeWasToggled(paused);
 								// TODO: handle edge cases
 								// TODO: try to keep variable names meaningful
 								lastTimeWhenAnEyeWasOpen = Infinity;
