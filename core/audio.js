@@ -70,15 +70,13 @@ class SleepSweep {
 	constructor(actx) {
 		this.ctx = actx;
 
-		// Main oscillator (engine hum)
 		this.osc = this.ctx.createOscillator();
-		this.osc.type = "sawtooth";
+		this.osc.type = "sine";
 
-		// Gain for volume control
 		this.gain = this.ctx.createGain();
 		this.gain.gain.value = 0;
 
-		// Slight filtering to soften harshness
+		// Not sure how much this filter is actually doing
 		this.filter = this.ctx.createBiquadFilter();
 		this.filter.type = "lowpass";
 		this.filter.frequency.value = 800;
@@ -90,8 +88,6 @@ class SleepSweep {
 		this.osc.start();
 
 		this.active = false;
-
-
 		this.timeOfLastGestureTrigger = 0; // audio context time
 		this.maxEffectDurationAfterGestureTrigger = 2.0; // seconds
 	}
@@ -110,43 +106,27 @@ class SleepSweep {
 
 		const effectProgress = (gestureProgress - effectStartFraction) / (1 - effectStartFraction);
 
-		// Volume curve (gentle ramp)
 		const volume = effectProgress * effectProgress * 0.4;
 
-		// Pitch sweep (friendly hum rising)
 		const baseFreq = 120;
 		const freq = baseFreq + effectProgress * 120;
 
 		this.gain.gain.setTargetAtTime(volume, now, 0.05);
 		this.osc.frequency.setTargetAtTime(freq, now, 0.05);
 
-		// Slightly open filter as it ramps
 		this.filter.frequency.setTargetAtTime(800 + effectProgress * 1200, now, 0.05);
 	}
 
-	// timerWasReset() {
-	// 	const now = this.ctx.currentTime;
-
-	// 	// Smoothly fade out and reset tone
-	// 	this.gain.gain.setTargetAtTime(0, now, 0.05);
-	// 	this.osc.frequency.setTargetAtTime(120, now, 0.05);
-	// 	this.filter.frequency.setTargetAtTime(800, now, 0.05);
-	// }
-
 	sleepModeWasToggled(nowInSleepMode) {
 		const now = this.ctx.currentTime;
-
 		const currentFreq = this.osc.frequency.value;
-
-		const targetFreq = nowInSleepMode
-			? currentFreq * 0.5
-			: currentFreq * 2.0;
+		const targetFreq = currentFreq * (nowInSleepMode ? 0.5 : 2.0);
 
 		this.osc.frequency.cancelScheduledValues(now);
 		this.osc.frequency.setValueAtTime(currentFreq, now);
 		this.osc.frequency.exponentialRampToValueAtTime(targetFreq, now + (nowInSleepMode ? 1 : 0.15));
 
-		this.gain.gain.setTargetAtTime(0, now + 0.05, nowInSleepMode ? 0.5 : 0.1); // should be <= this.maxEffectDurationAfterGestureTrigger
+		this.gain.gain.setTargetAtTime(0, now + 0.05, nowInSleepMode ? 0.4 : 0.1); // should be <= this.maxEffectDurationAfterGestureTrigger
 
 		this.timeOfLastGestureTrigger = now;
 	}
