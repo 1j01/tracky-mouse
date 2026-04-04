@@ -53,16 +53,8 @@ const isSelectorValid = ((dummyElement) =>
 const dwellClickers = [];
 
 let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
-// Sound effects are disabled by default UNLESS the UI is initialized,
-// in which case there's a setting where you can turn them off.
-// This is a little awkward because the dwell clicker and UI are separate APIs,
-// but I think this is the most sensible thing for now.
-let soundEffectsEnabled = false;
-const playSoundIfEnabled = (...args) => {
-	if (soundEffectsEnabled) {
-		playSound(...args);
-	}
-};
+let initialAudioEnabled = false;
+let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
 
 /**
  * @param {Object} config
@@ -421,7 +413,7 @@ const initDwellClicking = (config) => {
 							})
 						));
 						config.afterDispatch?.();
-						playSoundIfEnabled("clickRelease");
+						playSound("clickRelease");
 					} else {
 						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
@@ -434,7 +426,7 @@ const initDwellClicking = (config) => {
 						config.afterDispatch?.();
 						if (config.shouldDrag?.(hoverCandidate.target)) {
 							dwellDragging = hoverCandidate.target;
-							playSoundIfEnabled("clickPress");
+							playSound("clickPress");
 						} else {
 							config.beforeDispatch?.();
 							hoverCandidate.target.dispatchEvent(new PointerEvent("pointerup",
@@ -445,8 +437,8 @@ const initDwellClicking = (config) => {
 							));
 							config.click(hoverCandidate);
 							config.afterDispatch?.();
-							playSoundIfEnabled("clickPress");
-							playSoundIfEnabled("clickRelease", { delay: 0.03 }); // fully separating the sounds sounded worse
+							playSound("clickPress");
+							playSound("clickRelease", { delay: 0.03 }); // fully separating the sounds sounded worse
 						}
 					}
 					hoverCandidate = null;
@@ -629,6 +621,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			const { initAudio } = module;
 			initAudio();
 			playSound = module.playSound;
+			setAudioEnabled = module.setAudioEnabled;
+			setAudioEnabled(initialAudioEnabled);
 		}, (e) => {
 			console.warn("Failed to load audio module, click sounds will be disabled:", e);
 		});
@@ -2068,10 +2062,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					type: "checkbox",
 					default: true,
 					afterInitialLoad: () => {
-						soundEffectsEnabled = s.soundEffects;
+						setAudioEnabled(s.soundEffects);
 					},
 					handleSettingChange: () => {
-						soundEffectsEnabled = s.soundEffects;
+						setAudioEnabled(s.soundEffects);
 					},
 					description: t("settings.soundEffects.description", { defaultValue: "Plays sounds when you click." }),
 				},
@@ -2574,7 +2568,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				setting._load?.(settings, initialLoad);
 			});
 		}
-		soundEffectsEnabled = s.soundEffects;
+		setAudioEnabled(s.soundEffects);
 
 		// Now that all settings are loaded, update disabled states
 		for (const func of functionsToUpdateDisabledStates) {
@@ -3694,7 +3688,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									const optionalPromise = setMouseButtonState(buttonIndex, buttonIsActive);
 									optionalPromise?.then((changedButtonState) => {
 										if (changedButtonState) {
-											playSoundIfEnabled(buttonIsActive ? "clickPress" : "clickRelease");
+											playSound(buttonIsActive ? "clickPress" : "clickRelease");
 										}
 									});
 								}

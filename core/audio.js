@@ -9,6 +9,15 @@ const audioFiles = {
 };
 const audioBuffers = {};
 
+// Sound effects are disabled by default because the dwell clicker can be initialized without the UI,
+// in which case there's no UI to disable the sound effects from.
+// The actual default in the app is separate.
+export let audioEnabled = false;
+
+export function setAudioEnabled(enabled) {
+	audioEnabled = enabled;
+};
+
 export function initAudio() {
 	if (actx === null) {
 		actx = new AudioContext();
@@ -40,7 +49,7 @@ export function initAudio() {
 }
 
 export function playSound(soundId, { delay = 0 } = {}) {
-	if (actx && actx.state === "running" && audioBuffers[soundId]) {
+	if (audioEnabled && actx && actx.state === "running" && audioBuffers[soundId]) {
 		const source = actx.createBufferSource();
 		source.buffer = audioBuffers[soundId];
 		source.connect(actx.destination);
