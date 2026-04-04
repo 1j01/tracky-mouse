@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In the dwell clicker API, added `config.shouldClickThrough(el)` hook to allow ignoring elements and clicking behind them.
   - By default, it will match elements with the class `.tracky-mouse-click-through`.
   - In most cases `pointer-events: none` can be used instead. The new API is useful for specifically blocking system mouse interaction without blocking Tracky Mouse. This is used in the archery mini-game on the website to temporarily disable system mouse interaction when you're using head tracking, to improve the accuracy of categorizing input methods on the scoreboard.
-- Added a **General > Sound effects** setting, enabled by default, which plays sounds when you click.
+- Added a **General > Sound effects** setting, enabled by default, which plays sounds when you click, as well as giving audio feedback for the "Close eyes to start/stop" gesture. ([issue #125](https://github.com/1j01/tracky-mouse/issues/125))
 
 ### Fixed
 

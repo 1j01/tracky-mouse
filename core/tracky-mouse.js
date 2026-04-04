@@ -55,6 +55,8 @@ const dwellClickers = [];
 let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
 let initialAudioEnabled = false;
 let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
+/** @type {SleepSweep | null} */
+let sleepSweep = null;
 
 /**
  * @param {Object} config
@@ -622,6 +624,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			initAudio();
 			playSound = module.playSound;
 			setAudioEnabled = module.setAudioEnabled;
+			sleepSweep = module.sleepSweep;
 			setAudioEnabled(initialAudioEnabled);
 		}, (e) => {
 			console.warn("Failed to load audio module, click sounds will be disabled:", e);
@@ -3253,6 +3256,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
+		sleepSweep?.setEnabled(s.closeEyesToToggle);
+
 		if (!pointTracker) {
 			return;
 		}
@@ -3643,10 +3648,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
 							lastTimeWhenAnEyeWasOpen = performance.now();
 						}
-						if (performance.now() - lastTimeWhenAnEyeWasOpen > 2000) {
+						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
+						sleepSweep?.update(sleepGestureProgress);
+						if (sleepGestureProgress >= 1) {
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
+								sleepSweep?.sleepModeWasToggled(paused);
 								// TODO: handle edge cases
 								// TODO: try to keep variable names meaningful
 								lastTimeWhenAnEyeWasOpen = Infinity;

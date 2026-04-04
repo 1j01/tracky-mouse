@@ -292,3 +292,10 @@ npm run in-website -- npm run deploy
 
 Publish the GitHub release. This should trigger a GitHub Actions workflow which publishes the core package to npm.
 
+## Credits
+
+Sound effects:
+- Sleep gesture pause/unpause: [Michel Baradari - 9 Sci-Fi Computer Sounds and Beeps](https://opengameart.org/content/9-sci-fi-computer-sounds-and-beeps) (CC-BY 3.0)
+- Click: [Kenney - 51 UI sound effects (buttons, switches and clicks)](https://opengameart.org/content/51-ui-sound-effects-buttons-switches-and-clicks) (CC0)
+- Middle click: [Isaiah Odhner - Middle Mouse Click](https://opengameart.org/content/middle-mouse-click) (CC0)
+

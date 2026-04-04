@@ -1,13 +1,20 @@
 
 /** @type {AudioContext | null} */
 let actx = null;
+/** @type {SleepSweep | null} */
+export let sleepSweep = null;
 
 const audioPath = new URL("./audio", import.meta.url).href;
 const audioFiles = {
+	// https://opengameart.org/content/51-ui-sound-effects-buttons-switches-and-clicks (CC0)
 	clickPress: `${audioPath}/click-press.wav`,
 	clickRelease: `${audioPath}/click-release.wav`,
+	// https://opengameart.org/content/middle-mouse-click (original recordings for this project, released under CC0)
 	middleClickPress: `${audioPath}/middle-click-press.wav`,
 	middleClickRelease: `${audioPath}/middle-click-release.wav`,
+	// https://opengameart.org/content/9-sci-fi-computer-sounds-and-beeps (CC-BY 3.0)
+	pause: `${audioPath}/pause.wav`,
+	unpause: `${audioPath}/unpause.wav`,
 };
 const audioBuffers = {};
 
@@ -47,6 +54,9 @@ export function initAudio() {
 					console.error("Error loading audio file:", url, error);
 				});
 		}
+
+		// Set up other effect(s)
+		sleepSweep = new SleepSweep(actx);
 	}
 }
 
@@ -59,5 +69,81 @@ export function playSound(soundId, { delay = 0, playbackRate = 1, volume = 1 } =
 		gain.gain.value = volume;
 		source.playbackRate.value = playbackRate;
 		source.start(actx.currentTime + delay);
+	}
+}
+class SleepSweep {
+	constructor(actx) {
+		this.ctx = actx;
+
+		this.osc = this.ctx.createOscillator();
+		this.osc.type = "sine";
+
+		this.gain = this.ctx.createGain();
+		this.gain.gain.value = 0;
+
+		// Not sure how much this filter is actually doing
+		this.filter = this.ctx.createBiquadFilter();
+		this.filter.type = "lowpass";
+		this.filter.frequency.value = 800;
+
+		this.osc.connect(this.filter);
+		this.filter.connect(this.gain);
+		this.gain.connect(this.ctx.destination);
+
+		this.osc.start();
+
+		this.enabled = false;
+		this.active = false;
+		this.timeOfLastGestureTrigger = 0; // audio context time
+		this.maxEffectDurationAfterGestureTrigger = 2.0; // seconds
+	}
+
+	update(gestureProgress) {
+		const now = this.ctx.currentTime;
+		if (!this.enabled) {
+			this.gain.gain.setTargetAtTime(0, now, 0.05);
+			return;
+		}
+
+		const effectStartFraction = 0.5;
+
+		if (gestureProgress < effectStartFraction) {
+			if (this.timeOfLastGestureTrigger + this.maxEffectDurationAfterGestureTrigger < now) {
+				this.gain.gain.setTargetAtTime(0, now, 0.05);
+			}
+			return;
+		}
+
+		const effectProgress = (gestureProgress - effectStartFraction) / (1 - effectStartFraction);
+
+		const volume = effectProgress * effectProgress * 0.4;
+
+		const baseFreq = 120;
+		const freq = baseFreq + effectProgress * 40;
+
+		this.gain.gain.setTargetAtTime(volume, now, 0.05);
+		this.osc.frequency.setTargetAtTime(freq, now, 0.05);
+
+		this.filter.frequency.setTargetAtTime(800 + effectProgress * 1200, now, 0.05);
+	}
+
+	sleepModeWasToggled(nowInSleepMode) {
+		const now = this.ctx.currentTime;
+		const currentFreq = this.osc.frequency.value;
+		const targetFreq = currentFreq * (nowInSleepMode ? 0.5 : 2.0);
+
+		this.osc.frequency.cancelScheduledValues(now);
+		this.osc.frequency.setValueAtTime(currentFreq, now);
+		this.osc.frequency.exponentialRampToValueAtTime(targetFreq, now + (nowInSleepMode ? 1 : 0.15));
+
+		this.gain.gain.setTargetAtTime(0, now + 0.05, nowInSleepMode ? 0.2 : 0.1); // should be <= this.maxEffectDurationAfterGestureTrigger
+
+		playSound(nowInSleepMode ? "pause" : "unpause");
+
+		this.timeOfLastGestureTrigger = now;
+	}
+
+	setEnabled(enabled) {
+		this.enabled = enabled;
 	}
 }
