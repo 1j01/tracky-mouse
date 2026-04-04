@@ -4240,7 +4240,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false (at least in some version of Electron (v12 I think, when I tested it), on Ubuntu, with XFCE)
 	const iid = setInterval(function animationLoop() {
-		draw(!paused || document.visibilityState === "visible");
+		draw(!paused || document.visibilityState === "visible" || isDesktopApp);
 	}, 15);
 
 	let autoDemo = false;

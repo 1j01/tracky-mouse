@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed an issue where mouth movement would sometimes affect the cursor position, due to tracking points on the mouth. This was especially problematic for the "Open mouth to click" modes. It now specifically avoids tracking movement near the lips. ([issue #34](https://github.com/1j01/tracky-mouse/issues/34))
+- Fixed "Close eyes to start/stop" gesture not working when the desktop app's window was in the background.
 
 ## [2.6.0] - 2026-03-21
 
