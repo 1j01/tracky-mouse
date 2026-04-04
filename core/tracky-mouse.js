@@ -3737,7 +3737,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 										if (changedButtonState) {
 											if (buttonIndex === 1) {
 												playSound(buttonIsActive ? "middleClickPress" : "middleClickRelease", {
-													volume: 2,
+													volume: 4,
 												});
 											} else {
 												playSound(buttonIsActive ? "clickPress" : "clickRelease", {
