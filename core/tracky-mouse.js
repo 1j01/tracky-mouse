@@ -3733,8 +3733,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								if (!setMouseButtonState) {
 									console.warn("setMouseButtonState function not provided");
 								} else {
-									const optionalPromise = setMouseButtonState(buttonIndex, buttonIsActive);
-									optionalPromise?.then((changedButtonState) => {
+									const maybeAPromise = setMouseButtonState(buttonIndex, buttonIsActive);
+									const playSoundForButton = (changedButtonState) => {
 										if (changedButtonState) {
 											if (buttonIndex === 1) {
 												playSound(buttonIsActive ? "middleClickPress" : "middleClickRelease", {
@@ -3746,7 +3746,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 												});
 											}
 										}
-									});
+									};
+									if (maybeAPromise instanceof Promise) {
+										maybeAPromise.then(playSoundForButton);
+									} else {
+										playSoundForButton(maybeAPromise);
+									}
 								}
 								buttonStates[buttonNames[buttonIndex]] = buttonIsActive;
 								if (buttonIsActive) {
