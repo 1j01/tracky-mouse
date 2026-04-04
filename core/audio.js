@@ -66,17 +66,84 @@ export function playSound(soundId, { delay = 0, playbackRate = 1, volume = 1 } =
 		source.start(actx.currentTime + delay);
 	}
 }
-
 class SleepSweep {
 	constructor(actx) {
+		this.ctx = actx;
 
+		// Main oscillator (engine hum)
+		this.osc = this.ctx.createOscillator();
+		this.osc.type = "sawtooth";
+
+		// Gain for volume control
+		this.gain = this.ctx.createGain();
+		this.gain.gain.value = 0;
+
+		// Slight filtering to soften harshness
+		this.filter = this.ctx.createBiquadFilter();
+		this.filter.type = "lowpass";
+		this.filter.frequency.value = 800;
+
+		this.osc.connect(this.filter);
+		this.filter.connect(this.gain);
+		this.gain.connect(this.ctx.destination);
+
+		this.osc.start();
+
+		this.active = false;
 	}
+
+	// progress: 0 → 1 over the 2 seconds
+	update(progress) {
+		const now = this.ctx.currentTime;
+
+		// Don’t start immediately — wait until halfway
+		const startPoint = 0.5;
+
+		if (progress < startPoint) {
+			this.gain.gain.setTargetAtTime(0, now, 0.05);
+			return;
+		}
+
+		const t = (progress - startPoint) / (1 - startPoint);
+
+		// Volume curve (gentle ramp)
+		const volume = t * t * 0.4;
+
+		// Pitch sweep (friendly hum rising)
+		const baseFreq = 120;
+		const freq = baseFreq + t * 120;
+
+		this.gain.gain.setTargetAtTime(volume, now, 0.05);
+		this.osc.frequency.setTargetAtTime(freq, now, 0.05);
+
+		// Slightly open filter as it ramps
+		this.filter.frequency.setTargetAtTime(800 + t * 1200, now, 0.05);
+	}
+
+	// timerWasReset() {
+	// 	const now = this.ctx.currentTime;
+
+	// 	// Smoothly fade out and reset tone
+	// 	this.gain.gain.setTargetAtTime(0, now, 0.05);
+	// 	this.osc.frequency.setTargetAtTime(120, now, 0.05);
+	// 	this.filter.frequency.setTargetAtTime(800, now, 0.05);
+	// }
 
 	sleepModeWasToggled(nowInSleepMode) {
+		const now = this.ctx.currentTime;
 
-	}
+		// Quick chirp: up when enabling, down when disabling
+		const currentFreq = this.osc.frequency.value;
 
-	timerWasReset() {
+		const targetFreq = nowInSleepMode
+			? currentFreq * 2.2   // rising chirp
+			: currentFreq * 0.5;  // falling chirp
 
+		this.osc.frequency.cancelScheduledValues(now);
+		this.osc.frequency.setValueAtTime(currentFreq, now);
+		this.osc.frequency.exponentialRampToValueAtTime(targetFreq, now + 0.15);
+
+		// Fade out quickly after chirp
+		this.gain.gain.setTargetAtTime(0, now + 0.05, 0.1);
 	}
 }
