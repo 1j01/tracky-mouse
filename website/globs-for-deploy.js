@@ -31,6 +31,7 @@ exports.include = [
 	"input-simulator.js",
 	"gamepad-mouse.js",
 	"archery-mini-game.js",
+	"drawing-pad-demo.js",
 	"core/images/*.svg",
 	"core/audio/*.wav",
 	"core/tracky-mouse.css",
