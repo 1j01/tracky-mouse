@@ -100,7 +100,7 @@ class SleepSweep {
 
 	update(gestureProgress) {
 		const now = this.ctx.currentTime;
-		if (!this.enabled) {
+		if (!this.enabled || !audioEnabled) {
 			this.gain.gain.setTargetAtTime(0, now, 0.05);
 			return;
 		}
