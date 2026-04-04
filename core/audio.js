@@ -1,6 +1,8 @@
 
 /** @type {AudioContext | null} */
 let actx = null;
+/** @type {SleepSweep | null} */
+export let sleepSweep = null;
 
 const audioPath = new URL("./audio", import.meta.url).href;
 const audioFiles = {
@@ -47,6 +49,9 @@ export function initAudio() {
 					console.error("Error loading audio file:", url, error);
 				});
 		}
+
+		// Set up other effect(s)
+		sleepSweep = new SleepSweep(actx);
 	}
 }
 
@@ -61,3 +66,22 @@ export function playSound(soundId, { delay = 0, playbackRate = 1, volume = 1 } =
 		source.start(actx.currentTime + delay);
 	}
 }
+
+class SleepSweep {
+	constructor(actx) {
+		this.oscillator = actx.createOscillator();
+		this.gain = actx.createGain();
+		this.oscillator.connect(this.gain).connect(actx.destination);
+		this.oscillator.type = "sine";
+		this.oscillator.frequency.value = 0.5;
+	}
+
+	toggled(paused) {
+		if (paused) {
+			this.oscillator.start();
+		} else {
+			this.oscillator.stop();
+			this.oscillator.disconnect();
+			this.gain.disconnect();
+		}
+	}
