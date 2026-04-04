@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - In most cases `pointer-events: none` can be used instead. The new API is useful for specifically blocking system mouse interaction without blocking Tracky Mouse. This is used in the archery mini-game on the website to temporarily disable system mouse interaction when you're using head tracking, to improve the accuracy of categorizing input methods on the scoreboard.
 - Added a **General > Sound effects** setting, enabled by default, which plays sounds when you click.
 
+### Fixed
+
+- Fixed an issue where mouth movement would sometimes affect the cursor position, due to tracking points on the mouth. This was especially problematic for the "Open mouth to click" modes. It now specifically avoids tracking movement near the lips. ([issue #34](https://github.com/1j01/tracky-mouse/issues/34))
+
 ## [2.6.0] - 2026-03-21
 
 ### Changed

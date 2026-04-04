@@ -3404,6 +3404,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							if (distance > headSize) {
 								return false;
 							}
+							// Avoid mouth affecting pointer position.
+							distance = annotations.lipsLowerInner.map((lipPoint) =>
+								Math.min(
+									Math.hypot(lipPoint[0] - x, lipPoint[1] - y),
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.1 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.2 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.3 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.4 - y), // a bit below too (yeah I'm being a little lazy here)
+								)
+							).reduce((a, b) => Math.min(a, b), Infinity);
+							if (distance < headSize * 0.1) {
+								return false;
+							}
 							// Avoid blinking eyes affecting pointer position.
 							// distance to outer corners of eyes
 							distance = Math.min(
