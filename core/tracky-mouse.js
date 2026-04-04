@@ -52,6 +52,12 @@ const isSelectorValid = ((dummyElement) =>
 
 const dwellClickers = [];
 
+let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
+let initialAudioEnabled = false;
+let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
+/** @type {SleepSweep | null} */
+let sleepSweep = null;
+
 /**
  * @param {Object} config
  * @param {string} config.targets - a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
@@ -409,6 +415,7 @@ const initDwellClicking = (config) => {
 							})
 						));
 						config.afterDispatch?.();
+						playSound("clickRelease");
 					} else {
 						config.beforePointerDownDispatch?.();
 						config.beforeDispatch?.();
@@ -421,6 +428,7 @@ const initDwellClicking = (config) => {
 						config.afterDispatch?.();
 						if (config.shouldDrag?.(hoverCandidate.target)) {
 							dwellDragging = hoverCandidate.target;
+							playSound("clickPress");
 						} else {
 							config.beforeDispatch?.();
 							hoverCandidate.target.dispatchEvent(new PointerEvent("pointerup",
@@ -431,6 +439,8 @@ const initDwellClicking = (config) => {
 							));
 							config.click(hoverCandidate);
 							config.afterDispatch?.();
+							playSound("clickPress");
+							playSound("clickRelease", { delay: 0.03 }); // fully separating the sounds sounded worse
 						}
 					}
 					hoverCandidate = null;
@@ -607,6 +617,21 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// and it's not like we want to expose all electronAPI as part of the public API necessarily
 		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
+
+	try {
+		import("./audio.js").then((module) => {
+			const { initAudio } = module;
+			initAudio();
+			playSound = module.playSound;
+			setAudioEnabled = module.setAudioEnabled;
+			sleepSweep = module.sleepSweep;
+			setAudioEnabled(initialAudioEnabled);
+		}, (e) => {
+			console.warn("Failed to load audio module, click sounds will be disabled:", e);
+		});
+	} catch (e) {
+		console.warn("Failed to load audio support, click sounds will be disabled:", e);
+	}
 
 	const isDesktopApp = !!window.electronAPI;
 
@@ -2033,6 +2058,20 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			type: "group",
 			label: t("settings.sections.general.label", { defaultValue: "General" }),
 			settings: [
+				{
+					label: t("settings.soundEffects.label", { defaultValue: "Sound effects" }),
+					className: "tracky-mouse-sound-effects",
+					key: "soundEffects",
+					type: "checkbox",
+					default: true,
+					afterInitialLoad: () => {
+						setAudioEnabled(s.soundEffects);
+					},
+					handleSettingChange: () => {
+						setAudioEnabled(s.soundEffects);
+					},
+					description: t("settings.soundEffects.description", { defaultValue: "Plays sounds when you click." }),
+				},
 				// opposite, "Start paused", might be clearer, especially if I add a "pause" button
 				{
 					label: t("settings.startEnabled.label", { defaultValue: "Start enabled" }),
@@ -2054,7 +2093,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					// - I considered adding "⚠︎" but it feels a little too alarming
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"Planned refinements include: visual and auditory feedback, improved detection accuracy, and separate settings for durations to toggle on and off.\">experimental</span>)",
 					// label: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• Missing visual and auditory feedback.\n• Missing settings for duration(s) to toggle on and off.\n• Affected by false positive blink detections, especially when looking downward.\">Experimental</span>)",
-					label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)" }),
+					// label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop (<span style=\"border-bottom: 1px dotted;\" title=\"• There is currently no visual or auditory feedback.\n• There are no settings for duration(s) to toggle on and off.\n• It is affected by false positive blink detections, especially when looking downward.\">Experimental</span>)" }),
+					label: t("settings.closeEyesToToggle.label", { defaultValue: "Close eyes to start/stop" }),
 					className: "tracky-mouse-close-eyes-to-toggle",
 					key: "closeEyesToToggle",
 					type: "checkbox",
@@ -2359,6 +2399,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var showDebugText = false;
 	var showDebugEyeZoom = false;
 	var showDebugHeadTilt = false;
+	var showDebugRegionFilter = false;
 
 	// Constants (could become Advanced Settings in the future)
 	var defaultWidth = 640;
@@ -2532,6 +2573,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				setting._load?.(settings, initialLoad);
 			});
 		}
+		setAudioEnabled(s.soundEffects);
 
 		// Now that all settings are loaded, update disabled states
 		for (const func of functionsToUpdateDisabledStates) {
@@ -3215,6 +3257,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
+		sleepSweep?.setEnabled(s.closeEyesToToggle);
+
 		if (!pointTracker) {
 			return;
 		}
@@ -3350,13 +3394,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						// TODO: separate confidence threshold for removing vs adding points?
 
+
 						// cull points to those within useful facial region
-						pointTracker.filterPoints((pointIndex) => {
-							var pointOffset = pointIndex * 2;
+						function regionFilter([x, y]) {
+
 							// distance from tip of nose (stretched so make an ellipse taller than wide)
 							var distance = Math.hypot(
-								(annotations.noseTip[0][0] - pointTracker.curXY[pointOffset]) * 1.4,
-								annotations.noseTip[0][1] - pointTracker.curXY[pointOffset + 1]
+								(annotations.noseTip[0][0] - x) * 1.4,
+								annotations.noseTip[0][1] - y
 							);
 							var headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
@@ -3365,23 +3410,60 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							if (distance > headSize) {
 								return false;
 							}
+							// Avoid mouth affecting pointer position.
+							distance = annotations.lipsLowerInner.map((lipPoint) =>
+								Math.min(
+									Math.hypot(lipPoint[0] - x, lipPoint[1] - y),
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.1 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.2 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.3 - y), // a bit below too
+									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.4 - y), // a bit below too (yeah I'm being a little lazy here)
+								)
+							).reduce((a, b) => Math.min(a, b), Infinity);
+							if (distance < headSize * 0.1) {
+								return false;
+							}
 							// Avoid blinking eyes affecting pointer position.
 							// distance to outer corners of eyes
 							distance = Math.min(
 								Math.hypot(
-									annotations.leftEyeLower0[0][0] - pointTracker.curXY[pointOffset],
-									annotations.leftEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
+									annotations.leftEyeLower0[0][0] - x,
+									annotations.leftEyeLower0[0][1] - y
 								),
 								Math.hypot(
-									annotations.rightEyeLower0[0][0] - pointTracker.curXY[pointOffset],
-									annotations.rightEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
+									annotations.rightEyeLower0[0][0] - x,
+									annotations.rightEyeLower0[0][1] - y
 								),
 							);
 							if (distance < headSize * 0.42) {
 								return false;
 							}
 							return true;
+						}
+						pointTracker.filterPoints((pointIndex) => {
+							var pointOffset = pointIndex * 2;
+							const point = [pointTracker.curXY[pointOffset], pointTracker.curXY[pointOffset + 1]];
+							return regionFilter(point);
 						});
+
+						// Debug visualization for region filter (a sort of heatmap of where points will be culled)
+						if (showDebugRegionFilter) {
+							ctx.save();
+							if (s.mirror) {
+								ctx.translate(canvas.width, 0);
+								ctx.scale(-1, 1);
+							}
+							ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+							const vizStep = 4;
+							for (let x = 0; x < canvas.width; x += vizStep) {
+								for (let y = 0; y < canvas.height; y += vizStep) {
+									if (!regionFilter([x, y])) {
+										ctx.fillRect(x - 5, y - 5, vizStep, vizStep);
+									}
+								}
+							}
+							ctx.restore();
+						}
 
 						const keypoints = facemeshPrediction.keypoints;
 						if (keypoints) {
@@ -3567,10 +3649,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
 							lastTimeWhenAnEyeWasOpen = performance.now();
 						}
-						if (performance.now() - lastTimeWhenAnEyeWasOpen > 2000) {
+						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
+						sleepSweep?.update(sleepGestureProgress);
+						if (sleepGestureProgress >= 1) {
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
+								sleepSweep?.sleepModeWasToggled(paused);
 								// TODO: handle edge cases
 								// TODO: try to keep variable names meaningful
 								lastTimeWhenAnEyeWasOpen = Infinity;
@@ -3635,10 +3720,41 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						const buttonNames = ["left", "middle", "right"];
 						for (let buttonIndex = 0; buttonIndex < 3; buttonIndex++) {
-							if ((clickButton === buttonIndex) !== buttonStates[buttonNames[buttonIndex]]) {
-								setMouseButtonState(buttonIndex, clickButton === buttonIndex);
-								buttonStates[buttonNames[buttonIndex]] = clickButton === buttonIndex;
-								if ((clickButton === buttonIndex)) {
+							const buttonIsActive = clickButton === buttonIndex;
+							if (buttonIsActive !== buttonStates[buttonNames[buttonIndex]]) {
+								// Wait for confirmation of the button state change before playing SFX
+								// but not before updating buttonStates, since we check that in this loop
+								// to decide whether to call setMouseButtonState.
+								// We don't want to send extraneous mouse button changes to the main process,
+								// even if it does track button states itself. If nothing else it's wasted IPC.
+								// That said, an argument could be made for updating lastMouseDownTime later
+								// if the IPC is slow, to extend the time frame for making a simple click
+								// rather than a drag.
+								if (!setMouseButtonState) {
+									console.warn("setMouseButtonState function not provided");
+								} else {
+									const maybeAPromise = setMouseButtonState(buttonIndex, buttonIsActive);
+									const playSoundForButton = (changedButtonState) => {
+										if (changedButtonState) {
+											if (buttonIndex === 1) {
+												playSound(buttonIsActive ? "middleClickPress" : "middleClickRelease", {
+													volume: 4,
+												});
+											} else {
+												playSound(buttonIsActive ? "clickPress" : "clickRelease", {
+													playbackRate: buttonIndex === 0 ? 1 : buttonIndex === 2 ? 1.2 : 1.5,
+												});
+											}
+										}
+									};
+									if (maybeAPromise instanceof Promise) {
+										maybeAPromise.then(playSoundForButton);
+									} else {
+										playSoundForButton(maybeAPromise);
+									}
+								}
+								buttonStates[buttonNames[buttonIndex]] = buttonIsActive;
+								if (buttonIsActive) {
 									lastMouseDownTime = performance.now();
 								} else {
 									// Limit "Delay Before Dragging" effect to the duration of a click.
@@ -4130,7 +4246,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 	// Can't use requestAnimationFrame, doesn't work with webPreferences.backgroundThrottling: false (at least in some version of Electron (v12 I think, when I tested it), on Ubuntu, with XFCE)
 	const iid = setInterval(function animationLoop() {
-		draw(!paused || document.visibilityState === "visible");
+		draw(!paused || document.visibilityState === "visible" || isDesktopApp);
 	}, 15);
 
 	let autoDemo = false;

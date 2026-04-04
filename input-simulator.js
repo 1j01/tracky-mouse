@@ -153,7 +153,9 @@ export class InputSimulator {
 			} else {
 				this.pointerUp(target, x, y, buttonIndex);
 			}
+			return true;
 		}
+		return false;
 	}
 	dropdownToCloseFunction = new WeakMap();
 	openDropdown(dropdown, { focus = true } = {}) {
@@ -357,7 +359,17 @@ export class InputSimulator {
 			}
 		} else {
 			// Normal click
-			target.click();
+			// HTMLElement has click() but SVGElement does not
+			if (target.click) {
+				target.click();
+			} else {
+				const event = new MouseEvent("click", Object.assign(this.getEventOptions({ x, y }), {
+					button: 0,
+					bubbles: true,
+					cancelable: true,
+				}));
+				target.dispatchEvent(event);
+			}
 			if (target.matches("input, textarea")) {
 				target.focus();
 			}

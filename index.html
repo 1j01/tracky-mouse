@@ -149,6 +149,9 @@
 				<div>
 					<h3>Facial Gestures</h3>
 					<p>Click by winking or opening your mouth. Hold the pose to drag.</p>
+					<!-- when generalized, might read more like: -->
+					<!-- <h3>Gestures</h3> -->
+					<!-- <p>Blink, smile, or raise your eyebrows to trigger actions.</p> -->
 				</div>
 			</li>
 			<li>
@@ -174,13 +177,6 @@
 				</div>
 			</li>
 			<!-- <li>
-				<img width="64" height="64" src="images/gestures.svg" alt="Facial gestures">
-				<div>
-					<h3>Gestures</h3>
-					<p>Blink, smile, or raise your eyebrows to trigger actions.</p>
-				</div>
-			</li> -->
-			<!-- <li>
 				<img width="64" height="64" src="images/open-source.svg" alt="Open source logo">
 				<div>
 					<h3>Free and Open Source</h3>
@@ -205,6 +201,34 @@
 					(see: CLI)
 				</div>
 			</li> -->
+			<li>
+				<div>
+					<h3>And more...</h3>
+					<ul style="line-height: 1.7;">
+						<li>Sound effects</li>
+						<li>
+							<a href="https://github.com/1j01/tracky-mouse/blob/main/core/README.md#tracky-mouse-api">
+								Embedding API
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/1j01/tracky-mouse/blob/main/CLI.md#tracky-mouse-cli">
+								<!-- Command Line Interface -->
+								CLI for external control
+								<!-- CLI for software interoperability -->
+							</a>
+						</li>
+						<li>Translated into 60 languages</li>
+						<li>Free (<a href="https://www.paypal.com/paypalme/IsaiahOdhner">donations
+								accepted</a>)</li>
+						<li>
+							<a href="https://github.com/1j01/tracky-mouse">
+								Open source
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
 		</ul>
 	</section>
 	<section class="page-section">
@@ -250,9 +274,10 @@
 			or other conditions that make it difficult to use a mouse,
 			can greatly benefit from hands-free computer control.
 		</p>
-		<p>
-			As a programmer, Tracky Mouse helps me edit code faster because I my hands don't have to leave the keyboard.
-		</p>
+		<!-- <p>
+			As a programmer, Tracky Mouse has helped me edit code faster
+			because my hands don't have to leave the keyboard to move the cursor.
+		</p> -->
 		<p>
 			It's also just fun! It feels like controlling the computer with your mind.
 		</p>
@@ -328,6 +353,13 @@
 				aria-label="archery target"></button>
 			<button class="archery-target" style="--diameter: 100px; top: 100%; left: 100%"
 				aria-label="archery target"></button>
+		</div>
+
+		<h3 hidden style="font-weight: 100; font-size: 5em; opacity: 0.5; margin: 0.2em; text-align: center;"
+			class="drawing-pad-demo-visibility">
+			Drawing Pad Demo
+		</h3>
+		<div hidden id="drawing-pad-demo" class="drawing-pad-demo-visibility">
 		</div>
 	</section>
 	<section class="page-section">
