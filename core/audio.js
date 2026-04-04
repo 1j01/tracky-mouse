@@ -90,34 +90,38 @@ class SleepSweep {
 		this.osc.start();
 
 		this.active = false;
+
+
+		this.timeOfLastGestureTrigger = 0; // audio context time
+		this.maxEffectDurationAfterGestureTrigger = 2.0; // seconds
 	}
 
-	// progress: 0 → 1 over the 2 seconds
-	update(progress) {
+	update(gestureProgress) {
 		const now = this.ctx.currentTime;
 
-		// Don’t start immediately — wait until halfway
-		const startPoint = 0.5;
+		const effectStartFraction = 0.5;
 
-		if (progress < startPoint) {
-			this.gain.gain.setTargetAtTime(0, now, 0.05);
+		if (gestureProgress < effectStartFraction) {
+			if (this.timeOfLastGestureTrigger + this.maxEffectDurationAfterGestureTrigger < now) {
+				this.gain.gain.setTargetAtTime(0, now, 0.05);
+			}
 			return;
 		}
 
-		const t = (progress - startPoint) / (1 - startPoint);
+		const effectProgress = (gestureProgress - effectStartFraction) / (1 - effectStartFraction);
 
 		// Volume curve (gentle ramp)
-		const volume = t * t * 0.4;
+		const volume = effectProgress * effectProgress * 0.4;
 
 		// Pitch sweep (friendly hum rising)
 		const baseFreq = 120;
-		const freq = baseFreq + t * 120;
+		const freq = baseFreq + effectProgress * 120;
 
 		this.gain.gain.setTargetAtTime(volume, now, 0.05);
 		this.osc.frequency.setTargetAtTime(freq, now, 0.05);
 
 		// Slightly open filter as it ramps
-		this.filter.frequency.setTargetAtTime(800 + t * 1200, now, 0.05);
+		this.filter.frequency.setTargetAtTime(800 + effectProgress * 1200, now, 0.05);
 	}
 
 	// timerWasReset() {
@@ -132,18 +136,18 @@ class SleepSweep {
 	sleepModeWasToggled(nowInSleepMode) {
 		const now = this.ctx.currentTime;
 
-		// Quick chirp: up when enabling, down when disabling
 		const currentFreq = this.osc.frequency.value;
 
 		const targetFreq = nowInSleepMode
-			? currentFreq * 2.2   // rising chirp
-			: currentFreq * 0.5;  // falling chirp
+			? currentFreq * 0.5
+			: currentFreq * 2.0;
 
 		this.osc.frequency.cancelScheduledValues(now);
 		this.osc.frequency.setValueAtTime(currentFreq, now);
-		this.osc.frequency.exponentialRampToValueAtTime(targetFreq, now + 0.15);
+		this.osc.frequency.exponentialRampToValueAtTime(targetFreq, now + (nowInSleepMode ? 1 : 0.15));
 
-		// Fade out quickly after chirp
-		this.gain.gain.setTargetAtTime(0, now + 0.05, 0.1);
+		this.gain.gain.setTargetAtTime(0, now + 0.05, nowInSleepMode ? 0.5 : 0.1); // should be <= this.maxEffectDurationAfterGestureTrigger
+
+		this.timeOfLastGestureTrigger = now;
 	}
 }
