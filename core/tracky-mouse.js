@@ -2395,6 +2395,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	var showDebugText = false;
 	var showDebugEyeZoom = false;
 	var showDebugHeadTilt = false;
+	var showDebugRegionFilter = false;
 
 	// Constants (could become Advanced Settings in the future)
 	var defaultWidth = 640;
@@ -3387,13 +3388,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						// TODO: separate confidence threshold for removing vs adding points?
 
+
 						// cull points to those within useful facial region
-						pointTracker.filterPoints((pointIndex) => {
-							var pointOffset = pointIndex * 2;
+						function regionFilter([x, y]) {
+
 							// distance from tip of nose (stretched so make an ellipse taller than wide)
 							var distance = Math.hypot(
-								(annotations.noseTip[0][0] - pointTracker.curXY[pointOffset]) * 1.4,
-								annotations.noseTip[0][1] - pointTracker.curXY[pointOffset + 1]
+								(annotations.noseTip[0][0] - x) * 1.4,
+								annotations.noseTip[0][1] - y
 							);
 							var headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
@@ -3406,19 +3408,43 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							// distance to outer corners of eyes
 							distance = Math.min(
 								Math.hypot(
-									annotations.leftEyeLower0[0][0] - pointTracker.curXY[pointOffset],
-									annotations.leftEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
+									annotations.leftEyeLower0[0][0] - x,
+									annotations.leftEyeLower0[0][1] - y
 								),
 								Math.hypot(
-									annotations.rightEyeLower0[0][0] - pointTracker.curXY[pointOffset],
-									annotations.rightEyeLower0[0][1] - pointTracker.curXY[pointOffset + 1]
+									annotations.rightEyeLower0[0][0] - x,
+									annotations.rightEyeLower0[0][1] - y
 								),
 							);
 							if (distance < headSize * 0.42) {
 								return false;
 							}
 							return true;
+						}
+						pointTracker.filterPoints((pointIndex) => {
+							var pointOffset = pointIndex * 2;
+							const point = [pointTracker.curXY[pointOffset], pointTracker.curXY[pointOffset + 1]];
+							return regionFilter(point);
 						});
+
+						// Debug visualization for region filter (a sort of heatmap of where points will be culled)
+						if (showDebugRegionFilter) {
+							ctx.save();
+							if (s.mirror) {
+								ctx.translate(canvas.width, 0);
+								ctx.scale(-1, 1);
+							}
+							ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+							const vizStep = 4;
+							for (let x = 0; x < canvas.width; x += vizStep) {
+								for (let y = 0; y < canvas.height; y += vizStep) {
+									if (!regionFilter([x, y])) {
+										ctx.fillRect(x - 5, y - 5, vizStep, vizStep);
+									}
+								}
+							}
+							ctx.restore();
+						}
 
 						const keypoints = facemeshPrediction.keypoints;
 						if (keypoints) {
