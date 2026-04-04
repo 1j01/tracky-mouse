@@ -3688,7 +3688,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 									const optionalPromise = setMouseButtonState(buttonIndex, buttonIsActive);
 									optionalPromise?.then((changedButtonState) => {
 										if (changedButtonState) {
-											playSound(buttonIsActive ? "clickPress" : "clickRelease");
+											if (buttonIndex === 1) {
+												playSound(buttonIsActive ? "middleClickPress" : "middleClickRelease", {
+													volume: 2,
+												});
+											} else {
+												playSound(buttonIsActive ? "clickPress" : "clickRelease", {
+													playbackRate: buttonIndex === 0 ? 1 : buttonIndex === 2 ? 1.2 : 1.5,
+												});
+											}
 										}
 									});
 								}

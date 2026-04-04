@@ -6,6 +6,8 @@ const audioPath = new URL("./audio", import.meta.url).href;
 const audioFiles = {
 	clickPress: `${audioPath}/click-press.wav`,
 	clickRelease: `${audioPath}/click-release.wav`,
+	middleClickPress: `${audioPath}/middle-click-press.wav`,
+	middleClickRelease: `${audioPath}/middle-click-release.wav`,
 };
 const audioBuffers = {};
 
@@ -48,11 +50,14 @@ export function initAudio() {
 	}
 }
 
-export function playSound(soundId, { delay = 0 } = {}) {
+export function playSound(soundId, { delay = 0, playbackRate = 1, volume = 1 } = {}) {
 	if (audioEnabled && actx && actx.state === "running" && audioBuffers[soundId]) {
+		const gain = actx.createGain();
 		const source = actx.createBufferSource();
 		source.buffer = audioBuffers[soundId];
-		source.connect(actx.destination);
+		source.connect(gain).connect(actx.destination);
+		gain.gain.value = volume;
+		source.playbackRate.value = playbackRate;
 		source.start(actx.currentTime + delay);
 	}
 }
