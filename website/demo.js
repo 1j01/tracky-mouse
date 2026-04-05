@@ -76,7 +76,7 @@ const initOptions = {
 		updateHUD();
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
-		if (regainControlTimeout !== null && isEnabled()) {
+		if (!isClickingAllowed()) {
 			return false;
 		}
 		return inputSimulator.setMouseButtonState(buttonIndex, pressed);
@@ -175,7 +175,7 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
-		if (regainControlTimeout !== null && isEnabled()) {
+		if (!isClickingAllowed()) {
 			return;
 		}
 		inputSimulator.click(target, x, y);
@@ -199,6 +199,10 @@ function isEnabled() {
 	return toggleButton?.getAttribute("aria-pressed") === "true";
 }
 
+function isClickingAllowed() {
+	return isEnabled() && regainControlTimeout === null;
+}
+
 function updateDwellClickingEnabled() {
 	// This function can be called during the call to TrackyMouse.init
 	// We could maybe init the dwell clicker before the UI to avoid the awkwardness of this early return and `dwellClicker` being non-constant.
@@ -206,16 +210,15 @@ function updateDwellClickingEnabled() {
 	// as the UI needs to manage different clicking modes, and this is a ridiculous amount of "glue code"
 	// to support the basic features of Tracky Mouse.
 	if (!dwellClicker) return;
-	const enabled = isEnabled();
-	dwellClicker.paused = !enabled || activeSettings.clickingMode !== "dwell" || regainControlTimeout !== null;
+	dwellClicker.paused = activeSettings.clickingMode !== "dwell" || !isClickingAllowed();
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
-	virtualCursor.style.opacity = (enabled && regainControlTimeout === null) ? "" : "0.2";
+	virtualCursor.style.opacity = isClickingAllowed() ? "" : "0.2";
 	updateHUD();
 }
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	if (regainControlTimeout !== null && isEnabled()) {
+	if (!isClickingAllowed()) {
 		return;
 	}
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
