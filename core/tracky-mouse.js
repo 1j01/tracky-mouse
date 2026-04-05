@@ -2431,6 +2431,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		scoreThreshold: 0.75
 	};
 	let useFacemesh = true;
+	let sleepGestureEyesClosedDuration = 2000;
 	// maybe should be based on size of head in view?
 	const pruningGridSize = 5;
 	const minDistanceToAddPoint = pruningGridSize * 1.5;
@@ -3672,7 +3673,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
 							lastTimeWhenAnEyeWasOpen = performance.now();
 						}
-						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
+						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / sleepGestureEyesClosedDuration;
 						sleepSweep?.update(sleepGestureProgress);
 						if (sleepGestureProgress >= 1) {
 							if (s.closeEyesToToggle) {
