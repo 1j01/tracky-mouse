@@ -2391,12 +2391,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	pointerEl.style.display = "none";
 	document.body.appendChild(pointerEl);
 
-	var cameraVideo = document.createElement('video');
+	let cameraVideo = document.createElement('video');
 	// required to work in iOS 11 & up:
 	cameraVideo.setAttribute('playsinline', '');
 
+	let stats;
 	if (statsJs) {
-		var stats = new Stats();
+		stats = new Stats();
 		stats.domElement.style.position = 'fixed';
 		stats.domElement.style.top = '0px';
 		stats.domElement.style.right = '0px';
@@ -2470,7 +2471,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let mouseNeedsInitPos = true;
 
 	// Other state
-	var paused = true;
+	let paused = true;
 	let pointTracker;
 
 	// Named lists of facemesh landmark indices
