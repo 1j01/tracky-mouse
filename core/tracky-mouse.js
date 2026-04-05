@@ -613,7 +613,7 @@ TrackyMouse._initAudio = async function () {
 		initAudio();
 		playSound = module.playSound;
 		setAudioEnabled = module.setAudioEnabled;
-		sleepSweep = module.sleepSweep;
+		sleepSweep = new module.SleepSweep;
 		setAudioEnabled(initialAudioEnabled);
 		// console.log("Audio is initially " + (initialAudioEnabled ? "enabled" : "disabled"));
 	} catch (e) {
