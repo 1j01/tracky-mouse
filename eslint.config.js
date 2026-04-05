@@ -53,6 +53,7 @@ module.exports = [
 				"caughtErrorsIgnorePattern": "^_",
 				// "varsIgnorePattern": "^_",
 			}],
+			"no-var": "error",
 		},
 	},
 	{
