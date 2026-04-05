@@ -261,7 +261,9 @@ For the screen overlay window, you can use **View > Toggle Developer Tools (Scre
 - There are no tests yet.
 - Make sure to test the first-run state (no settings saved) for both the web and desktop versions often.
   - Web: `(()=>{ const backup = localStorage["tracky-mouse-settings"]; delete localStorage["tracky-mouse-settings"]; localStorage["tracky-mouse-settings-backup"] = backup; })()`
+    - Undo: `(()=>{ const toRestore = localStorage["tracky-mouse-settings-backup"]; delete localStorage["tracky-mouse-settings-backup"]; localStorage["tracky-mouse-settings"] = toRestore; })()`
   - Desktop (Windows cmd.exe): `move %AppData%\"Tracky Mouse"\tracky-mouse-settings.json %AppData%\"Tracky Mouse"\tracky-mouse-settings.json.bak`
+    - Undo: `move %AppData%\"Tracky Mouse"\tracky-mouse-settings.json.bak %AppData%\"Tracky Mouse"\tracky-mouse-settings.json`
 
 ## Release Process
 
