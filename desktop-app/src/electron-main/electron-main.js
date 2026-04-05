@@ -613,7 +613,7 @@ const createWindow = () => {
 		return app.isPackaged;
 	});
 
-	function clickingAllowed() {
+	function isClickingAllowed() {
 		if (regainControlTimeout || !enabled || activeSettings.clickingMode === 'off') {
 			return false;
 		}
@@ -632,7 +632,7 @@ const createWindow = () => {
 	}
 
 	ipcMain.on('click', async (_event, x, y, _time) => {
-		if (!clickingAllowed()) {
+		if (!isClickingAllowed()) {
 			return;
 		}
 
@@ -657,7 +657,7 @@ const createWindow = () => {
 	ipcMain.handle('setMouseButtonState', async (_event, button, down) => {
 		// TODO: make sure the mouse button is released when disabling clicking ability
 		// (including exiting the app, I suppose!)
-		if (!clickingAllowed()) {
+		if (!isClickingAllowed()) {
 			return false;
 		}
 

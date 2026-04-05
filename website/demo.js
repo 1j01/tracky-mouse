@@ -200,7 +200,7 @@ function isEnabled() {
 }
 
 function isClickingAllowed() {
-	return isEnabled() && regainControlTimeout === null;
+	return isEnabled() && regainControlTimeout === null && activeSettings.clickingMode !== 'off';
 }
 
 function updateDwellClickingEnabled() {
@@ -210,15 +210,16 @@ function updateDwellClickingEnabled() {
 	// as the UI needs to manage different clicking modes, and this is a ridiculous amount of "glue code"
 	// to support the basic features of Tracky Mouse.
 	if (!dwellClicker) return;
+	const enabled = isEnabled();
 	dwellClicker.paused = activeSettings.clickingMode !== "dwell" || !isClickingAllowed();
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
-	virtualCursor.style.opacity = isClickingAllowed() ? "" : "0.2";
+	virtualCursor.style.opacity = (enabled && regainControlTimeout === null) ? "" : "0.2";
 	updateHUD();
 }
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	if (!isClickingAllowed()) {
+	if (regainControlTimeout !== null && isEnabled()) {
 		return;
 	}
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
