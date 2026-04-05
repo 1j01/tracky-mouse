@@ -2459,7 +2459,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let mouthInfo;
 	let headTilt = { pitch: 0, yaw: 0, roll: 0 };
 	let headTiltFilters = { pitch: null, yaw: null, roll: null };
-	let lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
+	let sleepGestureProgress = 0;
 	// ## State related to switching between head trackers
 	let useClmTracking = true;
 	let showClmTracking = useClmTracking;
@@ -2804,7 +2804,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
-		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
+		sleepGestureProgress = 0;
 		updateStartStopButton();
 	};
 
@@ -3267,6 +3267,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 	}
 
+	let lastTimestamp = -Infinity;
 	function draw(update = true) {
 		ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
 		ctx.clearRect(0, 0, canvas.width, canvas.height); // in case there's no footage
@@ -3281,7 +3282,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
+		const timestamp = performance.now();
+		const deltaTime = Math.min(timestamp - lastTimestamp, 100);
+		lastTimestamp = timestamp;
+
 		sleepSweep?.setEnabled(s.closeEyesToToggle);
+		sleepSweep?.update(sleepGestureProgress);
 
 		if (!pointTracker) {
 			return;
@@ -3670,19 +3676,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						blinkInfo = detectBlinks();
 						mouthInfo = detectMouthOpen();
-						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
-							lastTimeWhenAnEyeWasOpen = performance.now();
+						if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+							sleepGestureProgress += deltaTime / sleepGestureEyesClosedDuration;
+							sleepGestureProgress = Math.min(sleepGestureProgress, 1);
+						} else {
+							sleepGestureProgress -= deltaTime / sleepGestureEyesClosedDuration;
+							sleepGestureProgress = Math.max(sleepGestureProgress, 0);
 						}
-						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / sleepGestureEyesClosedDuration;
-						sleepSweep?.update(sleepGestureProgress);
 						if (sleepGestureProgress >= 1) {
+							sleepGestureProgress = 0;
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
 								sleepSweep?.sleepModeWasToggled(paused);
-								// TODO: handle edge cases
-								// TODO: try to keep variable names meaningful
-								lastTimeWhenAnEyeWasOpen = Infinity;
 							}
 						}
 
