@@ -599,6 +599,29 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
+TrackyMouse._initAudio = async function () {
+	let module;
+	try {
+		// console.log("Loading audio support...");
+		module = await import("./audio.js");
+	} catch (e) {
+		console.warn("Failed to load audio module, click sounds will be disabled:", e);
+	}
+	// console.log("Audio module loaded.");
+	try {
+		const { initAudio } = module;
+		initAudio();
+		playSound = module.playSound;
+		setAudioEnabled = module.setAudioEnabled;
+		sleepSweep = module.sleepSweep;
+		setAudioEnabled(initialAudioEnabled);
+		// console.log("Audio is initially " + (initialAudioEnabled ? "enabled" : "disabled"));
+	} catch (e) {
+		console.warn("Failed to initialize audio support, click sounds will be disabled:", e);
+	}
+	return module;
+};
+
 TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const {
@@ -618,20 +641,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
 
-	try {
-		import("./audio.js").then((module) => {
-			const { initAudio } = module;
-			initAudio();
-			playSound = module.playSound;
-			setAudioEnabled = module.setAudioEnabled;
-			sleepSweep = module.sleepSweep;
-			setAudioEnabled(initialAudioEnabled);
-		}, (e) => {
-			console.warn("Failed to load audio module, click sounds will be disabled:", e);
-		});
-	} catch (e) {
-		console.warn("Failed to load audio support, click sounds will be disabled:", e);
-	}
+	TrackyMouse._initAudio();
 
 	const isDesktopApp = !!window.electronAPI;
 

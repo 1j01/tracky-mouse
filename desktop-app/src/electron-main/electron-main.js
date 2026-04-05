@@ -498,6 +498,7 @@ const createWindow = () => {
 			bottomOffset,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
 			systemMousePosition,
+			soundEffectsEnabled: activeSettings.soundEffects,
 		});
 	};
 

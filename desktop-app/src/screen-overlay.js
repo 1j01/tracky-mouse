@@ -1,5 +1,7 @@
 /* global TrackyMouse, electronAPI */
 
+let audio = null;
+
 TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
 
 // I like bigButton and I cannot lie
@@ -19,6 +21,9 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
 	click: ({ x, y }) => {
 		electronAPI.mouseClick(x, y);
+
+		audio?.playSound("clickPress");
+		setTimeout(() => audio?.playSound("clickRelease"), 100);
 	},
 });
 
@@ -46,7 +51,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 let wasDwellClickerEnabled = false;
 electronAPI.onOverlayUpdate((_event, data) => {
 	// console.log("onOverlayUpdate", data);
-	const { isEnabled, clickingMode } = data;
+	const { isEnabled, clickingMode, soundEffectsEnabled } = data;
 
 	screenOverlay.update(data);
 
@@ -62,4 +67,12 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	dwellClicker.paused = !dwellClickerEnabled;
 	wasDwellClickerEnabled = dwellClickerEnabled;
 
+	audio?.setAudioEnabled(soundEffectsEnabled);
+
+});
+
+TrackyMouse._initAudio().then((module) => {
+	audio = module;
+}, (e) => {
+	console.warn("Failed to initialize audio module, click sounds will be disabled:", e);
 });
