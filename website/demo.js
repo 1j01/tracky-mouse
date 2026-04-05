@@ -76,7 +76,7 @@ const initOptions = {
 		updateHUD();
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
-		if (regainControlTimeout !== null) {
+		if (regainControlTimeout !== null && isEnabled()) {
 			return false;
 		}
 		return inputSimulator.setMouseButtonState(buttonIndex, pressed);
@@ -175,7 +175,7 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
-		if (regainControlTimeout !== null) {
+		if (regainControlTimeout !== null && isEnabled()) {
 			return;
 		}
 		inputSimulator.click(target, x, y);
@@ -215,7 +215,7 @@ function updateDwellClickingEnabled() {
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	if (regainControlTimeout !== null) {
+	if (regainControlTimeout !== null && isEnabled()) {
 		return;
 	}
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
