@@ -16,11 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In the dwell clicker API, added `config.shouldClickThrough(el)` hook to allow ignoring elements and clicking behind them.
   - By default, it will match elements with the class `.tracky-mouse-click-through`.
   - In most cases `pointer-events: none` can be used instead. The new API is useful for specifically blocking system mouse interaction without blocking Tracky Mouse. This is used in the archery mini-game on the website to temporarily disable system mouse interaction when you're using head tracking, to improve the accuracy of categorizing input methods on the scoreboard.
+- The demo on the website now includes the HUD, manual takeback support, and all clicking modes, and richly simulates mouse behavior that cannot simply be triggered by JS: text selection, opening dropdowns, context menus, and autoscroll. These features are not currently part of the embedding API, but help to showcase the capabilities of the desktop app. The archery mini-game keeps track of all different input methods separately on the scoreboard, and also now supports using a gamepad as a mouse for comparison.
 
 ### Fixed
 
 - Fixed an issue where mouth movement would sometimes affect the cursor position, due to tracking points on the mouth. This was especially problematic for the "Open mouth to click" modes. It now specifically avoids tracking movement near the lips. ([issue #34](https://github.com/1j01/tracky-mouse/issues/34))
 - Fixed "Close eyes to start/stop" gesture not working when the desktop app's window was in the background.
+- Fixed the HUD not sticking to the bottom of the screen on mobile browsers when scrolling up.
 
 ## [2.6.0] - 2026-03-21
 
