@@ -2649,6 +2649,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		}
 		if (stored) {
 			deserializeSettings(stored, initialLoad);
+		} else {
+			// HACK: ensure handleInitialLoad is called even for first run
+			// Combined with the below, this feels very redundant, and I'd like to
+			// move to a subscription-based pattern, more of a formal "settings store", something like that.
+			// This is currently necessary for sound effects to work on the first run of the web demo.
+			deserializeSettings(serializeSettings(), initialLoad);
 		}
 		if (initialLoad && (!stored || !stored.globalSettings || Object.keys(stored.globalSettings).length === 0)) {
 			// We could just call setOptions in both cases,
