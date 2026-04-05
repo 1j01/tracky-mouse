@@ -2433,7 +2433,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let face;
 	let faceScore = 0;
 	let faceConvergence = 0;
-	// var faceConvergenceThreshold = 50;
+	// let faceConvergenceThreshold = 50;
 	let pointsBasedOnFaceScore = 0;
 	// ## Facemesh state
 	let detector;
@@ -3161,7 +3161,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		draw(ctx) {
 			for (let i = 0; i < this.pointCount; i++) {
 				let pointOffset = i * 2;
-				// var distMoved = Math.hypot(
+				// let distMoved = Math.hypot(
 				// 	this.prevXY[pointOffset] - this.curXY[pointOffset],
 				// 	this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
 				// );
@@ -3222,7 +3222,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
 		for (let pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
 			let pointOffset = pointIndex * 2;
-			// var distance = Math.hypot(
+			// let distance = Math.hypot(
 			// 	x - oops.curXY[pointOffset],
 			// 	y - oops.curXY[pointOffset + 1]
 			// );
@@ -4083,8 +4083,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// Acceleration curves add a lot of stability,
 			// letting you focus on a specific point without jitter, but still move quickly.
 
-			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
-			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
+			// let accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
+			// let accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
 			let accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
 
 			let distance = Math.hypot(movementX, movementY);
