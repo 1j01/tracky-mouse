@@ -55,8 +55,6 @@ const dwellClickers = [];
 let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
 let initialAudioEnabled = false;
 let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
-/** @type {SleepSweep | null} */
-let sleepSweep = null;
 
 /**
  * @param {Object} config
@@ -613,7 +611,6 @@ TrackyMouse._initAudio = async function () {
 		initAudio();
 		playSound = module.playSound;
 		setAudioEnabled = module.setAudioEnabled;
-		sleepSweep = new module.SleepSweep;
 		setAudioEnabled(initialAudioEnabled);
 		// console.log("Audio is initially " + (initialAudioEnabled ? "enabled" : "disabled"));
 	} catch (e) {
@@ -641,7 +638,16 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
 
-	TrackyMouse._initAudio();
+	/** @type {SleepSweep | null} */
+	let sleepSweep = null;
+
+	TrackyMouse._initAudio().then((module) => {
+		// _initAudio warns in the console and resolves to undefined if it fails to load audio support
+		if (module) {
+			const { SleepSweep } = module;
+			sleepSweep = new SleepSweep();
+		}
+	});
 
 	const isDesktopApp = !!window.electronAPI;
 
