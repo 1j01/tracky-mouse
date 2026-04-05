@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.7.0] - 2026-04-05
+
 ### Changed
 
 - Removed "experimental" label from "Close eyes to start/stop" setting.
@@ -287,7 +291,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.6.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/1j01/tracky-mouse/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/1j01/tracky-mouse/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/1j01/tracky-mouse/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/1j01/tracky-mouse/compare/v2.3.0...v2.4.0
