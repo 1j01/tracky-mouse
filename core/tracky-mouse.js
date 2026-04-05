@@ -55,8 +55,6 @@ const dwellClickers = [];
 let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
 let initialAudioEnabled = false;
 let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
-/** @type {SleepSweep | null} */
-let sleepSweep = null;
 
 /**
  * @param {Object} config
@@ -599,6 +597,28 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
+TrackyMouse._initAudio = async function () {
+	let module;
+	try {
+		// console.log("Loading audio support...");
+		module = await import("./audio.js");
+	} catch (e) {
+		console.warn("Failed to load audio module, click sounds will be disabled:", e);
+	}
+	// console.log("Audio module loaded.");
+	try {
+		const { initAudio } = module;
+		initAudio();
+		playSound = module.playSound;
+		setAudioEnabled = module.setAudioEnabled;
+		setAudioEnabled(initialAudioEnabled);
+		// console.log("Audio is initially " + (initialAudioEnabled ? "enabled" : "disabled"));
+	} catch (e) {
+		console.warn("Failed to initialize audio support, click sounds will be disabled:", e);
+	}
+	return module;
+};
+
 TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const {
@@ -618,20 +638,16 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// Could group things under an "unstable" object, or ideally, design nice APIs for everything.
 	} = initOptions;
 
-	try {
-		import("./audio.js").then((module) => {
-			const { initAudio } = module;
-			initAudio();
-			playSound = module.playSound;
-			setAudioEnabled = module.setAudioEnabled;
-			sleepSweep = module.sleepSweep;
-			setAudioEnabled(initialAudioEnabled);
-		}, (e) => {
-			console.warn("Failed to load audio module, click sounds will be disabled:", e);
-		});
-	} catch (e) {
-		console.warn("Failed to load audio support, click sounds will be disabled:", e);
-	}
+	/** @type {SleepSweep | null} */
+	let sleepSweep = null;
+
+	TrackyMouse._initAudio().then((module) => {
+		// _initAudio warns in the console and resolves to undefined if it fails to load audio support
+		if (module) {
+			const { SleepSweep } = module;
+			sleepSweep = new SleepSweep();
+		}
+	});
 
 	const isDesktopApp = !!window.electronAPI;
 
@@ -886,7 +902,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	};
 
 
-	var languageToDefaultRegion = {
+	let languageToDefaultRegion = {
 		aa: "ET",
 		ab: "GE",
 		abr: "GH",
@@ -1631,9 +1647,9 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			// </svg>`;
 		}
 
-		var split = locale.toUpperCase().split(/-|_/);
-		var lang = split.shift();
-		var code = split.pop();
+		let split = locale.toUpperCase().split(/-|_/);
+		let lang = split.shift();
+		let code = split.pop();
 
 		if (!/^[A-Z]{2}$/.test(code)) {
 			code = languageToDefaultRegion[lang.toLowerCase()];
@@ -1648,7 +1664,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		return a + b;
 	}
 
-	var uiContainer = div || document.createElement("div");
+	let uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.classList.toggle("tracky-mouse-rtl", isRTL);
 	uiContainer.dir = isRTL ? "rtl" : "ltr";
@@ -1674,12 +1690,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
-	var startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
-	var useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
-	var useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
-	var errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
-	var canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
-	var desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
+	let startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
+	let useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
+	let useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
+	let errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
+	let canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
+	let desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
 	// Settings (initialized later; defaults are defined in settingsCategories)
 	const s = {};
@@ -2367,26 +2383,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		});
 	}
 
-	var canvas = uiContainer.querySelector(".tracky-mouse-canvas");
-	var ctx = canvas.getContext('2d', { willReadFrequently: true });
+	let canvas = uiContainer.querySelector(".tracky-mouse-canvas");
+	let ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-	var debugEyeCanvas = document.createElement("canvas");
+	let debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
 	debugEyeCanvas.style.display = "none";
 	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
-	var debugEyeCtx = debugEyeCanvas.getContext('2d');
+	let debugEyeCtx = debugEyeCanvas.getContext('2d');
 
-	var pointerEl = document.createElement('div');
+	let pointerEl = document.createElement('div');
 	pointerEl.className = "tracky-mouse-pointer";
 	pointerEl.style.display = "none";
 	document.body.appendChild(pointerEl);
 
-	var cameraVideo = document.createElement('video');
+	let cameraVideo = document.createElement('video');
 	// required to work in iOS 11 & up:
 	cameraVideo.setAttribute('playsinline', '');
 
+	let stats;
 	if (statsJs) {
-		var stats = new Stats();
+		stats = new Stats();
 		stats.domElement.style.position = 'fixed';
 		stats.domElement.style.top = '0px';
 		stats.domElement.style.right = '0px';
@@ -2395,73 +2412,74 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	// Debug flags (not shown in the UI; could become Advanced Settings in the future)
-	var debugAcceleration = false;
-	var showDebugText = false;
-	var showDebugEyeZoom = false;
-	var showDebugHeadTilt = false;
-	var showDebugRegionFilter = false;
+	let debugAcceleration = false;
+	let showDebugText = false;
+	let showDebugEyeZoom = false;
+	let showDebugHeadTilt = false;
+	let showDebugRegionFilter = false;
 
 	// Constants (could become Advanced Settings in the future)
-	var defaultWidth = 640;
-	var defaultHeight = 480;
-	var maxPoints = 1000;
-	var faceScoreThreshold = 0.5;
-	var facemeshOptions = {
+	let defaultWidth = 640;
+	let defaultHeight = 480;
+	let maxPoints = 1000;
+	let faceScoreThreshold = 0.5;
+	let facemeshOptions = {
 		maxContinuousChecks: 5,
 		detectionConfidence: 0.9,
 		maxFaces: 1,
 		iouThreshold: 0.3,
 		scoreThreshold: 0.75
 	};
-	var useFacemesh = true;
+	let useFacemesh = true;
+	let sleepGestureEyesClosedDuration = 2000;
 	// maybe should be based on size of head in view?
 	const pruningGridSize = 5;
 	const minDistanceToAddPoint = pruningGridSize * 1.5;
 
 	// Head tracking and facial gesture state
 	// ## Clmtrackr state
-	var face;
-	var faceScore = 0;
-	var faceConvergence = 0;
-	// var faceConvergenceThreshold = 50;
-	var pointsBasedOnFaceScore = 0;
+	let face;
+	let faceScore = 0;
+	let faceConvergence = 0;
+	// let faceConvergenceThreshold = 50;
+	let pointsBasedOnFaceScore = 0;
 	// ## Facemesh state
 	let detector;
 	let currentCameraImageData;
-	var facemeshLoaded = false;
-	var facemeshFirstEstimation = true;
-	var facemeshEstimating = false;
-	var facemeshRejectNext = 0;
-	var facemeshPrediction;
-	var facemeshEstimateFaces;
-	var faceInViewConfidenceThreshold = 0.7;
-	var pointsBasedOnFaceInViewConfidence = 0;
-	var cameraFramesSinceFacemeshUpdate = [];
-	var blinkInfo;
-	var mouthInfo;
-	var headTilt = { pitch: 0, yaw: 0, roll: 0 };
-	var headTiltFilters = { pitch: null, yaw: null, roll: null };
-	var lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
+	let facemeshLoaded = false;
+	let facemeshFirstEstimation = true;
+	let facemeshEstimating = false;
+	let facemeshRejectNext = 0;
+	let facemeshPrediction;
+	let facemeshEstimateFaces;
+	let faceInViewConfidenceThreshold = 0.7;
+	let pointsBasedOnFaceInViewConfidence = 0;
+	let cameraFramesSinceFacemeshUpdate = [];
+	let blinkInfo;
+	let mouthInfo;
+	let headTilt = { pitch: 0, yaw: 0, roll: 0 };
+	let headTiltFilters = { pitch: null, yaw: null, roll: null };
+	let sleepGestureProgress = 0;
 	// ## State related to switching between head trackers
-	var useClmTracking = true;
-	var showClmTracking = useClmTracking;
-	var fallbackTimeoutID;
+	let useClmTracking = true;
+	let showClmTracking = useClmTracking;
+	let fallbackTimeoutID;
 
 	// Mouse state
-	var mouseX = 0;
-	var mouseY = 0;
-	var buttonStates = {
+	let mouseX = 0;
+	let mouseY = 0;
+	let buttonStates = {
 		left: false,
 		right: false,
 		middle: false,
 	};
-	var mouseButtonUntilMouthCloses = -1;
-	var lastMouseDownTime = -Infinity;
-	var mouseNeedsInitPos = true;
+	let mouseButtonUntilMouthCloses = -1;
+	let lastMouseDownTime = -Infinity;
+	let mouseNeedsInitPos = true;
 
 	// Other state
-	var paused = true;
-	var pointTracker;
+	let paused = true;
+	let pointTracker;
 
 	// Named lists of facemesh landmark indices
 	const MESH_ANNOTATIONS = {
@@ -2639,6 +2657,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		}
 		if (stored) {
 			deserializeSettings(stored, initialLoad);
+		} else {
+			// HACK: ensure handleInitialLoad is called even for first run
+			// Combined with the below, this feels very redundant, and I'd like to
+			// move to a subscription-based pattern, more of a formal "settings store", something like that.
+			// This is currently necessary for sound effects to work on the first run of the web demo.
+			deserializeSettings(serializeSettings(), initialLoad);
 		}
 		if (initialLoad && (!stored || !stored.globalSettings || Object.keys(stored.globalSettings).length === 0)) {
 			// We could just call setOptions in both cases,
@@ -2752,9 +2776,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	const settingsLoadedPromise = loadOptions(true);
 
 	// Don't use WebGL because clmTracker is our fallback! It's also not much slower than with WebGL.
-	var clmTracker = new clm.tracker({ useWebGL: false });
+	let clmTracker = new clm.tracker({ useWebGL: false });
 	clmTracker.init();
-	var clmTrackingStarted = false;
+	let clmTrackingStarted = false;
 
 	const stopCameraStream = () => {
 		if (cameraVideo.srcObject) {
@@ -2780,7 +2804,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointsBasedOnFaceScore = 0;
 		faceScore = 0;
 		faceConvergence = 0;
-		lastTimeWhenAnEyeWasOpen = Infinity; // far future rather than far past so that sleep gesture doesn't trigger initially, skipping the delay
+		sleepGestureProgress = 0;
 		updateStartStopButton();
 	};
 
@@ -3068,7 +3092,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		}
 		addPoint(x, y) {
 			if (this.pointCount < maxPoints) {
-				var pointIndex = this.pointCount * 2;
+				let pointIndex = this.pointCount * 2;
 				this.curXY[pointIndex] = x;
 				this.curXY[pointIndex + 1] = y;
 				this.prevXY[pointIndex] = x;
@@ -3077,8 +3101,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 		}
 		filterPoints(condition) {
-			var outputPointIndex = 0;
-			for (var inputPointIndex = 0; inputPointIndex < this.pointCount; inputPointIndex++) {
+			let outputPointIndex = 0;
+			for (let inputPointIndex = 0; inputPointIndex < this.pointCount; inputPointIndex++) {
 				if (condition(inputPointIndex)) {
 					if (outputPointIndex < inputPointIndex) {
 						const inputOffset = inputPointIndex * 2;
@@ -3126,10 +3150,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			[this.prevPyramid, this.curPyramid] = [this.curPyramid, this.prevPyramid];
 
 			// these are options worth breaking out and exploring
-			var winSize = 20;
-			var maxIterations = 30;
-			var epsilon = 0.01;
-			var minEigen = 0.001;
+			let winSize = 20;
+			let maxIterations = 30;
+			let epsilon = 0.01;
+			let minEigen = 0.001;
 
 			jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, this.curPyramid.data[0]);
 			this.curPyramid.build(this.curPyramid.data[0], true);
@@ -3143,9 +3167,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			this.prunePoints();
 		}
 		draw(ctx) {
-			for (var i = 0; i < this.pointCount; i++) {
-				var pointOffset = i * 2;
-				// var distMoved = Math.hypot(
+			for (let i = 0; i < this.pointCount; i++) {
+				let pointOffset = i * 2;
+				// let distMoved = Math.hypot(
 				// 	this.prevXY[pointOffset] - this.curXY[pointOffset],
 				// 	this.prevXY[pointOffset + 1] - this.curXY[pointOffset + 1]
 				// );
@@ -3163,11 +3187,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 		}
 		getMovement() {
-			var movementX = 0;
-			var movementY = 0;
-			var numMovements = 0;
-			for (var i = 0; i < this.pointCount; i++) {
-				var pointOffset = i * 2;
+			let movementX = 0;
+			let movementY = 0;
+			let numMovements = 0;
+			for (let i = 0; i < this.pointCount; i++) {
+				let pointOffset = i * 2;
 				movementX += this.curXY[pointOffset] - this.prevXY[pointOffset];
 				movementY += this.curXY[pointOffset + 1] - this.prevXY[pointOffset + 1];
 				numMovements += 1;
@@ -3204,9 +3228,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		// in order to keep a smooth overall tracking calculation,
 		// don't add points if they're close to an existing point.
 		// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
-		for (var pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
-			var pointOffset = pointIndex * 2;
-			// var distance = Math.hypot(
+		for (let pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
+			let pointOffset = pointIndex * 2;
+			// let distance = Math.hypot(
 			// 	x - oops.curXY[pointOffset],
 			// 	y - oops.curXY[pointOffset + 1]
 			// );
@@ -3243,6 +3267,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 	}
 
+	let lastTimestamp = -Infinity;
 	function draw(update = true) {
 		ctx.resetTransform(); // in case there is an error, don't flip constantly back and forth due to mirroring
 		ctx.clearRect(0, 0, canvas.width, canvas.height); // in case there's no footage
@@ -3257,7 +3282,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
 		}
 
+		const timestamp = performance.now();
+		const deltaTime = Math.min(timestamp - lastTimestamp, 100);
+		lastTimestamp = timestamp;
+
 		sleepSweep?.setEnabled(s.closeEyesToToggle);
+		sleepSweep?.update(sleepGestureProgress);
 
 		if (!pointTracker) {
 			return;
@@ -3399,11 +3429,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						function regionFilter([x, y]) {
 
 							// distance from tip of nose (stretched so make an ellipse taller than wide)
-							var distance = Math.hypot(
+							let distance = Math.hypot(
 								(annotations.noseTip[0][0] - x) * 1.4,
 								annotations.noseTip[0][1] - y
 							);
-							var headSize = Math.hypot(
+							let headSize = Math.hypot(
 								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
 								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
 							);
@@ -3441,7 +3471,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							return true;
 						}
 						pointTracker.filterPoints((pointIndex) => {
-							var pointOffset = pointIndex * 2;
+							let pointOffset = pointIndex * 2;
 							const point = [pointTracker.curXY[pointOffset], pointTracker.curXY[pointOffset + 1]];
 							return regionFilter(point);
 						});
@@ -3646,19 +3676,19 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						blinkInfo = detectBlinks();
 						mouthInfo = detectMouthOpen();
-						if (blinkInfo.rightEye.open || blinkInfo.leftEye.open) {
-							lastTimeWhenAnEyeWasOpen = performance.now();
+						if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+							sleepGestureProgress += deltaTime / sleepGestureEyesClosedDuration;
+							sleepGestureProgress = Math.min(sleepGestureProgress, 1);
+						} else {
+							sleepGestureProgress -= deltaTime / sleepGestureEyesClosedDuration;
+							sleepGestureProgress = Math.max(sleepGestureProgress, 0);
 						}
-						const sleepGestureProgress = (performance.now() - lastTimeWhenAnEyeWasOpen) / 2000;
-						sleepSweep?.update(sleepGestureProgress);
 						if (sleepGestureProgress >= 1) {
+							sleepGestureProgress = 0;
 							if (s.closeEyesToToggle) {
 								paused = !paused;
 								updatePaused();
 								sleepSweep?.sleepModeWasToggled(paused);
-								// TODO: handle edge cases
-								// TODO: try to keep variable names meaningful
-								lastTimeWhenAnEyeWasOpen = Infinity;
 							}
 						}
 
@@ -4027,14 +4057,14 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 					// cull points to those within useful facial region
 					pointTracker.filterPoints((pointIndex) => {
-						var pointOffset = pointIndex * 2;
+						let pointOffset = pointIndex * 2;
 						// distance from tip of nose (stretched so make an ellipse taller than wide)
-						var distance = Math.hypot(
+						let distance = Math.hypot(
 							(face[62][0] - pointTracker.curXY[pointOffset]) * 1.4,
 							face[62][1] - pointTracker.curXY[pointOffset + 1]
 						);
 						// distance based on outer eye corners
-						var headSize = Math.hypot(
+						let headSize = Math.hypot(
 							face[23][0] - face[28][0],
 							face[23][1] - face[28][1]
 						);
@@ -4062,18 +4092,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			const screenWidth = window.electronAPI ? screen.width : innerWidth;
 			const screenHeight = window.electronAPI ? screen.height : innerHeight;
 
-			var [movementX, movementY] = pointTracker.getMovement();
+			let [movementX, movementY] = pointTracker.getMovement();
 
 			// Acceleration curves add a lot of stability,
 			// letting you focus on a specific point without jitter, but still move quickly.
 
-			// var accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
-			// var accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
-			var accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
+			// let accelerate = (delta, distance) => (delta / 10) * (distance ** 0.8);
+			// let accelerate = (delta, distance) => (delta / 1) * (Math.abs(delta) ** 0.8);
+			let accelerate = (delta, _distance) => (delta / 1) * (Math.abs(delta * 5) ** s.headTrackingAcceleration);
 
-			var distance = Math.hypot(movementX, movementY);
-			var deltaX = accelerate(movementX * s.headTrackingSensitivityX, distance);
-			var deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
+			let distance = Math.hypot(movementX, movementY);
+			let deltaX = accelerate(movementX * s.headTrackingSensitivityX, distance);
+			let deltaY = accelerate(movementY * s.headTrackingSensitivityY, distance);
 
 			if (s.headTrackingTiltInfluence > 0) {
 				const yawRange = [

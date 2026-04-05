@@ -76,7 +76,7 @@ const initOptions = {
 		updateHUD();
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
-		if (regainControlTimeout !== null) {
+		if (!isClickingAllowed()) {
 			return false;
 		}
 		return inputSimulator.setMouseButtonState(buttonIndex, pressed);
@@ -99,15 +99,15 @@ const initOptions = {
 		}
 	},
 	notifyToggleState: () => {
-		// Integrate the Dwell Clicker and the UI's enabled state
-		// TODO: make the init API create/manage the dwell clicker,
-		// and accept clicking configuration
-		updateDwellClickingEnabled();
-
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		mousePosHistory.length = 0;
+
+		// Integrate the Dwell Clicker and the UI's enabled state
+		// TODO: make the init API create/manage the dwell clicker,
+		// and accept clicking configuration
+		updateDwellClickingEnabled();
 	},
 	clickingModeSupported: true,
 };
@@ -175,7 +175,7 @@ const config = {
 	),
 	// Define how to click on an element.
 	click: ({ target, x, y }) => {
-		if (regainControlTimeout !== null) {
+		if (!isClickingAllowed()) {
 			return;
 		}
 		inputSimulator.click(target, x, y);
@@ -193,6 +193,16 @@ const config = {
 };
 dwellClicker = TrackyMouse.initDwellClicking(config);
 
+function isEnabled() {
+	// HACK, TODO: get state from proper channel
+	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
+	return toggleButton?.getAttribute("aria-pressed") === "true";
+}
+
+function isClickingAllowed() {
+	return isEnabled() && regainControlTimeout === null && activeSettings.clickingMode !== 'off';
+}
+
 function updateDwellClickingEnabled() {
 	// This function can be called during the call to TrackyMouse.init
 	// We could maybe init the dwell clicker before the UI to avoid the awkwardness of this early return and `dwellClicker` being non-constant.
@@ -200,17 +210,16 @@ function updateDwellClickingEnabled() {
 	// as the UI needs to manage different clicking modes, and this is a ridiculous amount of "glue code"
 	// to support the basic features of Tracky Mouse.
 	if (!dwellClicker) return;
-	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
-	const started = toggleButton.getAttribute("aria-pressed") === "true";
-	dwellClicker.paused = !started || activeSettings.clickingMode !== "dwell" || regainControlTimeout !== null;
+	const enabled = isEnabled();
+	dwellClicker.paused = activeSettings.clickingMode !== "dwell" || !isClickingAllowed();
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
-	virtualCursor.style.opacity = (started && regainControlTimeout === null) ? "" : "0.2";
+	virtualCursor.style.opacity = (enabled && regainControlTimeout === null) ? "" : "0.2";
 	updateHUD();
 }
 updateDwellClickingEnabled();
 
 TrackyMouse.onPointerMove = (x, y) => {
-	if (regainControlTimeout !== null) {
+	if (regainControlTimeout !== null && isEnabled()) {
 		return;
 	}
 	screenOverlay.updateMousePos(x, y); // UNSTABLE API
@@ -230,8 +239,7 @@ function getScreenOverlayMessageText({ isManualTakeback, enabled }) {
 }
 
 function updateHUD() {
-	const toggleButton = document.querySelector(".tracky-mouse-start-stop-button");
-	const enabled = toggleButton && toggleButton.getAttribute("aria-pressed") === "true";
+	const enabled = isEnabled();
 	const isManualTakeback = enabled && regainControlTimeout !== null;
 	const bottomOffset = document.querySelector(".taskbar")?.offsetHeight || 0;
 	// UNSTABLE API
