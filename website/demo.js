@@ -99,15 +99,15 @@ const initOptions = {
 		}
 	},
 	notifyToggleState: () => {
-		// Integrate the Dwell Clicker and the UI's enabled state
-		// TODO: make the init API create/manage the dwell clicker,
-		// and accept clicking configuration
-		updateDwellClickingEnabled();
-
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		mousePosHistory.length = 0;
+
+		// Integrate the Dwell Clicker and the UI's enabled state
+		// TODO: make the init API create/manage the dwell clicker,
+		// and accept clicking configuration
+		updateDwellClickingEnabled();
 	},
 	clickingModeSupported: true,
 };

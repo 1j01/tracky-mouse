@@ -582,7 +582,6 @@ const createWindow = () => {
 			initialPos.y /= screenScaleFactor;
 		}
 		enabled = nowEnabled;
-		updateDwellClickingAndHUD();
 
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);
@@ -592,6 +591,8 @@ const createWindow = () => {
 			// Avoid false positive for manual takeback.
 			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		}
+
+		updateDwellClickingAndHUD();
 	});
 	ipcMain.on('updateInputFeedback', (_event, data) => {
 		inputFeedback = data;
