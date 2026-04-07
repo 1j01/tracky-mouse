@@ -1,4 +1,4 @@
-import { InputSimulator } from "./input-simulator.js";
+import { InputSimulator } from "./core/src/input-simulator.js";
 
 export const GAMEPAD_POINTER_ID = 1122343409;
 

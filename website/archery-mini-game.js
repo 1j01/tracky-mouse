@@ -9,9 +9,9 @@
 //
 //  (ASCII art credit: Marc Leuchtenberger 2002)
 
+import { TM_POINTER_ID } from "./core/src/input-simulator.js";
 import { activeSettings } from "./demo.js"; // circular dependency
 import { GAMEPAD_POINTER_ID } from "./gamepad-mouse.js";
-import { TM_POINTER_ID } from "./input-simulator.js";
 
 // TODO: separate out input categorization logic from the game code
 

@@ -1,6 +1,6 @@
 /* global TrackyMouse */
 
-import { InputSimulator } from "./input-simulator.js";
+import { InputSimulator } from "./core/src/input-simulator.js";
 
 TrackyMouse.dependenciesRoot = "./core";
 
