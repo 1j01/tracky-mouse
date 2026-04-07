@@ -601,7 +601,7 @@ TrackyMouse._initAudio = async function () {
 	let module;
 	try {
 		// console.log("Loading audio support...");
-		module = await import("./audio.js");
+		module = await import("./src/audio.js");
 	} catch (e) {
 		console.warn("Failed to load audio module, click sounds will be disabled:", e);
 	}

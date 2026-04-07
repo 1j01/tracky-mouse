@@ -36,7 +36,7 @@ exports.include = [
 	"core/audio/*.wav",
 	"core/tracky-mouse.css",
 	"core/tracky-mouse.js",
-	"core/audio.js",
+	"core/src/**/*.js",
 	"core/locales/*/translation.json",
 	"core/lib/clmtrackr.js",
 	"core/lib/jsfeat-min.js",

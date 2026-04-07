@@ -2,7 +2,7 @@
 /** @type {AudioContext | null} */
 let actx = null;
 
-const audioPath = new URL("./audio", import.meta.url).href;
+const audioPath = new URL("../audio", import.meta.url).href;
 const audioFiles = {
 	// https://opengameart.org/content/51-ui-sound-effects-buttons-switches-and-clicks (CC0)
 	clickPress: `${audioPath}/click-press.wav`,
