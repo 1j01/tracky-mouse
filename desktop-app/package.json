@@ -46,10 +46,11 @@
   "homepage": "https://trackymouse.js.org/",
   "main": "src/electron-main/electron-main.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "build-tm-driver": "node tm-driver/build.js",
+    "start": "npm run build-tm-driver && electron-forge start",
+    "package": "npm run build-tm-driver && electron-forge package",
+    "make": "npm run build-tm-driver && electron-forge make",
+    "publish": "npm run build-tm-driver && electron-forge publish"
   },
   "dependencies": {
     "@sentry/electron": "^5.11.0",

@@ -27,6 +27,9 @@ module.exports = {
 		icon: "./images/tracky-mouse-logo",
 		name: "Tracky Mouse",
 		executableName,
+		extraResource: [
+			"tm-driver/bin",
+		],
 		appBundleId: "io.isaiahodhner.tracky-mouse",
 		appCategoryType: "public.app-category.utilities",
 		appCopyright: "© 2024 Isaiah Odhner",
