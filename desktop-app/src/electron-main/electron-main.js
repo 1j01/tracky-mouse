@@ -212,7 +212,15 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 // Normal app behavior continues here.
 
 const windowStateKeeper = require('electron-window-state');
-const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+const {
+	startTMDriver,
+	stopTMDriver,
+	setMouseLocation: setMouseLocationWithoutTracking,
+	getMouseLocation,
+	click,
+	mouseDown,
+	mouseUp,
+} = require('./tm-driver-client.js');
 const { ensureInitialRelativeMouseMove } = require('./win-relative-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
@@ -473,7 +481,11 @@ const createWindow = () => {
 		appWindow = null; // not needed if calling app.exit(), which exits immediately, but useful if calling other methods to quit
 		// screenOverlayWindow?.close(); // doesn't work because screenOverlayWindow.closable is false
 		// app.quit(); // doesn't work either, because screenOverlayWindow.closable is false
-		app.exit(); // doesn't call beforeunload and unload listeners, or before-quit or will-quit
+		stopTMDriver().catch((error) => {
+			console.error('Failed to stop tm-driver before exiting:', error);
+		}).finally(() => {
+			app.exit(); // doesn't call beforeunload and unload listeners, or before-quit or will-quit
+		});
 		// Note: if re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 	});
 
@@ -773,6 +785,14 @@ app.on('ready', async () => {
 		app.quit();
 		return;
 	}
+	try {
+		await startTMDriver({ app });
+	} catch (error) {
+		console.error("Failed to start tm-driver:", error);
+		dialog.showErrorBox("Failed to start mouse driver", `Failed to start tm-driver. The app will now quit.\n\n${error.message}`);
+		app.quit();
+		return;
+	}
 	createWindow();
 	// Ensure the custom menus exist when language is not set (i.e. first run)
 	// This is computationally redundant when language is already set (handled in deserializeSettings)
@@ -801,6 +821,12 @@ app.on('ready', async () => {
 	if (!success) {
 		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
 	}
+});
+
+app.on('before-quit', () => {
+	stopTMDriver().catch((error) => {
+		console.error('Failed to stop tm-driver in before-quit:', error);
+	});
 });
 
 app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, additionalData) => {
