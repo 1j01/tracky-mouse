@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/go-vgo/robotgo"
 )
@@ -31,6 +32,12 @@ func main() {
 	reader := bufio.NewScanner(os.Stdin)
 	writer := bufio.NewWriter(os.Stdout)
 	var writeMu sync.Mutex
+	delayClickUntilAfterReturn := true //os.Getenv("TM_NATIVE_DELAY_CLICK_UNTIL_AFTER_RETURN") == "1"
+	// postReturnClickDelay := 150 * time.Millisecond
+	// if delayMs, err := strconv.Atoi(os.Getenv("TM_NATIVE_POST_RETURN_CLICK_DELAY_MS")); err == nil && delayMs >= 0 {
+		// postReturnClickDelay = time.Duration(delayMs) * time.Millisecond
+	// }
+	postReturnClickDelay := 500 * time.Millisecond
 
 	for reader.Scan() {
 		line := reader.Bytes()
@@ -58,8 +65,16 @@ func main() {
 			if button == "middle" {
 				button = "center"
 			}
-			robotgo.Click(button)
-			writeOK(&writeMu, writer, req.ID, 0, 0)
+			if delayClickUntilAfterReturn {
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+				go func(button string) {
+					time.Sleep(postReturnClickDelay)
+					robotgo.Click(button)
+				}(button)
+			} else {
+				robotgo.Click(button)
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+			}
 		case "mouseDown":
 			button := req.Button
 			if button == "" {
@@ -68,8 +83,16 @@ func main() {
 			if button == "middle" {
 				button = "center"
 			}
-			robotgo.Toggle(button)
-			writeOK(&writeMu, writer, req.ID, 0, 0)
+			if delayClickUntilAfterReturn {
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+				go func(button string) {
+					time.Sleep(postReturnClickDelay)
+					robotgo.Toggle(button)
+				}(button)
+			} else {
+				robotgo.Toggle(button)
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+			}
 		case "mouseUp":
 			button := req.Button
 			if button == "" {
@@ -78,8 +101,16 @@ func main() {
 			if button == "middle" {
 				button = "center"
 			}
-			robotgo.Toggle(button, "up")
-			writeOK(&writeMu, writer, req.ID, 0, 0)
+			if delayClickUntilAfterReturn {
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+				go func(button string) {
+					time.Sleep(postReturnClickDelay)
+					robotgo.Toggle(button, "up")
+				}(button)
+			} else {
+				robotgo.Toggle(button, "up")
+				writeOK(&writeMu, writer, req.ID, 0, 0)
+			}
 		case "ensureCursorVisible":
 			ensureCursorVisible()
 			writeOK(&writeMu, writer, req.ID, 0, 0)
