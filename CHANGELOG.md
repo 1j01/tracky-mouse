@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- In the desktop app, mouse control now runs in a separate Go helper process (`tm-driver`) instead of using the `serenade-driver` native Node.js module.
 
 ## [3.0.0] - 2026-08-30
 
