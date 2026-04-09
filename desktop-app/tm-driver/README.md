@@ -20,10 +20,16 @@ npm run in-desktop-app -- npm run build-tm-driver
 
 The output binary is written to `desktop-app/tm-driver/bin/`.
 
-## Process Protocol
+## Daemon Protocol
 
-This helper process reads JSON-RPC-like requests from stdin (one JSON object per line)
-and writes one JSON response per line to stdout.
+`tm-driver` now runs as a daemon process and listens on TCP `127.0.0.1:47047` by default.
+The desktop app connects to this daemon; it no longer starts `tm-driver` directly.
+
+Set `TM_DRIVER_ADDR` to change the listen address (for example `127.0.0.1:48000`).
+
+The protocol is JSON-RPC-like over newline-delimited JSON (one JSON object per line).
+
+For compatibility and local testing, `tm-driver --stdio` runs the previous stdin/stdout mode.
 
 Supported methods:
 - `setMouseLocation` with params `{ "x": number, "y": number }`

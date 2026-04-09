@@ -1,32 +1,19 @@
-const path = require('path');
-const fs = require('fs');
+const net = require('net');
 const readline = require('readline');
-const { spawn } = require('child_process');
 
-/** @type {import('electron').App | undefined} */
-let electronApp;
-/** @type {import('child_process').ChildProcessWithoutNullStreams | null} */
-let driverProcess = null;
+const DEFAULT_DRIVER_ADDRESS = '127.0.0.1:47047';
+
+/** @type {import('net').Socket | null} */
+let driverSocket = null;
+/** @type {readline.Interface | null} */
+let lineReader = null;
 /** @type {Map<number, { resolve: (value: any) => void, reject: (error: Error) => void }>} */
 const pendingRequests = new Map();
 let nextRequestId = 1;
-let hasProcessExitHook = false;
 let isShuttingDown = false;
 
-function getDriverExecutableName() {
-	return process.platform === 'win32' ? 'tracky-mouse-driver.exe' : 'tracky-mouse-driver';
-}
-
-function getPackagedDriverPath() {
-	return path.join(process.resourcesPath, 'tm-driver', 'bin', getDriverExecutableName());
-}
-
-function getDevelopmentDriverPath(app) {
-	return path.join(app.getAppPath(), 'tm-driver', 'bin', getDriverExecutableName());
-}
-
-function getGoSourceDir(app) {
-	return path.join(app.getAppPath(), 'tm-driver');
+function getDriverAddress() {
+	return process.env.TM_DRIVER_ADDR || DEFAULT_DRIVER_ADDRESS;
 }
 
 function rejectAllPendingRequests(message) {
@@ -60,28 +47,35 @@ function handleDriverLine(line) {
 	pending.resolve(response.result);
 }
 
-function spawnDriverProcess(command, args, options = {}) {
-	const proc = spawn(command, args, {
-		stdio: ['pipe', 'pipe', 'pipe'],
-		windowsHide: true,
-		...options,
-	});
+function connectToDriver() {
+	const driverAddress = getDriverAddress();
+	const [host, portPart] = driverAddress.split(':');
+	const port = Number(portPart);
+	if (!host || !Number.isInteger(port) || port <= 0) {
+		throw new Error(`Invalid TM_DRIVER_ADDR value: ${driverAddress}. Expected host:port`);
+	}
 
-	const lineReader = readline.createInterface({ input: proc.stdout });
-	lineReader.on('line', handleDriverLine);
-	proc.stderr.on('data', (chunk) => {
-		console.error(`[tm-driver] ${chunk.toString().trimEnd()}`);
+	return new Promise((resolve, reject) => {
+		const socket = net.createConnection({ host, port });
+		let settled = false;
+		const onError = (error) => {
+			if (settled) {
+				console.error(`[tm-driver] Socket error: ${error.message}`);
+				return;
+			}
+			settled = true;
+			reject(error);
+		};
+		socket.once('error', onError);
+		socket.once('connect', () => {
+			if (settled) {
+				return;
+			}
+			settled = true;
+			socket.off('error', onError);
+			resolve(socket);
+		});
 	});
-	proc.on('exit', (code, signal) => {
-		driverProcess = null;
-		rejectAllPendingRequests(`tm-driver exited unexpectedly (code=${code}, signal=${signal ?? 'none'})`);
-	});
-	proc.on('error', (error) => {
-		driverProcess = null;
-		rejectAllPendingRequests(`tm-driver failed to start: ${error.message}`);
-	});
-
-	return proc;
 }
 
 function withTimeout(promise, timeoutMs, timeoutMessage) {
@@ -96,65 +90,62 @@ function withTimeout(promise, timeoutMs, timeoutMessage) {
 	});
 }
 
-async function startTMDriver({ app }) {
-	if (driverProcess) {
+async function startTMDriver() {
+	if (driverSocket) {
 		return;
 	}
-	electronApp = app;
-	const executableName = getDriverExecutableName();
-	const packagedPath = getPackagedDriverPath();
-	const developmentPath = getDevelopmentDriverPath(app);
-	let command;
-	let args;
-	let options = {};
-	if (app.isPackaged) {
-		command = packagedPath;
-		args = [];
-	} else if (fs.existsSync(developmentPath)) {
-		command = developmentPath;
-		args = [];
-	} else {
-		command = 'go';
-		args = ['run', '.'];
-		options = { cwd: getGoSourceDir(app) };
-	}
-	driverProcess = spawnDriverProcess(command, args, options);
-	if (!driverProcess) {
-		throw new Error(`Failed to start tm-driver (${executableName}).`);
-	}
+	isShuttingDown = false;
+	driverSocket = await withTimeout(
+		connectToDriver(),
+		3000,
+		`Timed out connecting to tm-driver at ${getDriverAddress()}.`,
+	);
+	lineReader = readline.createInterface({ input: driverSocket });
+	lineReader.on('line', handleDriverLine);
+	driverSocket.on('error', (error) => {
+		if (!isShuttingDown) {
+			rejectAllPendingRequests(`tm-driver socket error: ${error.message}`);
+		}
+	});
+	driverSocket.on('close', () => {
+		if (lineReader) {
+			lineReader.close();
+			lineReader = null;
+		}
+		driverSocket = null;
+		if (!isShuttingDown) {
+			rejectAllPendingRequests('tm-driver connection closed unexpectedly');
+		}
+	});
 	await withTimeout(
 		callDriver('ping'),
 		3000,
-		`Timed out waiting for tm-driver startup (${executableName}).`,
+		`Timed out waiting for tm-driver ping response at ${getDriverAddress()}.`,
 	);
-	if (!hasProcessExitHook) {
-		hasProcessExitHook = true;
-		process.once('exit', () => {
-			if (driverProcess) {
-				driverProcess.kill();
-			}
-		});
-	}
 }
 
 async function stopTMDriver() {
 	isShuttingDown = true;
-	if (!driverProcess) {
+	if (!driverSocket) {
 		return;
 	}
-	const proc = driverProcess;
-	driverProcess = null;
+	const socket = driverSocket;
+	driverSocket = null;
+	if (lineReader) {
+		lineReader.close();
+		lineReader = null;
+	}
 	pendingRequests.clear(); // Drop silently instead of rejecting, to avoid errors during shutdown
 	await new Promise((resolve) => {
-		proc.once('exit', () => resolve());
-		proc.kill();
+		socket.once('close', () => resolve());
+		socket.end();
+		socket.destroy();
 	});
 }
 
 function ensureDriverRunning() {
-	if (!driverProcess) {
-		const location = electronApp?.isPackaged ? getPackagedDriverPath() : getDevelopmentDriverPath(electronApp);
-		throw new Error(`tm-driver process is not running. Expected binary at: ${location}`);
+	if (!driverSocket || driverSocket.destroyed) {
+		throw new Error(`tm-driver daemon is not connected at ${getDriverAddress()}.`);
 	}
 }
 
@@ -167,7 +158,7 @@ function callDriver(method, params = {}) {
 	const payload = JSON.stringify({ id, method, params });
 	return new Promise((resolve, reject) => {
 		pendingRequests.set(id, { resolve, reject });
-		driverProcess.stdin.write(`${payload}\n`, (error) => {
+		driverSocket.write(`${payload}\n`, (error) => {
 			if (!error || isShuttingDown) {
 				return;
 			}

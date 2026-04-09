@@ -4,10 +4,14 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net"
 	"os"
 
 	"github.com/go-vgo/robotgo"
 )
+
+const defaultListenAddr = "127.0.0.1:47047"
 
 type request struct {
 	ID     int                    `json:"id"`
@@ -27,8 +31,46 @@ type mousePosition struct {
 }
 
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-	writer := bufio.NewWriter(os.Stdout)
+	if len(os.Args) > 1 && os.Args[1] == "--stdio" {
+		if err := serveStream(os.Stdin, os.Stdout); err != nil {
+			fmt.Fprintf(os.Stderr, "stdio server error: %v\n", err)
+		}
+		return
+	}
+
+	listenAddr := os.Getenv("TM_DRIVER_ADDR")
+	if listenAddr == "" {
+		listenAddr = defaultListenAddr
+	}
+
+	listener, err := net.Listen("tcp", listenAddr)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to listen on %s: %v\n", listenAddr, err)
+		os.Exit(1)
+	}
+	defer listener.Close()
+
+	fmt.Fprintf(os.Stderr, "tm-driver daemon listening on %s\n", listenAddr)
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "accept error: %v\n", err)
+			continue
+		}
+
+		go func(c net.Conn) {
+			defer c.Close()
+			if err := serveStream(c, c); err != nil {
+				fmt.Fprintf(os.Stderr, "connection error: %v\n", err)
+			}
+		}(conn)
+	}
+}
+
+func serveStream(input io.Reader, output io.Writer) error {
+	scanner := bufio.NewScanner(input)
+	writer := bufio.NewWriter(output)
 	defer writer.Flush()
 
 	for scanner.Scan() {
@@ -40,14 +82,15 @@ func main() {
 		}
 		resp := handleRequest(req)
 		if err := writeResponse(writer, resp); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to write response: %v\n", err)
-			return
+			return fmt.Errorf("failed to write response: %w", err)
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Fprintf(os.Stderr, "stdin scanner error: %v\n", err)
+		return fmt.Errorf("scanner error: %w", err)
 	}
+
+	return nil
 }
 
 func writeResponse(writer *bufio.Writer, resp response) error {

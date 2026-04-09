@@ -786,10 +786,10 @@ app.on('ready', async () => {
 		return;
 	}
 	try {
-		await startTMDriver({ app });
+		await startTMDriver();
 	} catch (error) {
-		console.error("Failed to start tm-driver:", error);
-		dialog.showErrorBox("Failed to start mouse driver", `Failed to start tm-driver. The app will now quit.\n\n${error.message}`);
+		console.error("Failed to connect to tm-driver:", error);
+		dialog.showErrorBox("Failed to connect to mouse driver", `Failed to connect to tm-driver daemon. The app will now quit.\n\n${error.message}`);
 		app.quit();
 		return;
 	}
