@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- On Windows, the desktop app now uses a custom title bar instead of the native Windows title bar.
+
+### Fixed
+
+- On Windows, the app should no longer freeze when using Tracky Mouse to click
+the Tracky Mouse app window's own minimize or close buttons, or
+right-clicking on its titlebar. (
+  - That said, clicking on the window's border can still freeze it up.
 
 ## [2.7.0] - 2026-04-05
 

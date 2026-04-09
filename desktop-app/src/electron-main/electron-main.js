@@ -439,6 +439,14 @@ const createWindow = () => {
 			backgroundThrottling: false,
 		},
 		icon: `${__dirname}/../../images/tracky-mouse-logo-512.png`,
+		...(process.platform === 'win32' ? {
+			titleBarStyle: 'hidden',
+			titleBarOverlay: {
+				color: 'rgb(223, 204, 255)',
+				symbolColor: 'black',
+				height: 32,
+			},
+		} : {}),
 	});
 
 	// and load the html page of the app.
