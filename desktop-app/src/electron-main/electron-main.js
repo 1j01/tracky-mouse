@@ -439,6 +439,17 @@ const createWindow = () => {
 			backgroundThrottling: false,
 		},
 		icon: `${__dirname}/../../images/tracky-mouse-logo-512.png`,
+		// Work around issue where clicking on titlebar buttons or right clicking on the titlebar
+		// freezes the app on Windows, by using a custom title bar.
+		// https://github.com/1j01/tracky-mouse/issues/69
+		...(process.platform === 'win32' ? {
+			titleBarStyle: 'hidden',
+			titleBarOverlay: {
+				color: 'rgb(196, 173, 235)',
+				symbolColor: 'black',
+				height: 32,
+			},
+		} : {}),
 	});
 
 	// and load the html page of the app.

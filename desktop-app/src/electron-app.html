@@ -37,12 +37,29 @@
 		}
 
 		html,
-		body,
-		.tracky-mouse-ui {
+		body {
 			margin: 0;
 			padding: 0;
 			width: 100%;
 			height: 100%;
+			overflow: hidden;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.app-titlebar {
+			-webkit-app-region: drag;
+			height: env(titlebar-area-height, 0px);
+			background-color: rgb(196, 173, 235);
+			flex-shrink: 0;
+		}
+
+		.tracky-mouse-ui {
+			flex: 1;
+			/* `overflow: hidden` is actually needed to SHOW a scrollbar, in this case. */
 			overflow: hidden;
 			/* Don't need min height when height of the container is 100%,
 			and don't want it because it can make the camera view get pushed
@@ -74,6 +91,10 @@
 </head>
 
 <body>
+	<div class="app-titlebar">
+		<!-- Note: scale() is doing the work of margin here in addition to sizing -->
+		<img src="../images/tracky-mouse-logo.svg" alt="Tracky Mouse Logo" style="transform: scale(0.7);">
+	</div>
 	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
 	<script>
 		(async () => {
