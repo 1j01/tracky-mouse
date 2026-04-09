@@ -11,6 +11,7 @@ let driverProcess = null;
 const pendingRequests = new Map();
 let nextRequestId = 1;
 let hasProcessExitHook = false;
+let isShuttingDown = false;
 
 function getDriverExecutableName() {
 	return process.platform === 'win32' ? 'tracky-mouse-driver.exe' : 'tracky-mouse-driver';
@@ -137,12 +138,13 @@ async function startTMDriver({ app }) {
 }
 
 async function stopTMDriver() {
+	isShuttingDown = true;
 	if (!driverProcess) {
 		return;
 	}
 	const proc = driverProcess;
 	driverProcess = null;
-	rejectAllPendingRequests('tm-driver stopped');
+	pendingRequests.clear(); // Drop silently instead of rejecting, to avoid errors during shutdown
 	await new Promise((resolve) => {
 		proc.once('exit', () => resolve());
 		proc.kill();
@@ -157,13 +159,16 @@ function ensureDriverRunning() {
 }
 
 function callDriver(method, params = {}) {
+	if (isShuttingDown) {
+		return new Promise(() => { }); // Never resolves; callers suspend quietly during shutdown
+	}
 	ensureDriverRunning();
 	const id = nextRequestId++;
 	const payload = JSON.stringify({ id, method, params });
 	return new Promise((resolve, reject) => {
 		pendingRequests.set(id, { resolve, reject });
 		driverProcess.stdin.write(`${payload}\n`, (error) => {
-			if (!error) {
+			if (!error || isShuttingDown) {
 				return;
 			}
 			pendingRequests.delete(id);
