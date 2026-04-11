@@ -4,10 +4,10 @@ description: Use this when existing translatable strings have been modified stru
 ---
 
 1. Run `npx i18next-cli extract`
-2. Run `git diff locales/en/translation.json` and review the new translations and the relations to the old strings and keys. If there are new or modified strings that require translation work, proceed but skip these until the end. (We still don't want to reword things unnecessarily, so don't use the "translate-new-strings" skill for this.)
-3. Run `git restore locales/*/translation.json` so that the original strings are back in place for programmatic manipulation.
-4. Create a transformation function and test it in isolation first (using Node.js `-e` flag).
-5. Run a Node.js command to patch all the locale files (using Node.js `-e` flag).
+2. Run `git diff core/locales/en/translation.json` and review the new translations and the relations to the old strings and keys. If there are new or modified strings that require translation work, proceed but skip these until the end. (We still don't want to reword things unnecessarily, so don't use the "translate-new-strings" skill for this.)
+3. Run `git restore core/locales/*/translation.json` so that the original strings are back in place for programmatic manipulation.
+4. Create a transformation function and test it in isolation first (using Node.js with a heredoc).
+5. Run a Node.js command to patch all the locale files (using Node.js with a heredoc).
 6. Run `npx i18next-cli extract` again to reorder the keys.
 7. Run `npx i18next-cli status` to verify.
    - If needed, run `npx i18next-cli status <lang>` to get a more detailed report for a specific language.
