@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "ไม่ได้รับสิทธิ์ โปรดเปิดใช้งานการเข้าถึงกล้อง",
   "video.errors.previouslySelectedUnavailable": "กล้องที่เลือกไว้ก่อนหน้านี้ไม่พร้อมใช้งาน ลองเลือก \"Default\" ใน วิดีโอ > แหล่งสัญญาณกล้อง แล้วจึงเลือกกล้องเฉพาะหากจำเป็น",
   "video.errors.retryAfterClosingOtherPrograms": "โปรดตรวจสอบว่าไม่มีโปรแกรมอื่นใช้กล้องอยู่ แล้วลองใหม่",
-  "video.errors.unsupportedResolution": "เว็บแคมไม่รองรับความละเอียดที่ต้องการ โปรดเปลี่ยนการตั้งค่า"
+  "video.errors.unsupportedResolution": "เว็บแคมไม่รองรับความละเอียดที่ต้องการ โปรดเปลี่ยนการตั้งค่า",
+  "video.status.accessTakingLongerThanExpected": "การเข้าถึงกล้องใช้เวลานานกว่าที่คาดไว้..."
 }

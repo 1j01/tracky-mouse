@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Zugriff verweigert. Bitte aktivieren Sie den Kamerazugriff.",
   "video.errors.previouslySelectedUnavailable": "Die zuvor ausgewählte Kamera ist nicht verfügbar. Wählen Sie für Video > Kameraquelle 'Standard' und wählen Sie bei Bedarf eine spezifische Kamera aus.",
   "video.errors.retryAfterClosingOtherPrograms": "Bitte stellen Sie sicher, dass keine andere Anwendung die Kamera verwendet, und versuchen Sie es erneut.",
-  "video.errors.unsupportedResolution": "Die Webcam unterstützt die erforderliche Auflösung nicht. Bitte ändern Sie Ihre Einstellungen."
+  "video.errors.unsupportedResolution": "Die Webcam unterstützt die erforderliche Auflösung nicht. Bitte ändern Sie Ihre Einstellungen.",
+  "video.status.accessTakingLongerThanExpected": "Der Zugriff auf die Kamera dauert länger als erwartet..."
 }

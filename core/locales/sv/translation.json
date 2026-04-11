@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Åtkomst nekad. Aktivera åtkomst till kameran.",
   "video.errors.previouslySelectedUnavailable": "Den tidigare valda kameran är inte tillgänglig. Prova att välja \"Standard\" för Video > Kamerakälla och välj sedan en specifik kamera om du behöver.",
   "video.errors.retryAfterClosingOtherPrograms": "Kontrollera att inga andra program använder kameran och försök igen.",
-  "video.errors.unsupportedResolution": "Webbkameran stöder inte den upplösning som krävs. Ändra dina inställningar."
+  "video.errors.unsupportedResolution": "Webbkameran stöder inte den upplösning som krävs. Ändra dina inställningar.",
+  "video.status.accessTakingLongerThanExpected": "Åtkomst till kameran tar längre tid än förväntat..."
 }

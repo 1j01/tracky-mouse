@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "اجازت مسترد کر دی گئی۔ براہِ کرم کیمرے تک رسائی فعال کریں۔",
   "video.errors.previouslySelectedUnavailable": "پہلے منتخب کیا گیا کیمرہ دستیاب نہیں۔ ویڈیو > کیمرہ ماخذ میں \"ڈیفالٹ\" منتخب کرنے کی کوشش کریں، اور ضرورت ہو تو بعد میں کوئی مخصوص کیمرہ منتخب کریں۔",
   "video.errors.retryAfterClosingOtherPrograms": "یقینی بنائیں کہ کوئی اور پروگرام کیمرہ استعمال نہیں کر رہا اور دوبارہ کوشش کریں۔",
-  "video.errors.unsupportedResolution": "ویب کیم مطلوبہ ریزولیوشن کو سپورٹ نہیں کرتا۔ براہِ کرم اپنی سیٹنگز تبدیل کریں۔"
+  "video.errors.unsupportedResolution": "ویب کیم مطلوبہ ریزولیوشن کو سپورٹ نہیں کرتا۔ براہِ کرم اپنی سیٹنگز تبدیل کریں۔",
+  "video.status.accessTakingLongerThanExpected": "کیمرے تک رسائی میں توقع سے زیادہ وقت لگ رہا ہے..."
 }

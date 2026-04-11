@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Kebenaran dinafikan. Sila benarkan akses kepada kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera yang dipilih sebelum ini tidak tersedia. Cuba pilih \"Default\" untuk Video > Sumber kamera, kemudian pilih kamera tertentu jika perlu.",
   "video.errors.retryAfterClosingOtherPrograms": "Pastikan tiada program lain menggunakan kamera dan cuba lagi.",
-  "video.errors.unsupportedResolution": "Kamera web tidak menyokong resolusi yang diperlukan. Sila ubah tetapan anda."
+  "video.errors.unsupportedResolution": "Kamera web tidak menyokong resolusi yang diperlukan. Sila ubah tetapan anda.",
+  "video.status.accessTakingLongerThanExpected": "Mengakses kamera mengambil masa lebih lama daripada yang dijangkakan..."
 }

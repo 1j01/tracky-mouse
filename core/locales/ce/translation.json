@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "ХӀокху ю хьажа хаам дац. Камера хьажа кхочуш йа.",
   "video.errors.previouslySelectedUnavailable": "ХӀинца тӀетохан камера хилар дац. Видео > Камеран хирорг тӀехь \"Стандарт\" тӀетоха хьа, хьажар хьажа хӀинца конкрет камера тӀетохар.",
   "video.errors.retryAfterClosingOtherPrograms": "Шорна хьа, хӀинца кхин программ камера цахьажийна, юккъа дӀайо цуьнан хьаьжна.",
-  "video.errors.unsupportedResolution": "Веб-камера цуьнан резолюци дӀайаман дац. Параметраш кхетар."
+  "video.errors.unsupportedResolution": "Веб-камера цуьнан резолюци дӀайаман дац. Параметраш кхетар.",
+  "video.status.accessTakingLongerThanExpected": "Доступ к камере занимает больше времени, чем ожидалось..."
 }

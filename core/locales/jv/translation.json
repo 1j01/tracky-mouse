@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Ijin ditolak. Mangga uripna akses kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera sing sadurungé dipilih ora kasedhiya. Coba pilih \"Default\" ing Video > Sumber kamera, banjur pilih kamera tartamtu yen perlu.",
   "video.errors.retryAfterClosingOtherPrograms": "Priksa manawa ora ana program liya sing nganggo kamera, banjur coba maneh.",
-  "video.errors.unsupportedResolution": "Webcam ora ndhukung resolusi sing dibutuhake. Mangga ganti pangaturan."
+  "video.errors.unsupportedResolution": "Webcam ora ndhukung resolusi sing dibutuhake. Mangga ganti pangaturan.",
+  "video.status.accessTakingLongerThanExpected": "Ngakses kamera mbutuhake wektu luwih suwe tinimbang sing diarepake..."
 }

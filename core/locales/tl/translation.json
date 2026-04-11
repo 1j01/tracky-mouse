@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Tinanggihan ang pahintulot. Paki-enable ang access sa kamera.",
   "video.errors.previouslySelectedUnavailable": "Hindi magagamit ang dating napiling kamera. Subukang piliin ang \"Default\" sa Video > Camera source, at pagkatapos ay pumili ng partikular na kamera kung kailangan mo.",
   "video.errors.retryAfterClosingOtherPrograms": "Tiyaking walang ibang programang gumagamit ng kamera at subukang muli.",
-  "video.errors.unsupportedResolution": "Hindi sinusuportahan ng webcam ang kinakailangang resolusyon. Pakibago ang iyong mga setting."
+  "video.errors.unsupportedResolution": "Hindi sinusuportahan ng webcam ang kinakailangang resolusyon. Pakibago ang iyong mga setting.",
+  "video.status.accessTakingLongerThanExpected": "Mas matagal kaysa inaasahan ang pag-access sa camera..."
 }

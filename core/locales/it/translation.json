@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permesso negato. Abilita l'accesso alla fotocamera.",
   "video.errors.previouslySelectedUnavailable": "La fotocamera precedentemente selezionata non è disponibile. Prova a selezionare \"Predefinita\" in Video > Sorgente fotocamera, e poi scegli una fotocamera specifica se necessario.",
   "video.errors.retryAfterClosingOtherPrograms": "Assicurati che nessun altro programma stia usando la fotocamera e riprova.",
-  "video.errors.unsupportedResolution": "La webcam non supporta la risoluzione richiesta. Modifica le impostazioni."
+  "video.errors.unsupportedResolution": "La webcam non supporta la risoluzione richiesta. Modifica le impostazioni.",
+  "video.status.accessTakingLongerThanExpected": "L'accesso alla fotocamera sta impiegando più tempo del previsto..."
 }

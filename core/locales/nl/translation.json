@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Toegang geweigerd. Schakel de cameratoegang in.",
   "video.errors.previouslySelectedUnavailable": "De eerder geselecteerde camera is niet beschikbaar. Probeer \"Standaard\" te kiezen bij Video > Camerabron en selecteer daarna zo nodig een specifieke camera.",
   "video.errors.retryAfterClosingOtherPrograms": "Zorg dat geen andere programma's de camera gebruiken en probeer het opnieuw.",
-  "video.errors.unsupportedResolution": "De webcam ondersteunt de vereiste resolutie niet. Pas je instellingen aan."
+  "video.errors.unsupportedResolution": "De webcam ondersteunt de vereiste resolutie niet. Pas je instellingen aan.",
+  "video.status.accessTakingLongerThanExpected": "Toegang krijgen tot de camera duurt langer dan verwacht..."
 }

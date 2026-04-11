@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "🚫📷. 🙏✅📷",
   "video.errors.previouslySelectedUnavailable": "⚙️👉📷 🔎🥺... 🙏 🖱️💥 📹>📷>🤷📷; 🖱️💥 📹>📷>❤️📷.",
   "video.errors.retryAfterClosingOtherPrograms": "📷🟰📸. 🙏 ❌↗️💻📸, 🔄.",
-  "video.errors.unsupportedResolution": "📷🤝📐❌. 🙏⚙️."
+  "video.errors.unsupportedResolution": "📷🤝📐❌. 🙏⚙️.",
+  "video.status.accessTakingLongerThanExpected": "📷⏳😕..."
 }

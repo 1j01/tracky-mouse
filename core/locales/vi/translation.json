@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Quyền bị từ chối. Hãy cho phép truy cập camera.",
   "video.errors.previouslySelectedUnavailable": "Camera đã chọn trước đó không khả dụng. Hãy thử chọn \"Default\" trong Video > Camera source, rồi chọn camera cụ thể nếu cần.",
   "video.errors.retryAfterClosingOtherPrograms": "Hãy chắc rằng không có chương trình nào khác đang dùng camera rồi thử lại.",
-  "video.errors.unsupportedResolution": "Webcam không hỗ trợ độ phân giải yêu cầu. Hãy thay đổi cài đặt."
+  "video.errors.unsupportedResolution": "Webcam không hỗ trợ độ phân giải yêu cầu. Hãy thay đổi cài đặt.",
+  "video.status.accessTakingLongerThanExpected": "Việc truy cập camera đang mất nhiều thời gian hơn dự kiến..."
 }

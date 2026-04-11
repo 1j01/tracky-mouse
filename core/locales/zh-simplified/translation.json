@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "权限被拒绝。请启用对摄像头的访问。",
   "video.errors.previouslySelectedUnavailable": "之前选择的摄像头不可用。请在“视频 > 摄像头来源”中先选择“默认”，如有需要再选择具体的摄像头。",
   "video.errors.retryAfterClosingOtherPrograms": "请确认没有其他程序正在使用摄像头，然后重试。",
-  "video.errors.unsupportedResolution": "网络摄像头不支持所需的分辨率。请更改设置。"
+  "video.errors.unsupportedResolution": "网络摄像头不支持所需的分辨率。请更改设置。",
+  "video.status.accessTakingLongerThanExpected": "访问摄像头所花的时间比预期更久..."
 }

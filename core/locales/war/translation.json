@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Gindidiri an permiso. Paki-on an katungod ha kamera.",
   "video.errors.previouslySelectedUnavailable": "An nanguna nga pinili nga kamera diri na magamit. Sulayi pagpili han \"Default\" ha Video > Camera source, ngan katapos pili hin partikular nga kamera kun kinahanglan mo.",
   "video.errors.retryAfterClosingOtherPrograms": "Siguroha nga waray iba nga programa nga nagamit han kamera ngan sulayi utro.",
-  "video.errors.unsupportedResolution": "An webcam diri nasuporta han ginkikinahanglan nga resolusyon. Paki-iba an imo mga setting."
+  "video.errors.unsupportedResolution": "An webcam diri nasuporta han ginkikinahanglan nga resolusyon. Paki-iba an imo mga setting.",
+  "video.status.accessTakingLongerThanExpected": "An pag-access han kamera nagdudugay hin mas maiha kay han ginlalaoman..."
 }

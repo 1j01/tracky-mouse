@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permission refusée. Veuillez autoriser l'accès à la caméra.",
   "video.errors.previouslySelectedUnavailable": "La caméra précédemment sélectionnée n'est pas disponible. Essayez de sélectionner \"Par défaut\" pour Vidéo > Source de la caméra, puis sélectionnez une caméra spécifique si nécessaire.",
   "video.errors.retryAfterClosingOtherPrograms": "Veuillez vous assurer qu'aucun autre programme n'utilise la caméra et réessayez.",
-  "video.errors.unsupportedResolution": "La webcam ne prend pas en charge la résolution requise. Veuillez modifier vos paramètres."
+  "video.errors.unsupportedResolution": "La webcam ne prend pas en charge la résolution requise. Veuillez modifier vos paramètres.",
+  "video.status.accessTakingLongerThanExpected": "L'accès à la caméra prend plus de temps que prévu..."
 }

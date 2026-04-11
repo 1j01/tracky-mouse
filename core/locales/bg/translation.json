@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Достъпът е отказан. Моля, разрешете достъп до камерата.",
   "video.errors.previouslySelectedUnavailable": "Предишно избраната камера не е налична. Опитайте да изберете \"Default\" в Video > Camera source и след това изберете конкретна камера, ако е необходимо.",
   "video.errors.retryAfterClosingOtherPrograms": "Уверете се, че няма други програми, които използват камерата, и опитайте отново.",
-  "video.errors.unsupportedResolution": "Уеб камерата не поддържа необходимата разделителна способност. Моля, променете настройките."
+  "video.errors.unsupportedResolution": "Уеб камерата не поддържа необходимата разделителна способност. Моля, променете настройките.",
+  "video.status.accessTakingLongerThanExpected": "Достъпът до камерата отнема повече време от очакваното..."
 }

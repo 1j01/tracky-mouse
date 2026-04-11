@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permís denegat. Habilita l'accés a la càmera.",
   "video.errors.previouslySelectedUnavailable": "La càmera seleccionada anteriorment no és disponible. Prova de seleccionar \"Per defecte\" a Vídeo > Origen de la càmera i, després, tria una càmera concreta si cal.",
   "video.errors.retryAfterClosingOtherPrograms": "Assegura't que cap altre programa estigui usant la càmera i torna-ho a provar.",
-  "video.errors.unsupportedResolution": "La webcam no admet la resolució requerida. Canvia la configuració."
+  "video.errors.unsupportedResolution": "La webcam no admet la resolució requerida. Canvia la configuració.",
+  "video.status.accessTakingLongerThanExpected": "L'accés a la càmera està trigant més del que s'esperava..."
 }

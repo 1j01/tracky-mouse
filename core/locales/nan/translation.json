@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "權限予拒絕。請允許程式使用攝影機。",
   "video.errors.previouslySelectedUnavailable": "上以前揀 ê 攝影機今無通用。請佇「視訊 > 攝影機來源」內面先揀「預設」，若需要閣再揀特定 ê 攝影機。",
   "video.errors.retryAfterClosingOtherPrograms": "請確認無其他程式咧用攝影機，再試看覓。",
-  "video.errors.unsupportedResolution": "攝影機無支援必要 ê 解析度，請調整設定。"
+  "video.errors.unsupportedResolution": "攝影機無支援必要 ê 解析度，請調整設定。",
+  "video.status.accessTakingLongerThanExpected": "存取攝影機比預期閣較久..."
 }

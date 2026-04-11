@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "הגישה נדחתה. אנא אפשר גישה למצלמה.",
   "video.errors.previouslySelectedUnavailable": "המצלמה שנבחרה קודם אינה זמינה. נסה לבחור \"ברירת מחדל\" תחת וידאו > מקור מצלמה, ולאחר מכן בחר מצלמה ספציפית במידת הצורך.",
   "video.errors.retryAfterClosingOtherPrograms": "ודא שאין תוכניות אחרות שמשתמשות במצלמה ונסה שוב.",
-  "video.errors.unsupportedResolution": "מצלמת הרשת אינה תומכת ברזולוציה הנדרשת. אנא שנה את ההגדרות."
+  "video.errors.unsupportedResolution": "מצלמת הרשת אינה תומכת ברזולוציה הנדרשת. אנא שנה את ההגדרות.",
+  "video.status.accessTakingLongerThanExpected": "הגישה למצלמה לוקחת יותר זמן מהצפוי..."
 }

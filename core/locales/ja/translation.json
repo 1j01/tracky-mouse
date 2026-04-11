@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "権限が拒否されました。カメラへのアクセスを有効にしてください。",
   "video.errors.previouslySelectedUnavailable": "以前選択したカメラは使用できません。［ビデオ］>［カメラソース］で「デフォルト」を選択し、必要に応じて特定のカメラを選び直してください。",
   "video.errors.retryAfterClosingOtherPrograms": "他のプログラムがカメラを使用していないことを確認してから、もう一度お試しください。",
-  "video.errors.unsupportedResolution": "ウェブカメラが必要な解像度に対応していません。設定を変更してください。"
+  "video.errors.unsupportedResolution": "ウェブカメラが必要な解像度に対応していません。設定を変更してください。",
+  "video.status.accessTakingLongerThanExpected": "カメラへのアクセスに予想より時間がかかっています..."
 }

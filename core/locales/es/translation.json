@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permiso denegado. Por favor habilita el acceso a la cámara.",
   "video.errors.previouslySelectedUnavailable": "La cámara seleccionada anteriormente no está disponible. Intenta seleccionar \"Predeterminada\" en Video > Fuente de cámara, y luego selecciona una cámara específica si lo necesitas.",
   "video.errors.retryAfterClosingOtherPrograms": "Asegúrate de que ningún otro programa esté usando la cámara e intenta de nuevo.",
-  "video.errors.unsupportedResolution": "La webcam no soporta la resolución requerida. Por favor cambia tus ajustes."
+  "video.errors.unsupportedResolution": "La webcam no soporta la resolución requerida. Por favor cambia tus ajustes.",
+  "video.status.accessTakingLongerThanExpected": "Acceder a la cámara está tardando más de lo esperado..."
 }

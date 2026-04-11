@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Přístup odepřen. Povolte prosím přístup ke kameře.",
   "video.errors.previouslySelectedUnavailable": "Dříve vybraná kamera není k dispozici. Zkuste zvolit \"Výchozí\" u Nastavení videa > Zdroj kamery a poté případně vyberte konkrétní kameru.",
   "video.errors.retryAfterClosingOtherPrograms": "Ujistěte se, že kameru nepoužívá jiný program, a zkuste to znovu.",
-  "video.errors.unsupportedResolution": "Webkamera nepodporuje požadované rozlišení. Změňte prosím nastavení."
+  "video.errors.unsupportedResolution": "Webkamera nepodporuje požadované rozlišení. Změňte prosím nastavení.",
+  "video.status.accessTakingLongerThanExpected": "Přístup ke kameře trvá déle, než se očekávalo..."
 }

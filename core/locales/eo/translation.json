@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permeso rifuzita. Bonvolu ebligi aliron al la fotilo.",
   "video.errors.previouslySelectedUnavailable": "La antaŭe elektita fotilo ne disponeblas. Provu elekti \"Defaŭlta\" ĉe Video > Fonto de fotilo, kaj poste elektu specifan fotilon se necese.",
   "video.errors.retryAfterClosingOtherPrograms": "Bonvolu certigi, ke neniuj aliaj programoj uzas la fotilon, kaj provu denove.",
-  "video.errors.unsupportedResolution": "La retkamerao ne subtenas la bezonatan distingivon. Bonvolu ŝanĝi viajn agordojn."
+  "video.errors.unsupportedResolution": "La retkamerao ne subtenas la bezonatan distingivon. Bonvolu ŝanĝi viajn agordojn.",
+  "video.status.accessTakingLongerThanExpected": "Aliro al la fotilo daŭras pli longe ol atendite..."
 }

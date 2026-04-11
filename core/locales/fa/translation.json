@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "اجازه رد شد. لطفاً دسترسی به دوربین را فعال کنید.",
   "video.errors.previouslySelectedUnavailable": "دوربینی که قبلاً انتخاب شده بود در دسترس نیست. در مسیر Video > Camera source گزینه‌ی \"Default\" را انتخاب کنید و اگر لازم شد بعداً یک دوربین مشخص را برگزینید.",
   "video.errors.retryAfterClosingOtherPrograms": "لطفاً مطمئن شوید هیچ برنامه‌ی دیگری از دوربین استفاده نمی‌کند و دوباره تلاش کنید.",
-  "video.errors.unsupportedResolution": "وب‌کم وضوح مورد نیاز را پشتیبانی نمی‌کند. لطفاً تنظیمات خود را تغییر دهید."
+  "video.errors.unsupportedResolution": "وب‌کم وضوح مورد نیاز را پشتیبانی نمی‌کند. لطفاً تنظیمات خود را تغییر دهید.",
+  "video.status.accessTakingLongerThanExpected": "دسترسی به دوربین بیشتر از حد انتظار طول کشیده است..."
 }

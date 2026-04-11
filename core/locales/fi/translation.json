@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Käyttö estetty. Ota kameran käyttöoikeus käyttöön.",
   "video.errors.previouslySelectedUnavailable": "Aiemmin valittu kamera ei ole käytettävissä. Kokeile valita \"Oletus\" kohdasta Video > Kameralähde ja valitse sitten tarvittaessa tietty kamera.",
   "video.errors.retryAfterClosingOtherPrograms": "Varmista, ettei mikään muu ohjelma käytä kameraa, ja yritä uudelleen.",
-  "video.errors.unsupportedResolution": "Web-kamera ei tue vaadittua tarkkuutta. Muuta asetuksia."
+  "video.errors.unsupportedResolution": "Web-kamera ei tue vaadittua tarkkuutta. Muuta asetuksia.",
+  "video.status.accessTakingLongerThanExpected": "Kameran käyttöoikeuden saaminen kestää odotettua kauemmin..."
 }

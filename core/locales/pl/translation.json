@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Odmowa dostępu. Włącz dostęp do kamery.",
   "video.errors.previouslySelectedUnavailable": "Poprzednio wybrana kamera jest niedostępna. Spróbuj wybrać \"Domyślna\" w ustawieniu Wideo > Źródło kamery, a następnie wybierz konkretną kamerę, jeśli to konieczne.",
   "video.errors.retryAfterClosingOtherPrograms": "Upewnij się, że żaden inny program nie korzysta z kamery, i spróbuj ponownie.",
-  "video.errors.unsupportedResolution": "Kamera internetowa nie obsługuje wymaganej rozdzielczości. Zmień ustawienia."
+  "video.errors.unsupportedResolution": "Kamera internetowa nie obsługuje wymaganej rozdzielczości. Zmień ustawienia.",
+  "video.status.accessTakingLongerThanExpected": "Uzyskiwanie dostępu do kamery trwa dłużej niż oczekiwano..."
 }

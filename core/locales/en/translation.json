@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permission denied. Please enable access to the camera.",
   "video.errors.previouslySelectedUnavailable": "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.",
   "video.errors.retryAfterClosingOtherPrograms": "Please make sure no other programs are using the camera and try again.",
-  "video.errors.unsupportedResolution": "Webcam does not support the required resolution. Please change your settings."
+  "video.errors.unsupportedResolution": "Webcam does not support the required resolution. Please change your settings.",
+  "video.status.accessTakingLongerThanExpected": "Accessing the camera is taking longer than expected..."
 }

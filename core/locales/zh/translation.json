@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "權限被拒絕。請啟用對攝影機的存取權限。",
   "video.errors.previouslySelectedUnavailable": "先前選取的攝影機無法使用。請嘗試在「視訊 > 攝影機來源」中選擇「預設」，之後如有需要再選擇特定攝影機。",
   "video.errors.retryAfterClosingOtherPrograms": "請確認沒有其他程式正在使用攝影機，然後再試一次。",
-  "video.errors.unsupportedResolution": "網路攝影機不支援所需的解析度。請變更你的設定。"
+  "video.errors.unsupportedResolution": "網路攝影機不支援所需的解析度。請變更你的設定。",
+  "video.status.accessTakingLongerThanExpected": "存取攝影機所花的時間比預期更久..."
 }

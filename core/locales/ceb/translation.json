@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Gitakdan ang permiso. Palihug i-enable ang pag-access sa kamera.",
   "video.errors.previouslySelectedUnavailable": "Ang miaging napiling kamera dili na magamit. Sulayi pagpili ug \"Default\" sa Video > Camera source, unya pilia ang espesipikong kamera kung kinahanglan.",
   "video.errors.retryAfterClosingOtherPrograms": "Palihug siguradua nga walay lain nga programa nga naggamit sa kamera ug sulayi pag-usab.",
-  "video.errors.unsupportedResolution": "Dili masuportahan sa webcam ang gikinahanglan nga resolusyon. Palihug usba ang imong mga setting."
+  "video.errors.unsupportedResolution": "Dili masuportahan sa webcam ang gikinahanglan nga resolusyon. Palihug usba ang imong mga setting.",
+  "video.status.accessTakingLongerThanExpected": "Ang pag-access sa camera nagdugay og mas taas kaysa gipaabot..."
 }

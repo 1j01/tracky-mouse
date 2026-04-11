@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "ਇਜਾਜ਼ਤ ਰੱਦ ਕੀਤੀ ਗਈ। ਕਿਰਪਾ ਕਰਕੇ ਕੈਮਰੇ ਦੀ ਪਹੁੰਚ ਇਨੇਬਲ ਕਰੋ।",
   "video.errors.previouslySelectedUnavailable": "ਪਹਿਲਾਂ ਚੁਣਿਆ ਗਿਆ ਕੈਮਰਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। Video > Camera source ਲਈ \"Default\" ਚੁਣ ਕੇ ਦੇਖੋ ਅਤੇ ਜੇ ਲੋੜ ਪਏ ਤਾਂ ਬਾਅਦ ਵਿੱਚ ਕੋਈ ਖਾਸ ਕੈਮਰਾ ਚੁਣੋ।",
   "video.errors.retryAfterClosingOtherPrograms": "ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਕੋਈ ਹੋਰ ਪ੍ਰੋਗਰਾਮ ਕੈਮਰਾ ਨਹੀਂ ਵਰਤ ਰਿਹਾ ਅਤੇ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
-  "video.errors.unsupportedResolution": "ਵੈੱਬਕੈਮ ਲੋੜੀਂਦੀ ਰੈਜ਼ੋਲੂਸ਼ਨ ਨੂੰ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ ਬਦਲੋ।"
+  "video.errors.unsupportedResolution": "ਵੈੱਬਕੈਮ ਲੋੜੀਂਦੀ ਰੈਜ਼ੋਲੂਸ਼ਨ ਨੂੰ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ ਬਦਲੋ।",
+  "video.status.accessTakingLongerThanExpected": "ਕੈਮਰੇ ਤੱਕ ਪਹੁੰਚਣ ਵਿੱਚ ਉਮੀਦ ਨਾਲੋਂ ਵੱਧ ਸਮਾਂ ਲੱਗ ਰਿਹਾ ਹੈ..."
 }

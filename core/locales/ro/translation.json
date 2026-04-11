@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Permisiune refuzată. Vă rugăm să permiteți accesul la cameră.",
   "video.errors.previouslySelectedUnavailable": "Camera selectată anterior nu este disponibilă. Încercați să selectați \"Implicit\" pentru Video > Sursă cameră, apoi alegeți o cameră specifică dacă este necesar.",
   "video.errors.retryAfterClosingOtherPrograms": "Asigurați‑vă că niciun alt program nu folosește camera și încercați din nou.",
-  "video.errors.unsupportedResolution": "Camera web nu suportă rezoluția necesară. Vă rugăm să modificați setările."
+  "video.errors.unsupportedResolution": "Camera web nu suportă rezoluția necesară. Vă rugăm să modificați setările.",
+  "video.status.accessTakingLongerThanExpected": "Accesarea camerei durează mai mult decât se aștepta..."
 }

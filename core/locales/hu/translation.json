@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Hozzáférés megtagadva. Engedélyezd a kamera használatát.",
   "video.errors.previouslySelectedUnavailable": "A korábban kiválasztott kamera nem érhető el. Próbáld meg a Video > Kamera forrása menüben az \"Alapértelmezett\" opciót választani, majd szükség esetén válassz ki egy konkrét kamerát.",
   "video.errors.retryAfterClosingOtherPrograms": "Győződj meg róla, hogy más program nem használja a kamerát, majd próbáld újra.",
-  "video.errors.unsupportedResolution": "A webkamera nem támogatja a szükséges felbontást. Módosítsd a beállításokat."
+  "video.errors.unsupportedResolution": "A webkamera nem támogatja a szükséges felbontást. Módosítsd a beállításokat.",
+  "video.status.accessTakingLongerThanExpected": "A kamera elérése a vártnál tovább tart..."
 }

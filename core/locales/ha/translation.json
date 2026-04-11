@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "An ƙi izini. Don Allah ka kunna damar amfani da kyamara.",
   "video.errors.previouslySelectedUnavailable": "Kyamarar da aka zaɓa a baya ba ta samuwa. Gwada zaɓar \"Default\" a Video > Camera source, sannan ka zaɓi takamaiman kyamara idan kana buƙata.",
   "video.errors.retryAfterClosingOtherPrograms": "Ka tabbata babu wani shiri da ke amfani da kyamara sannan ka sake gwadawa.",
-  "video.errors.unsupportedResolution": "Kyamarar yanar gizo ba ta goyan bayan ƙudurin da ake buƙata ba. Don Allah ka canza saitunanka."
+  "video.errors.unsupportedResolution": "Kyamarar yanar gizo ba ta goyan bayan ƙudurin da ake buƙata ba. Don Allah ka canza saitunanka.",
+  "video.status.accessTakingLongerThanExpected": "Samun damar amfani da kyamara yana daukar lokaci fiye da yadda aka zata..."
 }

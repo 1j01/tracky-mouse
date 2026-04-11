@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "السماح مرفوض. من فضلك فعّل صلاحية الوصول للكاميرا.",
   "video.errors.previouslySelectedUnavailable": "الكاميرا اللي كنت مختارها قبل كده مش متاحة دلوقتي. جرّب تختار \"افتراضي\" في فيديو > مصدر الكاميرا، وبعدين اختار كاميرا معيّنة لو محتاج.",
   "video.errors.retryAfterClosingOtherPrograms": "اتأكد إن مفيش برامج تانية بتستخدم الكاميرا وجرب تاني.",
-  "video.errors.unsupportedResolution": "الكاميرا مش بتدعم دقة العرض المطلوبة. غيّر الإعدادات لو سمحت."
+  "video.errors.unsupportedResolution": "الكاميرا مش بتدعم دقة العرض المطلوبة. غيّر الإعدادات لو سمحت.",
+  "video.status.accessTakingLongerThanExpected": "الوصول للكاميرا بياخد وقت أطول من المتوقع..."
 }

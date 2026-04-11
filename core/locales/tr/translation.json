@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "İzin reddedildi. Lütfen kameraya erişimi etkinleştirin.",
   "video.errors.previouslySelectedUnavailable": "Önceden seçilen kamera kullanılamıyor. Video > Kamera kaynağı için \"Varsayılan\"'ı seçmeyi deneyin ve gerekirse daha sonra belirli bir kamera seçin.",
   "video.errors.retryAfterClosingOtherPrograms": "Lütfen başka hiçbir programın kamerayı kullanmadığından emin olun ve tekrar deneyin.",
-  "video.errors.unsupportedResolution": "Web kamerası gereken çözünürlüğü desteklemiyor. Lütfen ayarlarınızı değiştirin."
+  "video.errors.unsupportedResolution": "Web kamerası gereken çözünürlüğü desteklemiyor. Lütfen ayarlarınızı değiştirin.",
+  "video.status.accessTakingLongerThanExpected": "Kameraya erişmek beklenenden daha uzun sürüyor..."
 }

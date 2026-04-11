@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "परवानगी नाकारली. कृपया कॅमेरा ऍक्सेस सक्षम करा.",
   "video.errors.previouslySelectedUnavailable": "यापूर्वी निवडलेला कॅमेरा उपलब्ध नाही. Video > Camera source मध्ये \"Default\" निवडून पाहा आणि गरज असल्यास नंतर विशिष्ट कॅमेरा निवडा.",
   "video.errors.retryAfterClosingOtherPrograms": "कॅमेरा इतर कोणताही प्रोग्राम वापरत नाही याची खात्री करा आणि पुन्हा प्रयत्न करा.",
-  "video.errors.unsupportedResolution": "वेबकॅम आवश्यक रेझोल्यूशनला सपोर्ट करत नाही. कृपया सेटिंग्ज बदला."
+  "video.errors.unsupportedResolution": "वेबकॅम आवश्यक रेझोल्यूशनला सपोर्ट करत नाही. कृपया सेटिंग्ज बदला.",
+  "video.status.accessTakingLongerThanExpected": "कॅमेराचा प्रवेश मिळवायला अपेक्षेपेक्षा जास्त वेळ लागत आहे..."
 }

@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Доступ заборонено. Увімкніть доступ до камери.",
   "video.errors.previouslySelectedUnavailable": "Раніше вибрана камера недоступна. Спробуйте вибрати \"Default\" у Video > Джерело камери, а потім за потреби виберіть конкретну камеру.",
   "video.errors.retryAfterClosingOtherPrograms": "Переконайтеся, що жодна інша програма не використовує камеру, і спробуйте ще раз.",
-  "video.errors.unsupportedResolution": "Вебкамера не підтримує потрібну роздільну здатність. Змініть налаштування."
+  "video.errors.unsupportedResolution": "Вебкамера не підтримує потрібну роздільну здатність. Змініть налаштування.",
+  "video.status.accessTakingLongerThanExpected": "Доступ до камери займає більше часу, ніж очікувалося..."
 }

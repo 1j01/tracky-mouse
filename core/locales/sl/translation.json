@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Dovoljenje je zavrnjeno. Omogočite dostop do kamere.",
   "video.errors.previouslySelectedUnavailable": "Prej izbrana kamera ni na voljo. Poskusite izbrati »Privzeto« pod Video > Vir kamere in nato po potrebi izberite določeno kamero.",
   "video.errors.retryAfterClosingOtherPrograms": "Preverite, da kamere ne uporablja drug program, in poskusite znova.",
-  "video.errors.unsupportedResolution": "Spletna kamera ne podpira zahtevane ločljivosti. Spremenite nastavitve."
+  "video.errors.unsupportedResolution": "Spletna kamera ne podpira zahtevane ločljivosti. Spremenite nastavitve.",
+  "video.status.accessTakingLongerThanExpected": "Dostop do kamere traja dlje, kot je bilo pričakovano..."
 }

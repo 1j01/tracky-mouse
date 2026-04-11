@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "권한이 거부되었습니다. 카메라 접근 권한을 허용해 주세요.",
   "video.errors.previouslySelectedUnavailable": "이전에 선택한 카메라를 사용할 수 없습니다. 필요하다면 [비디오 > 카메라 소스]에서 \"기본값\"을 선택한 뒤, 특정 카메라를 다시 선택해 보세요.",
   "video.errors.retryAfterClosingOtherPrograms": "다른 프로그램이 카메라를 사용 중인지 확인한 후 다시 시도해 주세요.",
-  "video.errors.unsupportedResolution": "웹캠이 필요한 해상도를 지원하지 않습니다. 설정을 변경해 주세요."
+  "video.errors.unsupportedResolution": "웹캠이 필요한 해상도를 지원하지 않습니다. 설정을 변경해 주세요.",
+  "video.status.accessTakingLongerThanExpected": "카메라에 접근하는 데 예상보다 시간이 더 걸리고 있습니다..."
 }

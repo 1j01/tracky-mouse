@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Մուտքը արգելված է։ Խնդրում ենք թույլատրել մուտքը տեսախցիկին։",
   "video.errors.previouslySelectedUnavailable": "Նախկինում ընտրված տեսախցիկը հասանելի չէ։ Փորձեք Video > Camera source բաժնում ընտրել \"Default\" և ապա, անհրաժեշտության դեպքում, ընտրել կոնկրետ տեսախցիկ։",
   "video.errors.retryAfterClosingOtherPrograms": "Խնդրում ենք ստուգել, որ որևէ այլ ծրագիր չի օգտագործում տեսախցիկը, և փորձել կրկին։",
-  "video.errors.unsupportedResolution": "Վեբ տեսախցիկը չի աջակցում պահանջվող լուծաչափը։ Խնդրում ենք փոխել կարգավորումները։"
+  "video.errors.unsupportedResolution": "Վեբ տեսախցիկը չի աջակցում պահանջվող լուծաչափը։ Խնդրում ենք փոխել կարգավորումները։",
+  "video.status.accessTakingLongerThanExpected": "Տեսախցիկին հասանելիություն ստանալը սպասվածից ավելի երկար է տևում..."
 }

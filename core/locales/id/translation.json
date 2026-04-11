@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Izin ditolak. Harap aktifkan akses ke kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera yang sebelumnya dipilih tidak tersedia. Coba pilih \"Default\" pada Video > Sumber kamera, lalu pilih kamera tertentu jika diperlukan.",
   "video.errors.retryAfterClosingOtherPrograms": "Pastikan tidak ada program lain yang menggunakan kamera dan coba lagi.",
-  "video.errors.unsupportedResolution": "Webcam tidak mendukung resolusi yang dibutuhkan. Silakan ubah pengaturan Anda."
+  "video.errors.unsupportedResolution": "Webcam tidak mendukung resolusi yang dibutuhkan. Silakan ubah pengaturan Anda.",
+  "video.status.accessTakingLongerThanExpected": "Mengakses kamera memakan waktu lebih lama dari yang diharapkan..."
 }

@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "અનુમતિ નકારી દેવામાં આવી. કૃપા કરીને કેમેરા ઍક્સેસ સક્રિય કરો.",
   "video.errors.previouslySelectedUnavailable": "પહેલાં પસંદ કરાયેલ કેમેરા ઉપલબ્ધ નથી. Video > Camera source માં \"Default\" પસંદ કરો, અને પછી જરૂરી હોય તો ચોક્કસ કેમેરા પસંદ કરો.",
   "video.errors.retryAfterClosingOtherPrograms": "કૃપા કરીને ખાતરી કરો કે કોઈ અન્ય પ્રોગ્રામ કેમેરાનો ઉપયોગ નથી કરતા અને ફરી પ્રયાસ કરો.",
-  "video.errors.unsupportedResolution": "વેબકેમ જરૂરી રિઝોલ્યુશન સપોર્ટ કરતું નથી. કૃપા કરીને સેટિંગ્સ બદલો."
+  "video.errors.unsupportedResolution": "વેબકેમ જરૂરી રિઝોલ્યુશન સપોર્ટ કરતું નથી. કૃપા કરીને સેટિંગ્સ બદલો.",
+  "video.status.accessTakingLongerThanExpected": "કેમેરા ઍક્સેસ કરવામાં અપેક્ષા કરતાં વધુ સમય લાગી રહ્યો છે..."
 }

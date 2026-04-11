@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "অনুমতি অস্বীকৃত। অনুগ্রহ করে ক্যামেরা ব্যবহারের অনুমতি দিন।",
   "video.errors.previouslySelectedUnavailable": "আগে নির্বাচিত ক্যামেরাটি এখন আর উপলব্ধ নয়। Video > Camera source থেকে \"Default\" নির্বাচন করে দেখুন, এরপর প্রয়োজনে নির্দিষ্ট একটি ক্যামেরা নির্বাচন করুন।",
   "video.errors.retryAfterClosingOtherPrograms": "অনুগ্রহ করে নিশ্চিত করুন যে অন্য কোনো প্রোগ্রাম ক্যামেরা ব্যবহার করছে না, তারপর আবার চেষ্টা করুন।",
-  "video.errors.unsupportedResolution": "ওয়েবক্যাম প্রয়োজনীয় রেজোলিউশন সমর্থন করে না। অনুগ্রহ করে আপনার সেটিং পরিবর্তন করুন।"
+  "video.errors.unsupportedResolution": "ওয়েবক্যাম প্রয়োজনীয় রেজোলিউশন সমর্থন করে না। অনুগ্রহ করে আপনার সেটিং পরিবর্তন করুন।",
+  "video.status.accessTakingLongerThanExpected": "ক্যামেরায় অ্যাক্সেস করতে প্রত্যাশার চেয়ে বেশি সময় লাগছে..."
 }

@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Dopuštenje je odbijeno. Omogućite pristup kameri.",
   "video.errors.previouslySelectedUnavailable": "Prethodno odabrana kamera nije dostupna. Pokušajte odabrati \"Zadano\" za Video > Izvor kamere, a zatim po potrebi odaberite određenu kameru.",
   "video.errors.retryAfterClosingOtherPrograms": "Provjerite da nijedan drugi program ne koristi kameru i pokušajte ponovno.",
-  "video.errors.unsupportedResolution": "Web-kamera ne podržava potrebnu rezoluciju. Promijenite postavke."
+  "video.errors.unsupportedResolution": "Web-kamera ne podržava potrebnu rezoluciju. Promijenite postavke.",
+  "video.status.accessTakingLongerThanExpected": "Pristup kameri traje dulje nego što se očekivalo..."
 }

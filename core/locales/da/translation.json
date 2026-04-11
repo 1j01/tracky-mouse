@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Adgang nægtet. Aktiver venligst adgang til kameraet.",
   "video.errors.previouslySelectedUnavailable": "Det tidligere valgte kamera er ikke tilgængeligt. Prøv at vælge \"Standard\" under Video > Kamerakilde, og vælg derefter et specifikt kamera, hvis du har brug for det.",
   "video.errors.retryAfterClosingOtherPrograms": "Kontrollér, at ingen andre programmer bruger kameraet, og prøv igen.",
-  "video.errors.unsupportedResolution": "Webkameraet understøtter ikke den krævede opløsning. Ændr venligst dine indstillinger."
+  "video.errors.unsupportedResolution": "Webkameraet understøtter ikke den krævede opløsning. Ændr venligst dine indstillinger.",
+  "video.status.accessTakingLongerThanExpected": "Adgangen til kameraet tager længere tid end forventet..."
 }

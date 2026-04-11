@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "अनुमति अस्वीकृत। कृपया कैमरा उपयोग की अनुमति दें।",
   "video.errors.previouslySelectedUnavailable": "पहले चुना गया कैमरा उपलब्ध नहीं है। Video > Camera source में \"Default\" चुनकर देखें, और ज़रूरत हो तो बाद में कोई विशेष कैमरा चुनें।",
   "video.errors.retryAfterClosingOtherPrograms": "कृपया सुनिश्चित करें कि कोई अन्य प्रोग्राम कैमरा उपयोग नहीं कर रहा है, फिर दोबारा प्रयास करें।",
-  "video.errors.unsupportedResolution": "वेबकैम आवश्यक रेज़ोल्यूशन सपोर्ट नहीं करता। कृपया अपनी सेटिंग बदलें।"
+  "video.errors.unsupportedResolution": "वेबकैम आवश्यक रेज़ोल्यूशन सपोर्ट नहीं करता। कृपया अपनी सेटिंग बदलें।",
+  "video.status.accessTakingLongerThanExpected": "कैमरे तक पहुंचने में उम्मीद से ज़्यादा समय लग रहा है..."
 }

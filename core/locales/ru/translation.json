@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Доступ запрещён. Разрешите доступ к камере.",
   "video.errors.previouslySelectedUnavailable": "Ранее выбранная камера недоступна. Выберите \"По умолчанию\" в разделе Видео > Источник камеры, а затем при необходимости укажите конкретную камеру.",
   "video.errors.retryAfterClosingOtherPrograms": "Убедитесь, что другие программы не используют камеру, и повторите попытку.",
-  "video.errors.unsupportedResolution": "Веб‑камера не поддерживает требуемое разрешение. Измените настройки."
+  "video.errors.unsupportedResolution": "Веб‑камера не поддерживает требуемое разрешение. Измените настройки.",
+  "video.status.accessTakingLongerThanExpected": "Доступ к камере занимает больше времени, чем ожидалось..."
 }

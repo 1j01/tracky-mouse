@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Ruhusa imekataliwa. Tafadhali wezesha ufikiaji wa kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera uliyokuwa umechagua awali haipatikani. Jaribu kuchagua \"Default\" kwa Video > Chanzo cha kamera, kisha uchague kamera maalum ikiwa inahitajika.",
   "video.errors.retryAfterClosingOtherPrograms": "Tafadhali hakikisha hakuna programu nyingine inayotumia kamera kisha ujaribu tena.",
-  "video.errors.unsupportedResolution": "Kamera ya wavuti haiungi mkono azimio (resolution) linalohitajika. Tafadhali badilisha mipangilio yako."
+  "video.errors.unsupportedResolution": "Kamera ya wavuti haiungi mkono azimio (resolution) linalohitajika. Tafadhali badilisha mipangilio yako.",
+  "video.status.accessTakingLongerThanExpected": "Kufikia kamera kunachukua muda mrefu zaidi kuliko ilivyotarajiwa..."
 }

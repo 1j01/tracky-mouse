@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "تم رفض الإذن. يرجى تفعيل الوصول إلى الكاميرا.",
   "video.errors.previouslySelectedUnavailable": "الكاميرا المحددة سابقًا غير متاحة. جرّب اختيار \"الافتراضي\" من فيديو > مصدر الكاميرا، ثم اختر كاميرا محددة إذا احتجت ذلك.",
   "video.errors.retryAfterClosingOtherPrograms": "يرجى التأكد من عدم استخدام برامج أخرى للكاميرا ثم المحاولة مرة أخرى.",
-  "video.errors.unsupportedResolution": "كاميرا الويب لا تدعم الدقة المطلوبة. يرجى تغيير الإعدادات."
+  "video.errors.unsupportedResolution": "كاميرا الويب لا تدعم الدقة المطلوبة. يرجى تغيير الإعدادات.",
+  "video.status.accessTakingLongerThanExpected": "يستغرق الوصول إلى الكاميرا وقتًا أطول من المتوقع..."
 }

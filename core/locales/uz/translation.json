@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Ruxsat berilmadi. Kameraga kirishga ruxsat bering.",
   "video.errors.previouslySelectedUnavailable": "Oldin tanlangan kamera mavjud emas. Video > Kamera manbai uchun \"Default\" ni tanlab ko‘ring, so‘ng zarurat bo‘lsa, aniq kamerani tanlang.",
   "video.errors.retryAfterClosingOtherPrograms": "Kameradan boshqa dasturlar foydalanmayotganiga ishonch hosil qiling va qayta urinib ko‘ring.",
-  "video.errors.unsupportedResolution": "Veb‑kamera kerakli o‘lchamni qo‘llab‑quvvatlamaydi. Sozlamalarni o‘zgartiring."
+  "video.errors.unsupportedResolution": "Veb‑kamera kerakli o‘lchamni qo‘llab‑quvvatlamaydi. Sozlamalarni o‘zgartiring.",
+  "video.status.accessTakingLongerThanExpected": "Kameraga kirish kutilganidan ko'proq vaqt olmoqda..."
 }

@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "அனுமதி மறுக்கப்பட்டது. கேமரா அணுகலை இயக்கவும்.",
   "video.errors.previouslySelectedUnavailable": "முந்தையதாகத் தேர்ந்தெடுக்கப்பட்ட கேமரா இப்போது கிடைப்பதில்லை. Video > Camera source இல் \"Default\" ஐத் தேர்ந்தெடுத்து, தேவையெனில் பின்னர் ஒரு குறிப்பிட்ட கேமராவைத் தேர்ந்தெடுக்கவும்.",
   "video.errors.retryAfterClosingOtherPrograms": "வேறு எந்த நிரலும் கேமராவைப் பயன்படுத்தவில்லை என்பதை உறுதிப்படுத்தி, மீண்டும் முயற்சிக்கவும்.",
-  "video.errors.unsupportedResolution": "தேவையான தீர்மானத்தை (resolution) இந்த webcam ஆதரிக்கவில்லை. தயவுசெய்து உங்கள் அமைப்புகளை மாற்றவும்."
+  "video.errors.unsupportedResolution": "தேவையான தீர்மானத்தை (resolution) இந்த webcam ஆதரிக்கவில்லை. தயவுசெய்து உங்கள் அமைப்புகளை மாற்றவும்.",
+  "video.status.accessTakingLongerThanExpected": "கேமராவை அணுகுவதற்கு எதிர்பார்த்ததை விட அதிக நேரம் எடுத்துக்கொள்கிறது..."
 }

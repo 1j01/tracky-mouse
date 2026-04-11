@@ -197,5 +197,6 @@
   "video.errors.permissionDenied": "Рөхсәт юк. Камерага керүгә рөхсәт бирегез.",
   "video.errors.previouslySelectedUnavailable": "Элек сайланган камера хәзер кулланыла алмый. Видео > Камера чыганагы өчен \"Үзлекле\" (Default) ны сайлап, аннары кирәк булса, конкрет камераны сайлап карагыз.",
   "video.errors.retryAfterClosingOtherPrograms": "Башка программалар камераны кулланмавын тикшерегез һәм яңадан сынап карагыз.",
-  "video.errors.unsupportedResolution": "Веб‑камера таләп ителгән киңлек/биеклекне хупламый. Көйләүләрне үзгәртегез."
+  "video.errors.unsupportedResolution": "Веб‑камера таләп ителгән киңлек/биеклекне хупламый. Көйләүләрне үзгәртегез.",
+  "video.status.accessTakingLongerThanExpected": "Камерага керү көтелгәннән озаграк бара..."
 }
