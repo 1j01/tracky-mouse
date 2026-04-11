@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - On Windows, the desktop app now uses a custom title bar.
+- The background of the whole window is now light purple instead of white or black, matching the background color of main part of the app.
 
 ### Fixed
 

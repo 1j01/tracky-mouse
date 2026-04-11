@@ -433,6 +433,7 @@ const createWindow = () => {
 		y: appWindowState.y,
 		width: appWindowState.width,
 		height: appWindowState.height,
+		backgroundColor: 'rgb(223, 204, 255)',
 		webPreferences: {
 			preload: path.join(app.getAppPath(), 'src/preload-app-window.js'),
 			// Disable throttling of animations and timers so the mouse control can still work when minimized.
