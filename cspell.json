@@ -92,6 +92,7 @@
 		"pointerleave",
 		"pointermove",
 		"pointerup",
+		"readdir",
 		"referentiality",
 		"reinit",
 		"rescap",
