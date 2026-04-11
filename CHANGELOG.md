@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Fixed
+
+- CLI: `--all-args` now allows additional Electron/Chromium flags without failing argument parsing.
 
 ## [2.7.0] - 2026-04-05
 

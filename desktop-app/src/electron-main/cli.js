@@ -59,6 +59,11 @@ parser.add_argument("--cli-lang", {
 	metavar: "LANG",
 });
 
+parser.add_argument("--all-args", {
+	help: t("cli.args.all-args.description", { defaultValue: "Allow electron/chromium flags." }),
+	action: "store_true",
+});
+
 parser.add_argument("--start", {
 	help: t("cli.args.start.description", { defaultValue: "Start head tracking." }),
 	action: "store_true",

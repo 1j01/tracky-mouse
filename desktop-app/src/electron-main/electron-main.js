@@ -71,7 +71,10 @@ try {
 const { parser } = require('./cli.js');
 
 // Note: this may exit the app, if the user runs `tracky-mouse --help`.
-const args = parser.parse_args(argsArray);
+// With --all-args, use parse_known_args to silently ignore electron/chromium flags.
+const args = argsArray.includes('--all-args')
+	? parser.parse_known_args(argsArray)[0]
+	: parser.parse_args(argsArray);
 
 // After argument parsing that may have exited the app, handle single instance behavior.
 // Electron provides a way to communicate between instances of the app,
@@ -212,7 +215,11 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 // Normal app behavior continues here.
 
 const windowStateKeeper = require('electron-window-state');
-const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
+const mouseInputDriver = //process.env.TM_MOUSE_DRIVER_WORKER === 'true'
+	//?
+	require('./mouse-input-driver-client.js');
+//: (() => { throw new Error('serenade-driver disabled'); })();
+const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = mouseInputDriver;
 const { ensureInitialRelativeMouseMove } = require('./win-relative-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
