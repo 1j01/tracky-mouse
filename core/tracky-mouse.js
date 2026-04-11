@@ -2809,6 +2809,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	};
 
 	let showedCameraError = false;
+	const cameraAccessSlowWarningDelayMS = 5000;
+	let cameraAccessSlowWarningTimeoutID;
 	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
 		// Phases:
 		// 1. "tryPreferredCamera"
@@ -2898,8 +2900,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
+		clearTimeout(cameraAccessSlowWarningTimeoutID);
+		errorMessage.hidden = true;
+		cameraAccessSlowWarningTimeoutID = setTimeout(() => {
+			errorMessage.textContent = t("video.status.accessTakingLongerThanExpected", { defaultValue: "Accessing the camera is taking longer than expected..." });
+			errorMessage.hidden = false;
+		}, cameraAccessSlowWarningDelayMS);
 		console.log("TrackyMouse.useCamera phase", phase, "constraints", constraints);
 		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
+			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			if (phase === "justGetPermission") {
 				for (const track of stream.getTracks()) {
 					track.stop();
@@ -2922,6 +2931,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
+			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			console.log("TrackyMouse.useCamera phase", phase, "error", error);
 			if (
 				phase === "tryPreferredCamera" &&

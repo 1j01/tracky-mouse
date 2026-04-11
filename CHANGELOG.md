@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - On Windows, the app should no longer freeze when using Tracky Mouse to click the Tracky Mouse app window's own minimize or close buttons, or right-clicking on its titlebar. ([issue #69](https://github.com/1j01/tracky-mouse/issues/69))
   - That said, clicking on the window's border (resizing) can still freeze it up.
+- While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
 
 ## [2.7.0] - 2026-04-05
 
