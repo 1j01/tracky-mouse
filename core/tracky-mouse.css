@@ -76,8 +76,11 @@
 
 .tracky-mouse-ui {
 	display: grid;
-	/* 50vh is key here; 5fr and minmax might be done away with */
-	grid-template-columns: repeat(auto-fit, minmax(50vh, 5fr));
+	/* vh is key here; it defines an aspect ratio for the switch from vertical to horizontal layout */
+	/* fr and minmax might be done away with */
+	/* TODO: replace vh with embedding-friendly units (cqh?) */
+	/* TODO: FIXME: the width can be more than the page */
+	grid-template-columns: repeat(auto-fit, minmax(60vh, 1fr));
 	gap: 5px;
 	background-color: rgb(223, 204, 255);
 	color: black;
