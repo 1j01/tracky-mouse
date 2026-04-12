@@ -1669,6 +1669,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	uiContainer.classList.toggle("tracky-mouse-rtl", isRTL);
 	uiContainer.dir = isRTL ? "rtl" : "ltr";
 	uiContainer.innerHTML = `
+	<div class="tracky-mouse-ui-layout">
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
 		</div>
@@ -1686,6 +1687,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		<p class="tracky-mouse-desktop-app-download-message">
 			${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
 		</p>
+	</div>
 	`;
 	if (!div) {
 		document.body.appendChild(uiContainer);
