@@ -178,7 +178,7 @@
 }
 
 .tracky-mouse-canvas-container-container {
-	flex: 1;
+	/* flex: 1; */
 	flex-basis: 0;
 	min-width: 0;
 	/* I might be able to simplify this or let it have an intrinsic height
@@ -188,7 +188,14 @@
 	is fixed or not, not whether it's a web demo or desktop app.
 	So I might differentiate based on a .constrained-height class or something,
 	if not detect it automatically. */
-	min-height: var(--tracky-mouse-camera-view-min-height, 300px);
+	/* min-height: var(--tracky-mouse-camera-view-min-height, 300px); */
+}
+
+@container tracky-mouse-ui (aspect-ratio > 5/4) {
+	.tracky-mouse-canvas-container-container {
+		flex: 1;
+		min-height: var(--tracky-mouse-camera-view-min-height, 300px);
+	}
 }
 
 .tracky-mouse-canvas-container {
