@@ -102,6 +102,7 @@
 	flex: 1;
 	min-width: 0;
 	min-height: 0;
+	gap: 10px;
 }
 
 @container tracky-mouse-ui (aspect-ratio > 5/4) {
