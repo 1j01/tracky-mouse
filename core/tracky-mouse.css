@@ -218,6 +218,7 @@
 
 .tracky-mouse-use-camera-button {
 	font-size: min(2em, 8vw);
+	font-size: min(2em, 8cqw);
 	color: white;
 	background-color: rgb(220, 20, 60);
 	border: 0;
@@ -232,6 +233,7 @@
 
 .tracky-mouse-error-message {
 	font-size: min(1.5em, 6vw);
+	font-size: min(1.5em, 6cqw);
 	text-align: center;
 	color: white;
 	padding: 5px;
