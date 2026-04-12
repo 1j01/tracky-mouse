@@ -38,6 +38,14 @@
 			height: env(titlebar-area-height, 0px);
 			background-color: rgb(196, 173, 235);
 			flex-shrink: 0;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.app-titlebar-text {
+			font-size: 14px;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 		}
 
 		.tracky-mouse-ui {
@@ -77,6 +85,8 @@
 	<div class="app-titlebar">
 		<!-- Note: scale() is doing the work of margin here in addition to sizing -->
 		<img src="../images/tracky-mouse-logo.svg" alt="Tracky Mouse Logo" style="transform: scale(0.7);">
+		<!-- TODO: localization -->
+		<span class="app-titlebar-text">Tracky Mouse</span>
 	</div>
 	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
 	<script>
