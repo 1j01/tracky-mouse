@@ -1681,7 +1681,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				<canvas class="tracky-mouse-canvas"></canvas>
 			</div>
 		</div>
-		<div class="tracky-mouse-toolbar">
+		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
 		</div>
 		<div class="tracky-mouse-settings"></div>

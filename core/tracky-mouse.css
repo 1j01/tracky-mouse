@@ -364,7 +364,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	color: rgb(135 0 191);
 }
 
-.tracky-mouse-toolbar {
+.tracky-mouse-controls {
 	position: absolute;
 	top: 10px;
 	left: 10px;
