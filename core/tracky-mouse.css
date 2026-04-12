@@ -78,7 +78,7 @@
 	container-name: tracky-mouse-ui;
 	container-type: size;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	background-color: rgb(223, 204, 255);
 	color: black;
 	padding: 10px;
@@ -102,7 +102,7 @@
 	flex: 1;
 }
 
-@container tracky-mouse-ui (aspect-ratio > 1/1) {
+@container tracky-mouse-ui (aspect-ratio > 5/4) {
 	.tracky-mouse-ui-layout {
 		flex-direction: row;
 	}
@@ -351,17 +351,24 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	color: rgb(135 0 191);
 }
 
-.tracky-mouse-controls {
-	overflow: auto;
+.tracky-mouse-toolbar {
+	position: absolute;
+	top: 10px;
+	left: 10px;
 }
 
-.tracky-mouse-controls details {
+.tracky-mouse-settings {
+	overflow: auto;
+	flex: 1;
+}
+
+.tracky-mouse-settings details {
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
 	margin-bottom: 8px;
 }
 
-.tracky-mouse-controls details summary {
+.tracky-mouse-settings details summary {
 	cursor: pointer;
 	user-select: none;
 	font-weight: bold;
@@ -369,6 +376,6 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	padding: 8px;
 }
 
-.tracky-mouse-controls details .tracky-mouse-details-body {
+.tracky-mouse-settings details .tracky-mouse-details-body {
 	padding: 8px;
 }

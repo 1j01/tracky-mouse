@@ -1670,9 +1670,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	uiContainer.dir = isRTL ? "rtl" : "ltr";
 	uiContainer.innerHTML = `
 	<div class="tracky-mouse-ui-layout">
-		<div class="tracky-mouse-controls">
-			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
-		</div>
 		<div class="tracky-mouse-canvas-container-container">
 			<div class="tracky-mouse-canvas-container">
 				<div class="tracky-mouse-canvas-overlay">
@@ -1684,6 +1681,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				<canvas class="tracky-mouse-canvas"></canvas>
 			</div>
 		</div>
+		<div class="tracky-mouse-toolbar">
+			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
+		</div>
+		<div class="tracky-mouse-settings"></div>
 		<p class="tracky-mouse-desktop-app-download-message">
 			${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
 		</p>
@@ -2366,7 +2367,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		return rowEl;
 	}
 
-	buildSettingsUI(uiContainer.querySelector(".tracky-mouse-controls"), settingsCategories);
+	buildSettingsUI(uiContainer.querySelector(".tracky-mouse-settings"), settingsCategories);
 
 	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
 	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
