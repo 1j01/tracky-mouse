@@ -241,8 +241,21 @@ function createMenu() {
 			submenu: [
 				{ role: 'reload' },
 				{ role: 'forceReload' },
-				{ role: 'toggleDevTools' },
+				// role 'toggleDevTools' isn't working on Windows since switching to a custom titlebar
+				// { role: 'toggleDevTools' },
 				{
+					label: t("desktop.menu.toggleDevtools", { defaultValue: 'Toggle Developer Tools' }),
+					click: async () => {
+						const { BrowserWindow } = require('electron');
+						// XXX: localization hazard: relying on the untranslated window title
+						const screenOverlayWindow = BrowserWindow.getAllWindows().find(window => window.getTitle() === 'Tracky Mouse');
+						if (screenOverlayWindow.webContents.isDevToolsOpened()) {
+							screenOverlayWindow.webContents.closeDevTools();
+						} else {
+							screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
+						}
+					},
+				}, {
 					label: t("desktop.menu.toggleScreenOverlayDevtools", { defaultValue: 'Toggle Developer Tools (Screen Overlay)' }),
 					click: async () => {
 						const { BrowserWindow } = require('electron');
