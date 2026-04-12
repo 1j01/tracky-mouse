@@ -222,7 +222,7 @@ function updateScreenScaleFactor() {
 	screenScaleFactor = screen.getPrimaryDisplay().scaleFactor;
 }
 
-const { updateMenu } = require("./menus.js");
+const { updateMenu, getCustomMenuBarModel, invokeMenuItemById } = require("./menus.js");
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -623,6 +623,14 @@ const createWindow = () => {
 
 	ipcMain.handle('getIsPackaged', async () => {
 		return app.isPackaged;
+	});
+
+	ipcMain.handle('getCustomMenuBarModel', async () => {
+		return getCustomMenuBarModel();
+	});
+
+	ipcMain.handle('invokeMenuItem', async (event, menuItemId) => {
+		return invokeMenuItemById(menuItemId, BrowserWindow.fromWebContents(event.sender));
 	});
 
 	function isClickingAllowed() {

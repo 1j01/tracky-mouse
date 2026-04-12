@@ -1,10 +1,82 @@
-const { app, dialog, Menu } = require('electron');
+const { app, dialog, Menu, BrowserWindow } = require('electron');
 const { readFile, writeFile, copyFile } = require('fs').promises;
 const { join } = require('path');
 
 const { t } = require('./i18n');
 
 const isMac = process.platform === 'darwin';
+const isWindows = process.platform === 'win32';
+
+let currentMenu = null;
+let currentCustomMenuBarModel = { menus: [] };
+
+function sanitizeMenuIdPart(value) {
+	return String(value || 'item').replace(/[^a-zA-Z0-9_-]+/g, '_');
+}
+
+function assignStableMenuItemIds(items, parentId = 'menu') {
+	for (let index = 0; index < items.length; index++) {
+		const item = items[index];
+		if (item.type === 'separator') {
+			continue;
+		}
+
+		if (!item.id) {
+			const idPart = sanitizeMenuIdPart(item.role || item.label || index);
+			item.id = `${parentId}__${index}__${idPart}`;
+		}
+
+		if (Array.isArray(item.submenu)) {
+			assignStableMenuItemIds(item.submenu, item.id);
+		}
+	}
+}
+
+function menuItemsToCustomMenuBarModel(items) {
+	return items.map((item) => {
+		if (item.type === 'separator') {
+			return { type: 'separator' };
+		}
+
+		return {
+			type: item.type,
+			id: item.id,
+			label: item.label,
+			enabled: item.enabled,
+			checked: item.checked,
+			accelerator: item.accelerator || '',
+			submenu: item.submenu ? menuItemsToCustomMenuBarModel(item.submenu.items) : null,
+		};
+	});
+}
+
+function buildCustomMenuBarModel(menu) {
+	const menus = menu.items
+		.filter((topLevelItem) => topLevelItem.label && topLevelItem.submenu)
+		.map((topLevelItem) => ({
+			id: topLevelItem.id,
+			label: topLevelItem.label,
+			items: menuItemsToCustomMenuBarModel(topLevelItem.submenu.items),
+		}));
+
+	return { menus };
+}
+
+function notifyCustomMenuBarModelUpdated() {
+	if (!isWindows) {
+		return;
+	}
+
+	for (const window of BrowserWindow.getAllWindows()) {
+		if (window.isDestroyed()) {
+			continue;
+		}
+		if (window.getTitle() === 'Tracky Mouse Screen Overlay') {
+			continue;
+		}
+		window.webContents.send('customMenuBarModelUpdated', currentCustomMenuBarModel);
+	}
+}
 
 // let loadSettings;
 // module.exports = (dependencies) => {
@@ -234,13 +306,43 @@ function createMenu() {
 			],
 		}
 	];
+	assignStableMenuItemIds(template);
 	const menu = Menu.buildFromTemplate(template);
 	return menu;
 };
 
 function updateMenu() {
-	const menu = createMenu();
-	Menu.setApplicationMenu(menu);
+	currentMenu = createMenu();
+	Menu.setApplicationMenu(currentMenu);
+	currentCustomMenuBarModel = buildCustomMenuBarModel(currentMenu);
+	notifyCustomMenuBarModelUpdated();
 }
 
-module.exports = { updateMenu };
+function getCustomMenuBarModel() {
+	if (!currentMenu) {
+		currentMenu = createMenu();
+		currentCustomMenuBarModel = buildCustomMenuBarModel(currentMenu);
+	}
+	return currentCustomMenuBarModel;
+}
+
+function invokeMenuItemById(menuItemId, browserWindow) {
+	if (!currentMenu) {
+		currentMenu = createMenu();
+		currentCustomMenuBarModel = buildCustomMenuBarModel(currentMenu);
+	}
+
+	const menuItem = currentMenu.getMenuItemById(menuItemId);
+	if (!menuItem || !menuItem.enabled || menuItem.type === 'separator') {
+		return false;
+	}
+
+	if (typeof menuItem.click === 'function') {
+		menuItem.click(menuItem, browserWindow ?? BrowserWindow.getFocusedWindow(), undefined);
+		return true;
+	}
+
+	return false;
+}
+
+module.exports = { updateMenu, getCustomMenuBarModel, invokeMenuItemById };

@@ -76,6 +76,7 @@
 			}
 		}
 	</style>
+	<link rel="stylesheet" type="text/css" href="custom-menu-bar.css">
 	<link rel="stylesheet" type="text/css" href="../node_modules/tracky-mouse/tracky-mouse.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
@@ -88,9 +89,14 @@
 		<!-- TODO: localization -->
 		<span class="app-titlebar-text">Tracky Mouse</span>
 	</div>
+	<div id="custom-menu-bar"></div>
 	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
+	<script src="../node_modules/os-gui/MenuBar.js"></script>
+	<script src="custom-menu-bar.js"></script>
 	<script>
 		(async () => {
+			initCustomMenuBar();
+
 			// Load options before initializing UI and put in localStorage
 			// because currently the translation loading uses localStorage only
 			let opts;

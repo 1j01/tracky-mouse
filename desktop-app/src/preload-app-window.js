@@ -45,6 +45,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	// isPackaged: !!process.defaultApp, // nope, doesn't exist
 	getIsPackaged: () => ipcRenderer.invoke('getIsPackaged'),
 
+	getPlatform: () => process.platform,
+
+	getCustomMenuBarModel: () => ipcRenderer.invoke('getCustomMenuBarModel'),
+
+	invokeMenuItem: (menuItemId) => ipcRenderer.invoke('invokeMenuItem', menuItemId),
+
+	onCustomMenuBarModelUpdated: (callback) => {
+		const listener = (_event, model) => { callback(model); };
+		ipcRenderer.on('customMenuBarModelUpdated', listener);
+		return () => { ipcRenderer.removeListener('customMenuBarModelUpdated', listener); };
+	},
+
 	openCameraSettings: (deviceId) => {
 		return ipcRenderer.invoke('openCameraSettings', deviceId);
 	},

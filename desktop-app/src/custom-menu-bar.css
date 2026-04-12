@@ -1,0 +1,89 @@
+#custom-menu-bar {
+	-webkit-app-region: no-drag;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	padding-left: 2px;
+	background-color: rgb(207, 188, 240);
+}
+
+#custom-menu-bar .menus {
+	height: auto;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+	font-size: 12px;
+}
+
+#custom-menu-bar .menu-button {
+	appearance: none;
+	border: none;
+	background: transparent;
+	color: rgb(28, 20, 44);
+	height: 20px;
+	padding: 0 9px;
+	line-height: 20px;
+}
+
+#custom-menu-bar .menu-button:hover,
+#custom-menu-bar .menu-button.highlight {
+	background: rgba(255, 255, 255, 0.45);
+}
+
+#custom-menu-bar .menu-button.active {
+	background: rgba(144, 107, 207, 0.3);
+}
+
+.menu-popup {
+	background: rgb(243, 236, 255);
+	border: 1px solid rgb(173, 151, 212);
+	border-radius: 8px;
+	box-shadow: 0 8px 20px rgba(66, 37, 128, 0.2);
+	padding: 4px;
+	font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+	font-size: 12px;
+	color: rgb(28, 20, 44);
+}
+
+.menu-popup-table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.menu-popup .menu-item {
+	height: 24px;
+	border-radius: 5px;
+}
+
+.menu-popup .menu-item td {
+	padding: 0 8px;
+	white-space: nowrap;
+}
+
+.menu-popup .menu-item-label {
+	padding-right: 20px;
+}
+
+.menu-popup .menu-item-shortcut {
+	opacity: 0.75;
+}
+
+.menu-popup .menu-item.highlight {
+	background: rgba(144, 107, 207, 0.22);
+}
+
+.menu-popup .menu-item[aria-disabled='true'] {
+	opacity: 0.45;
+}
+
+.menu-popup .menu-hr {
+	border: none;
+	border-top: 1px solid rgba(117, 91, 171, 0.28);
+	margin: 4px 6px;
+}
+
+.menu-hotkey {
+	text-decoration-thickness: 1px;
+}
