@@ -77,6 +77,7 @@
 .tracky-mouse-ui {
 	container-name: tracky-mouse-ui;
 	container-type: size;
+	position: relative;
 	min-height: 1500px;
 	min-height: calc(1500px * var(--tracky-mouse-auto-height, 1));
 	display: flex;
