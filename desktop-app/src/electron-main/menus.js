@@ -104,6 +104,21 @@ function createMenu() {
 				homepage: 'https://trackymouse.js.org',
 				description: t("desktop.about.description", { defaultValue: 'Control your computer with your webcam.' }),
 				license: 'MIT',
+				win_options: {
+					// Work around issue where clicking on titlebar buttons or right clicking on the titlebar
+					// freezes the app on Windows, by using a custom title bar.
+					// https://github.com/1j01/tracky-mouse/issues/69
+					// Note: it can also freeze up when dragging the logo image link... sometimes.
+					// (why sometimes!?)
+					...(process.platform === 'win32' ? {
+						titleBarStyle: 'hidden',
+						titleBarOverlay: {
+							// color: 'rgb(196, 173, 235)',
+							// symbolColor: 'black',
+							height: 32,
+						},
+					} : {}),
+				},
 			});
 		},
 	};
