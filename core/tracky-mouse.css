@@ -78,7 +78,7 @@
 	container-name: tracky-mouse-ui;
 	container-type: size;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	background-color: rgb(223, 204, 255);
 	color: black;
 	padding: 10px;

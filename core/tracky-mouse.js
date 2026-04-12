@@ -1685,10 +1685,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
 		</div>
 		<div class="tracky-mouse-settings"></div>
-		<p class="tracky-mouse-desktop-app-download-message">
-			${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
-		</p>
 	</div>
+	<p class="tracky-mouse-desktop-app-download-message">
+		${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
+	</p>
 	`;
 	if (!div) {
 		document.body.appendChild(uiContainer);
