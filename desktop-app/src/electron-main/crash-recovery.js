@@ -1,6 +1,6 @@
+const { app, BrowserWindow } = require('electron');
+
 function installCrashRecovery({
-	app,
-	BrowserWindow,
 	getAppWindow,
 	getScreenOverlayWindow,
 }) {

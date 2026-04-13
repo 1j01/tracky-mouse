@@ -782,8 +782,6 @@ const createWindow = () => {
 };
 
 installCrashRecovery({
-	app,
-	BrowserWindow,
 	getAppWindow: () => appWindow,
 	getScreenOverlayWindow: () => screenOverlayWindow,
 });
