@@ -490,6 +490,31 @@ const createWindow = () => {
 		// Note: if re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 	});
 
+	// Helper for safely sending messages without spamming the console
+	function trySendOverlayWindowMessage(message, ...args) {
+		// Could include logic to log when toggling between able and unable to update,
+		// but for now it's enough to avoid errors spamming the console.
+		if (!screenOverlayWindow || screenOverlayWindow.isDestroyed()) {
+			// This can happen while closing the app normally.
+			// console.error("No overlay window to update...");
+			return;
+		}
+		if (screenOverlayWindow.webContents.isDestroyed()) {
+			// console.error("No overlay window web contents to update...");
+			return;
+		}
+		if (screenOverlayWindow.webContents.isCrashed()) {
+			// console.error("Overlay window web contents is crashed; can't update overlay...");
+			return;
+		}
+		if (screenOverlayWindow.webContents.isLoadingMainFrame()) {
+			// This happens normally during startup.
+			// console.error("Overlay window web contents is still loading; can't update overlay yet.");
+			return;
+		}
+		screenOverlayWindow.webContents.send(message, ...args);
+	}
+
 	// Expose functionality to the renderer processes.
 
 	// Allow controlling the mouse, but pause if the mouse is moved normally.
@@ -503,7 +528,7 @@ const createWindow = () => {
 		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
-		screenOverlayWindow?.webContents.send('overlayUpdate', {
+		trySendOverlayWindowMessage('overlayUpdate', {
 			isEnabled: enabled && !isManualTakeback,
 			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
@@ -584,7 +609,7 @@ const createWindow = () => {
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		screenOverlayWindow?.webContents.send('moveMouse', x, y, time);
+		trySendOverlayWindowMessage('moveMouse', x, y, time);
 	});
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
