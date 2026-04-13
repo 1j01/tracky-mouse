@@ -237,72 +237,6 @@ app.commandLine.appendSwitch("enable-blink-features", "MiddleClickAutoscroll");
 
 let activeSettings = {};
 
-const maxCrashEventsInWindow = 5;
-const crashWindowDurationMs = 60 * 1000;
-const crashEventTimesByKey = new Map();
-
-function recordCrashEvent(crashKey) {
-	const now = Date.now();
-	const crashTimes = crashEventTimesByKey.get(crashKey) ?? [];
-	const prunedCrashTimes = crashTimes.filter((time) => now - time < crashWindowDurationMs);
-	prunedCrashTimes.push(now);
-	crashEventTimesByKey.set(crashKey, prunedCrashTimes);
-	return prunedCrashTimes.length;
-}
-
-function isRecoverableRenderFailure(details) {
-	return details.reason === "crashed" || details.reason === "killed" || details.reason === "oom";
-}
-
-function attachRendererCrashHandler(window, windowName) {
-	window.webContents.on("render-process-gone", (_event, details) => {
-		const crashCount = recordCrashEvent(`renderer-${windowName}`);
-		console.error(`[crash] ${windowName} renderer process gone`, {
-			reason: details.reason,
-			exitCode: details.exitCode,
-			crashCount,
-		});
-		Sentry.captureMessage(`${windowName} renderer process gone`, {
-			level: "error",
-			tags: {
-				process_type: "renderer",
-				window_name: windowName,
-				reason: details.reason,
-			},
-			extra: {
-				exitCode: details.exitCode,
-				crashCount,
-			},
-		});
-
-		if (!isRecoverableRenderFailure(details)) {
-			return;
-		}
-		if (crashCount > maxCrashEventsInWindow) {
-			console.error(`[crash] ${windowName} renderer crashed too many times. Recovery suppressed.`);
-			return;
-		}
-
-		if (!window.isDestroyed()) {
-			window.webContents.reload();
-		}
-	});
-}
-
-function recoverRendererWindowsAfterGpuCrash() {
-	const windows = [
-		{ name: "main", window: appWindow },
-		{ name: "overlay", window: screenOverlayWindow },
-	];
-	for (const { name, window } of windows) {
-		if (!window || window.isDestroyed()) {
-			continue;
-		}
-		console.error(`[crash] Reloading ${name} window after GPU process failure.`);
-		window.webContents.reloadIgnoringCache();
-	}
-}
-
 let enabled = true;
 async function loadSettings() {
 	let data;
@@ -521,7 +455,6 @@ const createWindow = () => {
 
 	// and load the html page of the app.
 	appWindow.loadFile(`src/electron-app.html`);
-	attachRendererCrashHandler(appWindow, "main");
 
 	// Toggle the DevTools with F12
 	appWindow.webContents.on("before-input-event", (_e, input) => {
@@ -809,7 +742,6 @@ const createWindow = () => {
 	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
 	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
-	attachRendererCrashHandler(screenOverlayWindow, "overlay");
 	screenOverlayWindow.on('close', (event) => {
 		// If Windows Explorer is restarted while the app is running,
 		// the Screen Overlay Window can appear in the taskbar, and become closable.
@@ -889,41 +821,6 @@ app.on('ready', async () => {
 	if (!success) {
 		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
 	}
-});
-
-app.on("child-process-gone", (_event, details) => {
-	if (details.type !== "GPU") {
-		return;
-	}
-
-	const crashCount = recordCrashEvent("gpu");
-	console.error("[crash] GPU process gone", {
-		reason: details.reason,
-		exitCode: details.exitCode,
-		serviceName: details.serviceName,
-		name: details.name,
-		crashCount,
-	});
-	Sentry.captureMessage("GPU process gone", {
-		level: "error",
-		tags: {
-			process_type: "gpu",
-			reason: details.reason,
-		},
-		extra: {
-			exitCode: details.exitCode,
-			serviceName: details.serviceName,
-			name: details.name,
-			crashCount,
-		},
-	});
-
-	if (crashCount > maxCrashEventsInWindow) {
-		console.error("[crash] GPU process has crashed too many times. Skipping automatic renderer reload.");
-		return;
-	}
-
-	recoverRendererWindowsAfterGpuCrash();
 });
 
 app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, additionalData) => {
