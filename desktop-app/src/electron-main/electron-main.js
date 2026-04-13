@@ -223,6 +223,7 @@ function updateScreenScaleFactor() {
 }
 
 const { updateMenu, getCustomMenuBarModel, invokeMenuItemById } = require("./menus.js");
+const { installCrashRecovery } = require('./crash-recovery.js');
 
 // Allow recovering from WebGL crash unlimited times.
 // (To test the recovery, I've been using Ctrl+Alt+F1 and Ctrl+Alt+F2 in Ubuntu.
@@ -779,6 +780,14 @@ const createWindow = () => {
 
 	// screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
 };
+
+installCrashRecovery({
+	app,
+	BrowserWindow,
+	createWindow,
+	getAppWindow: () => appWindow,
+	getScreenOverlayWindow: () => screenOverlayWindow,
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
