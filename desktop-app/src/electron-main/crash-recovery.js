@@ -1,7 +1,6 @@
 function installCrashRecovery({
 	app,
 	BrowserWindow,
-	createWindow,
 	getAppWindow,
 	getScreenOverlayWindow,
 }) {
@@ -19,6 +18,7 @@ function installCrashRecovery({
 
 	function reloadWindowSafely(browserWindow, label, reason) {
 		if (!browserWindow || browserWindow.isDestroyed()) {
+			console.error(`Renderer process for ${label} gone with reason ${reason}, but no owner window found to reload.`);
 			return false;
 		}
 		try {
@@ -36,12 +36,8 @@ function installCrashRecovery({
 			console.error(`Skipping recovery for ${reason} due to cooldown.`);
 			return;
 		}
-		const recoveredApp = reloadWindowSafely(getAppWindow(), 'app window', reason);
-		const recoveredOverlay = reloadWindowSafely(getScreenOverlayWindow(), 'screen overlay window', reason);
-		if (!recoveredApp && !recoveredOverlay) {
-			console.error(`Recovering from ${reason}: recreating windows.`);
-			createWindow();
-		}
+		reloadWindowSafely(getAppWindow(), 'app window', reason);
+		reloadWindowSafely(getScreenOverlayWindow(), 'screen overlay window', reason);
 	}
 
 	app.on('render-process-gone', (_event, webContents, details) => {
@@ -63,13 +59,7 @@ function installCrashRecovery({
 		}
 
 		const ownerWindow = BrowserWindow.fromWebContents(webContents);
-		if (ownerWindow && !ownerWindow.isDestroyed()) {
-			reloadWindowSafely(ownerWindow, 'renderer window', `renderer ${reason}`);
-			return;
-		}
-
-		// Fallback for unexpected state.
-		createWindow();
+		reloadWindowSafely(ownerWindow, 'renderer window', `renderer ${reason}`);
 	});
 
 	app.on('child-process-gone', (_event, details) => {
