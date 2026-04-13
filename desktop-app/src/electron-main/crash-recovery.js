@@ -4,19 +4,37 @@ function installCrashRecovery({
 	getAppWindow,
 	getScreenOverlayWindow,
 }) {
-	const restartCooldownMs = 5000;
+	const defaultRecoveryDelayMs = 100;
+	const maxRecoveryDelayMs = 5 * 1000;
+	const recoveryDelayThresholdMs = 30 * 1000;
+	let recoveryTimeout = null;
 	let lastRecoveryAt = 0;
+	/** @type {Map<BrowserWindow, { reasons: string[] }>} */
+	const pendingRecovery = new Map();
 
-	function isRecoveryOnCooldown() {
-		const now = Date.now();
-		if (now - lastRecoveryAt < restartCooldownMs) {
-			return true;
+	function recover() {
+		for (const [browserWindow, { reasons }] of pendingRecovery.entries()) {
+			reloadWindowSafely(browserWindow, reasons.join(', '));
 		}
-		lastRecoveryAt = now;
-		return false;
+		pendingRecovery.clear();
+		lastRecoveryAt = performance.now();
+		recoveryTimeout = null;
 	}
 
-	function reloadWindowSafely(browserWindow, label, reason) {
+	function scheduleReload(browserWindow, reason) {
+		const recoveryInfo = pendingRecovery.get(browserWindow) ?? { reasons: [] };
+		recoveryInfo.reasons.push(reason);
+		pendingRecovery.set(browserWindow, recoveryInfo);
+
+		if (!recoveryTimeout) {
+			const timeSinceLastRecovery = performance.now() - lastRecoveryAt;
+			const recoveryDelayMs = timeSinceLastRecovery > recoveryDelayThresholdMs ? defaultRecoveryDelayMs : maxRecoveryDelayMs;
+			recoveryTimeout = setTimeout(recover, recoveryDelayMs);
+		}
+	}
+
+	function reloadWindowSafely(browserWindow, reason) {
+		const label = browserWindow === getAppWindow() ? 'app window' : browserWindow === getScreenOverlayWindow() ? 'screen overlay window' : 'unknown window';
 		if (!browserWindow || browserWindow.isDestroyed()) {
 			console.error(`Renderer process for ${label} gone with reason ${reason}, but no owner window found to reload.`);
 			return false;
@@ -31,13 +49,9 @@ function installCrashRecovery({
 		}
 	}
 
-	function recoverByReloadingWindows(reason) {
-		if (isRecoveryOnCooldown()) {
-			console.error(`Skipping recovery for ${reason} due to cooldown.`);
-			return;
-		}
-		reloadWindowSafely(getAppWindow(), 'app window', reason);
-		reloadWindowSafely(getScreenOverlayWindow(), 'screen overlay window', reason);
+	function scheduleReloadingBothWindows(reason) {
+		scheduleReload(getAppWindow(), reason);
+		scheduleReload(getScreenOverlayWindow(), reason);
 	}
 
 	app.on('render-process-gone', (_event, webContents, details) => {
@@ -48,18 +62,12 @@ function installCrashRecovery({
 			name: details?.name,
 		});
 
-		// Normal shutdown/navigation should not trigger recovery.
 		if (reason === 'clean-exit') {
 			return;
 		}
 
-		if (isRecoveryOnCooldown()) {
-			console.error(`Skipping renderer recovery for ${reason} due to cooldown.`);
-			return;
-		}
-
 		const ownerWindow = BrowserWindow.fromWebContents(webContents);
-		reloadWindowSafely(ownerWindow, 'renderer window', `renderer ${reason}`);
+		scheduleReload(ownerWindow, `renderer ${reason}`);
 	});
 
 	app.on('child-process-gone', (_event, details) => {
@@ -77,10 +85,8 @@ function installCrashRecovery({
 			return;
 		}
 
-		// Keep recovery simple: if GPU/utility/video-related subprocesses die,
-		// reload both windows so camera/WebGL pipelines can reinitialize.
 		if (type === 'GPU' || type === 'Utility') {
-			recoverByReloadingWindows(`${type.toLowerCase()} process ${reason}`);
+			scheduleReloadingBothWindows(`${type.toLowerCase()} process ${reason}`);
 		}
 	});
 }
