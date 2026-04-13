@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nie udało się odczytać wybranego pliku.",
   "desktop.menu.importSettings": "Importuj ustawienia",
   "desktop.menu.speech": "Mowa",
+  "desktop.menu.toggleDevtools": "Przełącz narzędzia deweloperskie",
   "desktop.menu.toggleScreenOverlayDevtools": "Przełącz narzędzia deweloperskie (nakładka ekranu)",
   "desktop.menu.view": "Widok",
   "desktop.menu.window": "Okno",

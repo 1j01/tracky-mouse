@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "讀取揀著 ê 檔案失敗。",
   "desktop.menu.importSettings": "匯入設定",
   "desktop.menu.speech": "語音",
+  "desktop.menu.toggleDevtools": "開關開發者工具",
   "desktop.menu.toggleScreenOverlayDevtools": "開關開發者工具（畫面疊加層）",
   "desktop.menu.view": "檢視",
   "desktop.menu.window": "視窗",

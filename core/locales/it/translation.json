@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Impossibile leggere il file selezionato.",
   "desktop.menu.importSettings": "Importa impostazioni",
   "desktop.menu.speech": "Voce",
+  "desktop.menu.toggleDevtools": "Attiva/Disattiva strumenti sviluppatore",
   "desktop.menu.toggleScreenOverlayDevtools": "Attiva/Disattiva strumenti sviluppatore (sovrapposizione schermo)",
   "desktop.menu.view": "Visualizza",
   "desktop.menu.window": "Finestra",

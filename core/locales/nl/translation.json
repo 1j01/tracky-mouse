@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Geselecteerde bestand kon niet worden gelezen.",
   "desktop.menu.importSettings": "Instellingen importeren",
   "desktop.menu.speech": "Spraak",
+  "desktop.menu.toggleDevtools": "Ontwikkelhulpmiddelen schakelen",
   "desktop.menu.toggleScreenOverlayDevtools": "Ontwikkelhulpmiddelen schakelen (schermoverlay)",
   "desktop.menu.view": "Beeld",
   "desktop.menu.window": "Venster",

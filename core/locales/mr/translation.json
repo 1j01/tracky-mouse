@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "निवडलेली फाइल वाचण्यात अयशस्वी.",
   "desktop.menu.importSettings": "सेटिंग्ज इम्पोर्ट करा",
   "desktop.menu.speech": "वाणी",
+  "desktop.menu.toggleDevtools": "डेव्हलपर टूल्स बदल",
   "desktop.menu.toggleScreenOverlayDevtools": "डेव्हलपर टूल्स बदल (स्क्रीन ओव्हरले)",
   "desktop.menu.view": "दृश्य",
   "desktop.menu.window": "विंडो",

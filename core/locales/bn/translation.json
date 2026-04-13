@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "নির্বাচিত ফাইলটি পড়তে ব্যর্থ হয়েছে।",
   "desktop.menu.importSettings": "সেটিং ইমপোর্ট করুন",
   "desktop.menu.speech": "বাক্ নিয়ন্ত্রণ",
+  "desktop.menu.toggleDevtools": "ডেভেলপার টুল টগল করুন",
   "desktop.menu.toggleScreenOverlayDevtools": "ডেভেলপার টুল টগল করুন (স্ক্রিন ওভারলে)",
   "desktop.menu.view": "দৃশ্য",
   "desktop.menu.window": "উইন্ডো",

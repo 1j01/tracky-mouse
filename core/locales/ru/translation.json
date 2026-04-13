@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Не удалось прочитать выбранный файл.",
   "desktop.menu.importSettings": "Импорт настроек",
   "desktop.menu.speech": "Речь",
+  "desktop.menu.toggleDevtools": "Переключить инструменты разработчика",
   "desktop.menu.toggleScreenOverlayDevtools": "Переключить инструменты разработчика (оверлей экрана)",
   "desktop.menu.view": "Вид",
   "desktop.menu.window": "Окно",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "選択したファイルを読み取れませんでした。",
   "desktop.menu.importSettings": "設定のインポート",
   "desktop.menu.speech": "音声",
+  "desktop.menu.toggleDevtools": "開発者ツールの切り替え",
   "desktop.menu.toggleScreenOverlayDevtools": "開発者ツールの切り替え（オーバーレイ画面）",
   "desktop.menu.view": "表示",
   "desktop.menu.window": "ウィンドウ",

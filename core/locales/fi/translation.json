@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Valitun tiedoston lukeminen epäonnistui.",
   "desktop.menu.importSettings": "Tuo asetukset",
   "desktop.menu.speech": "Puhe",
+  "desktop.menu.toggleDevtools": "Näytä/piilota kehittäjätyökalut",
   "desktop.menu.toggleScreenOverlayDevtools": "Näytä/piilota kehittäjätyökalut (näyttöpeite)",
   "desktop.menu.view": "Näytä",
   "desktop.menu.window": "Ikkuna",

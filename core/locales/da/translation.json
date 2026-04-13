@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Kunne ikke læse den valgte fil.",
   "desktop.menu.importSettings": "Importer indstillinger",
   "desktop.menu.speech": "Tale",
+  "desktop.menu.toggleDevtools": "Slå udviklerværktøjer til/fra",
   "desktop.menu.toggleScreenOverlayDevtools": "Slå udviklerværktøjer til/fra (skærm­overlæg)",
   "desktop.menu.view": "Vis",
   "desktop.menu.window": "Vindue",

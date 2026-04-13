@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "فشل قراءة الملف المحدد.",
   "desktop.menu.importSettings": "استيراد الإعدادات",
   "desktop.menu.speech": "الصوت",
+  "desktop.menu.toggleDevtools": "تبديل أدوات المطوّر",
   "desktop.menu.toggleScreenOverlayDevtools": "تبديل أدوات المطوّر (تراكب الشاشة)",
   "desktop.menu.view": "عرض",
   "desktop.menu.window": "نافذة",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Ausgewählte Datei konnte nicht gelesen werden.",
   "desktop.menu.importSettings": "Einstellungen importieren",
   "desktop.menu.speech": "Sprachausgabe",
+  "desktop.menu.toggleDevtools": "Entwicklertools umschalten",
   "desktop.menu.toggleScreenOverlayDevtools": "Entwicklertools umschalten (Bildschirm-Overlay)",
   "desktop.menu.view": "Ansicht",
   "desktop.menu.window": "Fenster",

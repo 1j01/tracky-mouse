@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Failed to read selected file.",
   "desktop.menu.importSettings": "Import Settings",
   "desktop.menu.speech": "Speech",
+  "desktop.menu.toggleDevtools": "Toggle Developer Tools",
   "desktop.menu.toggleScreenOverlayDevtools": "Toggle Developer Tools (Screen Overlay)",
   "desktop.menu.view": "View",
   "desktop.menu.window": "Window",

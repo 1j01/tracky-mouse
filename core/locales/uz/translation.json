@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Tanlangan faylni o‘qib bo‘lmadi.",
   "desktop.menu.importSettings": "Sozlamalarni import qilish",
   "desktop.menu.speech": "Nutq",
+  "desktop.menu.toggleDevtools": "Ishlab chiquvchi vositalarini yoqish/o‘chirish",
   "desktop.menu.toggleScreenOverlayDevtools": "Ishlab chiquvchi vositalarini yoqish/o‘chirish (ekran qoplami)",
   "desktop.menu.view": "Ko‘rish",
   "desktop.menu.window": "Oyna",

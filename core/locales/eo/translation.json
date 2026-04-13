@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Malsukcesis legi elektitan dosieron.",
   "desktop.menu.importSettings": "Importi agordojn",
   "desktop.menu.speech": "Parolo",
+  "desktop.menu.toggleDevtools": "Ŝalti/Malŝalti programist-ilojn",
   "desktop.menu.toggleScreenOverlayDevtools": "Ŝalti/Malŝalti programist-ilojn (Ekran-kovraĵo)",
   "desktop.menu.view": "Vido",
   "desktop.menu.window": "Fenestro",

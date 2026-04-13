@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "קריאת הקובץ הנבחר נכשלה.",
   "desktop.menu.importSettings": "ייבוא הגדרות",
   "desktop.menu.speech": "דיבור",
+  "desktop.menu.toggleDevtools": "הצג/הסתר כלים למפתחים",
   "desktop.menu.toggleScreenOverlayDevtools": "הצג/הסתר כלים למפתחים (חפיפת מסך)",
   "desktop.menu.view": "תצוגה",
   "desktop.menu.window": "חלון",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Izbrane datoteke ni bilo mogoče prebrati.",
   "desktop.menu.importSettings": "Uvozi nastavitve",
   "desktop.menu.speech": "Govor",
+  "desktop.menu.toggleDevtools": "Preklopi razvijalska orodja",
   "desktop.menu.toggleScreenOverlayDevtools": "Preklopi razvijalska orodja (zaslonski prekrivni sloj)",
   "desktop.menu.view": "Pogled",
   "desktop.menu.window": "Okno",

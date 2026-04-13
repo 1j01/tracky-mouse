@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "خواندن پرونده‌ی انتخاب‌شده ناموفق بود.",
   "desktop.menu.importSettings": "درون‌ریزی تنظیمات",
   "desktop.menu.speech": "گفتار",
+  "desktop.menu.toggleDevtools": "تغییر وضعیت ابزارهای توسعه‌دهنده",
   "desktop.menu.toggleScreenOverlayDevtools": "تغییر وضعیت ابزارهای توسعه‌دهنده (پوشش صفحه)",
   "desktop.menu.view": "نما",
   "desktop.menu.window": "پنجره",

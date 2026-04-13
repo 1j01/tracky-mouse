@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Kunne ikke lese valgt fil.",
   "desktop.menu.importSettings": "Importer innstillinger",
   "desktop.menu.speech": "Tale",
+  "desktop.menu.toggleDevtools": "Slå utviklerverktøy av/på",
   "desktop.menu.toggleScreenOverlayDevtools": "Slå utviklerverktøy (skjermoverlegg) av/på",
   "desktop.menu.view": "Vis",
   "desktop.menu.window": "Vindu",

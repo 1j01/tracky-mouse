@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Չհաջողվեց կարդալ ընտրված ֆայլը։",
   "desktop.menu.importSettings": "Ներմուծել կարգավորումները",
   "desktop.menu.speech": "Խոսք",
+  "desktop.menu.toggleDevtools": "Միացնել/անջատել մշակողի գործիքները",
   "desktop.menu.toggleScreenOverlayDevtools": "Միացնել/անջատել մշակողի գործիքները (էկրանի պատում)",
   "desktop.menu.view": "Տեսք",
   "desktop.menu.window": "Պատուհան",

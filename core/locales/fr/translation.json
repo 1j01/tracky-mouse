@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Échec de la lecture du fichier sélectionné.",
   "desktop.menu.importSettings": "Importer les paramètres",
   "desktop.menu.speech": "Parole",
+  "desktop.menu.toggleDevtools": "Basculer les outils de développement",
   "desktop.menu.toggleScreenOverlayDevtools": "Basculer les outils de développement (Superposition d'écran)",
   "desktop.menu.view": "Affichage",
   "desktop.menu.window": "Fenêtre",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Det gick inte att läsa den valda filen.",
   "desktop.menu.importSettings": "Importera inställningar",
   "desktop.menu.speech": "Tal",
+  "desktop.menu.toggleDevtools": "Växla utvecklarverktyg",
   "desktop.menu.toggleScreenOverlayDevtools": "Växla utvecklarverktyg (skärmöverlägg)",
   "desktop.menu.view": "Visa",
   "desktop.menu.window": "Fönster",

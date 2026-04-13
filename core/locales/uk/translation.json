@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Не вдалося прочитати вибраний файл.",
   "desktop.menu.importSettings": "Імпорт налаштувань",
   "desktop.menu.speech": "Мовлення",
+  "desktop.menu.toggleDevtools": "Перемкнути засоби розробника",
   "desktop.menu.toggleScreenOverlayDevtools": "Перемкнути засоби розробника (екранна накладка)",
   "desktop.menu.view": "Вигляд",
   "desktop.menu.window": "Вікно",

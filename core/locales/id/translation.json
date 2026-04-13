@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Gagal membaca berkas yang dipilih.",
   "desktop.menu.importSettings": "Impor pengaturan",
   "desktop.menu.speech": "Ucapan",
+  "desktop.menu.toggleDevtools": "Alihkan Alat Pengembang",
   "desktop.menu.toggleScreenOverlayDevtools": "Alihkan Alat Pengembang (Lapisan layar)",
   "desktop.menu.view": "Tampilan",
   "desktop.menu.window": "Jendela",

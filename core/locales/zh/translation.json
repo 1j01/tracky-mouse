@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "無法讀取選取的檔案。",
   "desktop.menu.importSettings": "匯入設定",
   "desktop.menu.speech": "語音",
+  "desktop.menu.toggleDevtools": "切換開發人員工具",
   "desktop.menu.toggleScreenOverlayDevtools": "切換開發人員工具（螢幕覆蓋層）",
   "desktop.menu.view": "檢視",
   "desktop.menu.window": "視窗",

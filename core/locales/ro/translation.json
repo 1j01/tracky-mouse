@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nu s‑a putut citi fișierul selectat.",
   "desktop.menu.importSettings": "Importă setări",
   "desktop.menu.speech": "Vorbire",
+  "desktop.menu.toggleDevtools": "Comută instrumentele pentru dezvoltatori",
   "desktop.menu.toggleScreenOverlayDevtools": "Comută instrumentele pentru dezvoltatori (suprapunere ecran)",
   "desktop.menu.view": "Vizualizare",
   "desktop.menu.window": "Fereastră",

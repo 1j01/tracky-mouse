@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nije uspelo čitanje izabranog fajla.",
   "desktop.menu.importSettings": "Uvoz podešavanja",
   "desktop.menu.speech": "Govor",
+  "desktop.menu.toggleDevtools": "Uključi/isključi razvojne alate",
   "desktop.menu.toggleScreenOverlayDevtools": "Uključi/isključi razvojne alate (prekrivka ekrana)",
   "desktop.menu.view": "Prikaz",
   "desktop.menu.window": "Prozor",

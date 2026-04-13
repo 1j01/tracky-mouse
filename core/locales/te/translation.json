@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ఎంచుకున్న ఫైల్‌ను చదవడంలో విఫలమైంది.",
   "desktop.menu.importSettings": "సెట్టింగ్‌లను దిగుమతి చేయండి",
   "desktop.menu.speech": "స్పీచ్",
+  "desktop.menu.toggleDevtools": "డెవలపర్ టూల్స్‌ను టాగిల్ చేయండి",
   "desktop.menu.toggleScreenOverlayDevtools": "డెవలపర్ టూల్స్‌ను టాగిల్ చేయండి (స్క్రీన్ ఓవర్లే)",
   "desktop.menu.view": "దృశ్యం",
   "desktop.menu.window": "విండో",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Error al leer el archivo seleccionado.",
   "desktop.menu.importSettings": "Importar ajustes",
   "desktop.menu.speech": "Voz",
+  "desktop.menu.toggleDevtools": "Alternar herramientas de desarrollo",
   "desktop.menu.toggleScreenOverlayDevtools": "Alternar herramientas de desarrollo (superposición de pantalla)",
   "desktop.menu.view": "Vista",
   "desktop.menu.window": "Ventana",

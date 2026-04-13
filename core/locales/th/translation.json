@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ไม่สามารถอ่านไฟล์ที่เลือกได้",
   "desktop.menu.importSettings": "นำเข้าการตั้งค่า",
   "desktop.menu.speech": "การพูด",
+  "desktop.menu.toggleDevtools": "สลับ Developer Tools",
   "desktop.menu.toggleScreenOverlayDevtools": "สลับ Developer Tools (หน้าต่างซ้อนทับ)",
   "desktop.menu.view": "มุมมอง",
   "desktop.menu.window": "หน้าต่าง",

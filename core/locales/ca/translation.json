@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "No s'ha pogut llegir el fitxer seleccionat.",
   "desktop.menu.importSettings": "Importa la configuració",
   "desktop.menu.speech": "Veu",
+  "desktop.menu.toggleDevtools": "Commuta les eines de desenvolupador",
   "desktop.menu.toggleScreenOverlayDevtools": "Commuta les eines de desenvolupador (superposició de pantalla)",
   "desktop.menu.view": "Visualitza",
   "desktop.menu.window": "Finestra",

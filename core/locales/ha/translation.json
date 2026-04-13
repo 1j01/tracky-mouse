@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "An kasa karanta fayil ɗin da aka zaɓa.",
   "desktop.menu.importSettings": "Shigo da saituna",
   "desktop.menu.speech": "Magana",
+  "desktop.menu.toggleDevtools": "Kunna/ kashe kayan aikin masu haɓakawa",
   "desktop.menu.toggleScreenOverlayDevtools": "Kunna/ kashe kayan aikin masu haɓakawa (Screen Overlay)",
   "desktop.menu.view": "Kallo",
   "desktop.menu.window": "Tagar",

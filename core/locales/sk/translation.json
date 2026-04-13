@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nepodarilo sa prečítať vybraný súbor.",
   "desktop.menu.importSettings": "Import nastavení",
   "desktop.menu.speech": "Reč",
+  "desktop.menu.toggleDevtools": "Prepnúť nástroje vývojára",
   "desktop.menu.toggleScreenOverlayDevtools": "Prepnúť nástroje vývojára (prekrytie obrazovky)",
   "desktop.menu.view": "Zobraziť",
   "desktop.menu.window": "Okno",

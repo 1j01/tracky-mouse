@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nem sikerült beolvasni a kiválasztott fájlt.",
   "desktop.menu.importSettings": "Beállítások importálása",
   "desktop.menu.speech": "Beszéd",
+  "desktop.menu.toggleDevtools": "Fejlesztői eszközök be-/kikapcsolása",
   "desktop.menu.toggleScreenOverlayDevtools": "Fejlesztői eszközök be-/kikapcsolása (képernyőfedvény)",
   "desktop.menu.view": "Nézet",
   "desktop.menu.window": "Ablak",

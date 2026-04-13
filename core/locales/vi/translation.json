@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Không đọc được tệp đã chọn.",
   "desktop.menu.importSettings": "Nhập cài đặt",
   "desktop.menu.speech": "Giọng nói",
+  "desktop.menu.toggleDevtools": "Bật/tắt Công cụ Nhà phát triển",
   "desktop.menu.toggleScreenOverlayDevtools": "Bật/tắt Công cụ Nhà phát triển (Lớp phủ màn hình)",
   "desktop.menu.view": "Xem",
   "desktop.menu.window": "Cửa sổ",

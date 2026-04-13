@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Ezin izan da hautatutako fitxategia irakurri.",
   "desktop.menu.importSettings": "Inportatu ezarpenak",
   "desktop.menu.speech": "Ahotsa",
+  "desktop.menu.toggleDevtools": "Txandakatu garatzaile tresnak",
   "desktop.menu.toggleScreenOverlayDevtools": "Txandakatu garatzaile tresnak (pantaila gaineko geruza)",
   "desktop.menu.view": "Ikusi",
   "desktop.menu.window": "Leihoa",

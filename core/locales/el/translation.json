@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Αποτυχία ανάγνωσης του επιλεγμένου αρχείου.",
   "desktop.menu.importSettings": "Εισαγωγή ρυθμίσεων",
   "desktop.menu.speech": "Ομιλία",
+  "desktop.menu.toggleDevtools": "Εναλλαγή εργαλείων προγραμματιστή",
   "desktop.menu.toggleScreenOverlayDevtools": "Εναλλαγή εργαλείων προγραμματιστή (επικάλυψη οθόνης)",
   "desktop.menu.view": "Προβολή",
   "desktop.menu.window": "Παράθυρο",

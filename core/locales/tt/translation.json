@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Сайланган файлны укып булмады.",
   "desktop.menu.importSettings": "Көйләүләрне импортлау",
   "desktop.menu.speech": "Сөйләм",
+  "desktop.menu.toggleDevtools": "Эшләнмәче коралларын күчереп кую",
   "desktop.menu.toggleScreenOverlayDevtools": "Эшләнмәче коралларын күчереп кую (экран өсләмәсе)",
   "desktop.menu.view": "Күренеш",
   "desktop.menu.window": "Тәрәзә",

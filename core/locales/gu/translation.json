@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "પસંદ કરેલી ફાઇલ વાંચવામાં નિષ્ફળ.",
   "desktop.menu.importSettings": "સેટિંગ્સ ઇમ્પોર્ટ કરો",
   "desktop.menu.speech": "વાણી",
+  "desktop.menu.toggleDevtools": "Developer Tools ચાલુ/બંધ કરો",
   "desktop.menu.toggleScreenOverlayDevtools": "Developer Tools (સ્ક્રીન ઓવરલે) ચાલુ/બંધ કરો",
   "desktop.menu.view": "દૃશ્ય",
   "desktop.menu.window": "વિન્ડો",

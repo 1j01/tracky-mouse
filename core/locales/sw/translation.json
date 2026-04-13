@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Imeshindwa kusoma faili uliochagua.",
   "desktop.menu.importSettings": "Ingiza Mipangilio",
   "desktop.menu.speech": "Hotuba/Sauti",
+  "desktop.menu.toggleDevtools": "Washa/Zima Zana za Msanidi",
   "desktop.menu.toggleScreenOverlayDevtools": "Washa/Zima Zana za Msanidi (Screen Overlay)",
   "desktop.menu.view": "Mwonekano",
   "desktop.menu.window": "Dirisha",

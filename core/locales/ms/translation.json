@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Gagal membaca fail yang dipilih.",
   "desktop.menu.importSettings": "Import Tetapan",
   "desktop.menu.speech": "Ucapan",
+  "desktop.menu.toggleDevtools": "Togol Alat Pembangun",
   "desktop.menu.toggleScreenOverlayDevtools": "Togol Alat Pembangun (Lapisan Skrin)",
   "desktop.menu.view": "Paparan",
   "desktop.menu.window": "Tetingkap",

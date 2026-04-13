@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ਚੁਣੀ ਗਈ ਫਾਈਲ ਨਹੀਂ ਪੜ੍ਹੀ ਜਾ ਸਕੀ।",
   "desktop.menu.importSettings": "ਸੈਟਿੰਗਾਂ ਇੰਪੋਰਟ ਕਰੋ",
   "desktop.menu.speech": "ਬੋਲਣਾ",
+  "desktop.menu.toggleDevtools": "ਡਿਵੈਲਪਰ ਟੂਲ ਓਨ/ਆਫ਼ ਕਰੋ",
   "desktop.menu.toggleScreenOverlayDevtools": "ਡਿਵੈਲਪਰ ਟੂਲ (ਸਕ੍ਰੀਨ ਓਵਰਲੇ) ਓਨ/ਆਫ਼ ਕਰੋ",
   "desktop.menu.view": "ਵੇਖੋ",
   "desktop.menu.window": "ਵਿੰਡੋ",

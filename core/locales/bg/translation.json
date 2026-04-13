@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Неуспешно четене на избрания файл.",
   "desktop.menu.importSettings": "Импорт на настройки",
   "desktop.menu.speech": "Глас",
+  "desktop.menu.toggleDevtools": "Превключи инструментите за разработчици",
   "desktop.menu.toggleScreenOverlayDevtools": "Превключи инструментите за разработчици (екранно покритие)",
   "desktop.menu.view": "Изглед",
   "desktop.menu.window": "Прозорец",

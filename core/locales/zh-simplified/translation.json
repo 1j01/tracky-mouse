@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "读取所选文件失败。",
   "desktop.menu.importSettings": "导入设置",
   "desktop.menu.speech": "语音",
+  "desktop.menu.toggleDevtools": "切换开发者工具",
   "desktop.menu.toggleScreenOverlayDevtools": "切换开发者工具（屏幕叠加层）",
   "desktop.menu.view": "查看",
   "desktop.menu.window": "窗口",

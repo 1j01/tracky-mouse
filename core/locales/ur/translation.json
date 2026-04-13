@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "منتخب فائل پڑھنے میں ناکامی۔",
   "desktop.menu.importSettings": "سیٹنگز درآمد کریں",
   "desktop.menu.speech": "گفتگو",
+  "desktop.menu.toggleDevtools": "ڈیولپر ٹولز کو آن/آف کریں",
   "desktop.menu.toggleScreenOverlayDevtools": "ڈیولپر ٹولز کو آن/آف کریں (اسکرین اوورلے)",
   "desktop.menu.view": "دیکھیں",
   "desktop.menu.window": "ونڈو",

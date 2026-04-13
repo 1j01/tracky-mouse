@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Seçilen dosya okunamadı.",
   "desktop.menu.importSettings": "Ayarları İçe Aktar",
   "desktop.menu.speech": "Konuşma",
+  "desktop.menu.toggleDevtools": "Geliştirici Araçlarını Aç/Kapat",
   "desktop.menu.toggleScreenOverlayDevtools": "Geliştirici Araçlarını Aç/Kapat (Ekran Katmanı)",
   "desktop.menu.view": "Görünüm",
   "desktop.menu.window": "Pencere",

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Napakyas pagbasa han pinili nga file.",
   "desktop.menu.importSettings": "Import hin mga Setting",
   "desktop.menu.speech": "Pinulongan nga tingog",
+  "desktop.menu.toggleDevtools": "I-toggle an Developer Tools",
   "desktop.menu.toggleScreenOverlayDevtools": "I-toggle an Developer Tools (Screen Overlay)",
   "desktop.menu.view": "View",
   "desktop.menu.window": "Window",

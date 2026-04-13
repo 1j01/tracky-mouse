@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Falha ao ler o arquivo selecionado.",
   "desktop.menu.importSettings": "Importar configurações",
   "desktop.menu.speech": "Voz",
+  "desktop.menu.toggleDevtools": "Alternar Ferramentas de Desenvolvedor",
   "desktop.menu.toggleScreenOverlayDevtools": "Alternar Ferramentas de Desenvolvedor (Sobreposição de tela)",
   "desktop.menu.view": "Exibir",
   "desktop.menu.window": "Janela",

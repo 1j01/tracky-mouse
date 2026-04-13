@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "❌ 📖👀 📄",
   "desktop.menu.importSettings": "📂⚙️",
   "desktop.menu.speech": "🗣️",
+  "desktop.menu.toggleDevtools": "🧑‍💻🛠️",
   "desktop.menu.toggleScreenOverlayDevtools": "🧑‍💻🛠️ (🖥️⿻)",
   "desktop.menu.view": "👀",
   "desktop.menu.window": "🪟",

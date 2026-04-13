@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Хьажа файл дӀайо дац.",
   "desktop.menu.importSettings": "Параметраш импорт",
   "desktop.menu.speech": "Хийца хӀара",
+  "desktop.menu.toggleDevtools": "Developer Tools тӀепара",
   "desktop.menu.toggleScreenOverlayDevtools": "Developer Tools (Экранан overlay) тӀепара",
   "desktop.menu.view": "Вид",
   "desktop.menu.window": "АгӀо",

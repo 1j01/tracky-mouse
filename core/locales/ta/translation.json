@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "தேர்ந்தெடுத்த கோப்பைப் படிக்க முடியவில்லை.",
   "desktop.menu.importSettings": "அமைப்புகளை இறக்குமதி செய்",
   "desktop.menu.speech": "குரல்",
+  "desktop.menu.toggleDevtools": "Developer Tools ஐ ஆன்/ஆஃப் செய்",
   "desktop.menu.toggleScreenOverlayDevtools": "Developer Tools ஐ ஆன்/ஆஃப் செய் (திரை மேலடுக்கு)",
   "desktop.menu.view": "காண்க",
   "desktop.menu.window": "சாளரம்",
