@@ -2569,7 +2569,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				}
 				return faces;
 			} catch (error) {
-				detector.dispose();
+				try {
+					detector?.dispose();
+				} catch (disposeError) {
+					console.error("Failed to dispose facemesh detector after estimation error:", disposeError);
+				}
 				detector = null;
 				// TODO: avoid alert
 				console.error("Facemesh estimation failed:", error);
