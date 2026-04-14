@@ -64,6 +64,19 @@ const best_times = {
 	with_gamepad: Infinity,
 	with_unknown_input: Infinity,
 };
+try {
+	const json = localStorage.getItem("tracky-mouse-archery-best-times");
+	if (json) {
+		const stored_times = JSON.parse(json);
+		for (const [key, value] of Object.entries(stored_times)) {
+			if (key in best_times && typeof value === "number") {
+				best_times[key] = value;
+			}
+		}
+	}
+} catch (_error) {
+	// ignore localStorage access errors (etc.)
+}
 function initRound() {
 	round = {
 		// used_head_tracker: false,
@@ -303,6 +316,11 @@ function handleTargetHit(event) {
 				li.append(new_best);
 			}
 			ul.append(li);
+		}
+		try {
+			localStorage.setItem("tracky-mouse-archery-best-times", JSON.stringify(best_times));
+		} catch (_error) {
+			// ignore localStorage access errors
 		}
 		archery_game.classList.add("round-over");
 		setTimeout(() => {
