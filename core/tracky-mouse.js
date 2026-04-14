@@ -2034,11 +2034,22 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					type: "button",
 					visible: () => isDesktopApp,
 					onClick: async () => {
+						function showToast(message) {
+							const toast = document.createElement("div");
+							toast.className = "tracky-mouse-toast";
+							toast.textContent = message;
+							document.body.appendChild(toast);
+							setTimeout(() => {
+								toast.remove();
+							}, 5000);
+						}
+
 						let knownCameras = {};
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+							throw new Error("Parsing known cameras is currently disabled for testing purposes."); // TODO: remove this after testing
 						} catch (error) {
-							alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.message);
 							return;
 						}
 
@@ -2049,10 +2060,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
 							if (result?.error) {
-								alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + result.error);
+								showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + result.error);
 							}
 						} catch (error) {
-							alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.message);
 						}
 					},
 					// description: t("settings.openCameraSettings.description.alt1", { defaultValue: "Open your camera's system settings window to adjust properties like brightness and contrast." }),
@@ -2548,14 +2559,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 		try {
 			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+			errorMessage.hidden = true;
 		} catch (error) {
 			detector = null;
-			// TODO: avoid alert
 			console.error("Failed to create facemesh detector:", error);
-			alert(error);
+			errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${t("faceDetectorInitError", { defaultValue: "Failed to create face detector" })}\n\n${error.message}`;
+			errorMessage.hidden = false;
 		}
 
 		facemeshLoaded = true;
+		let loggedDetectorError = false;
 		facemeshEstimateFaces = async () => {
 			const imageData = currentCameraImageData;//getCameraImageData();
 			if (!imageData) {
@@ -2569,15 +2582,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				}
 				return faces;
 			} catch (error) {
+				if (!loggedDetectorError) {
+					console.error("Facemesh estimation failed:", error);
+					loggedDetectorError = true;
+				}
 				try {
 					detector?.dispose();
 				} catch (disposeError) {
 					console.error("Failed to dispose facemesh detector after estimation error:", disposeError);
 				}
 				detector = null;
-				// TODO: avoid alert
-				console.error("Facemesh estimation failed:", error);
-				alert(error);
+				errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${t("faceDetectorError", { defaultValue: "Face detector error" })}\n\n${error.message}`;
+				errorMessage.hidden = false;
 			}
 			return [];
 		};

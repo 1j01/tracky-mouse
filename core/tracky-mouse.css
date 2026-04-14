@@ -214,6 +214,7 @@
 	color: white;
 	padding: 5px;
 	animation: tracky-mouse-jello-vertical 1s ease 0s 1 normal none;
+	white-space: pre-wrap;
 }
 
 @keyframes tracky-mouse-jello-vertical {
@@ -244,6 +245,21 @@
 	100% {
 		transform: scale3d(calc(calc(3 + 1) / 4), calc(calc(3 + 1) / 4), 1);
 	}
+}
+
+.tracky-mouse-toast {
+	position: fixed;
+	top: 25px + env(titlebar-area-height, 0px);
+	top: calc(25px + env(titlebar-area-height, 0px));
+	right: 25px;
+	z-index: 100;
+	background-color: rgba(255, 233, 38, 0.8);
+	color: black;
+	padding: 10px 20px;
+	border-radius: 5px;
+	animation: tracky-mouse-fade-out 3s 3s ease-out forwards;
+	white-space: pre-wrap;
+	font-family: sans-serif;
 }
 
 /* Screen overlay in electron app */

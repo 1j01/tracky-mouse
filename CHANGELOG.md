@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - That said, clicking on the window's border (resizing) can still freeze it up.
 - While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
 - In the desktop app, Tracky Mouse now tries to recover automatically if a renderer, GPU, or utility/video subprocess crashes.
+- Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard.
 
 ## [2.7.0] - 2026-04-05
 
