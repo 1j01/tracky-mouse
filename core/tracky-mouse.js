@@ -1755,7 +1755,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					key: "headTrackingLeashDistance",
 					type: "slider",
 					min: 0,
-					max: 20,
+					max: 200,
 					default: 0,
 					labels: {
 						min: t("settings.leashDistance.sliderMin", { defaultValue: "Off" }),
@@ -4588,7 +4588,7 @@ TrackyMouse.initScreenOverlay = () => {
 		}
 	}
 
-	const leashCanvasSize = 64;
+	const leashCanvasSize = 250;
 	const leashCanvas = document.createElement("canvas");
 	leashCanvas.style.position = "fixed";
 	leashCanvas.style.zIndex = "899990"; // just below .tracky-mouse-pointer
@@ -4607,26 +4607,21 @@ TrackyMouse.initScreenOverlay = () => {
 		}
 		const cx = leashCanvasSize / 2;
 		const cy = leashCanvasSize / 2;
-		const radius = leash.distance;
-		const accDist = Math.hypot(leash.accX, leash.accY);
-		const ratio = accDist / radius;
 
-		// Draw the leash boundary circle
+		// Draw the leash (line + dot)
 		leashCtx.beginPath();
-		leashCtx.arc(cx, cy, radius, 0, Math.PI * 2);
-		leashCtx.strokeStyle = ratio > 0.7 ? "rgba(255, 180, 0, 0.8)" : "rgba(255, 255, 255, 0.45)";
+		leashCtx.strokeStyle = "fuchsia";
 		leashCtx.lineWidth = 1.5;
+		leashCtx.moveTo(cx, cy);
+		leashCtx.lineTo(cx - leash.accX, cy + leash.accY);
 		leashCtx.stroke();
 
-		// Draw a dot showing the accumulated head offset within the leash
-		if (accDist > 0.5) {
-			const dotX = cx + leash.accX;
-			const dotY = cy + leash.accY;
-			leashCtx.beginPath();
-			leashCtx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
-			leashCtx.fillStyle = ratio > 0.8 ? "rgba(255, 140, 0, 1)" : "rgba(255, 255, 255, 0.75)";
-			leashCtx.fill();
-		}
+		const dotX = cx - leash.accX;
+		const dotY = cy + leash.accY;
+		leashCtx.beginPath();
+		leashCtx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
+		leashCtx.fillStyle = "fuchsia";
+		leashCtx.fill();
 	}
 
 	function updateMousePos(x, y) {

@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a **Cursor Movement > Leash distance** setting. The cursor only moves when the head moves beyond the set radius (in pixels) from where the cursor last stopped. A circle visualization is shown in the screen overlay.
+- Added a **Cursor Movement > Leash distance** setting. The cursor only moves after movement accumulates beyond the configured leash radius from where the cursor last stopped. A circle visualization is shown in the screen overlay.
 
 ### Fixed
 
