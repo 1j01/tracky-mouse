@@ -2047,7 +2047,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						let knownCameras = {};
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
-							throw new Error("Parsing known cameras is currently disabled for testing purposes."); // TODO: remove this after testing
 						} catch (error) {
 							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.message);
 							return;
