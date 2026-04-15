@@ -2827,6 +2827,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		updateStartStopButton();
 	};
 
+	// Handle monkey-patched alert() replacement in face-landmarks-detection.min.js
+	// (Hm, could make it throw instead. Then we wouldn't need this.)
+	window._TrackyMouse_faceLandmarksDetectionAlert = (message) => {
+		// TODO: i18n (it's just one message; we could check for the string (or not) and translate it)
+		// const isContextCreationMessage = message === "Failed to create WebGL canvas context when passing video frame.";
+		errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${message}`;
+		errorMessage.hidden = false;
+	};
+
 	let showedCameraError = false;
 	const cameraAccessSlowWarningDelayMS = 5000;
 	let cameraAccessSlowWarningTimeoutID;
