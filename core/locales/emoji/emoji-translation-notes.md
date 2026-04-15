@@ -41,6 +41,7 @@ TODO: copy from brainstorming section and remove unused options
   - roll: 🙃
 - center, middle: 🎯, 👉|👈, 👉👈, 🪹??, 🏠??, ⚓?, 🪆???
 - border, limit: 🧱, 📐, 🗜️, 🔳, 🔲, ... + screen
+- range, extent, limit: 🫸📏🫷
 - free-moving, unconstrained: 🪁, 🪶, 🪽, 🧈
 - smooth, adj.: 🧈
 - smooth, v.: 🧴, 🧈
