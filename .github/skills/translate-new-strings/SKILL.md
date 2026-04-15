@@ -12,9 +12,10 @@ Follow these steps in order:
 5. Run `npx i18next-cli extract` again to reorder the keys.
 6. Run `npx i18next-cli status` to get a percentage of translation completion.
    - If needed, run `npx i18next-cli status <lang>` to get a more detailed report for a specific language.
-7. Check the `emoji` locale specifically, as emoji may get corrupted.
-8. Generate a few variations for the emoji translations, and ask which is best, since this requires some creativity.
-9. Commit with "Add new translations" with the AI prompt in the description (but no AI explanation part).
+7. Check the `emoji` locale specifically, as emoji may get corrupted. Fix using the `apply_patch` tool.
+8. Commit with "Add new translations" with the AI prompt in the description (but no AI explanation part).
+9. Brainstorm variations for each emoji translation, as these require creativity, and present these as numbered and lettered lists, so that suggestions may be easily accepted.
+10. If any suggestions are accepted, amend the commit.
 
 Here is an example of a Node.js script to patch the new strings into the other language files:
 
