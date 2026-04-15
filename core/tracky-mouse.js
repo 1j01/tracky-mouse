@@ -1750,20 +1750,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					// description: t("settings.motionThreshold.description.alt2", { defaultValue: "Speed in pixels/frame required to move the cursor." }),
 				},
 				{
-					label: t("settings.leashDistance.label", { defaultValue: "Leash distance" }),
-					className: "tracky-mouse-leash-distance",
-					key: "headTrackingLeashDistance",
-					type: "slider",
-					min: 0,
-					max: 200,
-					default: 0,
-					labels: {
-						min: t("settings.leashDistance.sliderMin", { defaultValue: "Off" }),
-						max: t("settings.leashDistance.sliderMax", { defaultValue: "Large" }),
-					},
-					description: t("settings.leashDistance.description", { defaultValue: "Radius in pixels of a dead zone around the cursor. The cursor only moves when the head moves beyond this radius from where the cursor last stopped." }),
-				},
-				{
 					type: "group",
 					label: t("settings.sections.pointTracking.label", { defaultValue: "Point tracking" }),
 					disabled: () => s.headTrackingTiltInfluence === 1,
@@ -2492,8 +2478,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	// Mouse state
 	let mouseX = 0;
 	let mouseY = 0;
-	let leashAccX = 0;
-	let leashAccY = 0;
 	let buttonStates = {
 		left: false,
 		right: false,
@@ -3861,11 +3845,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			headNotFound: !face && !facemeshPrediction,
 			blinkInfo,
 			mouthInfo,
-			leash: {
-				distance: s.headTrackingLeashDistance,
-				accX: leashAccX,
-				accY: leashAccY,
-			},
 		});
 
 		if (facemeshPrediction) {
@@ -4276,21 +4255,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 
 			if (!paused) {
-				if (s.headTrackingLeashDistance > 0) {
-					leashAccX += deltaX * screenWidth;
-					leashAccY += deltaY * screenHeight;
-					const accDist = Math.hypot(leashAccX, leashAccY);
-					if (accDist > s.headTrackingLeashDistance) {
-						const factor = (accDist - s.headTrackingLeashDistance) / accDist;
-						mouseX -= leashAccX * factor;
-						mouseY += leashAccY * factor;
-						leashAccX = leashAccX / accDist * s.headTrackingLeashDistance;
-						leashAccY = leashAccY / accDist * s.headTrackingLeashDistance;
-					}
-				} else {
-					mouseX -= deltaX * screenWidth;
-					mouseY += deltaY * screenHeight;
-				}
+				mouseX -= deltaX * screenWidth;
+				mouseY += deltaY * screenHeight;
 
 				mouseX = Math.min(Math.max(0, mouseX), screenWidth);
 				mouseY = Math.min(Math.max(0, mouseY), screenHeight);
@@ -4386,8 +4352,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	};
 	const updatePaused = () => {
 		mouseNeedsInitPos = true;
-		leashAccX = 0;
-		leashAccY = 0;
 		if (paused) {
 			pointerEl.style.display = "none";
 		}
@@ -4588,47 +4552,11 @@ TrackyMouse.initScreenOverlay = () => {
 		}
 	}
 
-	const leashCanvasSize = 250;
-	const leashCanvas = document.createElement("canvas");
-	leashCanvas.style.position = "fixed";
-	leashCanvas.style.zIndex = "899990"; // just below .tracky-mouse-pointer
-	leashCanvas.style.top = "0";
-	leashCanvas.style.left = "0";
-	leashCanvas.style.pointerEvents = "none";
-	leashCanvas.width = leashCanvasSize;
-	leashCanvas.height = leashCanvasSize;
-	document.body.appendChild(leashCanvas);
-	const leashCtx = leashCanvas.getContext("2d");
-	function drawLeash({ inputFeedback, isEnabled }) {
-		leashCtx.clearRect(0, 0, leashCanvasSize, leashCanvasSize);
-		const leash = inputFeedback?.leash;
-		if (!leash || !isEnabled || leash.distance <= 0) {
-			return;
-		}
-		const cx = leashCanvasSize / 2;
-		const cy = leashCanvasSize / 2;
-
-		// Draw the leash (line + dot)
-		leashCtx.beginPath();
-		leashCtx.strokeStyle = "fuchsia";
-		leashCtx.lineWidth = 1.5;
-		leashCtx.moveTo(cx, cy);
-		leashCtx.lineTo(cx - leash.accX, cy + leash.accY);
-		leashCtx.stroke();
-
-		const dotX = cx - leash.accX;
-		const dotY = cy + leash.accY;
-		leashCtx.beginPath();
-		leashCtx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
-		leashCtx.fillStyle = "fuchsia";
-		leashCtx.fill();
-	}
-
 	function updateMousePos(x, y) {
 		// inputFeedbackCanvas.style.transform = `translate(${x - inputFeedbackCanvas.width / 2}px, ${y - inputFeedbackCanvas.height / 2}px)`;
 		// inputFeedbackCanvas.style.transform = `translate(${x}px, ${y}px)`;
 		inputFeedbackCanvas.style.transform = `translate(${Math.min(x, window.innerWidth - inputFeedbackCanvas.width)}px, ${Math.min(y, window.innerHeight - inputFeedbackCanvas.height)}px)`;
-		leashCanvas.style.transform = `translate(${x - leashCanvasSize / 2}px, ${y - leashCanvasSize / 2}px)`;
+
 	}
 
 	function update(data) {
@@ -4656,7 +4584,6 @@ TrackyMouse.initScreenOverlay = () => {
 		}
 
 		drawInputFeedback(data);
-		drawLeash(data);
 
 		if (systemMousePosition) {
 			const { x, y } = systemMousePosition;
