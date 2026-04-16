@@ -128,6 +128,10 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		bucket.element.dataset.row = bucketAngles.row;
 		bucket.element.dataset.pitch = bucketAngles.pitch;
 		bucket.element.dataset.yaw = bucketAngles.yaw;
+		bucket.element.style.setProperty("--column", `${bucketAngles.column}`);
+		bucket.element.style.setProperty("--row", `${bucketAngles.row}`);
+		bucket.element.style.setProperty("--pitch", `${bucketAngles.pitch}deg`);
+		bucket.element.style.setProperty("--yaw", `${bucketAngles.yaw}deg`);
 	}
 
 	if (bucket.samples.length < 5) {

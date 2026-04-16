@@ -17,7 +17,9 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	transform: translateX(attr(data-column) * 110px) translateY(attr(data-row) * 110px);
+	transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px));
+	/* transform: translateX(var(--pitch) * 110px) translateY(var(--yaw) * 110px); */
+	transform-style: preserve-3d;
 }
 
 .bucket img {
