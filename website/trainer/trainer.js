@@ -6,8 +6,6 @@
  * @property {number} pitch
  * @property {number} yaw
  * @property {number} ordinal
- * @property {Promise<Blob>} blobPromise
- * @property {number} timestamp
  * @property {HTMLImageElement} img
  */
 
@@ -76,8 +74,6 @@ async function loadImagesAndEnableRecording() {
 							pitch: parseFloat(pitch),
 							yaw: parseFloat(yaw),
 							ordinal: parseInt(fileName.split(".")[0]),
-							blobPromise: Promise.resolve(file),
-							timestamp: file.lastModified,
 							img: document.createElement("img"),
 						};
 						sample.img.src = URL.createObjectURL(file);
@@ -288,22 +284,18 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			pitch: bucketAngles.pitch,
 			yaw: bucketAngles.yaw,
 			ordinal: existingBucket?.samples?.length ?? 0,
-			blobPromise: new Promise((resolve) => {
-				mouthCanvas.toBlob((blob) => {
-					resolve(blob);
-					// TODO: display instantly instead of waiting for the blob to be created
-					sample.img.src = URL.createObjectURL(blob);
-					db.save(sample.poseId, sample.pitch, sample.yaw, sample.ordinal, blob).then(() => {
-						sample.img.dataset.saveState = "saved";
-					}).catch((err) => {
-						console.error("Failed to save sample:", err);
-						sample.img.dataset.saveState = "error";
-					});
-				});
-			}),
-			timestamp: Date.now(),
 			img: document.createElement("img"),
 		};
+		mouthCanvas.toBlob((blob) => {
+			// TODO: display instantly instead of waiting for the blob to be created
+			sample.img.src = URL.createObjectURL(blob);
+			db.save(sample.poseId, sample.pitch, sample.yaw, sample.ordinal, blob).then(() => {
+				sample.img.dataset.saveState = "saved";
+			}).catch((err) => {
+				console.error("Failed to save sample:", err);
+				sample.img.dataset.saveState = "error";
+			});
+		});
 		trackAndDisplaySample(sample);
 	}
 
