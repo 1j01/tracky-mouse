@@ -6,13 +6,13 @@ const db = new TrainerDB();
 const mouthCanvas = document.getElementById("mouth-canvas");
 
 const poses = {
+	"mouth-closed": { label: "Mouth Closed", description: "Keep your mouth closed, but make various facial expressions." },
+	"mouth-open": { label: "Mouth Open", description: "Open your mouth without sticking out your tongue." },
 	"tongue-center": { label: "Tongue Center", description: "Stick your tongue straight out." },
 	"tongue-left": { label: "Tongue Left", description: "Stick your tongue out to the left." },
 	"tongue-right": { label: "Tongue Right", description: "Stick your tongue out to the right." },
 	"tongue-up": { label: "Tongue Up", description: "Stick your tongue out upwards." },
 	"tongue-down": { label: "Tongue Down", description: "Stick your tongue out downwards." },
-	"mouth-open": { label: "Mouth Open", description: "Open your mouth without sticking out your tongue." },
-	"mouth-closed": { label: "Mouth Closed", description: "Keep your mouth closed, but make various facial expressions." }
 };
 
 let currentPose = Object.keys(poses)[0];
