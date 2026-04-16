@@ -65,3 +65,10 @@ img[data-save-state="saved"] {
 img[data-save-state="error"] {
 	border-color: red;
 }
+
+/* TODO: maybe implement a "passive" mode to properly disable clicking/mouse movement and related settings */
+.tracky-mouse-start-stop-button,
+.tracky-mouse-desktop-app-download-message,
+.tracky-mouse-controls details:first-of-type {
+	display: none;
+}
