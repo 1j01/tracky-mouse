@@ -61,11 +61,8 @@ export class TrainerDB {
 			);
 		}
 
-		// const hasPermission =
-		await handle.requestPermission({ mode: "readwrite" }) === "granted";
-		// if (!hasPermission) {
-		// 	throw new Error("Permission denied");
-		// }
+		// Request read/write permission proactively but don't require it
+		await handle.requestPermission({ mode: "readwrite" });
 
 		this.rootHandle = handle;
 		await idbSet(KEY, handle);
