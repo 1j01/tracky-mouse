@@ -153,6 +153,10 @@ for (const [poseId, pose] of Object.entries(poses)) {
 	});
 }
 
+/**
+ * @param {{pitch: number, yaw: number}} headTilt 
+ * @returns {{pitch: number, yaw: number}}
+ */
 function headTiltToBucket(headTilt) {
 	const maxYaw = 40; // degrees
 	const maxPitch = 40; // degrees
@@ -166,6 +170,10 @@ function headTiltToBucket(headTilt) {
 	return { yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
 }
 
+/**
+ * @param {HTMLVideoElement} video 
+ * @param {Face} facemeshPrediction 
+ */
 function captureMouthImage(video, facemeshPrediction) {
 	/** @type {BoundingBox} */
 	const mouthBoundingBox = { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity, width: -Infinity, height: -Infinity };
