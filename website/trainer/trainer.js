@@ -167,20 +167,24 @@ for (const [poseId, pose] of Object.entries(poses)) {
 }
 
 /**
- * @param {{pitch: number, yaw: number}} headTilt 
- * @returns {{pitch: number, yaw: number}}
+ * @param {{pitch: number, yaw: number}} headTilt in radians
+ * @returns {{pitch: number, yaw: number}} quantized angles in degrees
  */
 function headTiltToBucket(headTilt) {
 	const maxYaw = 40; // degrees
 	const maxPitch = 40; // degrees
 	const yawBucketCount = 9;
 	const pitchBucketCount = 9;
+	return {
+		yaw: clampAndSnap(headTilt.yaw * (180 / Math.PI), -maxYaw, maxYaw, yawBucketCount),
+		pitch: clampAndSnap(headTilt.pitch * (180 / Math.PI), -maxPitch, maxPitch, pitchBucketCount)
+	};
+}
 
-	const yaw = Math.max(-maxYaw, Math.min(maxYaw, headTilt.yaw * 180 / Math.PI));
-	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch * 180 / Math.PI));
-	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
-	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
-	return { yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
+function clampAndSnap(value, min, max, bucketCount) {
+	const range = max - min;
+	const quantized = min + Math.round(((value - min) / range) * (bucketCount - 1)) * (range / (bucketCount - 1));
+	return Math.max(min, Math.min(max, quantized));
 }
 
 /**
