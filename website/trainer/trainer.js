@@ -154,6 +154,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		sample.img.style.setProperty("--ordinal", bucket.samples.length);
 		bucket.element.appendChild(sample.img);
 		bucket.element.dataset.count = bucket.samples.length;
+		bucket.element.style.setProperty("--count", bucket.samples.length);
 	}
 
 	if (currentBucket) {
