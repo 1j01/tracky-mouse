@@ -65,6 +65,7 @@ function setRecording(shouldRecord) {
 async function loadImagesAndEnableRecording() {
 	try {
 		const existingImageFiles = await db.load();
+		reset(); // in case of switching folders, clear out old samples
 		for (const poseId in existingImageFiles) {
 			for (const pitch in existingImageFiles[poseId]) {
 				for (const yaw in existingImageFiles[poseId][pitch]) {
@@ -114,7 +115,6 @@ function init() {
 			return;
 		}
 		try {
-			// TODO: reset data after selecting new folder
 			setRecording(false);
 			await db.selectFolder();
 			if (!db.rootHandle) {
@@ -165,6 +165,14 @@ for (const [poseId, pose] of Object.entries(poses)) {
 		}
 	});
 }
+
+function reset() {
+	for (const pose of Object.values(poses)) {
+		pose.buckets = {};
+	}
+	document.getElementById("samples-grid").innerHTML = "";
+}
+
 
 /**
  * @param {{pitch: number, yaw: number}} headTilt in radians
