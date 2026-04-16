@@ -35,7 +35,10 @@
 			<div id="tracky-mouse"></div>
 			<div class="controls">
 				<button id="select-folder">Select Dataset Folder</button>
+				<button id="cancel-loading" hidden>Cancel Loading</button>
 				<button id="toggle-recording" disabled aria-pressed="false">Start Recording</button>
+				<progress id="loading-progress" max="1" value="0" hidden></progress>
+				<span id="loading-status" aria-live="polite"></span>
 			</div>
 			<div id="samples-grid"></div>
 			<ul id="poses-list"></ul>

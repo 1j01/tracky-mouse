@@ -32,6 +32,9 @@ const db = new TrainerDB();
 const mouthCanvas = document.getElementById("mouth-canvas");
 const toggleRecordingButton = document.getElementById("toggle-recording");
 const selectFolderButton = document.getElementById("select-folder");
+const loadingProgress = document.getElementById("loading-progress");
+const loadingStatus = document.getElementById("loading-status");
+const cancelLoadingButton = document.getElementById("cancel-loading");
 
 /** @type {{[key: string]: { label: string, description: string, buckets: { [key: string]: { [key: string]: { samples: Sample[], element: HTMLElement } } } }}} */
 const poses = {
@@ -47,6 +50,9 @@ const poses = {
 let currentPose = Object.keys(poses)[0];
 let currentBucket = null;
 let recording = false;
+let loading = false;
+let activeLoadController = null;
+let recordingControlsInitialized = false;
 const maxSamplesPerBucket = 5;
 
 const MOUTH_MESH_ANNOTATIONS = {
@@ -62,9 +68,52 @@ function setRecording(shouldRecord) {
 	toggleRecordingButton.setAttribute("aria-pressed", recording);
 }
 
-async function loadImagesAndEnableRecording() {
+function updateLoadingStatus(message) {
+	loadingStatus.textContent = message;
+}
+
+function updateLoadingProgress(loaded, total) {
+	loadingProgress.max = Math.max(total, 1);
+	loadingProgress.value = Math.min(loaded, loadingProgress.max);
+	updateLoadingStatus(total > 0 ? `Loading samples: ${loaded}/${total}` : "Loading samples: 0/0");
+}
+
+function setLoadingState(isLoading) {
+	loading = isLoading;
+	selectFolderButton.disabled = isLoading;
+	toggleRecordingButton.disabled = isLoading || !recordingControlsInitialized;
+	cancelLoadingButton.hidden = !isLoading;
+	loadingProgress.hidden = !isLoading;
+	if (!isLoading) {
+		updateLoadingStatus("");
+	}
+}
+
+function enableRecordingControls() {
+	if (toggleRecordingButton.hasAttribute("disabled")) {
+		toggleRecordingButton.removeAttribute("disabled");
+	}
+	if (recordingControlsInitialized) {
+		return;
+	}
+	recordingControlsInitialized = true;
+	toggleRecordingButton.addEventListener("click", () => {
+		setRecording(!recording);
+	});
+	window.addEventListener("blur", () => {
+		setRecording(false);
+	});
+}
+
+async function loadImagesAndEnableRecording(signal) {
 	try {
-		const existingImageFiles = await db.load();
+		updateLoadingProgress(0, 0);
+		const existingImageFiles = await db.load({
+			signal,
+			onProgress: ({ loaded, total }) => {
+				updateLoadingProgress(loaded, total);
+			},
+		});
 		reset(); // in case of switching folders, clear out old samples
 		for (const poseId in existingImageFiles) {
 			for (const pitch in existingImageFiles[poseId]) {
@@ -86,6 +135,10 @@ async function loadImagesAndEnableRecording() {
 		}
 		console.log("Loaded existing samples from database");
 	} catch (err) {
+		if (err.name === "AbortError") {
+			console.log("Loading samples canceled");
+			return;
+		}
 		if (err.name === "NotFoundError") {
 			console.log("No existing samples found in database");
 		} else {
@@ -94,22 +147,38 @@ async function loadImagesAndEnableRecording() {
 			return;
 		}
 	}
-	if (!toggleRecordingButton.hasAttribute("disabled")) {
+	enableRecordingControls();
+}
+
+async function startLoadingImages() {
+	if (loading) {
 		return;
 	}
-	toggleRecordingButton.removeAttribute("disabled");
-	toggleRecordingButton.addEventListener("click", () => {
-		setRecording(!recording);
-	});
-	window.addEventListener("blur", () => {
-		setRecording(false);
-	});
+	const loadController = new AbortController();
+	activeLoadController = loadController;
+	setRecording(false);
+	setLoadingState(true);
+	try {
+		await loadImagesAndEnableRecording(loadController.signal);
+	} finally {
+		if (activeLoadController === loadController) {
+			activeLoadController = null;
+		}
+		setLoadingState(false);
+	}
 }
 
 function init() {
 	const trackyMouse = TrackyMouse.init(document.getElementById("tracky-mouse"));
 
+	cancelLoadingButton.addEventListener("click", () => {
+		activeLoadController?.abort();
+	});
+
 	selectFolderButton.addEventListener("click", async () => {
+		if (loading) {
+			return;
+		}
 		if (!window.showDirectoryPicker) {
 			alert("The File System Access API is not supported in this browser. Please use a compatible browser like Chrome or Edge.");
 			return;
@@ -120,8 +189,11 @@ function init() {
 			if (!db.rootHandle) {
 				return;
 			}
-			loadImagesAndEnableRecording();
+			startLoadingImages();
 		} catch (err) {
+			if (err.name === "AbortError") {
+				return;
+			}
 			console.error("Failed to select folder:", err);
 			alert("Failed to select folder. Make sure you grant the necessary permissions and try again.");
 		}
@@ -132,7 +204,7 @@ function init() {
 			console.log("No access to database, user needs to select folder");
 			return;
 		}
-		loadImagesAndEnableRecording();
+		startLoadingImages();
 	}).catch((err) => {
 		console.error("Failed to initialize database:", err);
 		alert("Failed to access the database:\n\n" + err.message);

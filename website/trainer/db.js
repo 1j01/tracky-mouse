@@ -41,6 +41,12 @@ export class TrainerDB {
 		this.rootHandle = null;
 	}
 
+	checkAbort(signal) {
+		if (signal?.aborted) {
+			throw new DOMException("Loading canceled", "AbortError");
+		}
+	}
+
 	async init() {
 		const handle = await idbGet(KEY);
 		if (!handle) return false;
@@ -68,40 +74,59 @@ export class TrainerDB {
 		await idbSet(KEY, handle);
 	}
 
-	async load() {
+	/**
+	 * @param {{signal?: AbortSignal, onProgress?: (progress: { loaded: number, total: number }) => void}} [options]
+	 */
+	async load(options = {}) {
+		const { signal, onProgress } = options;
 		if (!this.rootHandle) {
 			throw new Error("Folder not selected");
 		}
+		this.checkAbort(signal);
 
 		const posesDir = await this.rootHandle.getDirectoryHandle("poses");
 		const data = {};
+		/** @type {Array<{poseId: string, pitch: string, yaw: string, fileName: string, fileHandle: FileSystemFileHandle}>} */
+		const fileEntries = [];
 
 		for await (const [poseId, poseHandle] of posesDir.entries()) {
+			this.checkAbort(signal);
 			if (poseHandle.kind !== "directory") continue;
 
-			data[poseId] = {};
-
 			for await (const [pitch, pitchHandle] of poseHandle.entries()) {
+				this.checkAbort(signal);
 				if (pitchHandle.kind !== "directory") continue;
 
-				data[poseId][pitch] = {};
-
 				for await (const [yaw, yawHandle] of pitchHandle.entries()) {
+					this.checkAbort(signal);
 					if (yawHandle.kind !== "directory") continue;
 
-					data[poseId][pitch][yaw] = [];
-
 					for await (const [fileName, fileHandle] of yawHandle.entries()) {
+						this.checkAbort(signal);
 						if (fileHandle.kind !== "file") continue;
-
-						const file = await fileHandle.getFile();
-						data[poseId][pitch][yaw].push({
-							fileName,
-							file
-						});
+						fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
 					}
 				}
 			}
+		}
+
+		const total = fileEntries.length;
+		let loaded = 0;
+		onProgress?.({ loaded, total });
+
+		for (const { poseId, pitch, yaw, fileName, fileHandle } of fileEntries) {
+			this.checkAbort(signal);
+			data[poseId] ??= {};
+			data[poseId][pitch] ??= {};
+			data[poseId][pitch][yaw] ??= [];
+
+			const file = await fileHandle.getFile();
+			data[poseId][pitch][yaw].push({
+				fileName,
+				file
+			});
+			loaded += 1;
+			onProgress?.({ loaded, total });
 		}
 
 		return data;

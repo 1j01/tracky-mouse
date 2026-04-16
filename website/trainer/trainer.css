@@ -3,6 +3,23 @@
 	color: white;
 }
 
+.controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+#loading-progress {
+	width: 180px;
+	height: 16px;
+}
+
+#loading-status {
+	min-width: 140px;
+	font-size: 0.9rem;
+}
+
 #samples-grid {
 	position: relative;
 	perspective: 500px;
