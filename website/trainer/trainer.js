@@ -14,6 +14,7 @@ const poses = {
 };
 
 let currentPose = Object.keys(poses)[0];
+let currentBucket = null;
 
 const MOUTH_MESH_ANNOTATIONS = {
 	lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
@@ -63,7 +64,6 @@ function headTiltToBucket(headTilt) {
 	return { column, row, yaw, pitch };
 
 }
-
 
 function recordSnapshot(facemeshPrediction, headTilt, video) {
 	const mouthBoundingBox = { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity };
@@ -153,6 +153,13 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		bucket.element.dataset.count = bucket.samples.length;
 	}
 
+	if (currentBucket) {
+		currentBucket.element.classList.remove("current");
+	}
+
+	currentBucket = bucket;
+
+	currentBucket.element.classList.add("current");
 }
 
 

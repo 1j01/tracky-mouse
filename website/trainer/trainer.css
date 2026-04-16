@@ -18,7 +18,7 @@
 	left: 50%;
 	top: 50%;
 	/* transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px)); */
-	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(150px);
+	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(150px) scale(0.3);
 	transform-origin: center;
 	transform-style: preserve-3d;
 }
@@ -28,6 +28,10 @@
 	left: 0;
 	top: 0;
 	transform: translate(-50%, -50%);
+}
+
+.bucket.current img {
+	border: 2px solid #007bff;
 }
 
 .bucket::before {
