@@ -96,7 +96,7 @@ export class TrainerDB {
 			throw new Error("Folder not selected");
 		}
 
-		const posesDir = await this._getOrCreateDir(this.rootHandle, "poses");
+		const posesDir = await this.rootHandle.getDirectoryHandle("poses");
 		const data = {};
 
 		for await (const [poseId, poseHandle] of posesDir.entries()) {
@@ -135,20 +135,16 @@ export class TrainerDB {
 			throw new Error("Folder not selected");
 		}
 
-		const posesDir = await this._getOrCreateDir(this.rootHandle, "poses");
-		const poseDir = await this._getOrCreateDir(posesDir, poseId);
-		const pitchDir = await this._getOrCreateDir(poseDir, String(pitch));
-		const yawDir = await this._getOrCreateDir(pitchDir, String(yaw));
+		const posesDir = await this.rootHandle.getDirectoryHandle("poses", { create: true });
+		const poseDir = await posesDir.getDirectoryHandle(poseId, { create: true });
+		const pitchDir = await poseDir.getDirectoryHandle(String(pitch), { create: true });
+		const yawDir = await pitchDir.getDirectoryHandle(String(yaw), { create: true });
 
 		const fileHandle = await yawDir.getFileHandle(`${n}.png`, { create: true });
 
 		const writable = await fileHandle.createWritable();
 		await writable.write(imageBlob);
 		await writable.close();
-	}
-
-	async _getOrCreateDir(parent, name) {
-		return parent.getDirectoryHandle(name, { create: true });
 	}
 
 	async _verifyPermission(handle, write = false) {
