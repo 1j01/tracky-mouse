@@ -84,6 +84,8 @@ export class TrainerDB {
 		}
 		this.checkAbort(signal);
 
+		let scannedFolders = 0;
+		let scannedFiles = 0;
 		const posesDir = await this.rootHandle.getDirectoryHandle("poses");
 		const data = {};
 		/** @type {Array<{poseId: string, pitch: string, yaw: string, fileName: string, fileHandle: FileSystemFileHandle}>} */
@@ -92,18 +94,26 @@ export class TrainerDB {
 		for await (const [poseId, poseHandle] of posesDir.entries()) {
 			this.checkAbort(signal);
 			if (poseHandle.kind !== "directory") continue;
+			scannedFolders += 1;
+			onProgress?.({ scannedFiles, scannedFolders, total: 0 });
 
 			for await (const [pitch, pitchHandle] of poseHandle.entries()) {
 				this.checkAbort(signal);
 				if (pitchHandle.kind !== "directory") continue;
+				scannedFolders += 1;
+				onProgress?.({ scannedFiles, scannedFolders, total: 0 });
 
 				for await (const [yaw, yawHandle] of pitchHandle.entries()) {
 					this.checkAbort(signal);
 					if (yawHandle.kind !== "directory") continue;
+					scannedFolders += 1;
+					onProgress?.({ scannedFiles, scannedFolders, total: 0 });
 
 					for await (const [fileName, fileHandle] of yawHandle.entries()) {
 						this.checkAbort(signal);
 						if (fileHandle.kind !== "file") continue;
+						scannedFiles += 1;
+						onProgress?.({ scannedFiles, scannedFolders, total: 0 });
 						fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
 					}
 				}
@@ -112,7 +122,7 @@ export class TrainerDB {
 
 		const total = fileEntries.length;
 		let loaded = 0;
-		onProgress?.({ loaded, total });
+		onProgress?.({ scannedFiles, scannedFolders, loaded, total });
 
 		for (const { poseId, pitch, yaw, fileName, fileHandle } of fileEntries) {
 			this.checkAbort(signal);
@@ -126,7 +136,7 @@ export class TrainerDB {
 				file
 			});
 			loaded += 1;
-			onProgress?.({ loaded, total });
+			onProgress?.({ scannedFiles, scannedFolders, loaded, total });
 		}
 
 		return data;

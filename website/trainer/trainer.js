@@ -72,10 +72,10 @@ function updateLoadingStatus(message) {
 	loadingStatus.textContent = message;
 }
 
-function updateLoadingProgress(loaded, total) {
+function updateLoadingProgress({ scannedFiles, scannedFolders, loaded, total }) {
 	loadingProgress.max = Math.max(total, 1);
 	loadingProgress.value = Math.min(loaded, loadingProgress.max);
-	updateLoadingStatus(total > 0 ? `Loading samples: ${loaded}/${total}` : "Loading samples: 0/0");
+	updateLoadingStatus(total > 0 ? `Loading samples: ${loaded}/${total}` : `Scanning folders: ${scannedFolders}, files: ${scannedFiles}`);
 }
 
 function setLoadingState(isLoading) {
@@ -107,12 +107,10 @@ function enableRecordingControls() {
 
 async function loadImagesAndEnableRecording(signal) {
 	try {
-		updateLoadingProgress(0, 0);
+		updateLoadingProgress({ scannedFiles: 0, scannedFolders: 0, loaded: 0, total: 0 });
 		const existingImageFiles = await db.load({
 			signal,
-			onProgress: ({ loaded, total }) => {
-				updateLoadingProgress(loaded, total);
-			},
+			onProgress: updateLoadingProgress,
 		});
 		reset(); // in case of switching folders, clear out old samples
 		for (const poseId in existingImageFiles) {
