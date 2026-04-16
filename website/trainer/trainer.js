@@ -40,6 +40,7 @@ for (const [poseId, pose] of Object.entries(poses)) {
 	const li = document.createElement("li");
 	li.textContent = pose.label;
 	li.title = pose.description;
+	li.classList.toggle("selected", poseId === currentPose);
 	document.getElementById("poses-list").appendChild(li);
 	li.addEventListener("click", () => {
 		currentPose = poseId;
