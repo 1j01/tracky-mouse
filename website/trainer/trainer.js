@@ -3,6 +3,8 @@ import { TrainerDB } from "./db.js";
 
 const db = new TrainerDB();
 
+const mouthCanvas = document.getElementById("mouth-canvas");
+
 const poses = {
 	"tongue-center": { label: "Tongue Center", description: "Stick your tongue straight out." },
 	"tongue-left": { label: "Tongue Left", description: "Stick your tongue out to the left." },
@@ -94,7 +96,6 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		y: mouthBoundingBox.centerY - captureSize / 2,
 	};
 
-	const mouthCanvas = document.getElementById("mouth-canvas");
 	const ctx = mouthCanvas.getContext("2d");
 	ctx.clearRect(0, 0, mouthCanvas.width, mouthCanvas.height);
 	ctx.drawImage(
@@ -149,6 +150,8 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		bucket.samples.push(sample);
 		sample.img.width = 50;
 		sample.img.height = 50;
+		// sample.img.dataset.ordinal = bucket.samples.length;
+		sample.img.style.setProperty("--ordinal", bucket.samples.length);
 		bucket.element.appendChild(sample.img);
 		bucket.element.dataset.count = bucket.samples.length;
 	}

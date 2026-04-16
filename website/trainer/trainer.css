@@ -24,11 +24,35 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	transform: translate(-50%, -50%);
+	/* transform: translate(-50%, -50%); */
+	transform: translate(-50%, -50%) translateZ(calc(var(--ordinal) * 10px));
+	border: 2px solid white;
 }
 
+/* .bucket img:nth-child(1) {
+	transform: translate(-50%, -50%) translateZ(10px);
+}
+
+.bucket img:nth-child(2) {
+	transform: translate(-50%, -50%) translateZ(20px);
+}
+
+.bucket img:nth-child(3) {
+	transform: translate(-50%, -50%) translateZ(30px);
+}
+
+.bucket img:nth-child(4) {
+	transform: translate(-50%, -50%) translateZ(40px);
+}
+
+.bucket img:nth-child(5) {
+	transform: translate(-50%, -50%) translateZ(50px);
+} */
+
+
+
 .bucket.current img {
-	border: 2px solid #007bff;
+	border: 2px solid #007bff !important;
 }
 
 .bucket::before {
