@@ -85,8 +85,13 @@ async function loadImagesAndEnableRecording() {
 		}
 		console.log("Loaded existing samples from database");
 	} catch (err) {
-		console.error("Failed to load existing samples from database:", err);
-		alert("Failed to load existing samples from database:\n\n" + err.message);
+		if (err.name === "NotFoundError") {
+			console.log("No existing samples found in database");
+		} else {
+			console.error("Failed to load existing samples from database:", err);
+			alert("Failed to load existing samples from database:\n\n" + err.message);
+			return;
+		}
 	}
 	if (!toggleRecordingButton.hasAttribute("disabled")) {
 		return;
