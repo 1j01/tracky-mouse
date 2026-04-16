@@ -75,6 +75,7 @@ async function loadImagesAndEnableRecording() {
 							img: document.createElement("img"),
 						};
 						sample.img.src = URL.createObjectURL(file);
+						sample.img.dataset.saveState = "saved";
 						trackAndDisplaySample(sample);
 					}
 				}
