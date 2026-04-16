@@ -49,6 +49,19 @@ for (const [poseId, pose] of Object.entries(poses)) {
 	});
 }
 
+function headTiltToBucket(headTilt) {
+	const maxYaw = 40; // degrees
+	const maxPitch = 40; // degrees
+	const yawBucketCount = 9;
+	const pitchBucketCount = 9;
+
+	const yaw = Math.max(-maxYaw, Math.min(maxYaw, headTilt.yaw));
+	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch));
+	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
+	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
+	return { column, row };
+
+}
 
 
 function recordSnapshot(facemeshPrediction, headTilt, video) {
@@ -62,6 +75,63 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			if (y > mouthBoundingBox.yMax) mouthBoundingBox.yMax = y;
 		}
 	}
+	const paddingFraction = 0.5;
+	mouthBoundingBox.xMin -= (mouthBoundingBox.xMax - mouthBoundingBox.xMin) * paddingFraction;
+	mouthBoundingBox.xMax += (mouthBoundingBox.xMax - mouthBoundingBox.xMin) * paddingFraction;
+	mouthBoundingBox.yMin -= (mouthBoundingBox.yMax - mouthBoundingBox.yMin) * paddingFraction;
+	mouthBoundingBox.yMax += (mouthBoundingBox.yMax - mouthBoundingBox.yMin) * paddingFraction;
+
+	const mouthCanvas = document.getElementById("mouth-canvas");
+	const ctx = mouthCanvas.getContext("2d");
+	const width = mouthBoundingBox.xMax - mouthBoundingBox.xMin;
+	const height = mouthBoundingBox.yMax - mouthBoundingBox.yMin;
+	ctx.clearRect(0, 0, mouthCanvas.width, mouthCanvas.height);
+	ctx.drawImage(
+		video,
+		mouthBoundingBox.xMin,
+		mouthBoundingBox.yMin,
+		width,
+		height,
+		0,
+		0,
+		mouthCanvas.width,
+		mouthCanvas.height
+	);
+
+
+	const bucketAngles = headTiltToBucket(headTilt);
+	const pose = poses[currentPose];
+	if (!pose.buckets[bucketAngles.column]) {
+		pose.buckets[bucketAngles.column] = {};
+	}
+	let bucket = pose.buckets[bucketAngles.column][bucketAngles.row];
+	if (!bucket) {
+		bucket = pose.buckets[bucketAngles.column][bucketAngles.row] = {
+			samples: [],
+			element: document.createElement("div"),
+		};
+		document.getElementById("samples-grid").append(bucket.element);
+		bucket.element.style.transform = `rotateX(${bucketAngles.pitch}deg) rotateY(${bucketAngles.yaw}deg)`;
+	}
+
+	if (bucket.samples.length < 5) {
+		const sample = {
+			blobPromise: new Promise((resolve) => {
+				mouthCanvas.toBlob((blob) => {
+					resolve(blob);
+					sample.img.src = URL.createObjectURL(blob);
+				});
+			}),
+			timestamp: Date.now(),
+			img: document.createElement("img"),
+		};
+		sample.img.width = 50;
+		sample.img.height = 50;
+		bucket.element.appendChild(sample.img);
+
+		bucket.samples.push(sample);
+	}
+
 }
 
 
