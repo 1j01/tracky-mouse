@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<!-- TODO: tighten CSP if possible; it seems WASM requires 'unsafe-eval' in Chrome... https://issues.chromium.org/issues/41457889 -->
+	<!-- I worked hard to avoid 'unsafe-eval', I invented a whole tool for it (see eval-is-evil.html), so this is a bit of a bummer. -->
+	<meta http-equiv="Content-Security-Policy"
+		content="default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://fonts.googleapis.com https://fonts.gstatic.com">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contribute Training Data - Tracky Mouse</title>
+	<meta name="description" content="Help build a new feature">
+	<link rel="preload" href="core/lib/no-eval.js" as="script">
+	<link rel="preload" href="core/lib/clmtrackr.js" as="script">
+	<link rel="stylesheet" type="text/css" href="core/tracky-mouse.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="tracky-mouse-website.css">
+	<link rel="stylesheet" type="text/css" href="trainer/trainer.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
+</head>
+
+<body>
+	<header>
+		<img src="images/tracky-mouse-logo-512.png" width="32" height="32" alt="" class="logo">
+		<h1>Contribute Training Data</h1>
+	</header>
+	<main>
+		<div id="trainer-applet">
+			<div id="tracky-mouse"></div>
+			<div class="controls">
+				<button id="select-folder">Select Dataset Folder</button>
+			</div>
+			<ul id="samples-grid"></ul>
+			<ul id="poses-list"></ul>
+			<canvas id="mouth-canvas" width="200" height="200"></canvas>
+		</div>
+	</main>
+	<footer>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="https://github.com/1j01/tracky-mouse">GitHub</a>
+			<a href="goodies.html">Wallpapers & Other Downloads</a>
+			<a href="privacy.html">Privacy Policy</a>
+			<a href="mailto:isaiahodhner@gmail.com">Send Email</a>
+			<!-- <a href="privacy.html">Privacy Policy</a> -->
+			<!-- <a href="api.html">API</a> -->
+			<!-- <a href="cli.html">CLI</a> -->
+			<!-- <a href="contact.html">Contact</a> -->
+		</nav>
+		<p>
+			&copy; 2026 Isaiah Odhner
+		</p>
+	</footer>
+	<script defer src="core/lib/face-landmarks-detection.min.js"></script>
+	<script defer src="core/tracky-mouse.js"></script>
+	<!-- `<script type="module">` is implicitly deferred, so this will load after the library despite `defer` on the library -->
+	<script type="module" src="trainer/trainer.js"></script>
+
+</body>
+
+</html>

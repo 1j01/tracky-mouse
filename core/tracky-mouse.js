@@ -4393,6 +4393,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		_waitForSettingsLoaded() {
 			return settingsLoadedPromise;
 		},
+		get _facemeshPrediction() {
+			return facemeshPrediction;
+		},
+		get _headTilt() {
+			return headTilt;
+		},
+		get _video() {
+			return cameraVideo;
+		},
 		dispose() {
 			// TODO: re-structure so that cleanup can succeed even if initialization fails
 			// OOP would help with this, by storing references in an object, but it doesn't necessarily
@@ -4487,11 +4496,13 @@ TrackyMouse.init = function (div, opts = {}) {
 
 	createInner();
 
-	return {
-		dispose() {
-			inner.dispose();
-		},
-	};
+	return new Proxy({}, {
+		get(_target, prop) {
+			if (prop in inner) {
+				return inner[prop];
+			}
+		}
+	});
 
 };
 
