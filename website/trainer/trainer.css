@@ -4,11 +4,8 @@
 }
 
 #samples-grid {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	perspective: 200px;
 	position: relative;
+	perspective: 200px;
 	min-height: 500px;
 	transform-style: preserve-3d;
 }

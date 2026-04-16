@@ -61,7 +61,7 @@ function headTiltToBucket(headTilt) {
 	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch * 180 / Math.PI));
 	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
 	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
-	return { column, row, yaw, pitch };
+	return { column, row, yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
 
 }
 
