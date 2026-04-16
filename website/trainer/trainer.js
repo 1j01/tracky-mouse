@@ -114,10 +114,9 @@ function headTiltToBucket(headTilt) {
 	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
 	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
 	return { column, row, yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
-
 }
 
-function recordSnapshot(facemeshPrediction, headTilt, video) {
+function captureMouthImage(video, facemeshPrediction) {
 	const mouthBoundingBox = { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity };
 	for (const part of Object.values(MOUTH_MESH_ANNOTATIONS)) {
 		for (const index of part) {
@@ -159,7 +158,10 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		mouthCanvas.width,
 		mouthCanvas.height
 	);
+}
 
+function recordSnapshot(facemeshPrediction, headTilt, video) {
+	captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
 	if (!pose.buckets[bucketAngles.column]) {
