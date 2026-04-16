@@ -1,30 +1,4 @@
-/*
-AI prompt used:
-> I'm planning to use the FS Access API as a database of images, in this structure:
-> `<selected folder>/poses/<pose id>/<pitch>/<yaw>/<n>.png` 
-> 
-> 
-> Implement a storage class like so:
-> 
-> export class TrainerDB {
-> 	selectFolder() {
-> 
-> 	}
-> 	load() {
-> 
-> 	}
-> 	save(poseId, pitch, yaw, n, image) {
-> 
-> 	}
-> }
-> 
-> Warn if selecting `poses` folder that you should select the parent folder.
 
-Followup:
-> Persist folder access.
-
-+ removed a stupid wrapper around getDirectoryHandle.
-*/
 const DB_NAME = "trainer-db";
 const STORE_NAME = "handles";
 const KEY = "root";
@@ -71,7 +45,7 @@ export class TrainerDB {
 		const handle = await idbGet(KEY);
 		if (!handle) return false;
 
-		const hasPermission = await this._verifyPermission(handle);
+		const hasPermission = await handle.queryPermission({ mode: "readwrite" }) === "granted";
 		if (!hasPermission) return false;
 
 		this.rootHandle = handle;
@@ -87,7 +61,11 @@ export class TrainerDB {
 			);
 		}
 
-		await this._verifyPermission(handle, true);
+		// const hasPermission =
+		await handle.requestPermission({ mode: "readwrite" }) === "granted";
+		// if (!hasPermission) {
+		// 	throw new Error("Permission denied");
+		// }
 
 		this.rootHandle = handle;
 		await idbSet(KEY, handle);
@@ -147,19 +125,5 @@ export class TrainerDB {
 		const writable = await fileHandle.createWritable();
 		await writable.write(imageBlob);
 		await writable.close();
-	}
-
-	async _verifyPermission(handle, write = false) {
-		const opts = { mode: write ? "readwrite" : "read" };
-
-		if ((await handle.queryPermission(opts)) === "granted") {
-			return true;
-		}
-
-		if ((await handle.requestPermission(opts)) === "granted") {
-			return true;
-		}
-
-		return false;
 	}
 }

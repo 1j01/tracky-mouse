@@ -4,6 +4,8 @@ import { TrainerDB } from "./db.js";
 const db = new TrainerDB();
 
 const mouthCanvas = document.getElementById("mouth-canvas");
+const toggleRecordingButton = document.getElementById("toggle-recording");
+const selectFolderButton = document.getElementById("select-folder");
 
 const poses = {
 	"mouth-closed": { label: "Mouth Closed", description: "Keep your mouth closed, but make various facial expressions." },
@@ -17,6 +19,8 @@ const poses = {
 
 let currentPose = Object.keys(poses)[0];
 let currentBucket = null;
+let recording = false;
+const maxSamplesPerBucket = 5;
 
 const MOUTH_MESH_ANNOTATIONS = {
 	lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
@@ -25,8 +29,54 @@ const MOUTH_MESH_ANNOTATIONS = {
 	lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
 };
 
+function enableRecording() {
+	if (!toggleRecordingButton.hasAttribute("disabled")) {
+		return;
+	}
+	toggleRecordingButton.removeAttribute("disabled");
+	toggleRecordingButton.addEventListener("click", () => {
+		recording = !recording;
+		toggleRecordingButton.textContent = recording ? "Stop Recording" : "Start Recording";
+		toggleRecordingButton.setAttribute("aria-pressed", recording);
+	});
+}
+
 function init() {
 	const trackyMouse = TrackyMouse.init(document.getElementById("tracky-mouse"));
+
+	selectFolderButton.addEventListener("click", async () => {
+		if (!window.showDirectoryPicker) {
+			alert("The File System Access API is not supported in this browser. Please use a compatible browser like Chrome or Edge.");
+			return;
+		}
+		try {
+			await db.selectFolder();
+			if (!db.rootHandle) {
+				// alert("Folder selection was cancelled or failed. Please try again.");
+				return;
+			}
+			// alert("Folder selected successfully! You can now start recording samples.");
+			enableRecording();
+		} catch (err) {
+			console.error("Failed to select folder:", err);
+			alert("Failed to select folder. Make sure you grant the necessary permissions and try again.");
+		}
+	});
+
+	// addEventListener("click", () => {
+	db.init().then((hasAccess) => {
+		if (!hasAccess) {
+			console.log("No access to database, user needs to select folder");
+			// alert("Please select a folder to store the training data.");
+			return;
+		}
+		// db.load(); // TODO: load existing images
+		enableRecording();
+	}).catch((err) => {
+		console.error("Failed to initialize database:", err);
+		alert("Failed to access the database:\n\n" + err.message);
+	});
+	// }, { once: true });
 
 	setInterval(() => {
 		if (trackyMouse._facemeshPrediction) {
@@ -135,13 +185,23 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		bucket.element.style.setProperty("--yaw", `${-bucketAngles.yaw}deg`);
 	}
 
-	if (bucket.samples.length < 5) {
+	if (bucket.samples.length < maxSamplesPerBucket && recording) {
 		const sample = {
+			poseId: currentPose,
+			pitch: bucketAngles.pitch,
+			yaw: bucketAngles.yaw,
+			ordinal: bucket.samples.length,
 			blobPromise: new Promise((resolve) => {
 				mouthCanvas.toBlob((blob) => {
 					resolve(blob);
 					// TODO: display instantly instead of waiting for the blob to be created
 					sample.img.src = URL.createObjectURL(blob);
+					db.save(sample.poseId, sample.pitch, sample.yaw, sample.ordinal, blob).then(() => {
+						sample.img.dataset.saveState = "saved";
+					}).catch((err) => {
+						console.error("Failed to save sample:", err);
+						sample.img.dataset.saveState = "error";
+					});
 				});
 			}),
 			timestamp: Date.now(),
