@@ -3,20 +3,27 @@
 	color: white;
 }
 
-.bucket {
-	display: inline-block;
-	width: 120px;
-	height: 120px;
-	border: 2px solid black;
-	margin: 10px;
+#samples-grid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	perspective: 1000px;
 	position: relative;
+	min-height: 500px;
+	transform-style: preserve-3d;
+}
+
+.bucket {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform: translateX(attr(data-column) * 110px) translateY(attr(data-row) * 110px);
 }
 
 .bucket img {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	left: 0;
+	top: 0;
 }
 
 .bucket::before {

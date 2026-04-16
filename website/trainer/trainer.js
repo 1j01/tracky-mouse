@@ -56,11 +56,11 @@ function headTiltToBucket(headTilt) {
 	const yawBucketCount = 9;
 	const pitchBucketCount = 9;
 
-	const yaw = Math.max(-maxYaw, Math.min(maxYaw, headTilt.yaw));
-	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch));
+	const yaw = Math.max(-maxYaw, Math.min(maxYaw, headTilt.yaw * 180 / Math.PI));
+	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch * 180 / Math.PI));
 	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
 	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
-	return { column, row };
+	return { column, row, yaw, pitch };
 
 }
 
@@ -121,11 +121,13 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			element: document.createElement("div"),
 		};
 		document.getElementById("samples-grid").append(bucket.element);
-		bucket.element.style.transform = `rotateX(${bucketAngles.pitch}deg) rotateY(${bucketAngles.yaw}deg)`;
+		// bucket.element.style.transform = `translateZ(500px) rotateY(${bucketAngles.pitch}deg) rotateZ(${bucketAngles.yaw}deg)`;
 		bucket.element.classList.add("bucket");
 		bucket.element.dataset.count = "0";
 		bucket.element.dataset.column = bucketAngles.column;
 		bucket.element.dataset.row = bucketAngles.row;
+		bucket.element.dataset.pitch = bucketAngles.pitch;
+		bucket.element.dataset.yaw = bucketAngles.yaw;
 	}
 
 	if (bucket.samples.length < 5) {
