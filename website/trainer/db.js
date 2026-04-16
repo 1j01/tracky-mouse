@@ -19,22 +19,76 @@ AI prompt used:
 > }
 > 
 > Warn if selecting `poses` folder that you should select the parent folder.
+
+Followup:
+> Persist folder access.
 */
+const DB_NAME = "trainer-db";
+const STORE_NAME = "handles";
+const KEY = "root";
+
+function openDB() {
+	return new Promise((resolve, reject) => {
+		const req = indexedDB.open(DB_NAME, 1);
+
+		req.onupgradeneeded = () => {
+			req.result.createObjectStore(STORE_NAME);
+		};
+
+		req.onsuccess = () => resolve(req.result);
+		req.onerror = () => reject(req.error);
+	});
+}
+
+async function idbSet(key, value) {
+	const db = await openDB();
+	return new Promise((resolve, reject) => {
+		const tx = db.transaction(STORE_NAME, "readwrite");
+		tx.objectStore(STORE_NAME).put(value, key);
+		tx.oncomplete = resolve;
+		tx.onerror = () => reject(tx.error);
+	});
+}
+
+async function idbGet(key) {
+	const db = await openDB();
+	return new Promise((resolve, reject) => {
+		const tx = db.transaction(STORE_NAME, "readonly");
+		const req = tx.objectStore(STORE_NAME).get(key);
+		req.onsuccess = () => resolve(req.result);
+		req.onerror = () => reject(req.error);
+	});
+}
 
 export class TrainerDB {
 	constructor() {
 		this.rootHandle = null;
 	}
 
-	async selectFolder() {
-		this.rootHandle = await window.showDirectoryPicker();
+	async init() {
+		const handle = await idbGet(KEY);
+		if (!handle) return false;
 
-		// Warn if user picked "poses" instead of parent
-		if (this.rootHandle.name === "poses") {
+		const hasPermission = await this._verifyPermission(handle);
+		if (!hasPermission) return false;
+
+		this.rootHandle = handle;
+		return true;
+	}
+
+	async selectFolder() {
+		const handle = await window.showDirectoryPicker();
+
+		if (handle.name === "poses") {
 			console.warn(
 				"You selected the 'poses' folder. Please select its parent folder instead."
 			);
 		}
+
+		await this._verifyPermission(handle, true);
+
+		this.rootHandle = handle;
+		await idbSet(KEY, handle);
 	}
 
 	async load() {
@@ -43,7 +97,6 @@ export class TrainerDB {
 		}
 
 		const posesDir = await this._getOrCreateDir(this.rootHandle, "poses");
-
 		const data = {};
 
 		for await (const [poseId, poseHandle] of posesDir.entries()) {
@@ -87,8 +140,7 @@ export class TrainerDB {
 		const pitchDir = await this._getOrCreateDir(poseDir, String(pitch));
 		const yawDir = await this._getOrCreateDir(pitchDir, String(yaw));
 
-		const fileName = `${n}.png`;
-		const fileHandle = await yawDir.getFileHandle(fileName, { create: true });
+		const fileHandle = await yawDir.getFileHandle(`${n}.png`, { create: true });
 
 		const writable = await fileHandle.createWritable();
 		await writable.write(imageBlob);
@@ -96,6 +148,20 @@ export class TrainerDB {
 	}
 
 	async _getOrCreateDir(parent, name) {
-		return await parent.getDirectoryHandle(name, { create: true });
+		return parent.getDirectoryHandle(name, { create: true });
+	}
+
+	async _verifyPermission(handle, write = false) {
+		const opts = { mode: write ? "readwrite" : "read" };
+
+		if ((await handle.queryPermission(opts)) === "granted") {
+			return true;
+		}
+
+		if ((await handle.requestPermission(opts)) === "granted") {
+			return true;
+		}
+
+		return false;
 	}
 }
