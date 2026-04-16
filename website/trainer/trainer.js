@@ -75,29 +75,38 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			if (y > mouthBoundingBox.yMax) mouthBoundingBox.yMax = y;
 		}
 	}
+	mouthBoundingBox.width = mouthBoundingBox.xMax - mouthBoundingBox.xMin;
+	mouthBoundingBox.height = mouthBoundingBox.yMax - mouthBoundingBox.yMin;
+	mouthBoundingBox.centerX = mouthBoundingBox.xMin + mouthBoundingBox.width / 2;
+	mouthBoundingBox.centerY = mouthBoundingBox.yMin + mouthBoundingBox.height / 2;
 	const paddingFraction = 0.5;
-	mouthBoundingBox.xMin -= (mouthBoundingBox.xMax - mouthBoundingBox.xMin) * paddingFraction;
-	mouthBoundingBox.xMax += (mouthBoundingBox.xMax - mouthBoundingBox.xMin) * paddingFraction;
-	mouthBoundingBox.yMin -= (mouthBoundingBox.yMax - mouthBoundingBox.yMin) * paddingFraction;
-	mouthBoundingBox.yMax += (mouthBoundingBox.yMax - mouthBoundingBox.yMin) * paddingFraction;
+	const captureSize = Math.max(mouthBoundingBox.width, mouthBoundingBox.height) * (1 + 2 * paddingFraction);
+	// TODO: normalize by head size
+	const captureBox = {
+		// x: mouthBoundingBox.xMin - mouthBoundingBox.width * paddingFraction,
+		// y: mouthBoundingBox.yMin - mouthBoundingBox.height * paddingFraction,
+		// width: mouthBoundingBox.width * (1 + 2 * paddingFraction),
+		// height: mouthBoundingBox.height * (1 + 2 * paddingFraction),
+		width: captureSize,
+		height: captureSize,
+		x: mouthBoundingBox.centerX - captureSize / 2,
+		y: mouthBoundingBox.centerY - captureSize / 2,
+	};
 
 	const mouthCanvas = document.getElementById("mouth-canvas");
 	const ctx = mouthCanvas.getContext("2d");
-	const width = mouthBoundingBox.xMax - mouthBoundingBox.xMin;
-	const height = mouthBoundingBox.yMax - mouthBoundingBox.yMin;
 	ctx.clearRect(0, 0, mouthCanvas.width, mouthCanvas.height);
 	ctx.drawImage(
 		video,
-		mouthBoundingBox.xMin,
-		mouthBoundingBox.yMin,
-		width,
-		height,
+		captureBox.x,
+		captureBox.y,
+		captureBox.width,
+		captureBox.height,
 		0,
 		0,
 		mouthCanvas.width,
 		mouthCanvas.height
 	);
-
 
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
@@ -119,6 +128,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			blobPromise: new Promise((resolve) => {
 				mouthCanvas.toBlob((blob) => {
 					resolve(blob);
+					// TODO: display instantly instead of waiting for the blob to be created
 					sample.img.src = URL.createObjectURL(blob);
 				});
 			}),
