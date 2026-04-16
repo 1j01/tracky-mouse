@@ -1,4 +1,14 @@
 /* global TrackyMouse */
+
+/**
+ * @typedef {Object} BoundingBox
+ * @property {number} xMin
+ * @property {number} yMin
+ * @property {number} xMax
+ * @property {number} yMax
+ * @property {number} width
+ * @property {number} height
+ */
 import { TrainerDB } from "./db.js";
 
 const db = new TrainerDB();
@@ -117,7 +127,8 @@ function headTiltToBucket(headTilt) {
 }
 
 function captureMouthImage(video, facemeshPrediction) {
-	const mouthBoundingBox = { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity };
+	/** @type {BoundingBox} */
+	const mouthBoundingBox = { xMin: Infinity, xMax: -Infinity, yMin: Infinity, yMax: -Infinity, width: -Infinity, height: -Infinity };
 	for (const part of Object.values(MOUTH_MESH_ANNOTATIONS)) {
 		for (const index of part) {
 			const { x, y } = facemeshPrediction.keypoints[index];
@@ -129,28 +140,27 @@ function captureMouthImage(video, facemeshPrediction) {
 	}
 	mouthBoundingBox.width = mouthBoundingBox.xMax - mouthBoundingBox.xMin;
 	mouthBoundingBox.height = mouthBoundingBox.yMax - mouthBoundingBox.yMin;
-	mouthBoundingBox.centerX = mouthBoundingBox.xMin + mouthBoundingBox.width / 2;
-	mouthBoundingBox.centerY = mouthBoundingBox.yMin + mouthBoundingBox.height / 2;
+	const mouthCenterX = mouthBoundingBox.xMin + mouthBoundingBox.width / 2;
+	const mouthCenterY = mouthBoundingBox.yMin + mouthBoundingBox.height / 2;
 	const paddingFraction = 0.5;
 	const captureSize = Math.max(mouthBoundingBox.width, mouthBoundingBox.height) * (1 + 2 * paddingFraction);
 	// TODO: normalize by head size
+	/** @type {BoundingBox} */
 	const captureBox = {
-		// x: mouthBoundingBox.xMin - mouthBoundingBox.width * paddingFraction,
-		// y: mouthBoundingBox.yMin - mouthBoundingBox.height * paddingFraction,
-		// width: mouthBoundingBox.width * (1 + 2 * paddingFraction),
-		// height: mouthBoundingBox.height * (1 + 2 * paddingFraction),
+		xMin: mouthCenterX - captureSize / 2,
+		yMin: mouthCenterY - captureSize / 2,
+		xMax: mouthCenterX + captureSize / 2,
+		yMax: mouthCenterY + captureSize / 2,
 		width: captureSize,
 		height: captureSize,
-		x: mouthBoundingBox.centerX - captureSize / 2,
-		y: mouthBoundingBox.centerY - captureSize / 2,
 	};
 
 	const ctx = mouthCanvas.getContext("2d");
 	ctx.clearRect(0, 0, mouthCanvas.width, mouthCanvas.height);
 	ctx.drawImage(
 		video,
-		captureBox.x,
-		captureBox.y,
+		captureBox.xMin,
+		captureBox.yMin,
 		captureBox.width,
 		captureBox.height,
 		0,
