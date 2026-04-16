@@ -28,9 +28,23 @@
 		<h1>Contribute Training Data</h1>
 	</header>
 	<main>
-		<p>
+		<div id="trainer-applet">
+			<div class="controls">
+				<button id="selectFolder">Select Dataset Folder</button>
+				<button id="startCamera">Allow Camera</button>
+				<select id="cameraSelect"></select>
+			</div>
 
-		</p>
+			<div class="status">
+				<div id="poseLabel"></div>
+				<div id="progress"></div>
+			</div>
+
+			<video id="video" autoplay playsinline></video>
+			<canvas id="overlay"></canvas>
+
+			<div id="grid"></div>
+		</div>
 	</main>
 	<footer>
 		<nav>
@@ -49,7 +63,7 @@
 		</p>
 	</footer>
 	<script src="core/lib/face-landmarks-detection.min.js"></script>
-	<script type="module" src="trainer.js"></script>
+	<script type="module" src="trainer/trainer.js"></script>
 
 </body>
 

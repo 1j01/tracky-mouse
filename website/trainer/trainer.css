@@ -1,0 +1,80 @@
+body {
+	font-family: sans-serif;
+	background: #111;
+	color: white;
+	text-align: center;
+}
+
+video {
+	width: 480px;
+	border-radius: 12px;
+}
+
+#overlay {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.controls {
+	margin: 10px;
+}
+
+#grid {
+	display: grid;
+	grid-template-columns: repeat(9, 80px);
+	gap: 6px;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.bucket {
+	width: 80px;
+	height: 80px;
+	background: #222;
+	position: relative;
+	border-radius: 8px;
+}
+
+.bucket img {
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border: 2px solid white;
+	border-radius: 6px;
+}
+
+.bucket img:nth-child(1) {
+	transform: rotate(-5deg);
+	top: 5px;
+	left: 5px;
+}
+
+.bucket img:nth-child(2) {
+	transform: rotate(5deg);
+	top: 10px;
+	left: 10px;
+}
+
+.bucket img:nth-child(3) {
+	transform: rotate(-3deg);
+	top: 15px;
+	left: 15px;
+}
+
+.bucket img:nth-child(4) {
+	transform: rotate(3deg);
+	top: 20px;
+	left: 20px;
+}
+
+.bucket img:nth-child(5) {
+	transform: rotate(-2deg);
+	top: 25px;
+	left: 25px;
+}
+
+.filled {
+	outline: 2px solid lime;
+}
