@@ -122,6 +122,10 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		};
 		document.getElementById("samples-grid").append(bucket.element);
 		bucket.element.style.transform = `rotateX(${bucketAngles.pitch}deg) rotateY(${bucketAngles.yaw}deg)`;
+		bucket.element.classList.add("bucket");
+		bucket.element.dataset.count = "0";
+		bucket.element.dataset.column = bucketAngles.column;
+		bucket.element.dataset.row = bucketAngles.row;
 	}
 
 	if (bucket.samples.length < 5) {
@@ -136,11 +140,11 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			timestamp: Date.now(),
 			img: document.createElement("img"),
 		};
+		bucket.samples.push(sample);
 		sample.img.width = 50;
 		sample.img.height = 50;
 		bucket.element.appendChild(sample.img);
-
-		bucket.samples.push(sample);
+		bucket.element.dataset.count = bucket.samples.length;
 	}
 
 }
