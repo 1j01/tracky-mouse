@@ -107,6 +107,7 @@ function init() {
 		}
 		try {
 			// TODO: disable recording while changing folders
+			// and reset data
 			await db.selectFolder();
 			if (!db.rootHandle) {
 				return;
@@ -150,6 +151,9 @@ for (const [poseId, pose] of Object.entries(poses)) {
 		currentPose = poseId;
 		for (const el of document.querySelectorAll("#poses-list li")) {
 			el.classList.toggle("selected", el === li);
+		}
+		for (const el of document.querySelectorAll(".bucket")) {
+			el.style.display = el.dataset.poseId === currentPose ? "" : "none";
 		}
 	});
 }
@@ -239,8 +243,10 @@ function trackAndDisplaySample(sample) {
 		bucket.element.dataset.count = "0";
 		bucket.element.dataset.pitch = sample.pitch;
 		bucket.element.dataset.yaw = sample.yaw;
+		bucket.element.dataset.poseId = sample.poseId;
 		bucket.element.style.setProperty("--pitch", `${-sample.pitch}deg`);
 		bucket.element.style.setProperty("--yaw", `${-sample.yaw}deg`);
+		bucket.element.style.display = sample.poseId === currentPose ? "" : "none";
 	}
 
 	bucket.samples.push(sample);
