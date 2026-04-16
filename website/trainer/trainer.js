@@ -113,7 +113,7 @@ function headTiltToBucket(headTilt) {
 	const pitch = Math.max(-maxPitch, Math.min(maxPitch, headTilt.pitch * 180 / Math.PI));
 	const column = Math.floor(((yaw + maxYaw) / (2 * maxYaw)) * yawBucketCount);
 	const row = Math.floor(((pitch + maxPitch) / (2 * maxPitch)) * pitchBucketCount);
-	return { column, row, yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
+	return { yaw: -maxYaw + (column * (2 * maxYaw) / (yawBucketCount - 1)), pitch: -maxPitch + (row * (2 * maxPitch) / (pitchBucketCount - 1)) };
 }
 
 function captureMouthImage(video, facemeshPrediction) {
@@ -164,12 +164,12 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 	captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
-	if (!pose.buckets[bucketAngles.column]) {
-		pose.buckets[bucketAngles.column] = {};
+	if (!pose.buckets[bucketAngles.pitch]) {
+		pose.buckets[bucketAngles.pitch] = {};
 	}
-	let bucket = pose.buckets[bucketAngles.column][bucketAngles.row];
+	let bucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw];
 	if (!bucket) {
-		bucket = pose.buckets[bucketAngles.column][bucketAngles.row] = {
+		bucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw] = {
 			samples: [],
 			element: document.createElement("div"),
 		};
@@ -177,12 +177,8 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 		// bucket.element.style.transform = `translateZ(500px) rotateY(${bucketAngles.pitch}deg) rotateZ(${bucketAngles.yaw}deg)`;
 		bucket.element.classList.add("bucket");
 		bucket.element.dataset.count = "0";
-		bucket.element.dataset.column = bucketAngles.column;
-		bucket.element.dataset.row = bucketAngles.row;
 		bucket.element.dataset.pitch = bucketAngles.pitch;
 		bucket.element.dataset.yaw = bucketAngles.yaw;
-		bucket.element.style.setProperty("--column", `${bucketAngles.column}`);
-		bucket.element.style.setProperty("--row", `${bucketAngles.row}`);
 		bucket.element.style.setProperty("--pitch", `${-bucketAngles.pitch}deg`);
 		bucket.element.style.setProperty("--yaw", `${-bucketAngles.yaw}deg`);
 	}
