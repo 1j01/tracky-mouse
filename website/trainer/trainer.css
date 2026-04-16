@@ -5,7 +5,7 @@
 
 #samples-grid {
 	position: relative;
-	perspective: 200px;
+	perspective: 500px;
 	min-height: 500px;
 	transform-style: preserve-3d;
 }
@@ -15,7 +15,7 @@
 	left: 50%;
 	top: 50%;
 	/* transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px)); */
-	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(150px) scale(0.3);
+	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(250px) scale(0.8);
 	transform-origin: center;
 	transform-style: preserve-3d;
 }
@@ -46,4 +46,12 @@
 	justify-content: center;
 	font-size: 12px;
 	transform: translateZ(5px);
+}
+
+.bucket[data-count="5"]::before {
+	background-color: green;
+}
+
+.bucket[data-count="5"] img {
+	border: 2px solid #006d2d;
 }
