@@ -58,6 +58,12 @@ const MOUTH_MESH_ANNOTATIONS = {
 	lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
 };
 
+function setRecording(shouldRecord) {
+	recording = shouldRecord;
+	toggleRecordingButton.textContent = recording ? "Stop Recording" : "Start Recording";
+	toggleRecordingButton.setAttribute("aria-pressed", recording);
+}
+
 async function loadImagesAndEnableRecording() {
 	try {
 		const existingImageFiles = await db.load();
@@ -91,9 +97,10 @@ async function loadImagesAndEnableRecording() {
 	}
 	toggleRecordingButton.removeAttribute("disabled");
 	toggleRecordingButton.addEventListener("click", () => {
-		recording = !recording;
-		toggleRecordingButton.textContent = recording ? "Stop Recording" : "Start Recording";
-		toggleRecordingButton.setAttribute("aria-pressed", recording);
+		setRecording(!recording);
+	});
+	window.addEventListener("blur", () => {
+		setRecording(false);
 	});
 }
 
@@ -106,8 +113,8 @@ function init() {
 			return;
 		}
 		try {
-			// TODO: disable recording while changing folders
-			// and reset data
+			// TODO: reset data after selecting new folder
+			setRecording(false);
 			await db.selectFolder();
 			if (!db.rootHandle) {
 				return;
