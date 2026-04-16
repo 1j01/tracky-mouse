@@ -99,7 +99,7 @@ export class TrainerDB {
 
 						const file = await fileHandle.getFile();
 						data[poseId][pitch][yaw].push({
-							name: fileName,
+							fileName,
 							file
 						});
 					}

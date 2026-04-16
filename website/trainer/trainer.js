@@ -58,7 +58,33 @@ const MOUTH_MESH_ANNOTATIONS = {
 	lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
 };
 
-function enableRecording() {
+async function loadImagesAndEnableRecording() {
+	try {
+		const existingImageFiles = await db.load();
+		for (const poseId in existingImageFiles) {
+			for (const pitch in existingImageFiles[poseId]) {
+				for (const yaw in existingImageFiles[poseId][pitch]) {
+					for (const { fileName, file } of existingImageFiles[poseId][pitch][yaw]) {
+						const sample = {
+							poseId,
+							pitch: parseFloat(pitch),
+							yaw: parseFloat(yaw),
+							ordinal: parseInt(fileName.split(".")[0]),
+							blobPromise: Promise.resolve(file),
+							timestamp: file.lastModified,
+							img: document.createElement("img"),
+						};
+						sample.img.src = URL.createObjectURL(file);
+						trackAndDisplaySample(sample);
+					}
+				}
+			}
+		}
+		console.log("Loaded existing samples from database");
+	} catch (err) {
+		console.error("Failed to load existing samples from database:", err);
+		alert("Failed to load existing samples from database:\n\n" + err.message);
+	}
 	if (!toggleRecordingButton.hasAttribute("disabled")) {
 		return;
 	}
@@ -79,33 +105,28 @@ function init() {
 			return;
 		}
 		try {
+			// TODO: disable recording while changing folders
 			await db.selectFolder();
 			if (!db.rootHandle) {
-				// alert("Folder selection was cancelled or failed. Please try again.");
 				return;
 			}
-			// alert("Folder selected successfully! You can now start recording samples.");
-			enableRecording();
+			loadImagesAndEnableRecording();
 		} catch (err) {
 			console.error("Failed to select folder:", err);
 			alert("Failed to select folder. Make sure you grant the necessary permissions and try again.");
 		}
 	});
 
-	// addEventListener("click", () => {
 	db.init().then((hasAccess) => {
 		if (!hasAccess) {
 			console.log("No access to database, user needs to select folder");
-			// alert("Please select a folder to store the training data.");
 			return;
 		}
-		// db.load(); // TODO: load existing images
-		enableRecording();
+		loadImagesAndEnableRecording();
 	}).catch((err) => {
 		console.error("Failed to initialize database:", err);
 		alert("Failed to access the database:\n\n" + err.message);
 	});
-	// }, { once: true });
 
 	setInterval(() => {
 		if (trackyMouse._facemeshPrediction) {
