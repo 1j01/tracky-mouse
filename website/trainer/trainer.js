@@ -1,6 +1,17 @@
 /* global TrackyMouse */
 
 /**
+ * @typedef {Object} Sample
+ * @property {string} poseId
+ * @property {number} pitch
+ * @property {number} yaw
+ * @property {number} ordinal
+ * @property {Promise<Blob>} blobPromise
+ * @property {number} timestamp
+ * @property {HTMLImageElement} img
+ */
+
+/**
  * @typedef {Object} BoundingBox
  * @property {number} xMin
  * @property {number} yMin
@@ -9,6 +20,13 @@
  * @property {number} width
  * @property {number} height
  */
+
+/**
+ * @typedef {Object} Face
+ * @property {Array<{x: number, y: number, z: number}>} keypoints
+ * @property {BoundingBox} box
+ */
+
 import { TrainerDB } from "./db.js";
 
 const db = new TrainerDB();
@@ -17,6 +35,7 @@ const mouthCanvas = document.getElementById("mouth-canvas");
 const toggleRecordingButton = document.getElementById("toggle-recording");
 const selectFolderButton = document.getElementById("select-folder");
 
+/** @type {{[key: string]: { label: string, description: string, buckets: { [key: string]: { [key: string]: { samples: Sample[], element: HTMLElement } } } }}} */
 const poses = {
 	"mouth-closed": { label: "Mouth Closed", description: "Keep your mouth closed, but make various facial expressions." },
 	"mouth-open": { label: "Mouth Open", description: "Open your mouth without sticking out your tongue." },
@@ -170,6 +189,12 @@ function captureMouthImage(video, facemeshPrediction) {
 	);
 }
 
+
+/**
+ * @param {Face} facemeshPrediction 
+ * @param {{pitch: number, yaw: number, roll: number}} headTilt 
+ * @param {HTMLVideoElement} video 
+ */
 function recordSnapshot(facemeshPrediction, headTilt, video) {
 	captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
@@ -194,6 +219,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 	}
 
 	if (bucket.samples.length < maxSamplesPerBucket && recording) {
+		/** @type {Sample} */
 		const sample = {
 			poseId: currentPose,
 			pitch: bucketAngles.pitch,
