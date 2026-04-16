@@ -75,7 +75,15 @@ export class TrainerDB {
 	}
 
 	/**
-	 * @param {{signal?: AbortSignal, onProgress?: (progress: { loaded: number, total: number }) => void}} [options]
+	 * @param {{
+	 * 	signal?: AbortSignal,
+	 * 	onProgress?: (progress: {
+	 * 		phase: "scanning" | "reading",
+	 * 		entriesScanned: number,
+	 * 		loaded: number,
+	 * 		total: number,
+	 * 	}) => void,
+	 * }} [options]
 	 */
 	async load(options = {}) {
 		const { signal, onProgress } = options;
@@ -88,21 +96,31 @@ export class TrainerDB {
 		const data = {};
 		/** @type {Array<{poseId: string, pitch: string, yaw: string, fileName: string, fileHandle: FileSystemFileHandle}>} */
 		const fileEntries = [];
+		let entriesScanned = 0;
+		onProgress?.({ phase: "scanning", entriesScanned, loaded: 0, total: 0 });
 
 		for await (const [poseId, poseHandle] of posesDir.entries()) {
 			this.checkAbort(signal);
+			entriesScanned += 1;
+			onProgress?.({ phase: "scanning", entriesScanned, loaded: 0, total: 0 });
 			if (poseHandle.kind !== "directory") continue;
 
 			for await (const [pitch, pitchHandle] of poseHandle.entries()) {
 				this.checkAbort(signal);
+				entriesScanned += 1;
+				onProgress?.({ phase: "scanning", entriesScanned, loaded: 0, total: 0 });
 				if (pitchHandle.kind !== "directory") continue;
 
 				for await (const [yaw, yawHandle] of pitchHandle.entries()) {
 					this.checkAbort(signal);
+					entriesScanned += 1;
+					onProgress?.({ phase: "scanning", entriesScanned, loaded: 0, total: 0 });
 					if (yawHandle.kind !== "directory") continue;
 
 					for await (const [fileName, fileHandle] of yawHandle.entries()) {
 						this.checkAbort(signal);
+						entriesScanned += 1;
+						onProgress?.({ phase: "scanning", entriesScanned, loaded: 0, total: 0 });
 						if (fileHandle.kind !== "file") continue;
 						fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
 					}
@@ -112,7 +130,7 @@ export class TrainerDB {
 
 		const total = fileEntries.length;
 		let loaded = 0;
-		onProgress?.({ loaded, total });
+		onProgress?.({ phase: "reading", entriesScanned, loaded, total });
 
 		for (const { poseId, pitch, yaw, fileName, fileHandle } of fileEntries) {
 			this.checkAbort(signal);
@@ -126,7 +144,7 @@ export class TrainerDB {
 				file
 			});
 			loaded += 1;
-			onProgress?.({ loaded, total });
+			onProgress?.({ phase: "reading", entriesScanned, loaded, total });
 		}
 
 		return data;

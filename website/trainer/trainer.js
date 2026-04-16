@@ -52,7 +52,7 @@ let currentBucket = null;
 let recording = false;
 let loading = false;
 let activeLoadController = null;
-let recordingControlsInitialized = false;
+let recordingEnabled = false;
 const maxSamplesPerBucket = 5;
 
 const MOUTH_MESH_ANNOTATIONS = {
@@ -68,50 +68,41 @@ function setRecording(shouldRecord) {
 	toggleRecordingButton.setAttribute("aria-pressed", recording);
 }
 
-function updateLoadingStatus(message) {
-	loadingStatus.textContent = message;
+function setRecordingEnabled(shouldEnable) {
+	recordingEnabled = shouldEnable;
+	toggleRecordingButton.disabled = loading || !recordingEnabled;
 }
 
-function updateLoadingProgress(loaded, total) {
-	loadingProgress.max = Math.max(total, 1);
-	loadingProgress.value = Math.min(loaded, loadingProgress.max);
-	updateLoadingStatus(total > 0 ? `Loading samples: ${loaded}/${total}` : "Loading samples: 0/0");
-}
-
-function setLoadingState(isLoading) {
-	loading = isLoading;
-	selectFolderButton.disabled = isLoading;
-	toggleRecordingButton.disabled = isLoading || !recordingControlsInitialized;
-	cancelLoadingButton.hidden = !isLoading;
-	loadingProgress.hidden = !isLoading;
-	if (!isLoading) {
-		updateLoadingStatus("");
-	}
-}
-
-function enableRecordingControls() {
-	if (toggleRecordingButton.hasAttribute("disabled")) {
-		toggleRecordingButton.removeAttribute("disabled");
-	}
-	if (recordingControlsInitialized) {
+function renderLoadingUI({ isActive, phase = "scanning", entriesScanned = 0, loaded = 0, total = 0 }) {
+	selectFolderButton.disabled = isActive;
+	cancelLoadingButton.hidden = !isActive;
+	loadingProgress.hidden = !isActive;
+	if (!isActive) {
+		loadingStatus.textContent = "";
+		loadingProgress.removeAttribute("value");
+		loadingProgress.max = 1;
+		loadingProgress.value = 0;
 		return;
 	}
-	recordingControlsInitialized = true;
-	toggleRecordingButton.addEventListener("click", () => {
-		setRecording(!recording);
-	});
-	window.addEventListener("blur", () => {
-		setRecording(false);
-	});
+	if (phase === "scanning") {
+		loadingProgress.removeAttribute("value");
+		loadingStatus.textContent = `Reading folders... scanned ${entriesScanned} entries`;
+		return;
+	}
+	loadingProgress.max = Math.max(total, 1);
+	loadingProgress.value = loaded;
+	loadingStatus.textContent = `Loading samples: ${loaded}/${total}`;
 }
 
-async function loadImagesAndEnableRecording(signal) {
+/**
+ * @returns {Promise<boolean | null>} true on success, false on fatal error, null if canceled
+ */
+async function loadAndDisplayExistingSamples(signal) {
 	try {
-		updateLoadingProgress(0, 0);
 		const existingImageFiles = await db.load({
 			signal,
-			onProgress: ({ loaded, total }) => {
-				updateLoadingProgress(loaded, total);
+			onProgress: ({ phase, entriesScanned, loaded, total }) => {
+				renderLoadingUI({ isActive: true, phase, entriesScanned, loaded, total });
 			},
 		});
 		reset(); // in case of switching folders, clear out old samples
@@ -134,42 +125,61 @@ async function loadImagesAndEnableRecording(signal) {
 			}
 		}
 		console.log("Loaded existing samples from database");
+		return true;
 	} catch (err) {
 		if (err.name === "AbortError") {
 			console.log("Loading samples canceled");
-			return;
+			return null;
 		}
 		if (err.name === "NotFoundError") {
 			console.log("No existing samples found in database");
+			return true;
 		} else {
 			console.error("Failed to load existing samples from database:", err);
 			alert("Failed to load existing samples from database:\n\n" + err.message);
-			return;
+			return false;
 		}
 	}
-	enableRecordingControls();
 }
 
-async function startLoadingImages() {
+async function loadSamplesForCurrentFolder() {
 	if (loading) {
 		return;
 	}
 	const loadController = new AbortController();
+	const recordingWasEnabled = recordingEnabled;
 	activeLoadController = loadController;
+	loading = true;
 	setRecording(false);
-	setLoadingState(true);
+	renderLoadingUI({ isActive: true, phase: "scanning", entriesScanned: 0, loaded: 0, total: 0 });
+	setRecordingEnabled(recordingWasEnabled);
 	try {
-		await loadImagesAndEnableRecording(loadController.signal);
+		const loadResult = await loadAndDisplayExistingSamples(loadController.signal);
+		if (loadResult === true) {
+			setRecordingEnabled(true);
+		} else {
+			setRecordingEnabled(recordingWasEnabled);
+		}
 	} finally {
 		if (activeLoadController === loadController) {
 			activeLoadController = null;
 		}
-		setLoadingState(false);
+		loading = false;
+		renderLoadingUI({ isActive: false });
+		setRecordingEnabled(recordingEnabled);
 	}
 }
 
 function init() {
 	const trackyMouse = TrackyMouse.init(document.getElementById("tracky-mouse"));
+
+	toggleRecordingButton.addEventListener("click", () => {
+		setRecording(!recording);
+	});
+	window.addEventListener("blur", () => {
+		setRecording(false);
+	});
+	setRecordingEnabled(false);
 
 	cancelLoadingButton.addEventListener("click", () => {
 		activeLoadController?.abort();
@@ -189,7 +199,7 @@ function init() {
 			if (!db.rootHandle) {
 				return;
 			}
-			startLoadingImages();
+			loadSamplesForCurrentFolder();
 		} catch (err) {
 			if (err.name === "AbortError") {
 				return;
@@ -204,7 +214,7 @@ function init() {
 			console.log("No access to database, user needs to select folder");
 			return;
 		}
-		startLoadingImages();
+		loadSamplesForCurrentFolder();
 	}).catch((err) => {
 		console.error("Failed to initialize database:", err);
 		alert("Failed to access the database:\n\n" + err.message);
