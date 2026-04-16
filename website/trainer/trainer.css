@@ -7,7 +7,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	perspective: 1000px;
+	perspective: 200px;
 	position: relative;
 	min-height: 500px;
 	transform-style: preserve-3d;
@@ -15,10 +15,11 @@
 
 .bucket {
 	position: absolute;
-	left: 0;
-	top: 0;
-	transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px));
-	/* transform: translateX(var(--pitch) * 110px) translateY(var(--yaw) * 110px); */
+	left: 50%;
+	top: 50%;
+	/* transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px)); */
+	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(150px);
+	transform-origin: center;
 	transform-style: preserve-3d;
 }
 
@@ -26,6 +27,7 @@
 	position: absolute;
 	left: 0;
 	top: 0;
+	transform: translate(-50%, -50%);
 }
 
 .bucket::before {
@@ -42,4 +44,5 @@
 	align-items: center;
 	justify-content: center;
 	font-size: 12px;
+	transform: translateZ(5px);
 }
