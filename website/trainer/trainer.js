@@ -189,6 +189,40 @@ function captureMouthImage(video, facemeshPrediction) {
 	);
 }
 
+/**
+ * @param {Sample} sample 
+ */
+function trackAndDisplaySample(sample) {
+	const pose = poses[sample.poseId];
+	if (!pose.buckets[sample.pitch]) {
+		pose.buckets[sample.pitch] = {};
+	}
+	let bucket = pose.buckets[sample.pitch][sample.yaw];
+	if (!bucket) {
+		bucket = pose.buckets[sample.pitch][sample.yaw] = {
+			samples: [],
+			element: document.createElement("div"),
+		};
+		document.getElementById("samples-grid").append(bucket.element);
+		// bucket.element.style.transform = `translateZ(500px) rotateY(${sample.pitch}deg) rotateZ(${sample.yaw}deg)`;
+		bucket.element.classList.add("bucket");
+		bucket.element.dataset.count = "0";
+		bucket.element.dataset.pitch = sample.pitch;
+		bucket.element.dataset.yaw = sample.yaw;
+		bucket.element.style.setProperty("--pitch", `${-sample.pitch}deg`);
+		bucket.element.style.setProperty("--yaw", `${-sample.yaw}deg`);
+	}
+
+	bucket.samples.push(sample);
+	sample.img.width = 50;
+	sample.img.height = 50;
+	// sample.img.dataset.ordinal = bucket.samples.length;
+	sample.img.style.setProperty("--ordinal", bucket.samples.length);
+	bucket.element.appendChild(sample.img);
+	bucket.element.dataset.count = bucket.samples.length;
+	bucket.element.style.setProperty("--count", bucket.samples.length);
+
+}
 
 /**
  * @param {Face} facemeshPrediction 
@@ -202,29 +236,15 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 	if (!pose.buckets[bucketAngles.pitch]) {
 		pose.buckets[bucketAngles.pitch] = {};
 	}
-	let bucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw];
-	if (!bucket) {
-		bucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw] = {
-			samples: [],
-			element: document.createElement("div"),
-		};
-		document.getElementById("samples-grid").append(bucket.element);
-		// bucket.element.style.transform = `translateZ(500px) rotateY(${bucketAngles.pitch}deg) rotateZ(${bucketAngles.yaw}deg)`;
-		bucket.element.classList.add("bucket");
-		bucket.element.dataset.count = "0";
-		bucket.element.dataset.pitch = bucketAngles.pitch;
-		bucket.element.dataset.yaw = bucketAngles.yaw;
-		bucket.element.style.setProperty("--pitch", `${-bucketAngles.pitch}deg`);
-		bucket.element.style.setProperty("--yaw", `${-bucketAngles.yaw}deg`);
-	}
+	const existingBucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw];
 
-	if (bucket.samples.length < maxSamplesPerBucket && recording) {
+	if (recording && (!existingBucket || existingBucket.samples.length < maxSamplesPerBucket)) {
 		/** @type {Sample} */
 		const sample = {
 			poseId: currentPose,
 			pitch: bucketAngles.pitch,
 			yaw: bucketAngles.yaw,
-			ordinal: bucket.samples.length,
+			ordinal: existingBucket?.samples?.length ?? 0,
 			blobPromise: new Promise((resolve) => {
 				mouthCanvas.toBlob((blob) => {
 					resolve(blob);
@@ -241,23 +261,12 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			timestamp: Date.now(),
 			img: document.createElement("img"),
 		};
-		bucket.samples.push(sample);
-		sample.img.width = 50;
-		sample.img.height = 50;
-		// sample.img.dataset.ordinal = bucket.samples.length;
-		sample.img.style.setProperty("--ordinal", bucket.samples.length);
-		bucket.element.appendChild(sample.img);
-		bucket.element.dataset.count = bucket.samples.length;
-		bucket.element.style.setProperty("--count", bucket.samples.length);
+		trackAndDisplaySample(sample);
 	}
 
-	if (currentBucket) {
-		currentBucket.element.classList.remove("current");
-	}
-
-	currentBucket = bucket;
-
-	currentBucket.element.classList.add("current");
+	currentBucket?.element.classList.remove("current");
+	currentBucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw];
+	currentBucket?.element.classList.add("current");
 }
 
 
