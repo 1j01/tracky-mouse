@@ -13,10 +13,7 @@ const poses = {
 	"mouth-closed": { label: "Mouth Closed", description: "Keep your mouth closed, but make various facial expressions." }
 };
 
-for (const [poseId, pose] of Object.entries(poses)) {
-	pose.id = poseId;
-	pose.buckets = {};
-}
+let currentPose = Object.keys(poses)[0];
 
 const MOUTH_MESH_ANNOTATIONS = {
 	lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
@@ -25,10 +22,6 @@ const MOUTH_MESH_ANNOTATIONS = {
 	lipsLowerInner: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308],
 };
 
-TrackyMouse.dependenciesRoot = "core";
-TrackyMouse.loadDependencies().then(() => {
-	init();
-});
 function init() {
 	const trackyMouse = TrackyMouse.init(document.getElementById("tracky-mouse"));
 
@@ -40,7 +33,22 @@ function init() {
 	}, 100);
 }
 
-let currentPose = Object.keys(poses)[0];
+
+for (const [poseId, pose] of Object.entries(poses)) {
+	pose.id = poseId;
+	pose.buckets = {};
+	const li = document.createElement("li");
+	li.textContent = pose.label;
+	li.title = pose.description;
+	document.getElementById("poses-list").appendChild(li);
+	li.addEventListener("click", () => {
+		currentPose = poseId;
+		for (const el of document.querySelectorAll("#poses-list li")) {
+			el.classList.toggle("selected", el === li);
+		}
+	});
+}
+
 
 
 function recordSnapshot(facemeshPrediction, headTilt, video) {
@@ -57,3 +65,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 }
 
 
+TrackyMouse.dependenciesRoot = "core";
+TrackyMouse.loadDependencies().then(() => {
+	init();
+});

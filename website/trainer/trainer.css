@@ -1,0 +1,4 @@
+#poses-list li.selected {
+	background-color: #007bff;
+	color: white;
+}
