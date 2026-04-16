@@ -25,7 +25,7 @@
 	left: 0;
 	top: 0;
 	/* transform: translate(-50%, -50%); */
-	transform: translate(-50%, -50%) translateZ(calc(var(--ordinal) * 5px));
+	transform: translate(-50%, -50%) translateZ(calc(var(--sample-index) * 5px));
 	border: 2px solid white;
 }
 
