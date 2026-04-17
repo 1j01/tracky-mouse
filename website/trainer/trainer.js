@@ -127,6 +127,9 @@ async function loadImagesAndEnableRecording(signal) {
 							element: document.createElement("img"),
 						};
 						sample.element.classList.add("thumbnail");
+						sample.element.onload = () => {
+							URL.revokeObjectURL(sample.element.src);
+						};
 						sample.element.src = URL.createObjectURL(file);
 						sample.element.dataset.saveState = "saved";
 						trackAndDisplaySample(sample);
