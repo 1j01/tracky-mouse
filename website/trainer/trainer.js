@@ -25,6 +25,17 @@
  * @property {BoundingBox} box
  */
 
+/**
+ * @typedef {Object} CropMetadata
+ * @property {BoundingBox} mouthBoundingBox
+ * @property {BoundingBox} captureBox
+ * @property {number} paddingFraction
+ * @property {number} sourceWidth
+ * @property {number} sourceHeight
+ * @property {number} outputWidth
+ * @property {number} outputHeight
+ */
+
 import { TrainerDB } from "./db.js";
 
 const db = new TrainerDB();
@@ -297,7 +308,7 @@ function clampAndSnap(value, min, max, bucketCount) {
 /**
  * @param {HTMLVideoElement} video 
  * @param {Face} facemeshPrediction 
- * @returns {boolean} whether valid (not clipped by video bounds)
+ * @returns {{isValidCapture: boolean, cropMetadata: CropMetadata}} crop result and validity (not clipped by video bounds)
  */
 function captureMouthImage(video, facemeshPrediction) {
 	/** @type {BoundingBox} */
@@ -342,7 +353,18 @@ function captureMouthImage(video, facemeshPrediction) {
 		mouthCanvas.height
 	);
 
-	return captureBox.xMin >= 0 && captureBox.yMin >= 0 && captureBox.xMax <= video.videoWidth && captureBox.yMax <= video.videoHeight;
+	return {
+		isValidCapture: captureBox.xMin >= 0 && captureBox.yMin >= 0 && captureBox.xMax <= video.videoWidth && captureBox.yMax <= video.videoHeight,
+		cropMetadata: {
+			mouthBoundingBox,
+			captureBox,
+			paddingFraction,
+			sourceWidth: video.videoWidth,
+			sourceHeight: video.videoHeight,
+			outputWidth: mouthCanvas.width,
+			outputHeight: mouthCanvas.height,
+		},
+	};
 }
 
 /**
@@ -384,7 +406,7 @@ function trackAndDisplaySample(sample) {
  * @param {HTMLVideoElement} video 
  */
 function recordSnapshot(facemeshPrediction, headTilt, video) {
-	const isValidCapture = captureMouthImage(video, facemeshPrediction);
+	const { isValidCapture, cropMetadata } = captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
 	if (!pose.buckets[bucketAngles.pitch]) {
@@ -415,7 +437,15 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 				sample.element.dataset.saveState = "error";
 				return;
 			}
-			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob).then(() => {
+			const metadata = {
+				keypoints: facemeshPrediction.keypoints.map((keypoint) => ({
+					x: keypoint.x,
+					y: keypoint.y,
+					z: keypoint.z,
+				})),
+				crop: cropMetadata,
+			};
+			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob, metadata).then(() => {
 				sample.element.dataset.saveState = "saved";
 			}).catch((err) => {
 				console.error("Failed to save sample:", err);

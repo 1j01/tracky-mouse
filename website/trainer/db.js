@@ -114,6 +114,9 @@ export class TrainerDB {
 
 					await walkDirectory.call(this, entryHandle, [...pathParts, name]);
 				} else if (entryHandle.kind === "file") {
+					if (!name.toLowerCase().endsWith(".png")) {
+						return;
+					}
 					scannedFiles += 1;
 					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
@@ -156,7 +159,7 @@ export class TrainerDB {
 		return data;
 	}
 
-	async save(poseId, pitch, yaw, n, imageBlob) {
+	async save(poseId, pitch, yaw, n, imageBlob, metadata) {
 		if (!this.rootHandle) {
 			throw new Error("Folder not selected");
 		}
@@ -166,10 +169,16 @@ export class TrainerDB {
 		const pitchDir = await poseDir.getDirectoryHandle(String(pitch), { create: true });
 		const yawDir = await pitchDir.getDirectoryHandle(String(yaw), { create: true });
 
-		const fileHandle = await yawDir.getFileHandle(`${n}.png`, { create: true });
+		const imageFileHandle = await yawDir.getFileHandle(`${n}.png`, { create: true });
+		const imageWritable = await imageFileHandle.createWritable();
+		await imageWritable.write(imageBlob);
+		await imageWritable.close();
 
-		const writable = await fileHandle.createWritable();
-		await writable.write(imageBlob);
-		await writable.close();
+		if (metadata !== undefined) {
+			const metadataFileHandle = await yawDir.getFileHandle(`${n}.json`, { create: true });
+			const metadataWritable = await metadataFileHandle.createWritable();
+			await metadataWritable.write(JSON.stringify(metadata, null, 2));
+			await metadataWritable.close();
+		}
 	}
 }

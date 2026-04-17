@@ -8,7 +8,6 @@ Hopefully this will power a ["tongue as joystick"](https://github.com/1j01/track
 
 Important before serious usage:
 - Crop is zooming differently based on mouth pose; should normalize using head size
-- Store the facemesh pose and the crop info with the sample
 
 High impact:
 - Keyboard shortcut for starting/stopping recording (spacebar or R)
