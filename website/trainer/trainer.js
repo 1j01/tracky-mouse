@@ -97,6 +97,11 @@ function updateSelectedFolderStatus() {
 	selectedFolderStatus.textContent = folderName
 		? `Selected folder: 📂 ${folderName}`
 		: "No folder selected";
+	// Could potentially handle this more gracefully by skipping looking for a "poses" subfolder in the db if "poses" is selected
+	if (folderName === "poses") {
+		selectedFolderStatus.textContent += "\n⚠️ Please select the parent folder of 'poses'";
+	}
+	selectedFolderStatus.style.whiteSpace = "pre-wrap";
 }
 
 function enableRecordingControls() {

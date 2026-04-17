@@ -60,15 +60,6 @@ export class TrainerDB {
 
 	async selectFolder() {
 		const handle = await window.showDirectoryPicker();
-
-		if (handle.name === "poses") {
-			// TODO: Actually present this warning to the user
-			// (Or simplify folder structure)
-			console.warn(
-				"You selected the 'poses' folder. Please select its parent folder instead."
-			);
-		}
-
 		await idbSet(KEY, handle);
 		this.rootHandle = handle;
 	}
