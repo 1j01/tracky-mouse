@@ -374,6 +374,11 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			element: document.createElement("img"),
 		};
 		mouthCanvas.toBlob((blob) => {
+			if (!blob) {
+				console.error("Failed to encode sample image as blob");
+				sample.element.dataset.saveState = "error";
+				return;
+			}
 			// TODO: display instantly instead of waiting for the blob to be created
 			sample.element.src = URL.createObjectURL(blob);
 			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob).then(() => {
