@@ -1,6 +1,8 @@
 .train-page {
 	max-width: min(92rem, calc(100% - 2rem));
 	padding-bottom: 2rem;
+	background: #f4f8fc;
+	color: #17212b;
 }
 
 .train-main {
@@ -16,6 +18,7 @@
 .mouth-panel,
 .poses-panel {
 	background: #fff;
+	color: #17212b;
 	border: 1px solid #d7e0ea;
 	border-radius: 12px;
 	padding: 0.9rem;
@@ -85,6 +88,7 @@
 	width: min(100%, 220px);
 	height: auto;
 	background: #0a1220;
+	color: #e7f0ff;
 	border-radius: 8px;
 	border: 1px solid #3d4d66;
 }
@@ -106,6 +110,7 @@
 	border-radius: 8px;
 	border: 1px solid #d7e0ea;
 	background: #fff;
+	color: #17212b;
 	font-size: 0.86rem;
 	cursor: pointer;
 	user-select: none;
@@ -123,6 +128,7 @@
 	min-height: clamp(18rem, 45vh, 35rem);
 	transform-style: preserve-3d;
 	background: radial-gradient(circle at 50% 45%, #06264d 0%, #081a30 45%, #070e18 100%);
+	color: #e7f0ff;
 	border-radius: 10px;
 	overflow: visible;
 }
@@ -166,6 +172,7 @@
 
 .bucket[data-count="5"]::before {
 	background: green;
+	color: #fff;
 }
 
 img[data-save-state="saved"] {
