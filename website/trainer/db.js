@@ -124,20 +124,22 @@ export class TrainerDB {
 		let loaded = 0;
 		onProgress?.({ scannedFiles, scannedFolders, loaded, total });
 
-		for (const { poseId, pitch, yaw, fileName, fileHandle } of fileEntries) {
-			this.checkAbort(signal);
-			data[poseId] ??= {};
-			data[poseId][pitch] ??= {};
-			data[poseId][pitch][yaw] ??= [];
+		await Promise.all(
+			fileEntries.map(async ({ poseId, pitch, yaw, fileName, fileHandle }) => {
+				this.checkAbort(signal);
+				data[poseId] ??= {};
+				data[poseId][pitch] ??= {};
+				data[poseId][pitch][yaw] ??= [];
 
-			const file = await fileHandle.getFile();
-			data[poseId][pitch][yaw].push({
-				fileName,
-				file
-			});
-			loaded += 1;
-			onProgress?.({ scannedFiles, scannedFolders, loaded, total });
-		}
+				const file = await fileHandle.getFile();
+				data[poseId][pitch][yaw].push({
+					fileName,
+					file
+				});
+				loaded += 1;
+				onProgress?.({ scannedFiles, scannedFolders, loaded, total });
+			})
+		);
 
 		return data;
 	}
