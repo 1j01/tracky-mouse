@@ -91,34 +91,50 @@ export class TrainerDB {
 		/** @type {Array<{poseId: string, pitch: string, yaw: string, fileName: string, fileHandle: FileSystemFileHandle}>} */
 		const fileEntries = [];
 
-		for await (const [poseId, poseHandle] of posesDir.entries()) {
-			this.checkAbort(signal);
-			if (poseHandle.kind !== "directory") continue;
-			scannedFolders += 1;
-			onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
+		async function collect(asyncIterable) {
+			const results = [];
+			for await (const item of asyncIterable) {
+				results.push(item);
+			}
+			return results;
+		}
 
-			for await (const [pitch, pitchHandle] of poseHandle.entries()) {
+		await Promise.all(
+			(await collect(posesDir.entries())).map(async ([poseId, poseHandle]) => {
 				this.checkAbort(signal);
-				if (pitchHandle.kind !== "directory") continue;
+				if (poseHandle.kind !== "directory") return;
 				scannedFolders += 1;
 				onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
-				for await (const [yaw, yawHandle] of pitchHandle.entries()) {
-					this.checkAbort(signal);
-					if (yawHandle.kind !== "directory") continue;
-					scannedFolders += 1;
-					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
-
-					for await (const [fileName, fileHandle] of yawHandle.entries()) {
+				await Promise.all(
+					(await collect(poseHandle.entries())).map(async ([pitch, pitchHandle]) => {
 						this.checkAbort(signal);
-						if (fileHandle.kind !== "file") continue;
-						scannedFiles += 1;
+						if (pitchHandle.kind !== "directory") return;
+						scannedFolders += 1;
 						onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
-						fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
-					}
-				}
-			}
-		}
+
+						await Promise.all(
+							(await collect(pitchHandle.entries())).map(async ([yaw, yawHandle]) => {
+								this.checkAbort(signal);
+								if (yawHandle.kind !== "directory") return;
+								scannedFolders += 1;
+								onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
+
+								await Promise.all(
+									(await collect(yawHandle.entries())).map(async ([fileName, fileHandle]) => {
+										this.checkAbort(signal);
+										if (fileHandle.kind !== "file") return;
+										scannedFiles += 1;
+										onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
+										fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
+									})
+								);
+							})
+						);
+					})
+				);
+			})
+		);
 
 		const total = fileEntries.length;
 		let loaded = 0;
