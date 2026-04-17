@@ -148,9 +148,8 @@
 	padding: 0;
 	list-style: none;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+	grid-template-columns: repeat(1fr);
 	gap: 0.45rem;
-	max-height: 15rem;
 	overflow: auto;
 }
 
