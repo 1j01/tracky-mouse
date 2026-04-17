@@ -73,9 +73,15 @@ function updateLoadingStatus(message) {
 }
 
 function updateLoadingProgress({ scannedFiles, scannedFolders, loaded, total }) {
-	loadingProgress.max = Math.max(total, 1);
-	loadingProgress.value = Math.min(loaded, loadingProgress.max);
-	updateLoadingStatus(total > 0 ? `Loading samples: ${loaded}/${total}` : `Scanning folders: ${scannedFolders}, files: ${scannedFiles}`);
+	if (total > 0) {
+		loadingProgress.max = total;
+		loadingProgress.value = loaded;
+		updateLoadingStatus(`Loading samples: ${loaded}/${total}`);
+	} else {
+		loadingProgress.removeAttribute("max");
+		loadingProgress.removeAttribute("value");
+		updateLoadingStatus(`Scanning folders: ${scannedFolders}, files: ${scannedFiles}`);
+	}
 }
 
 function setLoadingState(isLoading) {
