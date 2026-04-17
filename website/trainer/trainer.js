@@ -95,8 +95,8 @@ function setLoadingState(isLoading) {
 function updateSelectedFolderStatus() {
 	const folderName = db.rootHandle?.name;
 	selectedFolderStatus.textContent = folderName
-		? `Selected folder: ${folderName}`
-		: "Selected folder: none";
+		? `Selected folder: 📂 ${folderName}`
+		: "No folder selected";
 }
 
 function enableRecordingControls() {
