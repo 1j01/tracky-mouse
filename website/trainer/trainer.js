@@ -27,10 +27,10 @@
 
 /**
  * @typedef {Object} CropMetadata
- * @property {BoundingBox} mouthBoundingBox
- * @property {BoundingBox} captureBox
- * @property {number} sourceWidth
- * @property {number} sourceHeight
+ * @property {BoundingBox} videoFrameMouthBoundingBox
+ * @property {BoundingBox} videoFrameCaptureBoundingBox
+ * @property {number} videoFrameWidth
+ * @property {number} videoFrameHeight
  * @property {number} capturedImageWidth
  * @property {number} capturedImageHeight
  */
@@ -38,7 +38,7 @@
 /**
  * @typedef {Object} SampleMetadata
  * @property {number} formatVersion
- * @property {Array<{x: number, y: number, z: number}>} keypoints
+ * @property {Array<{x: number, y: number, z: number}>} videoFrameKeypoints
  * @property {CropMetadata} crop
  */
 
@@ -362,10 +362,10 @@ function captureMouthImage(video, facemeshPrediction) {
 	return {
 		isValidCapture: captureBox.xMin >= 0 && captureBox.yMin >= 0 && captureBox.xMax <= video.videoWidth && captureBox.yMax <= video.videoHeight,
 		cropMetadata: {
-			mouthBoundingBox,
-			captureBox,
-			sourceWidth: video.videoWidth,
-			sourceHeight: video.videoHeight,
+			videoFrameMouthBoundingBox: mouthBoundingBox,
+			videoFrameCaptureBoundingBox: captureBox,
+			videoFrameWidth: video.videoWidth,
+			videoFrameHeight: video.videoHeight,
 			capturedImageWidth: mouthCanvas.width,
 			capturedImageHeight: mouthCanvas.height,
 		},
@@ -444,8 +444,8 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			}
 			/** @type {SampleMetadata} */
 			const metadata = {
-				formatVersion: 1,
-				keypoints: facemeshPrediction.keypoints,
+				formatVersion: 2,
+				videoFrameKeypoints: facemeshPrediction.keypoints,
 				crop: cropMetadata,
 			};
 			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob, metadata).then(() => {
