@@ -1,6 +1,96 @@
-#poses-list li.selected {
-	background-color: #007bff;
-	color: white;
+.train-page {
+	--train-bg: linear-gradient(180deg, #f7fcff 0%, #eff4ff 100%);
+	--train-surface: #ffffff;
+	--train-surface-alt: #f2f8ff;
+	--train-ink: #112035;
+	--train-ink-soft: #405067;
+	--train-outline: #bfd3ea;
+	--train-accent: #0d7cd6;
+	--train-accent-strong: #005fae;
+	--train-shadow: 0 18px 40px -28px rgba(13, 58, 102, 0.45);
+	background: var(--train-bg);
+	min-height: 100vh;
+	max-width: min(92rem, calc(100% - 2rem));
+	padding-bottom: 2rem;
+	color: var(--train-ink);
+}
+
+.train-main {
+	display: grid;
+	gap: 1.25rem;
+	margin-top: 1.5rem;
+	margin-bottom: 2rem;
+	animation: train-fade-in 360ms ease-out;
+}
+
+.intro-panel {
+	padding: 1rem 1.2rem;
+	border: 1px solid var(--train-outline);
+	border-radius: 14px;
+	background: var(--train-surface-alt);
+	box-shadow: var(--train-shadow);
+	color: var(--train-ink-soft);
+	line-height: 1.4;
+	font-size: 1rem;
+}
+
+.intro-panel p {
+	margin: 0;
+}
+
+.trainer-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+	grid-template-areas:
+		"workspace controls"
+		"samples controls";
+	gap: 1.1rem;
+	align-items: start;
+}
+
+.workspace-panel,
+.control-panel,
+.samples-panel {
+	background: var(--train-surface);
+	border: 1px solid var(--train-outline);
+	border-radius: 16px;
+	box-shadow: var(--train-shadow);
+	padding: 1rem;
+}
+
+.workspace-panel {
+	grid-area: workspace;
+	padding: 0.8rem;
+	overflow: hidden;
+}
+
+.workspace-panel #tracky-mouse {
+	max-width: 100%;
+	min-height: 360px;
+}
+
+.control-panel {
+	grid-area: controls;
+	display: grid;
+	gap: 1rem;
+	position: sticky;
+	top: 1rem;
+}
+
+.samples-panel {
+	grid-area: samples;
+	overflow: hidden;
+}
+
+.samples-panel h2,
+.mouth-panel h2,
+.poses-panel h2 {
+	margin: 0 0 0.65rem;
+	font-family: "Atkinson Hyperlegible Mono", monospace;
+	font-size: 0.96rem;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--train-ink-soft);
 }
 
 .controls {
@@ -8,6 +98,77 @@
 	flex-wrap: wrap;
 	gap: 8px;
 	align-items: center;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--train-outline);
+}
+
+.controls button {
+	appearance: none;
+	border: 1px solid color-mix(in srgb, var(--train-accent) 25%, white);
+	background: linear-gradient(180deg, #f5fbff 0%, #dff0ff 100%);
+	border-radius: 10px;
+	padding: 0.5rem 0.75rem;
+	font: inherit;
+	color: var(--train-ink);
+	cursor: pointer;
+	transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.controls button:hover:not(:disabled) {
+	transform: translateY(-1px);
+	border-color: var(--train-accent);
+	box-shadow: 0 6px 14px -12px rgba(0, 95, 174, 0.8);
+}
+
+.controls button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.mouth-panel,
+.poses-panel {
+	padding: 0.8rem;
+	border: 1px solid var(--train-outline);
+	border-radius: 12px;
+	background: var(--train-surface-alt);
+}
+
+#mouth-canvas {
+	display: block;
+	margin: 0 auto;
+	width: min(100%, 220px);
+	height: auto;
+	background: #0a1220;
+	border-radius: 10px;
+	border: 1px solid #3d4d66;
+}
+
+#poses-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+	gap: 0.45rem;
+	max-height: 15rem;
+	overflow: auto;
+}
+
+#poses-list li {
+	padding: 0.35rem 0.45rem;
+	text-align: center;
+	border-radius: 9px;
+	border: 1px solid var(--train-outline);
+	background: #ffffff;
+	font-size: 0.86rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+#poses-list li.selected {
+	background-color: var(--train-accent);
+	border-color: var(--train-accent-strong);
+	color: white;
 }
 
 #loading-progress {
@@ -23,8 +184,12 @@
 #samples-grid {
 	position: relative;
 	perspective: 500px;
-	min-height: 500px;
+	min-height: clamp(18rem, 45vh, 35rem);
 	transform-style: preserve-3d;
+	border-radius: 12px;
+	background: radial-gradient(circle at 50% 45%, #06264d 0%, #081a30 45%, #070e18 100%);
+	outline: 1px solid #26384f;
+	overflow: hidden;
 }
 
 .bucket {
@@ -47,7 +212,7 @@
 }
 
 .bucket.current img {
-	border: 2px solid #007bff !important;
+	border: 2px solid var(--train-accent) !important;
 }
 
 .bucket::before {
@@ -88,4 +253,54 @@ img[data-save-state="error"] {
 .tracky-mouse-desktop-app-download-message,
 .tracky-mouse-controls details:first-of-type {
 	display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	.train-page {
+		--train-bg: linear-gradient(180deg, #0b1018 0%, #101827 100%);
+		--train-surface: #131e2f;
+		--train-surface-alt: #1a293c;
+		--train-ink: #e7f0ff;
+		--train-ink-soft: #c1d3ec;
+		--train-outline: #39506f;
+		--train-accent: #38a6ff;
+		--train-accent-strong: #0f7acb;
+		--train-shadow: 0 18px 44px -30px rgba(0, 0, 0, 0.75);
+	}
+
+	#poses-list li {
+		background: #15243a;
+	}
+
+	.controls button {
+		background: linear-gradient(180deg, #1a2b42 0%, #15314f 100%);
+		border-color: #466385;
+		color: var(--train-ink);
+	}
+}
+
+@media (max-width: 61rem) {
+	.trainer-layout {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"workspace"
+			"controls"
+			"samples";
+	}
+
+	.control-panel {
+		position: static;
+	}
+}
+
+@keyframes train-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

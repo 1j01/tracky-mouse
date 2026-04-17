@@ -25,24 +25,44 @@
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
 </head>
 
-<body>
+<body class="train-page">
 	<header>
 		<img src="images/tracky-mouse-logo-512.png" width="32" height="32" alt="" class="logo">
 		<h1>Contribute Training Data</h1>
 	</header>
-	<main>
-		<div id="trainer-applet">
-			<div id="tracky-mouse"></div>
-			<div class="controls">
-				<button id="select-folder">Select Dataset Folder</button>
-				<button id="cancel-loading" hidden>Cancel Loading</button>
-				<button id="toggle-recording" disabled aria-pressed="false">Start Recording</button>
-				<progress id="loading-progress" max="1" value="0" hidden></progress>
-				<span id="loading-status" aria-live="polite"></span>
-			</div>
-			<div id="samples-grid"></div>
-			<ul id="poses-list"></ul>
-			<canvas id="mouth-canvas" width="200" height="200"></canvas>
+	<main class="train-main">
+		<section class="intro-panel" aria-label="Training Info">
+			<p>
+				Help improve facial expression tracking by recording labeled head-pose samples. Start by selecting a
+				folder,
+				then capture frames while you move through different angles.
+			</p>
+		</section>
+		<div id="trainer-applet" class="trainer-layout">
+			<section class="workspace-panel" aria-label="Camera Workspace">
+				<div id="tracky-mouse"></div>
+			</section>
+			<aside class="control-panel" aria-label="Training Controls">
+				<div class="controls" role="group" aria-label="Recording Controls">
+					<button id="select-folder">Select Dataset Folder</button>
+					<button id="cancel-loading" hidden>Cancel Loading</button>
+					<button id="toggle-recording" disabled aria-pressed="false">Start Recording</button>
+					<progress id="loading-progress" max="1" value="0" hidden></progress>
+					<span id="loading-status" aria-live="polite"></span>
+				</div>
+				<section class="mouth-panel" aria-label="Mouth Capture Preview">
+					<h2>Mouth Preview</h2>
+					<canvas id="mouth-canvas" width="200" height="200"></canvas>
+				</section>
+				<section class="poses-panel" aria-label="Pose Buckets">
+					<h2>Pose Buckets</h2>
+					<ul id="poses-list"></ul>
+				</section>
+			</aside>
+			<section class="samples-panel" aria-label="Captured Samples">
+				<h2>Samples Cloud</h2>
+				<div id="samples-grid"></div>
+			</section>
 		</div>
 	</main>
 	<footer>
