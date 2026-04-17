@@ -201,16 +201,18 @@
 	transform-style: preserve-3d;
 }
 
-.bucket img {
+.bucket .thumbnail {
 	position: absolute;
 	left: 0;
 	top: 0;
+	width: 50px;
+	height: 50px;
 	/* transform: translate(-50%, -50%); */
 	transform: translate(-50%, -50%) translateZ(calc(var(--sample-index) * 5px));
 	border: 2px solid white;
 }
 
-.bucket.current img {
+.bucket.current .thumbnail {
 	border: 2px solid var(--train-accent) !important;
 }
 
@@ -235,15 +237,15 @@
 	background-color: green;
 }
 
-/* .bucket[data-count="5"] img {
+/* .bucket[data-count="5"] .thumbnail {
 	border: 2px solid #006d2d;
 } */
 
-img[data-save-state="saved"] {
+.thumbnail[data-save-state="saved"] {
 	border-color: green;
 }
 
-img[data-save-state="error"] {
+.thumbnail[data-save-state="error"] {
 	border-color: red;
 }
 

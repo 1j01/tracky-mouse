@@ -126,6 +126,7 @@ async function loadImagesAndEnableRecording(signal) {
 							sampleIndex: parseInt(fileName.split(".")[0]),
 							element: document.createElement("img"),
 						};
+						sample.element.classList.add("thumbnail");
 						sample.element.src = URL.createObjectURL(file);
 						sample.element.dataset.saveState = "saved";
 						trackAndDisplaySample(sample);
@@ -341,8 +342,6 @@ function trackAndDisplaySample(sample) {
 	}
 
 	bucket.samples.push(sample);
-	sample.element.width = 50;
-	sample.element.height = 50;
 	sample.element.style.setProperty("--sample-index", bucket.samples.length);
 	bucket.element.appendChild(sample.element);
 	bucket.element.dataset.count = bucket.samples.length;
@@ -371,16 +370,22 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			pitch: bucketAngles.pitch,
 			yaw: bucketAngles.yaw,
 			sampleIndex: existingBucket?.samples?.length ?? 0,
-			element: document.createElement("img"),
+			element: document.createElement("canvas"),
 		};
+		sample.element.classList.add("thumbnail");
+		sample.element.dataset.saveState = "pending";
+		// display instantly instead of waiting for the blob to be created, by using canvas
+		sample.element.width = mouthCanvas.width;
+		sample.element.height = mouthCanvas.height;
+		const ctx = sample.element.getContext("2d");
+		ctx.drawImage(mouthCanvas, 0, 0, sample.element.width, sample.element.height);
+
 		mouthCanvas.toBlob((blob) => {
 			if (!blob) {
 				console.error("Failed to encode sample image as blob");
 				sample.element.dataset.saveState = "error";
 				return;
 			}
-			// TODO: display instantly instead of waiting for the blob to be created
-			sample.element.src = URL.createObjectURL(blob);
 			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob).then(() => {
 				sample.element.dataset.saveState = "saved";
 			}).catch((err) => {
