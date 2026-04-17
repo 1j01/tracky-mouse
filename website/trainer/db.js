@@ -95,25 +95,25 @@ export class TrainerDB {
 			this.checkAbort(signal);
 			if (poseHandle.kind !== "directory") continue;
 			scannedFolders += 1;
-			onProgress?.({ scannedFiles, scannedFolders, total: 0 });
+			onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
 			for await (const [pitch, pitchHandle] of poseHandle.entries()) {
 				this.checkAbort(signal);
 				if (pitchHandle.kind !== "directory") continue;
 				scannedFolders += 1;
-				onProgress?.({ scannedFiles, scannedFolders, total: 0 });
+				onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
 				for await (const [yaw, yawHandle] of pitchHandle.entries()) {
 					this.checkAbort(signal);
 					if (yawHandle.kind !== "directory") continue;
 					scannedFolders += 1;
-					onProgress?.({ scannedFiles, scannedFolders, total: 0 });
+					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
 					for await (const [fileName, fileHandle] of yawHandle.entries()) {
 						this.checkAbort(signal);
 						if (fileHandle.kind !== "file") continue;
 						scannedFiles += 1;
-						onProgress?.({ scannedFiles, scannedFolders, total: 0 });
+						onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 						fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
 					}
 				}
