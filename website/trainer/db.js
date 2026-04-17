@@ -99,42 +99,37 @@ export class TrainerDB {
 			return results;
 		}
 
-		await Promise.all(
-			(await collect(posesDir.entries())).map(async ([poseId, poseHandle]) => {
+		async function walkDirectory(handle, pathParts = []) {
+			this.checkAbort(signal);
+
+			const entries = await collect(handle.entries());
+
+			await Promise.all(entries.map(async ([name, entryHandle]) => {
 				this.checkAbort(signal);
-				if (poseHandle.kind !== "directory") return;
-				scannedFolders += 1;
-				onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
-				await Promise.all(
-					(await collect(poseHandle.entries())).map(async ([pitch, pitchHandle]) => {
-						this.checkAbort(signal);
-						if (pitchHandle.kind !== "directory") return;
-						scannedFolders += 1;
-						onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
+				if (entryHandle.kind === "directory") {
+					scannedFolders += 1;
+					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
-						await Promise.all(
-							(await collect(pitchHandle.entries())).map(async ([yaw, yawHandle]) => {
-								this.checkAbort(signal);
-								if (yawHandle.kind !== "directory") return;
-								scannedFolders += 1;
-								onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
+					await walkDirectory.call(this, entryHandle, [...pathParts, name]);
+				} else if (entryHandle.kind === "file") {
+					scannedFiles += 1;
+					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
-								await Promise.all(
-									(await collect(yawHandle.entries())).map(async ([fileName, fileHandle]) => {
-										this.checkAbort(signal);
-										if (fileHandle.kind !== "file") return;
-										scannedFiles += 1;
-										onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
-										fileEntries.push({ poseId, pitch, yaw, fileName, fileHandle });
-									})
-								);
-							})
-						);
-					})
-				);
-			})
-		);
+					const [poseId, pitch, yaw] = pathParts;
+
+					fileEntries.push({
+						poseId,
+						pitch,
+						yaw,
+						fileName: name,
+						fileHandle: entryHandle
+					});
+				}
+			}));
+		}
+
+		await walkDirectory.call(this, posesDir);
 
 		const total = fileEntries.length;
 		let loaded = 0;
