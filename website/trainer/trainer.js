@@ -6,7 +6,7 @@
  * @property {number} pitch
  * @property {number} yaw
  * @property {number} sampleIndex
- * @property {HTMLImageElement} img
+ * @property {HTMLImageElement|HTMLCanvasElement} element
  */
 
 /**
@@ -124,10 +124,10 @@ async function loadImagesAndEnableRecording(signal) {
 							pitch: parseFloat(pitch),
 							yaw: parseFloat(yaw),
 							sampleIndex: parseInt(fileName.split(".")[0]),
-							img: document.createElement("img"),
+							element: document.createElement("img"),
 						};
-						sample.img.src = URL.createObjectURL(file);
-						sample.img.dataset.saveState = "saved";
+						sample.element.src = URL.createObjectURL(file);
+						sample.element.dataset.saveState = "saved";
 						trackAndDisplaySample(sample);
 					}
 				}
@@ -341,10 +341,10 @@ function trackAndDisplaySample(sample) {
 	}
 
 	bucket.samples.push(sample);
-	sample.img.width = 50;
-	sample.img.height = 50;
-	sample.img.style.setProperty("--sample-index", bucket.samples.length);
-	bucket.element.appendChild(sample.img);
+	sample.element.width = 50;
+	sample.element.height = 50;
+	sample.element.style.setProperty("--sample-index", bucket.samples.length);
+	bucket.element.appendChild(sample.element);
 	bucket.element.dataset.count = bucket.samples.length;
 	bucket.element.style.setProperty("--count", bucket.samples.length);
 
@@ -371,16 +371,16 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			pitch: bucketAngles.pitch,
 			yaw: bucketAngles.yaw,
 			sampleIndex: existingBucket?.samples?.length ?? 0,
-			img: document.createElement("img"),
+			element: document.createElement("img"),
 		};
 		mouthCanvas.toBlob((blob) => {
 			// TODO: display instantly instead of waiting for the blob to be created
-			sample.img.src = URL.createObjectURL(blob);
+			sample.element.src = URL.createObjectURL(blob);
 			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob).then(() => {
-				sample.img.dataset.saveState = "saved";
+				sample.element.dataset.saveState = "saved";
 			}).catch((err) => {
 				console.error("Failed to save sample:", err);
-				sample.img.dataset.saveState = "error";
+				sample.element.dataset.saveState = "error";
 			});
 		});
 		trackAndDisplaySample(sample);
