@@ -282,6 +282,7 @@ for (const [poseId, pose] of Object.entries(poses)) {
 		for (const el of document.querySelectorAll(".bucket")) {
 			el.style.display = el.dataset.poseId === currentPose ? "" : "none";
 		}
+		setRecording(false);
 	});
 }
 
