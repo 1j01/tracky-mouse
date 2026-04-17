@@ -189,7 +189,7 @@
 	border-radius: 12px;
 	background: radial-gradient(circle at 50% 45%, #06264d 0%, #081a30 45%, #070e18 100%);
 	outline: 1px solid #26384f;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .bucket {
