@@ -20,6 +20,12 @@
  */
 
 /**
+ * @typedef {Object} Size
+ * @property {number} width
+ * @property {number} height
+ */
+
+/**
  * @typedef {Object} Face
  * @property {Array<{x: number, y: number, z: number}>} keypoints
  * @property {BoundingBox} box
@@ -29,10 +35,8 @@
  * @typedef {Object} CropMetadata
  * @property {BoundingBox} videoFrameMouthBoundingBox
  * @property {BoundingBox} videoFrameCaptureBoundingBox
- * @property {number} videoFrameWidth
- * @property {number} videoFrameHeight
- * @property {number} capturedImageWidth
- * @property {number} capturedImageHeight
+ * @property {Size} videoFrameSize
+ * @property {Size} sampleImageResolution
  */
 
 /**
@@ -364,10 +368,14 @@ function captureMouthImage(video, facemeshPrediction) {
 		cropMetadata: {
 			videoFrameMouthBoundingBox: mouthBoundingBox,
 			videoFrameCaptureBoundingBox: captureBox,
-			videoFrameWidth: video.videoWidth,
-			videoFrameHeight: video.videoHeight,
-			capturedImageWidth: mouthCanvas.width,
-			capturedImageHeight: mouthCanvas.height,
+			videoFrameSize: {
+				width: video.videoWidth,
+				height: video.videoHeight,
+			},
+			sampleImageResolution: {
+				width: mouthCanvas.width,
+				height: mouthCanvas.height,
+			},
 		},
 	};
 }
@@ -444,7 +452,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 			}
 			/** @type {SampleMetadata} */
 			const metadata = {
-				formatVersion: 2,
+				formatVersion: 3,
 				videoFrameKeypoints: facemeshPrediction.keypoints,
 				crop: cropMetadata,
 			};
