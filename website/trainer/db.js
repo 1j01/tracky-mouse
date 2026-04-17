@@ -121,6 +121,18 @@ export class TrainerDB {
 					onProgress?.({ scannedFiles, scannedFolders, loaded: 0, total: 0 });
 
 					const [poseId, pitch, yaw] = pathParts;
+					if (!poseId || !pitch || !yaw) {
+						console.warn(`Skipping file with unexpected path structure: ${[...pathParts, name].join("/")}`);
+						return;
+					}
+					if (isNaN(pitch) || isNaN(yaw)) {
+						console.warn(`Skipping file with non-numeric pitch or yaw path component: ${[...pathParts, name].join("/")}`);
+						return;
+					}
+					if (isNaN(parseInt(name))) {
+						console.warn(`Skipping file with non-numeric name: ${[...pathParts, name].join("/")}`);
+						return;
+					}
 
 					fileEntries.push({
 						poseId,
