@@ -29,11 +29,17 @@
  * @typedef {Object} CropMetadata
  * @property {BoundingBox} mouthBoundingBox
  * @property {BoundingBox} captureBox
- * @property {number} paddingFraction
  * @property {number} sourceWidth
  * @property {number} sourceHeight
- * @property {number} outputWidth
- * @property {number} outputHeight
+ * @property {number} capturedImageWidth
+ * @property {number} capturedImageHeight
+ */
+
+/**
+ * @typedef {Object} SampleMetadata
+ * @property {number} formatVersion
+ * @property {Array<{x: number, y: number, z: number}>} keypoints
+ * @property {CropMetadata} crop
  */
 
 import { TrainerDB } from "./db.js";
@@ -308,7 +314,7 @@ function clampAndSnap(value, min, max, bucketCount) {
 /**
  * @param {HTMLVideoElement} video 
  * @param {Face} facemeshPrediction 
- * @returns {{isValidCapture: boolean, cropMetadata: CropMetadata}} crop result and validity (not clipped by video bounds)
+ * @returns {{isValidCapture: boolean, cropMetadata: CropMetadata}} whether capture is in bounds plus crop metadata
  */
 function captureMouthImage(video, facemeshPrediction) {
 	/** @type {BoundingBox} */
@@ -358,11 +364,10 @@ function captureMouthImage(video, facemeshPrediction) {
 		cropMetadata: {
 			mouthBoundingBox,
 			captureBox,
-			paddingFraction,
 			sourceWidth: video.videoWidth,
 			sourceHeight: video.videoHeight,
-			outputWidth: mouthCanvas.width,
-			outputHeight: mouthCanvas.height,
+			capturedImageWidth: mouthCanvas.width,
+			capturedImageHeight: mouthCanvas.height,
 		},
 	};
 }
@@ -437,12 +442,10 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 				sample.element.dataset.saveState = "error";
 				return;
 			}
+			/** @type {SampleMetadata} */
 			const metadata = {
-				keypoints: facemeshPrediction.keypoints.map((keypoint) => ({
-					x: keypoint.x,
-					y: keypoint.y,
-					z: keypoint.z,
-				})),
+				formatVersion: 1,
+				keypoints: facemeshPrediction.keypoints,
 				crop: cropMetadata,
 			};
 			db.save(sample.poseId, sample.pitch, sample.yaw, sample.sampleIndex, blob, metadata).then(() => {
