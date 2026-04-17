@@ -62,16 +62,26 @@ export class TrainerDB {
 		const handle = await window.showDirectoryPicker();
 
 		if (handle.name === "poses") {
+			// TODO: Actually present this warning to the user
+			// (Or simplify folder structure)
 			console.warn(
 				"You selected the 'poses' folder. Please select its parent folder instead."
 			);
 		}
 
-		// Request read/write permission proactively but don't require it
-		await handle.requestPermission({ mode: "readwrite" });
-
-		this.rootHandle = handle;
 		await idbSet(KEY, handle);
+		this.rootHandle = handle;
+	}
+
+	async ensureWritePermission() {
+		if (!this.rootHandle) {
+			throw new Error("Folder not selected");
+		}
+
+		const hasPermission = await this.rootHandle.queryPermission({ mode: "readwrite" }) === "granted";
+		if (hasPermission) return true;
+
+		return await this.rootHandle.requestPermission({ mode: "readwrite" }) === "granted";
 	}
 
 	/**

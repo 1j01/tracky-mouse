@@ -108,7 +108,13 @@ function enableRecordingControls() {
 	}
 	recordingControlsInitialized = true;
 	toggleRecordingButton.addEventListener("click", () => {
-		setRecording(!recording);
+		db.ensureWritePermission().then((granted) => {
+			if (granted) {
+				setRecording(!recording);
+			} else {
+				alert("Please enable file editing permission to allow saving samples.\n\nThese settings can typically be found by clicking a button at the left of the address bar.\nIt may look like a lock or a camera icon.");
+			}
+		});
 	});
 	window.addEventListener("blur", () => {
 		setRecording(false);
@@ -122,7 +128,6 @@ async function loadImagesAndEnableRecording(signal) {
 			signal,
 			onProgress: updateLoadingProgress,
 		});
-		reset(); // in case of switching folders, clear out old samples
 		for (const poseId in existingImageFiles) {
 			for (const pitch in existingImageFiles[poseId]) {
 				for (const yaw in existingImageFiles[poseId][pitch]) {
@@ -199,6 +204,7 @@ function init() {
 		try {
 			setRecording(false);
 			await db.selectFolder();
+			reset();
 			updateSelectedFolderStatus();
 			if (!db.rootHandle) {
 				return;
@@ -257,6 +263,7 @@ function reset() {
 	for (const pose of Object.values(poses)) {
 		pose.buckets = {};
 	}
+	currentBucket = null;
 	document.getElementById("samples-grid").innerHTML = "";
 }
 
