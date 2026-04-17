@@ -48,3 +48,4 @@ Style:
 - "Samples Cloud" is too dark in light mode
 - "Samples Cloud" wording?
 - poses selector text alignment: left might look better
+- could try a more descriptive "1x"-"5x" to indicate sample counts, and maybe make it less prominent; not sure how much I want to highlight less-than-max stacks; I don't want people to strain their neck trying to fill all the buckets, but in as much as they're *not* going to strain their neck, I *do* want to encourage filling more buckets... maybe a separate style for near-center buckets, treating the outer buckets as "bonus" samples that are nice to have but not expected to be filled
