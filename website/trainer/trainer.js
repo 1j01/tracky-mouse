@@ -274,6 +274,7 @@ function clampAndSnap(value, min, max, bucketCount) {
 /**
  * @param {HTMLVideoElement} video 
  * @param {Face} facemeshPrediction 
+ * @returns {boolean} whether valid (not clipped by video bounds)
  */
 function captureMouthImage(video, facemeshPrediction) {
 	/** @type {BoundingBox} */
@@ -317,6 +318,8 @@ function captureMouthImage(video, facemeshPrediction) {
 		mouthCanvas.width,
 		mouthCanvas.height
 	);
+
+	return captureBox.xMin >= 0 && captureBox.yMin >= 0 && captureBox.xMax <= video.videoWidth && captureBox.yMax <= video.videoHeight;
 }
 
 /**
@@ -358,7 +361,7 @@ function trackAndDisplaySample(sample) {
  * @param {HTMLVideoElement} video 
  */
 function recordSnapshot(facemeshPrediction, headTilt, video) {
-	captureMouthImage(video, facemeshPrediction);
+	const isValidCapture = captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
 	if (!pose.buckets[bucketAngles.pitch]) {
@@ -366,7 +369,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 	}
 	const existingBucket = pose.buckets[bucketAngles.pitch][bucketAngles.yaw];
 
-	if (recording && (!existingBucket || existingBucket.samples.length < maxSamplesPerBucket)) {
+	if (recording && isValidCapture && (!existingBucket || existingBucket.samples.length < maxSamplesPerBucket)) {
 		/** @type {Sample} */
 		const sample = {
 			poseId: currentPose,
