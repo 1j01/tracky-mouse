@@ -68,19 +68,15 @@ function setRecording(shouldRecord) {
 	toggleRecordingButton.setAttribute("aria-pressed", recording);
 }
 
-function updateLoadingStatus(message) {
-	loadingStatus.textContent = message;
-}
-
 function updateLoadingProgress({ scannedFiles, scannedFolders, loaded, total }) {
 	if (total > 0) {
 		loadingProgress.max = total;
 		loadingProgress.value = loaded;
-		updateLoadingStatus(`Loading samples: ${loaded}/${total}`);
+		loadingStatus.textContent = `Loading samples: ${loaded}/${total}`;
 	} else {
 		loadingProgress.removeAttribute("max");
 		loadingProgress.removeAttribute("value");
-		updateLoadingStatus(`Scanning folders: ${scannedFolders}, files: ${scannedFiles}`);
+		loadingStatus.textContent = `Scanning folders: ${scannedFolders}, files: ${scannedFiles}`;
 	}
 }
 
@@ -91,7 +87,7 @@ function setLoadingState(isLoading) {
 	cancelLoadingButton.hidden = !isLoading;
 	loadingProgress.hidden = !isLoading;
 	if (!isLoading) {
-		updateLoadingStatus("");
+		loadingStatus.textContent = "";
 	}
 }
 
