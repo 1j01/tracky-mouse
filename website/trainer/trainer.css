@@ -180,6 +180,11 @@
 	font-size: 0.9rem;
 }
 
+#selected-folder {
+	font-size: 0.9rem;
+	color: var(--train-ink-soft);
+}
+
 #samples-grid {
 	position: relative;
 	perspective: 500px;

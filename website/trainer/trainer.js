@@ -35,6 +35,7 @@ const selectFolderButton = document.getElementById("select-folder");
 const loadingProgress = document.getElementById("loading-progress");
 const loadingStatus = document.getElementById("loading-status");
 const cancelLoadingButton = document.getElementById("cancel-loading");
+const selectedFolderStatus = document.getElementById("selected-folder");
 
 /** @type {{[key: string]: { label: string, description: string, buckets: { [key: string]: { [key: string]: { samples: Sample[], element: HTMLElement } } } }}} */
 const poses = {
@@ -89,6 +90,13 @@ function setLoadingState(isLoading) {
 	if (!isLoading) {
 		loadingStatus.textContent = "";
 	}
+}
+
+function updateSelectedFolderStatus() {
+	const folderName = db.rootHandle?.name;
+	selectedFolderStatus.textContent = folderName
+		? `Selected folder: ${folderName}`
+		: "Selected folder: none";
 }
 
 function enableRecordingControls() {
@@ -174,6 +182,7 @@ async function startLoadingImages() {
 
 function init() {
 	const trackyMouse = TrackyMouse.init(document.getElementById("tracky-mouse"));
+	updateSelectedFolderStatus();
 
 	cancelLoadingButton.addEventListener("click", () => {
 		activeLoadController?.abort();
@@ -190,6 +199,7 @@ function init() {
 		try {
 			setRecording(false);
 			await db.selectFolder();
+			updateSelectedFolderStatus();
 			if (!db.rootHandle) {
 				return;
 			}
@@ -204,6 +214,7 @@ function init() {
 	});
 
 	db.init().then((hasAccess) => {
+		updateSelectedFolderStatus();
 		if (!hasAccess) {
 			console.log("No access to database, user needs to select folder");
 			return;
