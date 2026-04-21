@@ -187,6 +187,7 @@
 
 #samples-grid {
 	position: relative;
+	--sphere-radius: 250px;
 	perspective: 500px;
 	min-height: clamp(18rem, 45vh, 35rem);
 	transform-style: preserve-3d;
@@ -201,9 +202,47 @@
 	left: 50%;
 	top: 50%;
 	/* transform: translateX(calc(var(--column) * 50px)) translateY(calc(var(--row) * 50px)); */
-	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(250px) scale(0.8);
+	transform: rotateX(var(--pitch)) rotateY(var(--yaw)) translateZ(var(--sphere-radius)) scale(0.8);
 	transform-origin: center;
 	transform-style: preserve-3d;
+}
+
+.sphere-cursor {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 0;
+	height: 0;
+	transform: rotateX(var(--pitch, 0deg)) rotateY(var(--yaw, 0deg)) translateZ(calc(var(--sphere-radius) + 12px));
+	transform-origin: center;
+	transform-style: preserve-3d;
+	pointer-events: none;
+	z-index: 2;
+}
+
+.sphere-cursor::before,
+.sphere-cursor::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.sphere-cursor::before {
+	width: 22px;
+	height: 22px;
+	border: 2px solid color-mix(in srgb, white 70%, var(--train-accent));
+	background: color-mix(in srgb, var(--train-accent) 24%, transparent);
+	box-shadow: 0 0 0 1px rgba(6, 18, 32, 0.75), 0 0 16px rgba(56, 166, 255, 0.38);
+}
+
+.sphere-cursor::after {
+	width: 7px;
+	height: 7px;
+	background: white;
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
 }
 
 .bucket .thumbnail {
