@@ -285,7 +285,8 @@ function createMenu() {
 				},
 				{ type: 'separator' },
 				{ role: 'resetZoom' },
-				{ role: 'zoomIn' },
+				{ role: 'zoomIn', accelerator: 'CmdOrCtrl+=' },
+				{ role: 'zoomIn', accelerator: 'CmdOrCtrl+Plus', visible: false },
 				{ role: 'zoomOut' },
 				{ type: 'separator' },
 				{ role: 'togglefullscreen' }

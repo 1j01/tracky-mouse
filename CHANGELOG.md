@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
 - In the desktop app, Tracky Mouse now tries to recover automatically if a renderer, GPU, or utility/video subprocess crashes.
 - Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard.
+- The Zoom In shortcut now works as <kbd>Ctrl</kbd>+<kbd>=</kbd> (or <kbd>Cmd</kbd>+<kbd>=</kbd> on macOS), without requiring <kbd>Shift</kbd>. ([issue #104](https://github.com/1j01/tracky-mouse/issues/104))
 
 ## [2.7.0] - 2026-04-05
 
