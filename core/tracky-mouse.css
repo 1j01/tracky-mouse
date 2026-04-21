@@ -217,6 +217,13 @@
 	white-space: pre-wrap;
 }
 
+.tracky-mouse-error-message pre {
+	white-space: pre-wrap;
+	font-size: small;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+}
+
 @keyframes tracky-mouse-jello-vertical {
 	0% {
 		transform: scale3d(calc(calc(3 + 1) / 4), calc(calc(3 + 1) / 4), 1);
