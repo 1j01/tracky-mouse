@@ -75,6 +75,16 @@ let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
  * @param {() => void} [config.beforePointerDownDispatch] - a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
  * @param {() => boolean} [config.isHeld] - a function that returns true if the next dwell should be a release (triggering `pointerup`).
  */
+
+// Module-private signals so the dwell clicker can wait for the head tracker
+// to actually see a face before starting dwells — otherwise a physical mouse
+// would trigger dwells before the camera stream is up. See issue #41.
+// If TrackyMouse.init() is never called (pure dwell-clicker use with an eye
+// tracker or similar), headTrackingInitialized stays false and the gate is
+// a no-op, preserving existing behavior.
+let headTrackingInitialized = false;
+let headDetected = false;
+
 const initDwellClicking = (config) => {
 
 	/** translation placeholder */
@@ -529,7 +539,11 @@ const initDwellClicking = (config) => {
 				return;
 			}
 			if (recentMovementAmount < 5) {
-				if (!hoverCandidate) {
+				// Wait for head tracking to actually detect a face before starting
+				// new dwells; otherwise moving a physical mouse triggers clicks
+				// before the camera is really in use. See issue #41.
+				const headTrackingReady = !headTrackingInitialized || headDetected;
+				if (!hoverCandidate && headTrackingReady) {
 					hoverCandidate = {
 						x: averagePoint.x,
 						y: averagePoint.y,
@@ -4149,6 +4163,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
+			// Once the face tracker has established any points, treat the head as
+			// detected. This latches on (doesn't flip back) so brief drop-outs
+			// don't make the dwell clicker stop working. See issue #41.
+			if (!headDetected && pointTracker.pointCount > 0) {
+				headDetected = true;
+			}
+
 			const screenWidth = window.electronAPI ? screen.width : innerWidth;
 			const screenHeight = window.electronAPI ? screen.height : innerHeight;
 
@@ -4467,6 +4488,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 // Wrapper that manages an inner instance and recreates it when the language is changed.
 TrackyMouse.init = function (div, opts = {}) {
+	// Mark the head tracker as in use so initDwellClicking knows to wait for
+	// the first face detection before starting dwells. See issue #41.
+	headTrackingInitialized = true;
+
 	let inner = null;
 
 	// UI state saving could be cleaner as part of the inner instance idk
