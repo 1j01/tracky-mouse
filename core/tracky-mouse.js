@@ -1697,6 +1697,37 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	let desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
+	let lastShownErrorDetails = null;
+	function showError(message, error, { warningIcon = true } = {}) {
+		const alreadyShown = !errorMessage.hidden && lastShownErrorDetails?.message === message && lastShownErrorDetails?.error?.name === error?.name && lastShownErrorDetails?.error?.message === error?.message;
+		if (alreadyShown) {
+			// Play CSS animation to indicate repeated errors
+			// but not if they're occurring constantly
+			// Note: for constant errors, with this scheme, it may animate
+			// when returning to the tab due to timer throttling, or due to lag.
+			if (performance.now() > lastShownErrorDetails.time + 100) {
+				errorMessage.style.animation = "none";
+				if (alreadyShown) {
+					void errorMessage.offsetWidth; // trigger reflow to allow restarting animation
+					errorMessage.style.animation = "";
+				}
+			}
+		} else {
+			if (warningIcon) {
+				errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${message}`;
+			} else {
+				errorMessage.textContent = message;
+			}
+			if (error) {
+				const pre = document.createElement("pre");
+				pre.textContent = error.name + ": " + error.message;
+				errorMessage.appendChild(pre);
+			}
+			errorMessage.hidden = false;
+		}
+		lastShownErrorDetails = { message, error, time: performance.now() };
+	}
+
 	// Settings (initialized later; defaults are defined in settingsCategories)
 	const s = {};
 
@@ -2048,7 +2079,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.name + ": " + error.message);
 							return;
 						}
 
@@ -2062,7 +2093,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + result.error);
 							}
 						} catch (error) {
-							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.name + ": " + error.message);
 						}
 					},
 					// description: t("settings.openCameraSettings.description.alt1", { defaultValue: "Open your camera's system settings window to adjust properties like brightness and contrast." }),
@@ -2562,8 +2593,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		} catch (error) {
 			detector = null;
 			console.error("Failed to create facemesh detector:", error);
-			errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${t("faceDetectorInitError", { defaultValue: "Failed to create face detector" })}\n\n${error.message}`;
-			errorMessage.hidden = false;
+			showError(t("faceDetectorInitError", { defaultValue: "Failed to create face detector" }), error);
 		}
 
 		facemeshLoaded = true;
@@ -2591,8 +2621,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					console.error("Failed to dispose facemesh detector after estimation error:", disposeError);
 				}
 				detector = null;
-				errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${t("faceDetectorError", { defaultValue: "Face detector error" })}\n\n${error.message}`;
-				errorMessage.hidden = false;
+				showError(t("faceDetectorError", { defaultValue: "Face detector error" }), error);
 			}
 			return [];
 		};
@@ -2836,7 +2865,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		errorMessage.hidden = false;
 	};
 
-	let showedCameraError = false;
 	const cameraAccessSlowWarningDelayMS = 5000;
 	let cameraAccessSlowWarningTimeoutID;
 	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
@@ -2971,7 +2999,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
-				errorMessage.textContent = t("video.errors.noCameraFound", { defaultValue: "No camera found. Please make sure you have a camera connected and enabled." });
+				showError(t("video.errors.noCameraFound", { defaultValue: "No camera found. Please make sure you have a camera connected and enabled." }));
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
 				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
@@ -2979,18 +3007,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
 				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
 				// or "1 camera source detected" preceding it)
-				errorMessage.textContent = t("video.errors.cameraInUse", { defaultValue: "Webcam is already in use. Please make sure you have no other programs using the camera." });
+				showError(t("video.errors.cameraInUse", { defaultValue: "Webcam is already in use. Please make sure you have no other programs using the camera." }));
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
 				// Update: it definitely isn't, but I can't say exactly what it means in other cases.
 				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
 				// I really hope that isn't the problem.
-				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
-				errorMessage.textContent = t("video.errors.retryAfterClosingOtherPrograms", { defaultValue: "Please make sure no other programs are using the camera and try again." });
+				// showError("Webcam may already be in use. Please make sure you have no other programs using the camera.");
+				showError(t("video.errors.retryAfterClosingOtherPrograms", { defaultValue: "Please make sure no other programs are using the camera and try again." }));
 				// A more honest/helpful message might be:
-				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
-				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
+				// showError("Please try again and then make sure no other programs are using the camera and try again again.");
+				// showError("Please try again before/after making sure no other programs are using the camera.");
 				// if it were not to be confusing.
 				// That is, one could save some time by just hitting the button to try again before trying to figure out of another program is using the camera,
 				// because sometimes that's enough.
@@ -3001,36 +3029,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
 				// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
 				if (constraints.video.deviceId?.exact) {
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
-					errorMessage.textContent = t("video.errors.previouslySelectedUnavailable", { defaultValue: "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to." });
+					// showError("The previously selected camera is not available. Please select a different camera from the dropdown and try again.");
+					// showError("The previously selected camera is not available. Please mess around with Video > Camera source.");
+					// showError("The previously selected camera is not available. Try changing Video > Camera source.");
+					// showError("The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.");
+					showError(t("video.errors.previouslySelectedUnavailable", { defaultValue: "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to." }));
 					// It's awkward but that's my best attempt at conveying how you may need to proceed
 					// without complicated description of how/why the dropdown might be populated with
 					// fake information until a camera stream is successfully opened.
 				} else {
-					errorMessage.textContent = t("video.errors.unsupportedResolution", { defaultValue: "Webcam does not support the required resolution. Please change your settings." });
+					showError(t("video.errors.unsupportedResolution", { defaultValue: "Webcam does not support the required resolution. Please change your settings." }));
 				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
-				errorMessage.textContent = t("video.errors.permissionDenied", { defaultValue: "Permission denied. Please enable access to the camera." });
+				showError(t("video.errors.permissionDenied", { defaultValue: "Permission denied. Please enable access to the camera." }));
 			} else if (error.name == "TypeError") {
 				// empty constraints object
-				errorMessage.textContent = `${t("video.errors.accessFailed", { defaultValue: "Something went wrong accessing the camera." })} (${error.name}: ${error.message})`;
+				showError(t("video.errors.accessFailed", { defaultValue: "Something went wrong accessing the camera." }), error);
 			} else {
 				// other errors
-				errorMessage.textContent = `${t("video.errors.accessFailedRetry", { defaultValue: "Something went wrong accessing the camera. Please try again." })} (${error.name}: ${error.message})`;
+				showError(t("video.errors.accessFailedRetry", { defaultValue: "Something went wrong accessing the camera. Please try again." }), error);
 			}
-			errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${errorMessage.textContent}`;
-			errorMessage.hidden = false;
-			// Play CSS animation only on retries
-			errorMessage.style.animation = "none";
-			if (showedCameraError) {
-				void errorMessage.offsetWidth; // trigger reflow to allow restarting animation
-				errorMessage.style.animation = "";
-			}
-			showedCameraError = true;
 		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
