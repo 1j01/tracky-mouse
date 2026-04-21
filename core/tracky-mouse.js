@@ -390,7 +390,14 @@ const initDwellClicking = (config) => {
 					let occluder = document.elementFromPoint(hoverCandidate.x, hoverCandidate.y);
 					hoverCandidate = null;
 					deactivateForAtLeast(inactiveAfterInvalidTimespan);
-					showOccluderIndicator(occluder || document.body);
+					// Only flash the red outline when there's a concrete occluding element.
+					// Falling back to document.body produced a confusing screen-wide outline
+					// whenever a dwell was canceled for non-occlusion reasons — e.g. turning the
+					// dwell clicker off, the pointer leaving the page, or a retarget resolving
+					// to null.
+					if (occluder && occluder !== document.body) {
+						showOccluderIndicator(occluder);
+					}
 				}
 			}
 

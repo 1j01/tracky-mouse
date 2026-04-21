@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard.
 - The Zoom In shortcut now works as <kbd>Ctrl</kbd>+<kbd>=</kbd> (or <kbd>Cmd</kbd>+<kbd>=</kbd> on macOS), without requiring <kbd>Shift</kbd>. ([issue #104](https://github.com/1j01/tracky-mouse/issues/104))
 - The Start/Stop button no longer shows "Stop" when "Start enabled" is turned on but camera permission has not yet been granted. The <kbd>F9</kbd> shortcut also now prompts for camera access on first use in the web version, matching the Start/Stop button. ([issue #56](https://github.com/1j01/tracky-mouse/issues/56))
+- No longer shows a full-screen red dashed outline when a dwell is canceled for reasons other than an actual occluding element — e.g. turning off the dwell clicker, the pointer leaving the page, or a retarget rule resolving to null. ([issue #42](https://github.com/1j01/tracky-mouse/issues/42))
 
 ## [2.7.0] - 2026-04-05
 
