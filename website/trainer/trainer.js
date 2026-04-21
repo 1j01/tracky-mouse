@@ -57,6 +57,7 @@ const loadingProgress = document.getElementById("loading-progress");
 const loadingStatus = document.getElementById("loading-status");
 const cancelLoadingButton = document.getElementById("cancel-loading");
 const selectedFolderStatus = document.getElementById("selected-folder");
+const samplesGrid = document.getElementById("samples-grid");
 
 /** @type {{[key: string]: { label: string, description: string, buckets: { [key: string]: { [key: string]: { samples: Sample[], element: HTMLElement } } } }}} */
 const poses = {
@@ -76,6 +77,15 @@ let loading = false;
 let activeLoadController = null;
 let recordingControlsInitialized = false;
 const maxSamplesPerBucket = 5;
+const maxYawDegrees = 40;
+const maxPitchDegrees = 40;
+const yawBucketCount = 9;
+const pitchBucketCount = 9;
+const sphereCursor = document.createElement("div");
+
+sphereCursor.classList.add("sphere-cursor");
+sphereCursor.setAttribute("aria-hidden", "true");
+samplesGrid.append(sphereCursor);
 
 const MOUTH_MESH_ANNOTATIONS = {
 	lipsUpperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
@@ -291,7 +301,8 @@ function reset() {
 		pose.buckets = {};
 	}
 	currentBucket = null;
-	document.getElementById("samples-grid").innerHTML = "";
+	samplesGrid.innerHTML = "";
+	samplesGrid.append(sphereCursor);
 }
 
 
@@ -300,20 +311,39 @@ function reset() {
  * @returns {{pitch: number, yaw: number}} quantized angles in degrees
  */
 function headTiltToBucket(headTilt) {
-	const maxYaw = 40; // degrees
-	const maxPitch = 40; // degrees
-	const yawBucketCount = 9;
-	const pitchBucketCount = 9;
+	const sphereAngles = headTiltToSphereAngles(headTilt);
 	return {
-		yaw: clampAndSnap(headTilt.yaw * (180 / Math.PI), -maxYaw, maxYaw, yawBucketCount),
-		pitch: clampAndSnap(headTilt.pitch * (180 / Math.PI), -maxPitch, maxPitch, pitchBucketCount)
+		yaw: snapToBucket(sphereAngles.yaw, -maxYawDegrees, maxYawDegrees, yawBucketCount),
+		pitch: snapToBucket(sphereAngles.pitch, -maxPitchDegrees, maxPitchDegrees, pitchBucketCount)
 	};
 }
 
-function clampAndSnap(value, min, max, bucketCount) {
+
+/**
+ * @param {{pitch: number, yaw: number}} headTilt in radians
+ * @returns {{pitch: number, yaw: number}} clamped angles in degrees
+ */
+function headTiltToSphereAngles(headTilt) {
+	return {
+		yaw: clampValue(headTilt.yaw * (180 / Math.PI), -maxYawDegrees, maxYawDegrees),
+		pitch: clampValue(headTilt.pitch * (180 / Math.PI), -maxPitchDegrees, maxPitchDegrees),
+	};
+}
+
+function snapToBucket(value, min, max, bucketCount) {
 	const range = max - min;
 	const quantized = min + Math.round(((value - min) / range) * (bucketCount - 1)) * (range / (bucketCount - 1));
-	return Math.max(min, Math.min(max, quantized));
+	return clampValue(quantized, min, max);
+}
+
+function clampValue(value, min, max) {
+	return Math.max(min, Math.min(max, value));
+}
+
+function updateSphereCursor(headTilt) {
+	const sphereAngles = headTiltToSphereAngles(headTilt);
+	sphereCursor.style.setProperty("--pitch", `${-sphereAngles.pitch}deg`);
+	sphereCursor.style.setProperty("--yaw", `${-sphereAngles.yaw}deg`);
 }
 
 /**
@@ -395,7 +425,7 @@ function trackAndDisplaySample(sample) {
 			samples: [],
 			element: document.createElement("div"),
 		};
-		document.getElementById("samples-grid").append(bucket.element);
+		samplesGrid.append(bucket.element);
 		bucket.element.classList.add("bucket");
 		bucket.element.dataset.count = "0";
 		bucket.element.dataset.pitch = sample.pitch;
@@ -423,6 +453,7 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 	const { isValidCapture, cropMetadata } = captureMouthImage(video, facemeshPrediction);
 	const bucketAngles = headTiltToBucket(headTilt);
 	const pose = poses[currentPose];
+	updateSphereCursor(headTilt);
 	if (!pose.buckets[bucketAngles.pitch]) {
 		pose.buckets[bucketAngles.pitch] = {};
 	}

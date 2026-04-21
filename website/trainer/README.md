@@ -23,7 +23,6 @@ What should happen if a save fails?
 What if a later save succeeds after a failure, creating a gap in the sample numbering?
 - Redesign the layout of the training page to emphasize the hierarchy of: Dataset Folder > Poses > Samples, and Video Input > Mouth Preview. The recording button should be accessible from any scroll position and should change color to indicate recording status.
 - Show progress for each pose. Guide the user through recording samples for each pose.
-- A cursor within the photo sphere (other than highlighting the current bucket, which only applies once there are samples, and doesn't show you precisely when it will move to a different bucket)
 - A timeline view, for dataset cleanup; some ideas (not necessarily mutually achievable or harmonious):
   - Showing frames from all poses, with labels; allowing re-labeling of frames
   - Leaving gaps in the timeline can help to see when a recording started or stopped (likely correlated with mislabeling)
