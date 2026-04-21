@@ -4301,8 +4301,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
 
-				mouseX = Math.min(Math.max(0, mouseX), screenWidth);
-				mouseY = Math.min(Math.max(0, mouseY), screenHeight);
+				// Let the tracked position sit a little past each edge so small
+				// backwards head jitter at the edge doesn't immediately pull the
+				// visible cursor inward — which otherwise makes clicking on the
+				// very edges and corners of the screen frustrating. Kept small
+				// so the "push past the edge to calibrate" technique still works.
+				// See issue #32.
+				const edgeOvershoot = 50;
+				mouseX = Math.min(Math.max(-edgeOvershoot, mouseX), screenWidth + edgeOvershoot);
+				mouseY = Math.min(Math.max(-edgeOvershoot, mouseY), screenHeight + edgeOvershoot);
 
 				if (mouseNeedsInitPos) {
 					// TODO: option to get preexisting mouse position instead of set it to center of screen
@@ -4310,16 +4317,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
+				const visibleX = Math.min(Math.max(0, mouseX), screenWidth);
+				const visibleY = Math.min(Math.max(0, mouseY), screenHeight);
 				if (window.electronAPI) {
-					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
+					window.electronAPI.moveMouse(~~visibleX, ~~visibleY);
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
-					pointerEl.style.left = `${Math.floor(mouseX)}px`;
-					pointerEl.style.top = `${Math.floor(mouseY)}px`;
+					pointerEl.style.left = `${Math.floor(visibleX)}px`;
+					pointerEl.style.top = `${Math.floor(visibleY)}px`;
 				}
 				if (TrackyMouse.onPointerMove) {
-					TrackyMouse.onPointerMove(mouseX, mouseY);
+					TrackyMouse.onPointerMove(visibleX, visibleY);
 				}
 			}
 		}
