@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - On Windows, the desktop app now uses a custom title bar, and a custom menu bar powered by [OS-GUI.js](https://os-gui.js.org)
 - The background of the whole window is now light purple instead of white or black, matching the background color of main part of the app.
+- The green optical flow tracking points are no longer drawn over the face in the camera view when **Tilt influence** is at 100%, since they have no effect on cursor movement at that setting. ([issue #80](https://github.com/1j01/tracky-mouse/issues/80))
 
 ### Fixed
 

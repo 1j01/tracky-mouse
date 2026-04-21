@@ -4138,8 +4138,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				clmTracker.draw(canvas, undefined, undefined, true);
 			}
 		}
-		ctx.fillStyle = "lime";
-		pointTracker.draw(ctx);
+		// At 100% tilt influence the optical flow points are weighted to zero
+		// and don't affect cursor movement, so drawing them over the face is
+		// just noise — matching the sensitivity sliders, which disable at === 1.
+		if (s.headTrackingTiltInfluence < 1) {
+			ctx.fillStyle = "lime";
+			pointTracker.draw(ctx);
+		}
 		debugPointsCtx.fillStyle = "green";
 		pointTracker.draw(debugPointsCtx);
 
