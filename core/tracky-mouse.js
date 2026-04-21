@@ -2958,6 +2958,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
+			updateStartStopButton();
 		}, async (error) => {
 			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			console.log("TrackyMouse.useCamera phase", phase, "error", error);
@@ -3039,12 +3040,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		cameraVideo.loop = true;
 	};
 
-	startStopButton.onclick = () => {
+	const requestToggleTracking = () => {
 		if (!useCameraButton.hidden) {
+			// Camera not connected yet. Request access and ensure we'll
+			// start (not stop) once it connects, regardless of whether
+			// "Start enabled" already set paused=false on load.
 			TrackyMouse.useCamera();
+			if (paused) {
+				paused = false;
+				updatePaused();
+			}
+			return;
 		}
 		handleShortcut("toggle-tracking");
 	};
+	startStopButton.onclick = requestToggleTracking;
 
 	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
 		console.log('getUserMedia not supported in this browser');
@@ -4342,12 +4352,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	const updateStartStopButton = () => {
-		if (paused) {
-			startStopButton.textContent = t("ui.startStopButton.start", { defaultValue: "Start" });
-			startStopButton.setAttribute("aria-pressed", "false");
-		} else {
+		// Show "Stop" only when tracking is actually active — i.e. the
+		// camera is connected and the user hasn't paused. Otherwise show
+		// "Start", so a page reloaded with "Start enabled" but no camera
+		// permission yet doesn't misleadingly say "Stop".
+		const isTracking = !paused && useCameraButton.hidden;
+		if (isTracking) {
 			startStopButton.textContent = t("ui.startStopButton.stop", { defaultValue: "Stop" });
 			startStopButton.setAttribute("aria-pressed", "true");
+		} else {
+			startStopButton.textContent = t("ui.startStopButton.start", { defaultValue: "Start" });
+			startStopButton.setAttribute("aria-pressed", "false");
 		}
 	};
 	const updatePaused = () => {
@@ -4376,7 +4391,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	const handleKeydown = (event) => {
 		// Same shortcut as the global shortcut in the electron app
 		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
-			handleShortcut("toggle-tracking");
+			requestToggleTracking();
 		}
 	};
 	addEventListener("keydown", handleKeydown);
