@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The background of the whole window is now light purple instead of white or black, matching the background color of main part of the app.
 - The green optical flow tracking points are no longer drawn over the face in the camera view when **Tilt influence** is at 100%, since they have no effect on cursor movement at that setting. ([issue #80](https://github.com/1j01/tracky-mouse/issues/80))
 - The desktop app now re-checks for updates every 6 hours while it's running, in addition to the check at startup, so long-running installs don't miss new releases. ([issue #84](https://github.com/1j01/tracky-mouse/issues/84))
+- After 5 minutes of being paused, the camera is now released to save battery and CPU, and to turn off the webcam indicator light. Pressing Start (or F9) reconnects the camera as usual. ([issue #55](https://github.com/1j01/tracky-mouse/issues/55))
 
 ### Fixed
 

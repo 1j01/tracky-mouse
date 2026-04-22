@@ -2850,6 +2850,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		cameraVideo.srcObject = null;
 	};
 
+	// Release the camera stream after the app has been paused continuously
+	// for this long, so the webcam indicator turns off and the OS can sleep
+	// the sensor. Hitting Start (or F9) re-requests access via the normal
+	// useCamera flow. See issue #55.
+	const IDLE_CAMERA_DEACTIVATION_MS = 5 * 60 * 1000;
+	let idleCameraDeactivationTimeoutID = null;
+	const deactivateIdleCamera = () => {
+		idleCameraDeactivationTimeoutID = null;
+		// Bail if state changed while the timer was pending, or if there's
+		// no real camera stream (e.g. demo footage via cameraVideo.src).
+		if (!paused) {
+			return;
+		}
+		if (!(cameraVideo.srcObject instanceof MediaStream)) {
+			return;
+		}
+		stopCameraStream();
+		useCameraButton.hidden = false;
+		updateStartStopButton();
+	};
+
 	const reset = () => {
 		stopCameraStream();
 		clmTrackingStarted = false;
@@ -4438,6 +4459,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		mouseNeedsInitPos = true;
 		if (paused) {
 			pointerEl.style.display = "none";
+			// Schedule camera deactivation if the user stays paused.
+			// Resuming (clicking Start or pressing F9) will cancel this
+			// before it fires, via the `else` branch below.
+			if (idleCameraDeactivationTimeoutID === null) {
+				idleCameraDeactivationTimeoutID = setTimeout(deactivateIdleCamera, IDLE_CAMERA_DEACTIVATION_MS);
+			}
+		} else {
+			if (idleCameraDeactivationTimeoutID !== null) {
+				clearTimeout(idleCameraDeactivationTimeoutID);
+				idleCameraDeactivationTimeoutID = null;
+			}
 		}
 		updateStartStopButton();
 		notifyToggleState?.(!paused);
@@ -4486,6 +4518,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
 
 			clearInterval(iid);
+
+			if (idleCameraDeactivationTimeoutID !== null) {
+				clearTimeout(idleCameraDeactivationTimeoutID);
+				idleCameraDeactivationTimeoutID = null;
+			}
 
 			// stopping camera stream is important, not sure about other resetting
 			reset();
