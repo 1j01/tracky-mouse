@@ -1783,7 +1783,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 25,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -1799,7 +1799,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -1837,7 +1837,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 100,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinLinear", { defaultValue: "Linear" }), // or "Direct", "Raw"

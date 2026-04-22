@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The green optical flow tracking points are no longer drawn over the face in the camera view when **Tilt influence** is at 100%, since they have no effect on cursor movement at that setting. ([issue #80](https://github.com/1j01/tracky-mouse/issues/80))
 - The desktop app now re-checks for updates every 6 hours while it's running, in addition to the check at startup, so long-running installs don't miss new releases. ([issue #84](https://github.com/1j01/tracky-mouse/issues/84))
 - After 5 minutes of being paused, the camera is now released to save battery and CPU, and to turn off the webcam indicator light. Pressing Start (or F9) reconnects the camera as usual. ([issue #55](https://github.com/1j01/tracky-mouse/issues/55))
+- The **Horizontal sensitivity**, **Vertical sensitivity**, and **Acceleration** sliders can now be set twice as high, for users who comfortably run them at the previous maximum or who are using Tracky Mouse from a distance. Existing settings are unchanged — they just sit at the middle of the new range. ([issue #95](https://github.com/1j01/tracky-mouse/issues/95))
 
 ### Fixed
 
