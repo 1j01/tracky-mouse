@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Each setting now has a small reset button beside it that restores the setting to its default value. ([issue #115](https://github.com/1j01/tracky-mouse/issues/115))
+
 ### Changed
 
 - On Windows, the desktop app now uses a custom title bar, and a custom menu bar powered by [OS-GUI.js](https://os-gui.js.org)
 - The background of the whole window is now light purple instead of white or black, matching the background color of main part of the app.
+- The green optical flow tracking points are no longer drawn over the face in the camera view when **Tilt influence** is at 100%, since they have no effect on cursor movement at that setting. ([issue #80](https://github.com/1j01/tracky-mouse/issues/80))
+- The desktop app now re-checks for updates every 6 hours while it's running, in addition to the check at startup, so long-running installs don't miss new releases. ([issue #84](https://github.com/1j01/tracky-mouse/issues/84))
+- After 5 minutes of being paused, the camera is now released to save battery and CPU, and to turn off the webcam indicator light. Pressing Start (or F9) reconnects the camera as usual. ([issue #55](https://github.com/1j01/tracky-mouse/issues/55))
+- The **Horizontal sensitivity**, **Vertical sensitivity**, and **Acceleration** sliders can now be set twice as high, for users who comfortably run them at the previous maximum or who are using Tracky Mouse from a distance. Existing settings are unchanged — they just sit at the middle of the new range. ([issue #95](https://github.com/1j01/tracky-mouse/issues/95))
 
 ### Fixed
 
@@ -18,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
 - In the desktop app, Tracky Mouse now tries to recover automatically if a renderer, GPU, or utility/video subprocess crashes.
 - Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard.
+- The Zoom In shortcut now works as <kbd>Ctrl</kbd>+<kbd>=</kbd> (or <kbd>Cmd</kbd>+<kbd>=</kbd> on macOS), without requiring <kbd>Shift</kbd>. ([issue #104](https://github.com/1j01/tracky-mouse/issues/104))
+- The Start/Stop button no longer shows "Stop" when "Start enabled" is turned on but camera permission has not yet been granted. The <kbd>F9</kbd> shortcut also now prompts for camera access on first use in the web version, matching the Start/Stop button. ([issue #56](https://github.com/1j01/tracky-mouse/issues/56))
+- No longer shows a full-screen red dashed outline when a dwell is canceled for reasons other than an actual occluding element — e.g. turning off the dwell clicker, the pointer leaving the page, or a retarget rule resolving to null. ([issue #42](https://github.com/1j01/tracky-mouse/issues/42))
+- When head tracking is set up alongside the dwell clicker, dwells no longer start from physical mouse movement before the camera has connected and a face has been detected. Pure dwell-clicker usage (without head tracking) is unaffected. ([issue #41](https://github.com/1j01/tracky-mouse/issues/41))
+- Made it easier to click on the very edges and corners of the screen: small backwards head jitter at an edge no longer immediately pulls the cursor inward during a dwell. The tracked position now absorbs up to 50 pixels of overshoot past each edge, while the visible cursor still clamps to the screen. ([issue #32](https://github.com/1j01/tracky-mouse/issues/32))
+- On Windows, the "Tracky Mouse Screen Overlay" window no longer appears in the taskbar after restarting Windows Explorer. ([issue #47](https://github.com/1j01/tracky-mouse/issues/47))
+- Suppressed facial-gesture clicks (Wink to click, Open mouth to click) when facemesh tracking confidence is low, so that briefly incoherent tracking (e.g. when standing up and the head moves out of frame) no longer triggers unintended clicks. ([issue #70](https://github.com/1j01/tracky-mouse/issues/70))
 
 ## [2.7.0] - 2026-04-05
 

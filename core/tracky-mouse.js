@@ -75,6 +75,16 @@ let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
  * @param {() => void} [config.beforePointerDownDispatch] - a function to call before a `pointerdown` event is dispatched. Likely to be merged with `config.beforeDispatch()` in the future.
  * @param {() => boolean} [config.isHeld] - a function that returns true if the next dwell should be a release (triggering `pointerup`).
  */
+
+// Module-private signals so the dwell clicker can wait for the head tracker
+// to actually see a face before starting dwells — otherwise a physical mouse
+// would trigger dwells before the camera stream is up. See issue #41.
+// If TrackyMouse.init() is never called (pure dwell-clicker use with an eye
+// tracker or similar), headTrackingInitialized stays false and the gate is
+// a no-op, preserving existing behavior.
+let headTrackingInitialized = false;
+let headDetected = false;
+
 const initDwellClicking = (config) => {
 
 	/** translation placeholder */
@@ -390,7 +400,14 @@ const initDwellClicking = (config) => {
 					let occluder = document.elementFromPoint(hoverCandidate.x, hoverCandidate.y);
 					hoverCandidate = null;
 					deactivateForAtLeast(inactiveAfterInvalidTimespan);
-					showOccluderIndicator(occluder || document.body);
+					// Only flash the red outline when there's a concrete occluding element.
+					// Falling back to document.body produced a confusing screen-wide outline
+					// whenever a dwell was canceled for non-occlusion reasons — e.g. turning the
+					// dwell clicker off, the pointer leaving the page, or a retarget resolving
+					// to null.
+					if (occluder && occluder !== document.body) {
+						showOccluderIndicator(occluder);
+					}
 				}
 			}
 
@@ -522,7 +539,11 @@ const initDwellClicking = (config) => {
 				return;
 			}
 			if (recentMovementAmount < 5) {
-				if (!hoverCandidate) {
+				// Wait for head tracking to actually detect a face before starting
+				// new dwells; otherwise moving a physical mouse triggers clicks
+				// before the camera is really in use. See issue #41.
+				const headTrackingReady = !headTrackingInitialized || headDetected;
+				if (!hoverCandidate && headTrackingReady) {
 					hoverCandidate = {
 						x: averagePoint.x,
 						y: averagePoint.y,
@@ -1762,7 +1783,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 25,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -1778,7 +1799,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -1816,7 +1837,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							inputValueToSettingValue: (inputValue) => inputValue / 100,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 200,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinLinear", { defaultValue: "Linear" }), // or "Direct", "Raw"
@@ -2371,6 +2392,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			});
 		}
 
+		// Reset-to-default button (skip for action buttons or settings without a declared default)
+		if (setting.type !== "button" && setting.default !== undefined) {
+			const resetLabel = t("ui.resetSetting.label", { defaultValue: "Reset to default" });
+			const resetButton = document.createElement("button");
+			resetButton.type = "button";
+			resetButton.className = "tracky-mouse-reset-setting-button";
+			resetButton.title = resetLabel;
+			resetButton.setAttribute("aria-label", resetLabel);
+			resetButton.innerHTML = `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3V1L4.5 4 8 7V5a3 3 0 1 1-3 3H3a5 5 0 1 0 5-5z" fill="currentColor"/></svg>`;
+			resetButton.addEventListener("click", (event) => {
+				// Prevent the wrapping <label> (for sliders) from forwarding the click to its input.
+				event.preventDefault();
+				event.stopPropagation();
+				setControlValue(setting.default);
+				// Fire change through the existing pipeline so downstream state
+				// (saved settings, handleSettingChange, disabled-state updates) runs.
+				control.dispatchEvent(new Event("change", { bubbles: true }));
+			});
+			rowEl.appendChild(resetButton);
+		}
+
 		return rowEl;
 	}
 
@@ -2808,6 +2850,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		cameraVideo.srcObject = null;
 	};
 
+	// Release the camera stream after the app has been paused continuously
+	// for this long, so the webcam indicator turns off and the OS can sleep
+	// the sensor. Hitting Start (or F9) re-requests access via the normal
+	// useCamera flow. See issue #55.
+	const IDLE_CAMERA_DEACTIVATION_MS = 5 * 60 * 1000;
+	let idleCameraDeactivationTimeoutID = null;
+	const deactivateIdleCamera = () => {
+		idleCameraDeactivationTimeoutID = null;
+		// Bail if state changed while the timer was pending, or if there's
+		// no real camera stream (e.g. demo footage via cameraVideo.src).
+		if (!paused) {
+			return;
+		}
+		if (!(cameraVideo.srcObject instanceof MediaStream)) {
+			return;
+		}
+		stopCameraStream();
+		useCameraButton.hidden = false;
+		updateStartStopButton();
+	};
+
 	const reset = () => {
 		stopCameraStream();
 		clmTrackingStarted = false;
@@ -2958,6 +3021,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
+			updateStartStopButton();
 		}, async (error) => {
 			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			console.log("TrackyMouse.useCamera phase", phase, "error", error);
@@ -3039,12 +3103,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		cameraVideo.loop = true;
 	};
 
-	startStopButton.onclick = () => {
+	const requestToggleTracking = () => {
 		if (!useCameraButton.hidden) {
+			// Camera not connected yet. Request access and ensure we'll
+			// start (not stop) once it connects, regardless of whether
+			// "Start enabled" already set paused=false on load.
 			TrackyMouse.useCamera();
+			if (paused) {
+				paused = false;
+				updatePaused();
+			}
+			return;
 		}
 		handleShortcut("toggle-tracking");
 	};
+	startStopButton.onclick = requestToggleTracking;
 
 	if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
 		console.log('getUserMedia not supported in this browser');
@@ -3732,6 +3805,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						blinkInfo.used = false;
 						mouthInfo.used = false;
+						// Suppress facial-gesture clicks when facemesh confidence is low (e.g. face partially out of frame).
+						// Only gates new gesture-to-click transitions; ongoing button state is preserved so a brief
+						// confidence dip doesn't release an in-progress drag. ([issue #70](https://github.com/1j01/tracky-mouse/issues/70))
+						if (!facemeshPrediction || facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold) {
+							return;
+						}
 						let clickButton = -1;
 						if (s.clickingMode === "blink") {
 							blinkInfo.used = true;
@@ -4121,12 +4200,24 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				clmTracker.draw(canvas, undefined, undefined, true);
 			}
 		}
-		ctx.fillStyle = "lime";
-		pointTracker.draw(ctx);
+		// At 100% tilt influence the optical flow points are weighted to zero
+		// and don't affect cursor movement, so drawing them over the face is
+		// just noise — matching the sensitivity sliders, which disable at === 1.
+		if (s.headTrackingTiltInfluence < 1) {
+			ctx.fillStyle = "lime";
+			pointTracker.draw(ctx);
+		}
 		debugPointsCtx.fillStyle = "green";
 		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
+			// Once the face tracker has established any points, treat the head as
+			// detected. This latches on (doesn't flip back) so brief drop-outs
+			// don't make the dwell clicker stop working. See issue #41.
+			if (!headDetected && pointTracker.pointCount > 0) {
+				headDetected = true;
+			}
+
 			const screenWidth = window.electronAPI ? screen.width : innerWidth;
 			const screenHeight = window.electronAPI ? screen.height : innerHeight;
 
@@ -4258,8 +4349,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
 
-				mouseX = Math.min(Math.max(0, mouseX), screenWidth);
-				mouseY = Math.min(Math.max(0, mouseY), screenHeight);
+				// Let the tracked position sit a little past each edge so small
+				// backwards head jitter at the edge doesn't immediately pull the
+				// visible cursor inward — which otherwise makes clicking on the
+				// very edges and corners of the screen frustrating. Kept small
+				// so the "push past the edge to calibrate" technique still works.
+				// See issue #32.
+				const edgeOvershoot = 50;
+				mouseX = Math.min(Math.max(-edgeOvershoot, mouseX), screenWidth + edgeOvershoot);
+				mouseY = Math.min(Math.max(-edgeOvershoot, mouseY), screenHeight + edgeOvershoot);
 
 				if (mouseNeedsInitPos) {
 					// TODO: option to get preexisting mouse position instead of set it to center of screen
@@ -4267,16 +4365,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					mouseY = screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
+				const visibleX = Math.min(Math.max(0, mouseX), screenWidth);
+				const visibleY = Math.min(Math.max(0, mouseY), screenHeight);
 				if (window.electronAPI) {
-					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
+					window.electronAPI.moveMouse(~~visibleX, ~~visibleY);
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
-					pointerEl.style.left = `${Math.floor(mouseX)}px`;
-					pointerEl.style.top = `${Math.floor(mouseY)}px`;
+					pointerEl.style.left = `${Math.floor(visibleX)}px`;
+					pointerEl.style.top = `${Math.floor(visibleY)}px`;
 				}
 				if (TrackyMouse.onPointerMove) {
-					TrackyMouse.onPointerMove(mouseX, mouseY);
+					TrackyMouse.onPointerMove(visibleX, visibleY);
 				}
 			}
 		}
@@ -4342,18 +4442,34 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	}
 
 	const updateStartStopButton = () => {
-		if (paused) {
-			startStopButton.textContent = t("ui.startStopButton.start", { defaultValue: "Start" });
-			startStopButton.setAttribute("aria-pressed", "false");
-		} else {
+		// Show "Stop" only when tracking is actually active — i.e. the
+		// camera is connected and the user hasn't paused. Otherwise show
+		// "Start", so a page reloaded with "Start enabled" but no camera
+		// permission yet doesn't misleadingly say "Stop".
+		const isTracking = !paused && useCameraButton.hidden;
+		if (isTracking) {
 			startStopButton.textContent = t("ui.startStopButton.stop", { defaultValue: "Stop" });
 			startStopButton.setAttribute("aria-pressed", "true");
+		} else {
+			startStopButton.textContent = t("ui.startStopButton.start", { defaultValue: "Start" });
+			startStopButton.setAttribute("aria-pressed", "false");
 		}
 	};
 	const updatePaused = () => {
 		mouseNeedsInitPos = true;
 		if (paused) {
 			pointerEl.style.display = "none";
+			// Schedule camera deactivation if the user stays paused.
+			// Resuming (clicking Start or pressing F9) will cancel this
+			// before it fires, via the `else` branch below.
+			if (idleCameraDeactivationTimeoutID === null) {
+				idleCameraDeactivationTimeoutID = setTimeout(deactivateIdleCamera, IDLE_CAMERA_DEACTIVATION_MS);
+			}
+		} else {
+			if (idleCameraDeactivationTimeoutID !== null) {
+				clearTimeout(idleCameraDeactivationTimeoutID);
+				idleCameraDeactivationTimeoutID = null;
+			}
 		}
 		updateStartStopButton();
 		notifyToggleState?.(!paused);
@@ -4376,7 +4492,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	const handleKeydown = (event) => {
 		// Same shortcut as the global shortcut in the electron app
 		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
-			handleShortcut("toggle-tracking");
+			requestToggleTracking();
 		}
 	};
 	addEventListener("keydown", handleKeydown);
@@ -4402,6 +4518,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// returning an instance of the class from `TrackyMouse.init` but deprecating it in favor of constructing the class.)
 
 			clearInterval(iid);
+
+			if (idleCameraDeactivationTimeoutID !== null) {
+				clearTimeout(idleCameraDeactivationTimeoutID);
+				idleCameraDeactivationTimeoutID = null;
+			}
 
 			// stopping camera stream is important, not sure about other resetting
 			reset();
@@ -4440,6 +4561,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 // Wrapper that manages an inner instance and recreates it when the language is changed.
 TrackyMouse.init = function (div, opts = {}) {
+	// Mark the head tracker as in use so initDwellClicking knows to wait for
+	// the first face detection before starting dwells. See issue #41.
+	headTrackingInitialized = true;
+
 	let inner = null;
 
 	// UI state saving could be cleaner as part of the inner instance idk
