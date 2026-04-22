@@ -7,6 +7,10 @@ const { t } = require('./i18n');
 const REPO = '1j01/tracky-mouse';
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
 
+// How often to re-check for updates while the app is running.
+// The app can stay open for days, so we re-check periodically in addition to the check at startup.
+const RECHECK_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
+
 // NOTE TO SELF: If you're expecting to see the update dialog,
 // make sure "General > Check for updates" IS ENABLED!
 const TEST_UPDATE_CHECKING = process.env.TEST_UPDATE_CHECKING === 'true';
@@ -135,15 +139,27 @@ async function getGitRepoRoot() {
 }
 // ---------
 
-module.exports = {
-	checkForUpdates: ({ currentVersion, skippedVersion, pleaseSkipThisVersion }) => {
-		const request = net.request(API_URL);
-		request.on('response', (response) => {
-			let body = '';
-			response.on('data', (chunk) => {
-				body += chunk;
-			});
-			response.on('end', async () => {
+let recheckIntervalHandle = null;
+let checkInProgress = false;
+
+function performCheck({ currentVersion, skippedVersion, pleaseSkipThisVersion }) {
+	if (checkInProgress) {
+		// Avoid stacking dialogs / concurrent requests if a previous check is still being handled
+		// (e.g. the user hasn't dismissed the "Update Available" dialog yet).
+		return;
+	}
+	checkInProgress = true;
+	const done = () => {
+		checkInProgress = false;
+	};
+	const request = net.request(API_URL);
+	request.on('response', (response) => {
+		let body = '';
+		response.on('data', (chunk) => {
+			body += chunk;
+		});
+		response.on('end', async () => {
+			try {
 				if (response.statusCode !== 200) {
 					console.error('Failed to check for app updates:', response.statusCode, body);
 					return;
@@ -249,11 +265,30 @@ module.exports = {
 						pleaseSkipThisVersion(latestVersion);
 					}
 				}
-			});
+			} finally {
+				done();
+			}
 		});
-		request.on('error', (error) => {
-			console.error('Network error checking for app updates:', error);
-		});
-		request.end();
+	});
+	request.on('error', (error) => {
+		console.error('Network error checking for app updates:', error);
+		done();
+	});
+	request.on('abort', () => {
+		done();
+	});
+	request.end();
+}
+
+module.exports = {
+	checkForUpdates: (options) => {
+		performCheck(options);
+		// Re-check periodically so long-running installs don't miss updates.
+		// The main process is a singleton, so a single interval is fine.
+		if (recheckIntervalHandle === null) {
+			recheckIntervalHandle = setInterval(() => {
+				performCheck(options);
+			}, RECHECK_INTERVAL_MS);
+		}
 	}
 };
