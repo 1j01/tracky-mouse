@@ -3763,6 +3763,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 						blinkInfo.used = false;
 						mouthInfo.used = false;
+						// Suppress facial-gesture clicks when facemesh confidence is low (e.g. face partially out of frame).
+						// Only gates new gesture-to-click transitions; ongoing button state is preserved so a brief
+						// confidence dip doesn't release an in-progress drag. ([issue #70](https://github.com/1j01/tracky-mouse/issues/70))
+						if (!facemeshPrediction || facemeshPrediction.faceInViewConfidence < faceInViewConfidenceThreshold) {
+							return;
+						}
 						let clickButton = -1;
 						if (s.clickingMode === "blink") {
 							blinkInfo.used = true;
