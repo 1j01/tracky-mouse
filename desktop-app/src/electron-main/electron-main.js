@@ -768,6 +768,21 @@ const createWindow = () => {
 	screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
 
 	screenOverlayWindow.loadFile(`src/electron-screen-overlay.html`);
+
+	// If Windows Explorer is restarted while the app is running, the Screen Overlay Window
+	// can appear in the taskbar, because the window's `skipTaskbar` state is lost.
+	// Periodically re-apply `setSkipTaskbar(true)` as a workaround.
+	// See: https://github.com/1j01/tracky-mouse/issues/47
+	// And: https://github.com/electron/electron/issues/29526
+	let skipTaskbarIntervalId = null;
+	if (process.platform === 'win32') {
+		skipTaskbarIntervalId = setInterval(() => {
+			if (screenOverlayWindow && !screenOverlayWindow.isDestroyed()) {
+				screenOverlayWindow.setSkipTaskbar(true);
+			}
+		}, 5000);
+	}
+
 	screenOverlayWindow.on('close', (event) => {
 		// If Windows Explorer is restarted while the app is running,
 		// the Screen Overlay Window can appear in the taskbar, and become closable.
@@ -787,6 +802,10 @@ const createWindow = () => {
 		screenOverlayWindow.show();
 	});
 	screenOverlayWindow.on('closed', () => {
+		if (skipTaskbarIntervalId !== null) {
+			clearInterval(skipTaskbarIntervalId);
+			skipTaskbarIntervalId = null;
+		}
 		screenOverlayWindow = null;
 	});
 

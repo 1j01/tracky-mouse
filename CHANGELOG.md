@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No longer shows a full-screen red dashed outline when a dwell is canceled for reasons other than an actual occluding element — e.g. turning off the dwell clicker, the pointer leaving the page, or a retarget rule resolving to null. ([issue #42](https://github.com/1j01/tracky-mouse/issues/42))
 - When head tracking is set up alongside the dwell clicker, dwells no longer start from physical mouse movement before the camera has connected and a face has been detected. Pure dwell-clicker usage (without head tracking) is unaffected. ([issue #41](https://github.com/1j01/tracky-mouse/issues/41))
 - Made it easier to click on the very edges and corners of the screen: small backwards head jitter at an edge no longer immediately pulls the cursor inward during a dwell. The tracked position now absorbs up to 50 pixels of overshoot past each edge, while the visible cursor still clamps to the screen. ([issue #32](https://github.com/1j01/tracky-mouse/issues/32))
+- On Windows, the "Tracky Mouse Screen Overlay" window no longer appears in the taskbar after restarting Windows Explorer. ([issue #47](https://github.com/1j01/tracky-mouse/issues/47))
 
 ## [2.7.0] - 2026-04-05
 
