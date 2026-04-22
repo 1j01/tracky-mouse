@@ -189,6 +189,7 @@
   "ui.camera.useDemoFootage": "Use demo footage",
   "ui.camera.useMyCamera": "Use my camera",
   "ui.desktopAppPromo.message": "You can control your entire computer with the <a href=\"https://trackymouse.js.org/\">TrackyMouse</a> desktop app.",
+  "ui.resetSetting.label": "Reset to default",
   "ui.startStopButton.start": "Start",
   "ui.startStopButton.stop": "Stop",
   "video.errors.accessFailed": "Something went wrong accessing the camera.",

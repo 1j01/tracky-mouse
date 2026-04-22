@@ -2392,6 +2392,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			});
 		}
 
+		// Reset-to-default button (skip for action buttons or settings without a declared default)
+		if (setting.type !== "button" && setting.default !== undefined) {
+			const resetLabel = t("ui.resetSetting.label", { defaultValue: "Reset to default" });
+			const resetButton = document.createElement("button");
+			resetButton.type = "button";
+			resetButton.className = "tracky-mouse-reset-setting-button";
+			resetButton.title = resetLabel;
+			resetButton.setAttribute("aria-label", resetLabel);
+			resetButton.innerHTML = `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3V1L4.5 4 8 7V5a3 3 0 1 1-3 3H3a5 5 0 1 0 5-5z" fill="currentColor"/></svg>`;
+			resetButton.addEventListener("click", (event) => {
+				// Prevent the wrapping <label> (for sliders) from forwarding the click to its input.
+				event.preventDefault();
+				event.stopPropagation();
+				setControlValue(setting.default);
+				// Fire change through the existing pipeline so downstream state
+				// (saved settings, handleSettingChange, disabled-state updates) runs.
+				control.dispatchEvent(new Event("change", { bubbles: true }));
+			});
+			rowEl.appendChild(resetButton);
+		}
+
 		return rowEl;
 	}
 

@@ -161,6 +161,41 @@
 	gap: 10px;
 }
 
+.tracky-mouse-ui .tracky-mouse-reset-setting-button {
+	flex: 0 0 auto;
+	margin-inline-start: 8px;
+	padding: 2px;
+	width: 22px;
+	height: 22px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: inherit;
+	opacity: 0.6;
+	cursor: pointer;
+}
+
+.tracky-mouse-ui .tracky-mouse-reset-setting-button:hover,
+.tracky-mouse-ui .tracky-mouse-reset-setting-button:focus-visible {
+	opacity: 1;
+	border-color: rgb(191, 36, 234);
+}
+
+.tracky-mouse-ui .tracky-mouse-reset-setting-button:disabled {
+	opacity: 0.3;
+	cursor: default;
+	border-color: transparent;
+}
+
+.tracky-mouse-ui .tracky-mouse-reset-setting-button svg {
+	width: 16px;
+	height: 16px;
+	display: block;
+}
+
 .tracky-mouse-canvas-container-container {
 	flex: 1;
 	flex-basis: 0;

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Each setting now has a small reset button beside it that restores the setting to its default value. ([issue #115](https://github.com/1j01/tracky-mouse/issues/115))
+
 ### Changed
 
 - On Windows, the desktop app now uses a custom title bar, and a custom menu bar powered by [OS-GUI.js](https://os-gui.js.org)
