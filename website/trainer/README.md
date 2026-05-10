@@ -13,9 +13,7 @@ High impact:
 - Keyboard shortcut for starting/stopping recording (spacebar or R)
 - A way to invalidate recent samples, such as an "Undo Last 5 Seconds" button, or a more dynamic rewind/erase feature, where you can preview the mouth as it rewinds so you can know when you can stop erasing. (shortcut could be backspace or Ctrl+Z or Z)
 - Most mistakes will probably be made while starting/stopping recording, so storing this timing information could be useful for dataset cleanup.
-- Instructions for usage, plus context about what the data is for.
-  - When using a mobile device, you may want to rotate it around your head rather than rotating your head.
-- Instructions to submit samples to the public dataset, with consent and optional consent to usage outside of the project
+- Consent form / contributor license agreement, possibly with two tiers (Tracky Mouse and non-commercial use vs. commercial/general use, or dividing along the lines of intent, assistive technology and maybe research vs. general use); could generate a license file in the dataset folder
 - Training data augmentation (lightness and color balance randomization, zoom/crop randomization, horizontal flips (with left/right labels reversed), adding speckles/distractors, maybe simulating images clipped at the edge of the video frame)
 
 Medium impact:

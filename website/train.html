@@ -33,9 +33,45 @@
 	<main class="train-main">
 		<section class="intro-panel" aria-label="Training Info">
 			<p>
-				Help improve facial expression tracking by recording labeled head-pose samples. Start by selecting a
-				folder,
-				then capture frames while you move through different angles.
+				I'd like to add a new feature to Tracky Mouse, where you can use your tongue position to control
+				scrolling or arrow keys.
+				This could greatly increase the number of games you could play with just your face, from mouse-only
+				games to including platformers, first person shooters, and more.
+			</p>
+			<p>
+				I'm not aware of any completely free and open datasets for tongue pose recognition, so I've created this
+				tool to allow anyone to contribute training data.
+			</p>
+			<p>
+				As you move your head around (or the camera around your head), it will stack images in a sort of photo
+				sphere, collecting up to 5 images for each angle.
+			</p>
+			<h2>How to Contribute</h2>
+			<p>
+				This tool requires a Chromium-based browser (Chrome, Edge, Opera, etc.) and a webcam.
+			</p>
+			<p>
+				To get started, create an empty folder on your computer (using File Explorer or Finder), then click
+				"Select Dataset Folder" and choose
+				the new folder.
+			</p>
+			<p>To record a pose:</p>
+			<ul>
+				<li>Start making the pose and hold it.</li>
+				<li>Press "Start Recording".</li>
+				<li>Tilt your head around, or if on mobile, move the device around your head, keeping it pointed at you.
+				</li>
+				<li>You don't have to get every angle, just do what feels comfortable.</li>
+				<li>Try to hold the pose until after you press "Stop Recording", to avoid mislabeled data.</li>
+			</ul>
+			<p>
+				Select each pose from the list and repeat the steps.
+			</p>
+			<p>
+				You can upload the collected data to Google Drive, Dropbox, or any file sharing service, then share the
+				link with me (<a
+					href="mailto:isaiahodhner@gmail.com?subject=Training%20Data%20Contribution">isaiahodhner@gmail.com</a>).
+				I'll email you back to let you know when I've received it, so you can free up space.
 			</p>
 		</section>
 		<div id="trainer-applet" class="trainer-layout">
