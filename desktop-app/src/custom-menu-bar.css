@@ -8,6 +8,10 @@
 	background-color: rgb(207, 188, 240);
 }
 
+#custom-menu-bar:empty {
+	display: none;
+}
+
 #custom-menu-bar .menus {
 	height: auto;
 	display: flex;
