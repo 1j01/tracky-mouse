@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard. ([issue #96](https://github.com/1j01/tracky-mouse/issues/96))
 - The desktop app's update dialogs should no longer block using Tracky Mouse as an input method on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
 - Improved error display styling and consistency.
+- The screen overlay window should now be hidden from Mission Control on macOS.
 
 ## [2.7.0] - 2026-04-05
 
