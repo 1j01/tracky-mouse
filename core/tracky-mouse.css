@@ -161,7 +161,7 @@
 	gap: 10px;
 }
 
-.tracky-mouse-canvas-container-container {
+.tracky-mouse-camera-area {
 	flex: 1;
 	flex-basis: 0;
 	min-width: 0;

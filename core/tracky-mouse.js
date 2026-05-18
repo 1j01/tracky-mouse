@@ -1672,7 +1672,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
 		</div>
-		<div class="tracky-mouse-canvas-container-container">
+		<div class="tracky-mouse-camera-area">
 			<div class="tracky-mouse-canvas-container">
 				<div class="tracky-mouse-canvas-overlay">
 					<button class="tracky-mouse-use-camera-button">${t("ui.camera.allowAccess", { defaultValue: "Allow Camera Access" })}</button>
@@ -2430,7 +2430,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
 	debugEyeCanvas.style.display = "none";
-	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
+	uiContainer.querySelector(".tracky-mouse-camera-area").appendChild(debugEyeCanvas);
 	let debugEyeCtx = debugEyeCanvas.getContext('2d');
 
 	let pointerEl = document.createElement('div');
