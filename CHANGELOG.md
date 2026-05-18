@@ -15,12 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- On Windows, the app should no longer freeze when using Tracky Mouse to click the Tracky Mouse app window's own minimize or close buttons, or right-clicking on its titlebar. ([issue #69](https://github.com/1j01/tracky-mouse/issues/69))
-  - That said, clicking on the window's border (resizing) can still freeze it up.
+- On Windows, the app should no longer freeze when using Tracky Mouse to click the application's own minimize or close buttons, or when right-clicking on its titlebar. ([issue #69](https://github.com/1j01/tracky-mouse/issues/69))
+  - That said, clicking on the window's border (as to resize the window) can still freeze it up. This should be fixed in the next release by updating Electron.
 - While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
-- In the desktop app, Tracky Mouse now tries to recover automatically if a renderer, GPU, or utility/video subprocess crashes.
-- Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard.
-- The auto-updater's dialogs should no longer block using Tracky Mouse as an input method on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
+- In the desktop app, Tracky Mouse now tries to recover automatically if a subprocess crashes. ([issue #111](https://github.com/1j01/tracky-mouse/issues/111))
+- Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard. ([issue #96](https://github.com/1j01/tracky-mouse/issues/96))
+- The desktop app's update dialogs should no longer block using Tracky Mouse as an input method on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
 - Improved error display styling and consistency.
 
 ## [2.7.0] - 2026-04-05
