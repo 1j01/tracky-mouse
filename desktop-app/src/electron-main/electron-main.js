@@ -836,7 +836,8 @@ app.on('ready', async () => {
 			pleaseSkipThisVersion: (version) => {
 				activeSettings.skippedUpdateVersion = version;
 				saveSettings();
-			}
+			},
+			browserWindow: appWindow,
 		});
 	}
 

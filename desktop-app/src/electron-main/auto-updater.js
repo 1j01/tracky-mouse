@@ -136,7 +136,7 @@ async function getGitRepoRoot() {
 // ---------
 
 module.exports = {
-	checkForUpdates: ({ currentVersion, skippedVersion, pleaseSkipThisVersion }) => {
+	checkForUpdates: ({ currentVersion, skippedVersion, pleaseSkipThisVersion, browserWindow }) => {
 		const request = net.request(API_URL);
 		request.on('response', (response) => {
 			let body = '';
@@ -182,6 +182,7 @@ module.exports = {
 						? [t("desktop.updater.action.updateFromGit", { defaultValue: 'Update from Git' }), t("desktop.updater.action.remindMeLater", { defaultValue: 'Remind me later' }), t("desktop.updater.action.skipThisVersion", { defaultValue: 'Skip this version' })]
 						: [t("desktop.updater.action.download", { defaultValue: 'Download' }), t("desktop.updater.action.remindMeLater", { defaultValue: 'Remind me later' }), t("desktop.updater.action.skipThisVersion", { defaultValue: 'Skip this version' })];
 					const { response: buttonIndex } = await dialog.showMessageBox({
+						browserWindow,
 						type: 'info',
 						title: t("desktop.updater.updateAvailable.title", { defaultValue: 'Update Available' }),
 						message: `${t("desktop.updater.updateAvailable.message", { defaultValue: "A new version of Tracky Mouse is available: %0\n\nYou are currently using version %1." }).replace("%0", latestVersion).replace("%1", currentVersion)}` +
@@ -202,6 +203,7 @@ module.exports = {
 								await exec('npm', ['install'], { cwd: path.join(repoRoot, "desktop-app") });
 
 								const { response: restartChoice } = await dialog.showMessageBox({
+									browserWindow,
 									type: 'info',
 									title: t("desktop.updater.updateSuccessful.title", { defaultValue: 'Update Successful' }),
 									message: `${t("desktop.updater.updateSuccessful.message", { defaultValue: "Checked out %0. Restart the app to use the updated version." }).replace("%0", latestVersion)}`,
@@ -232,6 +234,7 @@ module.exports = {
 									console.error("Additionally, failed to report error to Sentry:", sentryError);
 								}
 								const { response: fallbackButtonIndex } = await dialog.showMessageBox({
+									browserWindow,
 									type: 'error',
 									title: t("desktop.updater.updateFailed.title", { defaultValue: 'Update Failed' }),
 									message: `${friendlyMessage}\n\n${error.message}`,
