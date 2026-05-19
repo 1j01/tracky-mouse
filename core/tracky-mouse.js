@@ -1698,7 +1698,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
 
 	let lastShownErrorDetails = null;
-	function showError(message, error, { warningIcon = true } = {}) {
+	function showError(message, error, { warningIcon = true, errorClass = "other" } = {}) {
 		const alreadyShown = !errorMessage.hidden && lastShownErrorDetails?.message === message && lastShownErrorDetails?.error?.name === error?.name && lastShownErrorDetails?.error?.message === error?.message;
 		if (alreadyShown) {
 			// Play CSS animation to indicate repeated errors
@@ -1725,7 +1725,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			}
 			errorMessage.hidden = false;
 		}
-		lastShownErrorDetails = { message, error, time: performance.now() };
+		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
 	}
 
 	// Settings (initialized later; defaults are defined in settingsCategories)
@@ -2589,11 +2589,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 		try {
 			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
-			errorMessage.hidden = true;
+			if (lastShownErrorDetails?.errorClass === "faceLandmarksDetection.createDetector") {
+				errorMessage.hidden = true;
+			}
 		} catch (error) {
 			detector = null;
 			console.error("Failed to create facemesh detector:", error);
-			showError(t("faceDetectorInitError", { defaultValue: "Failed to create face detector" }), error);
+			showError(t("faceDetectorInitError", { defaultValue: "Failed to create face detector" }), error, { errorClass: "faceLandmarksDetection.createDetector" });
 		}
 
 		facemeshLoaded = true;
