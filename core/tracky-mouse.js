@@ -1728,6 +1728,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
 	}
 
+	function hideError({ errorClass = "other" } = {}) {
+		if (lastShownErrorDetails?.errorClass === errorClass) {
+			errorMessage.hidden = true;
+		}
+	}
+
 	// Settings (initialized later; defaults are defined in settingsCategories)
 	const s = {};
 
@@ -2589,9 +2595,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 		try {
 			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
-			if (lastShownErrorDetails?.errorClass === "faceLandmarksDetection.createDetector") {
-				errorMessage.hidden = true;
-			}
+			hideError({ errorClass: "faceLandmarksDetection.createDetector" });
 		} catch (error) {
 			detector = null;
 			console.error("Failed to create facemesh detector:", error);
@@ -2959,7 +2963,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
 		clearTimeout(cameraAccessSlowWarningTimeoutID);
-		errorMessage.hidden = true;
+		hideError();
 		cameraAccessSlowWarningTimeoutID = setTimeout(() => {
 			errorMessage.textContent = t("video.status.accessTakingLongerThanExpected", { defaultValue: "Accessing the camera is taking longer than expected..." });
 			errorMessage.hidden = false;
@@ -2987,7 +2991,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 			cameraVideo.srcObject = stream;
 			useCameraButton.hidden = true;
-			errorMessage.hidden = true;
+			hideError();
 		}, async (error) => {
 			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			console.log("TrackyMouse.useCamera phase", phase, "error", error);
