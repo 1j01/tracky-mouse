@@ -4626,11 +4626,12 @@ TrackyMouse.initScreenOverlay = () => {
 			workAreaContainer.style.height = `${workAreaContainerBounds.height}px`;
 			message.style.bottom = "0px";
 		} else {
+			// bottomOffset was a never-released part of an unstable API.
+			// workAreaContainerBounds could be made required, just like bottomOffset was.
 			workAreaContainer.style.left = "0px";
 			workAreaContainer.style.top = "0px";
 			workAreaContainer.style.width = "100%";
-			workAreaContainer.style.height = "100%";
-			message.style.bottom = `${bottomOffset ?? 0}px`;
+			workAreaContainer.style.height = `calc(100% - ${bottomOffset ?? 0}px)`;
 		}
 
 		// Other diagnostics in the future would be stuff like:
