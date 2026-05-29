@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The desktop app's update dialogs should no longer block using Tracky Mouse as an input method on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
 - Improved error display styling and consistency.
 - The screen overlay window should now be hidden from Mission Control on macOS.
+- The error reporting system can now fail gracefully. This should fix an error on launch on Windows 7.
 
 ## [2.7.0] - 2026-04-05
 
