@@ -545,7 +545,7 @@ const createWindow = () => {
 	let isMultiMonitor = screen.getAllDisplays().length > 1;
 	let systemMousePosition = null;
 	const updateDwellClickingAndHUD = () => {
-		const statusBarContainerBounds = {
+		const workAreaContainerBounds = {
 			x: primaryDisplay.workArea.x - virtualDisplayBounds.x,
 			y: primaryDisplay.workArea.y - virtualDisplayBounds.y,
 			width: primaryDisplay.workArea.width,
@@ -558,7 +558,7 @@ const createWindow = () => {
 			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
 			inputFeedback,
-			statusBarContainerBounds,
+			workAreaContainerBounds,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
 			systemMousePosition,
 			soundEffectsEnabled: activeSettings.soundEffects,

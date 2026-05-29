@@ -4614,16 +4614,16 @@ TrackyMouse.initScreenOverlay = () => {
 			isEnabled,
 			isManualTakeback,
 			inputFeedback,
-			statusBarContainerBounds,
+			workAreaContainerBounds,
 			bottomOffset,
 			systemMousePosition,
 		} = data;
 
-		if (statusBarContainerBounds) {
-			workAreaContainer.style.left = `${statusBarContainerBounds.x}px`;
-			workAreaContainer.style.top = `${statusBarContainerBounds.y}px`;
-			workAreaContainer.style.width = `${statusBarContainerBounds.width}px`;
-			workAreaContainer.style.height = `${statusBarContainerBounds.height}px`;
+		if (workAreaContainerBounds) {
+			workAreaContainer.style.left = `${workAreaContainerBounds.x}px`;
+			workAreaContainer.style.top = `${workAreaContainerBounds.y}px`;
+			workAreaContainer.style.width = `${workAreaContainerBounds.width}px`;
+			workAreaContainer.style.height = `${workAreaContainerBounds.height}px`;
 			message.style.bottom = "0px";
 		} else {
 			workAreaContainer.style.left = "0px";
