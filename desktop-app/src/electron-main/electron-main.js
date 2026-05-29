@@ -226,6 +226,20 @@ function updateScreenScaleFactor() {
 	screenScaleFactor = screen.getPrimaryDisplay().scaleFactor;
 }
 
+/**
+ * Computes the bounding rectangle that spans all connected displays.
+ * Must be called after the app 'ready' event.
+ * @returns {{ x: number, y: number, width: number, height: number }}
+ */
+function computeVirtualDisplayBounds() {
+	const displays = screen.getAllDisplays();
+	const x = Math.min(...displays.map(d => d.bounds.x));
+	const y = Math.min(...displays.map(d => d.bounds.y));
+	const right = Math.max(...displays.map(d => d.bounds.x + d.bounds.width));
+	const bottom = Math.max(...displays.map(d => d.bounds.y + d.bounds.height));
+	return { x, y, width: right - x, height: bottom - y };
+}
+
 const { updateMenu, getCustomMenuBarModel, invokeMenuItemById } = require("./menus.js");
 const { installCrashRecovery } = require('./crash-recovery.js');
 
@@ -527,9 +541,12 @@ const createWindow = () => {
 	let regainControlTimeout = null; // also used to check if we're pausing temporarily
 	let inputFeedback = {};
 	let primaryDisplay = screen.getPrimaryDisplay();
+	let virtualDisplayBounds = computeVirtualDisplayBounds();
+	let isMultiMonitor = screen.getAllDisplays().length > 1;
 	let systemMousePosition = null;
 	const updateDwellClickingAndHUD = () => {
-		const bottomOffset = (primaryDisplay.bounds.y + primaryDisplay.bounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
+		// Position the overlay message just above the primary display's taskbar.
+		const bottomOffset = (virtualDisplayBounds.y + virtualDisplayBounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
 		trySendOverlayWindowMessage('overlayUpdate', {
@@ -548,7 +565,11 @@ const createWindow = () => {
 	async function monitorMousePosition() {
 		try {
 			const pos = await getMouseLocation();
-			systemMousePosition = { x: pos.x / screenScaleFactor, y: pos.y / screenScaleFactor };
+			// Convert to overlay-local CSS coordinates (subtract the overlay window's virtual origin).
+			systemMousePosition = {
+				x: pos.x / screenScaleFactor - virtualDisplayBounds.x,
+				y: pos.y / screenScaleFactor - virtualDisplayBounds.y,
+			};
 		} catch (error) {
 			console.error("Error getting mouse position:", error);
 		}
@@ -613,7 +634,7 @@ const createWindow = () => {
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		trySendOverlayWindowMessage('moveMouse', x, y, time);
+		trySendOverlayWindowMessage('moveMouse', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
 	});
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
@@ -743,13 +764,14 @@ const createWindow = () => {
 	//   2026-01-18 04:58:14.966 Electron[24086:199877] *** Assertion failure in -[ElectronNSWindow titlebarAccessoryViewControllers], /BuildRoot/Library/Caches/com.apple.xbs/Sources/AppKit/AppKit-1671.60.112/AppKit.subproj/NSWindow.m:3439
 	//   [0118/045815.040421:WARNING:process_memory_mac.cc(93)] mach_vm_read(0x7ffee63e9000, 0x2000): (os/kern) invalid address (1)
 	// fullscreen on Linux: unknown, but previously it was enabled, so I'm leaving it as is for now.
-	const fullscreen = process.platform !== 'darwin';
+	// For multi-monitor, fullscreen is not used since it would only cover one display; explicit bounds are used instead.
+	const fullscreen = process.platform !== 'darwin' && !isMultiMonitor;
 	screenOverlayWindow = new BrowserWindow({
 		fullscreen,
-		x: primaryDisplay.bounds.x,
-		y: primaryDisplay.bounds.y,
-		width: primaryDisplay.bounds.width,
-		height: primaryDisplay.bounds.height,
+		x: virtualDisplayBounds.x,
+		y: virtualDisplayBounds.y,
+		width: virtualDisplayBounds.width,
+		height: virtualDisplayBounds.height,
 		frame: false,
 		transparent: true,
 		backgroundColor: '#00000000',
@@ -783,7 +805,12 @@ const createWindow = () => {
 		event.preventDefault();
 		screenOverlayWindow.setSkipTaskbar(true);
 		screenOverlayWindow.setClosable(false);
-		screenOverlayWindow.setFullScreen(true);
+		if (!isMultiMonitor && process.platform !== 'darwin') {
+			screenOverlayWindow.setFullScreen(true);
+		} else {
+			screenOverlayWindow.setFullScreen(false);
+			screenOverlayWindow.setBounds(virtualDisplayBounds);
+		}
 		screenOverlayWindow.setIgnoreMouseEvents(true);
 		// "screen-saver" is the highest level; it should show above the taskbar.
 		screenOverlayWindow.setAlwaysOnTop(true, 'screen-saver');
@@ -795,21 +822,30 @@ const createWindow = () => {
 		screenOverlayWindow = null;
 	});
 
-	screen.on('display-metrics-changed', () => {
+	function updateDisplayConfiguration() {
 		primaryDisplay = screen.getPrimaryDisplay();
+		virtualDisplayBounds = computeVirtualDisplayBounds();
+		isMultiMonitor = screen.getAllDisplays().length > 1;
 		if (screenOverlayWindow) {
-			screenOverlayWindow.setBounds({
-				x: primaryDisplay.bounds.x,
-				y: primaryDisplay.bounds.y,
-				width: primaryDisplay.bounds.width,
-				height: primaryDisplay.bounds.height,
-			});
+			if (!isMultiMonitor && process.platform !== 'darwin') {
+				// Keep fullscreen on single-monitor (non-macOS) to ensure the overlay covers the taskbar.
+			} else {
+				screenOverlayWindow.setFullScreen(false);
+				screenOverlayWindow.setBounds(virtualDisplayBounds);
+			}
 		}
 		updateDwellClickingAndHUD();
-	});
+		appWindow?.webContents.send('virtualDisplayBoundsChanged', virtualDisplayBounds);
+	}
+
+	screen.on('display-metrics-changed', updateDisplayConfiguration);
+	screen.on('display-added', updateDisplayConfiguration);
+	screen.on('display-removed', updateDisplayConfiguration);
 
 	// screenOverlayWindow.webContents.openDevTools({ mode: 'detach' });
 };
+
+ipcMain.handle('getVirtualDisplayBounds', () => computeVirtualDisplayBounds());
 
 installCrashRecovery({
 	getAppWindow: () => appWindow,
@@ -850,6 +886,8 @@ app.on('ready', async () => {
 	screen.on('display-metrics-changed', (/*event, display, changedMetrics*/) => {
 		updateScreenScaleFactor();
 	});
+	screen.on('display-added', updateScreenScaleFactor);
+	screen.on('display-removed', updateScreenScaleFactor);
 
 	const success = globalShortcut.register('F9', () => {
 		// console.log('Toggle tracking');

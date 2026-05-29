@@ -47,6 +47,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
 	getPlatform: () => process.platform,
 
+	getVirtualDisplayBounds: () => ipcRenderer.invoke('getVirtualDisplayBounds'),
+
+	onVirtualDisplayBoundsChanged: (callback) => {
+		const listener = (_event, bounds) => { callback(bounds); };
+		ipcRenderer.on('virtualDisplayBoundsChanged', listener);
+		return () => { ipcRenderer.removeListener('virtualDisplayBoundsChanged', listener); };
+	},
+
 	getCustomMenuBarModel: () => ipcRenderer.invoke('getCustomMenuBarModel'),
 
 	invokeMenuItem: (menuItemId) => ipcRenderer.invoke('invokeMenuItem', menuItemId),

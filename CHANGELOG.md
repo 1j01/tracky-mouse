@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Note:** This will be the last release to support Windows 7, 8, and 8.1
 
+### Added
+
+- Added multi-monitor support in the desktop app. The screen overlay now spans all connected monitors, and head tracking controls the mouse across the full virtual desktop.
+
 ### Changed
 
 - On Windows, the desktop app now uses a custom title bar, and a custom menu bar powered by [OS-GUI.js](https://os-gui.js.org)

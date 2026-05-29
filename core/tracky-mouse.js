@@ -2518,6 +2518,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
+	// Virtual display bounds cache (Electron only); covers all connected monitors.
+	let virtualDisplayBounds = null;
+	if (window.electronAPI?.getVirtualDisplayBounds) {
+		window.electronAPI.getVirtualDisplayBounds().then((bounds) => {
+			virtualDisplayBounds = bounds;
+		});
+		window.electronAPI.onVirtualDisplayBoundsChanged?.((bounds) => {
+			virtualDisplayBounds = bounds;
+			mouseNeedsInitPos = true;
+		});
+	}
+
 	// Other state
 	let paused = true;
 	let pointTracker;
@@ -4148,8 +4160,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
-			const screenWidth = window.electronAPI ? screen.width : innerWidth;
-			const screenHeight = window.electronAPI ? screen.height : innerHeight;
+			const screenWidth = window.electronAPI ? (virtualDisplayBounds?.width ?? screen.width) : innerWidth;
+			const screenHeight = window.electronAPI ? (virtualDisplayBounds?.height ?? screen.height) : innerHeight;
+			const screenOffsetX = window.electronAPI ? (virtualDisplayBounds?.x ?? 0) : 0;
+			const screenOffsetY = window.electronAPI ? (virtualDisplayBounds?.y ?? 0) : 0;
 
 			let [movementX, movementY] = pointTracker.getMovement();
 
@@ -4279,13 +4293,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
 
-				mouseX = Math.min(Math.max(0, mouseX), screenWidth);
-				mouseY = Math.min(Math.max(0, mouseY), screenHeight);
+				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
+				mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
 
 				if (mouseNeedsInitPos) {
 					// TODO: option to get preexisting mouse position instead of set it to center of screen
-					mouseX = screenWidth / 2;
-					mouseY = screenHeight / 2;
+					mouseX = screenOffsetX + screenWidth / 2;
+					mouseY = screenOffsetY + screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
 				if (window.electronAPI) {
