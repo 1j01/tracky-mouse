@@ -545,8 +545,12 @@ const createWindow = () => {
 	let isMultiMonitor = screen.getAllDisplays().length > 1;
 	let systemMousePosition = null;
 	const updateDwellClickingAndHUD = () => {
-		// Position the overlay message just above the primary display's taskbar.
-		const bottomOffset = (virtualDisplayBounds.y + virtualDisplayBounds.height) - (primaryDisplay.workArea.y + primaryDisplay.workArea.height);
+		const statusBarContainerBounds = {
+			x: primaryDisplay.workArea.x - virtualDisplayBounds.x,
+			y: primaryDisplay.workArea.y - virtualDisplayBounds.y,
+			width: primaryDisplay.workArea.width,
+			height: primaryDisplay.workArea.height,
+		};
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
 		trySendOverlayWindowMessage('overlayUpdate', {
@@ -554,7 +558,7 @@ const createWindow = () => {
 			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
 			inputFeedback,
-			bottomOffset,
+			statusBarContainerBounds,
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
 			systemMousePosition,
 			soundEffectsEnabled: activeSettings.soundEffects,

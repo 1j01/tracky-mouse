@@ -4545,21 +4545,24 @@ TrackyMouse.initScreenOverlay = () => {
 
 	const template = `
 	<div class="tracky-mouse-hide-near-cursor">
-		<div class="tracky-mouse-absolute-center">
-			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
-				<img src="${TrackyMouse.dependenciesRoot}/images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+		<div id="tracky-mouse-screen-overlay-work-area">
+			<div class="tracky-mouse-absolute-center">
+				<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
+					<img src="${TrackyMouse.dependenciesRoot}/images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+				</div>
+				<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
+					<img src="${TrackyMouse.dependenciesRoot}/images/head-not-found.svg" alt="head not found" width="128" height="128">
+				</div>
 			</div>
-			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
-				<img src="${TrackyMouse.dependenciesRoot}/images/head-not-found.svg" alt="head not found" width="128" height="128">
-			</div>
+			<div id="tracky-mouse-screen-overlay-message"></div>
 		</div>
-		<div id="tracky-mouse-screen-overlay-message"></div>
 	</div>
 	`;
 	const fragment = document.createRange().createContextualFragment(template);
 	document.body.appendChild(fragment);
 
 	const message = document.getElementById("tracky-mouse-screen-overlay-message");
+	const workAreaContainer = document.getElementById("tracky-mouse-screen-overlay-work-area");
 	message.dir = "auto";
 
 	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
@@ -4606,9 +4609,29 @@ TrackyMouse.initScreenOverlay = () => {
 	}
 
 	function update(data) {
-		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset, systemMousePosition } = data;
+		const {
+			messageText,
+			isEnabled,
+			isManualTakeback,
+			inputFeedback,
+			statusBarContainerBounds,
+			bottomOffset,
+			systemMousePosition,
+		} = data;
 
-		message.style.bottom = `${bottomOffset}px`;
+		if (statusBarContainerBounds) {
+			workAreaContainer.style.left = `${statusBarContainerBounds.x}px`;
+			workAreaContainer.style.top = `${statusBarContainerBounds.y}px`;
+			workAreaContainer.style.width = `${statusBarContainerBounds.width}px`;
+			workAreaContainer.style.height = `${statusBarContainerBounds.height}px`;
+			message.style.bottom = "0px";
+		} else {
+			workAreaContainer.style.left = "0px";
+			workAreaContainer.style.top = "0px";
+			workAreaContainer.style.width = "100%";
+			workAreaContainer.style.height = "100%";
+			message.style.bottom = `${bottomOffset ?? 0}px`;
+		}
 
 		// Other diagnostics in the future would be stuff like:
 		// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49
