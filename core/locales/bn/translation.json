@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "নির্বাচিত ফাইলটি পড়তে ব্যর্থ হয়েছে।",
   "desktop.menu.importSettings": "সেটিং ইমপোর্ট করুন",
   "desktop.menu.speech": "বাক্ নিয়ন্ত্রণ",
+  "desktop.menu.toggleDevtools": "ডেভেলপার টুল টগল করুন",
   "desktop.menu.toggleScreenOverlayDevtools": "ডেভেলপার টুল টগল করুন (স্ক্রিন ওভারলে)",
   "desktop.menu.view": "দৃশ্য",
   "desktop.menu.window": "উইন্ডো",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "আপডেট ব্যর্থ হয়েছে",
   "desktop.updater.updateSuccessful.message": "%0 চেক আউট করা হয়েছে। আপডেটেড সংস্করণ ব্যবহার করতে অ্যাপটি পুনরায় চালু করুন।",
   "desktop.updater.updateSuccessful.title": "আপডেট সফল হয়েছে",
+  "faceDetectorError": "ফেস ডিটেক্টর ত্রুটি",
+  "faceDetectorInitError": "ফেস ডিটেক্টর তৈরি করতে ব্যর্থ হয়েছে",
   "hud.pressToDisable": "Tracky Mouse বন্ধ করতে %0 চাপুন।",
   "hud.pressToEnable": "Tracky Mouse চালু করতে %0 চাপুন।",
   "hud.pressToToggle": "Tracky Mouse চালু/বন্ধ করতে %0 চাপুন।",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "অনুমতি অস্বীকৃত। অনুগ্রহ করে ক্যামেরা ব্যবহারের অনুমতি দিন।",
   "video.errors.previouslySelectedUnavailable": "আগে নির্বাচিত ক্যামেরাটি এখন আর উপলব্ধ নয়। Video > Camera source থেকে \"Default\" নির্বাচন করে দেখুন, এরপর প্রয়োজনে নির্দিষ্ট একটি ক্যামেরা নির্বাচন করুন।",
   "video.errors.retryAfterClosingOtherPrograms": "অনুগ্রহ করে নিশ্চিত করুন যে অন্য কোনো প্রোগ্রাম ক্যামেরা ব্যবহার করছে না, তারপর আবার চেষ্টা করুন।",
-  "video.errors.unsupportedResolution": "ওয়েবক্যাম প্রয়োজনীয় রেজোলিউশন সমর্থন করে না। অনুগ্রহ করে আপনার সেটিং পরিবর্তন করুন।"
+  "video.errors.unsupportedResolution": "ওয়েবক্যাম প্রয়োজনীয় রেজোলিউশন সমর্থন করে না। অনুগ্রহ করে আপনার সেটিং পরিবর্তন করুন।",
+  "video.status.accessTakingLongerThanExpected": "ক্যামেরায় অ্যাক্সেস করতে প্রত্যাশার চেয়ে বেশি সময় লাগছে..."
 }

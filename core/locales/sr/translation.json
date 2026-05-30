@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nije uspelo čitanje izabranog fajla.",
   "desktop.menu.importSettings": "Uvoz podešavanja",
   "desktop.menu.speech": "Govor",
+  "desktop.menu.toggleDevtools": "Uključi/isključi razvojne alate",
   "desktop.menu.toggleScreenOverlayDevtools": "Uključi/isključi razvojne alate (prekrivka ekrana)",
   "desktop.menu.view": "Prikaz",
   "desktop.menu.window": "Prozor",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Ažuriranje nije uspelo",
   "desktop.updater.updateSuccessful.message": "Preuzeta je revizija %0. Ponovo pokreni aplikaciju da bi koristio novu verziju.",
   "desktop.updater.updateSuccessful.title": "Ažuriranje uspešno",
+  "faceDetectorError": "Грешка детектора лица",
+  "faceDetectorInitError": "Није успело стварање детектора лица",
   "hud.pressToDisable": "Pritisni %0 da isključiš Tracky Mouse.",
   "hud.pressToEnable": "Pritisni %0 da uključiš Tracky Mouse.",
   "hud.pressToToggle": "Pritisni %0 da uključiš/isključiš Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Pristup je odbijen. Omogući pristup kameri.",
   "video.errors.previouslySelectedUnavailable": "Prethodno izabrana kamera nije dostupna. Pokušaj da izabereš \"Podrazumevano\" za Video > Izvor kamere, a zatim po potrebi izaberi konkretnu kameru.",
   "video.errors.retryAfterClosingOtherPrograms": "Uveri se da nijedan drugi program ne koristi kameru i pokušaj ponovo.",
-  "video.errors.unsupportedResolution": "Veb kamera ne podržava potrebnu rezoluciju. Promeni podešavanja."
+  "video.errors.unsupportedResolution": "Veb kamera ne podržava potrebnu rezoluciju. Promeni podešavanja.",
+  "video.status.accessTakingLongerThanExpected": "Pristup kameri traje duže nego što se očekivalo..."
 }

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Неуспешно четене на избрания файл.",
   "desktop.menu.importSettings": "Импорт на настройки",
   "desktop.menu.speech": "Глас",
+  "desktop.menu.toggleDevtools": "Превключи инструментите за разработчици",
   "desktop.menu.toggleScreenOverlayDevtools": "Превключи инструментите за разработчици (екранно покритие)",
   "desktop.menu.view": "Изглед",
   "desktop.menu.window": "Прозорец",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Обновяването се провали",
   "desktop.updater.updateSuccessful.message": "Изтеглена е версия %0. Рестартирайте приложението, за да използвате обновената версия.",
   "desktop.updater.updateSuccessful.title": "Обновяването беше успешно",
+  "faceDetectorError": "Грешка в детектора на лица",
+  "faceDetectorInitError": "Неуспешно създаване на детектора на лица",
   "hud.pressToDisable": "Натиснете %0, за да изключите Tracky Mouse.",
   "hud.pressToEnable": "Натиснете %0, за да включите Tracky Mouse.",
   "hud.pressToToggle": "Натиснете %0, за да включите или изключите Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Достъпът е отказан. Моля, разрешете достъп до камерата.",
   "video.errors.previouslySelectedUnavailable": "Предишно избраната камера не е налична. Опитайте да изберете \"Default\" в Video > Camera source и след това изберете конкретна камера, ако е необходимо.",
   "video.errors.retryAfterClosingOtherPrograms": "Уверете се, че няма други програми, които използват камерата, и опитайте отново.",
-  "video.errors.unsupportedResolution": "Уеб камерата не поддържа необходимата разделителна способност. Моля, променете настройките."
+  "video.errors.unsupportedResolution": "Уеб камерата не поддържа необходимата разделителна способност. Моля, променете настройките.",
+  "video.status.accessTakingLongerThanExpected": "Достъпът до камерата отнема повече време от очакваното..."
 }

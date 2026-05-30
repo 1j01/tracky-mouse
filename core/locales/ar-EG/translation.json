@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "فشل في قراءة الملف المختار.",
   "desktop.menu.importSettings": "استيراد الإعدادات",
   "desktop.menu.speech": "الصوت/الكلام",
+  "desktop.menu.toggleDevtools": "تشغيل/إيقاف أدوات المطوّرين",
   "desktop.menu.toggleScreenOverlayDevtools": "تشغيل/إيقاف أدوات المطوّرين (طبقة الشاشة)",
   "desktop.menu.view": "عرض",
   "desktop.menu.window": "نافذة",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "فشل التحديث",
   "desktop.updater.updateSuccessful.message": "اتحمّل الإصدار %0. أعد تشغيل التطبيق عشان تستخدم النسخة المحدّثة.",
   "desktop.updater.updateSuccessful.title": "تم التحديث بنجاح",
+  "faceDetectorError": "خطأ في كاشف الوجه",
+  "faceDetectorInitError": "فشل في إنشاء كاشف الوجه",
   "hud.pressToDisable": "اضغط %0 عشان توقف Tracky Mouse.",
   "hud.pressToEnable": "اضغط %0 عشان تشغّل Tracky Mouse.",
   "hud.pressToToggle": "اضغط %0 عشان تشغّل/توقف Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "السماح مرفوض. من فضلك فعّل صلاحية الوصول للكاميرا.",
   "video.errors.previouslySelectedUnavailable": "الكاميرا اللي كنت مختارها قبل كده مش متاحة دلوقتي. جرّب تختار \"افتراضي\" في فيديو > مصدر الكاميرا، وبعدين اختار كاميرا معيّنة لو محتاج.",
   "video.errors.retryAfterClosingOtherPrograms": "اتأكد إن مفيش برامج تانية بتستخدم الكاميرا وجرب تاني.",
-  "video.errors.unsupportedResolution": "الكاميرا مش بتدعم دقة العرض المطلوبة. غيّر الإعدادات لو سمحت."
+  "video.errors.unsupportedResolution": "الكاميرا مش بتدعم دقة العرض المطلوبة. غيّر الإعدادات لو سمحت.",
+  "video.status.accessTakingLongerThanExpected": "الوصول للكاميرا بياخد وقت أطول من المتوقع..."
 }

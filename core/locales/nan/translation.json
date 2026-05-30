@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "讀取揀著 ê 檔案失敗。",
   "desktop.menu.importSettings": "匯入設定",
   "desktop.menu.speech": "語音",
+  "desktop.menu.toggleDevtools": "開關開發者工具",
   "desktop.menu.toggleScreenOverlayDevtools": "開關開發者工具（畫面疊加層）",
   "desktop.menu.view": "檢視",
   "desktop.menu.window": "視窗",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "更新失敗",
   "desktop.updater.updateSuccessful.message": "已經 checkout %0。請重開應用程式來使用新版本。",
   "desktop.updater.updateSuccessful.title": "更新成功",
+  "faceDetectorError": "面偵測器錯誤",
+  "faceDetectorInitError": "無法建立面偵測器",
   "hud.pressToDisable": "按 %0 停止 Tracky Mouse。",
   "hud.pressToEnable": "按 %0 開始 Tracky Mouse。",
   "hud.pressToToggle": "按 %0 開關 Tracky Mouse。",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "權限予拒絕。請允許程式使用攝影機。",
   "video.errors.previouslySelectedUnavailable": "上以前揀 ê 攝影機今無通用。請佇「視訊 > 攝影機來源」內面先揀「預設」，若需要閣再揀特定 ê 攝影機。",
   "video.errors.retryAfterClosingOtherPrograms": "請確認無其他程式咧用攝影機，再試看覓。",
-  "video.errors.unsupportedResolution": "攝影機無支援必要 ê 解析度，請調整設定。"
+  "video.errors.unsupportedResolution": "攝影機無支援必要 ê 解析度，請調整設定。",
+  "video.status.accessTakingLongerThanExpected": "存取攝影機比預期閣較久..."
 }

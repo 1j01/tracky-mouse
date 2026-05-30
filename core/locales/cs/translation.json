@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nepodařilo se přečíst vybraný soubor.",
   "desktop.menu.importSettings": "Import nastavení",
   "desktop.menu.speech": "Řeč",
+  "desktop.menu.toggleDevtools": "Přepnout vývojářské nástroje",
   "desktop.menu.toggleScreenOverlayDevtools": "Přepnout vývojářské nástroje (překryv obrazovky)",
   "desktop.menu.view": "Zobrazení",
   "desktop.menu.window": "Okno",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Aktualizace se nezdařila",
   "desktop.updater.updateSuccessful.message": "Byla vybrána verze %0. Restartujte aplikaci, aby se použila aktualizovaná verze.",
   "desktop.updater.updateSuccessful.title": "Aktualizace byla úspěšná",
+  "faceDetectorError": "Chyba detektoru obličeje",
+  "faceDetectorInitError": "Nepodařilo se vytvořit detektor obličeje",
   "hud.pressToDisable": "Stisknutím %0 Tracky Mouse vypnete.",
   "hud.pressToEnable": "Stisknutím %0 Tracky Mouse zapnete.",
   "hud.pressToToggle": "Stisknutím %0 přepnete Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Přístup odepřen. Povolte prosím přístup ke kameře.",
   "video.errors.previouslySelectedUnavailable": "Dříve vybraná kamera není k dispozici. Zkuste zvolit \"Výchozí\" u Nastavení videa > Zdroj kamery a poté případně vyberte konkrétní kameru.",
   "video.errors.retryAfterClosingOtherPrograms": "Ujistěte se, že kameru nepoužívá jiný program, a zkuste to znovu.",
-  "video.errors.unsupportedResolution": "Webkamera nepodporuje požadované rozlišení. Změňte prosím nastavení."
+  "video.errors.unsupportedResolution": "Webkamera nepodporuje požadované rozlišení. Změňte prosím nastavení.",
+  "video.status.accessTakingLongerThanExpected": "Přístup ke kameře trvá déle, než se očekávalo..."
 }

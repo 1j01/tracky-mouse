@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Imeshindwa kusoma faili uliochagua.",
   "desktop.menu.importSettings": "Ingiza Mipangilio",
   "desktop.menu.speech": "Hotuba/Sauti",
+  "desktop.menu.toggleDevtools": "Washa/Zima Zana za Msanidi",
   "desktop.menu.toggleScreenOverlayDevtools": "Washa/Zima Zana za Msanidi (Screen Overlay)",
   "desktop.menu.view": "Mwonekano",
   "desktop.menu.window": "Dirisha",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Sasisho limefeli",
   "desktop.updater.updateSuccessful.message": "%0 imeshatolewa kutoka hifadhi. Anzisha upya programu ili utumie toleo jipya.",
   "desktop.updater.updateSuccessful.title": "Sasisho limefanikiwa",
+  "faceDetectorError": "Hitilafu ya kigunduzi cha uso",
+  "faceDetectorInitError": "Imeshindwa kuunda kigunduzi cha uso",
   "hud.pressToDisable": "Bonyeza %0 kuzima Tracky Mouse.",
   "hud.pressToEnable": "Bonyeza %0 kuwasha Tracky Mouse.",
   "hud.pressToToggle": "Bonyeza %0 kuwasha/kuzima Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Ruhusa imekataliwa. Tafadhali wezesha ufikiaji wa kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera uliyokuwa umechagua awali haipatikani. Jaribu kuchagua \"Default\" kwa Video > Chanzo cha kamera, kisha uchague kamera maalum ikiwa inahitajika.",
   "video.errors.retryAfterClosingOtherPrograms": "Tafadhali hakikisha hakuna programu nyingine inayotumia kamera kisha ujaribu tena.",
-  "video.errors.unsupportedResolution": "Kamera ya wavuti haiungi mkono azimio (resolution) linalohitajika. Tafadhali badilisha mipangilio yako."
+  "video.errors.unsupportedResolution": "Kamera ya wavuti haiungi mkono azimio (resolution) linalohitajika. Tafadhali badilisha mipangilio yako.",
+  "video.status.accessTakingLongerThanExpected": "Kufikia kamera kunachukua muda mrefu zaidi kuliko ilivyotarajiwa..."
 }

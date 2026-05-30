@@ -161,7 +161,7 @@
 	gap: 10px;
 }
 
-.tracky-mouse-canvas-container-container {
+.tracky-mouse-camera-area {
 	flex: 1;
 	flex-basis: 0;
 	min-width: 0;
@@ -214,6 +214,14 @@
 	color: white;
 	padding: 5px;
 	animation: tracky-mouse-jello-vertical 1s ease 0s 1 normal none;
+	white-space: pre-wrap;
+}
+
+.tracky-mouse-error-message pre {
+	white-space: pre-wrap;
+	font-size: small;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
 }
 
 @keyframes tracky-mouse-jello-vertical {
@@ -246,6 +254,21 @@
 	}
 }
 
+.tracky-mouse-toast {
+	position: fixed;
+	top: 25px + env(titlebar-area-height, 0px);
+	top: calc(25px + env(titlebar-area-height, 0px));
+	right: 25px;
+	z-index: 100;
+	background-color: rgba(255, 233, 38, 0.8);
+	color: black;
+	padding: 10px 20px;
+	border-radius: 5px;
+	animation: tracky-mouse-fade-out 3s 3s ease-out forwards;
+	white-space: pre-wrap;
+	font-family: sans-serif;
+}
+
 /* Screen overlay in electron app */
 
 .tracky-mouse-hide-near-cursor {
@@ -258,9 +281,17 @@
 	user-select: none;
 }
 
+#tracky-mouse-screen-overlay-work-area {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
 #tracky-mouse-screen-overlay-message {
 	color: yellow;
-	position: fixed;
+	position: absolute;
 	bottom: 0;
 	left: 50%;
 	transform: translateX(-50%);

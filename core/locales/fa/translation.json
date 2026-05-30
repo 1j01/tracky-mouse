@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "خواندن پرونده‌ی انتخاب‌شده ناموفق بود.",
   "desktop.menu.importSettings": "درون‌ریزی تنظیمات",
   "desktop.menu.speech": "گفتار",
+  "desktop.menu.toggleDevtools": "تغییر وضعیت ابزارهای توسعه‌دهنده",
   "desktop.menu.toggleScreenOverlayDevtools": "تغییر وضعیت ابزارهای توسعه‌دهنده (پوشش صفحه)",
   "desktop.menu.view": "نما",
   "desktop.menu.window": "پنجره",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "به‌روزرسانی ناموفق بود",
   "desktop.updater.updateSuccessful.message": "%0 دریافت شد. برای استفاده از نسخه‌ی به‌روزشده، برنامه را دوباره راه‌اندازی کنید.",
   "desktop.updater.updateSuccessful.title": "به‌روزرسانی با موفقیت انجام شد",
+  "faceDetectorError": "خطای آشکارساز چهره",
+  "faceDetectorInitError": "ایجاد آشکارساز چهره ناموفق بود",
   "hud.pressToDisable": "برای غیرفعال کردن Tracky Mouse، %0 را فشار دهید.",
   "hud.pressToEnable": "برای فعال کردن Tracky Mouse، %0 را فشار دهید.",
   "hud.pressToToggle": "برای روشن/خاموش کردن Tracky Mouse، %0 را فشار دهید.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "اجازه رد شد. لطفاً دسترسی به دوربین را فعال کنید.",
   "video.errors.previouslySelectedUnavailable": "دوربینی که قبلاً انتخاب شده بود در دسترس نیست. در مسیر Video > Camera source گزینه‌ی \"Default\" را انتخاب کنید و اگر لازم شد بعداً یک دوربین مشخص را برگزینید.",
   "video.errors.retryAfterClosingOtherPrograms": "لطفاً مطمئن شوید هیچ برنامه‌ی دیگری از دوربین استفاده نمی‌کند و دوباره تلاش کنید.",
-  "video.errors.unsupportedResolution": "وب‌کم وضوح مورد نیاز را پشتیبانی نمی‌کند. لطفاً تنظیمات خود را تغییر دهید."
+  "video.errors.unsupportedResolution": "وب‌کم وضوح مورد نیاز را پشتیبانی نمی‌کند. لطفاً تنظیمات خود را تغییر دهید.",
+  "video.status.accessTakingLongerThanExpected": "دسترسی به دوربین بیشتر از حد انتظار طول کشیده است..."
 }

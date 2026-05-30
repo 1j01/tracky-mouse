@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nem sikerült beolvasni a kiválasztott fájlt.",
   "desktop.menu.importSettings": "Beállítások importálása",
   "desktop.menu.speech": "Beszéd",
+  "desktop.menu.toggleDevtools": "Fejlesztői eszközök be-/kikapcsolása",
   "desktop.menu.toggleScreenOverlayDevtools": "Fejlesztői eszközök be-/kikapcsolása (képernyőfedvény)",
   "desktop.menu.view": "Nézet",
   "desktop.menu.window": "Ablak",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "A frissítés sikertelen",
   "desktop.updater.updateSuccessful.message": "A(z) %0 verziót töltöttük le. Indítsd újra az alkalmazást a frissítés használatához.",
   "desktop.updater.updateSuccessful.title": "A frissítés sikeres",
+  "faceDetectorError": "Arcérzékelő hiba",
+  "faceDetectorInitError": "Az arcérzékelő létrehozása sikertelen",
   "hud.pressToDisable": "Nyomd meg a(z) %0 billentyűt a Tracky Mouse kikapcsolásához.",
   "hud.pressToEnable": "Nyomd meg a(z) %0 billentyűt a Tracky Mouse bekapcsolásához.",
   "hud.pressToToggle": "Nyomd meg a(z) %0 billentyűt a Tracky Mouse be-/kikapcsolásához.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Hozzáférés megtagadva. Engedélyezd a kamera használatát.",
   "video.errors.previouslySelectedUnavailable": "A korábban kiválasztott kamera nem érhető el. Próbáld meg a Video > Kamera forrása menüben az \"Alapértelmezett\" opciót választani, majd szükség esetén válassz ki egy konkrét kamerát.",
   "video.errors.retryAfterClosingOtherPrograms": "Győződj meg róla, hogy más program nem használja a kamerát, majd próbáld újra.",
-  "video.errors.unsupportedResolution": "A webkamera nem támogatja a szükséges felbontást. Módosítsd a beállításokat."
+  "video.errors.unsupportedResolution": "A webkamera nem támogatja a szükséges felbontást. Módosítsd a beállításokat.",
+  "video.status.accessTakingLongerThanExpected": "A kamera elérése a vártnál tovább tart..."
 }

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Չհաջողվեց կարդալ ընտրված ֆայլը։",
   "desktop.menu.importSettings": "Ներմուծել կարգավորումները",
   "desktop.menu.speech": "Խոսք",
+  "desktop.menu.toggleDevtools": "Միացնել/անջատել մշակողի գործիքները",
   "desktop.menu.toggleScreenOverlayDevtools": "Միացնել/անջատել մշակողի գործիքները (էկրանի պատում)",
   "desktop.menu.view": "Տեսք",
   "desktop.menu.window": "Պատուհան",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Թարմացումը ձախողվեց",
   "desktop.updater.updateSuccessful.message": "Git‑ից ստացվել է %0 տարբերակը։ Վերագործարկեք ծրագիրը՝ թարմացված տարբերակն օգտագործելու համար։",
   "desktop.updater.updateSuccessful.title": "Թարմացումը հաջողվեց",
+  "faceDetectorError": "Դեմք հայտնաբերողի սխալ",
+  "faceDetectorInitError": "Չհաջողվեց ստեղծել դեմք հայտնաբերող",
   "hud.pressToDisable": "Սեղմեք %0՝ Tracky Mouse‑ը անջատելու համար։",
   "hud.pressToEnable": "Սեղմեք %0՝ Tracky Mouse‑ը միացնելու համար։",
   "hud.pressToToggle": "Սեղմեք %0՝ Tracky Mouse‑ը միացնելու կամ անջատելու համար։",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Մուտքը արգելված է։ Խնդրում ենք թույլատրել մուտքը տեսախցիկին։",
   "video.errors.previouslySelectedUnavailable": "Նախկինում ընտրված տեսախցիկը հասանելի չէ։ Փորձեք Video > Camera source բաժնում ընտրել \"Default\" և ապա, անհրաժեշտության դեպքում, ընտրել կոնկրետ տեսախցիկ։",
   "video.errors.retryAfterClosingOtherPrograms": "Խնդրում ենք ստուգել, որ որևէ այլ ծրագիր չի օգտագործում տեսախցիկը, և փորձել կրկին։",
-  "video.errors.unsupportedResolution": "Վեբ տեսախցիկը չի աջակցում պահանջվող լուծաչափը։ Խնդրում ենք փոխել կարգավորումները։"
+  "video.errors.unsupportedResolution": "Վեբ տեսախցիկը չի աջակցում պահանջվող լուծաչափը։ Խնդրում ենք փոխել կարգավորումները։",
+  "video.status.accessTakingLongerThanExpected": "Տեսախցիկին հասանելիություն ստանալը սպասվածից ավելի երկար է տևում..."
 }

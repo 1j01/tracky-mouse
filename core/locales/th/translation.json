@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ไม่สามารถอ่านไฟล์ที่เลือกได้",
   "desktop.menu.importSettings": "นำเข้าการตั้งค่า",
   "desktop.menu.speech": "การพูด",
+  "desktop.menu.toggleDevtools": "สลับ Developer Tools",
   "desktop.menu.toggleScreenOverlayDevtools": "สลับ Developer Tools (หน้าต่างซ้อนทับ)",
   "desktop.menu.view": "มุมมอง",
   "desktop.menu.window": "หน้าต่าง",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "อัปเดตล้มเหลว",
   "desktop.updater.updateSuccessful.message": "ตรวจเช็คเอาท์ %0 แล้ว กรุณารีสตาร์ตแอปเพื่อใช้เวอร์ชันที่อัปเดต",
   "desktop.updater.updateSuccessful.title": "อัปเดตสำเร็จ",
+  "faceDetectorError": "ข้อผิดพลาดในการตรวจจับใบหน้า",
+  "faceDetectorInitError": "ไม่สามารถสร้างตัวตรวจจับใบหน้าได้",
   "hud.pressToDisable": "กด %0 เพื่อปิดการทำงานของ Tracky Mouse",
   "hud.pressToEnable": "กด %0 เพื่อเปิดการทำงานของ Tracky Mouse",
   "hud.pressToToggle": "กด %0 เพื่อสลับเปิด/ปิด Tracky Mouse",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "ไม่ได้รับสิทธิ์ โปรดเปิดใช้งานการเข้าถึงกล้อง",
   "video.errors.previouslySelectedUnavailable": "กล้องที่เลือกไว้ก่อนหน้านี้ไม่พร้อมใช้งาน ลองเลือก \"Default\" ใน วิดีโอ > แหล่งสัญญาณกล้อง แล้วจึงเลือกกล้องเฉพาะหากจำเป็น",
   "video.errors.retryAfterClosingOtherPrograms": "โปรดตรวจสอบว่าไม่มีโปรแกรมอื่นใช้กล้องอยู่ แล้วลองใหม่",
-  "video.errors.unsupportedResolution": "เว็บแคมไม่รองรับความละเอียดที่ต้องการ โปรดเปลี่ยนการตั้งค่า"
+  "video.errors.unsupportedResolution": "เว็บแคมไม่รองรับความละเอียดที่ต้องการ โปรดเปลี่ยนการตั้งค่า",
+  "video.status.accessTakingLongerThanExpected": "การเข้าถึงกล้องใช้เวลานานกว่าที่คาดไว้..."
 }

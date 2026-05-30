@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Malsukcesis legi elektitan dosieron.",
   "desktop.menu.importSettings": "Importi agordojn",
   "desktop.menu.speech": "Parolo",
+  "desktop.menu.toggleDevtools": "Ŝalti/Malŝalti programist-ilojn",
   "desktop.menu.toggleScreenOverlayDevtools": "Ŝalti/Malŝalti programist-ilojn (Ekran-kovraĵo)",
   "desktop.menu.view": "Vido",
   "desktop.menu.window": "Fenestro",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Ĝisdatigo malsukcesis",
   "desktop.updater.updateSuccessful.message": "Elŝutis %0. Restartu la aplikaĵon por uzi la ĝisdatigitan version.",
   "desktop.updater.updateSuccessful.title": "Ĝisdatigo sukcesis",
+  "faceDetectorError": "Eraro de vizaĝo-detektilo",
+  "faceDetectorInitError": "Malsukcesis krei vizaĝo-detektilo",
   "hud.pressToDisable": "Premu %0 por malŝalti Tracky Mouse.",
   "hud.pressToEnable": "Premu %0 por ebligi Tracky Mouse.",
   "hud.pressToToggle": "Premu %0 por ŝalti/malŝalti Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Permeso rifuzita. Bonvolu ebligi aliron al la fotilo.",
   "video.errors.previouslySelectedUnavailable": "La antaŭe elektita fotilo ne disponeblas. Provu elekti \"Defaŭlta\" ĉe Video > Fonto de fotilo, kaj poste elektu specifan fotilon se necese.",
   "video.errors.retryAfterClosingOtherPrograms": "Bonvolu certigi, ke neniuj aliaj programoj uzas la fotilon, kaj provu denove.",
-  "video.errors.unsupportedResolution": "La retkamerao ne subtenas la bezonatan distingivon. Bonvolu ŝanĝi viajn agordojn."
+  "video.errors.unsupportedResolution": "La retkamerao ne subtenas la bezonatan distingivon. Bonvolu ŝanĝi viajn agordojn.",
+  "video.status.accessTakingLongerThanExpected": "Aliro al la fotilo daŭras pli longe ol atendite..."
 }

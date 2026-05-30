@@ -601,7 +601,7 @@ TrackyMouse._initAudio = async function () {
 	let module;
 	try {
 		// console.log("Loading audio support...");
-		module = await import("./audio.js");
+		module = await import("./src/audio.js");
 	} catch (e) {
 		console.warn("Failed to load audio module, click sounds will be disabled:", e);
 	}
@@ -1672,7 +1672,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
 		</div>
-		<div class="tracky-mouse-canvas-container-container">
+		<div class="tracky-mouse-camera-area">
 			<div class="tracky-mouse-canvas-container">
 				<div class="tracky-mouse-canvas-overlay">
 					<button class="tracky-mouse-use-camera-button">${t("ui.camera.allowAccess", { defaultValue: "Allow Camera Access" })}</button>
@@ -1696,6 +1696,37 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
 	let canvasContainer = uiContainer.querySelector('.tracky-mouse-canvas-container');
 	let desktopAppDownloadMessage = uiContainer.querySelector('.tracky-mouse-desktop-app-download-message');
+
+	let lastShownErrorDetails = null;
+	function showError(message, error, { warningIcon = true, errorClass = "other" } = {}) {
+		const alreadyShown = !errorMessage.hidden && lastShownErrorDetails?.message === message && lastShownErrorDetails?.error?.name === error?.name && lastShownErrorDetails?.error?.message === error?.message;
+		if (alreadyShown) {
+			// Play CSS animation to indicate repeated errors
+			// but not if they're occurring constantly
+			// Note: for constant errors, with this scheme, it may animate
+			// when returning to the tab due to timer throttling, or due to lag.
+			if (performance.now() > lastShownErrorDetails.time + 100) {
+				errorMessage.style.animation = "none";
+				if (alreadyShown) {
+					void errorMessage.offsetWidth; // trigger reflow to allow restarting animation
+					errorMessage.style.animation = "";
+				}
+			}
+		} else {
+			if (warningIcon) {
+				errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${message}`;
+			} else {
+				errorMessage.textContent = message;
+			}
+			if (error) {
+				const pre = document.createElement("pre");
+				pre.textContent = error.name + ": " + error.message;
+				errorMessage.appendChild(pre);
+			}
+			errorMessage.hidden = false;
+		}
+		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
+	}
 
 	// Settings (initialized later; defaults are defined in settingsCategories)
 	const s = {};
@@ -2034,11 +2065,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					type: "button",
 					visible: () => isDesktopApp,
 					onClick: async () => {
+						function showToast(message) {
+							const toast = document.createElement("div");
+							toast.className = "tracky-mouse-toast";
+							toast.textContent = message;
+							document.body.appendChild(toast);
+							setTimeout(() => {
+								toast.remove();
+							}, 5000);
+						}
+
 						let knownCameras = {};
 						try {
 							knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
 						} catch (error) {
-							alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + t("openCameraSettings.errors.parseKnownCameras", { defaultValue: "Failed to parse known cameras from localStorage:" }) + "\n" + error.name + ": " + error.message);
 							return;
 						}
 
@@ -2049,10 +2090,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						try {
 							const result = await window.electronAPI.openCameraSettings(selectedDeviceName);
 							if (result?.error) {
-								alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + result.error);
+								showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + result.error);
 							}
 						} catch (error) {
-							alert(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.message);
+							showToast(t("openCameraSettings.errors.sharedHeading", { defaultValue: "Failed to open camera settings:" }) + "\n" + error.name + ": " + error.message);
 						}
 					},
 					// description: t("settings.openCameraSettings.description.alt1", { defaultValue: "Open your camera's system settings window to adjust properties like brightness and contrast." }),
@@ -2389,7 +2430,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let debugEyeCanvas = document.createElement("canvas");
 	debugEyeCanvas.className = "tracky-mouse-debug-eye-canvas";
 	debugEyeCanvas.style.display = "none";
-	uiContainer.querySelector(".tracky-mouse-canvas-container-container").appendChild(debugEyeCanvas);
+	uiContainer.querySelector(".tracky-mouse-camera-area").appendChild(debugEyeCanvas);
 	let debugEyeCtx = debugEyeCanvas.getContext('2d');
 
 	let pointerEl = document.createElement('div');
@@ -2477,6 +2518,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
+	// Virtual display bounds cache (Electron only); covers all connected monitors.
+	let virtualDisplayBounds = null;
+	if (window.electronAPI?.getVirtualDisplayBounds) {
+		window.electronAPI.getVirtualDisplayBounds().then((bounds) => {
+			virtualDisplayBounds = bounds;
+		});
+		window.electronAPI.onVirtualDisplayBoundsChanged?.((bounds) => {
+			virtualDisplayBounds = bounds;
+			mouseNeedsInitPos = true;
+		});
+	}
+
 	// Other state
 	let paused = true;
 	let pointTracker;
@@ -2548,14 +2601,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 		try {
 			detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
+			if (lastShownErrorDetails?.errorClass === "faceLandmarksDetection.createDetector") {
+				errorMessage.hidden = true;
+			}
 		} catch (error) {
 			detector = null;
-			// TODO: avoid alert
 			console.error("Failed to create facemesh detector:", error);
-			alert(error);
+			showError(t("faceDetectorInitError", { defaultValue: "Failed to create face detector" }), error, { errorClass: "faceLandmarksDetection.createDetector" });
 		}
 
 		facemeshLoaded = true;
+		let loggedDetectorError = false;
 		facemeshEstimateFaces = async () => {
 			const imageData = currentCameraImageData;//getCameraImageData();
 			if (!imageData) {
@@ -2569,11 +2625,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				}
 				return faces;
 			} catch (error) {
-				detector.dispose();
+				if (!loggedDetectorError) {
+					console.error("Facemesh estimation failed:", error);
+					loggedDetectorError = true;
+				}
+				try {
+					detector?.dispose();
+				} catch (disposeError) {
+					console.error("Failed to dispose facemesh detector after estimation error:", disposeError);
+				}
 				detector = null;
-				// TODO: avoid alert
-				console.error("Facemesh estimation failed:", error);
-				alert(error);
+				showError(t("faceDetectorError", { defaultValue: "Face detector error" }), error);
 			}
 			return [];
 		};
@@ -2808,7 +2870,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		updateStartStopButton();
 	};
 
-	let showedCameraError = false;
+	// Handle monkey-patched alert() replacement in face-landmarks-detection.min.js
+	// (Hm, could make it throw instead. Then we wouldn't need this.)
+	window._TrackyMouse_faceLandmarksDetectionAlert = (message) => {
+		// TODO: i18n (it's just one message; we could check for the string (or not) and translate it)
+		// const isContextCreationMessage = message === "Failed to create WebGL canvas context when passing video frame.";
+		errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${message}`;
+		errorMessage.hidden = false;
+	};
+
+	const cameraAccessSlowWarningDelayMS = 5000;
+	let cameraAccessSlowWarningTimeoutID;
 	useCameraButton.onclick = TrackyMouse.useCamera = async (optionsOrEvent = {}) => {
 		// Phases:
 		// 1. "tryPreferredCamera"
@@ -2898,8 +2970,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			delete constraints.video.facingMode;
 			constraints.video.deviceId = { exact: deviceIdToTry };
 		}
+		clearTimeout(cameraAccessSlowWarningTimeoutID);
+		errorMessage.hidden = true;
+		cameraAccessSlowWarningTimeoutID = setTimeout(() => {
+			errorMessage.textContent = t("video.status.accessTakingLongerThanExpected", { defaultValue: "Accessing the camera is taking longer than expected..." });
+			errorMessage.hidden = false;
+		}, cameraAccessSlowWarningDelayMS);
 		console.log("TrackyMouse.useCamera phase", phase, "constraints", constraints);
 		navigator.mediaDevices.getUserMedia(constraints).then(async (stream) => {
+			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			if (phase === "justGetPermission") {
 				for (const track of stream.getTracks()) {
 					track.stop();
@@ -2922,6 +3001,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			useCameraButton.hidden = true;
 			errorMessage.hidden = true;
 		}, async (error) => {
+			clearTimeout(cameraAccessSlowWarningTimeoutID);
 			console.log("TrackyMouse.useCamera phase", phase, "error", error);
 			if (
 				phase === "tryPreferredCamera" &&
@@ -2933,7 +3013,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 			if (error.name == "NotFoundError" || error.name == "DevicesNotFoundError") {
 				// required track is missing
-				errorMessage.textContent = t("video.errors.noCameraFound", { defaultValue: "No camera found. Please make sure you have a camera connected and enabled." });
+				showError(t("video.errors.noCameraFound", { defaultValue: "No camera found. Please make sure you have a camera connected and enabled." }));
 			} else if (error.name == "NotReadableError" || error.name == "TrackStartError") {
 				// webcam is already in use
 				// or: OBS Virtual Camera is present but OBS is not running with Virtual Camera started
@@ -2941,18 +3021,18 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// (listing devices and showing only the OBS Virtual Camera would also be a good clue in itself;
 				// though care should be given to make it clear it's a list with one item, with something like "(no more cameras detected)" following the list
 				// or "1 camera source detected" preceding it)
-				errorMessage.textContent = t("video.errors.cameraInUse", { defaultValue: "Webcam is already in use. Please make sure you have no other programs using the camera." });
+				showError(t("video.errors.cameraInUse", { defaultValue: "Webcam is already in use. Please make sure you have no other programs using the camera." }));
 			} else if (error.name === "AbortError") {
 				// webcam is likely already in use
 				// I observed AbortError in Firefox 132.0.2 but I don't know it's used exclusively for this case.
 				// Update: it definitely isn't, but I can't say exactly what it means in other cases.
 				// Like, it might have to do with permissions being denied outside of a user gesture (distinct from the user denying the permission)
 				// I really hope that isn't the problem.
-				// errorMessage.textContent = "Webcam may already be in use. Please make sure you have no other programs using the camera.";
-				errorMessage.textContent = t("video.errors.retryAfterClosingOtherPrograms", { defaultValue: "Please make sure no other programs are using the camera and try again." });
+				// showError("Webcam may already be in use. Please make sure you have no other programs using the camera.");
+				showError(t("video.errors.retryAfterClosingOtherPrograms", { defaultValue: "Please make sure no other programs are using the camera and try again." }));
 				// A more honest/helpful message might be:
-				// errorMessage.textContent = "Please try again and then make sure no other programs are using the camera and try again again.";
-				// errorMessage.textContent = "Please try again before/after making sure no other programs are using the camera.";
+				// showError("Please try again and then make sure no other programs are using the camera and try again again.");
+				// showError("Please try again before/after making sure no other programs are using the camera.");
 				// if it were not to be confusing.
 				// That is, one could save some time by just hitting the button to try again before trying to figure out of another program is using the camera,
 				// because sometimes that's enough.
@@ -2963,36 +3043,27 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				// either due to the device not being present, or the ID having changed (don't ask me why that can happen but it can)
 				// Note: OverconstrainedError has a `constraint` property but not in Firefox so it's not very helpful.
 				if (constraints.video.deviceId?.exact) {
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a different camera from the dropdown and try again.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please mess around with Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Try changing Video > Camera source.";
-					// errorMessage.textContent = "The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.";
-					errorMessage.textContent = t("video.errors.previouslySelectedUnavailable", { defaultValue: "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to." });
+					// showError("The previously selected camera is not available. Please select a different camera from the dropdown and try again.");
+					// showError("The previously selected camera is not available. Please mess around with Video > Camera source.");
+					// showError("The previously selected camera is not available. Try changing Video > Camera source.");
+					// showError("The previously selected camera is not available. Please select a camera from the \"Camera source\" dropdown in the Video settings and if it doesn't show up, it might after you select Default.");
+					showError(t("video.errors.previouslySelectedUnavailable", { defaultValue: "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to." }));
 					// It's awkward but that's my best attempt at conveying how you may need to proceed
 					// without complicated description of how/why the dropdown might be populated with
 					// fake information until a camera stream is successfully opened.
 				} else {
-					errorMessage.textContent = t("video.errors.unsupportedResolution", { defaultValue: "Webcam does not support the required resolution. Please change your settings." });
+					showError(t("video.errors.unsupportedResolution", { defaultValue: "Webcam does not support the required resolution. Please change your settings." }));
 				}
 			} else if (error.name == "NotAllowedError" || error.name == "PermissionDeniedError") {
 				// permission denied in browser
-				errorMessage.textContent = t("video.errors.permissionDenied", { defaultValue: "Permission denied. Please enable access to the camera." });
+				showError(t("video.errors.permissionDenied", { defaultValue: "Permission denied. Please enable access to the camera." }));
 			} else if (error.name == "TypeError") {
 				// empty constraints object
-				errorMessage.textContent = `${t("video.errors.accessFailed", { defaultValue: "Something went wrong accessing the camera." })} (${error.name}: ${error.message})`;
+				showError(t("video.errors.accessFailed", { defaultValue: "Something went wrong accessing the camera." }), error);
 			} else {
 				// other errors
-				errorMessage.textContent = `${t("video.errors.accessFailedRetry", { defaultValue: "Something went wrong accessing the camera. Please try again." })} (${error.name}: ${error.message})`;
+				showError(t("video.errors.accessFailedRetry", { defaultValue: "Something went wrong accessing the camera. Please try again." }), error);
 			}
-			errorMessage.textContent = `${t("common.warningIcon", { defaultValue: "⚠️" })} ${errorMessage.textContent}`;
-			errorMessage.hidden = false;
-			// Play CSS animation only on retries
-			errorMessage.style.animation = "none";
-			if (showedCameraError) {
-				void errorMessage.offsetWidth; // trigger reflow to allow restarting animation
-				errorMessage.style.animation = "";
-			}
-			showedCameraError = true;
 		});
 	};
 	useDemoFootageButton.onclick = TrackyMouse.useDemoFootage = () => {
@@ -4089,8 +4160,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
-			const screenWidth = window.electronAPI ? screen.width : innerWidth;
-			const screenHeight = window.electronAPI ? screen.height : innerHeight;
+			const screenWidth = window.electronAPI ? (virtualDisplayBounds?.width ?? screen.width) : innerWidth;
+			const screenHeight = window.electronAPI ? (virtualDisplayBounds?.height ?? screen.height) : innerHeight;
+			const screenOffsetX = window.electronAPI ? (virtualDisplayBounds?.x ?? 0) : 0;
+			const screenOffsetY = window.electronAPI ? (virtualDisplayBounds?.y ?? 0) : 0;
 
 			let [movementX, movementY] = pointTracker.getMovement();
 
@@ -4220,13 +4293,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 				mouseX -= deltaX * screenWidth;
 				mouseY += deltaY * screenHeight;
 
-				mouseX = Math.min(Math.max(0, mouseX), screenWidth);
-				mouseY = Math.min(Math.max(0, mouseY), screenHeight);
+				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
+				mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
 
 				if (mouseNeedsInitPos) {
 					// TODO: option to get preexisting mouse position instead of set it to center of screen
-					mouseX = screenWidth / 2;
-					mouseY = screenHeight / 2;
+					mouseX = screenOffsetX + screenWidth / 2;
+					mouseY = screenOffsetY + screenHeight / 2;
 					mouseNeedsInitPos = false;
 				}
 				if (window.electronAPI) {
@@ -4355,6 +4428,15 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		_waitForSettingsLoaded() {
 			return settingsLoadedPromise;
 		},
+		get _facemeshPrediction() {
+			return facemeshPrediction;
+		},
+		get _headTilt() {
+			return headTilt;
+		},
+		get _video() {
+			return cameraVideo;
+		},
 		dispose() {
 			// TODO: re-structure so that cleanup can succeed even if initialization fails
 			// OOP would help with this, by storing references in an object, but it doesn't necessarily
@@ -4449,11 +4531,13 @@ TrackyMouse.init = function (div, opts = {}) {
 
 	createInner();
 
-	return {
-		dispose() {
-			inner.dispose();
-		},
-	};
+	return new Proxy({}, {
+		get(_target, prop) {
+			if (prop in inner) {
+				return inner[prop];
+			}
+		}
+	});
 
 };
 
@@ -4461,21 +4545,24 @@ TrackyMouse.initScreenOverlay = () => {
 
 	const template = `
 	<div class="tracky-mouse-hide-near-cursor">
-		<div class="tracky-mouse-absolute-center">
-			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
-				<img src="${TrackyMouse.dependenciesRoot}/images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+		<div id="tracky-mouse-screen-overlay-work-area">
+			<div class="tracky-mouse-absolute-center">
+				<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-manual-takeback-indicator">
+					<img src="${TrackyMouse.dependenciesRoot}/images/manual-takeback.svg" alt="hand reaching for mouse" width="128" height="128">
+				</div>
+				<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
+					<img src="${TrackyMouse.dependenciesRoot}/images/head-not-found.svg" alt="head not found" width="128" height="128">
+				</div>
 			</div>
-			<div class="tracky-mouse-screen-overlay-status-indicator tracky-mouse-head-not-found-indicator">
-				<img src="${TrackyMouse.dependenciesRoot}/images/head-not-found.svg" alt="head not found" width="128" height="128">
-			</div>
+			<div id="tracky-mouse-screen-overlay-message"></div>
 		</div>
-		<div id="tracky-mouse-screen-overlay-message"></div>
 	</div>
 	`;
 	const fragment = document.createRange().createContextualFragment(template);
 	document.body.appendChild(fragment);
 
 	const message = document.getElementById("tracky-mouse-screen-overlay-message");
+	const workAreaContainer = document.getElementById("tracky-mouse-screen-overlay-work-area");
 	message.dir = "auto";
 
 	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
@@ -4522,9 +4609,30 @@ TrackyMouse.initScreenOverlay = () => {
 	}
 
 	function update(data) {
-		const { messageText, isEnabled, isManualTakeback, inputFeedback, bottomOffset, systemMousePosition } = data;
+		const {
+			messageText,
+			isEnabled,
+			isManualTakeback,
+			inputFeedback,
+			workAreaContainerBounds,
+			bottomOffset,
+			systemMousePosition,
+		} = data;
 
-		message.style.bottom = `${bottomOffset}px`;
+		if (workAreaContainerBounds) {
+			workAreaContainer.style.left = `${workAreaContainerBounds.x}px`;
+			workAreaContainer.style.top = `${workAreaContainerBounds.y}px`;
+			workAreaContainer.style.width = `${workAreaContainerBounds.width}px`;
+			workAreaContainer.style.height = `${workAreaContainerBounds.height}px`;
+			message.style.bottom = "0px";
+		} else {
+			// bottomOffset was a never-released part of an unstable API.
+			// workAreaContainerBounds could be made required, just like bottomOffset was.
+			workAreaContainer.style.left = "0px";
+			workAreaContainer.style.top = "0px";
+			workAreaContainer.style.width = "100%";
+			workAreaContainer.style.height = `calc(100% - ${bottomOffset ?? 0}px)`;
+		}
 
 		// Other diagnostics in the future would be stuff like:
 		// - head too far away (smaller than a certain size) https://github.com/1j01/tracky-mouse/issues/49

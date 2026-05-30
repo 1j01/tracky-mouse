@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Nie udało się odczytać wybranego pliku.",
   "desktop.menu.importSettings": "Importuj ustawienia",
   "desktop.menu.speech": "Mowa",
+  "desktop.menu.toggleDevtools": "Przełącz narzędzia deweloperskie",
   "desktop.menu.toggleScreenOverlayDevtools": "Przełącz narzędzia deweloperskie (nakładka ekranu)",
   "desktop.menu.view": "Widok",
   "desktop.menu.window": "Okno",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Aktualizacja nie powiodła się",
   "desktop.updater.updateSuccessful.message": "Pobrano wersję %0. Uruchom ponownie aplikację, aby używać zaktualizowanej wersji.",
   "desktop.updater.updateSuccessful.title": "Aktualizacja powiodła się",
+  "faceDetectorError": "Błąd detektora twarzy",
+  "faceDetectorInitError": "Nie udało się utworzyć detektora twarzy",
   "hud.pressToDisable": "Naciśnij %0, aby wyłączyć Tracky Mouse.",
   "hud.pressToEnable": "Naciśnij %0, aby włączyć Tracky Mouse.",
   "hud.pressToToggle": "Naciśnij %0, aby przełączyć Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Odmowa dostępu. Włącz dostęp do kamery.",
   "video.errors.previouslySelectedUnavailable": "Poprzednio wybrana kamera jest niedostępna. Spróbuj wybrać \"Domyślna\" w ustawieniu Wideo > Źródło kamery, a następnie wybierz konkretną kamerę, jeśli to konieczne.",
   "video.errors.retryAfterClosingOtherPrograms": "Upewnij się, że żaden inny program nie korzysta z kamery, i spróbuj ponownie.",
-  "video.errors.unsupportedResolution": "Kamera internetowa nie obsługuje wymaganej rozdzielczości. Zmień ustawienia."
+  "video.errors.unsupportedResolution": "Kamera internetowa nie obsługuje wymaganej rozdzielczości. Zmień ustawienia.",
+  "video.status.accessTakingLongerThanExpected": "Uzyskiwanie dostępu do kamery trwa dłużej niż oczekiwano..."
 }

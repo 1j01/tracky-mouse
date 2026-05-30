@@ -1,0 +1,62 @@
+html {
+	background-color: white;
+	color: black;
+	font-family: 'Atkinson Hyperlegible Next', sans-serif;
+}
+
+body {
+	max-width: 70em;
+	max-width: min(70em, calc(100% - 2em));
+	margin: 0 auto;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		background-color: black;
+		color: white;
+	}
+
+	a:link,
+	header .try-demo-button.try-demo-button {
+		color: aquamarine;
+	}
+
+	a:visited {
+		color: rgb(197, 127, 255);
+	}
+}
+
+header {
+	text-align: center;
+	margin-top: 2em;
+}
+
+header h1 {
+	font-size: 2.6em;
+	margin-bottom: 0;
+}
+
+header .tagline {
+	font-size: 1.5em;
+	margin-top: 0.3em;
+}
+
+header .logo {
+	filter: drop-shadow(0 0 0.8em rgb(0, 217, 255));
+}
+
+footer {
+	text-align: center;
+}
+
+footer nav {
+	display: flex;
+	justify-content: center;
+	gap: 1em;
+	margin-top: 2em;
+}
+
+.page-section {
+	margin-top: 3em;
+	margin-bottom: 3em;
+}

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Seçilen dosya okunamadı.",
   "desktop.menu.importSettings": "Ayarları İçe Aktar",
   "desktop.menu.speech": "Konuşma",
+  "desktop.menu.toggleDevtools": "Geliştirici Araçlarını Aç/Kapat",
   "desktop.menu.toggleScreenOverlayDevtools": "Geliştirici Araçlarını Aç/Kapat (Ekran Katmanı)",
   "desktop.menu.view": "Görünüm",
   "desktop.menu.window": "Pencere",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Güncelleme Başarısız",
   "desktop.updater.updateSuccessful.message": "%0 alındı. Güncellenmiş sürümü kullanmak için uygulamayı yeniden başlatın.",
   "desktop.updater.updateSuccessful.title": "Güncelleme Başarılı",
+  "faceDetectorError": "Yüz algılayıcı hatası",
+  "faceDetectorInitError": "Yüz algılayıcı oluşturulamadı",
   "hud.pressToDisable": "Tracky Mouse'u devre dışı bırakmak için %0 tuşuna basın.",
   "hud.pressToEnable": "Tracky Mouse'u etkinleştirmek için %0 tuşuna basın.",
   "hud.pressToToggle": "Tracky Mouse'u açıp kapatmak için %0 tuşuna basın.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "İzin reddedildi. Lütfen kameraya erişimi etkinleştirin.",
   "video.errors.previouslySelectedUnavailable": "Önceden seçilen kamera kullanılamıyor. Video > Kamera kaynağı için \"Varsayılan\"'ı seçmeyi deneyin ve gerekirse daha sonra belirli bir kamera seçin.",
   "video.errors.retryAfterClosingOtherPrograms": "Lütfen başka hiçbir programın kamerayı kullanmadığından emin olun ve tekrar deneyin.",
-  "video.errors.unsupportedResolution": "Web kamerası gereken çözünürlüğü desteklemiyor. Lütfen ayarlarınızı değiştirin."
+  "video.errors.unsupportedResolution": "Web kamerası gereken çözünürlüğü desteklemiyor. Lütfen ayarlarınızı değiştirin.",
+  "video.status.accessTakingLongerThanExpected": "Kameraya erişmek beklenenden daha uzun sürüyor..."
 }

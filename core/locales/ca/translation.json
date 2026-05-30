@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "No s'ha pogut llegir el fitxer seleccionat.",
   "desktop.menu.importSettings": "Importa la configuració",
   "desktop.menu.speech": "Veu",
+  "desktop.menu.toggleDevtools": "Commuta les eines de desenvolupador",
   "desktop.menu.toggleScreenOverlayDevtools": "Commuta les eines de desenvolupador (superposició de pantalla)",
   "desktop.menu.view": "Visualitza",
   "desktop.menu.window": "Finestra",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "L'actualització ha fallat",
   "desktop.updater.updateSuccessful.message": "S'ha baixat %0. Reinicia l'aplicació per utilitzar la versió actualitzada.",
   "desktop.updater.updateSuccessful.title": "Actualització amb èxit",
+  "faceDetectorError": "Error del detector de cares",
+  "faceDetectorInitError": "No s ha pogut crear el detector de cares",
   "hud.pressToDisable": "Prem %0 per desactivar Tracky Mouse.",
   "hud.pressToEnable": "Prem %0 per activar Tracky Mouse.",
   "hud.pressToToggle": "Prem %0 per commutar Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Permís denegat. Habilita l'accés a la càmera.",
   "video.errors.previouslySelectedUnavailable": "La càmera seleccionada anteriorment no és disponible. Prova de seleccionar \"Per defecte\" a Vídeo > Origen de la càmera i, després, tria una càmera concreta si cal.",
   "video.errors.retryAfterClosingOtherPrograms": "Assegura't que cap altre programa estigui usant la càmera i torna-ho a provar.",
-  "video.errors.unsupportedResolution": "La webcam no admet la resolució requerida. Canvia la configuració."
+  "video.errors.unsupportedResolution": "La webcam no admet la resolució requerida. Canvia la configuració.",
+  "video.status.accessTakingLongerThanExpected": "L'accés a la càmera està trigant més del que s'esperava..."
 }

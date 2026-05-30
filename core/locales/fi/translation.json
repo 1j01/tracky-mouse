@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Valitun tiedoston lukeminen epäonnistui.",
   "desktop.menu.importSettings": "Tuo asetukset",
   "desktop.menu.speech": "Puhe",
+  "desktop.menu.toggleDevtools": "Näytä/piilota kehittäjätyökalut",
   "desktop.menu.toggleScreenOverlayDevtools": "Näytä/piilota kehittäjätyökalut (näyttöpeite)",
   "desktop.menu.view": "Näytä",
   "desktop.menu.window": "Ikkuna",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Päivitys epäonnistui",
   "desktop.updater.updateSuccessful.message": "Haettiin versio %0. Käynnistä sovellus uudelleen käyttääksesi päivitettyä versiota.",
   "desktop.updater.updateSuccessful.title": "Päivitys onnistui",
+  "faceDetectorError": "Kasvojentunnistuksen virhe",
+  "faceDetectorInitError": "Kasvojenilmaisimen luominen epäonnistui",
   "hud.pressToDisable": "Paina %0 poistaaksesi Tracky Mousen käytöstä.",
   "hud.pressToEnable": "Paina %0 ottaaksesi Tracky Mousen käyttöön.",
   "hud.pressToToggle": "Paina %0 vaihtaaksesi Tracky Mousen tilaa.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Käyttö estetty. Ota kameran käyttöoikeus käyttöön.",
   "video.errors.previouslySelectedUnavailable": "Aiemmin valittu kamera ei ole käytettävissä. Kokeile valita \"Oletus\" kohdasta Video > Kameralähde ja valitse sitten tarvittaessa tietty kamera.",
   "video.errors.retryAfterClosingOtherPrograms": "Varmista, ettei mikään muu ohjelma käytä kameraa, ja yritä uudelleen.",
-  "video.errors.unsupportedResolution": "Web-kamera ei tue vaadittua tarkkuutta. Muuta asetuksia."
+  "video.errors.unsupportedResolution": "Web-kamera ei tue vaadittua tarkkuutta. Muuta asetuksia.",
+  "video.status.accessTakingLongerThanExpected": "Kameran käyttöoikeuden saaminen kestää odotettua kauemmin..."
 }

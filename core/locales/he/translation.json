@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "קריאת הקובץ הנבחר נכשלה.",
   "desktop.menu.importSettings": "ייבוא הגדרות",
   "desktop.menu.speech": "דיבור",
+  "desktop.menu.toggleDevtools": "הצג/הסתר כלים למפתחים",
   "desktop.menu.toggleScreenOverlayDevtools": "הצג/הסתר כלים למפתחים (חפיפת מסך)",
   "desktop.menu.view": "תצוגה",
   "desktop.menu.window": "חלון",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "העדכון נכשל",
   "desktop.updater.updateSuccessful.message": "נמשכה הגרסה %0. הפעל מחדש את האפליקציה כדי להשתמש בגרסה המעודכנת.",
   "desktop.updater.updateSuccessful.title": "העדכון הצליח",
+  "faceDetectorError": "שגיאה בגלאי הפנים",
+  "faceDetectorInitError": "יצירת גלאי הפנים נכשלה",
   "hud.pressToDisable": "לחץ %0 כדי להשבית את Tracky Mouse.",
   "hud.pressToEnable": "לחץ %0 כדי להפעיל את Tracky Mouse.",
   "hud.pressToToggle": "לחץ %0 כדי להפעיל/לכבות את Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "הגישה נדחתה. אנא אפשר גישה למצלמה.",
   "video.errors.previouslySelectedUnavailable": "המצלמה שנבחרה קודם אינה זמינה. נסה לבחור \"ברירת מחדל\" תחת וידאו > מקור מצלמה, ולאחר מכן בחר מצלמה ספציפית במידת הצורך.",
   "video.errors.retryAfterClosingOtherPrograms": "ודא שאין תוכניות אחרות שמשתמשות במצלמה ונסה שוב.",
-  "video.errors.unsupportedResolution": "מצלמת הרשת אינה תומכת ברזולוציה הנדרשת. אנא שנה את ההגדרות."
+  "video.errors.unsupportedResolution": "מצלמת הרשת אינה תומכת ברזולוציה הנדרשת. אנא שנה את ההגדרות.",
+  "video.status.accessTakingLongerThanExpected": "הגישה למצלמה לוקחת יותר זמן מהצפוי..."
 }

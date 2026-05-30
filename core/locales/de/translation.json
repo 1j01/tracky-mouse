@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Ausgewählte Datei konnte nicht gelesen werden.",
   "desktop.menu.importSettings": "Einstellungen importieren",
   "desktop.menu.speech": "Sprachausgabe",
+  "desktop.menu.toggleDevtools": "Entwicklertools umschalten",
   "desktop.menu.toggleScreenOverlayDevtools": "Entwicklertools umschalten (Bildschirm-Overlay)",
   "desktop.menu.view": "Ansicht",
   "desktop.menu.window": "Fenster",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Update fehlgeschlagen",
   "desktop.updater.updateSuccessful.message": "%0 ausgecheckt. Starten Sie die App neu, um die aktualisierte Version zu verwenden.",
   "desktop.updater.updateSuccessful.title": "Update erfolgreich",
+  "faceDetectorError": "Fehler beim Gesichtsdetektor",
+  "faceDetectorInitError": "Gesichtsdetektor konnte nicht erstellt werden",
   "hud.pressToDisable": "Drücken Sie %0, um Tracky Mouse zu deaktivieren.",
   "hud.pressToEnable": "Drücken Sie %0, um Tracky Mouse zu aktivieren.",
   "hud.pressToToggle": "Drücken Sie %0, um Tracky Mouse umzuschalten.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Zugriff verweigert. Bitte aktivieren Sie den Kamerazugriff.",
   "video.errors.previouslySelectedUnavailable": "Die zuvor ausgewählte Kamera ist nicht verfügbar. Wählen Sie für Video > Kameraquelle 'Standard' und wählen Sie bei Bedarf eine spezifische Kamera aus.",
   "video.errors.retryAfterClosingOtherPrograms": "Bitte stellen Sie sicher, dass keine andere Anwendung die Kamera verwendet, und versuchen Sie es erneut.",
-  "video.errors.unsupportedResolution": "Die Webcam unterstützt die erforderliche Auflösung nicht. Bitte ändern Sie Ihre Einstellungen."
+  "video.errors.unsupportedResolution": "Die Webcam unterstützt die erforderliche Auflösung nicht. Bitte ändern Sie Ihre Einstellungen.",
+  "video.status.accessTakingLongerThanExpected": "Der Zugriff auf die Kamera dauert länger als erwartet..."
 }

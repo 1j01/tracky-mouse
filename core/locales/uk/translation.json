@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Не вдалося прочитати вибраний файл.",
   "desktop.menu.importSettings": "Імпорт налаштувань",
   "desktop.menu.speech": "Мовлення",
+  "desktop.menu.toggleDevtools": "Перемкнути засоби розробника",
   "desktop.menu.toggleScreenOverlayDevtools": "Перемкнути засоби розробника (екранна накладка)",
   "desktop.menu.view": "Вигляд",
   "desktop.menu.window": "Вікно",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Не вдалося оновити",
   "desktop.updater.updateSuccessful.message": "Перейдено на версію %0. Перезапустіть застосунок, щоб використати оновлену версію.",
   "desktop.updater.updateSuccessful.title": "Оновлення виконано успішно",
+  "faceDetectorError": "Помилка детектора обличчя",
+  "faceDetectorInitError": "Не вдалося створити детектор обличчя",
   "hud.pressToDisable": "Натисніть %0, щоб вимкнути Tracky Mouse.",
   "hud.pressToEnable": "Натисніть %0, щоб увімкнути Tracky Mouse.",
   "hud.pressToToggle": "Натисніть %0, щоб перемкнути стан Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Доступ заборонено. Увімкніть доступ до камери.",
   "video.errors.previouslySelectedUnavailable": "Раніше вибрана камера недоступна. Спробуйте вибрати \"Default\" у Video > Джерело камери, а потім за потреби виберіть конкретну камеру.",
   "video.errors.retryAfterClosingOtherPrograms": "Переконайтеся, що жодна інша програма не використовує камеру, і спробуйте ще раз.",
-  "video.errors.unsupportedResolution": "Вебкамера не підтримує потрібну роздільну здатність. Змініть налаштування."
+  "video.errors.unsupportedResolution": "Вебкамера не підтримує потрібну роздільну здатність. Змініть налаштування.",
+  "video.status.accessTakingLongerThanExpected": "Доступ до камери займає більше часу, ніж очікувалося..."
 }

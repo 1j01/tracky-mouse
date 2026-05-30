@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ఎంచుకున్న ఫైల్‌ను చదవడంలో విఫలమైంది.",
   "desktop.menu.importSettings": "సెట్టింగ్‌లను దిగుమతి చేయండి",
   "desktop.menu.speech": "స్పీచ్",
+  "desktop.menu.toggleDevtools": "డెవలపర్ టూల్స్‌ను టాగిల్ చేయండి",
   "desktop.menu.toggleScreenOverlayDevtools": "డెవలపర్ టూల్స్‌ను టాగిల్ చేయండి (స్క్రీన్ ఓవర్లే)",
   "desktop.menu.view": "దృశ్యం",
   "desktop.menu.window": "విండో",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "నవీకరణ విఫలమైంది",
   "desktop.updater.updateSuccessful.message": "%0 ను చెక్‌అవుట్ చేశాం. తాజా వెర్షన్‌ను ఉపయోగించడానికి యాప్‌ను మళ్లీ ప్రారంభించండి.",
   "desktop.updater.updateSuccessful.title": "నవీకరణ విజయవంతమైంది",
+  "faceDetectorError": "ముఖ గుర్తింపు పరికరం లోపం",
+  "faceDetectorInitError": "ముఖ గుర్తింపు పరికరాన్ని రూపొందించడం విఫలమైంది",
   "hud.pressToDisable": "Tracky Mouse‌ను నిలిపివేయడానికి %0 నొక్కండి.",
   "hud.pressToEnable": "Tracky Mouse‌ను ప్రారంభించడానికి %0 నొక్కండి.",
   "hud.pressToToggle": "Tracky Mouse‌ను టాగిల్ చేయడానికి %0 నొక్కండి.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "అనుమతి నిరాకరించబడింది. దయచేసి కెమెరా యాక్సెస్‌ను ఎనేబుల్ చేయండి.",
   "video.errors.previouslySelectedUnavailable": "ముందు ఎంచుకున్న కెమెరా ప్రస్తుతం అందుబాటులో లేదు. Video > Camera source కోసం \"Default\" ఎంచేయండి, తరువాత అవసరమైతే నిర్దిష్ట కెమెరాను ఎంచుకోండి.",
   "video.errors.retryAfterClosingOtherPrograms": "దయచేసి ఇతర ప్రోగ్రామ్‌లు కెమెరాను ఉపయోగించడం లేదని నిర్ధారించుకుని మళ్లీ ప్రయత్నించండి.",
-  "video.errors.unsupportedResolution": "వెబ్‌క్యామ్ అవసరమైన రిజల్యూషన్‌ను సపోర్ట్ చేయదు. దయచేసి మీ సెట్టింగ్‌లను మార్చండి."
+  "video.errors.unsupportedResolution": "వెబ్‌క్యామ్ అవసరమైన రిజల్యూషన్‌ను సపోర్ట్ చేయదు. దయచేసి మీ సెట్టింగ్‌లను మార్చండి.",
+  "video.status.accessTakingLongerThanExpected": "కెమెరాను యాక్సెస్ చేయడానికి ఊహించిన దానికంటే ఎక్కువ సమయం పడుతోంది..."
 }

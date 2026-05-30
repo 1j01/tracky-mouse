@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Failed to read selected file.",
   "desktop.menu.importSettings": "Import Settings",
   "desktop.menu.speech": "Speech",
+  "desktop.menu.toggleDevtools": "Toggle Developer Tools",
   "desktop.menu.toggleScreenOverlayDevtools": "Toggle Developer Tools (Screen Overlay)",
   "desktop.menu.view": "View",
   "desktop.menu.window": "Window",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Update Failed",
   "desktop.updater.updateSuccessful.message": "Checked out %0. Restart the app to use the updated version.",
   "desktop.updater.updateSuccessful.title": "Update Successful",
+  "faceDetectorError": "Face detector error",
+  "faceDetectorInitError": "Failed to create face detector",
   "hud.pressToDisable": "Press %0 to disable Tracky Mouse.",
   "hud.pressToEnable": "Press %0 to enable Tracky Mouse.",
   "hud.pressToToggle": "Press %0 to toggle Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Permission denied. Please enable access to the camera.",
   "video.errors.previouslySelectedUnavailable": "The previously selected camera is not available. Try selecting \"Default\" for Video > Camera source, and then select a specific camera if you need to.",
   "video.errors.retryAfterClosingOtherPrograms": "Please make sure no other programs are using the camera and try again.",
-  "video.errors.unsupportedResolution": "Webcam does not support the required resolution. Please change your settings."
+  "video.errors.unsupportedResolution": "Webcam does not support the required resolution. Please change your settings.",
+  "video.status.accessTakingLongerThanExpected": "Accessing the camera is taking longer than expected..."
 }

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Không đọc được tệp đã chọn.",
   "desktop.menu.importSettings": "Nhập cài đặt",
   "desktop.menu.speech": "Giọng nói",
+  "desktop.menu.toggleDevtools": "Bật/tắt Công cụ Nhà phát triển",
   "desktop.menu.toggleScreenOverlayDevtools": "Bật/tắt Công cụ Nhà phát triển (Lớp phủ màn hình)",
   "desktop.menu.view": "Xem",
   "desktop.menu.window": "Cửa sổ",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Cập nhật thất bại",
   "desktop.updater.updateSuccessful.message": "Đã checkout %0. Khởi động lại ứng dụng để dùng phiên bản mới.",
   "desktop.updater.updateSuccessful.title": "Cập nhật thành công",
+  "faceDetectorError": "Lỗi bộ phát hiện khuôn mặt",
+  "faceDetectorInitError": "Không thể tạo bộ phát hiện khuôn mặt",
   "hud.pressToDisable": "Nhấn %0 để tắt Tracky Mouse.",
   "hud.pressToEnable": "Nhấn %0 để bật Tracky Mouse.",
   "hud.pressToToggle": "Nhấn %0 để bật/tắt Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Quyền bị từ chối. Hãy cho phép truy cập camera.",
   "video.errors.previouslySelectedUnavailable": "Camera đã chọn trước đó không khả dụng. Hãy thử chọn \"Default\" trong Video > Camera source, rồi chọn camera cụ thể nếu cần.",
   "video.errors.retryAfterClosingOtherPrograms": "Hãy chắc rằng không có chương trình nào khác đang dùng camera rồi thử lại.",
-  "video.errors.unsupportedResolution": "Webcam không hỗ trợ độ phân giải yêu cầu. Hãy thay đổi cài đặt."
+  "video.errors.unsupportedResolution": "Webcam không hỗ trợ độ phân giải yêu cầu. Hãy thay đổi cài đặt.",
+  "video.status.accessTakingLongerThanExpected": "Việc truy cập camera đang mất nhiều thời gian hơn dự kiến..."
 }

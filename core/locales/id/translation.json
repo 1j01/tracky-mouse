@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Gagal membaca berkas yang dipilih.",
   "desktop.menu.importSettings": "Impor pengaturan",
   "desktop.menu.speech": "Ucapan",
+  "desktop.menu.toggleDevtools": "Alihkan Alat Pengembang",
   "desktop.menu.toggleScreenOverlayDevtools": "Alihkan Alat Pengembang (Lapisan layar)",
   "desktop.menu.view": "Tampilan",
   "desktop.menu.window": "Jendela",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Pembaruan gagal",
   "desktop.updater.updateSuccessful.message": "Versi %0 telah diambil. Mulai ulang aplikasi untuk menggunakan versi terbaru.",
   "desktop.updater.updateSuccessful.title": "Pembaruan berhasil",
+  "faceDetectorError": "Kesalahan detektor wajah",
+  "faceDetectorInitError": "Gagal membuat detektor wajah",
   "hud.pressToDisable": "Tekan %0 untuk menonaktifkan Tracky Mouse.",
   "hud.pressToEnable": "Tekan %0 untuk mengaktifkan Tracky Mouse.",
   "hud.pressToToggle": "Tekan %0 untuk mengalihkan Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Izin ditolak. Harap aktifkan akses ke kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera yang sebelumnya dipilih tidak tersedia. Coba pilih \"Default\" pada Video > Sumber kamera, lalu pilih kamera tertentu jika diperlukan.",
   "video.errors.retryAfterClosingOtherPrograms": "Pastikan tidak ada program lain yang menggunakan kamera dan coba lagi.",
-  "video.errors.unsupportedResolution": "Webcam tidak mendukung resolusi yang dibutuhkan. Silakan ubah pengaturan Anda."
+  "video.errors.unsupportedResolution": "Webcam tidak mendukung resolusi yang dibutuhkan. Silakan ubah pengaturan Anda.",
+  "video.status.accessTakingLongerThanExpected": "Mengakses kamera memakan waktu lebih lama dari yang diharapkan..."
 }

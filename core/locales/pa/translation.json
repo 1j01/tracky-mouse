@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "ਚੁਣੀ ਗਈ ਫਾਈਲ ਨਹੀਂ ਪੜ੍ਹੀ ਜਾ ਸਕੀ।",
   "desktop.menu.importSettings": "ਸੈਟਿੰਗਾਂ ਇੰਪੋਰਟ ਕਰੋ",
   "desktop.menu.speech": "ਬੋਲਣਾ",
+  "desktop.menu.toggleDevtools": "ਡਿਵੈਲਪਰ ਟੂਲ ਓਨ/ਆਫ਼ ਕਰੋ",
   "desktop.menu.toggleScreenOverlayDevtools": "ਡਿਵੈਲਪਰ ਟੂਲ (ਸਕ੍ਰੀਨ ਓਵਰਲੇ) ਓਨ/ਆਫ਼ ਕਰੋ",
   "desktop.menu.view": "ਵੇਖੋ",
   "desktop.menu.window": "ਵਿੰਡੋ",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "ਅੱਪਡੇਟ ਫੇਲ੍ਹ ਹੋਇਆ",
   "desktop.updater.updateSuccessful.message": "%0 ਚੈਕ‑ਆਉਟ ਕੀਤਾ ਗਿਆ। ਅੱਪਡੇਟ ਕੀਤੇ ਵਰਜਨ ਨੂੰ ਵਰਤਣ ਲਈ ਐਪ ਨੂੰ ਮੁੜ ਚਲਾਓ।",
   "desktop.updater.updateSuccessful.title": "ਅੱਪਡੇਟ ਸਫਲ ਰਹੀ",
+  "faceDetectorError": "ਚਿਹਰਾ ਖੋਜਕ ਗਲਤੀ",
+  "faceDetectorInitError": "ਚਿਹਰਾ ਖੋਜਕ ਬਣਾਉਣ ਵਿੱਚ ਅਸਫਲ",
   "hud.pressToDisable": "Tracky Mouse ਨੂੰ ਅਣਹਰਕਤ ਕਰਨ ਲਈ %0 ਦਬਾਓ।",
   "hud.pressToEnable": "Tracky Mouse ਨੂੰ ਚਾਲੂ ਕਰਨ ਲਈ %0 ਦਬਾਓ।",
   "hud.pressToToggle": "Tracky Mouse ਨੂੰ ਓਨ/ਆਫ਼ ਕਰਨ ਲਈ %0 ਦਬਾਓ।",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "ਇਜਾਜ਼ਤ ਰੱਦ ਕੀਤੀ ਗਈ। ਕਿਰਪਾ ਕਰਕੇ ਕੈਮਰੇ ਦੀ ਪਹੁੰਚ ਇਨੇਬਲ ਕਰੋ।",
   "video.errors.previouslySelectedUnavailable": "ਪਹਿਲਾਂ ਚੁਣਿਆ ਗਿਆ ਕੈਮਰਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। Video > Camera source ਲਈ \"Default\" ਚੁਣ ਕੇ ਦੇਖੋ ਅਤੇ ਜੇ ਲੋੜ ਪਏ ਤਾਂ ਬਾਅਦ ਵਿੱਚ ਕੋਈ ਖਾਸ ਕੈਮਰਾ ਚੁਣੋ।",
   "video.errors.retryAfterClosingOtherPrograms": "ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਕੋਈ ਹੋਰ ਪ੍ਰੋਗਰਾਮ ਕੈਮਰਾ ਨਹੀਂ ਵਰਤ ਰਿਹਾ ਅਤੇ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
-  "video.errors.unsupportedResolution": "ਵੈੱਬਕੈਮ ਲੋੜੀਂਦੀ ਰੈਜ਼ੋਲੂਸ਼ਨ ਨੂੰ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ ਬਦਲੋ।"
+  "video.errors.unsupportedResolution": "ਵੈੱਬਕੈਮ ਲੋੜੀਂਦੀ ਰੈਜ਼ੋਲੂਸ਼ਨ ਨੂੰ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ ਬਦਲੋ।",
+  "video.status.accessTakingLongerThanExpected": "ਕੈਮਰੇ ਤੱਕ ਪਹੁੰਚਣ ਵਿੱਚ ਉਮੀਦ ਨਾਲੋਂ ਵੱਧ ਸਮਾਂ ਲੱਗ ਰਿਹਾ ਹੈ..."
 }

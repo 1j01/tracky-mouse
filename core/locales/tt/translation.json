@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Сайланган файлны укып булмады.",
   "desktop.menu.importSettings": "Көйләүләрне импортлау",
   "desktop.menu.speech": "Сөйләм",
+  "desktop.menu.toggleDevtools": "Эшләнмәче коралларын күчереп кую",
   "desktop.menu.toggleScreenOverlayDevtools": "Эшләнмәче коралларын күчереп кую (экран өсләмәсе)",
   "desktop.menu.view": "Күренеш",
   "desktop.menu.window": "Тәрәзә",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Яңарту уңышсыз булды",
   "desktop.updater.updateSuccessful.message": "%0 тартып алынды. Яңартылган версияне куллану өчен кушымтаны яңадан эшләтеп җибәрегез.",
   "desktop.updater.updateSuccessful.title": "Яңарту уңышлы үтәлде",
+  "faceDetectorError": "Йөз таблаучы хатасы",
+  "faceDetectorInitError": "Йөз таблаучы ясалмады",
   "hud.pressToDisable": "Tracky Mouse ны сүндерү өчен %0 басыгыз.",
   "hud.pressToEnable": "Tracky Mouse ны кабызу өчен %0 басыгыз.",
   "hud.pressToToggle": "Tracky Mouse ны кабызу/сүндерү өчен %0 басыгыз.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Рөхсәт юк. Камерага керүгә рөхсәт бирегез.",
   "video.errors.previouslySelectedUnavailable": "Элек сайланган камера хәзер кулланыла алмый. Видео > Камера чыганагы өчен \"Үзлекле\" (Default) ны сайлап, аннары кирәк булса, конкрет камераны сайлап карагыз.",
   "video.errors.retryAfterClosingOtherPrograms": "Башка программалар камераны кулланмавын тикшерегез һәм яңадан сынап карагыз.",
-  "video.errors.unsupportedResolution": "Веб‑камера таләп ителгән киңлек/биеклекне хупламый. Көйләүләрне үзгәртегез."
+  "video.errors.unsupportedResolution": "Веб‑камера таләп ителгән киңлек/биеклекне хупламый. Көйләүләрне үзгәртегез.",
+  "video.status.accessTakingLongerThanExpected": "Камерага керү көтелгәннән озаграк бара..."
 }

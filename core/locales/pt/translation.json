@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Falha ao ler o arquivo selecionado.",
   "desktop.menu.importSettings": "Importar configurações",
   "desktop.menu.speech": "Voz",
+  "desktop.menu.toggleDevtools": "Alternar Ferramentas de Desenvolvedor",
   "desktop.menu.toggleScreenOverlayDevtools": "Alternar Ferramentas de Desenvolvedor (Sobreposição de tela)",
   "desktop.menu.view": "Exibir",
   "desktop.menu.window": "Janela",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Falha na atualização",
   "desktop.updater.updateSuccessful.message": "Versão %0 baixada. Reinicie o app para usar a versão atualizada.",
   "desktop.updater.updateSuccessful.title": "Atualização concluída com sucesso",
+  "faceDetectorError": "Erro do detetor de rosto",
+  "faceDetectorInitError": "Falha ao criar o detetor de rosto",
   "hud.pressToDisable": "Pressione %0 para desativar o Tracky Mouse.",
   "hud.pressToEnable": "Pressione %0 para ativar o Tracky Mouse.",
   "hud.pressToToggle": "Pressione %0 para alternar o Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Permissão negada. Habilite o acesso à câmera.",
   "video.errors.previouslySelectedUnavailable": "A câmera selecionada anteriormente não está disponível. Tente selecionar \"Padrão\" em Vídeo > Fonte da câmera e depois escolha uma câmera específica se precisar.",
   "video.errors.retryAfterClosingOtherPrograms": "Verifique se nenhum outro programa está usando a câmera e tente novamente.",
-  "video.errors.unsupportedResolution": "A webcam não suporta a resolução necessária. Altere suas configurações."
+  "video.errors.unsupportedResolution": "A webcam não suporta a resolução necessária. Altere suas configurações.",
+  "video.status.accessTakingLongerThanExpected": "O acesso à câmara está a demorar mais do que o esperado..."
 }

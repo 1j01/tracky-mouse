@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Ezin izan da hautatutako fitxategia irakurri.",
   "desktop.menu.importSettings": "Inportatu ezarpenak",
   "desktop.menu.speech": "Ahotsa",
+  "desktop.menu.toggleDevtools": "Txandakatu garatzaile tresnak",
   "desktop.menu.toggleScreenOverlayDevtools": "Txandakatu garatzaile tresnak (pantaila gaineko geruza)",
   "desktop.menu.view": "Ikusi",
   "desktop.menu.window": "Leihoa",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Eguneraketak huts egin du",
   "desktop.updater.updateSuccessful.message": "%0 hartu da. Abiatu berriro aplikazioa bertsio eguneratua erabiltzeko.",
   "desktop.updater.updateSuccessful.title": "Eguneraketa ongi burutu da",
+  "faceDetectorError": "Aurpegi detektorearen errorea",
+  "faceDetectorInitError": "Ezin izan da aurpegi detektorearen sortu",
   "hud.pressToDisable": "Sakatu %0 Tracky Mouse desgaitzeko.",
   "hud.pressToEnable": "Sakatu %0 Tracky Mouse gaitzeko.",
   "hud.pressToToggle": "Sakatu %0 Tracky Mouse aktibatu/desaktibatzeko.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Baimena ukatua. Gaitu kamerara sarbidea, mesedez.",
   "video.errors.previouslySelectedUnavailable": "Aurrekoan hautatutako kamera ez dago erabilgarri. Saiatu Bideoa > Kamera iturburua atalean \"Lehenetsia\" hautatzen, eta gero kamera zehatz bat aukeratu behar izanez gero.",
   "video.errors.retryAfterClosingOtherPrograms": "Ziurtatu beste inongo programak ez duela kamera erabiltzen eta saiatu berriro.",
-  "video.errors.unsupportedResolution": "Web‑kamerak ez du behar den bereizmena onartzen. Aldatu ezarpenak, mesedez."
+  "video.errors.unsupportedResolution": "Web‑kamerak ez du behar den bereizmena onartzen. Aldatu ezarpenak, mesedez.",
+  "video.status.accessTakingLongerThanExpected": "Kamerara sartzea espero baino gehiago luzatzen ari da..."
 }

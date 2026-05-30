@@ -48,7 +48,8 @@
   "desktop.menu.importReadError": "Napakyas pagbasa han pinili nga file.",
   "desktop.menu.importSettings": "Import hin mga Setting",
   "desktop.menu.speech": "Pinulongan nga tingog",
-  "desktop.menu.toggleScreenOverlayDevtools": "I-toggle an Developer Tools (Screen Overlay)",
+  "desktop.menu.toggleDevtools": "Ipakita/Itago an Developer Tools",
+  "desktop.menu.toggleScreenOverlayDevtools": "Ipakita/Itago an Developer Tools (Screen Overlay)",
   "desktop.menu.view": "View",
   "desktop.menu.window": "Window",
   "desktop.updater.action.doNotRestartYet": "Ha urhi nala",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Napakyas an pag-update",
   "desktop.updater.updateSuccessful.message": "Na-checkout na an %0. I-restart an app para magamit an na-update nga bersyon.",
   "desktop.updater.updateSuccessful.title": "Malamposon an pag-update",
+  "faceDetectorError": "Sayop han face detector",
+  "faceDetectorInitError": "Napakyas an paghimo ng face detector",
   "hud.pressToDisable": "Pindota an %0 basi patayon an Tracky Mouse.",
   "hud.pressToEnable": "Pindota an %0 basi paon an Tracky Mouse.",
   "hud.pressToToggle": "Pindota an %0 basi pa-on/pa-off an Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Gindidiri an permiso. Paki-on an katungod ha kamera.",
   "video.errors.previouslySelectedUnavailable": "An nanguna nga pinili nga kamera diri na magamit. Sulayi pagpili han \"Default\" ha Video > Camera source, ngan katapos pili hin partikular nga kamera kun kinahanglan mo.",
   "video.errors.retryAfterClosingOtherPrograms": "Siguroha nga waray iba nga programa nga nagamit han kamera ngan sulayi utro.",
-  "video.errors.unsupportedResolution": "An webcam diri nasuporta han ginkikinahanglan nga resolusyon. Paki-iba an imo mga setting."
+  "video.errors.unsupportedResolution": "An webcam diri nasuporta han ginkikinahanglan nga resolusyon. Paki-iba an imo mga setting.",
+  "video.status.accessTakingLongerThanExpected": "An pag-access han kamera nagdudugay hin mas maiha kay han ginlalaoman..."
 }

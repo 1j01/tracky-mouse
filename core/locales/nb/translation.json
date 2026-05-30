@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Kunne ikke lese valgt fil.",
   "desktop.menu.importSettings": "Importer innstillinger",
   "desktop.menu.speech": "Tale",
+  "desktop.menu.toggleDevtools": "Slå utviklerverktøy av/på",
   "desktop.menu.toggleScreenOverlayDevtools": "Slå utviklerverktøy (skjermoverlegg) av/på",
   "desktop.menu.view": "Vis",
   "desktop.menu.window": "Vindu",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Oppdatering mislyktes",
   "desktop.updater.updateSuccessful.message": "Sjekket ut %0. Start appen på nytt for å bruke den oppdaterte versjonen.",
   "desktop.updater.updateSuccessful.title": "Oppdatering fullført",
+  "faceDetectorError": "Feil i ansiktsdetektoren",
+  "faceDetectorInitError": "Klarte ikke å opprette ansiktsdetektoren",
   "hud.pressToDisable": "Trykk %0 for å deaktivere Tracky Mouse.",
   "hud.pressToEnable": "Trykk %0 for å aktivere Tracky Mouse.",
   "hud.pressToToggle": "Trykk %0 for å slå Tracky Mouse av eller på.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Tillatelse nektet. Aktiver tilgang til kameraet.",
   "video.errors.previouslySelectedUnavailable": "Det tidligere valgte kameraet er ikke tilgjengelig. Prøv å velge \"Standard\" under Video > Kamerakilde, og velg deretter et bestemt kamera om nødvendig.",
   "video.errors.retryAfterClosingOtherPrograms": "Kontroller at ingen andre programmer bruker kameraet, og prøv igjen.",
-  "video.errors.unsupportedResolution": "Webkameraet støtter ikke den nødvendige oppløsningen. Endre innstillingene."
+  "video.errors.unsupportedResolution": "Webkameraet støtter ikke den nødvendige oppløsningen. Endre innstillingene.",
+  "video.status.accessTakingLongerThanExpected": "Tilgang til kameraet tar lengre tid enn forventet..."
 }

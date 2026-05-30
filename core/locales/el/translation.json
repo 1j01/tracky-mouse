@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Αποτυχία ανάγνωσης του επιλεγμένου αρχείου.",
   "desktop.menu.importSettings": "Εισαγωγή ρυθμίσεων",
   "desktop.menu.speech": "Ομιλία",
+  "desktop.menu.toggleDevtools": "Εναλλαγή εργαλείων προγραμματιστή",
   "desktop.menu.toggleScreenOverlayDevtools": "Εναλλαγή εργαλείων προγραμματιστή (επικάλυψη οθόνης)",
   "desktop.menu.view": "Προβολή",
   "desktop.menu.window": "Παράθυρο",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Αποτυχία ενημέρωσης",
   "desktop.updater.updateSuccessful.message": "Έγινε εναλλαγή στην έκδοση %0. Επανεκκινήστε την εφαρμογή για να χρησιμοποιήσετε την ενημερωμένη έκδοση.",
   "desktop.updater.updateSuccessful.title": "Η ενημέρωση ολοκληρώθηκε με επιτυχία",
+  "faceDetectorError": "Σφάλμα ανιχνευτή προσώπου",
+  "faceDetectorInitError": "Αποτυχία δημιουργίας ανιχνευτή προσώπου",
   "hud.pressToDisable": "Πατήστε %0 για απενεργοποίηση του Tracky Mouse.",
   "hud.pressToEnable": "Πατήστε %0 για ενεργοποίηση του Tracky Mouse.",
   "hud.pressToToggle": "Πατήστε %0 για εναλλαγή του Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Δεν επιτρέπεται η πρόσβαση. Ενεργοποιήστε την πρόσβαση στην κάμερα.",
   "video.errors.previouslySelectedUnavailable": "Η προηγουμένως επιλεγμένη κάμερα δεν είναι διαθέσιμη. Δοκιμάστε να επιλέξετε \"Προεπιλογή\" στο Βίντεο > Πηγή κάμερας και στη συνέχεια επιλέξτε συγκεκριμένη κάμερα αν χρειάζεται.",
   "video.errors.retryAfterClosingOtherPrograms": "Βεβαιωθείτε ότι κανένα άλλο πρόγραμμα δεν χρησιμοποιεί την κάμερα και δοκιμάστε ξανά.",
-  "video.errors.unsupportedResolution": "Η κάμερα web δεν υποστηρίζει την απαιτούμενη ανάλυση. Αλλάξτε τις ρυθμίσεις σας."
+  "video.errors.unsupportedResolution": "Η κάμερα web δεν υποστηρίζει την απαιτούμενη ανάλυση. Αλλάξτε τις ρυθμίσεις σας.",
+  "video.status.accessTakingLongerThanExpected": "Η πρόσβαση στην κάμερα διαρκεί περισσότερο από το αναμενόμενο..."
 }

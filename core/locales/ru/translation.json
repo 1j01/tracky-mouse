@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Не удалось прочитать выбранный файл.",
   "desktop.menu.importSettings": "Импорт настроек",
   "desktop.menu.speech": "Речь",
+  "desktop.menu.toggleDevtools": "Переключить инструменты разработчика",
   "desktop.menu.toggleScreenOverlayDevtools": "Переключить инструменты разработчика (оверлей экрана)",
   "desktop.menu.view": "Вид",
   "desktop.menu.window": "Окно",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Обновление не удалось",
   "desktop.updater.updateSuccessful.message": "Получена версия %0. Перезапустите приложение, чтобы использовать обновлённую версию.",
   "desktop.updater.updateSuccessful.title": "Обновление успешно выполнено",
+  "faceDetectorError": "Ошибка детектора лица",
+  "faceDetectorInitError": "Не удалось создать детектор лица",
   "hud.pressToDisable": "Нажмите %0, чтобы отключить Tracky Mouse.",
   "hud.pressToEnable": "Нажмите %0, чтобы включить Tracky Mouse.",
   "hud.pressToToggle": "Нажмите %0, чтобы переключить Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Доступ запрещён. Разрешите доступ к камере.",
   "video.errors.previouslySelectedUnavailable": "Ранее выбранная камера недоступна. Выберите \"По умолчанию\" в разделе Видео > Источник камеры, а затем при необходимости укажите конкретную камеру.",
   "video.errors.retryAfterClosingOtherPrograms": "Убедитесь, что другие программы не используют камеру, и повторите попытку.",
-  "video.errors.unsupportedResolution": "Веб‑камера не поддерживает требуемое разрешение. Измените настройки."
+  "video.errors.unsupportedResolution": "Веб‑камера не поддерживает требуемое разрешение. Измените настройки.",
+  "video.status.accessTakingLongerThanExpected": "Доступ к камере занимает больше времени, чем ожидалось..."
 }

@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "An kasa karanta fayil ɗin da aka zaɓa.",
   "desktop.menu.importSettings": "Shigo da saituna",
   "desktop.menu.speech": "Magana",
+  "desktop.menu.toggleDevtools": "Kunna/ kashe kayan aikin masu haɓakawa",
   "desktop.menu.toggleScreenOverlayDevtools": "Kunna/ kashe kayan aikin masu haɓakawa (Screen Overlay)",
   "desktop.menu.view": "Kallo",
   "desktop.menu.window": "Tagar",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Sabuntawa ta gaza",
   "desktop.updater.updateSuccessful.message": "An zazzage %0. Sake kunna manhajar don amfani da sabon sigar.",
   "desktop.updater.updateSuccessful.title": "Sabuntawa ta yi nasara",
+  "faceDetectorError": "Kuskure a cikin mai gano fuska",
+  "faceDetectorInitError": "An kasa kirkirar mai gano fuska",
   "hud.pressToDisable": "Latsa %0 don kashe Tracky Mouse.",
   "hud.pressToEnable": "Latsa %0 don kunna Tracky Mouse.",
   "hud.pressToToggle": "Latsa %0 don kunnawa ko kashe Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "An ƙi izini. Don Allah ka kunna damar amfani da kyamara.",
   "video.errors.previouslySelectedUnavailable": "Kyamarar da aka zaɓa a baya ba ta samuwa. Gwada zaɓar \"Default\" a Video > Camera source, sannan ka zaɓi takamaiman kyamara idan kana buƙata.",
   "video.errors.retryAfterClosingOtherPrograms": "Ka tabbata babu wani shiri da ke amfani da kyamara sannan ka sake gwadawa.",
-  "video.errors.unsupportedResolution": "Kyamarar yanar gizo ba ta goyan bayan ƙudurin da ake buƙata ba. Don Allah ka canza saitunanka."
+  "video.errors.unsupportedResolution": "Kyamarar yanar gizo ba ta goyan bayan ƙudurin da ake buƙata ba. Don Allah ka canza saitunanka.",
+  "video.status.accessTakingLongerThanExpected": "Samun damar amfani da kyamara yana daukar lokaci fiye da yadda aka zata..."
 }

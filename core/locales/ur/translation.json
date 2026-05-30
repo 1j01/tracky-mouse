@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "منتخب فائل پڑھنے میں ناکامی۔",
   "desktop.menu.importSettings": "سیٹنگز درآمد کریں",
   "desktop.menu.speech": "گفتگو",
+  "desktop.menu.toggleDevtools": "ڈیولپر ٹولز کو آن/آف کریں",
   "desktop.menu.toggleScreenOverlayDevtools": "ڈیولپر ٹولز کو آن/آف کریں (اسکرین اوورلے)",
   "desktop.menu.view": "دیکھیں",
   "desktop.menu.window": "ونڈو",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "تازہ کاری ناکام ہو گئی",
   "desktop.updater.updateSuccessful.message": "%0 کو حاصل کر لیا گیا ہے۔ تازہ ترین ورژن استعمال کرنے کے لیے ایپ کو دوبارہ شروع کریں۔",
   "desktop.updater.updateSuccessful.title": "تازہ کاری کامیاب رہی",
+  "faceDetectorError": "چہرہ ڈیٹیکٹر کی غلطی",
+  "faceDetectorInitError": "چہرہ ڈیٹیکٹر بنانے میں ناکامی",
   "hud.pressToDisable": "ٹریکی ماؤس کو بند کرنے کے لیے %0 دبائیں۔",
   "hud.pressToEnable": "ٹریکی ماؤس کو فعال کرنے کے لیے %0 دبائیں۔",
   "hud.pressToToggle": "ٹریکی ماؤس کو آن/آف کرنے کے لیے %0 دبائیں۔",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "اجازت مسترد کر دی گئی۔ براہِ کرم کیمرے تک رسائی فعال کریں۔",
   "video.errors.previouslySelectedUnavailable": "پہلے منتخب کیا گیا کیمرہ دستیاب نہیں۔ ویڈیو > کیمرہ ماخذ میں \"ڈیفالٹ\" منتخب کرنے کی کوشش کریں، اور ضرورت ہو تو بعد میں کوئی مخصوص کیمرہ منتخب کریں۔",
   "video.errors.retryAfterClosingOtherPrograms": "یقینی بنائیں کہ کوئی اور پروگرام کیمرہ استعمال نہیں کر رہا اور دوبارہ کوشش کریں۔",
-  "video.errors.unsupportedResolution": "ویب کیم مطلوبہ ریزولیوشن کو سپورٹ نہیں کرتا۔ براہِ کرم اپنی سیٹنگز تبدیل کریں۔"
+  "video.errors.unsupportedResolution": "ویب کیم مطلوبہ ریزولیوشن کو سپورٹ نہیں کرتا۔ براہِ کرم اپنی سیٹنگز تبدیل کریں۔",
+  "video.status.accessTakingLongerThanExpected": "کیمرے تک رسائی میں توقع سے زیادہ وقت لگ رہا ہے..."
 }

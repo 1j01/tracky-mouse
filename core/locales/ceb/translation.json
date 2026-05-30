@@ -48,7 +48,8 @@
   "desktop.menu.importReadError": "Napakyas sa pagbasa sa napiling file.",
   "desktop.menu.importSettings": "I-import ang mga setting",
   "desktop.menu.speech": "Tingog",
-  "desktop.menu.toggleScreenOverlayDevtools": "I-toggle ang Developer Tools (Screen Overlay)",
+  "desktop.menu.toggleDevtools": "Ipakita/Itago ang Developer Tools",
+  "desktop.menu.toggleScreenOverlayDevtools": "Ipakita/Itago ang Developer Tools (Screen Overlay)",
   "desktop.menu.view": "View",
   "desktop.menu.window": "Window",
   "desktop.updater.action.doNotRestartYet": "Unya na",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Napakyas ang update",
   "desktop.updater.updateSuccessful.message": "Na-check out ang %0. I-restart ang app aron magamit ang bag-ong bersyon.",
   "desktop.updater.updateSuccessful.title": "Malampuson ang update",
+  "faceDetectorError": "Error sa face detector",
+  "faceDetectorInitError": "Napakyas ang paggawa ng face detector",
   "hud.pressToDisable": "Pindota ang %0 aron i-disable ang Tracky Mouse.",
   "hud.pressToEnable": "Pindota ang %0 aron i-enable ang Tracky Mouse.",
   "hud.pressToToggle": "Pindota ang %0 aron i-toggle ang Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Gitakdan ang permiso. Palihug i-enable ang pag-access sa kamera.",
   "video.errors.previouslySelectedUnavailable": "Ang miaging napiling kamera dili na magamit. Sulayi pagpili ug \"Default\" sa Video > Camera source, unya pilia ang espesipikong kamera kung kinahanglan.",
   "video.errors.retryAfterClosingOtherPrograms": "Palihug siguradua nga walay lain nga programa nga naggamit sa kamera ug sulayi pag-usab.",
-  "video.errors.unsupportedResolution": "Dili masuportahan sa webcam ang gikinahanglan nga resolusyon. Palihug usba ang imong mga setting."
+  "video.errors.unsupportedResolution": "Dili masuportahan sa webcam ang gikinahanglan nga resolusyon. Palihug usba ang imong mga setting.",
+  "video.status.accessTakingLongerThanExpected": "Ang pag-access sa camera nagdugay og mas taas kaysa gipaabot..."
 }

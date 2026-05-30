@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "فشل قراءة الملف المحدد.",
   "desktop.menu.importSettings": "استيراد الإعدادات",
   "desktop.menu.speech": "الصوت",
+  "desktop.menu.toggleDevtools": "تبديل أدوات المطوّر",
   "desktop.menu.toggleScreenOverlayDevtools": "تبديل أدوات المطوّر (تراكب الشاشة)",
   "desktop.menu.view": "عرض",
   "desktop.menu.window": "نافذة",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "فشل التحديث",
   "desktop.updater.updateSuccessful.message": "تم سحب %0. أعد تشغيل التطبيق لاستخدام الإصدار المحدَّث.",
   "desktop.updater.updateSuccessful.title": "تم التحديث بنجاح",
+  "faceDetectorError": "خطأ في كاشف الوجه",
+  "faceDetectorInitError": "فشل في إنشاء كاشف الوجه",
   "hud.pressToDisable": "اضغط %0 لتعطيل Tracky Mouse.",
   "hud.pressToEnable": "اضغط %0 لتمكين Tracky Mouse.",
   "hud.pressToToggle": "اضغط %0 لتبديل حالة Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "تم رفض الإذن. يرجى تفعيل الوصول إلى الكاميرا.",
   "video.errors.previouslySelectedUnavailable": "الكاميرا المحددة سابقًا غير متاحة. جرّب اختيار \"الافتراضي\" من فيديو > مصدر الكاميرا، ثم اختر كاميرا محددة إذا احتجت ذلك.",
   "video.errors.retryAfterClosingOtherPrograms": "يرجى التأكد من عدم استخدام برامج أخرى للكاميرا ثم المحاولة مرة أخرى.",
-  "video.errors.unsupportedResolution": "كاميرا الويب لا تدعم الدقة المطلوبة. يرجى تغيير الإعدادات."
+  "video.errors.unsupportedResolution": "كاميرا الويب لا تدعم الدقة المطلوبة. يرجى تغيير الإعدادات.",
+  "video.status.accessTakingLongerThanExpected": "يستغرق الوصول إلى الكاميرا وقتًا أطول من المتوقع..."
 }

@@ -48,7 +48,8 @@
   "desktop.menu.importReadError": "Nabigong basahin ang napiling file.",
   "desktop.menu.importSettings": "I-import ang mga setting",
   "desktop.menu.speech": "Boses",
-  "desktop.menu.toggleScreenOverlayDevtools": "I-toggle ang Developer Tools (Screen Overlay)",
+  "desktop.menu.toggleDevtools": "Ipakita/Itago ang Developer Tools",
+  "desktop.menu.toggleScreenOverlayDevtools": "Ipakita/Itago ang Developer Tools (Screen Overlay)",
   "desktop.menu.view": "Tingnan",
   "desktop.menu.window": "Window",
   "desktop.updater.action.doNotRestartYet": "Mamaya",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Nabigo ang pag-update",
   "desktop.updater.updateSuccessful.message": "Na-checkout ang %0. I-restart ang app para magamit ang na-update na bersyon.",
   "desktop.updater.updateSuccessful.title": "Matagumpay ang pag-update",
+  "faceDetectorError": "Error sa face detector",
+  "faceDetectorInitError": "Nabigo ang paggawa ng face detector",
   "hud.pressToDisable": "Pindutin ang %0 para i-disable ang Tracky Mouse.",
   "hud.pressToEnable": "Pindutin ang %0 para i-enable ang Tracky Mouse.",
   "hud.pressToToggle": "Pindutin ang %0 para i-toggle ang Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Tinanggihan ang pahintulot. Paki-enable ang access sa kamera.",
   "video.errors.previouslySelectedUnavailable": "Hindi magagamit ang dating napiling kamera. Subukang piliin ang \"Default\" sa Video > Camera source, at pagkatapos ay pumili ng partikular na kamera kung kailangan mo.",
   "video.errors.retryAfterClosingOtherPrograms": "Tiyaking walang ibang programang gumagamit ng kamera at subukang muli.",
-  "video.errors.unsupportedResolution": "Hindi sinusuportahan ng webcam ang kinakailangang resolusyon. Pakibago ang iyong mga setting."
+  "video.errors.unsupportedResolution": "Hindi sinusuportahan ng webcam ang kinakailangang resolusyon. Pakibago ang iyong mga setting.",
+  "video.status.accessTakingLongerThanExpected": "Mas matagal kaysa inaasahan ang pag-access sa camera..."
 }

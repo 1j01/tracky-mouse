@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "Gagal membaca fail yang dipilih.",
   "desktop.menu.importSettings": "Import Tetapan",
   "desktop.menu.speech": "Ucapan",
+  "desktop.menu.toggleDevtools": "Togol Alat Pembangun",
   "desktop.menu.toggleScreenOverlayDevtools": "Togol Alat Pembangun (Lapisan Skrin)",
   "desktop.menu.view": "Paparan",
   "desktop.menu.window": "Tetingkap",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "Kemas Kini Gagal",
   "desktop.updater.updateSuccessful.message": "Versi %0 telah diambil. Mulakan semula aplikasi untuk menggunakan versi yang dikemas kini.",
   "desktop.updater.updateSuccessful.title": "Kemas Kini Berjaya",
+  "faceDetectorError": "Ralat pengesan muka",
+  "faceDetectorInitError": "Gagal mencipta pengesan muka",
   "hud.pressToDisable": "Tekan %0 untuk nyahdayakan Tracky Mouse.",
   "hud.pressToEnable": "Tekan %0 untuk mendayakan Tracky Mouse.",
   "hud.pressToToggle": "Tekan %0 untuk togol Tracky Mouse.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "Kebenaran dinafikan. Sila benarkan akses kepada kamera.",
   "video.errors.previouslySelectedUnavailable": "Kamera yang dipilih sebelum ini tidak tersedia. Cuba pilih \"Default\" untuk Video > Sumber kamera, kemudian pilih kamera tertentu jika perlu.",
   "video.errors.retryAfterClosingOtherPrograms": "Pastikan tiada program lain menggunakan kamera dan cuba lagi.",
-  "video.errors.unsupportedResolution": "Kamera web tidak menyokong resolusi yang diperlukan. Sila ubah tetapan anda."
+  "video.errors.unsupportedResolution": "Kamera web tidak menyokong resolusi yang diperlukan. Sila ubah tetapan anda.",
+  "video.status.accessTakingLongerThanExpected": "Mengakses kamera mengambil masa lebih lama daripada yang dijangkakan..."
 }

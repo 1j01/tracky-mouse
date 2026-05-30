@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "读取所选文件失败。",
   "desktop.menu.importSettings": "导入设置",
   "desktop.menu.speech": "语音",
+  "desktop.menu.toggleDevtools": "切换开发者工具",
   "desktop.menu.toggleScreenOverlayDevtools": "切换开发者工具（屏幕叠加层）",
   "desktop.menu.view": "查看",
   "desktop.menu.window": "窗口",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "更新失败",
   "desktop.updater.updateSuccessful.message": "已检出 %0。重启应用以使用更新后的版本。",
   "desktop.updater.updateSuccessful.title": "更新成功",
+  "faceDetectorError": "人脸检测器错误",
+  "faceDetectorInitError": "无法创建人脸检测器",
   "hud.pressToDisable": "按 %0 可禁用 Tracky Mouse。",
   "hud.pressToEnable": "按 %0 可启用 Tracky Mouse。",
   "hud.pressToToggle": "按 %0 可切换 Tracky Mouse 的启用状态。",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "权限被拒绝。请启用对摄像头的访问。",
   "video.errors.previouslySelectedUnavailable": "之前选择的摄像头不可用。请在“视频 > 摄像头来源”中先选择“默认”，如有需要再选择具体的摄像头。",
   "video.errors.retryAfterClosingOtherPrograms": "请确认没有其他程序正在使用摄像头，然后重试。",
-  "video.errors.unsupportedResolution": "网络摄像头不支持所需的分辨率。请更改设置。"
+  "video.errors.unsupportedResolution": "网络摄像头不支持所需的分辨率。请更改设置。",
+  "video.status.accessTakingLongerThanExpected": "访问摄像头所花的时间比预期更久..."
 }

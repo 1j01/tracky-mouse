@@ -48,6 +48,7 @@
   "desktop.menu.importReadError": "निवडलेली फाइल वाचण्यात अयशस्वी.",
   "desktop.menu.importSettings": "सेटिंग्ज इम्पोर्ट करा",
   "desktop.menu.speech": "वाणी",
+  "desktop.menu.toggleDevtools": "डेव्हलपर टूल्स बदल",
   "desktop.menu.toggleScreenOverlayDevtools": "डेव्हलपर टूल्स बदल (स्क्रीन ओव्हरले)",
   "desktop.menu.view": "दृश्य",
   "desktop.menu.window": "विंडो",
@@ -68,6 +69,8 @@
   "desktop.updater.updateFailed.title": "अपडेट अयशस्वी",
   "desktop.updater.updateSuccessful.message": "%0 चेकआऊट केले. अपडेट केलेली आवृत्ती वापरण्यासाठी अॅप रीस्टार्ट करा.",
   "desktop.updater.updateSuccessful.title": "अपडेट यशस्वी",
+  "faceDetectorError": "फेस डिटेक्टर त्रुटी",
+  "faceDetectorInitError": "फेस डिटेक्टर तयार करणे अयशस्वी",
   "hud.pressToDisable": "Tracky Mouse बंद करण्यासाठी %0 दाबा.",
   "hud.pressToEnable": "Tracky Mouse सुरू करण्यासाठी %0 दाबा.",
   "hud.pressToToggle": "Tracky Mouse चालू/बंद करण्यासाठी %0 दाबा.",
@@ -197,5 +200,6 @@
   "video.errors.permissionDenied": "परवानगी नाकारली. कृपया कॅमेरा ऍक्सेस सक्षम करा.",
   "video.errors.previouslySelectedUnavailable": "यापूर्वी निवडलेला कॅमेरा उपलब्ध नाही. Video > Camera source मध्ये \"Default\" निवडून पाहा आणि गरज असल्यास नंतर विशिष्ट कॅमेरा निवडा.",
   "video.errors.retryAfterClosingOtherPrograms": "कॅमेरा इतर कोणताही प्रोग्राम वापरत नाही याची खात्री करा आणि पुन्हा प्रयत्न करा.",
-  "video.errors.unsupportedResolution": "वेबकॅम आवश्यक रेझोल्यूशनला सपोर्ट करत नाही. कृपया सेटिंग्ज बदला."
+  "video.errors.unsupportedResolution": "वेबकॅम आवश्यक रेझोल्यूशनला सपोर्ट करत नाही. कृपया सेटिंग्ज बदला.",
+  "video.status.accessTakingLongerThanExpected": "कॅमेराचा प्रवेश मिळवायला अपेक्षेपेक्षा जास्त वेळ लागत आहे..."
 }
