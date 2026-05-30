@@ -6,28 +6,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-**Note:** This will be the last release to support Windows 7, 8, and 8.1
+> [!NOTE]  
+> This will be the last release to support Windows 7, 8, and 8.1
 
 ### Added
 
-- Added multi-monitor support in the desktop app. The screen overlay now spans all connected monitors, and head tracking controls the mouse across the full virtual desktop.
+- **Multi-monitor support**: You can now control the mouse cursor across all screens.
+  - This has been tested on Ubuntu 22 and Windows 11, but it might not work correctly on macOS.
 
 ### Changed
 
 - On Windows, the desktop app now uses a custom title bar, and a custom menu bar powered by [OS-GUI.js](https://os-gui.js.org)
-- The background of the whole window is now light purple instead of white or black, matching the background color of main part of the app.
+- The background of the whole window is now light purple instead of white or black, matching the background color of the main part of the app.
 
 ### Fixed
 
 - On Windows, the app should no longer freeze when using Tracky Mouse to click the application's own minimize or close buttons, or when right-clicking on its titlebar. ([issue #69](https://github.com/1j01/tracky-mouse/issues/69))
-  - That said, clicking on the window's border (as to resize the window) can still freeze it up. This should be fixed in the next release by updating Electron.
+  - That said, clicking on the window's border (such as to resize the window) can still freeze it up. This should be fixed in the next release by updating Electron.
 - While waiting for camera access, Tracky Mouse now shows a message if it is taking longer than expected.
 - In the desktop app, Tracky Mouse now tries to recover automatically if a subprocess crashes. ([issue #111](https://github.com/1j01/tracky-mouse/issues/111))
-- Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse and could not be dismissed without using a physical mouse or keyboard. ([issue #96](https://github.com/1j01/tracky-mouse/issues/96))
-- The desktop app's update dialogs should no longer block using Tracky Mouse as an input method on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
+- Tracky Mouse no longer uses `alert()` to show error messages, which previously interrupted Tracky Mouse's mouse control. These dialogs couldn't be dismissed without resorting to a physical mouse or keyboard because they blocked execution of code needed to handle mouse control. ([issue #96](https://github.com/1j01/tracky-mouse/issues/96))
+- The desktop app's update dialogs should no longer block Tracky Mouse's mouse control on macOS. ([electron issue #23319](https://github.com/electron/electron/issues/23319))
 - Improved error display styling and consistency.
 - The screen overlay window should now be hidden from Mission Control on macOS.
-- The error reporting system can now fail gracefully. This should fix an error on launch on Windows 7.
+- The error reporting system can now fail gracefully. This should fix an error that occurred on launch on Windows 7.
 
 ## [2.7.0] - 2026-04-05
 
