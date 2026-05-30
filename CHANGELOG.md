@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.8.0] - 2026-05-30
+
 > [!NOTE]  
 > This will be the last release to support Windows 7, 8, and 8.1
 
@@ -314,7 +318,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/1j01/tracky-mouse/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/1j01/tracky-mouse/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/1j01/tracky-mouse/compare/v2.4.0...v2.5.0
