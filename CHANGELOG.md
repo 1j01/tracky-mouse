@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Removed
+
+- Windows 7, 8, and 8.1 are no longer supported. Windows 10 or later is required to run the desktop app.
+  - (If building from source, the app may still function in later versions if Electron is downgraded to version 22.)
+
+### Fixed
+
+- Clicking on the app window's border (such as to resize it) using Tracky Mouse itself should no longer freeze the app on Windows. ([issue #69](https://github.com/1j01/tracky-mouse/issues/69))
 
 ## [2.8.0] - 2026-05-30
 
