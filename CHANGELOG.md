@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [2.9.0] - 2026-06-02
+
 ### Removed
 
 - Windows 7, 8, and 8.1 are no longer supported. Windows 10 or later is required to run the desktop app.
@@ -325,7 +329,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.9.0...HEAD
+[2.9.0]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/1j01/tracky-mouse/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/1j01/tracky-mouse/compare/v2.5.0...v2.6.0
