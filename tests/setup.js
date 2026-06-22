@@ -41,4 +41,3 @@ if (typeof document !== 'undefined') {
 		}
 	};
 }
-

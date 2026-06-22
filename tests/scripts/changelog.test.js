@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { spawnSync } from 'child_process';
+import { fileURLToPath } from 'url';
 import { join } from 'path';
 
-const projectRoot = new URL('../../', import.meta.url).pathname.replace(/\/$/, '');
+const projectRoot = fileURLToPath(new URL('../../', import.meta.url));
 
 // These tests exercise the regex logic used by the release scripts
 // without spawning subprocesses that would modify project files.
