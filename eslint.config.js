@@ -88,6 +88,16 @@ module.exports = [
 	},
 	{
 		"files": [
+			"tests/**",
+		],
+		"languageOptions": {
+			"globals": {
+				...globals.node,
+			},
+		},
+	},
+	{
+		"files": [
 			"desktop-app/src/electron-main/electron-main.js",
 		],
 		"rules": {

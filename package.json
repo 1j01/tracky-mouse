@@ -26,7 +26,8 @@
 		"update-locales": "node scripts/update-locales.js",
 		"new-locale": "node scripts/new-locale.js",
 		"translate": "localazy upload && localazy download",
-		"release": "node scripts/release/release.js"
+		"release": "node scripts/release/release.js",
+		"test": "vitest run"
 	},
 	"bin": {
 		"tracky-mouse": "desktop-app/src/tracky-mouse-bin.js"
@@ -39,7 +40,9 @@
 		"eslint": "^9.0.0",
 		"fast-glob": "^3.3.3",
 		"i18next-cli": "^1.42.12",
+		"jsdom": "^29.1.1",
 		"npm-run-all": "^4.1.5",
-		"picomatch": "^4.0.3"
+		"picomatch": "^4.0.3",
+		"vitest": "^4.1.9"
 	}
 }
