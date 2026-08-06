@@ -17,6 +17,25 @@
 		rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-website.css">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-goodies-page.css">
+	<style>
+		.song-controls {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			margin-bottom: 0.75rem;
+		}
+
+		.song-controls label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.35rem;
+		}
+
+		.lyrics .optional-emoji.is-hidden,
+		.lyrics .backing-vocals.is-hidden {
+			display: none;
+		}
+	</style>
 
 	<link rel="icon" type="image/png" sizes="16x16" href="images/tracky-mouse-logo-16.png">
 	<link rel="icon" type="image/png" sizes="512x512" href="images/tracky-mouse-logo-512.png">
@@ -240,6 +259,10 @@
 	</section>
 	<section class="page-section">
 		<h2>Theme Song</h2>
+		<div class="song-controls">
+			<label><input type="checkbox" data-toggle="emoji" checked> Show emoji/kaomoji</label>
+			<label><input type="checkbox" data-toggle="backing-vocals" checked> Show backing vocals</label>
+		</div>
 		<pre class="lyrics">
 <strong>[Chorus]</strong>
 Tracky Mouse
@@ -248,66 +271,66 @@ You to use
 Your computer without a mouse
 
 <strong>[Verse 1]</strong>
-And without a touchpad 🚫🔲 ✅
-And without hands 🚫👐 ✅
-And without sitting 🚫🪑 ✅
+And without a touchpad <span class="optional-emoji">🚫🔲 ✅</span>
+And without hands <span class="optional-emoji">🚫👐 ✅</span>
+And without sitting <span class="optional-emoji">🚫🪑 ✅</span>
 That’s right, you can stand
 
 You can even interact
-From five feet back 📏✅
+From five feet back <span class="optional-emoji">📏✅</span>
 
 It might seem
-A little absurd (╭ರ_•́)
+A little absurd (<span class="optional-emoji">╭ರ_•́</span>)
 But I mean
-I’ve done it and it works ¯\_(ツ)_/¯
+I’ve done it and it works <span class="optional-emoji">¯\_(ツ)_/¯</span>
 
 The only problem being
-That it’s hard to see the screen 😅  <small>(Have you seen my glasses?) 👓</small>
+That it’s hard to see the screen <span class="optional-emoji">😅</span>  <small>(Have you seen my glasses?) 👓</small>
 
 <strong>[Chorus]</strong>
 Tracky Mouse
 It allows
 You to use
-Your computer without a mouse  <small>(And how!)</small>
+Your computer without a mouse  <span class="backing-vocals"><small>(And how!)</small></span>
 
 <strong>[Verse 2]</strong>
-Mouse cursor telekinesis ᯓ➤
-It's a superpower you can download today 🦸🏻‍♂️⬇️
-Close your eyes to toggle it  >ᴗ<
-And get on your way  <small>(Tracky Mouse!)</small>
+Mouse cursor telekinesis <span class="optional-emoji">ᯓ➤</span>
+It's a superpower you can download today <span class="optional-emoji">🦸🏻‍♂️⬇️</span>
+Close your eyes to toggle it  <span class="optional-emoji">>ᴗ<</span>
+And get on your way  <span class="backing-vocals"><small>(Tracky Mouse!)</small></span>
 
-Watching TV 📺🍿
-Eating a hoagie 🥖  <small>(Mmm!) 😋</small>
-Mayo may overflow  <small>(Ooo, oh no!)</small>
+Watching TV <span class="optional-emoji">📺🍿</span>
+Eating a hoagie <span class="optional-emoji">🥖</span>  <span class="backing-vocals"><small>(Mmm!) 😋</small></span>
+Mayo may overflow  <span class="backing-vocals"><small>(Ooo, oh no!)</small></span>
 
-You don't wanna get your paws 🐾
-On the spacebar just to pause ⏸️
-But you don't need to use your mitts 🧤
-When you can use your head to click 😎  <small>(Tracky Mouse!)</small>
+You don't wanna get your paws <span class="optional-emoji">🐾</span>
+On the spacebar just to pause <span class="optional-emoji">⏸️</span>
+But you don't need to use your mitts <span class="optional-emoji">🧤</span>
+When you can use your head to click <span class="optional-emoji">😎</span>  <span class="backing-vocals"><small>(Tracky Mouse!)</small></span>
 
 <strong>[Chorus]</strong>
 Tracky Mouse
 It allows
 You to use
-Your computer without a mouse  <small>(And how!)</small>
+Your computer without a mouse  <span class="backing-vocals"><small>(And how!)</small></span>
 
 <strong>[Verse 3]</strong>
-Hands-free 🙌
-A webcam is all you need ˙✧˖°📸⋆｡˚
+Hands-free <span class="optional-emoji">🙌</span>
+A webcam is all you need <span class="optional-emoji">˙✧˖°📸⋆｡˚</span>
 
-Left click! Right click! Middle click! 🖱
-I can click! anything! you can click! 💪
+Left click! Right click! Middle click! <span class="optional-emoji">🖱</span>
+I can click! anything! you can click! <span class="optional-emoji">💪</span>
 
-Click and drag, click and draw 🎨🖌️
-Now the drawing might come out a little bit raw 🥴🖌️
-But if I judicially zoom and use undo 🔎 ↩️
-I can draw a lot like you 🙂🖌️
+Click and drag, click and draw <span class="optional-emoji">🎨🖌️</span>
+Now the drawing might come out a little bit raw <span class="optional-emoji">🥴🖌️</span>
+But if I judicially zoom and use undo <span class="optional-emoji">🔎 ↩️</span>
+I can draw a lot like you <span class="optional-emoji">🙂🖌️</span>
 
 <strong>[Chorus]</strong>
 Tracky Mouse
 It allows
 You to use
-Your computer without a mouse  <small>(Look ma, no hands!)</small>
+Your computer without a mouse  <span class="backing-vocals"><small>(Look ma, no hands!)</small></span>
 
 And how!
 Tracky Mouse!
@@ -329,16 +352,16 @@ Tracky Mouse!
 			</p>
 			<pre class="lyrics">
 <strong>[Verse 4]</strong>
-No black magic 🔮
-No electrodes in my brain 🧠🔌
-Just a camera watching me 『❂』
+No black magic <span class="optional-emoji">🔮</span>
+No electrodes in my brain <span class="optional-emoji">🧠🔌</span>
+Just a camera watching me <span class="optional-emoji">『❂』</span>
 Repeatedly explain
 
 "No, for reals though,
 See how it follows my head around?"
 
-I show how I can browse 🌐
-And everybody goes "wow" 🤩  <small>(Wow!)</small>
+I show how I can browse <span class="optional-emoji">🌐</span>
+And everybody goes "wow" <span class="optional-emoji">🤩</span>  <span class="backing-vocals"><small>(Wow!)</small></span>
 </pre>
 		</details>
 	</section>
@@ -359,6 +382,27 @@ And everybody goes "wow" 🤩  <small>(Wow!)</small>
 		</p>
 	</footer>
 	<script>
+		const songOptionToggles = {
+			emoji: document.querySelector('input[data-toggle="emoji"]'),
+			backingVocals: document.querySelector('input[data-toggle="backing-vocals"]')
+		};
+
+		const applySongOptionVisibility = () => {
+			document.querySelectorAll('.lyrics .optional-emoji').forEach(element => {
+				element.classList.toggle('is-hidden', !songOptionToggles.emoji.checked);
+			});
+			document.querySelectorAll('.lyrics .backing-vocals').forEach(element => {
+				element.classList.toggle('is-hidden', !songOptionToggles.backingVocals.checked);
+			});
+		};
+
+		Object.values(songOptionToggles).forEach(toggle => {
+			if (toggle) {
+				toggle.addEventListener('change', applySongOptionVisibility);
+			}
+		});
+		applySongOptionVisibility();
+
 		// Auto-fit the height of the textareas to their content
 		document.querySelectorAll('.text-art textarea').forEach(textarea => {
 			textarea.style.height = 'auto';
