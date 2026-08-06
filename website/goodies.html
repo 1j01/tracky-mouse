@@ -31,8 +31,11 @@
 			gap: 0.35rem;
 		}
 
-		.lyrics .optional-emoji.is-hidden,
-		.lyrics .backing-vocals.is-hidden {
+		body:has(#show-emoji:not(:checked)) .lyrics .optional-emoji {
+			display: none;
+		}
+
+		body:has(#show-backing-vocals:not(:checked)) .lyrics .backing-vocals {
 			display: none;
 		}
 	</style>
@@ -260,8 +263,8 @@
 	<section class="page-section">
 		<h2>Theme Song</h2>
 		<div class="song-controls">
-			<label><input type="checkbox" data-toggle="emoji" checked> Show emoji/kaomoji</label>
-			<label><input type="checkbox" data-toggle="backing-vocals" checked> Show backing vocals</label>
+			<label><input type="checkbox" id="show-emoji" checked> Show emoji/kaomoji</label>
+			<label><input type="checkbox" id="show-backing-vocals" checked> Show backing vocals</label>
 		</div>
 		<pre class="lyrics">
 <strong>[Chorus]</strong>
@@ -382,27 +385,6 @@ And everybody goes "wow" <span class="optional-emoji">🤩</span>  <span class="
 		</p>
 	</footer>
 	<script>
-		const songOptionToggles = {
-			emoji: document.querySelector('input[data-toggle="emoji"]'),
-			backingVocals: document.querySelector('input[data-toggle="backing-vocals"]')
-		};
-
-		const applySongOptionVisibility = () => {
-			document.querySelectorAll('.lyrics .optional-emoji').forEach(element => {
-				element.classList.toggle('is-hidden', !songOptionToggles.emoji.checked);
-			});
-			document.querySelectorAll('.lyrics .backing-vocals').forEach(element => {
-				element.classList.toggle('is-hidden', !songOptionToggles.backingVocals.checked);
-			});
-		};
-
-		Object.values(songOptionToggles).forEach(toggle => {
-			if (toggle) {
-				toggle.addEventListener('change', applySongOptionVisibility);
-			}
-		});
-		applySongOptionVisibility();
-
 		// Auto-fit the height of the textareas to their content
 		document.querySelectorAll('.text-art textarea').forEach(textarea => {
 			textarea.style.height = 'auto';
