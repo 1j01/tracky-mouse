@@ -18,24 +18,20 @@
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-website.css">
 	<link rel="stylesheet" type="text/css" href="tracky-mouse-goodies-page.css">
 	<style>
-		.song-controls {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 1rem;
-			margin-bottom: 0.75rem;
-		}
-
-		.song-controls label {
+		label[for="show-emoji"],
+		label[for="show-backing-vocals"] {
 			display: inline-flex;
 			align-items: center;
 			gap: 0.35rem;
+			margin-right: 1rem;
+			margin-bottom: 0.75rem;
 		}
 
-		body:has(#show-emoji:not(:checked)) .lyrics .optional-emoji {
+		#show-emoji:not(:checked)~.lyrics .optional-emoji {
 			display: none;
 		}
 
-		body:has(#show-backing-vocals:not(:checked)) .lyrics .backing-vocals {
+		#show-backing-vocals:not(:checked)~.lyrics .backing-vocals {
 			display: none;
 		}
 	</style>
@@ -262,10 +258,10 @@
 	</section>
 	<section class="page-section">
 		<h2>Theme Song</h2>
-		<div class="song-controls">
-			<label><input type="checkbox" id="show-emoji" checked> Show emoji/kaomoji</label>
-			<label><input type="checkbox" id="show-backing-vocals" checked> Show backing vocals</label>
-		</div>
+		<input type="checkbox" id="show-emoji" checked>
+		<label for="show-emoji">Show emoji/kaomoji</label>
+		<input type="checkbox" id="show-backing-vocals" checked>
+		<label for="show-backing-vocals">Show backing vocals</label>
 		<pre class="lyrics">
 <strong>[Chorus]</strong>
 Tracky Mouse
