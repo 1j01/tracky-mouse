@@ -57,8 +57,7 @@ textarea {
 	row-gap: 0.25rem;
 }
 
-#theme-song>h2,
-#theme-song>.lyrics {
+#theme-song>:not(input[type="checkbox"]):not(label) {
 	grid-column: 1 / -1;
 }
 
