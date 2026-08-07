@@ -55,7 +55,6 @@ textarea {
 	grid-template-columns: max-content 1fr;
 	column-gap: 0.5rem;
 	row-gap: 0.25rem;
-	align-items: start;
 }
 
 .page-section:has(> #show-emoji)>h2,
@@ -66,6 +65,7 @@ textarea {
 .page-section:has(> #show-emoji)>input[type="checkbox"],
 .page-section:has(> #show-emoji)>label {
 	margin: 0;
+	align-self: center;
 }
 
 #show-emoji:not(:checked)~.lyrics .with-emoji,
