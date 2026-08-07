@@ -50,7 +50,8 @@ textarea {
 }
 
 label[for="show-emoji"],
-label[for="show-backing-vocals"] {
+label[for="show-backing-vocals"],
+label[for="show-bonus-verse"] {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
@@ -63,5 +64,9 @@ label[for="show-backing-vocals"] {
 }
 
 #show-backing-vocals:not(:checked)~.lyrics .backing-vocals {
+	display: none;
+}
+
+#show-bonus-verse:not(:checked)~.lyrics .bonus-verse {
 	display: none;
 }
