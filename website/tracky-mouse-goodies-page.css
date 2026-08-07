@@ -9,12 +9,9 @@
 	display: inline-block;
 }
 
-.page-section::after {
-	content: '';
-	display: block;
-	height: 1px;
-	background-color: rgb(80, 80, 80);
-	margin-top: 2em;
+.page-section {
+	padding-bottom: 2em;
+	border-bottom: 1px solid rgb(80, 80, 80);
 }
 
 textarea {
@@ -61,13 +58,13 @@ textarea {
 	align-items: start;
 }
 
-.page-section:has(> #show-emoji) > h2,
-.page-section:has(> #show-emoji) > .lyrics {
+.page-section:has(> #show-emoji)>h2,
+.page-section:has(> #show-emoji)>.lyrics {
 	grid-column: 1 / -1;
 }
 
-.page-section:has(> #show-emoji) > input[type="checkbox"],
-.page-section:has(> #show-emoji) > label {
+.page-section:has(> #show-emoji)>input[type="checkbox"],
+.page-section:has(> #show-emoji)>label {
 	margin: 0;
 }
 
