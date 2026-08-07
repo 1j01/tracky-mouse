@@ -59,14 +59,14 @@ label[for="show-bonus-verse"] {
 	margin-bottom: 0.75rem;
 }
 
-#show-emoji:not(:checked)~.lyrics .optional-emoji {
+#show-emoji:not(:checked)~.lyrics .with-emoji {
 	display: none;
 }
 
-#show-backing-vocals:not(:checked)~.lyrics .backing-vocals {
+#show-backing-vocals:not(:checked)~.lyrics .with-backing-vocals {
 	display: none;
 }
 
-#show-bonus-verse:not(:checked)~.lyrics .bonus-verse {
+#show-bonus-verse:not(:checked)~.lyrics .with-bonus-verse {
 	display: none;
 }
