@@ -20,6 +20,7 @@ exports.include = [
 	"eval-is-evil.html",
 	"index.html",
 	"goodies.html",
+	"works-with.html",
 	"privacy.html",
 	"train.html",
 	"trainer/*.{js,css}",
