@@ -49,24 +49,12 @@ textarea {
 	font-style: italic;
 }
 
-label[for="show-emoji"],
-label[for="show-backing-vocals"],
-label[for="show-bonus-verse"] {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.35rem;
+.lyrics label {
 	margin-right: 1rem;
-	margin-bottom: 0.75rem;
 }
 
-#show-emoji:not(:checked)~.lyrics .with-emoji {
-	display: none;
-}
-
-#show-backing-vocals:not(:checked)~.lyrics .with-backing-vocals {
-	display: none;
-}
-
+#show-emoji:not(:checked)~.lyrics .with-emoji,
+#show-backing-vocals:not(:checked)~.lyrics .with-backing-vocals,
 #show-bonus-verse:not(:checked)~.lyrics .with-bonus-verse {
 	display: none;
 }
