@@ -48,3 +48,20 @@ textarea {
 	font-size: 0.9em;
 	font-style: italic;
 }
+
+label[for="show-emoji"],
+label[for="show-backing-vocals"] {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-right: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+#show-emoji:not(:checked)~.lyrics .optional-emoji {
+	display: none;
+}
+
+#show-backing-vocals:not(:checked)~.lyrics .backing-vocals {
+	display: none;
+}
