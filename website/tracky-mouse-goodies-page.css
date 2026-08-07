@@ -50,20 +50,20 @@ textarea {
 	margin-right: 1rem;
 }
 
-.page-section:has(> #show-emoji) {
+#theme-song {
 	display: grid;
 	grid-template-columns: max-content 1fr;
 	column-gap: 0.5rem;
 	row-gap: 0.25rem;
 }
 
-.page-section:has(> #show-emoji)>h2,
-.page-section:has(> #show-emoji)>.lyrics {
+#theme-song>h2,
+#theme-song>.lyrics {
 	grid-column: 1 / -1;
 }
 
-.page-section:has(> #show-emoji)>input[type="checkbox"],
-.page-section:has(> #show-emoji)>label {
+#theme-song>input[type="checkbox"],
+#theme-song>label {
 	margin: 0;
 	align-self: center;
 }
