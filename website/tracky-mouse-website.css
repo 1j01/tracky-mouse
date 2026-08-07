@@ -52,6 +52,7 @@ footer {
 footer nav {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 	gap: 1em;
 	margin-top: 2em;
 }
