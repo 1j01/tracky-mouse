@@ -2528,8 +2528,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		middle: false,
 	};
 	let mouseButtonUntilMouthCloses = -1;
-	let virtualMouseX = 0; // used for joystick/dpad movement modes
-	let virtualMouseY = 0;
+	let virtualJoystickX = 0; // used for joystick/dpad movement modes
+	let virtualJoystickY = 0;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -4309,32 +4309,41 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					mouseX -= deltaX * screenWidth;
 					mouseY += deltaY * screenHeight;
 				} else {
-					virtualMouseX += deltaX * screenWidth;
-					virtualMouseY += deltaY * screenHeight;
-					const headTrackingDpadSpeed = 10;
-					const headTrackingDpadThreshold = 400; // TODO: fraction of screen size
-					// TODO: generalize to angle quantization, to support
-					// 4 directions, 8 directions, and any direction in one code path.
+					virtualJoystickX += deltaX;
+					virtualJoystickY += deltaY;
+					const joystickSpeed = 10;
+					const joystickDeadzone = 0.9;
+					const joystickSize = 5;
+
+					// TODO: generalize dpad vs joystick to angle quantization, to support
+					// 4 directions, 8 directions, and infinite directions in one code path.
 					// TODO: smoothly accelerate to max speed based on distance
 					// using two distance thresholds
 					if (s.headTrackingMovementMode == "dpad") {
-						if (Math.abs(virtualMouseX) > Math.abs(virtualMouseY)) {
-							if (Math.abs(virtualMouseX) > headTrackingDpadThreshold) {
-								mouseX -= Math.sign(virtualMouseX) * headTrackingDpadSpeed;
-							}
-						} else {
-							if (Math.abs(virtualMouseY) > headTrackingDpadThreshold) {
-								mouseY += Math.sign(virtualMouseY) * headTrackingDpadSpeed;
-							}
-						}
+						// if (Math.abs(virtualJoystickX) > Math.abs(virtualJoystickY)) {
+						// 	if (Math.abs(virtualJoystickX) > headTrackingDpadThreshold) {
+						// 		mouseX -= Math.sign(virtualJoystickX) * joystickSpeed;
+						// 	}
+						// } else {
+						// 	if (Math.abs(virtualJoystickY) > headTrackingDpadThreshold) {
+						// 		mouseY += Math.sign(virtualJoystickY) * joystickSpeed;
+						// 	}
+						// }
 					} else if (s.headTrackingMovementMode == "joystick") {
-						const distance = Math.hypot(virtualMouseX, virtualMouseY);
-						if (distance > headTrackingDpadThreshold) {
-							const angle = Math.atan2(virtualMouseY, virtualMouseX);
-							mouseX -= Math.cos(angle) * headTrackingDpadSpeed;
-							mouseY += Math.sin(angle) * headTrackingDpadSpeed;
+						const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
+						if (distance > joystickSize * joystickDeadzone) {
+							const angle = Math.atan2(virtualJoystickY, virtualJoystickX);
+							mouseX -= Math.cos(angle) * joystickSpeed;
+							mouseY += Math.sin(angle) * joystickSpeed;
+						}
+						// normalize to within circle
+						if (distance > joystickSize) {
+							const scale = joystickSize / distance;
+							virtualJoystickX *= scale;
+							virtualJoystickY *= scale;
 						}
 					}
+
 				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
