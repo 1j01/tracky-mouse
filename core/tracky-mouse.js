@@ -4322,22 +4322,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const joystickMaxSpeedThreshold = 0.9; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 1;
 
-					// TODO: generalize dpad vs joystick to angle quantization, to support
-					// 4 directions, 8 directions, and infinite directions in one code path.
-					if (s.headTrackingMovementMode == "dpad") {
-						// if (Math.abs(virtualJoystickX) > Math.abs(virtualJoystickY)) {
-						// 	if (Math.abs(virtualJoystickX) > headTrackingDpadThreshold) {
-						// 		mouseX -= Math.sign(virtualJoystickX) * joystickSpeed;
-						// 	}
-						// } else {
-						// 	if (Math.abs(virtualJoystickY) > headTrackingDpadThreshold) {
-						// 		mouseY += Math.sign(virtualJoystickY) * joystickSpeed;
-						// 	}
-						// }
-					} else if (s.headTrackingMovementMode == "joystick") {
+					if (s.headTrackingMovementMode !== "direct") {
+
 						const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
 						if (distance > joystickSize * joystickMinSpeedThreshold) {
-							const angle = Math.atan2(virtualJoystickY, virtualJoystickX);
+							let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
+
+							if (s.headTrackingMovementMode === "dpad") {
+								const numDirections = 4;
+								angle = Math.round(angle / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2);
+							}
+
 							const speed = joystickMaxSpeed * Math.max(0, Math.min(1,
 								((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
 							));
