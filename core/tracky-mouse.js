@@ -1741,6 +1741,19 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			label: t("settings.sections.cursorMovement.label", { defaultValue: "Cursor Movement" }),
 			settings: [
 				{
+					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }),
+					className: "tracky-mouse-movement-mode",
+					key: "headTrackingMovementMode",
+					type: "dropdown",
+					default: "direct",
+					options: [
+						{ value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
+						{ value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "Joystick" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center (in any direction)." }) },
+						{ value: "dpad", label: t("settings.movementMode.dpad.label", { defaultValue: "Directional pad" }), description: t("settings.movementMode.dpad.description", { defaultValue: "Moves the cursor continuously while your head is over a quadrant (up, down, left, or right)." }) },
+					],
+					description: t("settings.movementMode.description", { defaultValue: "Choose how head movement is translated into cursor movement." }),
+				},
+				{
 					label: t("settings.tiltInfluence.label", { defaultValue: "Tilt influence" }),
 					className: "tracky-mouse-tilt-influence",
 					key: "headTrackingTiltInfluence",
@@ -2515,6 +2528,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		middle: false,
 	};
 	let mouseButtonUntilMouthCloses = -1;
+	let virtualMouseX = 0; // used for joystick/dpad movement modes
+	let virtualMouseY = 0;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -4290,8 +4305,37 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 
 			if (!paused) {
-				mouseX -= deltaX * screenWidth;
-				mouseY += deltaY * screenHeight;
+				if (s.headTrackingMovementMode == "direct") {
+					mouseX -= deltaX * screenWidth;
+					mouseY += deltaY * screenHeight;
+				} else {
+					virtualMouseX += deltaX * screenWidth;
+					virtualMouseY += deltaY * screenHeight;
+					const headTrackingDpadSpeed = 10;
+					const headTrackingDpadThreshold = 400; // TODO: fraction of screen size
+					// TODO: generalize to angle quantization, to support
+					// 4 directions, 8 directions, and any direction in one code path.
+					// TODO: smoothly accelerate to max speed based on distance
+					// using two distance thresholds
+					if (s.headTrackingMovementMode == "dpad") {
+						if (Math.abs(virtualMouseX) > Math.abs(virtualMouseY)) {
+							if (Math.abs(virtualMouseX) > headTrackingDpadThreshold) {
+								mouseX -= Math.sign(virtualMouseX) * headTrackingDpadSpeed;
+							}
+						} else {
+							if (Math.abs(virtualMouseY) > headTrackingDpadThreshold) {
+								mouseY += Math.sign(virtualMouseY) * headTrackingDpadSpeed;
+							}
+						}
+					} else if (s.headTrackingMovementMode == "joystick") {
+						const distance = Math.hypot(virtualMouseX, virtualMouseY);
+						if (distance > headTrackingDpadThreshold) {
+							const angle = Math.atan2(virtualMouseY, virtualMouseX);
+							mouseX -= Math.cos(angle) * headTrackingDpadSpeed;
+							mouseY += Math.sin(angle) * headTrackingDpadSpeed;
+						}
+					}
+				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
 				mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
