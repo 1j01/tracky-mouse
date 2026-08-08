@@ -4334,12 +4334,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								angle = Math.round(angle / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2);
 							}
 
-							const speed = joystickMaxSpeed * Math.max(0, Math.min(1,
-								Math.pow(
-									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold),
-									joystickSpeedCurveExponent
-								)
-							));
+							const speed = joystickMaxSpeed * Math.pow(
+								Math.max(0, Math.min(1,
+									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
+								)),
+								joystickSpeedCurveExponent
+							);
 							mouseX -= Math.cos(angle) * speed;
 							mouseY += Math.sin(angle) * speed;
 						}
