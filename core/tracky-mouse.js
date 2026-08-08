@@ -4318,9 +4318,9 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
 
 					const joystickMaxSpeed = 30;
-					const joystickMinSpeedThreshold = 0.6; // AKA deadzone; fraction of joystickSize
-					const joystickMaxSpeedThreshold = 0.9; // AKA threshold for linear speed; fraction of joystickSize
-					const joystickSize = 0.5;
+					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
+					const joystickMaxSpeedThreshold = 0.9; // fraction of joystickSize; AKA live-zone?
+					const joystickSize = 1;
 
 					// TODO: generalize dpad vs joystick to angle quantization, to support
 					// 4 directions, 8 directions, and infinite directions in one code path.
@@ -4345,11 +4345,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							mouseY += Math.sin(angle) * speed;
 						}
 						// normalize to within circle
-						if (distance > joystickSize) {
-							const scale = joystickSize / distance;
-							virtualJoystickX *= scale;
-							virtualJoystickY *= scale;
-						}
+						// if (distance > joystickSize) {
+						// 	const scale = joystickSize / distance;
+						// 	virtualJoystickX *= scale;
+						// 	virtualJoystickY *= scale;
+						// }
 					}
 
 				}
