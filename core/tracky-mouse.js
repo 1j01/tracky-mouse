@@ -4318,8 +4318,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
 
 					const joystickMaxSpeed = 30;
-					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
-					const joystickMaxSpeedThreshold = 0.9; // fraction of joystickSize; AKA live-zone?
+					const joystickMinSpeedThreshold = 0.4; // fraction of joystickSize; AKA deadzone
+					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 1;
 
 					if (s.headTrackingMovementMode !== "direct") {
