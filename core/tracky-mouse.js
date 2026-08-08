@@ -4309,16 +4309,21 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					mouseX -= deltaX * screenWidth;
 					mouseY += deltaY * screenHeight;
 				} else {
-					virtualJoystickX += deltaX;
-					virtualJoystickY += deltaY;
-					const joystickSpeed = 10;
-					const joystickDeadzone = 0.9;
-					const joystickSize = 5;
+					// virtualJoystickX += deltaX;
+					// virtualJoystickY += deltaY;
+					// For now, only supporting absolute head tilt
+					// TODO: support 2D point tracking and the "Tilt influence" slider
+					// (complicating factors may include the screen size being baked into certain variables)
+					virtualJoystickX = Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
+					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
+
+					const joystickMaxSpeed = 30;
+					const joystickMinSpeedThreshold = 0.6; // AKA deadzone; fraction of joystickSize
+					const joystickMaxSpeedThreshold = 0.9; // AKA threshold for linear speed; fraction of joystickSize
+					const joystickSize = 0.5;
 
 					// TODO: generalize dpad vs joystick to angle quantization, to support
 					// 4 directions, 8 directions, and infinite directions in one code path.
-					// TODO: smoothly accelerate to max speed based on distance
-					// using two distance thresholds
 					if (s.headTrackingMovementMode == "dpad") {
 						// if (Math.abs(virtualJoystickX) > Math.abs(virtualJoystickY)) {
 						// 	if (Math.abs(virtualJoystickX) > headTrackingDpadThreshold) {
@@ -4331,10 +4336,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						// }
 					} else if (s.headTrackingMovementMode == "joystick") {
 						const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
-						if (distance > joystickSize * joystickDeadzone) {
+						if (distance > joystickSize * joystickMinSpeedThreshold) {
 							const angle = Math.atan2(virtualJoystickY, virtualJoystickX);
-							mouseX -= Math.cos(angle) * joystickSpeed;
-							mouseY += Math.sin(angle) * joystickSpeed;
+							const speed = joystickMaxSpeed * Math.max(0, Math.min(1,
+								((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
+							));
+							mouseX -= Math.cos(angle) * speed;
+							mouseY += Math.sin(angle) * speed;
 						}
 						// normalize to within circle
 						if (distance > joystickSize) {
