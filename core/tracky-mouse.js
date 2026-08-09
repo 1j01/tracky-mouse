@@ -3295,7 +3295,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		}
 	}
 
-	// FIXME: can't click to add points because canvas is covered by .tracky-mouse-canvas-overlay
 	canvas.addEventListener('click', (event) => {
 		if (!pointTracker) {
 			return;
