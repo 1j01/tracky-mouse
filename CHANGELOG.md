@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Cursor movement > Movement mode (experimental)** setting, with options to move the cursor continuously in a direction instead of only as you move your head.
+
 ### Fixed
 - Fixed a couple translations in the Emoji locale
 - Fixed behavior when launching the desktop app while it was still opening. Previously it would open multiple windows, and if enabled, fight for control over the mouse cursor. Impatient users should no longer have to worry about double-clicking multiple times. ([issue #130](https://github.com/1j01/tracky-mouse/issues/130))
