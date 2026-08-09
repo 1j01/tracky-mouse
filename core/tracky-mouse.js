@@ -1741,7 +1741,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			label: t("settings.sections.cursorMovement.label", { defaultValue: "Cursor Movement" }),
 			settings: [
 				{
-					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }),
+					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }) + t("experimentalLabel", { defaultValue: " (experimental)" }),
 					className: "tracky-mouse-movement-mode",
 					key: "headTrackingMovementMode",
 					type: "dropdown",
