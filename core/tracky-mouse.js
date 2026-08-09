@@ -1747,9 +1747,14 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					type: "dropdown",
 					default: "direct",
 					options: [
-						{ value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
-						{ value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "Joystick" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center (in any direction)." }) },
-						{ value: "dpad", label: t("settings.movementMode.dpad.label", { defaultValue: "Directional pad" }), description: t("settings.movementMode.dpad.description", { defaultValue: "Moves the cursor continuously while your head is over a quadrant (up, down, left, or right)." }) },
+						// { value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "🖾 Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
+						// { value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "Joystick" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center (in any direction)." }) },
+						// { value: "dpad", label: t("settings.movementMode.dpad.label", { defaultValue: "Directional pad" }), description: t("settings.movementMode.dpad.description", { defaultValue: "Moves the cursor continuously while your head is over a quadrant (up, down, left, or right)." }) },
+						{ value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "🖾 Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
+						{ value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "● Joystick" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in any direction." }) },
+						{ value: "joystick-4dir", label: t("settings.movementMode.joystick4dir.label", { defaultValue: "✦ Joystick 4 directions" }), description: t("settings.movementMode.joystick4dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in four directions (up, down, left, and right)." }) },
+						{ value: "joystick-6dir", label: t("settings.movementMode.joystick6dir.label", { defaultValue: "✶ Joystick 6 directions" }), description: t("settings.movementMode.joystick6dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in six directions (for isometric game worlds)." }) },
+						{ value: "joystick-8dir", label: t("settings.movementMode.joystick8dir.label", { defaultValue: "✷ Joystick 8 directions" }), description: t("settings.movementMode.joystick8dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in eight directions (up, down, left, right, or diagonal)." }) },
 					],
 					description: t("settings.movementMode.description", { defaultValue: "Choose how head movement is translated into cursor movement." }),
 				},
@@ -4329,9 +4334,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						if (distance > joystickSize * joystickMinSpeedThreshold) {
 							let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
 
-							if (s.headTrackingMovementMode === "dpad") {
-								const numDirections = 4;
-								angle = Math.round(angle / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2);
+							const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
+							if (numDirections) {
+								// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
+								// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
+								angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
 							}
 
 							const speed = joystickMaxSpeed * Math.pow(
