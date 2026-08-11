@@ -161,6 +161,10 @@
 	gap: 10px;
 }
 
+.tracky-mouse-ui .tracky-mouse-experimental-label {
+	border-bottom: 1px dotted;
+}
+
 .tracky-mouse-camera-area {
 	flex: 1;
 	flex-basis: 0;

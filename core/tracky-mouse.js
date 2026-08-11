@@ -1664,6 +1664,13 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		return a + b;
 	}
 
+	const addExperimentalLabel = (label, hoverText) =>
+		// Note: this is a bit messy. It could replace "%1" within `label` if present; and it's not escaping HTML.
+		t("ui.experimentalLabel", { defaultValue: "%0 (%1experimental%2)" })
+			.replace("%0", label)
+			.replace("%1", `<span class="tracky-mouse-experimental-label" title="${hoverText}">`)
+			.replace("%2", "</span>");
+
 	let uiContainer = div || document.createElement("div");
 	uiContainer.classList.add("tracky-mouse-ui");
 	uiContainer.classList.toggle("tracky-mouse-rtl", isRTL);
@@ -1741,7 +1748,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			label: t("settings.sections.cursorMovement.label", { defaultValue: "Cursor Movement" }),
 			settings: [
 				{
-					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }) + t("experimentalLabel", { defaultValue: " (experimental)" }),
+					label: addExperimentalLabel(t("settings.movementMode.label", { defaultValue: "Movement mode" }), t("settings.movementMode.experimentalLabelHoverText", { defaultValue: "This is a new feature, and it may not work with all the other settings." })),
 					className: "tracky-mouse-movement-mode",
 					key: "headTrackingMovementMode",
 					type: "dropdown",
