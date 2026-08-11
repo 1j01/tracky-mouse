@@ -43,11 +43,11 @@ Write for a broad audience and limit technical jargon. Try to make it clear whic
 When committing, use the following format for the commit message:
 
 ```
-<Short summary in present tense>
+Short summary in present tense
 
-AI prompt: "<verbatim copy of the message requesting the changes>"
-
-AI description: "<reasoning behind the changes>"
+AI prompt:
+> verbatim copy of the message requesting the changes
+> (possibly extending to multiple lines)
 ```
 
 Run `npm run lint` before committing. (This includes eslint and spell checking and `i18next-cli status`, so you don't need to run those separately.)
