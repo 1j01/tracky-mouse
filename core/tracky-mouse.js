@@ -1666,7 +1666,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const addExperimentalLabel = (label, hoverText) =>
 		// Note: this is a bit messy. It could replace "%1" within `label` if present; and it's not escaping HTML.
-		t("ui.experimentalLabel", { defaultValue: "%0 (%1experimental%2)" })
+		t("ui.experimentalLabel", { defaultValue: "%0 (%1Experimental%2)" })
 			.replace("%0", label)
 			.replace("%1", `<span class="tracky-mouse-experimental-label" title="${hoverText}">`)
 			.replace("%2", "</span>");
@@ -1754,14 +1754,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					type: "dropdown",
 					default: "direct",
 					options: [
-						// { value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "🖾 Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
-						// { value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "Joystick" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center (in any direction)." }) },
-						// { value: "dpad", label: t("settings.movementMode.dpad.label", { defaultValue: "Directional pad" }), description: t("settings.movementMode.dpad.description", { defaultValue: "Moves the cursor continuously while your head is over a quadrant (up, down, left, or right)." }) },
 						{ value: "direct", label: t("settings.movementMode.direct.label", { defaultValue: "🖾 Direct" }), description: t("settings.movementMode.direct.description", { defaultValue: "Moves the cursor when you move your head." }) },
-						{ value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "● Joystick (any direction)" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in any direction." }) },
-						{ value: "joystick-4dir", label: t("settings.movementMode.joystick4dir.label", { defaultValue: "✦ Joystick (4 directions)" }), description: t("settings.movementMode.joystick4dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in four directions (up, down, left, and right)." }) },
-						{ value: "joystick-6dir", label: t("settings.movementMode.joystick6dir.label", { defaultValue: "✶ Joystick (6 directions)" }), description: t("settings.movementMode.joystick6dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in six directions (for isometric game worlds)." }) },
-						{ value: "joystick-8dir", label: t("settings.movementMode.joystick8dir.label", { defaultValue: "✷ Joystick (8 directions)" }), description: t("settings.movementMode.joystick8dir.description", { defaultValue: "Moves the cursor continuously while your head is away from center, in eight directions (up, down, left, right, or diagonal)." }) },
+						{ value: "joystick", label: t("settings.movementMode.joystick.label", { defaultValue: "● Joystick style (any direction)" }), description: t("settings.movementMode.joystick.description", { defaultValue: "Moves the cursor continuously in the direction of your head." }) },
+						{ value: "joystick-4dir", label: t("settings.movementMode.joystick4dir.label", { defaultValue: "✦ D-pad style (4 directions)" }), description: t("settings.movementMode.joystick4dir.description", { defaultValue: "Moves the cursor continuously in the direction of your head, limited to four directions (up, down, left, and right)." }) },
+						{ value: "joystick-6dir", label: t("settings.movementMode.joystick6dir.label", { defaultValue: "✶ D-pad style (6 directions)" }), description: t("settings.movementMode.joystick6dir.description", { defaultValue: "Moves the cursor continuously in the direction of your head, limited to six directions. Intended for isometric game worlds." }) },
+						{ value: "joystick-8dir", label: t("settings.movementMode.joystick8dir.label", { defaultValue: "✷ D-pad style (8 directions)" }), description: t("settings.movementMode.joystick8dir.description", { defaultValue: "Moves the cursor continuously in the direction of your head, limited to eight directions (up, down, left, right, or diagonal)." }) },
 					],
 					description: t("settings.movementMode.description", { defaultValue: "Choose how head movement is translated into cursor movement." }),
 				},
