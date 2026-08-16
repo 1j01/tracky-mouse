@@ -2539,6 +2539,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	let mouseButtonUntilMouthCloses = -1;
 	let virtualJoystickX = 0; // used for joystick/dpad movement modes
 	let virtualJoystickY = 0;
+	let virtualDPadAngle = Infinity; // used for dpad movement modes
+	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/dpad movement modes
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -4327,6 +4329,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 					const joystickMaxSpeed = 30;
 					const joystickSpeedCurveExponent = 2;
+					const joystickSpeedRampTime = 1500; // milliseconds
 					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
 					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 1;
@@ -4342,14 +4345,23 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
 								// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
 								angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
+
+								if (virtualDPadAngle !== angle) {
+									virtualDPadAngle = angle;
+									virtualJoystickSpeedRampStartTime = performance.now();
+								}
+							} else {
+								virtualDPadAngle = Infinity;
 							}
 
+							const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
+							const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
 							const speed = joystickMaxSpeed * Math.pow(
 								Math.max(0, Math.min(1,
 									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
 								)),
 								joystickSpeedCurveExponent
-							);
+							) * speedRampOverTime;
 							mouseX -= Math.cos(angle) * speed;
 							mouseY += Math.sin(angle) * speed;
 						}
@@ -4359,6 +4371,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 						// 	virtualJoystickX *= scale;
 						// 	virtualJoystickY *= scale;
 						// }
+					} else {
+						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 
 				}
