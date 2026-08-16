@@ -4328,7 +4328,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
 
 					const joystickMaxSpeed = 30;
-					const joystickSpeedCurveExponent = 2;
+					const joystickDistanceToSpeedExponent = 2;
+					const joystickTimeToSpeedExponent = 1;
 					const joystickSpeedRampTime = 1500; // milliseconds
 					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
 					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
@@ -4360,8 +4361,11 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								Math.max(0, Math.min(1,
 									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
 								)),
-								joystickSpeedCurveExponent
-							) * speedRampOverTime;
+								joystickDistanceToSpeedExponent
+							) * Math.pow(
+								speedRampOverTime,
+								joystickTimeToSpeedExponent
+							);
 							mouseX -= Math.cos(angle) * speed;
 							mouseY += Math.sin(angle) * speed;
 						}
