@@ -2,6 +2,7 @@ private/
 dist/
 build/
 bin/
+new-translations.json
 localazy.keys.json
 
 # Blender
