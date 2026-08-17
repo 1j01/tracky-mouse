@@ -51,14 +51,14 @@ Languages needing translation: ${languagesNeedingTranslation.join(", ")}
 Keys needing translation:
 ${keysNeedingTranslation.map(key => `- ${key} (English: ${JSON.stringify(baseLocaleContent[key])})`).join("\n")}
 
-Please write a JSON file named "new-translations.json" in the "scripts" folder with the following structure:
+Please write a JSON file named "new-translations.json" in the "scripts" folder with the following structure, translating each string into all languages:
 {
 	"newKey1": {
 		"es": "Nueva Cadena 1",
 		"fr": "Nouvelle Chaîne 1",
 		// ... other languages
 	},
-	// ...
+	// ... other keys
 }
 `);
 } else if (process.argv.includes("--apply-translations")) {
