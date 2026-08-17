@@ -25,6 +25,7 @@
 		"update-cli-docs": "node scripts/update-cli-docs.js",
 		"update-locales": "node scripts/update-locales.js",
 		"new-locale": "node scripts/new-locale.js",
+		"translate-new-strings": "node scripts/translate-new-strings.js",
 		"translate": "localazy upload && localazy download",
 		"release": "node scripts/release/release.js"
 	},

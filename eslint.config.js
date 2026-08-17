@@ -68,6 +68,7 @@ module.exports = [
 			"scripts/update-cli-docs.js",
 			"scripts/new-locale.js",
 			"scripts/update-locales.js",
+			"scripts/translate-new-strings.js",
 			"scripts/fix-locale-whitespace.js",
 			"scripts/flatten-folders.js",
 			"scripts/release/update-msix-package-version.js",
