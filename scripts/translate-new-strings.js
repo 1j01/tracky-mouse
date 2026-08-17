@@ -22,6 +22,12 @@ function runExtractCommand() {
 		console.error(`Error running "${extractCommand}":`, extractResult.error);
 		process.exit(1);
 	}
+	if (extractResult.status !== 0) {
+		console.error(`Command "${extractCommand}" exited with code ${extractResult.status}`);
+		console.error("stdout:", extractResult.stdout);
+		console.error("stderr:", extractResult.stderr);
+		process.exit(1);
+	}
 }
 
 if (process.argv.includes("--what-needs-translation")) {
