@@ -47,14 +47,13 @@ const languagesNeedingTranslation = availableLanguages
 
 if (process.argv.includes("--what-needs-translation")) {
 	console.log(`
-Languages: ${availableLanguages.join(", ")}
+Languages needing translation: ${languagesNeedingTranslation.join(", ")}
 Keys needing translation:
 ${keysNeedingTranslation.map(key => `- ${key} (English: ${JSON.stringify(baseLocaleContent[key])})`).join("\n")}
 
 Please write a JSON file named "new-translations.json" in the "scripts" folder with the following structure:
 {
 	"newKey1": {
-		"en": "New String 1",
 		"es": "Nueva Cadena 1",
 		"fr": "Nouvelle Chaîne 1",
 		// ... other languages
