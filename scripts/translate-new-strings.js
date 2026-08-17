@@ -29,11 +29,13 @@ if (process.argv.includes("--what-needs-translation")) {
 }
 
 const baseLanguage = "en";
+const nonBaseLanguage = "ar";
 const baseLocaleFile = path.join(localesFolder, baseLanguage, "translation.json");
+const nonBaseLocaleFile = path.join(localesFolder, nonBaseLanguage, "translation.json");
 const baseLocaleContent = JSON.parse(fs.readFileSync(baseLocaleFile, "utf8"));
-const keysNeedingTranslation = Object.entries(baseLocaleContent)
-	.filter(([_key, value]) => !value)
-	.map(([key, _value]) => key);
+const nonBaseLocaleContent = JSON.parse(fs.readFileSync(nonBaseLocaleFile, "utf8"));
+const keysNeedingTranslation = Object.keys(baseLocaleContent)
+	.filter(key => !nonBaseLocaleContent[key]);
 const languagesNeedingTranslation = availableLanguages
 	.filter(lang => lang !== baseLanguage);
 
@@ -44,16 +46,15 @@ Keys needing translation:
 ${keysNeedingTranslation.map(key => `- ${key} (English: ${JSON.stringify(baseLocaleContent[key])})`).join("\n")}
 
 Please write a JSON file named "new-translations.json" in the "scripts" folder with the following structure:
-const newTranslations = {
+{
 	"newKey1": {
 		"en": "New String 1",
 		"es": "Nueva Cadena 1",
 		"fr": "Nouvelle Chaîne 1",
 		// ... other languages
 	},
-};
-
-
+	// ...
+}
 `);
 } else if (process.argv.includes("--apply-translations")) {
 	const newTranslations = require("./new-translations.json");
