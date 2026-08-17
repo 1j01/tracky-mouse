@@ -4334,6 +4334,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
 					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 1;
+					const joystickAngleHysterisis = 0.3; // fraction of dpad direction arc beyond the arc where it will switch to a different direction
 
 					if (s.headTrackingMovementMode !== "direct") {
 
@@ -4347,12 +4348,17 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
 								angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
 
-								if (virtualDPadAngle !== angle) {
+								const angleDiff = Math.atan2(Math.sin(angle - virtualDPadAngle), Math.cos(angle - virtualDPadAngle));
+
+								if (
+									!isFinite(virtualDPadAngle) ||
+									Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysterisis)
+								) {
 									virtualDPadAngle = angle;
 									virtualJoystickSpeedRampStartTime = performance.now();
 								}
 							} else {
-								virtualDPadAngle = Infinity;
+								virtualDPadAngle = angle;
 							}
 
 							const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
@@ -4366,8 +4372,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 								speedRampOverTime,
 								joystickTimeToSpeedExponent
 							);
-							mouseX -= Math.cos(angle) * speed;
-							mouseY += Math.sin(angle) * speed;
+							mouseX -= Math.cos(virtualDPadAngle) * speed;
+							mouseY += Math.sin(virtualDPadAngle) * speed;
 						}
 						// normalize to within circle
 						// if (distance > joystickSize) {
