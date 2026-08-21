@@ -8,7 +8,7 @@ This project is a monorepo with core (web library), desktop-app (electron app), 
 
 Use `npm run in-desktop-app -- <command>` to run commands in the desktop-app package, `npm run in-core -- <command>` for the core package, and `npm run in-website -- <command>` for the website package.
 
-Dependencies in the core package should be installed with npm, then added in `copy-deps.js` script to copy them to the `core/lib` folder, and to `loadDependencies` in `core/tracky-mouse.js`. Copy the dependencies with `npm run in-core -- npm run copy-deps`. Adding a new script is a breaking change for consumers that do not use `loadDependencies`, such as the desktop app. Also update `desktop-app.html` and the changelog.
+Dependencies in the core package should be installed with npm, then added in `copy-deps.js` script to copy them to the `core/lib` folder, and to `loadDependencies` in `core/src/tracky-mouse.js`. Copy the dependencies with `npm run in-core -- npm run copy-deps`. Adding a new script is a breaking change for consumers that do not use `loadDependencies`, such as the desktop app. Also update `desktop-app.html` and the changelog.
 
 For the desktop app, there is a `scripts/list-ipc-events.js` to help with understanding the flow of data between processes. There is also an architecture section in the main README.
 
