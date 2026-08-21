@@ -1,6 +1,6 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
-const TrackyMouse = {
+export const TrackyMouse = {
 	dependenciesRoot: "./tracky-mouse",
 };
 
@@ -4765,11 +4765,3 @@ TrackyMouse.initScreenOverlay = () => {
 		updateMousePos,
 	};
 };
-
-// CommonJS export is untested. Script tag usage recommended.
-// Just including this in case it is somehow useful.
-// eslint-disable-next-line no-undef
-if (typeof module !== "undefined" && module.exports) {
-	// eslint-disable-next-line no-undef
-	module.exports = TrackyMouse;
-}

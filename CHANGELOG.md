@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: The library now uses ES Module exports instead of a global `TrackyMouse` object. You can import it like this:
+  ```js
+  import { TrackyMouse } from "tracky-mouse";
+  ```
+  Or from non-module code, you can import it asynchronously like this:
+  ```js
+  const { TrackyMouse } = await import("tracky-mouse");
+  ```
+  You'll need an [`importmap`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) in your HTML, or a bundler like Webpack, Rollup, or Vite, to resolve the module specifier `"tracky-mouse"` to the actual file path.
+
 ### Added
 
 - **Cursor movement > Movement mode (experimental)** setting, with options to move the cursor continuously in a direction instead of only as you move your head.

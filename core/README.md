@@ -19,17 +19,29 @@ npm install tracky-mouse
 
 ## Usage
 
-The library is currently script tag-based, so you'll need to add it to your HTML file.
-
-```html
-<script src="path/to/tracky-mouse/tracky-mouse.js"></script>
-```
-
-Then you have to tell it where it can load related files from.
-Make sure not to include a trailing slash.
+If you are using a bundler like Webpack or Rollup, you can import the library like this:
 
 ```javascript
-TrackyMouse.dependenciesRoot = "path/to/tracky-mouse";
+import { TrackyMouse } from "tracky-mouse";
+```
+
+Without a bundler, you can use an import map:
+```html
+<script type="importmap">
+{
+	"imports": {
+		"tracky-mouse": "path/to/tracky-mouse/src/tracky-mouse.js"
+	}
+}
+</script>
+<script type="module">
+import { TrackyMouse } from "tracky-mouse";
+</script>
+```
+
+It's also possible to load the library asynchronously with:
+```javascript
+const { TrackyMouse } = await import("tracky-mouse");
 ```
 
 You also need to include the stylesheet, which is in the same directory as the script.

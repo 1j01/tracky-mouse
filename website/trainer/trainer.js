@@ -1,4 +1,3 @@
-/* global TrackyMouse */
 
 /**
  * @typedef {Object} Sample
@@ -46,6 +45,7 @@
  * @property {CropMetadata} crop
  */
 
+import { TrackyMouse } from "../core/src/tracky-mouse.js";
 import { TrainerDB } from "./db.js";
 
 const db = new TrainerDB();

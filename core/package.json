@@ -43,8 +43,9 @@
     "url": "https://github.com/1j01/tracky-mouse/issues"
   },
   "homepage": "https://trackymouse.js.org/",
-  "main": "tracky-mouse.js",
-  "browser": "tracky-mouse.js",
+  "type": "module",
+  "main": "src/core/tracky-mouse.js",
+  "browser": "src/core/tracky-mouse.js",
   "files": [
     "tracky-mouse.js",
     "tracky-mouse.css",

@@ -91,10 +91,9 @@
 		<span class="app-titlebar-text">Tracky Mouse</span>
 	</div>
 	<div id="custom-menu-bar"></div>
-	<script src="../node_modules/tracky-mouse/tracky-mouse.js"></script>
 	<script src="../node_modules/os-gui/MenuBar.js"></script>
 	<script src="custom-menu-bar.js"></script>
-	<script>
+	<script type="module">
 		(async () => {
 			initCustomMenuBar();
 
@@ -112,7 +111,7 @@
 				console.error("Error saving options to localStorage:", error);
 			}
 			// -------
-
+			const { TrackyMouse } = await import("../node_modules/tracky-mouse/src/tracky-mouse.js");
 			TrackyMouse.dependenciesRoot = "../node_modules/tracky-mouse";
 			TrackyMouse.init();
 		})();

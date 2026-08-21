@@ -1,4 +1,6 @@
-/* global TrackyMouse, electronAPI */
+/* global electronAPI */
+
+import { TrackyMouse } from "../node_modules/tracky-mouse/src/tracky-mouse.js";
 
 let audio = null;
 
