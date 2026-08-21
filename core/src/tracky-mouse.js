@@ -1,7 +1,7 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 export const TrackyMouse = {
-	dependenciesRoot: import.meta.url + "/..",
+	dependenciesRoot: new URL("..", import.meta.url).href,
 };
 
 const isSelectorValid = ((dummyElement) =>

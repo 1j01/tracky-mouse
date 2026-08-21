@@ -40,9 +40,9 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	return Promise.all(scriptFiles.map(loadScript)).then(() => {
 		return Promise.all(moreScriptFiles.map(loadScript));
 	}).then(async () => {
-		const core = await import(`${TrackyMouse.dependenciesRoot}/src/tracky-mouse.js`);
+		const core = await import("./src/tracky-mouse.js");
 		console.log("dependenciesRoot before:", TrackyMouse.dependenciesRoot);
-		Object.assign(TrackyMouse, core);
+		Object.assign(TrackyMouse, core.TrackyMouse);
 		console.log("dependenciesRoot after:", TrackyMouse.dependenciesRoot);
 	});
 };
