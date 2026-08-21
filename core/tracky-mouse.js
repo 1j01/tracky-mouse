@@ -1,7 +1,23 @@
 
-const TrackyMouse = {
+let core = {}; // @TODO: rename me / avoid global
+const TrackyMouse = new Proxy({
 	dependenciesRoot: "./tracky-mouse",
-};
+}, {
+	get: (target, prop) => {
+		if (prop in target) {
+			return target[prop];
+		}
+		if (core && prop in core) {
+			return core[prop];
+		}
+		return undefined;
+	},
+	set: (_target, prop, value) => {
+		core[prop] = value;
+		return true;
+	},
+});
+
 
 TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	TrackyMouse.dependenciesRoot = TrackyMouse.dependenciesRoot.replace(/\/+$/, "");
@@ -40,9 +56,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	return Promise.all(scriptFiles.map(loadScript)).then(() => {
 		return Promise.all(moreScriptFiles.map(loadScript));
 	}).then(async () => {
-		const core = await import("./src/tracky-mouse.js");
-		console.log("dependenciesRoot before:", TrackyMouse.dependenciesRoot);
-		Object.assign(TrackyMouse, core.TrackyMouse);
-		console.log("dependenciesRoot after:", TrackyMouse.dependenciesRoot);
+		core = (await import("./src/tracky-mouse.js")).TrackyMouse;
 	});
 };
