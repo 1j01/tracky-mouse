@@ -148,9 +148,8 @@
 	<script src="core/lib/clmtrackr.js"></script>
 	<script src="core/lib/face_mesh/face_mesh.js"></script>
 	<script src="core/lib/face-landmarks-detection.min.js"></script>
-	<script src="core/tracky-mouse.js"></script>
-	<script>
-		TrackyMouse.dependenciesRoot = "./core";
+	<script type="module">
+		import { TrackyMouse } from "./core/src/tracky-mouse.js";
 		TrackyMouse.init();
 	</script>
 	<!--
