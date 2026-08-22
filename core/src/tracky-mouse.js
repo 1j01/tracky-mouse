@@ -7,7 +7,7 @@ import { createDeferred, signedDistancePointLine } from "./helpers.js";
 import { initScreenOverlay } from "./hud.js";
 import { availableLanguages, isLocaleRTL } from "./languages.js";
 import { initSettingsUI } from "./settings-ui.js";
-import { getSettingsCategories } from "./settings.js";
+import { getSettingsCategories, traverseSettings } from "./settings.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
@@ -218,21 +218,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		},
 	});
 
-	function traverseSettings(settings, callback, parentGroup = null) {
-		for (const setting of settings) {
-			callback(setting, parentGroup);
-			if (setting.type === "group") {
-				traverseSettings(setting.settings, callback, setting);
-			}
-		}
-	}
-
 	const { updateDisabledStates } = initSettingsUI({
 		settingsCategories,
 		uiContainer,
 		t,
 		s,
-		traverseSettings,
 		getSetOptionsFunction: () => setOptions,
 	});
 

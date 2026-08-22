@@ -512,3 +512,12 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	];
 	return settingsCategories;
 }
+
+export function traverseSettings(settings, callback, parentGroup = null) {
+	for (const setting of settings) {
+		callback(setting, parentGroup);
+		if (setting.type === "group") {
+			traverseSettings(setting.settings, callback, setting);
+		}
+	}
+}
