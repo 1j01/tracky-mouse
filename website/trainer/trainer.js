@@ -473,7 +473,6 @@ function recordSnapshot(facemeshPrediction, headTilt, video) {
 }
 
 
-TrackyMouse.dependenciesRoot = "core";
 TrackyMouse.loadDependencies().then(() => {
 	init();
 });

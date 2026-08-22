@@ -1,8 +1,6 @@
 import { InputSimulator } from "./core/src/input-simulator.js";
 import { TrackyMouse } from "./core/src/tracky-mouse.js";
 
-TrackyMouse.dependenciesRoot = "./core";
-
 await TrackyMouse.loadDependencies();
 
 
