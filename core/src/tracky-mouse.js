@@ -4,16 +4,17 @@ export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href,
 };
 
-// TODO: deprecation warning
-// (but do we want to preserve the ability to modify it for now? it will need a backing variable)
-// Object.defineProperty(TrackyMouse, "dependenciesRoot", {
-// 	set() {
-// 		console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
-// 	},
-// 	get() {
-// 		return new URL("..", import.meta.url).href;
-// 	},
-// });
+// Deprecation notice for `TrackyMouse.dependenciesRoot`
+let _dependenciesRoot = TrackyMouse.dependenciesRoot;
+Object.defineProperty(TrackyMouse, "dependenciesRoot", {
+	set(value) {
+		console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
+		_dependenciesRoot = value.replace(/\/+$/, "");
+	},
+	get() {
+		return _dependenciesRoot;
+	},
+});
 
 TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 	TrackyMouse.dependenciesRoot = TrackyMouse.dependenciesRoot.replace(/\/+$/, "");
