@@ -131,3 +131,90 @@ export function detectMouthOpen(annotations, mouthInfo) {
 	mouth.active = mouth.thresholdMet; // TODO: maybe default to false, have this only set externally in gesture handling code
 	return mouth;
 }
+
+export function detectGestures({
+	// Input + Output state
+	blinkInfo, mouthInfo, sleepGestureProgress, sleepGestureEyesClosedDuration, mouseButtonUntilMouthCloses,
+	// Input only
+	annotations, s, deltaTime
+}) {
+	// Output only
+	let sleepGestureTriggered = false;
+	let clickButton = -1;
+
+
+	const prevMouthOpen = mouthInfo?.thresholdMet;
+
+	blinkInfo = detectBlinks(annotations, blinkInfo);
+	mouthInfo = detectMouthOpen(annotations, mouthInfo);
+	if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+		sleepGestureProgress += deltaTime / sleepGestureEyesClosedDuration;
+		sleepGestureProgress = Math.min(sleepGestureProgress, 1);
+	} else {
+		sleepGestureProgress -= deltaTime / sleepGestureEyesClosedDuration;
+		sleepGestureProgress = Math.max(sleepGestureProgress, 0);
+	}
+	if (sleepGestureProgress >= 1) {
+		sleepGestureProgress = 0;
+		if (s.closeEyesToToggle) {
+			sleepGestureTriggered = true;
+		}
+	}
+
+	blinkInfo.used = false;
+	mouthInfo.used = false;
+	if (s.clickingMode === "blink") {
+		blinkInfo.used = true;
+		if (blinkInfo.rightEye.active) {
+			clickButton = 0;
+		} else if (blinkInfo.leftEye.active) {
+			clickButton = 2;
+		}
+	}
+	if (s.clickingMode === "open-mouth-ignoring-eyes") {
+		mouthInfo.used = true;
+		if (mouthInfo.thresholdMet) {
+			clickButton = 0;
+		}
+	}
+	if (s.clickingMode === "open-mouth" || s.clickingMode === "open-mouth-simple") {
+		mouthInfo.used = true;
+		blinkInfo.used = true;
+		const allowModifiers = s.clickingMode !== "open-mouth-simple";
+		// Modifiers with eye closing trigger different buttons,
+		// making this a three-button mouse.
+		// (Eyebrow raising could be another alternative modifier.)
+		// Keep same button held if eye is opened,
+		// so you can continue to scroll a webpage without trying to
+		// read with one eye closed (for example).
+		if (mouthInfo.thresholdMet && !prevMouthOpen) {
+			if (blinkInfo.rightEye.active && allowModifiers) {
+				mouseButtonUntilMouthCloses = 1;
+			} else if (blinkInfo.leftEye.active && allowModifiers) {
+				mouseButtonUntilMouthCloses = 2;
+			} else if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
+				mouseButtonUntilMouthCloses = -1;
+			} else {
+				mouseButtonUntilMouthCloses = 0;
+			}
+		}
+		if (mouthInfo.thresholdMet) {
+			clickButton = mouseButtonUntilMouthCloses;
+			if (clickButton === -1) {
+				// Show as passive / not clicking in visuals
+				mouthInfo.active = false;
+				// TODO: show eyes as yellow too regardless of eye state?
+			}
+		}
+		// In the mode with modifiers, it's helpful to preview a click's modifiers,
+		// but in simple mode, it may be confusing to show any active state
+		// when you're not clicking.
+		if (mouthInfo.thresholdMet || s.clickingMode === "open-mouth-simple") {
+			// TODO: DRY mapping (deduplicate the association of eyes to buttons)
+			blinkInfo.rightEye.active = clickButton === 1;
+			blinkInfo.leftEye.active = clickButton === 2;
+		}
+	}
+
+	return { blinkInfo, mouthInfo, sleepGestureProgress, sleepGestureEyesClosedDuration, mouseButtonUntilMouthCloses, sleepGestureTriggered, clickButton };
+}
