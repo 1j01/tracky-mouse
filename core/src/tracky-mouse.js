@@ -2,7 +2,7 @@
 
 import { MESH_ANNOTATIONS } from "./constants.js";
 import { averagePoints, isSelectorValid, signedDistancePointLine } from "./helpers.js";
-import { getLanguageFlagEmoji, languageNames } from "./languages.js";
+import { getLanguageFlagEmoji, isLocaleRTL, languageNames } from "./languages.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
@@ -689,8 +689,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	} catch (e) {
 		console.warn("Could not load translations for TrackyMouse UI:", e);
 	}
-	const rtlLanguages = ["ar", "he", "fa", "ur"]; // Right-to-left languages (current and future)
-	const isRTL = rtlLanguages.includes(locale.split("-")[0]);
+	const isRTL = isLocaleRTL(locale);
 	const t = (key, options = {}) => translations[key] ?? options.defaultValue ?? key;
 	// console.trace("Initializing UI with locale", locale);
 

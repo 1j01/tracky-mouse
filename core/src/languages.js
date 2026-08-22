@@ -1,4 +1,8 @@
 
+const rtlLanguages = new Set(["ar", "he", "fa", "ur"]); // Right-to-left languages (current and future)
+export function isLocaleRTL(locale) {
+	return rtlLanguages.has(locale.split("-")[0]);
+}
 
 // language name mappings marked with * may not be ISO 639-1
 // they may be ISO 639-3 or bespoke
