@@ -1,4 +1,5 @@
 
+import { createDeferred } from "./helpers.js";
 import { traverseSettings } from "./settings.js";
 
 // TODO: clean up signature which is currently "whatever dependencies were needed to extract this code to a new file"
@@ -206,6 +207,7 @@ export function initSettingsUI({
 	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
 	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
 	const swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
+	const cameraSelect = uiContainer.querySelector(".tracky-mouse-camera-select");
 
 	if (window.electronAPI) {
 		// Disable the "run at login" option if the app isn't packaged,
@@ -228,7 +230,82 @@ export function initSettingsUI({
 		});
 	}
 
+	let populateCameraList = () => { return Promise.resolve(); };
+	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+		populateCameraList = () => {
+			let matchedCameraIdDeferred = createDeferred();
+			navigator.mediaDevices.enumerateDevices().then((devices) => {
+				const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+				let knownCameras = {};
+				try {
+					knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
+				} catch (error) {
+					console.error("Failed to parse known cameras from localStorage", error);
+				}
+				let knownCamerasChanged = false;
+				for (const device of videoDevices) {
+					if (device.deviceId && device.label) {
+						if (!knownCameras[device.deviceId] || knownCameras[device.deviceId].name !== device.label) {
+							knownCameras[device.deviceId] = { name: device.label };
+							knownCamerasChanged = true;
+						}
+					}
+				}
+				if (knownCamerasChanged) {
+					try {
+						localStorage.setItem("tracky-mouse-known-cameras", JSON.stringify(knownCameras));
+					} catch (error) {
+						console.error("Failed to store known cameras in localStorage", error);
+					}
+				}
+
+				cameraSelect.innerHTML = "";
+
+				const defaultOption = document.createElement("option");
+				defaultOption.value = "";
+				defaultOption.text = t("settings.cameraSource.defaultCamera", { defaultValue: "Default" });
+				cameraSelect.appendChild(defaultOption);
+
+				let matchingDeviceId = "";
+				for (const device of videoDevices) {
+					const option = document.createElement('option');
+					option.value = device.deviceId;
+					option.text = device.label || t("settings.cameraSource.numberedCamera", { defaultValue: "Camera %0" }).replace("%0", cameraSelect.length);
+					cameraSelect.appendChild(option);
+					if (device.deviceId === s.cameraDeviceId) {
+						matchingDeviceId = device.deviceId;
+					} else if (device.label === knownCameras[s.cameraDeviceId]?.name) {
+						matchingDeviceId ||= device.deviceId;
+					}
+				}
+
+				// Defaulting to "Default" would imply a preference isn't stored...
+				// but would it be more friendly anyways?
+				// cameraSelect.value = found ? s.cameraDeviceId : "";
+
+				// Show a placeholder for the selected camera
+				if (s.cameraDeviceId && !matchingDeviceId) {
+					const option = document.createElement("option");
+					option.value = s.cameraDeviceId;
+					const knownInfo = knownCameras[s.cameraDeviceId];
+					option.text = knownInfo ? `${knownInfo.name} (${t("settings.cameraSource.unavailableCameraAdjective", { defaultValue: "Unavailable" })})` : t("settings.cameraSource.unavailableCamera", { defaultValue: "Unavailable camera" });
+					cameraSelect.appendChild(option);
+					cameraSelect.value = s.cameraDeviceId;
+				} else {
+					cameraSelect.value = matchingDeviceId;
+				}
+				matchedCameraIdDeferred.resolve(matchingDeviceId);
+			});
+			return matchedCameraIdDeferred.promise;
+		};
+		populateCameraList();
+		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
+	}
+
+
 	return {
+		populateCameraList,
 		updateDisabledStates: () => {
 			for (const func of functionsToUpdateDisabledStates) {
 				func();

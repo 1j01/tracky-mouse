@@ -3,7 +3,7 @@
 import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
 import { MESH_ANNOTATIONS } from "./constants.js";
 import { initDwellClicking } from "./dwell-clicker.js";
-import { createDeferred, signedDistancePointLine } from "./helpers.js";
+import { signedDistancePointLine } from "./helpers.js";
 import { initScreenOverlay } from "./hud.js";
 import { availableLanguages, isLocaleRTL } from "./languages.js";
 import { initSettingsUI } from "./settings-ui.js";
@@ -218,15 +218,13 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		},
 	});
 
-	const { updateDisabledStates } = initSettingsUI({
+	const { updateDisabledStates, populateCameraList } = initSettingsUI({
 		settingsCategories,
 		uiContainer,
 		t,
 		s,
 		getSetOptionsFunction: () => setOptions,
 	});
-
-	const cameraSelect = uiContainer.querySelector(".tracky-mouse-camera-select");
 
 	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
@@ -500,79 +498,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	};
 
 	paused = !s.startEnabled;
-
-	let populateCameraList = () => { return Promise.resolve(); };
-	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-		populateCameraList = () => {
-			let matchedCameraIdDeferred = createDeferred();
-			navigator.mediaDevices.enumerateDevices().then((devices) => {
-				const videoDevices = devices.filter(device => device.kind === 'videoinput');
-
-				let knownCameras = {};
-				try {
-					knownCameras = JSON.parse(localStorage.getItem("tracky-mouse-known-cameras")) || {};
-				} catch (error) {
-					console.error("Failed to parse known cameras from localStorage", error);
-				}
-				let knownCamerasChanged = false;
-				for (const device of videoDevices) {
-					if (device.deviceId && device.label) {
-						if (!knownCameras[device.deviceId] || knownCameras[device.deviceId].name !== device.label) {
-							knownCameras[device.deviceId] = { name: device.label };
-							knownCamerasChanged = true;
-						}
-					}
-				}
-				if (knownCamerasChanged) {
-					try {
-						localStorage.setItem("tracky-mouse-known-cameras", JSON.stringify(knownCameras));
-					} catch (error) {
-						console.error("Failed to store known cameras in localStorage", error);
-					}
-				}
-
-				cameraSelect.innerHTML = "";
-
-				const defaultOption = document.createElement("option");
-				defaultOption.value = "";
-				defaultOption.text = t("settings.cameraSource.defaultCamera", { defaultValue: "Default" });
-				cameraSelect.appendChild(defaultOption);
-
-				let matchingDeviceId = "";
-				for (const device of videoDevices) {
-					const option = document.createElement('option');
-					option.value = device.deviceId;
-					option.text = device.label || t("settings.cameraSource.numberedCamera", { defaultValue: "Camera %0" }).replace("%0", cameraSelect.length);
-					cameraSelect.appendChild(option);
-					if (device.deviceId === s.cameraDeviceId) {
-						matchingDeviceId = device.deviceId;
-					} else if (device.label === knownCameras[s.cameraDeviceId]?.name) {
-						matchingDeviceId ||= device.deviceId;
-					}
-				}
-
-				// Defaulting to "Default" would imply a preference isn't stored...
-				// but would it be more friendly anyways?
-				// cameraSelect.value = found ? s.cameraDeviceId : "";
-
-				// Show a placeholder for the selected camera
-				if (s.cameraDeviceId && !matchingDeviceId) {
-					const option = document.createElement("option");
-					option.value = s.cameraDeviceId;
-					const knownInfo = knownCameras[s.cameraDeviceId];
-					option.text = knownInfo ? `${knownInfo.name} (${t("settings.cameraSource.unavailableCameraAdjective", { defaultValue: "Unavailable" })})` : t("settings.cameraSource.unavailableCamera", { defaultValue: "Unavailable camera" });
-					cameraSelect.appendChild(option);
-					cameraSelect.value = s.cameraDeviceId;
-				} else {
-					cameraSelect.value = matchingDeviceId;
-				}
-				matchedCameraIdDeferred.resolve(matchingDeviceId);
-			});
-			return matchedCameraIdDeferred.promise;
-		};
-		populateCameraList();
-		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
-	}
 
 	const settingsLoadedPromise = loadOptions(true);
 
