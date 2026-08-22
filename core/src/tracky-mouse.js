@@ -1,7 +1,7 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 export const TrackyMouse = {
-	dependenciesRoot: new URL("..", import.meta.url).href,
+	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
 };
 
 // Deprecation notice for `TrackyMouse.dependenciesRoot`
@@ -17,7 +17,6 @@ Object.defineProperty(TrackyMouse, "dependenciesRoot", {
 });
 
 TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
-	TrackyMouse.dependenciesRoot = TrackyMouse.dependenciesRoot.replace(/\/+$/, "");
 	const loadScript = src => {
 		return new Promise((resolve, reject) => {
 			// This wouldn't wait for them to load
