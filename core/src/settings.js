@@ -2,7 +2,7 @@ import { setAudioEnabled } from "./audio.js";
 import { availableLanguages, getLanguageFlagEmoji, languageNames, } from "./languages.js";
 import { TrackyMouse } from "./tracky-mouse.js";
 
-// TODO: clean up signature which is currently "whatever dependencies were needed to extract this code to a new file"
+// TODO: clean up signature which is roughly "whatever dependencies were needed to extract this code to a new file"
 export function getSettingsCategories({
 	t,
 	locale,
@@ -11,7 +11,7 @@ export function getSettingsCategories({
 	s,
 	isDesktopApp,
 	clickingModeSupported,
-	getCameraVideo,
+	cameraVideo,
 	setPaused,
 }) {
 
@@ -389,7 +389,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 							return;
 						}
 
-						const activeStream = getCameraVideo().srcObject;
+						const activeStream = cameraVideo.srcObject;
 						const activeDeviceId = activeStream?.getVideoTracks()[0]?.getSettings()?.deviceId;
 						const selectedDeviceName = knownCameras[activeDeviceId]?.name || t("settings.cameraSource.defaultCamera", { defaultValue: "Default" });
 

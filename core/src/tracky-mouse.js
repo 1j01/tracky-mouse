@@ -201,6 +201,9 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
 	}
 
+	const cameraVideo = document.createElement('video');
+	cameraVideo.setAttribute('playsinline', ''); // required to work in iOS 11 & up
+
 	// Settings (initialized later; defaults are defined in settingsCategories)
 	const s = {};
 
@@ -212,7 +215,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		s,
 		isDesktopApp,
 		clickingModeSupported,
-		getCameraVideo: () => cameraVideo,
+		cameraVideo,
 		setPaused: (value) => {
 			paused = value;
 		},
@@ -245,10 +248,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	pointerEl.className = "tracky-mouse-pointer";
 	pointerEl.style.display = "none";
 	document.body.appendChild(pointerEl);
-
-	let cameraVideo = document.createElement('video');
-	// required to work in iOS 11 & up:
-	cameraVideo.setAttribute('playsinline', '');
 
 	let stats;
 	if (statsJs) {
