@@ -1,7 +1,7 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 import { MESH_ANNOTATIONS } from "./constants.js";
-import { isSelectorValid, signedDistancePointLine } from "./helpers.js";
+import { averagePoints, isSelectorValid, signedDistancePointLine } from "./helpers.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
@@ -325,17 +325,6 @@ const initDwellClicking = (config) => {
 			bubbles: true,
 			cancelable: true,
 		};
-	};
-
-	const averagePoints = (points) => {
-		const average = { x: 0, y: 0 };
-		for (const point of points) {
-			average.x += point.x;
-			average.y += point.y;
-		}
-		average.x /= points.length;
-		average.y /= points.length;
-		return average;
 	};
 
 	const update = () => {

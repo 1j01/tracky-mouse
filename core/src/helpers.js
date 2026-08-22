@@ -20,3 +20,14 @@ export function signedDistancePointLine(point, a, b) {
 
 	return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 }
+
+export function averagePoints(points) {
+	const average = { x: 0, y: 0 };
+	for (const point of points) {
+		average.x += point.x;
+		average.y += point.y;
+	}
+	average.x /= points.length;
+	average.y /= points.length;
+	return average;
+};
