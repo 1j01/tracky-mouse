@@ -1561,10 +1561,10 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		middle: false,
 	};
 	let mouseButtonUntilMouthCloses = -1;
-	let virtualJoystickX = 0; // used for joystick/dpad movement modes
+	let virtualJoystickX = 0; // used for joystick/d-pad movement modes
 	let virtualJoystickY = 0;
-	let virtualDPadAngle = Infinity; // used for dpad movement modes
-	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/dpad movement modes
+	let virtualDPadAngle = Infinity; // used for d-pad movement modes
+	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/d-pad movement modes
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -1922,7 +1922,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		// Q: If Electron has such a problem, would it not occur in the later phases?
 		// Phase 2+3 should never occur in Electron.
 		// In fact, we can guard against this.
-		// Although, if phase 2+3 are only enterred on failure,
+		// Although, if phase 2+3 are only entered on failure,
 		// it can't really be a problem, can it?
 		//
 		// Q: Will this cause unnecessary prompts?
@@ -3291,7 +3291,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
 					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 1;
-					const joystickAngleHysterisis = 0.3; // fraction of dpad direction arc beyond the arc where it will switch to a different direction
+					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
 
 					if (s.headTrackingMovementMode !== "direct") {
 
@@ -3309,7 +3309,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 
 								if (
 									!isFinite(virtualDPadAngle) ||
-									Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysterisis)
+									Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysteresis)
 								) {
 									virtualDPadAngle = angle;
 									virtualJoystickSpeedRampStartTime = performance.now();
