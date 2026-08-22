@@ -1,5 +1,6 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
+import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
 import { MESH_ANNOTATIONS } from "./constants.js";
 import { averagePoints, isSelectorValid, signedDistancePointLine } from "./helpers.js";
 import { availableLanguages, getLanguageFlagEmoji, isLocaleRTL, languageNames } from "./languages.js";
@@ -59,10 +60,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 };
 
 const dwellClickers = [];
-
-let playSound = () => { console.log("audio module not loaded yet; can't play sound effect"); };
-let initialAudioEnabled = false;
-let setAudioEnabled = (enabled) => { initialAudioEnabled = enabled; };
 
 /**
  * @param {Object} config
@@ -595,28 +592,6 @@ TrackyMouse.cleanupDwellClicking = function () {
 	}
 };
 
-TrackyMouse._initAudio = async function () {
-	let module;
-	try {
-		// console.log("Loading audio support...");
-		module = await import("./audio.js");
-	} catch (e) {
-		console.warn("Failed to load audio module, click sounds will be disabled:", e);
-	}
-	// console.log("Audio module loaded.");
-	try {
-		const { initAudio } = module;
-		initAudio();
-		playSound = module.playSound;
-		setAudioEnabled = module.setAudioEnabled;
-		setAudioEnabled(initialAudioEnabled);
-		// console.log("Audio is initially " + (initialAudioEnabled ? "enabled" : "disabled"));
-	} catch (e) {
-		console.warn("Failed to initialize audio support, click sounds will be disabled:", e);
-	}
-	return module;
-};
-
 TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const {
@@ -639,13 +614,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	/** @type {SleepSweep | null} */
 	let sleepSweep = null;
 
-	TrackyMouse._initAudio().then((module) => {
-		// _initAudio warns in the console and resolves to undefined if it fails to load audio support
-		if (module) {
-			const { SleepSweep } = module;
-			sleepSweep = new SleepSweep();
-		}
-	});
+	try {
+		initAudio();
+		sleepSweep = new SleepSweep();
+	} catch (e) {
+		console.warn("Failed to initialize audio support, click sounds will be disabled:", e);
+	}
 
 	const isDesktopApp = !!window.electronAPI;
 
