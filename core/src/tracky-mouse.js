@@ -1,6 +1,7 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 import { MESH_ANNOTATIONS } from "./constants.js";
+import { isSelectorValid } from "./helpers.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
@@ -55,13 +56,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 		return Promise.all(moreScriptFiles.map(loadScript));
 	});
 };
-
-const isSelectorValid = ((dummyElement) =>
-	(selector) => {
-		try { dummyElement.querySelector(selector); } catch { return false; }
-		return true;
-	})(document.createDocumentFragment());
-
 
 const dwellClickers = [];
 
