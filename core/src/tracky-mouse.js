@@ -226,21 +226,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		getSetOptionsFunction: () => setOptions,
 	});
 
-	const runAtLoginCheckbox = uiContainer.querySelector(".tracky-mouse-run-at-login");
-	const swapMouseButtonsCheckbox = uiContainer.querySelector(".tracky-mouse-swap-mouse-buttons");
-	const swapMouseButtonsLabel = uiContainer.querySelector("label[for='tracky-mouse-swap-mouse-buttons']");
 	const cameraSelect = uiContainer.querySelector(".tracky-mouse-camera-select");
 
 	if (window.electronAPI) {
 		// Hide the desktop app download message if we're in the desktop app
 		// Might be good to also hide it, or change it, when on a mobile device
 		desktopAppDownloadMessage.hidden = true;
-
-		// Disable the "run at login" option if the app isn't packaged,
-		// as it's not set up to work in development mode.
-		window.electronAPI.getIsPackaged().then((isPackaged) => {
-			runAtLoginCheckbox.disabled = !isPackaged;
-		});
 	}
 
 	let canvas = uiContainer.querySelector(".tracky-mouse-canvas");
@@ -581,19 +572,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		};
 		populateCameraList();
 		navigator.mediaDevices.addEventListener('devicechange', populateCameraList);
-	}
-
-	// Handle right click on "swap mouse buttons", so it doesn't leave users stranded right-clicking.
-	// Note that if you click outside the application window, hiding it behind another window, or minimize it,
-	// you can still be left in a tricky situation.
-	// A more general safety net would be a "revert changes?" timer (https://github.com/1j01/tracky-mouse/issues/43)
-	// But this is good to have in any case, since you don't want to have to wait for a timeout if you don't have to.
-	for (const el of [swapMouseButtonsLabel, swapMouseButtonsCheckbox]) {
-		el.addEventListener("contextmenu", (e) => {
-			e.preventDefault();
-			swapMouseButtonsCheckbox.checked = !swapMouseButtonsCheckbox.checked;
-			swapMouseButtonsCheckbox.dispatchEvent(new Event("change"));
-		});
 	}
 
 	const settingsLoadedPromise = loadOptions(true);
