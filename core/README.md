@@ -50,7 +50,9 @@ import "tracky-mouse/tracky-mouse.css";
 
 ### Lazy loading
 
-It's also possible to load the library asynchronously with:
+If the library will only be used when enabled by the user, you might want to delay loading it until needed.
+
+In this case, you can load it asynchronously with dynamic import:
 ```javascript
 const { TrackyMouse } = await import("tracky-mouse");
 ```
