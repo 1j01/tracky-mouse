@@ -1,7 +1,7 @@
 /* global jsfeat, Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 import { MESH_ANNOTATIONS } from "./constants.js";
-import { isSelectorValid } from "./helpers.js";
+import { isSelectorValid, signedDistancePointLine } from "./helpers.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
@@ -3302,22 +3302,6 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			}
 		}
 		pointTracker.addPoint(x, y);
-	}
-
-	/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
-	function signedDistancePointLine(point, a, b) {
-		const [px, py] = point;
-		const [x1, y1] = a;
-		const [x2, y2] = b;
-
-		const dx = x2 - x1;
-		const dy = y2 - y1;
-
-		// Perpendicular (normal) vector
-		const nx = -dy;
-		const ny = dx;
-
-		return ((px - x1) * nx + (py - y1) * ny) / Math.hypot(nx, ny);
 	}
 
 	let lastTimestamp = -Infinity;
