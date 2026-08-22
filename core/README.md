@@ -19,14 +19,11 @@ npm install tracky-mouse
 
 ## Usage
 
-If you are using a bundler like Webpack or Rollup, you can import the library like this:
+### Without a bundler
 
-```javascript
-import { TrackyMouse } from "tracky-mouse";
-```
-
-Without a bundler, you can use an import map:
+Import the library as an ES module and include its stylesheet in your HTML:
 ```html
+<link rel="stylesheet" href="path/to/tracky-mouse/tracky-mouse.css">
 <script type="importmap">
 {
 	"imports": {
@@ -39,16 +36,25 @@ import { TrackyMouse } from "tracky-mouse";
 </script>
 ```
 
+### With a bundler
+
+If you're using a bundler like Webpack or Rollup, you can import it directly from the package:
+```javascript
+import { TrackyMouse } from "tracky-mouse";
+```
+
+But don't forget the stylesheet! You can import it in your JavaScript if your bundler supports CSS imports:
+```javascript
+import "tracky-mouse/tracky-mouse.css";
+```
+
+### Lazy loading
+
 It's also possible to load the library asynchronously with:
 ```javascript
 const { TrackyMouse } = await import("tracky-mouse");
 ```
 
-You also need to include the stylesheet, which is in the same directory as the script.
-
-```html
-<link rel="stylesheet" href="path/to/tracky-mouse/tracky-mouse.css">
-```
 
 ## Head Tracking
 
