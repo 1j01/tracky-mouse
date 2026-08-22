@@ -1162,7 +1162,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						}
 
 						// TODO: move facial gesture recognition code to a separate file
-						function detectBlinks() {
+						function detectBlinks(annotations, blinkInfo) {
 							// Note: currently head tilt matters a lot, but ideally it should not.
 							// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 							//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -1252,7 +1252,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							return eyes;
 						}
 
-						function detectMouthOpen() {
+						function detectMouthOpen(annotations, mouthInfo) {
 							const prevThresholdMet = mouthInfo?.thresholdMet;
 							const mouth = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
 							const thresholdHigh = 0.25;
@@ -1264,8 +1264,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 						const prevMouthOpen = mouthInfo?.thresholdMet;
 
-						blinkInfo = detectBlinks();
-						mouthInfo = detectMouthOpen();
+						blinkInfo = detectBlinks(annotations, blinkInfo);
+						mouthInfo = detectMouthOpen(annotations, mouthInfo);
 						if (!blinkInfo.rightEye.open && !blinkInfo.leftEye.open) {
 							sleepGestureProgress += deltaTime / sleepGestureEyesClosedDuration;
 							sleepGestureProgress = Math.min(sleepGestureProgress, 1);
