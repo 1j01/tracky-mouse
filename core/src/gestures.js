@@ -32,7 +32,7 @@ function getAspectMetrics(upperContour, lowerContour) {
 	};
 }
 
-export function detectBlinks(annotations, blinkInfo) {
+function detectBlinks(annotations, blinkInfo) {
 	// Note: currently head tilt matters a lot, but ideally it should not.
 	// - When moving closer to the camera, theoretically the eye size to head size ratio increases.
 	//   (if you can hold your eye still, you can test by moving nearer to / further from the camera (or moving the camera))
@@ -122,7 +122,7 @@ export function detectBlinks(annotations, blinkInfo) {
 	return eyes;
 }
 
-export function detectMouthOpen(annotations, mouthInfo) {
+function detectMouthOpen(annotations, mouthInfo) {
 	const prevThresholdMet = mouthInfo?.thresholdMet;
 	const mouth = getAspectMetrics(annotations.lipsUpperInner, annotations.lipsLowerInner);
 	const thresholdHigh = 0.25;
