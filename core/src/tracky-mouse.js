@@ -329,9 +329,9 @@ const initDwellClicking = (config) => {
 
 	const averagePoints = (points) => {
 		const average = { x: 0, y: 0 };
-		for (const pointer of points) {
-			average.x += pointer.x;
-			average.y += pointer.y;
+		for (const point of points) {
+			average.x += point.x;
+			average.y += point.y;
 		}
 		average.x /= points.length;
 		average.y /= points.length;
