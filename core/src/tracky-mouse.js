@@ -365,6 +365,7 @@ const initDwellClicking = (config) => {
 				const apparentHoverCandidate = getHoverCandidate(hoverCandidate.x, hoverCandidate.y);
 				const showOccluderIndicator = (occluder) => {
 					const occluderIndicator = document.createElement("div");
+					occluderIndicator.className = "tracky-mouse-occluder-indicator";
 					const occluderRect = occluder.getBoundingClientRect();
 					const outlineWidth = 4;
 					occluderIndicator.style.pointerEvents = "none";
@@ -4673,6 +4674,7 @@ TrackyMouse.initScreenOverlay = () => {
 	const hideNearCursorEls = document.querySelectorAll(".tracky-mouse-hide-near-cursor");
 
 	const inputFeedbackCanvas = document.createElement("canvas");
+	inputFeedbackCanvas.className = "tracky-mouse-input-feedback-canvas";
 	inputFeedbackCanvas.style.position = "fixed";
 	inputFeedbackCanvas.style.zIndex = "899990"; // just below .tracky-mouse-pointer
 	inputFeedbackCanvas.style.top = "0";
