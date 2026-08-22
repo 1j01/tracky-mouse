@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   You'll need an [`importmap`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) in your HTML, or a bundler like Webpack, Rollup, or Vite, to resolve the module specifier `"tracky-mouse"` to the actual file path.
 
+### Deprecated
+
+- `TrackyMouse.dependenciesRoot` is no longer needed. You can remove it from your code.
+
 ### Added
 
 - **Cursor movement > Movement mode (experimental)** setting, with options to move the cursor continuously in a direction instead of only as you move your head.

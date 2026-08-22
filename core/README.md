@@ -110,9 +110,10 @@ TrackyMouse.loadDependencies().then(function() {
 });
 ```
 
-### `TrackyMouse.dependenciesRoot`
+### `TrackyMouse.dependenciesRoot` (deprecated)
 
-Set this to the path to the folder where you installed tracky-mouse, without a trailing slash.
+Previously, it was required to set this to the path to the folder where you installed tracky-mouse.
+It is now inferred from the location of the `tracky-mouse.js` module.
 
 ### `TrackyMouse.loadDependencies([options])`
 
