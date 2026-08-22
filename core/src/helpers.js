@@ -5,6 +5,17 @@ export const isSelectorValid = ((dummyElement) =>
 		return true;
 	})(document.createDocumentFragment());
 
+
+/** Basically Promise.withResolvers (but I'm not sure browser support is good enough) */
+export function createDeferred() {
+	let resolve, reject;
+	const promise = new Promise((res, rej) => {
+		resolve = res;
+		reject = rej;
+	});
+	return { promise, resolve, reject };
+}
+
 /** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
 export function signedDistancePointLine(point, a, b) {
 	const [px, py] = point;

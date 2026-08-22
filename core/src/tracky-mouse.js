@@ -3,7 +3,7 @@
 import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
 import { MESH_ANNOTATIONS } from "./constants.js";
 import { initDwellClicking } from "./dwell-clicker.js";
-import { signedDistancePointLine } from "./helpers.js";
+import { createDeferred, signedDistancePointLine } from "./helpers.js";
 import { initScreenOverlay } from "./hud.js";
 import { availableLanguages, isLocaleRTL } from "./languages.js";
 import { initSettingsUI } from "./settings-ui.js";
@@ -519,16 +519,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	};
 
 	paused = !s.startEnabled;
-
-	// Basically Promise.withResolvers (but I'm not sure browser support is good enough)
-	function createDeferred() {
-		let resolve, reject;
-		const promise = new Promise((res, rej) => {
-			resolve = res;
-			reject = rej;
-		});
-		return { promise, resolve, reject };
-	}
 
 	let populateCameraList = () => { return Promise.resolve(); };
 	if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
