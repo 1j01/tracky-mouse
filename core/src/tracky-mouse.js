@@ -763,7 +763,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		pointTracker = new PointTracker();
+		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize, ctx, debugPointsCtx });
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -812,7 +812,19 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	/** Optical flow point tracking system */
 	class PointTracker {
-		constructor() {
+		constructor({
+			cameraVideo,
+			maxPoints,
+			pruningGridSize,
+			ctx,
+			debugPointsCtx,
+		}) {
+			this.cameraVideo = cameraVideo;
+			this.maxPoints = maxPoints;
+			this.pruningGridSize = pruningGridSize;
+			this.ctx = ctx;
+			this.debugPointsCtx = debugPointsCtx;
+
 			this.curPyramid = new jsfeat.pyramid_t(3);
 			this.prevPyramid = new jsfeat.pyramid_t(3);
 			this.curPyramid.allocate(cameraVideo.videoWidth, cameraVideo.videoHeight, jsfeat.U8C1_t);
@@ -824,7 +836,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			this.curXY = new Float32Array(maxPoints * 2);
 		}
 		addPoint(x, y) {
-			if (this.pointCount < maxPoints) {
+			if (this.pointCount < this.maxPoints) {
 				let pointIndex = this.pointCount * 2;
 				this.curXY[pointIndex] = x;
 				this.curXY[pointIndex + 1] = y;
@@ -847,16 +859,16 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					}
 					outputPointIndex++;
 				} else {
-					debugPointsCtx.fillStyle = "red";
+					this.debugPointsCtx.fillStyle = "red";
 					const inputOffset = inputPointIndex * 2;
-					circle(debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
-					debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+					circle(this.debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
+					this.debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
 					// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-					ctx.strokeStyle = ctx.fillStyle;
-					ctx.beginPath();
-					ctx.moveTo(this.prevXY[inputOffset], this.prevXY[inputOffset + 1]);
-					ctx.lineTo(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-					ctx.stroke();
+					this.ctx.strokeStyle = this.ctx.fillStyle;
+					this.ctx.beginPath();
+					this.ctx.moveTo(this.prevXY[inputOffset], this.prevXY[inputOffset + 1]);
+					this.ctx.lineTo(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+					this.ctx.stroke();
 				}
 			}
 			this.pointCount = outputPointIndex;
@@ -873,7 +885,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			const grid = {};
 			for (let pointIndex = 0; pointIndex < this.pointCount; pointIndex++) {
 				const pointOffset = pointIndex * 2;
-				grid[`${~~(this.curXY[pointOffset] / pruningGridSize)},${~~(this.curXY[pointOffset + 1] / pruningGridSize)}`] = pointIndex;
+				grid[`${~~(this.curXY[pointOffset] / this.pruningGridSize)},${~~(this.curXY[pointOffset + 1] / this.pruningGridSize)}`] = pointIndex;
 			}
 			const indexesToKeep = Object.values(grid);
 			this.filterPoints((pointIndex) => indexesToKeep.includes(pointIndex));
