@@ -2,7 +2,7 @@
 
 import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
 import { MESH_ANNOTATIONS } from "./constants.js";
-import { dwellClickers, initDwellClicking } from "./dwell-clicker.js";
+import { initDwellClicking } from "./dwell-clicker.js";
 import { signedDistancePointLine } from "./helpers.js";
 import { availableLanguages, getLanguageFlagEmoji, isLocaleRTL, languageNames } from "./languages.js";
 
@@ -62,11 +62,6 @@ TrackyMouse.loadDependencies = function ({ statsJs = false } = {}) {
 
 TrackyMouse.initDwellClicking = function (config) {
 	return initDwellClicking(config);
-};
-TrackyMouse.cleanupDwellClicking = function () {
-	for (const dwellClicker of dwellClickers) {
-		dwellClicker.dispose();
-	}
 };
 
 TrackyMouse._initInner = function (div, initOptions, reinit) {

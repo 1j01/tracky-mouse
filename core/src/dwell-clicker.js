@@ -1,8 +1,6 @@
 import { playSound } from "./audio.js";
 import { averagePoints, isSelectorValid } from "./helpers.js";
 
-export const dwellClickers = [];
-
 /**
  * @param {Object} config
  * @param {string} config.targets - a CSS selector for the elements to click. Anything else will be ignored (except as an occluder).
@@ -521,6 +519,5 @@ export function initDwellClicking(config) {
 		},
 		dispose,
 	};
-	dwellClickers.push(dwellClicker);
 	return dwellClicker;
 };

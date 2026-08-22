@@ -304,12 +304,6 @@ function getCurrentRotation(el) {
 }
 ```
 
-### `TrackyMouse.cleanupDwellClicking()`
-
-**Deprecated**: instead call `dispose()` on the object returned from `initDwellClicking()`.
-
-This stops the dwell clicker.
-
 ## Screen Overlay (HUD)
 
 ### `TrackyMouse.initScreenOverlay()` [UNSTABLE]

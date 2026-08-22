@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- The previously deprecated `TrackyMouse.cleanupDwellClicking()` is removed in this release. Cleanup code should call `dispose()` on the object returned by `TrackyMouse.initDwellClicking()`.
+
 ### Changed
 
 - BREAKING CHANGE: The library now uses ES Module exports instead of a global `TrackyMouse` object. You can import it like this:
