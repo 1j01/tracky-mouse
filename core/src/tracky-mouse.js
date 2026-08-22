@@ -3138,7 +3138,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		pointTracker = new OOPS();
+		pointTracker = new PointTracker();
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -3185,9 +3185,8 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 	// 	}
 	// }
 
-	// Object Oriented Programming Sucks
-	// or Optical flOw Points System
-	class OOPS {
+	/** Optical flow point tracking system */
+	class PointTracker {
 		constructor() {
 			this.curPyramid = new jsfeat.pyramid_t(3);
 			this.prevPyramid = new jsfeat.pyramid_t(3);
@@ -3331,16 +3330,16 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 		}
 	});
 
-	function maybeAddPoint(oops, x, y) {
+	function maybeAddPoint(pointTracker, x, y) {
 		// In order to prefer points that already exist, since they're already tracking,
 		// in order to keep a smooth overall tracking calculation,
 		// don't add points if they're close to an existing point.
 		// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
-		for (let pointIndex = 0; pointIndex < oops.pointCount; pointIndex++) {
+		for (let pointIndex = 0; pointIndex < pointTracker.pointCount; pointIndex++) {
 			let pointOffset = pointIndex * 2;
 			// let distance = Math.hypot(
-			// 	x - oops.curXY[pointOffset],
-			// 	y - oops.curXY[pointOffset + 1]
+			// 	x - pointTracker.curXY[pointOffset],
+			// 	y - pointTracker.curXY[pointOffset + 1]
 			// );
 			// if (distance < 8) {
 			// 	return;
@@ -3350,13 +3349,13 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 			// there's not much point in using Euclidean distance here,
 			// we can just look at x and y distances.
 			if (
-				Math.abs(x - oops.curXY[pointOffset]) <= minDistanceToAddPoint ||
-				Math.abs(y - oops.curXY[pointOffset + 1]) <= minDistanceToAddPoint
+				Math.abs(x - pointTracker.curXY[pointOffset]) <= minDistanceToAddPoint ||
+				Math.abs(y - pointTracker.curXY[pointOffset + 1]) <= minDistanceToAddPoint
 			) {
 				return;
 			}
 		}
-		oops.addPoint(x, y);
+		pointTracker.addPoint(x, y);
 	}
 
 	/** Returns the distance between a point and a line defined by two points, with the sign indicating which side of the line the point is on */
