@@ -1,4 +1,3 @@
-import { maybeAddPoint } from "./point-tracker.js";
 
 /**
  * Optimize the set of tracked points based on regions of the face.
@@ -121,4 +120,34 @@ export function curateTrackedPointsWithClmtrackr({ pointTracker, face }) {
 		}
 		return true;
 	});
+}
+
+function maybeAddPoint(pointTracker, x, y) {
+	const minDistanceToAddPoint = pointTracker.pruningGridSize * 1.5;
+
+	// In order to prefer points that already exist, since they're already tracking,
+	// in order to keep a smooth overall tracking calculation,
+	// don't add points if they're close to an existing point.
+	// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
+	for (let pointIndex = 0; pointIndex < pointTracker.pointCount; pointIndex++) {
+		let pointOffset = pointIndex * 2;
+		// let distance = Math.hypot(
+		// 	x - pointTracker.curXY[pointOffset],
+		// 	y - pointTracker.curXY[pointOffset + 1]
+		// );
+		// if (distance < 8) {
+		// 	return;
+		// }
+		// It might be good to base this on the size of the face...
+		// Also, since we're pruning points based on a grid,
+		// there's not much point in using Euclidean distance here,
+		// we can just look at x and y distances.
+		if (
+			Math.abs(x - pointTracker.curXY[pointOffset]) <= minDistanceToAddPoint ||
+			Math.abs(y - pointTracker.curXY[pointOffset + 1]) <= minDistanceToAddPoint
+		) {
+			return;
+		}
+	}
+	pointTracker.addPoint(x, y);
 }
