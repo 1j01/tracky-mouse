@@ -69,13 +69,15 @@ export function initScreenOverlay() {
 		}
 	}
 
-	function drawVirtualJoystick({ x, y, numDirections, active, deadzone }) {
+	function drawVirtualJoystick({ x, y, numDirections, active, deadzone, joystickSize }) {
 		const ctx = inputFeedbackCtx;
 		const r = inputFeedbackCanvas.width / 2 - 2;
+		const stickR = r * deadzone; // doesn't have to be tied to deadzone, just one choice
+		// TODO: visualize deadzone and active state also for omnidirectional joystick mode
 		ctx.save();
 		ctx.translate(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
-		ctx.fillStyle = "rgba(124, 91, 91, 0.5)";
-		ctx.strokeStyle = "rgb(80, 40, 40)";
+		ctx.fillStyle = "rgba(124, 91, 91, 0.3)";
+		ctx.strokeStyle = "rgba(80, 40, 40, 0.3)";
 		ctx.beginPath();
 		ctx.arc(0, 0, r, 0, 2 * Math.PI);
 		ctx.fill();
@@ -101,21 +103,21 @@ export function initScreenOverlay() {
 				ctx.arc(0, 0, r, angleStart, angleEnd);
 				ctx.arc(0, 0, deadzone * r, angleEnd, angleStart, true);
 				ctx.closePath();
-				ctx.fillStyle = active && i === activeDirection ? "rgba(255, 0, 0, 0.77)" : "rgba(124, 91, 91, 0.5)";
+				ctx.fillStyle = active && i === activeDirection ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)";
 				ctx.fill();
-				ctx.strokeStyle = active && i === activeDirection ? "rgb(255, 160, 160)" : "rgb(80, 40, 40)";
+				ctx.strokeStyle = active && i === activeDirection ? "rgba(255, 160, 160, 0.7)" : "rgba(80, 40, 40, 0.3)";
 				ctx.lineWidth = 1;
 				ctx.stroke();
 			}
 		}
 
-		ctx.fillStyle = "rgba(255, 80, 80, 0.77)";
-		ctx.strokeStyle = "rgb(255, 160, 160)";
+		ctx.fillStyle = "rgba(255, 80, 80, 0.5)";
+		ctx.strokeStyle = "rgba(255, 160, 160, 0.7)";
 		ctx.beginPath();
 		// TODO: minimize number of places x axis is negated throughout the codebase
-		ctx.arc(-x * (inputFeedbackCanvas.width / 2), y * (inputFeedbackCanvas.height / 2), inputFeedbackCanvas.width / 5, 0, 2 * Math.PI);
+		ctx.arc(-x * r / joystickSize, y * r / joystickSize, stickR, 0, 2 * Math.PI);
 		ctx.fill();
-		ctx.lineWidth = 1;
+		ctx.lineWidth = 2;
 		ctx.stroke();
 
 		ctx.restore();

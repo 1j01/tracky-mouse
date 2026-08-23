@@ -1595,7 +1595,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						numDirections,
 						used: true, // silly
 						active: false,
-						deadzone: joystickMinSpeedThreshold * joystickSize,
+						deadzone: joystickMinSpeedThreshold,
+						joystickSize,
 					};
 
 					const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
