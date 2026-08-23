@@ -88,10 +88,13 @@ export function initScreenOverlay() {
 			// It might need to be smarter and use magnitude, maybe something like
 			// if you imagine the slotted pathways that a stick shift has,
 			// locking into a lane and requiring a return to center.)
-			const activeDirection = Math.round((Math.atan2(y, -x) + 2 * Math.PI) / (2 * Math.PI) * numDirections) % numDirections;
+			const angle = Math.atan2(y, -x);
+			const activeDirection = (Math.round(
+				(angle / (Math.PI * 2) + 1 + 1 / 4) * numDirections
+			)) % numDirections;
 			for (let i = 0; i < numDirections; i++) {
-				const angleStart = ((i - 1 / 2) / numDirections) * 2 * Math.PI;
-				const angleEnd = ((i + 1 / 2) / numDirections) * 2 * Math.PI;
+				const angleStart = ((i - 1 / 2) / numDirections - 1 / 4) * 2 * Math.PI;
+				const angleEnd = ((i + 1 / 2) / numDirections - 1 / 4) * 2 * Math.PI;
 				ctx.beginPath();
 				ctx.moveTo(0, 0);
 				ctx.arc(0, 0, r, angleStart, angleEnd);
