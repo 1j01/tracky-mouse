@@ -61,10 +61,12 @@ export function initScreenOverlay() {
 			drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
 		}
 		if (virtualJoystick?.used) {
+			inputFeedbackCtx.save();
+			inputFeedbackCtx.translate(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
 			inputFeedbackCtx.fillStyle = "rgba(124, 91, 91, 0.5)";
 			inputFeedbackCtx.strokeStyle = "rgb(80, 40, 40)";
 			inputFeedbackCtx.beginPath();
-			inputFeedbackCtx.arc(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2, inputFeedbackCanvas.width / 2, 0, 2 * Math.PI);
+			inputFeedbackCtx.arc(0, 0, inputFeedbackCanvas.width / 2, 0, 2 * Math.PI);
 			inputFeedbackCtx.fill();
 			inputFeedbackCtx.lineWidth = 1;
 			inputFeedbackCtx.stroke();
@@ -83,8 +85,8 @@ export function initScreenOverlay() {
 					const angleStart = ((i - 1 / 2) / virtualJoystick.numDirections) * 2 * Math.PI;
 					const angleEnd = ((i + 1 / 2) / virtualJoystick.numDirections) * 2 * Math.PI;
 					inputFeedbackCtx.beginPath();
-					inputFeedbackCtx.moveTo(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
-					inputFeedbackCtx.arc(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2, inputFeedbackCanvas.width / 2, angleStart, angleEnd);
+					inputFeedbackCtx.moveTo(0, 0);
+					inputFeedbackCtx.arc(0, 0, inputFeedbackCanvas.width / 2, angleStart, angleEnd);
 					inputFeedbackCtx.closePath();
 					inputFeedbackCtx.fillStyle = i === activeDirection ? "rgba(255, 0, 0, 0.77)" : "rgba(124, 91, 91, 0.5)";
 					inputFeedbackCtx.fill();
@@ -98,10 +100,12 @@ export function initScreenOverlay() {
 			inputFeedbackCtx.strokeStyle = "rgb(255, 160, 160)";
 			inputFeedbackCtx.beginPath();
 			// TODO: minimize number of places x axis is negated throughout the codebase
-			inputFeedbackCtx.arc(inputFeedbackCanvas.width / 2 - virtualJoystick.x * (inputFeedbackCanvas.width / 2), inputFeedbackCanvas.height / 2 + virtualJoystick.y * (inputFeedbackCanvas.height / 2), inputFeedbackCanvas.width / 5, 0, 2 * Math.PI);
+			inputFeedbackCtx.arc(- virtualJoystick.x * (inputFeedbackCanvas.width / 2), virtualJoystick.y * (inputFeedbackCanvas.height / 2), inputFeedbackCanvas.width / 5, 0, 2 * Math.PI);
 			inputFeedbackCtx.fill();
 			inputFeedbackCtx.lineWidth = 1;
 			inputFeedbackCtx.stroke();
+
+			inputFeedbackCtx.restore();
 		}
 	}
 
