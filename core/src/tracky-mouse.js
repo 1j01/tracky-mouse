@@ -1580,14 +1580,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
 
-					virtualJoystickInfo = {
-						x: virtualJoystickX,
-						y: virtualJoystickY,
-						numDirections,
-						used: true, // silly
-						active: false,
-					};
-
 					const joystickMaxSpeed = 30;
 					const joystickDistanceToSpeedExponent = 1;
 					const joystickTimeToSpeedExponent = 0.5;
@@ -1596,6 +1588,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
 					const joystickSize = 0.6;
 					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
+
+					virtualJoystickInfo = {
+						x: virtualJoystickX,
+						y: virtualJoystickY,
+						numDirections,
+						used: true, // silly
+						active: false,
+						deadzone: joystickMinSpeedThreshold * joystickSize,
+					};
 
 					const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
 					if (distance > joystickSize * joystickMinSpeedThreshold) {
