@@ -69,7 +69,7 @@ export function initScreenOverlay() {
 		}
 	}
 
-	function drawVirtualJoystick({ x, y, numDirections, active, deadzone, joystickSize }) {
+	function drawVirtualJoystick({ x, y, numDirections, active, deadzone, maxMagnitude }) {
 		const ctx = inputFeedbackCtx;
 		const r = inputFeedbackCanvas.width / 2 - 2;
 		const stickR = r * deadzone; // doesn't have to be tied to deadzone, just one choice
@@ -131,7 +131,7 @@ export function initScreenOverlay() {
 		ctx.fillStyle = "rgba(255, 80, 80, 0.5)";
 		ctx.strokeStyle = "rgba(255, 160, 160, 0.7)";
 		ctx.beginPath();
-		ctx.arc(x * r / joystickSize, y * r / joystickSize, stickR, 0, 2 * Math.PI);
+		ctx.arc(r * x / maxMagnitude, r * y / maxMagnitude, stickR, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.lineWidth = 2;
 		ctx.stroke();

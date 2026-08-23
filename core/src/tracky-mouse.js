@@ -1589,9 +1589,9 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					const joystickDistanceToSpeedExponent = 1;
 					const joystickTimeToSpeedExponent = 0.5;
 					const joystickSpeedRampTime = 1500; // milliseconds
-					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
-					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
-					const joystickSize = 0.6;
+					const joystickMinSpeedThreshold = 0.3; // fraction of joystickMaxMagnitude; AKA deadzone
+					const joystickMaxSpeedThreshold = 1; // fraction of joystickMaxMagnitude; AKA live-zone?
+					const joystickMaxMagnitude = 0.6;
 					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
 
 					virtualJoystickInfo = {
@@ -1601,11 +1601,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						used: true, // silly
 						active: false,
 						deadzone: joystickMinSpeedThreshold,
-						joystickSize,
+						maxMagnitude: joystickMaxMagnitude,
 					};
 
 					const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
-					if (distance > joystickSize * joystickMinSpeedThreshold) {
+					if (distance > joystickMaxMagnitude * joystickMinSpeedThreshold) {
 						let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
 
 						if (numDirections) {
@@ -1630,7 +1630,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
 						const speed = joystickMaxSpeed * Math.pow(
 							Math.max(0, Math.min(1,
-								((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
+								((distance / joystickMaxMagnitude) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
 							)),
 							joystickDistanceToSpeedExponent
 						) * Math.pow(
@@ -1645,8 +1645,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 					// normalize to within circle
-					// if (distance > joystickSize) {
-					// 	const scale = joystickSize / distance;
+					// if (distance > joystickMaxMagnitude) {
+					// 	const scale = joystickMaxMagnitude / distance;
 					// 	virtualJoystickX *= scale;
 					// 	virtualJoystickY *= scale;
 					// }
