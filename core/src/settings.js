@@ -15,6 +15,7 @@ export function getSettingsCategories({
 	setPaused,
 }) {
 
+	// eslint-disable-next-line no-unused-vars
 	const addExperimentalLabel = (label, hoverText) =>
 		// Note: this is a bit messy. It could replace "%1" within `label` if present; and it's not escaping HTML.
 		t("ui.experimentalLabel", { defaultValue: "%0 (%1Experimental%2)" })
@@ -32,7 +33,7 @@ export function getSettingsCategories({
 			label: t("settings.sections.cursorMovement.label", { defaultValue: "Cursor Movement" }),
 			settings: [
 				{
-					label: addExperimentalLabel(t("settings.movementMode.label", { defaultValue: "Movement mode" }), t("settings.movementMode.experimentalLabelHoverText", { defaultValue: "This is a new feature, and it may not work with all the other settings." })),
+					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }),
 					className: "tracky-mouse-movement-mode",
 					key: "headTrackingMovementMode",
 					type: "dropdown",
