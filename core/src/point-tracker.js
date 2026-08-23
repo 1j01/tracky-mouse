@@ -46,17 +46,6 @@ export class PointTracker {
 					this.prevXY[outputOffset + 1] = this.prevXY[inputOffset + 1];
 				}
 				outputPointIndex++;
-			} else {
-				// this.debugPointsCtx.fillStyle = "red";
-				const inputOffset = inputPointIndex * 2;
-				// circle(this.debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
-				// this.debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				this.ctx.strokeStyle = this.ctx.fillStyle;
-				this.ctx.beginPath();
-				this.ctx.moveTo(this.prevXY[inputOffset], this.prevXY[inputOffset + 1]);
-				this.ctx.lineTo(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				this.ctx.stroke();
 			}
 		}
 		this.pointCount = outputPointIndex;
