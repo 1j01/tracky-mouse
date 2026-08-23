@@ -1359,8 +1359,13 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
 				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
-				const deltaXToMatchTilt = (targetX - mouseX) / screenWidth;
-				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
+				let deltaXToMatchTilt = (targetX - mouseX) / screenWidth;
+				let deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
+				if (s.headTrackingMovementMode !== "direct") {
+					deltaXToMatchTilt = targetX / screenWidth * 2 - 1 - virtualJoystickX;
+					deltaYToMatchTilt = targetY / screenHeight * 2 - 1 - virtualJoystickY;
+				}
+
 				// Slow down movement away from target, speed up movement towards target*
 				// *conditionally. Applies to part of the slider range.
 				// (Hey look, we can reuse the normalize function to choose where on the slider these effects kick in!)
@@ -1459,14 +1464,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					mouseY += deltaY * screenHeight;
 					virtualJoystickInfo = null;
 				} else {
-					// virtualJoystickX += deltaX;
-					// virtualJoystickY += deltaY;
-					// For now, only supporting absolute head tilt
-					// TODO: support 2D point tracking and the "Tilt influence" slider
-					// (complicating factors may include the screen size being baked into certain variables)
-					// TODO: at least use the range offset properly like how `targetX` is calculated with `normalize`
-					virtualJoystickX = -Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
-					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
+					virtualJoystickX += deltaX;
+					virtualJoystickY += deltaY;
 
 					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
 
@@ -1529,11 +1528,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 					// normalize to within circle
-					// if (distance > joystickMaxMagnitude) {
-					// 	const scale = joystickMaxMagnitude / distance;
-					// 	virtualJoystickX *= scale;
-					// 	virtualJoystickY *= scale;
-					// }
+					if (distance > joystickMaxMagnitude) {
+						const scale = joystickMaxMagnitude / distance;
+						virtualJoystickX *= scale;
+						virtualJoystickY *= scale;
+					}
 				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
