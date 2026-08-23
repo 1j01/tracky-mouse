@@ -325,8 +325,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let virtualJoystickX = 0; // used for joystick/d-pad movement modes
 	let virtualJoystickY = 0;
 	let virtualDPadAngle = Infinity; // used for d-pad movement modes
-	let virtualJoystickNumDirections = Infinity; // used for joystick/d-pad movement modes
 	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/d-pad movement modes
+	let virtualJoystickInfo;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -1152,12 +1152,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			headNotFound: !face && !facemeshPrediction,
 			blinkInfo,
 			mouthInfo,
-			virtualJoystick: {
-				x: virtualJoystickX,
-				y: virtualJoystickY,
-				numDirections: virtualJoystickNumDirections,
-				used: s.headTrackingMovementMode !== "direct",
-			},
+			virtualJoystickInfo,
 		});
 
 		if (facemeshPrediction) {
@@ -1573,6 +1568,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				if (s.headTrackingMovementMode === "direct") {
 					mouseX -= deltaX * screenWidth;
 					mouseY += deltaY * screenHeight;
+					virtualJoystickInfo = null;
 				} else {
 					// virtualJoystickX += deltaX;
 					// virtualJoystickY += deltaY;
@@ -1581,6 +1577,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					// (complicating factors may include the screen size being baked into certain variables)
 					virtualJoystickX = Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
 					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
+
+					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
+
+					virtualJoystickInfo = {
+						x: virtualJoystickX,
+						y: virtualJoystickY,
+						numDirections,
+						used: true, // silly
+					};
 
 					const joystickMaxSpeed = 30;
 					const joystickDistanceToSpeedExponent = 1;
@@ -1595,7 +1600,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					if (distance > joystickSize * joystickMinSpeedThreshold) {
 						let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
 
-						const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
 						if (numDirections) {
 							// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
 							// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
@@ -1613,7 +1617,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						} else {
 							virtualDPadAngle = angle;
 						}
-						virtualJoystickNumDirections = numDirections;
 
 						const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
 						const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;

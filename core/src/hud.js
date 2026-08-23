@@ -40,13 +40,13 @@ export function initScreenOverlay() {
 	const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
 
 	function drawInputFeedback({ inputFeedback, isEnabled }) {
-		const { blinkInfo, mouthInfo, virtualJoystick } = inputFeedback;
+		const { blinkInfo, mouthInfo, virtualJoystickInfo } = inputFeedback;
 		inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
 		if (!isEnabled) {
 			return;
 		}
-		if (virtualJoystick?.used) {
-			drawVirtualJoystick(virtualJoystick);
+		if (virtualJoystickInfo?.used) {
+			drawVirtualJoystick(virtualJoystickInfo);
 		}
 		// draw meters for blink and mouth openness
 		// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
