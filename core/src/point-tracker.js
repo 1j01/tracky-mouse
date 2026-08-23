@@ -7,13 +7,11 @@ export class PointTracker {
 		maxPoints,
 		pruningGridSize,
 		ctx,
-		debugPointsCtx,
 	}) {
 		this.cameraVideo = cameraVideo;
 		this.maxPoints = maxPoints;
 		this.pruningGridSize = pruningGridSize;
 		this.ctx = ctx;
-		this.debugPointsCtx = debugPointsCtx;
 
 		this.curPyramid = new jsfeat.pyramid_t(3);
 		this.prevPyramid = new jsfeat.pyramid_t(3);
@@ -49,10 +47,10 @@ export class PointTracker {
 				}
 				outputPointIndex++;
 			} else {
-				this.debugPointsCtx.fillStyle = "red";
+				// this.debugPointsCtx.fillStyle = "red";
 				const inputOffset = inputPointIndex * 2;
-				circle(this.debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
-				this.debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
+				// circle(this.debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
+				// this.debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
 				// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
 				this.ctx.strokeStyle = this.ctx.fillStyle;
 				this.ctx.beginPath();

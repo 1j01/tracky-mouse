@@ -756,15 +756,13 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		cameraVideo.height = cameraVideo.videoHeight;
 		canvas.width = cameraVideo.videoWidth;
 		canvas.height = cameraVideo.videoHeight;
-		debugPointsCanvas.width = cameraVideo.videoWidth;
-		debugPointsCanvas.height = cameraVideo.videoHeight;
 
 		// .tracky-mouse-canvas-container needs aspect-ratio CSS property
 		// so that the video can be scaled to fit the container.
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize, ctx, debugPointsCtx });
+		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize, ctx });
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -788,11 +786,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	canvas.height = defaultHeight;
 	cameraVideo.width = defaultWidth;
 	cameraVideo.height = defaultHeight;
-
-	const debugPointsCanvas = document.createElement("canvas");
-	debugPointsCanvas.width = canvas.width;
-	debugPointsCanvas.height = canvas.height;
-	const debugPointsCtx = debugPointsCanvas.getContext("2d");
 
 	canvas.addEventListener('click', (event) => {
 		if (!pointTracker) {
@@ -1431,8 +1424,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		}
 		ctx.fillStyle = "lime";
 		pointTracker.draw(ctx);
-		debugPointsCtx.fillStyle = "green";
-		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
 			const screenWidth = window.electronAPI ? (virtualDisplayBounds?.width ?? screen.width) : innerWidth;
