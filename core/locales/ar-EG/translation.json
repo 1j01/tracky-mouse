@@ -143,7 +143,6 @@
   "settings.movementMode.description": "اختار إزاي حركة راسك تتحول لحركة المؤشر.",
   "settings.movementMode.direct.description": "بيحرّك المؤشر لما تحرك راسك.",
   "settings.movementMode.direct.label": "🖾 مباشر",
-  "settings.movementMode.experimentalLabelHoverText": "دي ميزة جديدة، وممكن ما تشتغلش مع كل الإعدادات التانية.",
   "settings.movementMode.joystick.description": "بيحرّك المؤشر باستمرار في اتجاه راسك.",
   "settings.movementMode.joystick.label": "● نمط عصا التحكم (أي اتجاه)",
   "settings.movementMode.joystick4dir.description": "بيحرّك المؤشر باستمرار في اتجاه راسك، بس في أربع اتجاهات (فوق، تحت، يمين، وشمال).",

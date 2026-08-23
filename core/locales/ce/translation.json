@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Хьаша хьайо хьуьнга курсора юьххьера юкъара йохьу.",
   "settings.movementMode.direct.description": "Хьо хьайо хьуьнга курсора юьххьера юьйра.",
   "settings.movementMode.direct.label": "🖾 Йоьзина",
-  "settings.movementMode.experimentalLabelHoverText": "ХӀара керла функци яьлла, ца хьажа, цхьаьна массо кепара тохаршца ца болх.",
   "settings.movementMode.joystick.description": "Курсора хьайо хьуьнга юьххьера юкъара йохьу.",
   "settings.movementMode.joystick.label": "● Джойстика санна (массех хан йисте)",
   "settings.movementMode.joystick4dir.description": "Курсора хьайо хьуьнга юьххьера юкъара йохьу, цхьаъ уьйра цхьаьна итт йисте (чу, йисте, хьалха, тӀехьа).",

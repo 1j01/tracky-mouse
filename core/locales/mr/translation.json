@@ -143,7 +143,6 @@
   "settings.movementMode.description": "डोक्याची हालचाल कर्सरच्या हालचालीत कशी रूपांतरित करायची ते निवडा.",
   "settings.movementMode.direct.description": "तुम्ही डोके हलवल्यावर कर्सर हलवतो.",
   "settings.movementMode.direct.label": "🖾 थेट",
-  "settings.movementMode.experimentalLabelHoverText": "हे एक नवीन वैशिष्ट्य आहे आणि इतर सर्व सेटिंग्जसोबत कदाचित कार्य करणार नाही.",
   "settings.movementMode.joystick.description": "तुमच्या डोक्याच्या दिशेने कर्सर सतत हलवतो.",
   "settings.movementMode.joystick.label": "● जॉयस्टिक शैली (कोणतीही दिशा)",
   "settings.movementMode.joystick4dir.description": "तुमच्या डोक्याच्या दिशेने कर्सर सतत हलवतो, परंतु चार दिशांपुरता मर्यादित ठेवतो (वर, खाली, डावीकडे आणि उजवीकडे).",

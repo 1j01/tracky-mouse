@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Válassza ki, hogyan legyen a fejmozgás kurzormozgássá alakítva.",
   "settings.movementMode.direct.description": "A kurzort mozgatja, amikor mozgatja a fejét.",
   "settings.movementMode.direct.label": "🖾 Közvetlen",
-  "settings.movementMode.experimentalLabelHoverText": "Ez egy új funkció, és előfordulhat, hogy nem működik együtt az összes többi beállítással.",
   "settings.movementMode.joystick.description": "Folyamatosan a feje irányába mozgatja a kurzort.",
   "settings.movementMode.joystick.label": "● Joystick stílus (bármely irány)",
   "settings.movementMode.joystick4dir.description": "Folyamatosan a feje irányába mozgatja a kurzort, négy irányra korlátozva (fel, le, balra és jobbra).",

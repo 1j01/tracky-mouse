@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Baş hareketlerinin imleç hareketlerine nasıl dönüştürüleceğini seçin.",
   "settings.movementMode.direct.description": "Başınızı hareket ettirdiğinizde imleci hareket ettirir.",
   "settings.movementMode.direct.label": "🖾 Doğrudan",
-  "settings.movementMode.experimentalLabelHoverText": "Bu yeni bir özelliktir ve diğer tüm ayarlarla çalışmayabilir.",
   "settings.movementMode.joystick.description": "İmleci başınızın yönünde sürekli olarak hareket ettirir.",
   "settings.movementMode.joystick.label": "● Joystick stili (her yön)",
   "settings.movementMode.joystick4dir.description": "İmleci başınızın yönünde sürekli olarak hareket ettirir; dört yönle (yukarı, aşağı, sol ve sağ) sınırlıdır.",

@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Tria com es traduirà el moviment del cap en moviment del cursor.",
   "settings.movementMode.direct.description": "Mou el cursor quan mous el cap.",
   "settings.movementMode.direct.label": "🖾 Directe",
-  "settings.movementMode.experimentalLabelHoverText": "Aquesta és una funció nova i pot ser que no funcioni amb totes les altres opcions.",
   "settings.movementMode.joystick.description": "Mou el cursor contínuament en la direcció del teu cap.",
   "settings.movementMode.joystick.label": "● Estil joystick (qualsevol direcció)",
   "settings.movementMode.joystick4dir.description": "Mou el cursor contínuament en la direcció del teu cap, limitada a quatre direccions (amunt, avall, esquerra i dreta).",

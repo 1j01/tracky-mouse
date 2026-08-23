@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Pilih cara pergerakan kepala diterjemahkan kepada pergerakan kursor.",
   "settings.movementMode.direct.description": "Menggerakkan kursor apabila anda menggerakkan kepala.",
   "settings.movementMode.direct.label": "🖾 Langsung",
-  "settings.movementMode.experimentalLabelHoverText": "Ini ialah ciri baharu dan mungkin tidak berfungsi dengan semua tetapan lain.",
   "settings.movementMode.joystick.description": "Menggerakkan kursor secara berterusan mengikut arah kepala anda.",
   "settings.movementMode.joystick.label": "● Gaya kayu bedik (mana-mana arah)",
   "settings.movementMode.joystick4dir.description": "Menggerakkan kursor secara berterusan mengikut arah kepala anda, terhad kepada empat arah (atas, bawah, kiri dan kanan).",

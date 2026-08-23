@@ -143,7 +143,6 @@
   "settings.movementMode.description": "בחרו כיצד תנועת הראש תתורגם לתנועת הסמן.",
   "settings.movementMode.direct.description": "מזיז את הסמן כשאתם מזיזים את הראש.",
   "settings.movementMode.direct.label": "🖾 ישיר",
-  "settings.movementMode.experimentalLabelHoverText": "זוהי תכונה חדשה, וייתכן שהיא לא תפעל עם כל ההגדרות האחרות.",
   "settings.movementMode.joystick.description": "מזיז את הסמן ברציפות לכיוון הראש.",
   "settings.movementMode.joystick.label": "● סגנון ג׳ויסטיק (כל כיוון)",
   "settings.movementMode.joystick4dir.description": "מזיז את הסמן ברציפות לכיוון הראש, אך מוגבל לארבעה כיוונים (למעלה, למטה, שמאלה וימינה).",

@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Bosh harakatini kursor harakatiga qanday aylantirishni tanlang.",
   "settings.movementMode.direct.description": "Boshni harakatlantirganingizda kursorni harakatlantiradi.",
   "settings.movementMode.direct.label": "🖾 To‘g‘ridan-to‘g‘ri",
-  "settings.movementMode.experimentalLabelHoverText": "Bu yangi funksiya bo‘lib, u boshqa barcha sozlamalar bilan ishlamasligi mumkin.",
   "settings.movementMode.joystick.description": "Kursorni boshingiz yo‘nalishida uzluksiz harakatlantiradi.",
   "settings.movementMode.joystick.label": "● Joystik uslubi (istalgan yo‘nalish)",
   "settings.movementMode.joystick4dir.description": "Kursorni boshingiz yo‘nalishida uzluksiz harakatlantiradi, lekin to‘rtta yo‘nalish bilan cheklaydi (yuqoriga, pastga, chapga va o‘ngga).",

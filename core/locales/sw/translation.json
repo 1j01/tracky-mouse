@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Chagua jinsi mwendo wa kichwa utakavyotafsiriwa kuwa mwendo wa kishale.",
   "settings.movementMode.direct.description": "Husogeza kishale unapohamisha kichwa.",
   "settings.movementMode.direct.label": "🖾 Moja kwa moja",
-  "settings.movementMode.experimentalLabelHoverText": "Hiki ni kipengele kipya, na huenda kisifanye kazi na mipangilio mingine yote.",
   "settings.movementMode.joystick.description": "Husogeza kishale kila wakati kuelekea upande wa kichwa chako.",
   "settings.movementMode.joystick.label": "● Mtindo wa joystick (mwelekeo wowote)",
   "settings.movementMode.joystick4dir.description": "Husogeza kishale kila wakati kuelekea upande wa kichwa chako, ukiweka kikomo kwa mielekeo minne (juu, chini, kushoto na kulia).",

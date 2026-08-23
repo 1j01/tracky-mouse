@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Επιλέξτε πώς η κίνηση του κεφαλιού θα μεταφράζεται σε κίνηση του δρομέα.",
   "settings.movementMode.direct.description": "Μετακινεί τον δρομέα όταν κινείτε το κεφάλι σας.",
   "settings.movementMode.direct.label": "🖾 Άμεση",
-  "settings.movementMode.experimentalLabelHoverText": "Αυτή είναι μια νέα λειτουργία και ενδέχεται να μην λειτουργεί με όλες τις άλλες ρυθμίσεις.",
   "settings.movementMode.joystick.description": "Μετακινεί συνεχώς τον δρομέα προς την κατεύθυνση του κεφαλιού σας.",
   "settings.movementMode.joystick.label": "● Στυλ joystick (οποιαδήποτε κατεύθυνση)",
   "settings.movementMode.joystick4dir.description": "Μετακινεί συνεχώς τον δρομέα προς την κατεύθυνση του κεφαλιού σας, περιορισμένη σε τέσσερις κατευθύνσεις (πάνω, κάτω, αριστερά και δεξιά).",

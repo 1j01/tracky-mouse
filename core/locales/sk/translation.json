@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Vyberte, ako sa majú pohyby hlavy prekladať na pohyby kurzora.",
   "settings.movementMode.direct.description": "Posúva kurzor, keď pohybujete hlavou.",
   "settings.movementMode.direct.label": "🖾 Priamy",
-  "settings.movementMode.experimentalLabelHoverText": "Ide o novú funkciu, ktorá nemusí fungovať so všetkými ostatnými nastaveniami.",
   "settings.movementMode.joystick.description": "Plynulo posúva kurzor v smere vašej hlavy.",
   "settings.movementMode.joystick.label": "● Štýl joysticku (ľubovoľný smer)",
   "settings.movementMode.joystick4dir.description": "Plynulo posúva kurzor v smere vašej hlavy, pričom je obmedzený na štyri smery (hore, dole, doľava a doprava).",

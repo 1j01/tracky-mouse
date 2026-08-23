@@ -143,7 +143,6 @@
   "settings.movementMode.description": "منتخب کریں کہ سر کی حرکت کو کرسر کی حرکت میں کیسے تبدیل کیا جائے۔",
   "settings.movementMode.direct.description": "جب آپ سر ہلاتے ہیں تو کرسر کو حرکت دیتا ہے۔",
   "settings.movementMode.direct.label": "🖾 براہِ راست",
-  "settings.movementMode.experimentalLabelHoverText": "یہ ایک نئی خصوصیت ہے اور ممکن ہے کہ یہ دیگر تمام ترتیبات کے ساتھ کام نہ کرے۔",
   "settings.movementMode.joystick.description": "کرسر کو مسلسل آپ کے سر کی سمت میں حرکت دیتا ہے۔",
   "settings.movementMode.joystick.label": "● جوائس اسٹک انداز (کوئی بھی سمت)",
   "settings.movementMode.joystick4dir.description": "کرسر کو مسلسل آپ کے سر کی سمت میں حرکت دیتا ہے، لیکن چار سمتوں (اوپر، نیچے، بائیں اور دائیں) تک محدود رکھتا ہے۔",

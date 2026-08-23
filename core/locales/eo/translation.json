@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Elektu kiel kapmovo estu tradukata al kursormovo.",
   "settings.movementMode.direct.description": "Movas la kursoron kiam vi movas vian kapon.",
   "settings.movementMode.direct.label": "🖾 Rekta",
-  "settings.movementMode.experimentalLabelHoverText": "Ĉi tio estas nova funkcio, kaj ĝi eble ne funkcios kun ĉiuj aliaj agordoj.",
   "settings.movementMode.joystick.description": "Movas la kursoron senĉese en la direkto de via kapo.",
   "settings.movementMode.joystick.label": "● Stilo de stirstango (ĉiu direkto)",
   "settings.movementMode.joystick4dir.description": "Movas la kursoron senĉese en la direkto de via kapo, limigite al kvar direktoj (supren, malsupren, maldekstren kaj dekstren).",

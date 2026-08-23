@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Aukeratu buruaren mugimendua kurtsorearen mugimendu bihurtzeko modua.",
   "settings.movementMode.direct.description": "Kurtsorea mugitzen du burua mugitzen duzunean.",
   "settings.movementMode.direct.label": "🖾 Zuzena",
-  "settings.movementMode.experimentalLabelHoverText": "Ezaugarri berria da, eta baliteke beste ezarpen guztiekin ez funtzionatzea.",
   "settings.movementMode.joystick.description": "Kurtsorea etengabe mugitzen du zure buruaren norabidean.",
   "settings.movementMode.joystick.label": "● Joystick estiloa (edozein norabide)",
   "settings.movementMode.joystick4dir.description": "Kurtsorea etengabe mugitzen du zure buruaren norabidean, lau norabidetara mugatuta (gora, behera, ezkerrera eta eskuinera).",

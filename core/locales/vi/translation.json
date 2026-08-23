@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Chọn cách chuyển động đầu được chuyển thành chuyển động của con trỏ.",
   "settings.movementMode.direct.description": "Di chuyển con trỏ khi bạn di chuyển đầu.",
   "settings.movementMode.direct.label": "🖾 Trực tiếp",
-  "settings.movementMode.experimentalLabelHoverText": "Đây là tính năng mới và có thể không hoạt động với tất cả các cài đặt khác.",
   "settings.movementMode.joystick.description": "Liên tục di chuyển con trỏ theo hướng đầu của bạn.",
   "settings.movementMode.joystick.label": "● Kiểu cần điều khiển (mọi hướng)",
   "settings.movementMode.joystick4dir.description": "Liên tục di chuyển con trỏ theo hướng đầu của bạn, giới hạn ở bốn hướng (lên, xuống, trái và phải).",

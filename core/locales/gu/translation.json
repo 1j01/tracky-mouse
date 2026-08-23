@@ -143,7 +143,6 @@
   "settings.movementMode.description": "માથાની હિલચાલને કર્સરની હિલચાલમાં કેવી રીતે રૂપાંતરિત કરવી તે પસંદ કરો.",
   "settings.movementMode.direct.description": "તમે માથું હલાવો ત્યારે કર્સરને ખસેડે છે.",
   "settings.movementMode.direct.label": "🖾 સીધું",
-  "settings.movementMode.experimentalLabelHoverText": "આ એક નવી સુવિધા છે અને તે અન્ય તમામ સેટિંગ્સ સાથે કામ ન પણ કરે.",
   "settings.movementMode.joystick.description": "માથાની દિશામાં કર્સરને સતત ખસેડે છે.",
   "settings.movementMode.joystick.label": "● જોયસ્ટિક શૈલી (કોઈપણ દિશા)",
   "settings.movementMode.joystick4dir.description": "માથાની દિશામાં કર્સરને સતત ખસેડે છે, પરંતુ ચાર દિશાઓ સુધી મર્યાદિત છે (ઉપર, નીચે, ડાબે અને જમણે).",

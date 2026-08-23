@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Pilia kun paonan-o an paglihok han ulo iginhuhubad ngadto ha paglihok han cursor.",
   "settings.movementMode.direct.description": "Ginpapa-lihok an cursor kon imo ginpapalihok an imo ulo.",
   "settings.movementMode.direct.label": "🖾 Direkta",
-  "settings.movementMode.experimentalLabelHoverText": "Bag-o ini nga feature, ngan bangin diri ini gumana upod han iba nga mga setting.",
   "settings.movementMode.joystick.description": "Padayon nga ginpapalihok an cursor ha direksyon han imo ulo.",
   "settings.movementMode.joystick.label": "● Estilo hin joystick (bisan ano nga direksyon)",
   "settings.movementMode.joystick4dir.description": "Padayon nga ginpapalihok an cursor ha direksyon han imo ulo, pero upat la nga direksyon an pwede (taas, ubos, wala, ngan tuo).",

@@ -143,7 +143,6 @@
   "settings.movementMode.description": "ਚੁਣੋ ਕਿ ਸਿਰ ਦੀ ਹਿਲਜੁਲ ਨੂੰ ਕਰਸਰ ਦੀ ਹਿਲਜੁਲ ਵਿੱਚ ਕਿਵੇਂ ਬਦਲਿਆ ਜਾਵੇ।",
   "settings.movementMode.direct.description": "ਜਦੋਂ ਤੁਸੀਂ ਸਿਰ ਹਿਲਾਉਂਦੇ ਹੋ ਤਾਂ ਕਰਸਰ ਨੂੰ ਹਿਲਾਉਂਦਾ ਹੈ।",
   "settings.movementMode.direct.label": "🖾 ਸਿੱਧਾ",
-  "settings.movementMode.experimentalLabelHoverText": "ਇਹ ਇੱਕ ਨਵੀਂ ਵਿਸ਼ੇਸ਼ਤਾ ਹੈ ਅਤੇ ਹੋ ਸਕਦਾ ਹੈ ਕਿ ਇਹ ਹੋਰ ਸਾਰੀਆਂ ਸੈਟਿੰਗਾਂ ਨਾਲ ਕੰਮ ਨਾ ਕਰੇ।",
   "settings.movementMode.joystick.description": "ਕਰਸਰ ਨੂੰ ਤੁਹਾਡੇ ਸਿਰ ਦੀ ਦਿਸ਼ਾ ਵਿੱਚ ਲਗਾਤਾਰ ਹਿਲਾਉਂਦਾ ਹੈ।",
   "settings.movementMode.joystick.label": "● ਜੌਇਸਟਿਕ ਸ਼ੈਲੀ (ਕੋਈ ਵੀ ਦਿਸ਼ਾ)",
   "settings.movementMode.joystick4dir.description": "ਕਰਸਰ ਨੂੰ ਤੁਹਾਡੇ ਸਿਰ ਦੀ ਦਿਸ਼ਾ ਵਿੱਚ ਲਗਾਤਾਰ ਹਿਲਾਉਂਦਾ ਹੈ, ਪਰ ਚਾਰ ਦਿਸ਼ਾਵਾਂ (ਉੱਪਰ, ਹੇਠਾਂ, ਖੱਬੇ ਅਤੇ ਸੱਜੇ) ਤੱਕ ਸੀਮਿਤ ਰੱਖਦਾ ਹੈ।",

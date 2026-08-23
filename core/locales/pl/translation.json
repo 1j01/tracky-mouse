@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Wybierz sposób przekształcania ruchów głowy w ruchy kursora.",
   "settings.movementMode.direct.description": "Przesuwa kursor, gdy poruszasz głową.",
   "settings.movementMode.direct.label": "🖾 Bezpośredni",
-  "settings.movementMode.experimentalLabelHoverText": "To nowa funkcja i może nie działać ze wszystkimi innymi ustawieniami.",
   "settings.movementMode.joystick.description": "Ciągle przesuwa kursor w kierunku, w którym zwrócona jest głowa.",
   "settings.movementMode.joystick.label": "● Styl joysticka (dowolny kierunek)",
   "settings.movementMode.joystick4dir.description": "Ciągle przesuwa kursor w kierunku głowy, ograniczając ruch do czterech kierunków (góra, dół, lewo i prawo).",

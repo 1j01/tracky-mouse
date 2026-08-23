@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Välj hur huvudrörelser ska översättas till markörrörelser.",
   "settings.movementMode.direct.description": "Flyttar markören när du rör på huvudet.",
   "settings.movementMode.direct.label": "🖾 Direkt",
-  "settings.movementMode.experimentalLabelHoverText": "Det här är en ny funktion och den kanske inte fungerar med alla andra inställningar.",
   "settings.movementMode.joystick.description": "Flyttar markören kontinuerligt i den riktning som huvudet pekar.",
   "settings.movementMode.joystick.label": "● Joystick-stil (alla riktningar)",
   "settings.movementMode.joystick4dir.description": "Flyttar markören kontinuerligt i huvudets riktning, begränsat till fyra riktningar (upp, ner, vänster och höger).",

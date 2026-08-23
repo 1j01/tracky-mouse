@@ -143,7 +143,6 @@
   "settings.movementMode.description": "頭の動きをカーソルの動きに変換する方法を選択します。",
   "settings.movementMode.direct.description": "頭を動かすとカーソルが動きます。",
   "settings.movementMode.direct.label": "🖾 ダイレクト",
-  "settings.movementMode.experimentalLabelHoverText": "これは新しい機能であり、他のすべての設定と併用できない場合があります。",
   "settings.movementMode.joystick.description": "頭の向いている方向にカーソルを連続的に移動します。",
   "settings.movementMode.joystick.label": "● ジョイスティック方式（全方向）",
   "settings.movementMode.joystick4dir.description": "頭の向いている方向にカーソルを連続的に移動しますが、4方向（上、下、左、右）に限定されます。",

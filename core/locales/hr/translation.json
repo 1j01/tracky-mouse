@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Odaberite kako će se pokreti glave pretvarati u pokrete pokazivača.",
   "settings.movementMode.direct.description": "Pomiče pokazivač kada pomičete glavu.",
   "settings.movementMode.direct.label": "🖾 Izravno",
-  "settings.movementMode.experimentalLabelHoverText": "Ovo je nova značajka i možda neće raditi sa svim ostalim postavkama.",
   "settings.movementMode.joystick.description": "Neprestano pomiče pokazivač u smjeru vaše glave.",
   "settings.movementMode.joystick.label": "● Stil joysticka (bilo koji smjer)",
   "settings.movementMode.joystick4dir.description": "Neprestano pomiče pokazivač u smjeru vaše glave, ograničeno na četiri smjera (gore, dolje, lijevo i desno).",

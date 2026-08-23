@@ -143,7 +143,6 @@
   "settings.movementMode.description": "தலை அசைவு கர்சர் அசைவாக எவ்வாறு மாற்றப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்.",
   "settings.movementMode.direct.description": "நீங்கள் தலையை அசைக்கும்போது கர்சரை நகர்த்தும்.",
   "settings.movementMode.direct.label": "🖾 நேரடி",
-  "settings.movementMode.experimentalLabelHoverText": "இது ஒரு புதிய அம்சம்; மற்ற எல்லா அமைப்புகளுடனும் இது செயல்படாமல் இருக்கலாம்.",
   "settings.movementMode.joystick.description": "உங்கள் தலை இருக்கும் திசையில் கர்சரைத் தொடர்ந்து நகர்த்தும்.",
   "settings.movementMode.joystick.label": "● ஜாய்ஸ்டிக் பாணி (எந்தத் திசையும்)",
   "settings.movementMode.joystick4dir.description": "உங்கள் தலை இருக்கும் திசையில் கர்சரைத் தொடர்ந்து நகர்த்தும்; நான்கு திசைகளுக்கு (மேல், கீழ், இடது, வலது) மட்டும் வரையறுக்கப்பட்டுள்ளது.",

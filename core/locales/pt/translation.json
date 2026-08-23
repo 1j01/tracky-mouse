@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Escolha como os movimentos da cabeça serão traduzidos em movimentos do cursor.",
   "settings.movementMode.direct.description": "Move o cursor quando move a cabeça.",
   "settings.movementMode.direct.label": "🖾 Direto",
-  "settings.movementMode.experimentalLabelHoverText": "Esta é uma nova funcionalidade e pode não funcionar com todas as outras definições.",
   "settings.movementMode.joystick.description": "Move o cursor continuamente na direção da cabeça.",
   "settings.movementMode.joystick.label": "● Estilo joystick (qualquer direção)",
   "settings.movementMode.joystick4dir.description": "Move o cursor continuamente na direção da cabeça, limitado a quatro direções (cima, baixo, esquerda e direita).",

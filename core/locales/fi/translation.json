@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Valitse, miten pään liike muunnetaan kohdistimen liikkeeksi.",
   "settings.movementMode.direct.description": "Siirtää kohdistinta, kun liikutat päätäsi.",
   "settings.movementMode.direct.label": "🖾 Suora",
-  "settings.movementMode.experimentalLabelHoverText": "Tämä on uusi ominaisuus, eikä se välttämättä toimi kaikkien muiden asetusten kanssa.",
   "settings.movementMode.joystick.description": "Liikuttaa kohdistinta jatkuvasti pääsi osoittamaan suuntaan.",
   "settings.movementMode.joystick.label": "● Ohjaintyyli (mikä tahansa suunta)",
   "settings.movementMode.joystick4dir.description": "Liikuttaa kohdistinta jatkuvasti pääsi suuntaan, mutta vain neljään suuntaan (ylös, alas, vasemmalle ja oikealle).",

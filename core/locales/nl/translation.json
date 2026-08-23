@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Kies hoe hoofdbewegingen worden vertaald naar cursorbewegingen.",
   "settings.movementMode.direct.description": "Verplaatst de cursor wanneer je je hoofd beweegt.",
   "settings.movementMode.direct.label": "🖾 Direct",
-  "settings.movementMode.experimentalLabelHoverText": "Dit is een nieuwe functie en werkt mogelijk niet met alle andere instellingen.",
   "settings.movementMode.joystick.description": "Verplaatst de cursor continu in de richting van je hoofd.",
   "settings.movementMode.joystick.label": "● Joystickstijl (elke richting)",
   "settings.movementMode.joystick4dir.description": "Verplaatst de cursor continu in de richting van je hoofd, beperkt tot vier richtingen (omhoog, omlaag, links en rechts).",

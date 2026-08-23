@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Zaɓi yadda za a juya motsin kai zuwa motsin siginan kwamfuta.",
   "settings.movementMode.direct.description": "Yana motsa siginan kwamfuta lokacin da ka motsa kai.",
   "settings.movementMode.direct.label": "🖾 Kai tsaye",
-  "settings.movementMode.experimentalLabelHoverText": "Wannan sabon fasali ne, kuma yana iya rashin aiki tare da duk sauran saituna.",
   "settings.movementMode.joystick.description": "Yana motsa siginan kwamfuta ci gaba da tafiya zuwa inda kai yake.",
   "settings.movementMode.joystick.label": "● Salon joystick (kowace hanya)",
   "settings.movementMode.joystick4dir.description": "Yana motsa siginan kwamfuta ci gaba da tafiya zuwa inda kai yake, amma an iyakance shi zuwa hanyoyi huɗu (sama, ƙasa, hagu, da dama).",

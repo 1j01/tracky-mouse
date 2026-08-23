@@ -143,7 +143,6 @@
   "settings.movementMode.description": "اختر كيفية ترجمة حركة الرأس إلى حركة المؤشر.",
   "settings.movementMode.direct.description": "يحرك المؤشر عندما تحرك رأسك.",
   "settings.movementMode.direct.label": "🖾 مباشر",
-  "settings.movementMode.experimentalLabelHoverText": "هذه ميزة جديدة، وقد لا تعمل مع جميع الإعدادات الأخرى.",
   "settings.movementMode.joystick.description": "يحرك المؤشر باستمرار في اتجاه رأسك.",
   "settings.movementMode.joystick.label": "● نمط عصا التحكم (أي اتجاه)",
   "settings.movementMode.joystick4dir.description": "يحرك المؤشر باستمرار في اتجاه رأسك، مع الاقتصار على أربعة اتجاهات (أعلى، أسفل، يسار، ويمين).",

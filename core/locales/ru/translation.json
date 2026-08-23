@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Выберите, как движения головы будут преобразовываться в движения курсора.",
   "settings.movementMode.direct.description": "Перемещает курсор, когда вы двигаете головой.",
   "settings.movementMode.direct.label": "🖾 Прямой",
-  "settings.movementMode.experimentalLabelHoverText": "Это новая функция, и она может работать не со всеми остальными настройками.",
   "settings.movementMode.joystick.description": "Непрерывно перемещает курсор в направлении вашей головы.",
   "settings.movementMode.joystick.label": "● Стиль джойстика (любое направление)",
   "settings.movementMode.joystick4dir.description": "Непрерывно перемещает курсор в направлении вашей головы, ограничивая движение четырьмя направлениями (вверх, вниз, влево и вправо).",

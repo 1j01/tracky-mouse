@@ -143,7 +143,6 @@
   "settings.movementMode.description": "🫵🗣️➡️🖱️",
   "settings.movementMode.direct.description": "🗣️↔️🖱️",
   "settings.movementMode.direct.label": "🖾 ↔️",
-  "settings.movementMode.experimentalLabelHoverText": "🆕⚙️❓",
   "settings.movementMode.joystick.description": "🗣️➡️🖱️🔄",
   "settings.movementMode.joystick.label": "● 🕹️ ↗️↘️↙️↖️",
   "settings.movementMode.joystick4dir.description": "🗣️➡️🖱️🔄↕️↔️",

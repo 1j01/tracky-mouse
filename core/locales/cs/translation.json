@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Zvolte, jak se má pohyb hlavy převádět na pohyb kurzoru.",
   "settings.movementMode.direct.description": "Pohybuje kurzorem, když pohybujete hlavou.",
   "settings.movementMode.direct.label": "🖾 Přímý",
-  "settings.movementMode.experimentalLabelHoverText": "Toto je nová funkce a nemusí fungovat se všemi ostatními nastaveními.",
   "settings.movementMode.joystick.description": "Plynule pohybuje kurzorem ve směru vaší hlavy.",
   "settings.movementMode.joystick.label": "● Styl joysticku (libovolný směr)",
   "settings.movementMode.joystick4dir.description": "Plynule pohybuje kurzorem ve směru vaší hlavy, omezeně na čtyři směry (nahoru, dolů, doleva a doprava).",

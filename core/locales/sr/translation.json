@@ -143,7 +143,6 @@
   "settings.movementMode.description": "Izaberite kako će se pokreti glave pretvarati u pokrete kursora.",
   "settings.movementMode.direct.description": "Pomera kursor kada pomerate glavu.",
   "settings.movementMode.direct.label": "🖾 Direktno",
-  "settings.movementMode.experimentalLabelHoverText": "Ovo je nova funkcija i možda neće raditi sa svim ostalim podešavanjima.",
   "settings.movementMode.joystick.description": "Neprestano pomera kursor u smeru vaše glave.",
   "settings.movementMode.joystick.label": "● Stil džojstika (bilo koji smer)",
   "settings.movementMode.joystick4dir.description": "Neprestano pomera kursor u smeru vaše glave, ograničeno na četiri smera (gore, dole, levo i desno).",
