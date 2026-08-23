@@ -66,7 +66,7 @@ export function initScreenOverlay() {
 		}
 	}
 
-	function drawVirtualJoystick({ x, y, numDirections }) {
+	function drawVirtualJoystick({ x, y, numDirections, active }) {
 		const ctx = inputFeedbackCtx;
 		const r = inputFeedbackCanvas.width / 2 - 2;
 		ctx.save();
@@ -81,7 +81,7 @@ export function initScreenOverlay() {
 
 		if (numDirections > 0 && numDirections < 360) {
 			// Draw sectors, highlighting the active one.
-			// TODO: show deadzone and don't highlight when in deadzone
+			// TODO: show deadzone
 			// Also, use a single source of truth for the active direction
 			// that works with angle hysteresis* and whatever else.
 			// (*I haven't determined that the hysteresis actually helps.
@@ -96,9 +96,9 @@ export function initScreenOverlay() {
 				ctx.moveTo(0, 0);
 				ctx.arc(0, 0, r, angleStart, angleEnd);
 				ctx.closePath();
-				ctx.fillStyle = i === activeDirection ? "rgba(255, 0, 0, 0.77)" : "rgba(124, 91, 91, 0.5)";
+				ctx.fillStyle = active && i === activeDirection ? "rgba(255, 0, 0, 0.77)" : "rgba(124, 91, 91, 0.5)";
 				ctx.fill();
-				ctx.strokeStyle = i === activeDirection ? "rgb(255, 160, 160)" : "rgb(80, 40, 40)";
+				ctx.strokeStyle = active && i === activeDirection ? "rgb(255, 160, 160)" : "rgb(80, 40, 40)";
 				ctx.lineWidth = 1;
 				ctx.stroke();
 			}

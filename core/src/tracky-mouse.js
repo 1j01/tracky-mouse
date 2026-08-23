@@ -1585,6 +1585,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						y: virtualJoystickY,
 						numDirections,
 						used: true, // silly
+						active: false,
 					};
 
 					const joystickMaxSpeed = 30;
@@ -1631,6 +1632,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						);
 						mouseX -= Math.cos(virtualDPadAngle) * speed;
 						mouseY += Math.sin(virtualDPadAngle) * speed;
+
+						virtualJoystickInfo.active = true;
 					} else {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
