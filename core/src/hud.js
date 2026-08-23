@@ -34,8 +34,6 @@ export function initScreenOverlay() {
 	inputFeedbackCanvas.style.top = "0";
 	inputFeedbackCanvas.style.left = "0";
 	inputFeedbackCanvas.style.pointerEvents = "none";
-	inputFeedbackCanvas.width = 60;
-	inputFeedbackCanvas.height = 60;
 	document.body.appendChild(inputFeedbackCanvas);
 	const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
 
@@ -44,6 +42,11 @@ export function initScreenOverlay() {
 		inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
 		if (!isEnabled) {
 			return;
+		}
+		const targetSize = virtualJoystickInfo?.used ? 60 : 32;
+		if (inputFeedbackCanvas.width !== targetSize || inputFeedbackCanvas.height !== targetSize) {
+			inputFeedbackCanvas.width = targetSize;
+			inputFeedbackCanvas.height = targetSize;
 		}
 		if (virtualJoystickInfo?.used) {
 			drawVirtualJoystick(virtualJoystickInfo);
