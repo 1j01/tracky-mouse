@@ -6,12 +6,10 @@ export class PointTracker {
 		cameraVideo,
 		maxPoints,
 		pruningGridSize,
-		ctx,
 	}) {
 		this.cameraVideo = cameraVideo;
 		this.maxPoints = maxPoints;
 		this.pruningGridSize = pruningGridSize;
-		this.ctx = ctx;
 
 		this.curPyramid = new jsfeat.pyramid_t(3);
 		this.prevPyramid = new jsfeat.pyramid_t(3);

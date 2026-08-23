@@ -762,7 +762,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize, ctx });
+		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize });
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
