@@ -1509,8 +1509,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							virtualDPadAngle = angle;
 						}
 
-						const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
-						const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
+						const timeAtThisSector = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
+						const speedRampOverTime = Math.min(1, timeAtThisSector / joystickSpeedRampTime);
 						const speed = joystickMaxSpeed * Math.pow(
 							Math.max(0, Math.min(1,
 								((distance / joystickMaxMagnitude) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
