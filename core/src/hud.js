@@ -45,6 +45,9 @@ export function initScreenOverlay() {
 		if (!isEnabled) {
 			return;
 		}
+		if (virtualJoystick?.used) {
+			drawVirtualJoystick(virtualJoystick);
+		}
 		// draw meters for blink and mouth openness
 		// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
 		// (Ideally it should stay on top of the taskbar and context menus all the time
@@ -60,9 +63,6 @@ export function initScreenOverlay() {
 		}
 		if (mouthInfo?.used) {
 			drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
-		}
-		if (virtualJoystick?.used) {
-			drawVirtualJoystick(virtualJoystick);
 		}
 	}
 
