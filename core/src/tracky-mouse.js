@@ -325,6 +325,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let virtualJoystickX = 0; // used for joystick/d-pad movement modes
 	let virtualJoystickY = 0;
 	let virtualDPadAngle = Infinity; // used for d-pad movement modes
+	let virtualJoystickNumDirections = Infinity; // used for joystick/d-pad movement modes
 	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/d-pad movement modes
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
@@ -1151,6 +1152,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			headNotFound: !face && !facemeshPrediction,
 			blinkInfo,
 			mouthInfo,
+			virtualJoystick: {
+				x: virtualJoystickX,
+				y: virtualJoystickY,
+				numDirections: virtualJoystickNumDirections,
+				used: s.headTrackingMovementMode !== "direct",
+			},
 		});
 
 		if (facemeshPrediction) {
@@ -1608,6 +1615,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							} else {
 								virtualDPadAngle = angle;
 							}
+							virtualJoystickNumDirections = numDirections;
 
 							const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
 							const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
