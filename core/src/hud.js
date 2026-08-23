@@ -79,7 +79,7 @@ export function initScreenOverlay() {
 		ctx.lineWidth = 1;
 		ctx.stroke();
 
-		if (numDirections < 360) {
+		if (numDirections > 0 && numDirections < 360) {
 			// Draw sectors, highlighting the active one.
 			// TODO: show deadzone and don't highlight when in deadzone
 			// Also, use a single source of truth for the active direction
