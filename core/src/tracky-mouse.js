@@ -1598,7 +1598,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						x: virtualJoystickX,
 						y: virtualJoystickY,
 						numDirections,
-						used: true, // silly
 						active: false,
 						deadzone: joystickMinSpeedThreshold,
 						maxMagnitude: joystickMaxMagnitude,

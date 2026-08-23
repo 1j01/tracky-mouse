@@ -43,12 +43,12 @@ export function initScreenOverlay() {
 		if (!isEnabled) {
 			return;
 		}
-		const targetSize = virtualJoystickInfo?.used ? 60 : 32;
+		const targetSize = virtualJoystickInfo ? 60 : 32;
 		if (inputFeedbackCanvas.width !== targetSize || inputFeedbackCanvas.height !== targetSize) {
 			inputFeedbackCanvas.width = targetSize;
 			inputFeedbackCanvas.height = targetSize;
 		}
-		if (virtualJoystickInfo?.used) {
+		if (virtualJoystickInfo) {
 			drawVirtualJoystick(virtualJoystickInfo);
 		}
 		// draw meters for blink and mouth openness
