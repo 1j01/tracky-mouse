@@ -73,7 +73,6 @@ export function initScreenOverlay() {
 		const ctx = inputFeedbackCtx;
 		const r = inputFeedbackCanvas.width / 2 - 2;
 		const stickR = r * deadzone; // doesn't have to be tied to deadzone, just one choice
-		// TODO: visualize deadzone and active state also for omnidirectional joystick mode
 		ctx.save();
 		ctx.translate(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
 		ctx.fillStyle = "rgba(124, 91, 91, 0.3)";
@@ -109,6 +108,24 @@ export function initScreenOverlay() {
 				ctx.lineWidth = 1;
 				ctx.stroke();
 			}
+		} else {
+			const angle = Math.atan2(y, -x);
+			ctx.beginPath();
+			ctx.arc(0, 0, r, 0, Math.PI * 2);
+			ctx.closePath();
+			ctx.moveTo(deadzone * r, 0);
+			ctx.arc(0, 0, deadzone * r, 0, Math.PI * 2, true);
+			ctx.closePath();
+			// ctx.fillStyle = active ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)";
+			const gradient = ctx.createConicGradient(angle + Math.PI, 0, 0);
+			gradient.addColorStop(0.2, "rgba(124, 91, 91, 0.3)");
+			gradient.addColorStop(0.5, active ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)");
+			gradient.addColorStop(0.8, "rgba(124, 91, 91, 0.3)");
+			ctx.fillStyle = gradient;
+			ctx.fill();
+			ctx.strokeStyle = active ? "rgba(255, 160, 160, 0.7)" : "rgba(80, 40, 40, 0.3)";
+			ctx.lineWidth = 1;
+			ctx.stroke();
 		}
 
 		ctx.fillStyle = "rgba(255, 80, 80, 0.5)";
