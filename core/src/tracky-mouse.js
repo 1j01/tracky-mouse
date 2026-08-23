@@ -1469,7 +1469,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
 
-					const joystickMaxSpeed = 30;
+					const joystickMaxSpeed = 0.5; // pixels per millisecond
 					const joystickDistanceToSpeedExponent = 1;
 					const joystickTimeToSpeedExponent = 1.2;
 					const joystickSpeedRampTime = 2500; // milliseconds
@@ -1520,8 +1520,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							speedRampOverTime,
 							joystickTimeToSpeedExponent
 						);
-						mouseX += Math.cos(virtualDPadAngle) * speed;
-						mouseY += Math.sin(virtualDPadAngle) * speed;
+						mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
+						mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
 
 						virtualJoystickInfo.active = true;
 					} else {
