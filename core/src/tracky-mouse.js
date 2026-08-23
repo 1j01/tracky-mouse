@@ -1630,6 +1630,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							);
 							mouseX -= Math.cos(virtualDPadAngle) * speed;
 							mouseY += Math.sin(virtualDPadAngle) * speed;
+						} else {
+							virtualJoystickSpeedRampStartTime = performance.now();
 						}
 						// normalize to within circle
 						// if (distance > joystickSize) {
@@ -1637,8 +1639,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						// 	virtualJoystickX *= scale;
 						// 	virtualJoystickY *= scale;
 						// }
-					} else {
-						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 
 				}
