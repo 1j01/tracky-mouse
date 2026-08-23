@@ -1442,6 +1442,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 			let [movementX, movementY] = pointTracker.getMovement();
 
+			// Invert X axis of camera video motion to match screen
+			// (The camera VIEW is mirrored by default, but the video data is always opposite to the screen.)
+			movementX *= -1;
+
 			// Acceleration curves add a lot of stability,
 			// letting you focus on a specific point without jitter, but still move quickly.
 
@@ -1470,7 +1474,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
 				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
-				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
+				const deltaXToMatchTilt = (targetX - mouseX) / screenWidth;
 				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
 				// Slow down movement away from target, speed up movement towards target*
 				// *conditionally. Applies to part of the slider range.
@@ -1566,7 +1570,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 			if (!paused) {
 				if (s.headTrackingMovementMode === "direct") {
-					mouseX -= deltaX * screenWidth;
+					mouseX += deltaX * screenWidth;
 					mouseY += deltaY * screenHeight;
 					virtualJoystickInfo = null;
 				} else {
@@ -1575,7 +1579,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					// For now, only supporting absolute head tilt
 					// TODO: support 2D point tracking and the "Tilt influence" slider
 					// (complicating factors may include the screen size being baked into certain variables)
-					virtualJoystickX = Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
+					// TODO: at least use the range offset properly like how `targetX` is calculated with `normalize`
+					virtualJoystickX = -Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
 					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
 
 					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
@@ -1632,7 +1637,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							speedRampOverTime,
 							joystickTimeToSpeedExponent
 						);
-						mouseX -= Math.cos(virtualDPadAngle) * speed;
+						mouseX += Math.cos(virtualDPadAngle) * speed;
 						mouseY += Math.sin(virtualDPadAngle) * speed;
 
 						virtualJoystickInfo.active = true;

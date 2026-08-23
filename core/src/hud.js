@@ -91,7 +91,7 @@ export function initScreenOverlay() {
 			// It might need to be smarter and use magnitude, maybe something like
 			// if you imagine the slotted pathways that a stick shift has,
 			// locking into a lane and requiring a return to center.)
-			const angle = Math.atan2(y, -x);
+			const angle = Math.atan2(y, x);
 			const activeDirection = (Math.round(
 				(angle / (Math.PI * 2) + 1 + 1 / 4) * numDirections
 			)) % numDirections;
@@ -109,7 +109,7 @@ export function initScreenOverlay() {
 				ctx.stroke();
 			}
 		} else {
-			const angle = Math.atan2(y, -x);
+			const angle = Math.atan2(y, x);
 			ctx.beginPath();
 			ctx.arc(0, 0, r, 0, Math.PI * 2);
 			ctx.closePath();
@@ -131,8 +131,7 @@ export function initScreenOverlay() {
 		ctx.fillStyle = "rgba(255, 80, 80, 0.5)";
 		ctx.strokeStyle = "rgba(255, 160, 160, 0.7)";
 		ctx.beginPath();
-		// TODO: minimize number of places x axis is negated throughout the codebase
-		ctx.arc(-x * r / joystickSize, y * r / joystickSize, stickR, 0, 2 * Math.PI);
+		ctx.arc(x * r / joystickSize, y * r / joystickSize, stickR, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.lineWidth = 2;
 		ctx.stroke();
