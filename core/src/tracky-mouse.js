@@ -1570,7 +1570,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			}
 
 			if (!paused) {
-				if (s.headTrackingMovementMode == "direct") {
+				if (s.headTrackingMovementMode === "direct") {
 					mouseX -= deltaX * screenWidth;
 					mouseY += deltaY * screenHeight;
 				} else {
@@ -1591,56 +1591,52 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					const joystickSize = 0.6;
 					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
 
-					if (s.headTrackingMovementMode !== "direct") {
+					const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
+					if (distance > joystickSize * joystickMinSpeedThreshold) {
+						let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
 
-						const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
-						if (distance > joystickSize * joystickMinSpeedThreshold) {
-							let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
+						const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
+						if (numDirections) {
+							// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
+							// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
+							angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
 
-							const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
-							if (numDirections) {
-								// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
-								// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
-								angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
+							const angleDiff = Math.atan2(Math.sin(angle - virtualDPadAngle), Math.cos(angle - virtualDPadAngle));
 
-								const angleDiff = Math.atan2(Math.sin(angle - virtualDPadAngle), Math.cos(angle - virtualDPadAngle));
-
-								if (
-									!isFinite(virtualDPadAngle) ||
-									Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysteresis)
-								) {
-									virtualDPadAngle = angle;
-									virtualJoystickSpeedRampStartTime = performance.now();
-								}
-							} else {
+							if (
+								!isFinite(virtualDPadAngle) ||
+								Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysteresis)
+							) {
 								virtualDPadAngle = angle;
+								virtualJoystickSpeedRampStartTime = performance.now();
 							}
-							virtualJoystickNumDirections = numDirections;
-
-							const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
-							const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
-							const speed = joystickMaxSpeed * Math.pow(
-								Math.max(0, Math.min(1,
-									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
-								)),
-								joystickDistanceToSpeedExponent
-							) * Math.pow(
-								speedRampOverTime,
-								joystickTimeToSpeedExponent
-							);
-							mouseX -= Math.cos(virtualDPadAngle) * speed;
-							mouseY += Math.sin(virtualDPadAngle) * speed;
 						} else {
-							virtualJoystickSpeedRampStartTime = performance.now();
+							virtualDPadAngle = angle;
 						}
-						// normalize to within circle
-						// if (distance > joystickSize) {
-						// 	const scale = joystickSize / distance;
-						// 	virtualJoystickX *= scale;
-						// 	virtualJoystickY *= scale;
-						// }
-					}
+						virtualJoystickNumDirections = numDirections;
 
+						const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
+						const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
+						const speed = joystickMaxSpeed * Math.pow(
+							Math.max(0, Math.min(1,
+								((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
+							)),
+							joystickDistanceToSpeedExponent
+						) * Math.pow(
+							speedRampOverTime,
+							joystickTimeToSpeedExponent
+						);
+						mouseX -= Math.cos(virtualDPadAngle) * speed;
+						mouseY += Math.sin(virtualDPadAngle) * speed;
+					} else {
+						virtualJoystickSpeedRampStartTime = performance.now();
+					}
+					// normalize to within circle
+					// if (distance > joystickSize) {
+					// 	const scale = joystickSize / distance;
+					// 	virtualJoystickX *= scale;
+					// 	virtualJoystickY *= scale;
+					// }
 				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
