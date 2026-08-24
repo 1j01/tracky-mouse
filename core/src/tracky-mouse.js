@@ -1530,7 +1530,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							speedRampOverTime,
 							joystickTimeToSpeedExponent
 						);
-						if (!preventDragging) {
+						if (!preventDragging && isFinite(virtualDPadAngle) && isFinite(speed)) {
 							mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
 							mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
 						}
