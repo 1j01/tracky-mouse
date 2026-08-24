@@ -1529,11 +1529,20 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 					// normalize to within circle
-					if (distance > joystickMaxMagnitude) {
-						const scale = joystickMaxMagnitude / distance;
-						virtualJoystickX *= scale;
-						virtualJoystickY *= scale;
+					// if (distance > joystickMaxMagnitude) {
+					// 	const scale = joystickMaxMagnitude / distance;
+					// 	virtualJoystickX *= scale;
+					// 	virtualJoystickY *= scale;
+					// 	virtualJoystickInfo.x = virtualJoystickX;
+					// 	virtualJoystickInfo.y = virtualJoystickY;
+					// }
+					// normalize to within square
+					if (Math.abs(virtualJoystickX) > joystickMaxMagnitude) {
+						virtualJoystickX = Math.sign(virtualJoystickX) * joystickMaxMagnitude;
 						virtualJoystickInfo.x = virtualJoystickX;
+					}
+					if (Math.abs(virtualJoystickY) > joystickMaxMagnitude) {
+						virtualJoystickY = Math.sign(virtualJoystickY) * joystickMaxMagnitude;
 						virtualJoystickInfo.y = virtualJoystickY;
 					}
 				}
