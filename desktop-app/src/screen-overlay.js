@@ -70,9 +70,3 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	audio?.setAudioEnabled(soundEffectsEnabled);
 
 });
-
-TrackyMouse._initAudio().then((module) => {
-	audio = module;
-}, (e) => {
-	console.warn("Failed to initialize audio module, click sounds will be disabled:", e);
-});
