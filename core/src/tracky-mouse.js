@@ -285,6 +285,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	// maybe should be based on size of head in view?
 	const pruningGridSize = 5;
 
+	const joystickMaxSpeed = 0.5; // pixels per millisecond
+	const joystickDistanceToSpeedExponent = 1;
+	const joystickTimeToSpeedExponent = 1.2;
+	const joystickSpeedRampTime = 2500; // milliseconds
+	const joystickMinSpeedThreshold = 0.3; // fraction of joystickMaxMagnitude; AKA deadzone
+	const joystickMaxSpeedThreshold = 1; // fraction of joystickMaxMagnitude; AKA live-zone?
+	const joystickMaxMagnitude = 0.2;
+	const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
+
 	// Head tracking and facial gesture state
 	// ## Clmtrackr state
 	let face;
@@ -1467,15 +1476,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					virtualJoystickY += deltaY;
 
 					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
-
-					const joystickMaxSpeed = 0.5; // pixels per millisecond
-					const joystickDistanceToSpeedExponent = 1;
-					const joystickTimeToSpeedExponent = 1.2;
-					const joystickSpeedRampTime = 2500; // milliseconds
-					const joystickMinSpeedThreshold = 0.3; // fraction of joystickMaxMagnitude; AKA deadzone
-					const joystickMaxSpeedThreshold = 1; // fraction of joystickMaxMagnitude; AKA live-zone?
-					const joystickMaxMagnitude = 0.2;
-					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
 
 					virtualJoystickInfo = {
 						x: virtualJoystickX,
