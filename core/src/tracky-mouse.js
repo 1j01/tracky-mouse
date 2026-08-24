@@ -1533,6 +1533,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						const scale = joystickMaxMagnitude / distance;
 						virtualJoystickX *= scale;
 						virtualJoystickY *= scale;
+						virtualJoystickInfo.x = virtualJoystickX;
+						virtualJoystickInfo.y = virtualJoystickY;
 					}
 				}
 
