@@ -1365,14 +1365,23 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					return (value - min) / (max - min);
 				}
 
-				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
-				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
+				let targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
+				let targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
 				let deltaXToMatchTilt = (targetX - mouseX) / screenWidth;
 				let deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
 				if (s.headTrackingMovementMode !== "direct") {
-					deltaXToMatchTilt = targetX / screenWidth * 2 - 1 - virtualJoystickX;
-					deltaYToMatchTilt = targetY / screenHeight * 2 - 1 - virtualJoystickY;
+					targetX = targetX / screenWidth * 2 - 1;
+					targetY = targetY / screenHeight * 2 - 1;
+					// normalize to circle
+					const length = Math.hypot(targetX, targetY);
+					if (length > joystickMaxMagnitude) {
+						const scale = joystickMaxMagnitude / length;
+						targetX *= scale;
+						targetY *= scale;
+					}
+					deltaXToMatchTilt = targetX - virtualJoystickX;
+					deltaYToMatchTilt = targetY - virtualJoystickY;
 				}
 
 				// Slow down movement away from target, speed up movement towards target*
@@ -1529,22 +1538,22 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
 					// normalize to within circle
-					// if (distance > joystickMaxMagnitude) {
-					// 	const scale = joystickMaxMagnitude / distance;
-					// 	virtualJoystickX *= scale;
-					// 	virtualJoystickY *= scale;
-					// 	virtualJoystickInfo.x = virtualJoystickX;
-					// 	virtualJoystickInfo.y = virtualJoystickY;
-					// }
-					// normalize to within square
-					if (Math.abs(virtualJoystickX) > joystickMaxMagnitude) {
-						virtualJoystickX = Math.sign(virtualJoystickX) * joystickMaxMagnitude;
+					if (distance > joystickMaxMagnitude) {
+						const scale = joystickMaxMagnitude / distance;
+						virtualJoystickX *= scale;
+						virtualJoystickY *= scale;
 						virtualJoystickInfo.x = virtualJoystickX;
-					}
-					if (Math.abs(virtualJoystickY) > joystickMaxMagnitude) {
-						virtualJoystickY = Math.sign(virtualJoystickY) * joystickMaxMagnitude;
 						virtualJoystickInfo.y = virtualJoystickY;
 					}
+					// normalize to within square
+					// if (Math.abs(virtualJoystickX) > joystickMaxMagnitude) {
+					// 	virtualJoystickX = Math.sign(virtualJoystickX) * joystickMaxMagnitude;
+					// 	virtualJoystickInfo.x = virtualJoystickX;
+					// }
+					// if (Math.abs(virtualJoystickY) > joystickMaxMagnitude) {
+					// 	virtualJoystickY = Math.sign(virtualJoystickY) * joystickMaxMagnitude;
+					// 	virtualJoystickInfo.y = virtualJoystickY;
+					// }
 				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
