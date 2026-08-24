@@ -1365,14 +1365,14 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					return (value - min) / (max - min);
 				}
 
-				let targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
-				let targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
+				let targetX = (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
+				let targetY = normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
-				let deltaXToMatchTilt = (targetX - mouseX) / screenWidth;
-				let deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
+				let deltaXToMatchTilt = targetX - mouseX / screenWidth;
+				let deltaYToMatchTilt = targetY - mouseY / screenHeight;
 				if (s.headTrackingMovementMode !== "direct") {
-					targetX = targetX / screenWidth * 2 - 1;
-					targetY = targetY / screenHeight * 2 - 1;
+					targetX = targetX * 2 - 1;
+					targetY = targetY * 2 - 1;
 					// normalize to circle
 					const length = Math.hypot(targetX, targetY);
 					if (length > joystickMaxMagnitude) {
