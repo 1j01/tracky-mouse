@@ -1422,10 +1422,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			// This applied previously also to release, to help with double clicks,
 			// but this felt bad, and I find personally that I can still do double clicks without that help.
 			const timeSinceMouseDown = performance.now() - lastMouseDownTime;
-			if (timeSinceMouseDown < s.delayBeforeDragging) {
-				deltaX = 0;
-				deltaY = 0;
-			}
+			const preventDragging = timeSinceMouseDown < s.delayBeforeDragging;
 
 			if (debugAcceleration) {
 				const graphWidth = 200;
@@ -1460,8 +1457,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 			if (!paused) {
 				if (s.headTrackingMovementMode === "direct") {
-					mouseX += deltaX * screenWidth;
-					mouseY += deltaY * screenHeight;
+					if (!preventDragging) {
+						mouseX += deltaX * screenWidth;
+						mouseY += deltaY * screenHeight;
+					}
 					virtualJoystickInfo = null;
 				} else {
 					virtualJoystickX += deltaX;
@@ -1520,8 +1519,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							speedRampOverTime,
 							joystickTimeToSpeedExponent
 						);
-						mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
-						mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
+						if (!preventDragging) {
+							mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
+							mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
+						}
 
 						virtualJoystickInfo.active = true;
 					} else {
