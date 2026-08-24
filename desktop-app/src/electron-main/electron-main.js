@@ -706,6 +706,20 @@ const createWindow = () => {
 		return true;
 	}
 
+	function keepOverlayOnTop() {
+		// In case of popup menus (app menus, context menus, or dropdown menus) opening,
+		// we want to make sure the overlay stays on top.
+		// This doesn't work for all cases; for example, the Ubuntu dock context menu
+		// is system UI that behaves a little specially.
+		// Also, for any app that is too slow to open a menu, this will not work (race condition).
+		screenOverlayWindow.hide();
+		screenOverlayWindow.show();
+		setTimeout(() => {
+			screenOverlayWindow.hide();
+			screenOverlayWindow.show();
+		}, 100);
+	}
+
 	ipcMain.on('click', async (_event, x, y, _time) => {
 		if (!isClickingAllowed()) {
 			return;
@@ -720,6 +734,8 @@ const createWindow = () => {
 
 		// const latency = performance.now() - time;
 		// console.log(`click: ${x}, ${y}, latency: ${latency}`);
+
+		keepOverlayOnTop();
 	});
 
 	// Note: buttonStates is redundant now that we do basically the same thing in the renderer process
@@ -752,6 +768,8 @@ const createWindow = () => {
 				buttonStates[buttonName] = false;
 				await mouseUp(buttonName);
 				stateChanged = true;
+
+				keepOverlayOnTop();
 			}
 		}
 

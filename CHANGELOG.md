@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a couple translations in the Emoji locale
 - Fixed behavior when launching the desktop app while it was still opening. Previously it would open multiple windows, and if enabled, fight for control over the mouse cursor. Impatient users should no longer have to worry about double-clicking multiple times. ([issue #130](https://github.com/1j01/tracky-mouse/issues/130))
 - Fixed the ability to add points to the point tracker by clicking on the camera view. Note that the points are still filtered spatially and can disappear over time, so this may not be very useful.
+- The screen overlay (HUD) should now stay on top of more popup menus, including app menus, context menus, and dropdowns. ([issue #14](https://github.com/1j01/tracky-mouse/issues/14))
 
 ## [2.9.0] - 2026-06-02
 
