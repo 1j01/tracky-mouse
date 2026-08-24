@@ -335,7 +335,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let virtualJoystickX = 0; // used for joystick/d-pad movement modes
 	let virtualJoystickY = 0;
 	let virtualDPadAngle = Infinity; // used for d-pad movement modes
-	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/d-pad movement modes
+	let virtualJoystickSpeedRampStartTime = performance.now(); // used for joystick/d-pad movement modes
 	let virtualJoystickInfo;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
