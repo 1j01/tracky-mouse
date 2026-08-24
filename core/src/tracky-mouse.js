@@ -1373,7 +1373,9 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				if (s.headTrackingMovementMode !== "direct") {
 					targetX = targetX * 2 - 1;
 					targetY = targetY * 2 - 1;
-					// normalize to circle
+					// Normalize to within circle, matching later clamping to joystickMaxMagnitude.
+					// If the target isn't constrained to the bounds of what's reachable,
+					// it can lead to wild jitter of the angle of the virtual joystick.
 					const length = Math.hypot(targetX, targetY);
 					if (length > joystickMaxMagnitude) {
 						const scale = joystickMaxMagnitude / length;
