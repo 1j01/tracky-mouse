@@ -51,7 +51,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 let wasDwellClickerEnabled = false;
 electronAPI.onOverlayUpdate((_event, data) => {
 	// console.log("onOverlayUpdate", data);
-	const { isEnabled, clickingMode, soundEffectsEnabled } = data;
+	const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
 
 	screenOverlay.update(data);
 
@@ -59,7 +59,8 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	// Update: I'm now setting `dwellClicker.paused`, just keeping the event dispatching
 	// in case it's needed to cancel a dwell click in progress.
 	// TODO: ensure setting `paused` to `true` cancels any in-progress dwell click.
-	const dwellClickerEnabled = isEnabled && clickingMode === "dwell";
+	const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
+	const dwellClickerEnabled = isEnabled && clickingMode === "dwell" && !pauseDwellClickingDueToJoystickUsage;
 	if (wasDwellClickerEnabled !== dwellClickerEnabled) {
 		document.dispatchEvent(new Event(dwellClickerEnabled ? "mouseenter" : "mouseleave"));
 		window.dispatchEvent(new Event(dwellClickerEnabled ? "focus" : "blur"));
