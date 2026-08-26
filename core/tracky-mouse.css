@@ -399,7 +399,8 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	padding: 8px;
 }
 
-.tracky-mouse-control-row:not(:hover):not(:has(:focus-visible)) .tracky-mouse-setting-reset-button {
+.tracky-mouse-control-row:not(:hover):not(:has(:focus-visible)) .tracky-mouse-setting-reset-button,
+.tracky-mouse-setting-reset-button[disabled] {
 	opacity: 0;
 	pointer-events: none;
 }

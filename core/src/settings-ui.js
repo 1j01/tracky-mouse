@@ -134,13 +134,12 @@ export function initSettingsUI({
 			rowEl.setAttribute("title", setting.description);
 		}
 
-		// TODO: For buttons, which don't have a `default`, reserve some space to match.
+		const resetButton = document.createElement("button");
+		resetButton.className = "tracky-mouse-setting-reset-button";
+		resetButton.textContent = "↩"; // "⟲";
+		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
+		resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
 		if ("default" in setting) {
-			const resetButton = document.createElement("button");
-			resetButton.className = "tracky-mouse-setting-reset-button";
-			resetButton.textContent = "↩"; // "⟲";
-			resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
-			resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
 			resetButton.addEventListener("click", () => {
 				setControlValue(setting.default);
 				loadValueFromControl();
@@ -150,8 +149,14 @@ export function initSettingsUI({
 					func();
 				}
 			});
-			rowEl.prepend(resetButton);
+		} else {
+			// Disabled reset buttons are hidden by CSS
+			// The reset button is still included in the DOM to reserve space
+			// and align controls without reset buttons with those that have them
+			// (The only setting type without a default value is "button", for now at least.)
+			resetButton.disabled = true;
 		}
+		rowEl.prepend(resetButton);
 
 		const control = rowEl.querySelector(`.${setting.className}`);
 		const getControlValue = () => {
