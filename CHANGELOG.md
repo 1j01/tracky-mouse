@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   You'll need an [`importmap`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) in your HTML, or a bundler like Webpack, Rollup, or Vite, to resolve the module specifier `"tracky-mouse"` to the actual file path.
 
+- Increased the maximum for the cursor movement sensitivity and acceleration sliders.
+
 ### Deprecated
 
 - `TrackyMouse.dependenciesRoot` is no longer needed. You can remove it from your code.

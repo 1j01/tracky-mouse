@@ -100,7 +100,7 @@ export function getSettingsCategories({
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 180,
 							default: 25,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -116,7 +116,7 @@ export function getSettingsCategories({
 							inputValueToSettingValue: (inputValue) => inputValue / 1000,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 180,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinSlow", { defaultValue: "Slow" }),
@@ -154,7 +154,7 @@ export function getSettingsCategories({
 							inputValueToSettingValue: (inputValue) => inputValue / 100,
 							type: "slider",
 							min: 0,
-							max: 100,
+							max: 180,
 							default: 50,
 							labels: {
 								min: t("settings.shared.sliderMinLinear", { defaultValue: "Linear" }), // or "Direct", "Raw"
