@@ -85,15 +85,13 @@ export function initSettingsUI({
 				console.warn(`Setting is missing ${importantProp}:`, setting);
 			}
 		}
-
-		// TODO: consider making everything use <label for=""> inside and <div> outside
-		const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
+		const rowEl = document.createElement("div");
 		rowEl.className = "tracky-mouse-control-row";
 		if (setting.type === "slider") {
 			rowEl.innerHTML = `
-				<span class="tracky-mouse-label-text">${setting.label}</span>
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
 				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
+					<input type="range" id="${setting.className}" min="${setting.min}" max="${setting.max}" class="${setting.className}">
 					<span class="tracky-mouse-slider-labels">
 						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
 						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
