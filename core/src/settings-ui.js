@@ -36,6 +36,9 @@ export function initSettingsUI({
 						el.classList.toggle("tracky-mouse-disabled", disabled);
 						const controls = el.querySelectorAll(`input, select, button`);
 						for (const control of controls) {
+							if (control.matches(".tracky-mouse-setting-reset-button")) {
+								continue;
+							}
 							// This should handle nested disabled conditions properly
 							control.disabled = control.closest(".tracky-mouse-disabled") !== null;
 						}
@@ -129,6 +132,25 @@ export function initSettingsUI({
 		if (setting.description) {
 			// Tooltip; TODO: try an ⓘ info icon button with a popover
 			rowEl.setAttribute("title", setting.description);
+		}
+
+		// TODO: For buttons, which don't have a `default`, reserve some space to match.
+		if ("default" in setting) {
+			const resetButton = document.createElement("button");
+			resetButton.className = "tracky-mouse-setting-reset-button";
+			resetButton.textContent = "↩"; // "⟲";
+			resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
+			resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
+			resetButton.addEventListener("click", () => {
+				setControlValue(setting.default);
+				loadValueFromControl();
+				save();
+				setting.handleSettingChange?.();
+				for (const func of functionsToUpdateDisabledStates) {
+					func();
+				}
+			});
+			rowEl.prepend(resetButton);
 		}
 
 		const control = rowEl.querySelector(`.${setting.className}`);

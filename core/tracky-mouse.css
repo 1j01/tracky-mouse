@@ -398,3 +398,28 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 .tracky-mouse-controls details .tracky-mouse-details-body {
 	padding: 8px;
 }
+
+.tracky-mouse-control-row:not(:hover):not(:focus-within) .tracky-mouse-setting-reset-button {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.tracky-mouse-setting-reset-button {
+	transition: opacity 0.2s ease;
+	margin-inline-end: 5px;
+	font-size: 1.3em;
+	background: none;
+	border: 2px solid transparent;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.tracky-mouse-setting-reset-button:hover,
+.tracky-mouse-setting-reset-button:focus {
+	border-color: currentColor;
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tracky-mouse-setting-reset-button:active {
+	background-color: rgba(0, 0, 0, 0.2);
+}
