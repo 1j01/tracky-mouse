@@ -115,6 +115,7 @@ export function initDwellClicking(config) {
 	const inactiveAfterHoveredTimespan = 1000; // after dwell click indicator appears; does not control the time to finish that dwell click, only to click on something else after this is canceled (but it doesn't control that directly)
 	const inactiveAfterInvalidTimespan = 1000; // after a dwell click is canceled due to an element popping up in front, or existing in front at the center of the other element
 	const inactiveAfterFocusedTimespan = 1000; // after page becomes focused after being unfocused
+	const inactiveAfterUnpauseTimespan = 1000; // affects virtual joystick modes most notably, which pause and unpause the dwell clicker, but also affects toggling with the global hotkey etc. which isn't ideal for tuning
 	let recentPoints = [];
 	let inactiveUntilTime = performance.now();
 	let paused = false;
@@ -515,7 +516,13 @@ export function initDwellClicking(config) {
 			return paused;
 		},
 		set paused(value) {
+			const wasPaused = paused;
 			paused = value;
+			if (paused && !wasPaused) {
+				hoverCandidate = null;
+			} else if (wasPaused && !paused) {
+				deactivateForAtLeast(inactiveAfterUnpauseTimespan);
+			}
 		},
 		dispose,
 	};

@@ -48,25 +48,15 @@ electronAPI.onMouseMove((_event, x, y) => {
 	screenOverlay.updateMousePos(x, y);
 });
 
-let wasDwellClickerEnabled = false;
 electronAPI.onOverlayUpdate((_event, data) => {
 	// console.log("onOverlayUpdate", data);
 	const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
 
 	screenOverlay.update(data);
 
-	// "Trick" Tracky Mouse into stopping/starting the dwell clicker.
-	// Update: I'm now setting `dwellClicker.paused`, just keeping the event dispatching
-	// in case it's needed to cancel a dwell click in progress.
-	// TODO: ensure setting `paused` to `true` cancels any in-progress dwell click.
 	const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
 	const dwellClickerEnabled = isEnabled && clickingMode === "dwell" && !pauseDwellClickingDueToJoystickUsage;
-	if (wasDwellClickerEnabled !== dwellClickerEnabled) {
-		document.dispatchEvent(new Event(dwellClickerEnabled ? "mouseenter" : "mouseleave"));
-		window.dispatchEvent(new Event(dwellClickerEnabled ? "focus" : "blur"));
-	}
 	dwellClicker.paused = !dwellClickerEnabled;
-	wasDwellClickerEnabled = dwellClickerEnabled;
 
 	audio?.setAudioEnabled(soundEffectsEnabled);
 
