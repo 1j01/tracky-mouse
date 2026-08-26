@@ -43,7 +43,7 @@ export function initScreenOverlay() {
 		if (!isEnabled) {
 			return;
 		}
-		const targetSize = virtualJoystickInfo ? 60 : 32;
+		const targetSize = virtualJoystickInfo ? 80 : 32;
 		if (inputFeedbackCanvas.width !== targetSize || inputFeedbackCanvas.height !== targetSize) {
 			inputFeedbackCanvas.width = targetSize;
 			inputFeedbackCanvas.height = targetSize;
@@ -71,7 +71,11 @@ export function initScreenOverlay() {
 
 	function drawVirtualJoystick({ x, y, numDirections, active, deadzone, maxMagnitude }) {
 		const ctx = inputFeedbackCtx;
-		const r = inputFeedbackCanvas.width / 2 - 2;
+		// r includes padding for the stick circle, not just an outline
+		// I would define it in terms of stickR, but stickR is defined in terms of r.
+		// Could redesign it so the stick circle can't go outside the outer circle.
+		// It might feel a little more solid.
+		const r = inputFeedbackCanvas.width / 2 - 10;
 		const stickR = r * deadzone; // doesn't have to be tied to deadzone, just one choice
 		ctx.save();
 		ctx.translate(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
