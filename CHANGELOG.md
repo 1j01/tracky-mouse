@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```
   You'll need an [`importmap`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) in your HTML, or a bundler like Webpack, Rollup, or Vite, to resolve the module specifier `"tracky-mouse"` to the actual file path.
 
-- Increased the maximum for the cursor movement sensitivity and acceleration sliders.
+- Increased the maximum for the cursor movement sensitivity and acceleration sliders. ([issue #95](https://github.com/1j01/tracky-mouse/issues/95))
 
 ### Deprecated
 
@@ -31,8 +31,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Cursor movement > Movement mode** setting, with options to move the cursor continuously in a direction instead of only as you move your head.
+  - In the new modes, a virtual joystick or D-pad is shown next to the cursor.
+  - Options:
+    - 🖾 **Direct**: The original behavior. Moves the cursor when you move your head.
+    - ● **Joystick style (any direction)**: Moves the cursor continuously in the direction of your head.
+    - ✦ **D-pad style (4 directions)**: Moves the cursor continuously in the direction of your head, limited to four directions (up, down, left, and right).
+    - ✶ **D-pad style (6 directions)**: Moves the cursor continuously in the direction of your head, limited to six directions. Intended for isometric game worlds. Though most isometric games include UI that is more natural to use with the 4 or 8 direction modes, you could have some fun with this.
+    - ✷ **D-pad style (8 directions)**: Moves the cursor continuously in the direction of your head, limited to eight directions (up, down, left, right, or diagonal).
+
 
 ### Fixed
+
 - Fixed a couple translations in the Emoji locale
 - Fixed behavior when launching the desktop app while it was still opening. Previously it would open multiple windows, and if enabled, fight for control over the mouse cursor. Impatient users should no longer have to worry about double-clicking multiple times. ([issue #130](https://github.com/1j01/tracky-mouse/issues/130))
 - Fixed the ability to add points to the point tracker by clicking on the camera view. Note that the points are still filtered spatially and can disappear over time, so this may not be very useful.
@@ -40,6 +49,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When pausing the app cancels a dwell click, the desktop app will no longer briefly show a red rectangle around the border of the screen. ([issue #42](https://github.com/1j01/tracky-mouse/issues/42))
 - Setting `dwellClicker.paused` to `true` now cancels any in-progress dwell click.
 - Setting `dwellClicker.paused` to `false` includes a delay before starting a new dwell click.
+
+### Known Issues
+
+- The screen overlay (HUD) may flicker when clicking sometimes. This is a side effect of the fix for [issue #14](https://github.com/1j01/tracky-mouse/issues/14).
 
 ## [2.9.0] - 2026-06-02
 
