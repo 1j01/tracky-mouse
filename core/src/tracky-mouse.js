@@ -1754,10 +1754,11 @@ TrackyMouse.init = function (div, opts = {}) {
 		const openStates = Array.from(collapsibles).map(c => c.open);
 		const scrollables = inner._element.querySelectorAll("*");
 		const scrollPositions = Array.from(scrollables).map(s => [s.scrollLeft, s.scrollTop]);
-		const focusedElementSelector = Array.from(document.activeElement?.classList || []).map(c => `.${c}`).join("");
-		return { paused, openStates, scrollPositions, focusedElementSelector };
+		const focusedElementSelector = Array.from(document.activeElement?.classList || []).map(c => `.${c}`).join("") || "*";
+		const focusedElementIndexWithinSelected = Array.from(inner._element.querySelectorAll(focusedElementSelector)).indexOf(document.activeElement);
+		return { paused, openStates, scrollPositions, focusedElementSelector, focusedElementIndexWithinSelected };
 	};
-	const restoreUIState = ({ paused, openStates, scrollPositions, focusedElementSelector }) => {
+	const restoreUIState = ({ paused, openStates, scrollPositions, focusedElementSelector, focusedElementIndexWithinSelected }) => {
 		inner._waitForSettingsLoaded().then(() => {
 			inner._setPaused(paused);
 		});
@@ -1773,7 +1774,7 @@ TrackyMouse.init = function (div, opts = {}) {
 			scrollables[i].scrollTop = scrollTop;
 		}
 		if (focusedElementSelector) {
-			const elementToFocus = inner._element.querySelector(focusedElementSelector);
+			const elementToFocus = inner._element.querySelectorAll(focusedElementSelector)[focusedElementIndexWithinSelected];
 			elementToFocus?.focus();
 		}
 	};
