@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Udglatning",
   "settings.pointTracking.verticalSensitivity.description": "Hastighed for markørbevægelse som reaktion på lodret hovedbevægelse.",
   "settings.pointTracking.verticalSensitivity.label": "Lodret følsomhed",
+  "settings.resetSetting": "Nulstil til standard",
   "settings.runAtLogin.description": "Hvis dette er slået til, starter Tracky Mouse automatisk, når du logger ind på computeren.",
   "settings.runAtLogin.description.alt1": "Får Tracky Mouse til at starte automatisk, når du logger ind på computeren.",
   "settings.runAtLogin.label": "Kør ved login",

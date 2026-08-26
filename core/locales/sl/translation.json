@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Glajenje",
   "settings.pointTracking.verticalSensitivity.description": "Hitrost premikanja kazalca kot odziv na navpično gibanje glave.",
   "settings.pointTracking.verticalSensitivity.label": "Navpična občutljivost",
+  "settings.resetSetting": "Ponastavi na privzeto",
   "settings.runAtLogin.description": "Če je omogočeno, se bo Tracky Mouse samodejno zagnal, ko se prijavite v računalnik.",
   "settings.runAtLogin.description.alt1": "Poskrbi, da se Tracky Mouse samodejno zažene, ko se prijavite v računalnik.",
   "settings.runAtLogin.label": "Zaženi ob prijavi",

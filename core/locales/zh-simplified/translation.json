@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "平滑度",
   "settings.pointTracking.verticalSensitivity.description": "针对垂直头部运动时光标移动的速度。",
   "settings.pointTracking.verticalSensitivity.label": "垂直灵敏度",
+  "settings.resetSetting": "重置为默认值",
   "settings.runAtLogin.description": "启用后，你登录电脑时会自动启动 Tracky Mouse。",
   "settings.runAtLogin.description.alt1": "使 Tracky Mouse 在你登录电脑时自动启动。",
   "settings.runAtLogin.label": "登录时运行",

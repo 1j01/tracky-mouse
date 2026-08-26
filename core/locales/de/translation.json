@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Glättung",
   "settings.pointTracking.verticalSensitivity.description": "Geschwindigkeit der Cursorbewegung bei vertikaler Kopfbewegung.",
   "settings.pointTracking.verticalSensitivity.label": "Vertikale Empfindlichkeit",
+  "settings.resetSetting": "Auf Standard zurücksetzen",
   "settings.runAtLogin.description": "Wenn aktiviert, startet Tracky Mouse automatisch beim Anmelden am Computer.",
   "settings.runAtLogin.description.alt1": "Lässt Tracky Mouse beim Anmelden am Computer automatisch starten.",
   "settings.runAtLogin.label": "Beim Anmelden starten",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Simítás",
   "settings.pointTracking.verticalSensitivity.description": "A kurzor sebessége a fej függőleges mozgására reagálva.",
   "settings.pointTracking.verticalSensitivity.label": "Függőleges érzékenység",
+  "settings.resetSetting": "Visszaállítás alapértelmezettre",
   "settings.runAtLogin.description": "Ha engedélyezett, a Tracky Mouse automatikusan elindul, amikor bejelentkezel a számítógépre.",
   "settings.runAtLogin.description.alt1": "A Tracky Mouse automatikusan elindul, amikor bejelentkezel a számítógépre.",
   "settings.runAtLogin.label": "Indítás bejelentkezéskor",

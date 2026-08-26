@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "부드럽게 하기",
   "settings.pointTracking.verticalSensitivity.description": "머리를 위아래로 움직였을 때 커서가 움직이는 속도입니다.",
   "settings.pointTracking.verticalSensitivity.label": "수직 감도",
+  "settings.resetSetting": "기본값으로 재설정",
   "settings.runAtLogin.description": "이 옵션을 켜면 컴퓨터에 로그인할 때 Tracky Mouse가 자동으로 시작됩니다.",
   "settings.runAtLogin.description.alt1": "컴퓨터에 로그인할 때 Tracky Mouse를 자동으로 시작합니다.",
   "settings.runAtLogin.label": "로그인 시 자동 실행",

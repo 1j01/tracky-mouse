@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Pagpapakinis",
   "settings.pointTracking.verticalSensitivity.description": "Bilis ng galaw ng cursor bilang tugon sa patayong galaw ng ulo.",
   "settings.pointTracking.verticalSensitivity.label": "Patayong sensibilidad",
+  "settings.resetSetting": "I-reset sa default",
   "settings.runAtLogin.description": "Kung naka-on, awtomatikong magsisimula ang Tracky Mouse kapag nag-log in ka sa iyong computer.",
   "settings.runAtLogin.description.alt1": "Pinapasimulan ang Tracky Mouse nang awtomatiko kapag nag-log in ka sa iyong computer.",
   "settings.runAtLogin.label": "Patakbuhin sa pag-log in",

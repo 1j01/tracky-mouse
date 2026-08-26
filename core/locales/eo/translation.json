@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Glatigado",
   "settings.pointTracking.verticalSensitivity.description": "Rapido de movado de la kursoro responde al vertikala kapmovo.",
   "settings.pointTracking.verticalSensitivity.label": "Vertikala sentemo",
+  "settings.resetSetting": "Restarigi al defaŭlto",
   "settings.runAtLogin.description": "Se ebligita, Tracky Mouse aŭtomate startos kiam vi ensalutas vian komputilon.",
   "settings.runAtLogin.description.alt1": "Igus Tracky Mouse aŭtomate starti kiam vi ensalutas vian komputilon.",
   "settings.runAtLogin.label": "Ruli je ensaluto",

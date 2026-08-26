@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "هموارسازی",
   "settings.pointTracking.verticalSensitivity.description": "سرعت حرکت نشان‌گر در پاسخ به حرکت عمودی سر.",
   "settings.pointTracking.verticalSensitivity.label": "حساسیت عمودی",
+  "settings.resetSetting": "بازنشانی به حالت پیش‌فرض",
   "settings.runAtLogin.description": "اگر فعال باشد، Tracky Mouse هنگام ورود شما به سیستم به‌طور خودکار اجرا می‌شود.",
   "settings.runAtLogin.description.alt1": "باعث می‌شود Tracky Mouse هنگام ورود شما به سیستم به‌طور خودکار اجرا شود.",
   "settings.runAtLogin.label": "اجرا هنگام ورود به سیستم",

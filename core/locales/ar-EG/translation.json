@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "تنعيم",
   "settings.pointTracking.verticalSensitivity.description": "سرعة حركة المؤشر استجابةً لحركة الرأس الرأسية.",
   "settings.pointTracking.verticalSensitivity.label": "الحساسية الرأسية",
+  "settings.resetSetting": "إعادة التعيين إلى الإعداد الافتراضي",
   "settings.runAtLogin.description": "لو مفعّل، Tracky Mouse هيتشغّل تلقائياً أول ما تسجّل الدخول للكمبيوتر.",
   "settings.runAtLogin.description.alt1": "يخلي Tracky Mouse يشتغل تلقائياً أول ما تسجّل الدخول للكمبيوتر.",
   "settings.runAtLogin.label": "تشغيل وقت تسجيل الدخول",

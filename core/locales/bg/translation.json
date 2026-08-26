@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Изглаждане",
   "settings.pointTracking.verticalSensitivity.description": "Скорост на движение на курсора в отговор на вертикално движение на главата.",
   "settings.pointTracking.verticalSensitivity.label": "Вертикална чувствителност",
+  "settings.resetSetting": "Връщане към настройката по подразбиране",
   "settings.runAtLogin.description": "Ако е включено, Tracky Mouse ще се стартира автоматично, когато влезете в компютъра си.",
   "settings.runAtLogin.description.alt1": "Кара Tracky Mouse да се стартира автоматично, когато влезете в компютъра си.",
   "settings.runAtLogin.label": "Стартирай при влизане",

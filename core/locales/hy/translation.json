@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Հարթեցում",
   "settings.pointTracking.verticalSensitivity.description": "Կուրսորի շարժման արագությունը՝ գլխի ուղղահայաց շարժմանը արձագանքելիս։",
   "settings.pointTracking.verticalSensitivity.label": "Ուղղահայաց զգայունություն",
+  "settings.resetSetting": "Վերականգնել կանխադրվածը",
   "settings.runAtLogin.description": "Եթե միացված է, Tracky Mouse‑ը ինքնաբերաբար կգործարկվի, երբ մտնեք ձեր համակարգչի օգտահաշիվ։",
   "settings.runAtLogin.description.alt1": "Ստիպում է Tracky Mouse‑ին ինքնաբերաբար գործարկվել, երբ մտնում եք համակարգչի օգտահաշիվ։",
   "settings.runAtLogin.label": "Գործարկել մուտքի պահին",

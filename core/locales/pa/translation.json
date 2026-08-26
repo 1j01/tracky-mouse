@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "ਸਮੂਥਿੰਗ",
   "settings.pointTracking.verticalSensitivity.description": "ਵਰਟੀਕਲ ਸਿਰ ਹਰਕਤ ਦੇ ਜਵਾਬ ਵਿੱਚ ਕਰਸਰ ਦੀ ਗਤੀ।",
   "settings.pointTracking.verticalSensitivity.label": "ਵਰਟੀਕਲ ਸੰਵੇਦਨਸ਼ੀਲਤਾ",
+  "settings.resetSetting": "ਡਿਫੌਲਟ 'ਤੇ ਰੀਸੈੱਟ ਕਰੋ",
   "settings.runAtLogin.description": "ਜੇ ਚਾਲੂ ਹੈ ਤਾਂ ਜਦੋਂ ਤੁਸੀਂ ਆਪਣੇ ਕੰਪਿਊਟਰ ਵਿੱਚ ਲੌਗ ਇਨ ਕਰੋਗੇ ਤਾਂ Tracky Mouse ਆਪਣੇ‑ਆਪ ਸ਼ੁਰੂ ਹੋ ਜਾਵੇਗਾ।",
   "settings.runAtLogin.description.alt1": "ਜਦੋਂ ਤੁਸੀਂ ਆਪਣੇ ਕੰਪਿਊਟਰ ਵਿੱਚ ਲੌਗ ਇਨ ਕਰੋਗੇ ਤਾਂ Tracky Mouse ਆਪਣੇ‑ਆਪ ਚੱਲ ਪਏਗਾ।",
   "settings.runAtLogin.label": "ਲੌਗਇਨ 'ਤੇ ਚਲਾਓ",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "החלקה",
   "settings.pointTracking.verticalSensitivity.description": "מהירות תנועת הסמן בתגובה לתנועת ראש אנכית.",
   "settings.pointTracking.verticalSensitivity.label": "רגישות אנכית",
+  "settings.resetSetting": "איפוס לברירת המחדל",
   "settings.runAtLogin.description": "אם מסומן, Tracky Mouse יופעל אוטומטית כשאתה נכנס למחשב.",
   "settings.runAtLogin.description.alt1": "גורם ל-Tracky Mouse להתחיל אוטומטית כשנכנסים למחשב.",
   "settings.runAtLogin.label": "הפעל בעת כניסה",

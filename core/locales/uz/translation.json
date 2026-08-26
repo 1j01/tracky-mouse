@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Silliqlash",
   "settings.pointTracking.verticalSensitivity.description": "Boshning vertikal harakatiga javoban kursor tezligi.",
   "settings.pointTracking.verticalSensitivity.label": "Vertikal sezgirlik",
+  "settings.resetSetting": "Standart holatga qaytarish",
   "settings.runAtLogin.description": "Yoqqan bo‘lsa, Tracky Mouse kompyuterga kirganingizda avtomatik ravishda ishga tushadi.",
   "settings.runAtLogin.description.alt1": "Kompyuterga kirganingizda Tracky Mouse avtomatik ishga tushishini ta’minlaydi.",
   "settings.runAtLogin.label": "Kirishda ishga tushirish",

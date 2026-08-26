@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Afvlakken",
   "settings.pointTracking.verticalSensitivity.description": "Snelheid van cursorbeweging als reactie op verticale hoofdbeweging.",
   "settings.pointTracking.verticalSensitivity.label": "Verticale gevoeligheid",
+  "settings.resetSetting": "Terugzetten naar standaard",
   "settings.runAtLogin.description": "Als dit is ingeschakeld, start Tracky Mouse automatisch wanneer je je aanmeldt op je computer.",
   "settings.runAtLogin.description.alt1": "Laat Tracky Mouse automatisch starten wanneer je je aanmeldt op je computer.",
   "settings.runAtLogin.label": "Starten bij aanmelden",

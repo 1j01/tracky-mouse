@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Лахарца а",
   "settings.pointTracking.verticalSensitivity.description": "Чохь хилар дӀаьллаш тӀехь курсорийн дӀаьллан кадар.",
   "settings.pointTracking.verticalSensitivity.label": "Чохь хетардар",
+  "settings.resetSetting": "Дефолтех юкъара хьажа",
   "settings.runAtLogin.description": "Цу функция берина, хьо компютерхь дӀаяздарнахьа, Tracky Mouse автоматическ ехкаст.",
   "settings.runAtLogin.description.alt1": "Хьо компютерхь дӀаяздарнахьа Tracky Mouse автоматическ старт хийца ду.",
   "settings.runAtLogin.label": "ДӀаяздар тӀехь старт хьажа",

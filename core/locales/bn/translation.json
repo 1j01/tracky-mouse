@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "মসৃণতা",
   "settings.pointTracking.verticalSensitivity.description": "উল্লম্ব মাথা নড়াচড়ার প্রতি সাড়া দিয়ে কার্সরের গতির মান।",
   "settings.pointTracking.verticalSensitivity.label": "উল্লম্ব সংবেদনশীলতা",
+  "settings.resetSetting": "ডিফল্টে রিসেট করুন",
   "settings.runAtLogin.description": "এটি চালু থাকলে, আপনি কম্পিউটারে লগইন করলেই Tracky Mouse স্বয়ংক্রিয়ভাবে শুরু হবে।",
   "settings.runAtLogin.description.alt1": "আপনি কম্পিউটারে লগইন করলে Tracky Mouse স্বয়ংক্রিয়ভাবে চালু হবে।",
   "settings.runAtLogin.label": "লগইনের সময় চালু করুন",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Wygładzanie",
   "settings.pointTracking.verticalSensitivity.description": "Prędkość ruchu kursora w reakcji na pionowy ruch głowy.",
   "settings.pointTracking.verticalSensitivity.label": "Czułość pionowa",
+  "settings.resetSetting": "Przywróć ustawienia domyślne",
   "settings.runAtLogin.description": "Jeśli ta opcja jest włączona, Tracky Mouse będzie automatycznie uruchamiany po zalogowaniu do komputera.",
   "settings.runAtLogin.description.alt1": "Sprawia, że Tracky Mouse uruchamia się automatycznie po zalogowaniu do komputera.",
   "settings.runAtLogin.label": "Uruchamiaj przy logowaniu",

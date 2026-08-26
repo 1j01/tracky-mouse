@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Йомшарту",
   "settings.pointTracking.verticalSensitivity.description": "Башның вертикаль хәрәкәтенә җавап итеп курсор тизлеге.",
   "settings.pointTracking.verticalSensitivity.label": "Вертикаль сизгерлек",
+  "settings.resetSetting": "Килешен көйләүләргә кайтару",
   "settings.runAtLogin.description": "Әгәр кушылган булса, компьютерга кергәндә Tracky Mouse автоматик рәвештә эшләтеп җибәрелә.",
   "settings.runAtLogin.description.alt1": "Компьютерга кергәндә Tracky Mouse ны автоматик рәвештә эшләтеп җибәрә.",
   "settings.runAtLogin.label": "Кергәндә эшләтү",

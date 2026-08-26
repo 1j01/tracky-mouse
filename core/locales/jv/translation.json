@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Ngalusaké",
   "settings.pointTracking.verticalSensitivity.description": "Kacepetan gerakan kursor amarga gerakan endhas vertikal.",
   "settings.pointTracking.verticalSensitivity.label": "Sensitivitas vertikal",
+  "settings.resetSetting": "Reset menyang gawan",
   "settings.runAtLogin.description": "Yen diuripké, Tracky Mouse bakal otomatis diwiwiti nalika panjenengan mlebu komputer.",
   "settings.runAtLogin.description.alt1": "Nggawe Tracky Mouse miwiti otomatis nalika panjenengan mlebu komputer.",
   "settings.runAtLogin.label": "Mlaku nalika mlebu",

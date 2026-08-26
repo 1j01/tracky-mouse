@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Düzgünleştirme",
   "settings.pointTracking.verticalSensitivity.description": "Dikey baş hareketine tepki olarak imleç hareketinin hızı.",
   "settings.pointTracking.verticalSensitivity.label": "Dikey hassasiyet",
+  "settings.resetSetting": "Varsayılana sıfırla",
   "settings.runAtLogin.description": "Etkinleştirilirse, bilgisayarınıza giriş yaptığınızda Tracky Mouse otomatik olarak başlar.",
   "settings.runAtLogin.description.alt1": "Bilgisayarınıza giriş yaptığınızda Tracky Mouse'un otomatik olarak başlamasını sağlar.",
   "settings.runAtLogin.label": "Girişte çalıştır",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Сглаживание",
   "settings.pointTracking.verticalSensitivity.description": "Скорость движения курсора в ответ на вертикальное движение головы.",
   "settings.pointTracking.verticalSensitivity.label": "Вертикальная чувствительность",
+  "settings.resetSetting": "Сбросить до настроек по умолчанию",
   "settings.runAtLogin.description": "Если включено, Tracky Mouse будет автоматически запускаться при входе в систему.",
   "settings.runAtLogin.description.alt1": "Заставляет Tracky Mouse автоматически запускаться при входе в систему.",
   "settings.runAtLogin.label": "Запускать при входе в систему",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "స్మూత్ చేయడం",
   "settings.pointTracking.verticalSensitivity.description": "తల నిలువు కదలికకు ప్రతిస్పందనగా కర్సర్ కదలిక వేగం.",
   "settings.pointTracking.verticalSensitivity.label": "నిలువు సెన్సిటివిటీ",
+  "settings.resetSetting": "డిఫాల్ట్‌కు రీసెట్ చేయండి",
   "settings.runAtLogin.description": "ఇది ఎనేబుల్ చేసినట్లయితే, మీరు కంప్యూటర్‌లో లాగిన్ అయినప్పుడు Tracky Mouse స్వయంచాలకంగా ప్రారంభమవుతుంది.",
   "settings.runAtLogin.description.alt1": "మీరు కంప్యూటర్‌లో లాగిన్ అయినప్పుడు Tracky Mouse స్వయంచాలకంగా ప్రారంభమయ్యేలా చేస్తుంది.",
   "settings.runAtLogin.label": "లాగిన్ సమయంలో నడపండి",

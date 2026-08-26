@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "平滑化",
   "settings.pointTracking.verticalSensitivity.description": "頭の上下の動きに対するカーソルの移動速度です。",
   "settings.pointTracking.verticalSensitivity.label": "垂直方向の感度",
+  "settings.resetSetting": "デフォルトに戻す",
   "settings.runAtLogin.description": "有効にすると、コンピューターにログインしたときに Tracky Mouse が自動的に起動します。",
   "settings.runAtLogin.description.alt1": "コンピューターにログインしたときに Tracky Mouse を自動的に起動します。",
   "settings.runAtLogin.label": "ログイン時に自動起動",

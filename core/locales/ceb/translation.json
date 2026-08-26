@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Pagpahapsay",
   "settings.pointTracking.verticalSensitivity.description": "Tulin sa lihok sa cursor base sa vertical nga lihok sa ulo.",
   "settings.pointTracking.verticalSensitivity.label": "Vertical nga sensitibidad",
+  "settings.resetSetting": "I-reset sa default",
   "settings.runAtLogin.description": "Kung naka-on, awtomatikong mosugod ang Tracky Mouse inig sulod nimo sa imong kompyuter.",
   "settings.runAtLogin.description.alt1": "Nagpaandar sa Tracky Mouse awtomatik inig sulod nimo sa imong kompyuter.",
   "settings.runAtLogin.label": "Dagani inig login",

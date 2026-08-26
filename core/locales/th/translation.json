@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "การทำให้เรียบ",
   "settings.pointTracking.verticalSensitivity.description": "ความเร็วของการเคลื่อนที่ของเคอร์เซอร์ตอบสนองต่อการเคลื่อนศีรษะในแนวตั้ง",
   "settings.pointTracking.verticalSensitivity.label": "ความไวแนวตั้ง",
+  "settings.resetSetting": "รีเซ็ตเป็นค่าเริ่มต้น",
   "settings.runAtLogin.description": "หากเปิดใช้ Tracky Mouse จะเริ่มทำงานโดยอัตโนมัติเมื่อคุณเข้าสู่ระบบคอมพิวเตอร์",
   "settings.runAtLogin.description.alt1": "ทำให้ Tracky Mouse เริ่มทำงานโดยอัตโนมัติเมื่อคุณเข้าสู่ระบบคอมพิวเตอร์",
   "settings.runAtLogin.label": "เริ่มทำงานเมื่อเข้าสู่ระบบ",

@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Pagpa-hamok",
   "settings.pointTracking.verticalSensitivity.description": "Kadagmitan han lihok han kursor ha baton ha patindog nga lihok han ulo.",
   "settings.pointTracking.verticalSensitivity.label": "Patindog nga sensibilidad",
+  "settings.resetSetting": "I-reset ha default",
   "settings.runAtLogin.description": "Kun naka-on, awtomatiko nga mag-iistart an Tracky Mouse kon mag-log in ka ha imo kompyuter.",
   "settings.runAtLogin.description.alt1": "Naghihimo han Tracky Mouse nga awtomatiko nga mag-iistart kon mag-log in ka ha imo kompyuter.",
   "settings.runAtLogin.label": "Padagana ha pag-log in",

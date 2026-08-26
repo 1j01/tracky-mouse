@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Netezire",
   "settings.pointTracking.verticalSensitivity.description": "Viteza de mișcare a cursorului ca răspuns la mișcarea verticală a capului.",
   "settings.pointTracking.verticalSensitivity.label": "Sensibilitate verticală",
+  "settings.resetSetting": "Resetați la valorile implicite",
   "settings.runAtLogin.description": "Dacă este activat, Tracky Mouse va porni automat când vă conectați la computer.",
   "settings.runAtLogin.description.alt1": "Face Tracky Mouse să pornească automat când vă conectați la computer.",
   "settings.runAtLogin.label": "Rulează la autentificare",

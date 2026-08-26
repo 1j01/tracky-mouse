@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Pelicinan",
   "settings.pointTracking.verticalSensitivity.description": "Kelajuan pergerakan kursor sebagai tindak balas kepada pergerakan kepala menegak.",
   "settings.pointTracking.verticalSensitivity.label": "Kepekaan menegak",
+  "settings.resetSetting": "Tetapkan semula kepada lalai",
   "settings.runAtLogin.description": "Jika didayakan, Tracky Mouse akan bermula secara automatik apabila anda log masuk ke komputer.",
   "settings.runAtLogin.description.alt1": "Membuatkan Tracky Mouse bermula secara automatik apabila anda log masuk ke komputer.",
   "settings.runAtLogin.label": "Jalankan semasa log masuk",

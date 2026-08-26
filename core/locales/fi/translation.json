@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Tasoitus",
   "settings.pointTracking.verticalSensitivity.description": "Osoittimen liikkeen nopeus suhteessa pään pystysuuntaiseen liikkeeseen.",
   "settings.pointTracking.verticalSensitivity.label": "Pystysuuntainen liikkeen herkkyys",
+  "settings.resetSetting": "Palauta oletusasetukset",
   "settings.runAtLogin.description": "Jos käytössä, Tracky Mouse käynnistyy automaattisesti, kun kirjaudut tietokoneelle.",
   "settings.runAtLogin.description.alt1": "Saa Tracky Mousen käynnistymään automaattisesti, kun kirjaudut tietokoneelle.",
   "settings.runAtLogin.label": "Käynnistä kirjautuessa",

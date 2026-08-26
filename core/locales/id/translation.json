@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Penghalusan",
   "settings.pointTracking.verticalSensitivity.description": "Kecepatan pergerakan kursor sebagai respons terhadap gerakan kepala vertikal.",
   "settings.pointTracking.verticalSensitivity.label": "Sensitivitas vertikal",
+  "settings.resetSetting": "Atur ulang ke default",
   "settings.runAtLogin.description": "Jika diaktifkan, Tracky Mouse akan otomatis berjalan saat Anda masuk ke komputer.",
   "settings.runAtLogin.description.alt1": "Membuat Tracky Mouse berjalan otomatis ketika Anda masuk ke komputer.",
   "settings.runAtLogin.label": "Jalankan saat masuk",

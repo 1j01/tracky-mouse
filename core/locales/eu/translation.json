@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Leunketa",
   "settings.pointTracking.verticalSensitivity.description": "Kurtsorearen abiadura buruaren mugimendu bertikalari erantzunez.",
   "settings.pointTracking.verticalSensitivity.label": "Sentsibilitate bertikala",
+  "settings.resetSetting": "Berrezarri lehenetsira",
   "settings.runAtLogin.description": "Gaituta badago, Tracky Mouse automatikoki abiatuko da ordenagailuan saioa hasten duzunean.",
   "settings.runAtLogin.description.alt1": "Tracky Mouse automatikoki abiarazten du ordenagailuan saioa hasten duzunean.",
   "settings.runAtLogin.label": "Exekutatu saioa hastean",

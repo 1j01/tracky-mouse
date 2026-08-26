@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "平滑處理",
   "settings.pointTracking.verticalSensitivity.description": "照頭殼仰頭弓頭 ê 速度來控制游標 ê 速度。",
   "settings.pointTracking.verticalSensitivity.label": "直向靈敏度",
+  "settings.resetSetting": "重設為預設值",
   "settings.runAtLogin.description": "開啟後，汝登入電腦 ê 時陣，Tracky Mouse 會自動啟動。",
   "settings.runAtLogin.description.alt1": "汝登入電腦 ê 時陣，Tracky Mouse 會自動啟動。",
   "settings.runAtLogin.label": "登入時就啟動",

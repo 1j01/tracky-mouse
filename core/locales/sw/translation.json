@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Kusawazisha",
   "settings.pointTracking.verticalSensitivity.description": "Kasi ya mwendo wa kishale kulingana na mwendo wa kichwa juu‑chini.",
   "settings.pointTracking.verticalSensitivity.label": "Unyeti wa juu‑chini",
+  "settings.resetSetting": "Weka upya kwa chaguo-msingi",
   "settings.runAtLogin.description": "Ikiwa imewezeshwa, Tracky Mouse itaanza yenyewe unapoingia kwenye kompyuta yako.",
   "settings.runAtLogin.description.alt1": "Hufanya Tracky Mouse ianze kiotomatiki unapoingia kwenye kompyuta yako.",
   "settings.runAtLogin.label": "Endesha unapoingia",

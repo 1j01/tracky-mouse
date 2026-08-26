@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "ہموار کرنا",
   "settings.pointTracking.verticalSensitivity.description": "سر کی عمودی حرکت کے جواب میں کرسر کی رفتار۔",
   "settings.pointTracking.verticalSensitivity.label": "عمودی حساسیت",
+  "settings.resetSetting": "پہلے سے طے شدہ پر ری سیٹ کریں",
   "settings.runAtLogin.description": "اگر فعال ہو تو جب آپ کمپیوٹر میں لاگ اِن ہوں گے، ٹریکی ماؤس خود بخود شروع ہو جائے گا۔",
   "settings.runAtLogin.description.alt1": "جب آپ کمپیوٹر میں لاگ اِن ہوں، تو ٹریکی ماؤس کو خود بخود شروع کر دیتا ہے۔",
   "settings.runAtLogin.label": "لاگ اِن پر چلائیں",

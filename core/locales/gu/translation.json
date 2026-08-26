@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "સ્મૂથિંગ",
   "settings.pointTracking.verticalSensitivity.description": "ઉભું માથું હલનચલન માટે કર્સરની ગતિ.",
   "settings.pointTracking.verticalSensitivity.label": "ઉભી સંવેદનશીલતા",
+  "settings.resetSetting": "ડિફૉલ્ટ પર રીસેટ કરો",
   "settings.runAtLogin.description": "જો સક્રિય હોય, તો તમે કમ્પ્યુટરમાં લૉગિન કરો ત્યારે Tracky Mouse આપમેળે શરૂ થશે.",
   "settings.runAtLogin.description.alt1": "તમે કમ્પ્યુટરમાં લૉગિન કરો ત્યારે Tracky Mouse આપમેળે શરૂ થાય તે સુનિશ્ચિત કરે છે.",
   "settings.runAtLogin.label": "લૉગિન સમયે ચલાવો",

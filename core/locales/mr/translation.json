@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "स्मूदिंग",
   "settings.pointTracking.verticalSensitivity.description": "डोक्याच्या उभ्या हालचालीवर प्रतिसाद म्हणून कर्सरचा वेग.",
   "settings.pointTracking.verticalSensitivity.label": "उभी संवेदनशीलता",
+  "settings.resetSetting": "डीफॉल्टवर रीसेट करा",
   "settings.runAtLogin.description": "हे चालू असल्यास संगणकात लॉग इन करताच Tracky Mouse आपोआप सुरू होईल.",
   "settings.runAtLogin.description.alt1": "संगणकात लॉग इन करताच Tracky Mouse आपोआप सुरू करते.",
   "settings.runAtLogin.label": "लॉग इनवेळी चालवा",

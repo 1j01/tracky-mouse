@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Làm mượt",
   "settings.pointTracking.verticalSensitivity.description": "Tốc độ di chuyển con trỏ theo chuyển động dọc của đầu.",
   "settings.pointTracking.verticalSensitivity.label": "Độ nhạy dọc",
+  "settings.resetSetting": "Đặt lại về mặc định",
   "settings.runAtLogin.description": "Khi bật, Tracky Mouse sẽ tự khởi động khi bạn đăng nhập vào máy.",
   "settings.runAtLogin.description.alt1": "Làm Tracky Mouse tự khởi động khi bạn đăng nhập máy tính.",
   "settings.runAtLogin.label": "Chạy khi đăng nhập",

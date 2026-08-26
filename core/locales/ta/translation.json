@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "மென்மையாக்கம்",
   "settings.pointTracking.verticalSensitivity.description": "தலையின் நெடுச்சாய்வுக்கு எதிர்வினையாக சுட்டி நகரும் வேகம்.",
   "settings.pointTracking.verticalSensitivity.label": "நெடுச் சென்சிட்டிவிட்டி",
+  "settings.resetSetting": "இயல்புநிலைக்கு மீட்டமை",
   "settings.runAtLogin.description": "இதை இயக்கினால், நீங்கள் கணினியில் உள்நுழையும் போது Tracky Mouse தானாகவே தொடங்கும்.",
   "settings.runAtLogin.description.alt1": "நீங்கள் கணினியில் உள்நுழையும் போது Tracky Mouse தானாகவே தொடங்கும்படி செய்கிறது.",
   "settings.runAtLogin.label": "உள்நுழையும் போது இயக்கு",

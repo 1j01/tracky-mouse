@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Smussamento",
   "settings.pointTracking.verticalSensitivity.description": "Velocità del movimento del cursore in risposta al movimento verticale della testa.",
   "settings.pointTracking.verticalSensitivity.label": "Sensibilità verticale",
+  "settings.resetSetting": "Ripristina impostazioni predefinite",
   "settings.runAtLogin.description": "Se abilitato, Tracky Mouse si avvierà automaticamente quando effettui l'accesso al computer.",
   "settings.runAtLogin.description.alt1": "Avvia automaticamente Tracky Mouse quando effettui l'accesso al computer.",
   "settings.runAtLogin.label": "Esegui all'accesso",

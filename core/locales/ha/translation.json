@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Santsi",
   "settings.pointTracking.verticalSensitivity.description": "Saurin motsawar sigifa da ya dogara da motsin kai a tsaye.",
   "settings.pointTracking.verticalSensitivity.label": "Taushin motsi a tsaye",
+  "settings.resetSetting": "Sake saita zuwa tsoho",
   "settings.runAtLogin.description": "Idan an kunna wannan, Tracky Mouse zai fara aiki da kansa lokacin da ka shiga kwamfutarka.",
   "settings.runAtLogin.description.alt1": "Yana sa Tracky Mouse ya fara aiki da kansa lokacin da ka shiga kwamfutarka.",
   "settings.runAtLogin.label": "Gudana lokacin shiga",

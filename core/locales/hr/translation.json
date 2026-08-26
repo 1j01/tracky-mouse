@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Zaglađivanje",
   "settings.pointTracking.verticalSensitivity.description": "Brzina pomicanja pokazivača kao odgovor na okomiti pokret glave.",
   "settings.pointTracking.verticalSensitivity.label": "Okomita osjetljivost",
+  "settings.resetSetting": "Vrati na zadano",
   "settings.runAtLogin.description": "Ako je omogućeno, Tracky Mouse će se automatski pokrenuti kada se prijavite na računalo.",
   "settings.runAtLogin.description.alt1": "Čini da se Tracky Mouse automatski pokrene kada se prijavite na računalo.",
   "settings.runAtLogin.label": "Pokreni pri prijavi",

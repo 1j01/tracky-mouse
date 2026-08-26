@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Εξομάλυνση",
   "settings.pointTracking.verticalSensitivity.description": "Ταχύτητα κίνησης του δρομέα σε απόκριση της κάθετης κίνησης του κεφαλιού.",
   "settings.pointTracking.verticalSensitivity.label": "Κάθετη ευαισθησία",
+  "settings.resetSetting": "Επαναφορά στις προεπιλεγμένες ρυθμίσεις",
   "settings.runAtLogin.description": "Αν είναι ενεργό, το Tracky Mouse θα ξεκινά αυτόματα όταν συνδέεστε στον υπολογιστή σας.",
   "settings.runAtLogin.description.alt1": "Κάνει το Tracky Mouse να ξεκινά αυτόματα όταν συνδέεστε στον υπολογιστή σας.",
   "settings.runAtLogin.label": "Εκτέλεση κατά τη σύνδεση",

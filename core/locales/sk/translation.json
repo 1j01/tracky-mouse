@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Vyhladzovanie",
   "settings.pointTracking.verticalSensitivity.description": "Rýchlosť pohybu kurzora v reakcii na vertikálny pohyb hlavy.",
   "settings.pointTracking.verticalSensitivity.label": "Vertikálna citlivosť",
+  "settings.resetSetting": "Obnoviť predvolené nastavenia",
   "settings.runAtLogin.description": "Ak je zapnuté, Tracky Mouse sa automaticky spustí po prihlásení do počítača.",
   "settings.runAtLogin.description.alt1": "Spôsobí, že sa Tracky Mouse spustí automaticky po prihlásení do počítača.",
   "settings.runAtLogin.label": "Spúšťať po prihlásení",

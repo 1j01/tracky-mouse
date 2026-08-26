@@ -165,6 +165,7 @@
   "settings.pointTracking.smoothing.label": "Utjämning",
   "settings.pointTracking.verticalSensitivity.description": "Hastighet på markörrörelsen som svar på vertikal huvudrörelse.",
   "settings.pointTracking.verticalSensitivity.label": "Vertikal känslighet",
+  "settings.resetSetting": "Återställ till standard",
   "settings.runAtLogin.description": "Om aktiverat startar Tracky Mouse automatiskt när du loggar in på datorn.",
   "settings.runAtLogin.description.alt1": "Gör att Tracky Mouse startar automatiskt när du loggar in på datorn.",
   "settings.runAtLogin.label": "Kör vid inloggning",
