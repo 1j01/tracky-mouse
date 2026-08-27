@@ -549,8 +549,8 @@ export class InputSimulator {
 		function rewriteStylesheet(sheet) {
 			try {
 				rewriteHoverRules(sheet.cssRules);
-			} catch {
-				console.warn("Failed to rewrite hover rules for stylesheet:", sheet);
+			} catch (error) {
+				console.warn("Failed to rewrite :hover rules for stylesheet:", sheet.ownerNode?.outerHTML ?? sheet, error);
 			}
 		}
 
