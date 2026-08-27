@@ -13,13 +13,19 @@ import { getSettingsCategories, traverseSettings } from "./settings.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
+	silencedWarnings: [],
 };
 
 // Deprecation notice for `TrackyMouse.dependenciesRoot`
 let _dependenciesRoot = TrackyMouse.dependenciesRoot;
 Object.defineProperty(TrackyMouse, "dependenciesRoot", {
 	set(value) {
-		console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
+		if (!TrackyMouse.silencedWarnings.includes("dependenciesRoot-deprecation")) {
+			console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
+			// Could use silencedWarnings to avoid showing the same warning multiple times
+			// but mainly I'm adding it for consumers to silence the warning if they want to.
+			// TrackyMouse.silencedWarnings.push("dependenciesRoot-deprecation");
+		}
 		_dependenciesRoot = value.replace(/\/+$/, "");
 	},
 	get() {
