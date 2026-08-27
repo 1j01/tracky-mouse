@@ -520,14 +520,14 @@ export class InputSimulator {
 		// but we can modify stylesheets to simulate :hover behavior for simulated pointer events.
 		// This won't work for user agent stylesheets.
 		// TODO: provide some base hover styles in lieu of user agent CSS
-		// TODO: make this function idempotent, able to be called later to handle new stylesheets,
-		// and/or make it listen for new stylesheets to transform them automatically.
 
 		function rewriteHoverRules(rules) {
+			// This function should be idempotent,
+			// with the regexp avoiding rewriting already transformed rules.
 			for (const rule of [...rules]) {
 				if (rule.selectorText?.includes(':hover')) {
 					rule.selectorText = rule.selectorText.replace(
-						/:hover\b/g,
+						/:hover(?!,\s*\.tracky-mouse-hover)\b/g,
 						':is(:hover, .tracky-mouse-hover)'
 					);
 				}
