@@ -556,25 +556,24 @@ export class InputSimulator {
 		let hovered = [];
 
 		document.addEventListener('pointermove', e => {
-			const next = [];
-
+			const newHovered = [];
 			for (let el = e.target; el instanceof Element; el = el.parentElement) {
-				next.push(el);
+				newHovered.push(el);
 			}
 
 			for (const el of hovered) {
-				if (!next.includes(el)) {
+				if (!newHovered.includes(el)) {
 					el.classList.remove('tracky-mouse-hover');
 				}
 			}
 
-			for (const el of next) {
+			for (const el of newHovered) {
 				if (!hovered.includes(el)) {
 					el.classList.add('tracky-mouse-hover');
 				}
 			}
 
-			hovered = next;
+			hovered = newHovered;
 		});
 
 	}
