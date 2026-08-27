@@ -561,16 +561,8 @@ export class InputSimulator {
 				newHovered.push(el);
 			}
 
-			for (const el of hovered) {
-				if (!newHovered.includes(el)) {
-					el.classList.remove('tracky-mouse-hover');
-				}
-			}
-
-			for (const el of newHovered) {
-				if (!hovered.includes(el)) {
-					el.classList.add('tracky-mouse-hover');
-				}
+			for (const el of [...hovered, ...newHovered]) {
+				el.classList.toggle('tracky-mouse-hover', newHovered.includes(el));
 			}
 
 			hovered = newHovered;
