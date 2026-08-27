@@ -554,6 +554,16 @@ export class InputSimulator {
 			}
 		}
 
+		function rewriteStylesheetForElement(element) {
+			if (element.sheet) {
+				rewriteStylesheet(element.sheet);
+			} else {
+				element.addEventListener('load', () => {
+					rewriteStylesheet(element.sheet);
+				}, { once: true });
+			}
+		}
+
 		// Existing stylesheets
 		for (const sheet of document.styleSheets) {
 			rewriteStylesheet(sheet);
@@ -566,26 +576,14 @@ export class InputSimulator {
 					if (node.nodeType !== Node.ELEMENT_NODE) continue;
 
 					if (node.matches('style, link[rel~="stylesheet"]')) {
-						if (node.sheet) {
-							rewriteStylesheet(node.sheet);
-						} else {
-							node.addEventListener('load', () => {
-								rewriteStylesheet(node.sheet);
-							}, { once: true });
-						}
+						rewriteStylesheetForElement(node);
 					}
 
 					// Handle stylesheets nested inside added elements.
 					for (const el of node.querySelectorAll?.(
 						'style, link[rel~="stylesheet"]'
 					) ?? []) {
-						if (el.sheet) {
-							rewriteStylesheet(el.sheet);
-						} else {
-							el.addEventListener('load', () => {
-								rewriteStylesheet(el.sheet);
-							}, { once: true });
-						}
+						rewriteStylesheetForElement(el);
 					}
 				}
 			}
