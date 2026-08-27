@@ -406,7 +406,9 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	pointer-events: none;
 }
 
-.tracky-mouse-control-row:has(.tracky-mouse-setting-info-popover:popover-open) .tracky-mouse-setting-info-button {
+/* No longer using popover API because cursor+HUD should go on top in the web demo/web version. */
+/* .tracky-mouse-control-row:has(.tracky-mouse-setting-info-popover:popover-open) .tracky-mouse-setting-info-button { */
+.tracky-mouse-control-row:has(.tracky-mouse-setting-info-popover:not([hidden])) .tracky-mouse-setting-info-button {
 	opacity: 1;
 	pointer-events: auto;
 	background: rgb(255, 255, 157);
@@ -449,4 +451,6 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	color: black;
 	border: 2px solid black;
 	box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.5);
+	padding: 5px;
+	z-index: 1000;
 }

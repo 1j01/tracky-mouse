@@ -136,7 +136,11 @@ export function initSettingsUI({
 
 		const infoPopover = document.createElement("div");
 		infoPopover.className = "tracky-mouse-setting-info-popover";
-		infoPopover.popover = "auto";
+		// Avoiding using native popover functionality because
+		// the cursor+HUD should go on top in the web demo/web version.
+		// TODO: accessibility attributes, Esc to close, click outside to close
+		// infoPopover.popover = "auto";
+		infoPopover.hidden = true;
 		infoPopover.id = `tracky-mouse-${setting.className}-info-popover`;
 		infoPopover.textContent = setting.description;
 		rowEl.appendChild(infoPopover);
@@ -145,12 +149,17 @@ export function initSettingsUI({
 		infoButton.className = "tracky-mouse-setting-info-button tracky-mouse-setting-extra-button";
 		infoButton.textContent = "ⓘ";
 		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
+		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
+		// Should it show the whole popover itself temporarily?
 		// FIXME: tooltips are showing redundantly while the popover is open
 		// (Including while hovering over the popover itself!)
 		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
 		infoButton.ariaLabel = t("settings.settingInfo", { defaultValue: "Setting info" });
 		if (setting.description) {
-			infoButton.popoverTargetElement = infoPopover;
+			// infoButton.popoverTargetElement = infoPopover;
+			infoButton.addEventListener("click", () => {
+				infoPopover.hidden = !infoPopover.hidden;
+			});
 		} else {
 			// Disabled "extra" buttons are hidden by CSS
 			// The info button is still included in the DOM to reserve space
