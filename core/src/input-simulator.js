@@ -515,7 +515,7 @@ export class InputSimulator {
 
 		return target || fallback;
 	}
-	transformCSSHoverRules() {
+	static transformCSSHoverRules() {
 		// :hover doesn't work with simulated pointer events,
 		// but we can modify stylesheets to simulate :hover behavior for simulated pointer events.
 		// This won't work for user agent stylesheets.
