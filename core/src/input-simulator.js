@@ -580,9 +580,7 @@ export class InputSimulator {
 					}
 
 					// Handle stylesheets nested inside added elements.
-					for (const el of node.querySelectorAll?.(
-						'style, link[rel~="stylesheet"]'
-					) ?? []) {
+					for (const el of node.querySelectorAll('style, link[rel~="stylesheet"]')) {
 						rewriteStylesheetForElement(el);
 					}
 				}
