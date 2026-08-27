@@ -546,13 +546,54 @@ export class InputSimulator {
 			}
 		}
 
-		for (const sheet of document.styleSheets) {
+		function rewriteStylesheet(sheet) {
 			try {
 				rewriteHoverRules(sheet.cssRules);
 			} catch {
 				console.warn("Failed to rewrite hover rules for stylesheet:", sheet);
 			}
 		}
+
+		// Existing stylesheets
+		for (const sheet of document.styleSheets) {
+			rewriteStylesheet(sheet);
+		}
+
+		// Dynamically added stylesheets
+		new MutationObserver(mutations => {
+			for (const mutation of mutations) {
+				for (const node of mutation.addedNodes) {
+					if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+					if (node.matches('style, link[rel~="stylesheet"]')) {
+						if (node.sheet) {
+							rewriteStylesheet(node.sheet);
+						} else {
+							node.addEventListener('load', () => {
+								rewriteStylesheet(node.sheet);
+							}, { once: true });
+						}
+					}
+
+					// Handle stylesheets nested inside added elements.
+					for (const el of node.querySelectorAll?.(
+						'style, link[rel~="stylesheet"]'
+					) ?? []) {
+						if (el.sheet) {
+							rewriteStylesheet(el.sheet);
+						} else {
+							el.addEventListener('load', () => {
+								rewriteStylesheet(el.sheet);
+							}, { once: true });
+						}
+					}
+				}
+			}
+		}).observe(document.documentElement, {
+			childList: true,
+			subtree: true
+		});
+
 		let hovered = [];
 
 		document.addEventListener('pointermove', e => {
