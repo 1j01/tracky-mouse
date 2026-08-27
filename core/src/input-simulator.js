@@ -519,7 +519,15 @@ export class InputSimulator {
 		// :hover doesn't work with simulated pointer events,
 		// but we can modify stylesheets to simulate :hover behavior for simulated pointer events.
 		// This won't work for user agent stylesheets.
-		// TODO: provide some base hover styles in lieu of user agent CSS
+
+		// TODO: provide some base hover styles in lieu of user agent CSS.
+		// It's kind of tricky since setting background or borders can make
+		// native controls revert to base styles, but we might be able to
+		// reuse the "hover halo" currently used for dwell clicking,
+		// which has a richly configurable set of interactive controls.
+		// Or a different sort of overlay using mix-blend-mode
+		// to do something similar to filter: brightness(120%), but without overriding filter,
+		// in case an element uses filter already.
 
 		function rewriteHoverRules(rules) {
 			// This function should be idempotent,
