@@ -515,4 +515,59 @@ export class InputSimulator {
 
 		return target || fallback;
 	}
+	transformCSSHoverRules() {
+		// :hover doesn't work with simulated pointer events,
+		// but we can modify stylesheets to simulate :hover behavior for simulated pointer events.
+		// This won't work for user agent stylesheets.
+		// TODO: provide some base hover styles in lieu of user agent CSS
+		// TODO: make this function idempotent, able to be called later to handle new stylesheets,
+		// and/or make it listen for new stylesheets to transform them automatically.
+
+		function rewriteHoverRules(rules) {
+			for (const rule of [...rules]) {
+				if (rule.selectorText?.includes(':hover')) {
+					rule.selectorText = rule.selectorText.replace(
+						/:hover\b/g,
+						':is(:hover, .tracky-mouse-hover)'
+					);
+				}
+
+				if (rule.cssRules) {
+					rewriteHoverRules(rule.cssRules);
+				}
+			}
+		}
+
+		for (const sheet of document.styleSheets) {
+			try {
+				rewriteHoverRules(sheet.cssRules);
+			} catch {
+				console.warn("Failed to rewrite hover rules for stylesheet:", sheet);
+			}
+		}
+		let hovered = [];
+
+		document.addEventListener('pointermove', e => {
+			const next = [];
+
+			for (let el = e.target; el instanceof Element; el = el.parentElement) {
+				next.push(el);
+			}
+
+			for (const el of hovered) {
+				if (!next.includes(el)) {
+					el.classList.remove('tracky-mouse-hover');
+				}
+			}
+
+			for (const el of next) {
+				if (!hovered.includes(el)) {
+					el.classList.add('tracky-mouse-hover');
+				}
+			}
+
+			hovered = next;
+		});
+
+	}
 }
