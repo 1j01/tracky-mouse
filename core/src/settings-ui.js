@@ -134,8 +134,34 @@ export function initSettingsUI({
 			rowEl.setAttribute("title", setting.description);
 		}
 
+		const infoPopover = document.createElement("div");
+		infoPopover.className = "tracky-mouse-setting-info-popover";
+		infoPopover.popover = "auto";
+		infoPopover.id = `tracky-mouse-${setting.className}-info-popover`;
+		infoPopover.textContent = setting.description;
+		rowEl.appendChild(infoPopover);
+
+		const infoButton = document.createElement("button");
+		infoButton.className = "tracky-mouse-setting-info-button tracky-mouse-setting-extra-button";
+		infoButton.textContent = "ⓘ";
+		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
+		// FIXME: tooltips are showing redundantly while the popover is open
+		// (Including while hovering over the popover itself!)
+		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
+		infoButton.ariaLabel = t("settings.settingInfo", { defaultValue: "Setting info" });
+		if (setting.description) {
+			infoButton.popoverTargetElement = infoPopover;
+		} else {
+			// Disabled "extra" buttons are hidden by CSS
+			// The info button is still included in the DOM to reserve space
+			// and align controls without info buttons with those that have them
+			// (The only setting type without a default value is "button", for now at least.)
+			infoButton.disabled = true;
+		}
+		rowEl.prepend(infoButton);
+
 		const resetButton = document.createElement("button");
-		resetButton.className = "tracky-mouse-setting-reset-button";
+		resetButton.className = "tracky-mouse-setting-reset-button tracky-mouse-setting-extra-button";
 		resetButton.textContent = "↩"; // "⟲";
 		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
 		resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
@@ -150,7 +176,7 @@ export function initSettingsUI({
 				}
 			});
 		} else {
-			// Disabled reset buttons are hidden by CSS
+			// Disabled "extra" buttons are hidden by CSS
 			// The reset button is still included in the DOM to reserve space
 			// and align controls without reset buttons with those that have them
 			// (The only setting type without a default value is "button", for now at least.)
