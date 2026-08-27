@@ -34,15 +34,22 @@ export function initScreenOverlay() {
 	inputFeedbackCanvas.style.top = "0";
 	inputFeedbackCanvas.style.left = "0";
 	inputFeedbackCanvas.style.pointerEvents = "none";
-	inputFeedbackCanvas.width = 32;
-	inputFeedbackCanvas.height = 32;
 	document.body.appendChild(inputFeedbackCanvas);
 	const inputFeedbackCtx = inputFeedbackCanvas.getContext("2d");
+
 	function drawInputFeedback({ inputFeedback, isEnabled }) {
-		const { blinkInfo, mouthInfo } = inputFeedback;
+		const { blinkInfo, mouthInfo, virtualJoystickInfo } = inputFeedback;
 		inputFeedbackCtx.clearRect(0, 0, inputFeedbackCanvas.width, inputFeedbackCanvas.height);
 		if (!isEnabled) {
 			return;
+		}
+		const targetSize = virtualJoystickInfo ? 80 : 32;
+		if (inputFeedbackCanvas.width !== targetSize || inputFeedbackCanvas.height !== targetSize) {
+			inputFeedbackCanvas.width = targetSize;
+			inputFeedbackCanvas.height = targetSize;
+		}
+		if (virtualJoystickInfo) {
+			drawVirtualJoystick(virtualJoystickInfo);
 		}
 		// draw meters for blink and mouth openness
 		// TODO: draw meter backings to disambiguate showing zero vs being occluded by taskbar
@@ -60,6 +67,80 @@ export function initScreenOverlay() {
 		if (mouthInfo?.used) {
 			drawMeter(0, 20, 23, Math.max(2, 40 * mouthInfo.heightRatio), mouthInfo);
 		}
+	}
+
+	function drawVirtualJoystick({ x, y, numDirections, active, deadzone, maxMagnitude }) {
+		const ctx = inputFeedbackCtx;
+		// r includes padding for the stick circle, not just an outline
+		// I would define it in terms of stickR, but stickR is defined in terms of r.
+		// Could redesign it so the stick circle can't go outside the outer circle.
+		// It might feel a little more solid.
+		const r = inputFeedbackCanvas.width / 2 - 10;
+		const stickR = r * deadzone; // doesn't have to be tied to deadzone, just one choice
+		ctx.save();
+		ctx.translate(inputFeedbackCanvas.width / 2, inputFeedbackCanvas.height / 2);
+		ctx.fillStyle = "rgba(124, 91, 91, 0.3)";
+		ctx.strokeStyle = "rgba(80, 40, 40, 0.3)";
+		ctx.beginPath();
+		ctx.arc(0, 0, r, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.lineWidth = 1;
+		ctx.stroke();
+
+		if (numDirections > 0 && numDirections < 360) {
+			// Draw sectors, highlighting the active one.
+			// TODO: use a single source of truth for the active direction
+			// that works with angle hysteresis* and whatever else.
+			// (*I haven't determined that the hysteresis actually helps.
+			// It might need to be smarter and use magnitude, maybe something like
+			// if you imagine the slotted pathways that a stick shift has,
+			// locking into a lane and requiring a return to center.)
+			const angle = Math.atan2(y, x);
+			const activeDirection = (Math.round(
+				(angle / (Math.PI * 2) + 1 + 1 / 4) * numDirections
+			)) % numDirections;
+			for (let i = 0; i < numDirections; i++) {
+				const angleStart = ((i - 1 / 2) / numDirections - 1 / 4) * 2 * Math.PI;
+				const angleEnd = ((i + 1 / 2) / numDirections - 1 / 4) * 2 * Math.PI;
+				ctx.beginPath();
+				ctx.arc(0, 0, r, angleStart, angleEnd);
+				ctx.arc(0, 0, deadzone * r, angleEnd, angleStart, true);
+				ctx.closePath();
+				ctx.fillStyle = active && i === activeDirection ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)";
+				ctx.fill();
+				ctx.strokeStyle = active && i === activeDirection ? "rgba(255, 160, 160, 0.7)" : "rgba(80, 40, 40, 0.3)";
+				ctx.lineWidth = 1;
+				ctx.stroke();
+			}
+		} else {
+			const angle = Math.atan2(y, x);
+			ctx.beginPath();
+			ctx.arc(0, 0, r, 0, Math.PI * 2);
+			ctx.closePath();
+			ctx.moveTo(deadzone * r, 0);
+			ctx.arc(0, 0, deadzone * r, 0, Math.PI * 2, true);
+			ctx.closePath();
+			// ctx.fillStyle = active ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)";
+			const gradient = ctx.createConicGradient(angle + Math.PI, 0, 0);
+			gradient.addColorStop(0.2, "rgba(124, 91, 91, 0.3)");
+			gradient.addColorStop(0.5, active ? "rgba(255, 0, 0, 0.7)" : "rgba(124, 91, 91, 0.3)");
+			gradient.addColorStop(0.8, "rgba(124, 91, 91, 0.3)");
+			ctx.fillStyle = gradient;
+			ctx.fill();
+			ctx.strokeStyle = active ? "rgba(255, 160, 160, 0.7)" : "rgba(80, 40, 40, 0.3)";
+			ctx.lineWidth = 1;
+			ctx.stroke();
+		}
+
+		ctx.fillStyle = "rgba(255, 80, 80, 0.5)";
+		ctx.strokeStyle = "rgba(255, 160, 160, 0.7)";
+		ctx.beginPath();
+		ctx.arc(r * x / maxMagnitude, r * y / maxMagnitude, stickR, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.lineWidth = 2;
+		ctx.stroke();
+
+		ctx.restore();
 	}
 
 	function updateMousePos(x, y) {

@@ -70,7 +70,8 @@ const initOptions = {
 	// an exact version, and expect breaking changes in any update.
 	updateInputFeedback: (data) => {
 		inputFeedback = data;
-		updateHUD();
+		// updateHUD(); // called by updateDwellClickingEnabled
+		updateDwellClickingEnabled(); // needed for pauseDwellClickingDueToJoystickUsage
 	},
 	setMouseButtonState: (buttonIndex, pressed) => {
 		if (!isClickingAllowed()) {
@@ -208,7 +209,8 @@ function updateDwellClickingEnabled() {
 	// to support the basic features of Tracky Mouse.
 	if (!dwellClicker) return;
 	const enabled = isEnabled();
-	dwellClicker.paused = activeSettings.clickingMode !== "dwell" || !isClickingAllowed();
+	const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
+	dwellClicker.paused = activeSettings.clickingMode !== "dwell" || !isClickingAllowed() || pauseDwellClickingDueToJoystickUsage;
 	const virtualCursor = document.querySelector(".tracky-mouse-pointer");
 	virtualCursor.style.opacity = (enabled && regainControlTimeout === null) ? "" : "0.2";
 	updateHUD();

@@ -3,22 +3,29 @@
 import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
 import { MESH_ANNOTATIONS } from "./constants.js";
 import { initDwellClicking } from "./dwell-clicker.js";
+import { curateTrackedPointsWithClmtrackr, curateTrackedPointsWithFacemesh } from "./face-hotspots.js";
 import { detectGestures } from "./gestures.js";
 import { initScreenOverlay } from "./hud.js";
 import { availableLanguages, isLocaleRTL } from "./languages.js";
-import { maybeAddPoint, PointTracker } from "./point-tracker.js";
+import { PointTracker } from "./point-tracker.js";
 import { initSettingsUI } from "./settings-ui.js";
 import { getSettingsCategories, traverseSettings } from "./settings.js";
 
 export const TrackyMouse = {
 	dependenciesRoot: new URL("..", import.meta.url).href.replace(/\/+$/, ""),
+	silencedWarnings: [],
 };
 
 // Deprecation notice for `TrackyMouse.dependenciesRoot`
 let _dependenciesRoot = TrackyMouse.dependenciesRoot;
 Object.defineProperty(TrackyMouse, "dependenciesRoot", {
 	set(value) {
-		console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
+		if (!TrackyMouse.silencedWarnings.includes("dependenciesRoot-deprecation")) {
+			console.warn("TrackyMouse.dependenciesRoot is deprecated, and no longer needs to be set. You can remove it from your code. Dependencies will be loaded relative to the tracky-mouse.js module.");
+			// Could use silencedWarnings to avoid showing the same warning multiple times
+			// but mainly I'm adding it for consumers to silence the warning if they want to.
+			// TrackyMouse.silencedWarnings.push("dependenciesRoot-deprecation");
+		}
 		_dependenciesRoot = value.replace(/\/+$/, "");
 	},
 	get() {
@@ -284,6 +291,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	// maybe should be based on size of head in view?
 	const pruningGridSize = 5;
 
+	const joystickMaxSpeed = 0.5; // pixels per millisecond
+	const joystickDistanceToSpeedExponent = 1;
+	const joystickTimeToSpeedExponent = 1.2;
+	const joystickSpeedRampTime = 2500; // milliseconds
+	const joystickMinSpeedThreshold = 0.3; // fraction of joystickMaxMagnitude; AKA deadzone
+	const joystickMaxSpeedThreshold = 1; // fraction of joystickMaxMagnitude; AKA live-zone?
+	const joystickMaxMagnitude = 0.2;
+	const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
+
 	// Head tracking and facial gesture state
 	// ## Clmtrackr state
 	let face;
@@ -325,7 +341,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let virtualJoystickX = 0; // used for joystick/d-pad movement modes
 	let virtualJoystickY = 0;
 	let virtualDPadAngle = Infinity; // used for d-pad movement modes
-	let virtualJoystickSpeedRampStartTime = Infinity; // used for joystick/d-pad movement modes
+	let virtualJoystickSpeedRampStartTime = performance.now(); // used for joystick/d-pad movement modes
+	let virtualJoystickInfo;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
 
@@ -755,15 +772,13 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		cameraVideo.height = cameraVideo.videoHeight;
 		canvas.width = cameraVideo.videoWidth;
 		canvas.height = cameraVideo.videoHeight;
-		debugPointsCanvas.width = cameraVideo.videoWidth;
-		debugPointsCanvas.height = cameraVideo.videoHeight;
 
 		// .tracky-mouse-canvas-container needs aspect-ratio CSS property
 		// so that the video can be scaled to fit the container.
 		canvasContainer.style.aspectRatio = `${cameraVideo.videoWidth} / ${cameraVideo.videoHeight}`;
 		canvasContainer.style.setProperty('--aspect-ratio', cameraVideo.videoWidth / cameraVideo.videoHeight);
 
-		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize, ctx, debugPointsCtx });
+		pointTracker = new PointTracker({ cameraVideo, maxPoints, pruningGridSize });
 	});
 	cameraVideo.addEventListener('play', () => {
 		clmTracker.reset();
@@ -787,11 +802,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	canvas.height = defaultHeight;
 	cameraVideo.width = defaultWidth;
 	cameraVideo.height = defaultHeight;
-
-	const debugPointsCanvas = document.createElement("canvas");
-	debugPointsCanvas.width = canvas.width;
-	debugPointsCanvas.height = canvas.height;
-	const debugPointsCtx = debugPointsCanvas.getContext("2d");
 
 	canvas.addEventListener('click', (event) => {
 		if (!pointTracker) {
@@ -952,92 +962,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							return [key, indices.map(getPoint)];
 						}));
 
-						// nostrils
-						maybeAddPoint(pointTracker, annotations.noseLeftCorner[0][0], annotations.noseLeftCorner[0][1]);
-						maybeAddPoint(pointTracker, annotations.noseRightCorner[0][0], annotations.noseRightCorner[0][1]);
-						// midway between eyes
-						maybeAddPoint(pointTracker, annotations.midwayBetweenEyes[0][0], annotations.midwayBetweenEyes[0][1]);
-						// inner eye corners
-						// maybeAddPoint(pointTracker, annotations.leftEyeLower0[8][0], annotations.leftEyeLower0[8][1]);
-						// maybeAddPoint(pointTracker, annotations.rightEyeLower0[8][0], annotations.rightEyeLower0[8][1]);
-
+						curateTrackedPointsWithFacemesh({ pointTracker, annotations, showDebugRegionFilter, ctx, canvas, s });
 
 						// console.log(pointTracker.pointCount, cameraFramesSinceFacemeshUpdate.length, pointTracker.curXY);
 
 						pointsBasedOnFaceInViewConfidence = facemeshPrediction.faceInViewConfidence;
-
-						// TODO: separate confidence threshold for removing vs adding points?
-
-
-						// cull points to those within useful facial region
-						function regionFilter([x, y]) {
-
-							// distance from tip of nose (stretched so make an ellipse taller than wide)
-							let distance = Math.hypot(
-								(annotations.noseTip[0][0] - x) * 1.4,
-								annotations.noseTip[0][1] - y
-							);
-							let headSize = Math.hypot(
-								annotations.leftCheek[0][0] - annotations.rightCheek[0][0],
-								annotations.leftCheek[0][1] - annotations.rightCheek[0][1]
-							);
-							if (distance > headSize) {
-								return false;
-							}
-							// Avoid mouth affecting pointer position.
-							distance = annotations.lipsLowerInner.map((lipPoint) =>
-								Math.min(
-									Math.hypot(lipPoint[0] - x, lipPoint[1] - y),
-									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.1 - y), // a bit below too
-									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.2 - y), // a bit below too
-									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.3 - y), // a bit below too
-									Math.hypot(lipPoint[0] - x, lipPoint[1] + headSize * 0.4 - y), // a bit below too (yeah I'm being a little lazy here)
-								)
-							).reduce((a, b) => Math.min(a, b), Infinity);
-							if (distance < headSize * 0.1) {
-								return false;
-							}
-							// Avoid blinking eyes affecting pointer position.
-							// distance to outer corners of eyes
-							distance = Math.min(
-								Math.hypot(
-									annotations.leftEyeLower0[0][0] - x,
-									annotations.leftEyeLower0[0][1] - y
-								),
-								Math.hypot(
-									annotations.rightEyeLower0[0][0] - x,
-									annotations.rightEyeLower0[0][1] - y
-								),
-							);
-							if (distance < headSize * 0.42) {
-								return false;
-							}
-							return true;
-						}
-						pointTracker.filterPoints((pointIndex) => {
-							let pointOffset = pointIndex * 2;
-							const point = [pointTracker.curXY[pointOffset], pointTracker.curXY[pointOffset + 1]];
-							return regionFilter(point);
-						});
-
-						// Debug visualization for region filter (a sort of heatmap of where points will be culled)
-						if (showDebugRegionFilter) {
-							ctx.save();
-							if (s.mirror) {
-								ctx.translate(canvas.width, 0);
-								ctx.scale(-1, 1);
-							}
-							ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
-							const vizStep = 4;
-							for (let x = 0; x < canvas.width; x += vizStep) {
-								for (let y = 0; y < canvas.height; y += vizStep) {
-									if (!regionFilter([x, y])) {
-										ctx.fillRect(x - 5, y - 5, vizStep, vizStep);
-									}
-								}
-							}
-							ctx.restore();
-						}
 
 						const keypoints = facemeshPrediction.keypoints;
 						if (keypoints) {
@@ -1151,6 +1080,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			headNotFound: !face && !facemeshPrediction,
 			blinkInfo,
 			mouthInfo,
+			virtualJoystickInfo,
 		});
 
 		if (facemeshPrediction) {
@@ -1390,33 +1320,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				if (update && useClmTracking) {
 					pointsBasedOnFaceScore = faceScore;
 
-					// nostrils
-					maybeAddPoint(pointTracker, face[42][0], face[42][1]);
-					maybeAddPoint(pointTracker, face[43][0], face[43][1]);
-					// inner eye corners
-					// maybeAddPoint(pointTracker, face[25][0], face[25][1]);
-					// maybeAddPoint(pointTracker, face[30][0], face[30][1]);
-
-					// TODO: separate confidence threshold for removing vs adding points?
-
-					// cull points to those within useful facial region
-					pointTracker.filterPoints((pointIndex) => {
-						let pointOffset = pointIndex * 2;
-						// distance from tip of nose (stretched so make an ellipse taller than wide)
-						let distance = Math.hypot(
-							(face[62][0] - pointTracker.curXY[pointOffset]) * 1.4,
-							face[62][1] - pointTracker.curXY[pointOffset + 1]
-						);
-						// distance based on outer eye corners
-						let headSize = Math.hypot(
-							face[23][0] - face[28][0],
-							face[23][1] - face[28][1]
-						);
-						if (distance > headSize) {
-							return false;
-						}
-						return true;
-					});
+					curateTrackedPointsWithClmtrackr({ pointTracker, face, showDebugRegionFilter, ctx, canvas, s });
 				}
 			} else {
 				if (update && useClmTracking) {
@@ -1429,8 +1333,6 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		}
 		ctx.fillStyle = "lime";
 		pointTracker.draw(ctx);
-		debugPointsCtx.fillStyle = "green";
-		pointTracker.draw(debugPointsCtx);
 
 		if (update) {
 			const screenWidth = window.electronAPI ? (virtualDisplayBounds?.width ?? screen.width) : innerWidth;
@@ -1439,6 +1341,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			const screenOffsetY = window.electronAPI ? (virtualDisplayBounds?.y ?? 0) : 0;
 
 			let [movementX, movementY] = pointTracker.getMovement();
+
+			// Invert X axis of camera video motion to match screen
+			// (The camera VIEW is mirrored by default, but the video data is always opposite to the screen.)
+			movementX *= -1;
 
 			// Acceleration curves add a lot of stability,
 			// letting you focus on a specific point without jitter, but still move quickly.
@@ -1465,11 +1371,27 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					return (value - min) / (max - min);
 				}
 
-				const targetX = screenWidth * (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
-				const targetY = screenHeight * normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
+				let targetX = (1 - normalize(headTilt.yaw, yawRange[0], yawRange[1]));
+				let targetY = normalize(headTilt.pitch, pitchRange[0], pitchRange[1]);
 
-				const deltaXToMatchTilt = (mouseX - targetX) / screenWidth;
-				const deltaYToMatchTilt = (targetY - mouseY) / screenHeight;
+				let deltaXToMatchTilt = targetX - mouseX / screenWidth;
+				let deltaYToMatchTilt = targetY - mouseY / screenHeight;
+				if (s.headTrackingMovementMode !== "direct") {
+					targetX = targetX * 2 - 1;
+					targetY = targetY * 2 - 1;
+					// Normalize to within circle, matching later clamping to joystickMaxMagnitude.
+					// If the target isn't constrained to the bounds of what's reachable,
+					// it can lead to wild jitter of the angle of the virtual joystick.
+					const length = Math.hypot(targetX, targetY);
+					if (length > joystickMaxMagnitude) {
+						const scale = joystickMaxMagnitude / length;
+						targetX *= scale;
+						targetY *= scale;
+					}
+					deltaXToMatchTilt = targetX - virtualJoystickX;
+					deltaYToMatchTilt = targetY - virtualJoystickY;
+				}
+
 				// Slow down movement away from target, speed up movement towards target*
 				// *conditionally. Applies to part of the slider range.
 				// (Hey look, we can reuse the normalize function to choose where on the slider these effects kick in!)
@@ -1526,10 +1448,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			// This applied previously also to release, to help with double clicks,
 			// but this felt bad, and I find personally that I can still do double clicks without that help.
 			const timeSinceMouseDown = performance.now() - lastMouseDownTime;
-			if (timeSinceMouseDown < s.delayBeforeDragging) {
-				deltaX = 0;
-				deltaY = 0;
-			}
+			const preventDragging = timeSinceMouseDown < s.delayBeforeDragging;
 
 			if (debugAcceleration) {
 				const graphWidth = 200;
@@ -1563,76 +1482,86 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			}
 
 			if (!paused) {
-				if (s.headTrackingMovementMode == "direct") {
-					mouseX -= deltaX * screenWidth;
-					mouseY += deltaY * screenHeight;
+				if (s.headTrackingMovementMode === "direct") {
+					if (!preventDragging) {
+						mouseX += deltaX * screenWidth;
+						mouseY += deltaY * screenHeight;
+					}
+					virtualJoystickInfo = null;
 				} else {
-					// virtualJoystickX += deltaX;
-					// virtualJoystickY += deltaY;
-					// For now, only supporting absolute head tilt
-					// TODO: support 2D point tracking and the "Tilt influence" slider
-					// (complicating factors may include the screen size being baked into certain variables)
-					virtualJoystickX = Math.max(-1, Math.min(1, headTilt.yaw / (s.headTiltYawRange / 2)));
-					virtualJoystickY = Math.max(-1, Math.min(1, headTilt.pitch / (s.headTiltPitchRange / 2)));
+					virtualJoystickX += deltaX;
+					virtualJoystickY += deltaY;
 
-					const joystickMaxSpeed = 30;
-					const joystickDistanceToSpeedExponent = 2;
-					const joystickTimeToSpeedExponent = 1;
-					const joystickSpeedRampTime = 1500; // milliseconds
-					const joystickMinSpeedThreshold = 0.3; // fraction of joystickSize; AKA deadzone
-					const joystickMaxSpeedThreshold = 1; // fraction of joystickSize; AKA live-zone?
-					const joystickSize = 1;
-					const joystickAngleHysteresis = 0.3; // fraction of d-pad direction arc beyond the arc where it will switch to a different direction
+					const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
 
-					if (s.headTrackingMovementMode !== "direct") {
+					virtualJoystickInfo = {
+						x: virtualJoystickX,
+						y: virtualJoystickY,
+						numDirections,
+						active: false,
+						deadzone: joystickMinSpeedThreshold,
+						maxMagnitude: joystickMaxMagnitude,
+					};
 
-						const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
-						if (distance > joystickSize * joystickMinSpeedThreshold) {
-							let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
+					const distance = Math.hypot(virtualJoystickX, virtualJoystickY);
+					if (distance > joystickMaxMagnitude * joystickMinSpeedThreshold) {
+						let angle = Math.atan2(virtualJoystickY, virtualJoystickX);
 
-							const numDirections = parseInt(s.headTrackingMovementMode.match(/(\d+)/)?.[1] ?? 0, 10);
-							if (numDirections) {
-								// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
-								// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
-								angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
+						if (numDirections) {
+							// - Math.PI / 2 and + Math.PI / 2 are for 6 direction mode
+							// Note that most isometric games use 2:1 slopes rather than true 120 degree angles
+							angle = Math.round((angle - Math.PI / 2) / (Math.PI * 2) * numDirections) / numDirections * (Math.PI * 2) + Math.PI / 2;
 
-								const angleDiff = Math.atan2(Math.sin(angle - virtualDPadAngle), Math.cos(angle - virtualDPadAngle));
+							const angleDiff = Math.atan2(Math.sin(angle - virtualDPadAngle), Math.cos(angle - virtualDPadAngle));
 
-								if (
-									!isFinite(virtualDPadAngle) ||
-									Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysteresis)
-								) {
-									virtualDPadAngle = angle;
-									virtualJoystickSpeedRampStartTime = performance.now();
-								}
-							} else {
+							if (
+								!isFinite(virtualDPadAngle) ||
+								Math.abs(angleDiff) > Math.PI * 2 / numDirections / 2 * (1 + joystickAngleHysteresis)
+							) {
 								virtualDPadAngle = angle;
+								virtualJoystickSpeedRampStartTime = performance.now();
 							}
-
-							const timeAtThisAngle = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
-							const speedRampOverTime = numDirections ? Math.min(1, timeAtThisAngle / joystickSpeedRampTime) : 1;
-							const speed = joystickMaxSpeed * Math.pow(
-								Math.max(0, Math.min(1,
-									((distance / joystickSize) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
-								)),
-								joystickDistanceToSpeedExponent
-							) * Math.pow(
-								speedRampOverTime,
-								joystickTimeToSpeedExponent
-							);
-							mouseX -= Math.cos(virtualDPadAngle) * speed;
-							mouseY += Math.sin(virtualDPadAngle) * speed;
+						} else {
+							virtualDPadAngle = angle;
 						}
-						// normalize to within circle
-						// if (distance > joystickSize) {
-						// 	const scale = joystickSize / distance;
-						// 	virtualJoystickX *= scale;
-						// 	virtualJoystickY *= scale;
-						// }
+
+						const timeAtThisSector = performance.now() - virtualJoystickSpeedRampStartTime; // milliseconds
+						const speedRampOverTime = Math.min(1, timeAtThisSector / joystickSpeedRampTime);
+						const speed = joystickMaxSpeed * Math.pow(
+							Math.max(0, Math.min(1,
+								((distance / joystickMaxMagnitude) - joystickMinSpeedThreshold) / (joystickMaxSpeedThreshold - joystickMinSpeedThreshold)
+							)),
+							joystickDistanceToSpeedExponent
+						) * Math.pow(
+							speedRampOverTime,
+							joystickTimeToSpeedExponent
+						);
+						if (!preventDragging && isFinite(virtualDPadAngle) && isFinite(speed)) {
+							mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
+							mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
+						}
+
+						virtualJoystickInfo.active = true;
 					} else {
 						virtualJoystickSpeedRampStartTime = performance.now();
 					}
-
+					// normalize to within circle
+					if (distance > joystickMaxMagnitude) {
+						const scale = joystickMaxMagnitude / distance;
+						virtualJoystickX *= scale;
+						virtualJoystickY *= scale;
+						virtualJoystickInfo.x = virtualJoystickX;
+						virtualJoystickInfo.y = virtualJoystickY;
+					}
+					// normalize to within square
+					// if (Math.abs(virtualJoystickX) > joystickMaxMagnitude) {
+					// 	virtualJoystickX = Math.sign(virtualJoystickX) * joystickMaxMagnitude;
+					// 	virtualJoystickInfo.x = virtualJoystickX;
+					// }
+					// if (Math.abs(virtualJoystickY) > joystickMaxMagnitude) {
+					// 	virtualJoystickY = Math.sign(virtualJoystickY) * joystickMaxMagnitude;
+					// 	virtualJoystickInfo.y = virtualJoystickY;
+					// }
 				}
 
 				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
@@ -1831,10 +1760,11 @@ TrackyMouse.init = function (div, opts = {}) {
 		const openStates = Array.from(collapsibles).map(c => c.open);
 		const scrollables = inner._element.querySelectorAll("*");
 		const scrollPositions = Array.from(scrollables).map(s => [s.scrollLeft, s.scrollTop]);
-		const focusedElementSelector = Array.from(document.activeElement?.classList || []).map(c => `.${c}`).join("");
-		return { paused, openStates, scrollPositions, focusedElementSelector };
+		const focusedElementSelector = Array.from(document.activeElement?.classList || []).map(c => `.${c}`).join("") || "*";
+		const focusedElementIndexWithinSelected = Array.from(inner._element.querySelectorAll(focusedElementSelector)).indexOf(document.activeElement);
+		return { paused, openStates, scrollPositions, focusedElementSelector, focusedElementIndexWithinSelected };
 	};
-	const restoreUIState = ({ paused, openStates, scrollPositions, focusedElementSelector }) => {
+	const restoreUIState = ({ paused, openStates, scrollPositions, focusedElementSelector, focusedElementIndexWithinSelected }) => {
 		inner._waitForSettingsLoaded().then(() => {
 			inner._setPaused(paused);
 		});
@@ -1850,7 +1780,7 @@ TrackyMouse.init = function (div, opts = {}) {
 			scrollables[i].scrollTop = scrollTop;
 		}
 		if (focusedElementSelector) {
-			const elementToFocus = inner._element.querySelector(focusedElementSelector);
+			const elementToFocus = inner._element.querySelectorAll(focusedElementSelector)[focusedElementIndexWithinSelected];
 			elementToFocus?.focus();
 		}
 	};

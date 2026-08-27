@@ -36,6 +36,9 @@ export function initSettingsUI({
 						el.classList.toggle("tracky-mouse-disabled", disabled);
 						const controls = el.querySelectorAll(`input, select, button`);
 						for (const control of controls) {
+							if (control.matches(".tracky-mouse-setting-reset-button")) {
+								continue;
+							}
 							// This should handle nested disabled conditions properly
 							control.disabled = control.closest(".tracky-mouse-disabled") !== null;
 						}
@@ -85,15 +88,13 @@ export function initSettingsUI({
 				console.warn(`Setting is missing ${importantProp}:`, setting);
 			}
 		}
-
-		// TODO: consider making everything use <label for=""> inside and <div> outside
-		const rowEl = document.createElement(setting.type === "slider" ? "label" : "div");
+		const rowEl = document.createElement("div");
 		rowEl.className = "tracky-mouse-control-row";
 		if (setting.type === "slider") {
 			rowEl.innerHTML = `
-				<span class="tracky-mouse-label-text">${setting.label}</span>
+				<label for="${setting.className}"><span class="tracky-mouse-label-text">${setting.label}</span></label>
 				<span class="tracky-mouse-labeled-slider">
-					<input type="range" min="${setting.min}" max="${setting.max}" class="${setting.className}">
+					<input type="range" id="${setting.className}" min="${setting.min}" max="${setting.max}" class="${setting.className}">
 					<span class="tracky-mouse-slider-labels">
 						<span class="tracky-mouse-min-label">${setting.labels.min}</span>
 						<span class="tracky-mouse-max-label">${setting.labels.max}</span>
@@ -132,6 +133,30 @@ export function initSettingsUI({
 			// Tooltip; TODO: try an ⓘ info icon button with a popover
 			rowEl.setAttribute("title", setting.description);
 		}
+
+		const resetButton = document.createElement("button");
+		resetButton.className = "tracky-mouse-setting-reset-button";
+		resetButton.textContent = "↩"; // "⟲";
+		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
+		resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
+		if ("default" in setting) {
+			resetButton.addEventListener("click", () => {
+				setControlValue(setting.default);
+				loadValueFromControl();
+				save();
+				setting.handleSettingChange?.();
+				for (const func of functionsToUpdateDisabledStates) {
+					func();
+				}
+			});
+		} else {
+			// Disabled reset buttons are hidden by CSS
+			// The reset button is still included in the DOM to reserve space
+			// and align controls without reset buttons with those that have them
+			// (The only setting type without a default value is "button", for now at least.)
+			resetButton.disabled = true;
+		}
+		rowEl.prepend(resetButton);
 
 		const control = rowEl.querySelector(`.${setting.className}`);
 		const getControlValue = () => {

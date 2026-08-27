@@ -6,14 +6,10 @@ export class PointTracker {
 		cameraVideo,
 		maxPoints,
 		pruningGridSize,
-		ctx,
-		debugPointsCtx,
 	}) {
 		this.cameraVideo = cameraVideo;
 		this.maxPoints = maxPoints;
 		this.pruningGridSize = pruningGridSize;
-		this.ctx = ctx;
-		this.debugPointsCtx = debugPointsCtx;
 
 		this.curPyramid = new jsfeat.pyramid_t(3);
 		this.prevPyramid = new jsfeat.pyramid_t(3);
@@ -48,17 +44,6 @@ export class PointTracker {
 					this.prevXY[outputOffset + 1] = this.prevXY[inputOffset + 1];
 				}
 				outputPointIndex++;
-			} else {
-				this.debugPointsCtx.fillStyle = "red";
-				const inputOffset = inputPointIndex * 2;
-				circle(this.debugPointsCtx, this.curXY[inputOffset], this.curXY[inputOffset + 1], 5);
-				this.debugPointsCtx.fillText(condition.toString(), 5 + this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				// console.log(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				this.ctx.strokeStyle = this.ctx.fillStyle;
-				this.ctx.beginPath();
-				this.ctx.moveTo(this.prevXY[inputOffset], this.prevXY[inputOffset + 1]);
-				this.ctx.lineTo(this.curXY[inputOffset], this.curXY[inputOffset + 1]);
-				this.ctx.stroke();
 			}
 		}
 		this.pointCount = outputPointIndex;
@@ -138,37 +123,6 @@ export class PointTracker {
 		return [movementX, movementY];
 	}
 }
-
-export function maybeAddPoint(pointTracker, x, y) {
-	const minDistanceToAddPoint = pointTracker.pruningGridSize * 1.5;
-
-	// In order to prefer points that already exist, since they're already tracking,
-	// in order to keep a smooth overall tracking calculation,
-	// don't add points if they're close to an existing point.
-	// Otherwise, it would not just be redundant, but often remove the older points, in the pruning.
-	for (let pointIndex = 0; pointIndex < pointTracker.pointCount; pointIndex++) {
-		let pointOffset = pointIndex * 2;
-		// let distance = Math.hypot(
-		// 	x - pointTracker.curXY[pointOffset],
-		// 	y - pointTracker.curXY[pointOffset + 1]
-		// );
-		// if (distance < 8) {
-		// 	return;
-		// }
-		// It might be good to base this on the size of the face...
-		// Also, since we're pruning points based on a grid,
-		// there's not much point in using Euclidean distance here,
-		// we can just look at x and y distances.
-		if (
-			Math.abs(x - pointTracker.curXY[pointOffset]) <= minDistanceToAddPoint ||
-			Math.abs(y - pointTracker.curXY[pointOffset + 1]) <= minDistanceToAddPoint
-		) {
-			return;
-		}
-	}
-	pointTracker.addPoint(x, y);
-}
-
 
 function circle(ctx, x, y, r) {
 	ctx.beginPath();
