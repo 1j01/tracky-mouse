@@ -547,6 +547,9 @@ export class InputSimulator {
 		}
 
 		function rewriteStylesheet(sheet) {
+			if (sheet.href?.match(/https?:\/\/fonts\./) || sheet.ownerNode?.classList?.contains('tracky-mouse-no-hover-transform')) {
+				return;
+			}
 			try {
 				rewriteHoverRules(sheet.cssRules);
 			} catch (error) {
