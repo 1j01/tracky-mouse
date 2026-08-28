@@ -125,7 +125,7 @@ export function initSettingsUI({
 			}
 		} else if (setting.type === "button") {
 			rowEl.innerHTML = `
-				<button class="${setting.className}">${setting.label}</button>
+				<button class="${setting.className} tracky-mouse-setting-button">${setting.label}</button>
 			`;
 		}
 		if (setting.visible?.() === false) {
@@ -133,9 +133,10 @@ export function initSettingsUI({
 		}
 
 		if (setting.description) {
-			// TODO: should this be removed or scoped inward to just the label
-			// now that we have a popover button?
-			rowEl.title = setting.description;
+			const toGiveHoverText = rowEl.querySelector(".tracky-mouse-label-text, .tracky-mouse-setting-button");
+			if (toGiveHoverText) {
+				toGiveHoverText.title = setting.description;
+			}
 		}
 
 		const infoPopover = document.createElement("div");
@@ -160,7 +161,6 @@ export function initSettingsUI({
 		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
 		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
 		// Should it show the whole popover itself temporarily?
-		// TODO: avoid redundant hover text showing while the popover is open
 		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
 		infoButton.setAttribute("aria-label", t("settings.settingInfo", { defaultValue: "Setting info" }));
 		if (setting.description) {
