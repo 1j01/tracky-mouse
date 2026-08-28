@@ -36,7 +36,7 @@ export function initSettingsUI({
 						el.classList.toggle("tracky-mouse-disabled", disabled);
 						const controls = el.querySelectorAll(`input, select, button`);
 						for (const control of controls) {
-							if (control.matches(".tracky-mouse-setting-reset-button")) {
+							if (control.matches(".tracky-mouse-setting-extra-button")) {
 								continue;
 							}
 							// This should handle nested disabled conditions properly
