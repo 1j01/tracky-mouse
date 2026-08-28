@@ -132,7 +132,7 @@ export function initSettingsUI({
 		if (setting.description) {
 			// TODO: should this be removed or scoped inward to just the label
 			// now that we have a popover button?
-			rowEl.setAttribute("title", setting.description);
+			rowEl.title = setting.description;
 		}
 
 		const infoPopover = document.createElement("div");
