@@ -229,7 +229,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		},
 	});
 
-	const { updateDisabledStates, populateCameraList } = initSettingsUI({
+	const { updateDisabledStates, populateCameraList, disposeSettingsUI } = initSettingsUI({
 		settingsCategories,
 		uiContainer,
 		t,
@@ -1732,6 +1732,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			stats?.domElement.remove(); // there is no dispose method but this may be all that it would need to do https://github.com/mrdoob/stats.js/pull/96
 
 			removeEventListener("keydown", handleKeydown);
+
+			disposeSettingsUI();
 
 			removeShortcutListener?.();
 

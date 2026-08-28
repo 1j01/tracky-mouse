@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Գլխի թեքության կալիբրացում",
   "settings.sections.pointTracking.label": "Կետի հետևում",
   "settings.sections.video.label": "Վիդեո",
+  "settings.settingInfo": "Կարգավորման տեղեկություններ",
   "settings.shared.directionDown": "Ներքև",
   "settings.shared.directionLeft": "Ձախ",
   "settings.shared.directionRight": "Աջ",

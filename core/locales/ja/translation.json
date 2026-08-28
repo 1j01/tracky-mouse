@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "頭の傾きのキャリブレーション",
   "settings.sections.pointTracking.label": "ポイントトラッキング",
   "settings.sections.video.label": "ビデオ",
+  "settings.settingInfo": "設定情報",
   "settings.shared.directionDown": "下",
   "settings.shared.directionLeft": "左",
   "settings.shared.directionRight": "右",

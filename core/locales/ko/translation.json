@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "머리 기울기 보정",
   "settings.sections.pointTracking.label": "포인트 추적",
   "settings.sections.video.label": "비디오",
+  "settings.settingInfo": "설정 정보",
   "settings.shared.directionDown": "아래",
   "settings.shared.directionLeft": "왼쪽",
   "settings.shared.directionRight": "오른쪽",

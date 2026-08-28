@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "سر کی جھکاؤ کی درستی",
   "settings.sections.pointTracking.label": "پوائنٹ ٹریکنگ",
   "settings.sections.video.label": "ویڈیو",
+  "settings.settingInfo": "سیٹنگ کی معلومات",
   "settings.shared.directionDown": "نیچے",
   "settings.shared.directionLeft": "بائیں",
   "settings.shared.directionRight": "دائیں",

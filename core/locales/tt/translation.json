@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Баш авышуын көйләү",
   "settings.sections.pointTracking.label": "Нокта күзәтүе",
   "settings.sections.video.label": "Видео",
+  "settings.settingInfo": "Көйләү турында мәгълүмат",
   "settings.shared.directionDown": "Аска",
   "settings.shared.directionLeft": "Сулга",
   "settings.shared.directionRight": "Уңга",

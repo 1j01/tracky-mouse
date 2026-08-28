@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Βαθμονόμηση κλίσης κεφαλιού",
   "settings.sections.pointTracking.label": "Παρακολούθηση σημείων",
   "settings.sections.video.label": "Βίντεο",
+  "settings.settingInfo": "Πληροφορίες ρύθμισης",
   "settings.shared.directionDown": "Κάτω",
   "settings.shared.directionLeft": "Αριστερά",
   "settings.shared.directionRight": "Δεξιά",

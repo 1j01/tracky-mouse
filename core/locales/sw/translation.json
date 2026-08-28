@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibisho la kuinamisha kichwa",
   "settings.sections.pointTracking.label": "Ufuatiliaji wa pointi",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Maelezo ya mipangilio",
   "settings.shared.directionDown": "Chini",
   "settings.shared.directionLeft": "Kushoto",
   "settings.shared.directionRight": "Kulia",

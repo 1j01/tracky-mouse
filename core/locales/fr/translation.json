@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Étalonnage de l'inclinaison de la tête",
   "settings.sections.pointTracking.label": "Suivi de points",
   "settings.sections.video.label": "Vidéo",
+  "settings.settingInfo": "Informations sur le paramètre",
   "settings.shared.directionDown": "Bas",
   "settings.shared.directionLeft": "Gauche",
   "settings.shared.directionRight": "Droite",

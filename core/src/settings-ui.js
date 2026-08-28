@@ -13,6 +13,9 @@ export function initSettingsUI({
 	const elsByGroup = new Map();
 	const functionsToUpdateDisabledStates = [];
 
+	const disposeController = new AbortController();
+	const disposeSignal = disposeController.signal;
+
 	function buildSettingsUI(parentEl, settingsCategories) {
 
 		for (const category of settingsCategories) {
@@ -36,7 +39,7 @@ export function initSettingsUI({
 						el.classList.toggle("tracky-mouse-disabled", disabled);
 						const controls = el.querySelectorAll(`input, select, button`);
 						for (const control of controls) {
-							if (control.matches(".tracky-mouse-setting-reset-button")) {
+							if (control.matches(".tracky-mouse-setting-extra-button")) {
 								continue;
 							}
 							// This should handle nested disabled conditions properly
@@ -130,15 +133,70 @@ export function initSettingsUI({
 		}
 
 		if (setting.description) {
-			// Tooltip; TODO: try an ⓘ info icon button with a popover
-			rowEl.setAttribute("title", setting.description);
+			// TODO: should this be removed or scoped inward to just the label
+			// now that we have a popover button?
+			rowEl.title = setting.description;
 		}
 
+		const infoPopover = document.createElement("div");
+		infoPopover.className = "tracky-mouse-setting-info-popover";
+		// Avoiding using native popover functionality because
+		// the cursor+HUD should go on top in the web demo/web version.
+		// TODO: research aria-describedby, aria-haspopup
+		// What's the proper way to do a tooltip with explicit toggling?
+		// infoPopover.popover = "auto";
+		infoPopover.role = "dialog"; // NOT "tooltip"
+		infoPopover.hidden = true;
+		infoPopover.id = `tracky-mouse-${setting.className}-info-popover`;
+		infoPopover.textContent = setting.description;
+		infoPopover.title = ""; // avoid redundant tooltip
+		rowEl.appendChild(infoPopover);
+
+		const infoButton = document.createElement("button");
+		infoButton.className = "tracky-mouse-setting-info-button tracky-mouse-setting-extra-button";
+		infoButton.setAttribute("aria-controls", infoPopover.id);
+		infoButton.setAttribute("aria-expanded", false);
+		infoButton.textContent = "ⓘ";
+		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
+		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
+		// Should it show the whole popover itself temporarily?
+		// FIXME: tooltips are showing redundantly while the popover is open
+		// (Including while hovering over the popover itself!)
+		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
+		infoButton.setAttribute("aria-label", t("settings.settingInfo", { defaultValue: "Setting info" }));
+		if (setting.description) {
+			// infoButton.popoverTargetElement = infoPopover;
+			infoButton.addEventListener("click", () => {
+				infoPopover.hidden = !infoPopover.hidden;
+				infoButton.setAttribute("aria-expanded", !infoPopover.hidden);
+			});
+			// TODO: use event listener delegation to avoid many event listeners
+			addEventListener("pointerdown", (e) => {
+				if (!infoPopover.contains(e.target) && !infoButton.contains(e.target)) {
+					infoPopover.hidden = true;
+					infoButton.setAttribute("aria-expanded", false);
+				}
+			}, { signal: disposeSignal });
+			addEventListener("keydown", (e) => {
+				if (e.key === "Escape") {
+					infoPopover.hidden = true;
+					infoButton.setAttribute("aria-expanded", false);
+				}
+			}, { signal: disposeSignal });
+		} else {
+			// Disabled "extra" buttons are hidden by CSS
+			// The info button is still included in the DOM to reserve space
+			// and align controls without info buttons with those that have them
+			// (The only setting type without a default value is "button", for now at least.)
+			infoButton.disabled = true;
+		}
+		rowEl.prepend(infoButton);
+
 		const resetButton = document.createElement("button");
-		resetButton.className = "tracky-mouse-setting-reset-button";
+		resetButton.className = "tracky-mouse-setting-reset-button tracky-mouse-setting-extra-button";
 		resetButton.textContent = "↩"; // "⟲";
 		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
-		resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
+		resetButton.setAttribute("aria-label", t("settings.resetSetting", { defaultValue: "Reset to default" }));
 		if ("default" in setting) {
 			resetButton.addEventListener("click", () => {
 				setControlValue(setting.default);
@@ -150,7 +208,7 @@ export function initSettingsUI({
 				}
 			});
 		} else {
-			// Disabled reset buttons are hidden by CSS
+			// Disabled "extra" buttons are hidden by CSS
 			// The reset button is still included in the DOM to reserve space
 			// and align controls without reset buttons with those that have them
 			// (The only setting type without a default value is "button", for now at least.)
@@ -335,6 +393,11 @@ export function initSettingsUI({
 			for (const func of functionsToUpdateDisabledStates) {
 				func();
 			}
+		},
+		// `dispose` would be a more natural name, but I'm just making it
+		// easy to use destructuring for now
+		disposeSettingsUI: () => {
+			disposeController.abort();
 		},
 	};
 }

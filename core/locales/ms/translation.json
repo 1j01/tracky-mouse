@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Penentukuran condongan kepala",
   "settings.sections.pointTracking.label": "Penjejakan titik",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Maklumat tetapan",
   "settings.shared.directionDown": "Bawah",
   "settings.shared.directionLeft": "Kiri",
   "settings.shared.directionRight": "Kanan",

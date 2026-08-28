@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibrácia náklonu hlavy",
   "settings.sections.pointTracking.label": "Sledovanie bodov",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Informácie o nastavení",
   "settings.shared.directionDown": "Dole",
   "settings.shared.directionLeft": "Vľavo",
   "settings.shared.directionRight": "Vpravo",

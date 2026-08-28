@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "כיול הטיית ראש",
   "settings.sections.pointTracking.label": "מעקב נקודות",
   "settings.sections.video.label": "וידאו",
+  "settings.settingInfo": "מידע על ההגדרה",
   "settings.shared.directionDown": "למטה",
   "settings.shared.directionLeft": "שמאל",
   "settings.shared.directionRight": "ימין",

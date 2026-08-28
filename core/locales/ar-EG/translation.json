@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "معايرة إمالة الرأس",
   "settings.sections.pointTracking.label": "تتبّع النقاط",
   "settings.sections.video.label": "فيديو",
+  "settings.settingInfo": "معلومات الإعداد",
   "settings.shared.directionDown": "تحت",
   "settings.shared.directionLeft": "يسار",
   "settings.shared.directionRight": "يمين",

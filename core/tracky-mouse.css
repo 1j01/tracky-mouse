@@ -122,6 +122,7 @@
 	display: flex;
 	min-height: 30px;
 	align-items: center;
+	anchor-scope: all;
 }
 
 .tracky-mouse-ui .tracky-mouse-control-row label {
@@ -399,13 +400,24 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	padding: 8px;
 }
 
-.tracky-mouse-control-row:not(:hover):not(:has(:focus-visible)) .tracky-mouse-setting-reset-button,
-.tracky-mouse-setting-reset-button[disabled] {
+.tracky-mouse-control-row:not(:hover):not(:has(:focus-visible)) .tracky-mouse-setting-extra-button,
+.tracky-mouse-setting-extra-button[disabled] {
 	opacity: 0;
 	pointer-events: none;
 }
 
-.tracky-mouse-setting-reset-button {
+/* No longer using popover API because cursor+HUD should go on top in the web demo/web version. */
+/* .tracky-mouse-control-row:has(.tracky-mouse-setting-info-popover:popover-open) .tracky-mouse-setting-info-button { */
+.tracky-mouse-control-row:has(.tracky-mouse-setting-info-popover:not([hidden])) .tracky-mouse-setting-info-button {
+	opacity: 1;
+	pointer-events: auto;
+	background: rgb(255, 255, 157);
+	color: black;
+	outline: 2px solid black;
+}
+
+
+.tracky-mouse-setting-extra-button {
 	transition: opacity 0.2s ease;
 	margin-inline-end: 5px;
 	font-size: 1.3em;
@@ -415,12 +427,30 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	cursor: pointer;
 }
 
-.tracky-mouse-setting-reset-button:hover,
-.tracky-mouse-setting-reset-button:focus-visible {
+.tracky-mouse-setting-extra-button:hover,
+.tracky-mouse-setting-extra-button:focus-visible {
 	border-color: currentColor;
 	background-color: rgba(0, 0, 0, 0.1);
 }
 
-.tracky-mouse-setting-reset-button:active {
+.tracky-mouse-setting-extra-button:active {
 	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.tracky-mouse-setting-info-button {
+	anchor-name: --tracky-mouse-setting-info;
+}
+
+.tracky-mouse-setting-info-popover {
+	position-anchor: --tracky-mouse-setting-info;
+	position: fixed;
+	position-area: end span-end;
+	position-try-fallbacks: flip-block;
+	white-space: pre-wrap;
+	background: rgb(255, 255, 157);
+	color: black;
+	border: 2px solid black;
+	box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.5);
+	padding: 5px;
+	z-index: 1000;
 }

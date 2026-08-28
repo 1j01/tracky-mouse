@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Fej dőlése – kalibráció",
   "settings.sections.pointTracking.label": "Pontkövetés",
   "settings.sections.video.label": "Videó",
+  "settings.settingInfo": "Beállítási információ",
   "settings.shared.directionDown": "Le",
   "settings.shared.directionLeft": "Bal",
   "settings.shared.directionRight": "Jobb",

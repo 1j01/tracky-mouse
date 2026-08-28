@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "डोक्याच्या झुकण्याचे कॅलिब्रेशन",
   "settings.sections.pointTracking.label": "पॉइंट ट्रॅकिंग",
   "settings.sections.video.label": "व्हिडिओ",
+  "settings.settingInfo": "सेटिंगची माहिती",
   "settings.shared.directionDown": "खाली",
   "settings.shared.directionLeft": "डावे",
   "settings.shared.directionRight": "उजवे",

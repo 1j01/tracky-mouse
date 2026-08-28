@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "తల వంపు కాలిబ్రేషన్",
   "settings.sections.pointTracking.label": "పాయింట్ ట్రాకింగ్",
   "settings.sections.video.label": "వీడియో",
+  "settings.settingInfo": "సెట్టింగ్ సమాచారం",
   "settings.shared.directionDown": "కింద",
   "settings.shared.directionLeft": "ఎడమ",
   "settings.shared.directionRight": "కుడి",

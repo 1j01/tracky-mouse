@@ -515,4 +515,98 @@ export class InputSimulator {
 
 		return target || fallback;
 	}
+	static transformCSSHoverRules() {
+		// :hover doesn't work with simulated pointer events,
+		// but we can modify stylesheets to simulate :hover behavior for simulated pointer events.
+		// This won't work for user agent stylesheets.
+
+		// TODO: provide some base hover styles in lieu of user agent CSS.
+		// It's kind of tricky since setting background or borders can make
+		// native controls revert to base styles, but we might be able to
+		// reuse the "hover halo" currently used for dwell clicking,
+		// which has a richly configurable set of interactive controls.
+		// Or a different sort of overlay using mix-blend-mode
+		// to do something similar to filter: brightness(120%), but without overriding filter,
+		// in case an element uses filter already.
+
+		function rewriteHoverRules(rules) {
+			// This function should be idempotent,
+			// with the regexp avoiding rewriting already transformed rules.
+			for (const rule of [...rules]) {
+				if (rule.selectorText?.includes(':hover')) {
+					rule.selectorText = rule.selectorText.replace(
+						/:hover(?!,\s*\.tracky-mouse-hover)\b/g,
+						':is(:hover, .tracky-mouse-hover)'
+					);
+				}
+
+				if (rule.cssRules) {
+					rewriteHoverRules(rule.cssRules);
+				}
+			}
+		}
+
+		function rewriteStylesheet(sheet) {
+			if (sheet.href?.match(/https?:\/\/fonts\./) || sheet.ownerNode?.classList?.contains('tracky-mouse-no-hover-transform')) {
+				return;
+			}
+			try {
+				rewriteHoverRules(sheet.cssRules);
+			} catch (error) {
+				console.warn("Failed to rewrite :hover rules for stylesheet:", sheet.ownerNode?.outerHTML ?? sheet, error);
+			}
+		}
+
+		function rewriteStylesheetForElement(element) {
+			if (element.sheet) {
+				rewriteStylesheet(element.sheet);
+			} else {
+				element.addEventListener('load', () => {
+					rewriteStylesheet(element.sheet);
+				}, { once: true });
+			}
+		}
+
+		// Existing stylesheets
+		for (const sheet of document.styleSheets) {
+			rewriteStylesheet(sheet);
+		}
+
+		// Dynamically added stylesheets
+		new MutationObserver(mutations => {
+			for (const mutation of mutations) {
+				for (const node of mutation.addedNodes) {
+					if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+					if (node.matches('style, link[rel~="stylesheet"]')) {
+						rewriteStylesheetForElement(node);
+					}
+
+					// Handle stylesheets nested inside added elements.
+					for (const el of node.querySelectorAll('style, link[rel~="stylesheet"]')) {
+						rewriteStylesheetForElement(el);
+					}
+				}
+			}
+		}).observe(document.documentElement, {
+			childList: true,
+			subtree: true
+		});
+
+		let hovered = [];
+
+		document.addEventListener('pointermove', e => {
+			const newHovered = [];
+			for (let el = e.target; el instanceof Element; el = el.parentElement) {
+				newHovered.push(el);
+			}
+
+			for (const el of [...hovered, ...newHovered]) {
+				el.classList.toggle('tracky-mouse-hover', newHovered.includes(el));
+			}
+
+			hovered = newHovered;
+		});
+
+	}
 }
