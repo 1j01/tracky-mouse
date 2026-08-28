@@ -442,6 +442,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 }
 
 .tracky-mouse-setting-info-popover {
+	/* Note: There is fallback logic in settings-ui.js when position-area is unavailable */
 	position-anchor: --tracky-mouse-setting-info;
 	position: fixed;
 	position-area: end span-end;
@@ -453,4 +454,6 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.5);
 	padding: 5px;
 	z-index: 1000;
+	width: fit-content;
+	height: fit-content;
 }
