@@ -130,7 +130,8 @@ export function initSettingsUI({
 		}
 
 		if (setting.description) {
-			// Tooltip; TODO: try an ⓘ info icon button with a popover
+			// TODO: should this be removed or scoped inward to just the label
+			// now that we have a popover button?
 			rowEl.setAttribute("title", setting.description);
 		}
 
