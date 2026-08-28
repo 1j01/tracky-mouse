@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When pausing the app cancels a dwell click, the desktop app will no longer briefly show a red rectangle around the border of the screen. ([issue #42](https://github.com/1j01/tracky-mouse/issues/42))
 - Setting `dwellClicker.paused` to `true` now cancels any in-progress dwell click.
 - Setting `dwellClicker.paused` to `false` includes a delay before starting a new dwell click.
+- In the web version, if "Start enabled" is checked, but the app doesn't have permission to access the camera, it will now start paused, and show a "Start" button instead of a "Stop" button. ([issue #56](https://github.com/1j01/tracky-mouse/issues/56))
 
 ## [2.9.0] - 2026-06-02
 

@@ -1637,6 +1637,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		navigator.permissions?.query?.({ name: "camera" }).then((status) => {
 			if (status.state === "granted") {
 				TrackyMouse.useCamera();
+			} else if (!paused) {
+				// If "Start enabled" is checked, but we don't have camera permission,
+				// it's clearer to pause than leave it "active" but without a camera stream.
+				paused = true;
+				updatePaused();
 			}
 		}, (error) => {
 			console.log("Error querying permissions:", error);
