@@ -26,16 +26,13 @@
 		"update-cli-docs": "node scripts/update-cli-docs.js",
 		"update-locales": "node scripts/update-locales.js",
 		"new-locale": "node scripts/new-locale.js",
-		"translate-new-strings": "node scripts/translate-new-strings.js",
-		"translate": "localazy upload && localazy download",
-		"release": "node scripts/release/release.js"
+		"translate-new-strings": "node scripts/translate-new-strings.js"
 	},
 	"bin": {
 		"tracky-mouse": "desktop-app/src/tracky-mouse-bin.js"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
-		"@localazy/cli": "^2.0.8",
 		"@types/eslint": "^8.56.9",
 		"cspell-cli": "^8.7.0",
 		"eslint": "^9.0.0",
