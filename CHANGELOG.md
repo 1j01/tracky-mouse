@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - ✶ **D-pad style (6 directions)**: Moves the cursor continuously in the direction of your head, limited to six directions. Intended for isometric game worlds. Though most isometric games include UI that is more natural to use with the 4 or 8 direction modes, you could have some fun with this.
     - ✷ **D-pad style (8 directions)**: Moves the cursor continuously in the direction of your head, limited to eight directions (up, down, left, right, or diagonal).
 - You can now reset a setting to its default value by hovering over it and clicking the `↩` button at the left. ([issue #115](https://github.com/1j01/tracky-mouse/issues/115))
+- Settings also now have a `ⓘ` button to show help information. This makes it easier to view a setting's description, especially when hovering is difficult. ([issue #79](https://github.com/1j01/tracky-mouse/issues/79))
 
 ### Fixed
 
