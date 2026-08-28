@@ -753,7 +753,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	};
 
 	startStopButton.onclick = () => {
-		if (!useCameraButton.hidden) {
+		if (!useCameraButton.hidden && !paused) {
 			TrackyMouse.useCamera();
 		}
 		handleShortcut("toggle-tracking");
