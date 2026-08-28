@@ -13,6 +13,9 @@ export function initSettingsUI({
 	const elsByGroup = new Map();
 	const functionsToUpdateDisabledStates = [];
 
+	const disposeController = new AbortController();
+	const disposeSignal = disposeController.signal;
+
 	function buildSettingsUI(parentEl, settingsCategories) {
 
 		for (const category of settingsCategories) {
@@ -168,19 +171,18 @@ export function initSettingsUI({
 				infoButton.setAttribute("aria-expanded", !infoPopover.hidden);
 			});
 			// TODO: use event listener delegation to avoid many event listeners
-			// TODO: clean up listeners when disposing the UI
 			addEventListener("pointerdown", (e) => {
 				if (!infoPopover.contains(e.target) && !infoButton.contains(e.target)) {
 					infoPopover.hidden = true;
 					infoButton.setAttribute("aria-expanded", false);
 				}
-			});
+			}, { signal: disposeSignal });
 			addEventListener("keydown", (e) => {
 				if (e.key === "Escape") {
 					infoPopover.hidden = true;
 					infoButton.setAttribute("aria-expanded", false);
 				}
-			});
+			}, { signal: disposeSignal });
 		} else {
 			// Disabled "extra" buttons are hidden by CSS
 			// The info button is still included in the DOM to reserve space
@@ -391,6 +393,11 @@ export function initSettingsUI({
 			for (const func of functionsToUpdateDisabledStates) {
 				func();
 			}
+		},
+		// `dispose` would be a more natural name, but I'm just making it
+		// easy to use destructuring for now
+		disposeSettingsUI: () => {
+			disposeController.abort();
 		},
 	};
 }
