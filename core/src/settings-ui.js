@@ -139,8 +139,10 @@ export function initSettingsUI({
 		infoPopover.className = "tracky-mouse-setting-info-popover";
 		// Avoiding using native popover functionality because
 		// the cursor+HUD should go on top in the web demo/web version.
-		// TODO: accessibility attributes, Esc to close, click outside to close
+		// TODO: research aria-describedby, aria-haspopup
+		// What's the proper way to do a tooltip with explicit toggling?
 		// infoPopover.popover = "auto";
+		infoPopover.role = "dialog"; // NOT "tooltip"
 		infoPopover.hidden = true;
 		infoPopover.id = `tracky-mouse-${setting.className}-info-popover`;
 		infoPopover.textContent = setting.description;
@@ -149,6 +151,8 @@ export function initSettingsUI({
 
 		const infoButton = document.createElement("button");
 		infoButton.className = "tracky-mouse-setting-info-button tracky-mouse-setting-extra-button";
+		infoButton.setAttribute("aria-controls", infoPopover.id);
+		infoButton.setAttribute("aria-expanded", false);
 		infoButton.textContent = "ⓘ";
 		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
 		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
@@ -161,6 +165,21 @@ export function initSettingsUI({
 			// infoButton.popoverTargetElement = infoPopover;
 			infoButton.addEventListener("click", () => {
 				infoPopover.hidden = !infoPopover.hidden;
+				infoButton.setAttribute("aria-expanded", !infoPopover.hidden);
+			});
+			// TODO: use event listener delegation to avoid many event listeners
+			// TODO: clean up listeners when disposing the UI
+			addEventListener("pointerdown", (e) => {
+				if (!infoPopover.contains(e.target) && !infoButton.contains(e.target)) {
+					infoPopover.hidden = true;
+					infoButton.setAttribute("aria-expanded", false);
+				}
+			});
+			addEventListener("keydown", (e) => {
+				if (e.key === "Escape") {
+					infoPopover.hidden = true;
+					infoButton.setAttribute("aria-expanded", false);
+				}
 			});
 		} else {
 			// Disabled "extra" buttons are hidden by CSS
