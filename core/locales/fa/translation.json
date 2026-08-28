@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "کالیبراسیون خم شدن سر",
   "settings.sections.pointTracking.label": "ردیابی نقطه‌ای",
   "settings.sections.video.label": "ویدیو",
+  "settings.settingInfo": "اطلاعات تنظیمات",
   "settings.shared.directionDown": "پایین",
   "settings.shared.directionLeft": "چپ",
   "settings.shared.directionRight": "راست",

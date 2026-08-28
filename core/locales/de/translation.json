@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kopfneigung-Kalibrierung",
   "settings.sections.pointTracking.label": "Punktverfolgung",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Informationen zur Einstellung",
   "settings.shared.directionDown": "Unten",
   "settings.shared.directionLeft": "Links",
   "settings.shared.directionRight": "Rechts",

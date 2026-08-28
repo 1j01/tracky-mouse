@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "การปรับเทียบการเอียงศีรษะ",
   "settings.sections.pointTracking.label": "การติดตามจุด",
   "settings.sections.video.label": "วิดีโอ",
+  "settings.settingInfo": "ข้อมูลการตั้งค่า",
   "settings.shared.directionDown": "ลง",
   "settings.shared.directionLeft": "ซ้าย",
   "settings.shared.directionRight": "ขวา",

@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Baş eğimi kalibrasyonu",
   "settings.sections.pointTracking.label": "Nokta takibi",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Ayar bilgileri",
   "settings.shared.directionDown": "Aşağı",
   "settings.shared.directionLeft": "Sol",
   "settings.shared.directionRight": "Sağ",

@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "头部倾斜校准",
   "settings.sections.pointTracking.label": "点跟踪",
   "settings.sections.video.label": "视频",
+  "settings.settingInfo": "设置信息",
   "settings.shared.directionDown": "下",
   "settings.shared.directionLeft": "左",
   "settings.shared.directionRight": "右",

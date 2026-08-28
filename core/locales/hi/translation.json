@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "सिर झुकाव कैलिब्रेशन",
   "settings.sections.pointTracking.label": "पॉइंट ट्रैकिंग",
   "settings.sections.video.label": "वीडियो",
+  "settings.settingInfo": "सेटिंग की जानकारी",
   "settings.shared.directionDown": "नीचे",
   "settings.shared.directionLeft": "बाएँ",
   "settings.shared.directionRight": "दाएँ",

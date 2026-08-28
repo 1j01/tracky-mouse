@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibrasyon han pagtagilid han ulo",
   "settings.sections.pointTracking.label": "Point tracking",
   "settings.sections.video.label": "Bidyo",
+  "settings.settingInfo": "Impormasyon han setting",
   "settings.shared.directionDown": "Ubos",
   "settings.shared.directionLeft": "Wala",
   "settings.shared.directionRight": "Too",

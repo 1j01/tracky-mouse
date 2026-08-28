@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Buruaren inklinazioaren kalibrazioa",
   "settings.sections.pointTracking.label": "Puntu‑jarraipena",
   "settings.sections.video.label": "Bideoa",
+  "settings.settingInfo": "Ezarpenaren informazioa",
   "settings.shared.directionDown": "Behera",
   "settings.shared.directionLeft": "Ezkerra",
   "settings.shared.directionRight": "Eskuina",

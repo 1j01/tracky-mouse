@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibracija nagiba glave",
   "settings.sections.pointTracking.label": "Praćenje točaka",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Informacije o postavci",
   "settings.shared.directionDown": "Dolje",
   "settings.shared.directionLeft": "Lijevo",
   "settings.shared.directionRight": "Desno",

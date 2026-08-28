@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Hiệu chỉnh độ nghiêng đầu",
   "settings.sections.pointTracking.label": "Theo dõi điểm",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Thông tin cài đặt",
   "settings.shared.directionDown": "Xuống",
   "settings.shared.directionLeft": "Trái",
   "settings.shared.directionRight": "Phải",

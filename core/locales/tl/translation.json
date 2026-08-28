@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Pag-calibrate ng pag-ikot ng ulo",
   "settings.sections.pointTracking.label": "Point tracking",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Impormasyon sa setting",
   "settings.shared.directionDown": "Pababa",
   "settings.shared.directionLeft": "Kaliwa",
   "settings.shared.directionRight": "Kanan",

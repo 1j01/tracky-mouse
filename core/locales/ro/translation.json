@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Calibrare înclinare cap",
   "settings.sections.pointTracking.label": "Urmărire pe puncte",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Informații despre setare",
   "settings.shared.directionDown": "Jos",
   "settings.shared.directionLeft": "Stânga",
   "settings.shared.directionRight": "Dreapta",

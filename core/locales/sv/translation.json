@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibrering av huvudlutning",
   "settings.sections.pointTracking.label": "Punktspårning",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Inställningsinformation",
   "settings.shared.directionDown": "Ner",
   "settings.shared.directionLeft": "Vänster",
   "settings.shared.directionRight": "Höger",

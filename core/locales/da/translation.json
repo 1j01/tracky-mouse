@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibrering af hovedhældning",
   "settings.sections.pointTracking.label": "Punkts­sporing",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Indstillingeroplysninger",
   "settings.shared.directionDown": "Ned",
   "settings.shared.directionLeft": "Venstre",
   "settings.shared.directionRight": "Højre",

@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "মাথা কাত ক্যালিব্রেশন",
   "settings.sections.pointTracking.label": "পয়েন্ট ট্র্যাকিং",
   "settings.sections.video.label": "ভিডিও",
+  "settings.settingInfo": "সেটিংসের তথ্য",
   "settings.shared.directionDown": "নিচে",
   "settings.shared.directionLeft": "বাম",
   "settings.shared.directionRight": "ডান",

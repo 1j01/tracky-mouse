@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Хиларг хиран калибраци",
   "settings.sections.pointTracking.label": "Точкаш тӀехь слежени",
   "settings.sections.video.label": "Видео",
+  "settings.settingInfo": "Налаштувни меттигалла",
   "settings.shared.directionDown": "Низ",
   "settings.shared.directionLeft": "Чула",
   "settings.shared.directionRight": "Бар",

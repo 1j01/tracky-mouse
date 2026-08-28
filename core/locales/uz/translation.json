@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Bosh egilishini kalibrlash",
   "settings.sections.pointTracking.label": "Nuqta kuzatuvi",
   "settings.sections.video.label": "Video",
+  "settings.settingInfo": "Sozlama haqida ma’lumot",
   "settings.shared.directionDown": "Pastga",
   "settings.shared.directionLeft": "Chapga",
   "settings.shared.directionRight": "O‘ngga",

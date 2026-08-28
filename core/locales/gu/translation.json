@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "માથું ઝુકાવવાની કેલિબ્રેશન",
   "settings.sections.pointTracking.label": "પોઇન્ટ ટ્રેકિંગ",
   "settings.sections.video.label": "વિડિઓ",
+  "settings.settingInfo": "સેટિંગની માહિતી",
   "settings.shared.directionDown": "નીચે",
   "settings.shared.directionLeft": "ડાબી",
   "settings.shared.directionRight": "જમણી",

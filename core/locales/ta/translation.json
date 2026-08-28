@@ -175,6 +175,7 @@
   "settings.sections.headTiltCalibration.label": "தலையின் சாய்வு அளவைத்திருத்தம்",
   "settings.sections.pointTracking.label": "புள்ளி கண்காணிப்பு",
   "settings.sections.video.label": "வீடியோ",
+  "settings.settingInfo": "அமைப்பு தகவல்",
   "settings.shared.directionDown": "கீழே",
   "settings.shared.directionLeft": "இடது",
   "settings.shared.directionRight": "வலது",
