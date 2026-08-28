@@ -788,13 +788,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	cameraVideo.addEventListener('ended', () => {
 		useCameraButton.hidden = false;
 		if (!paused) {
-			handleShortcut("toggle-tracking");
+			paused = true;
+			updatePaused();
 		}
 	});
 	cameraVideo.addEventListener('error', () => {
 		useCameraButton.hidden = false;
 		if (!paused) {
-			handleShortcut("toggle-tracking");
+			paused = true;
+			updatePaused();
 		}
 	});
 
