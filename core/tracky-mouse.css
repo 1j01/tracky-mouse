@@ -456,4 +456,5 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	z-index: 1000;
 	width: fit-content;
 	height: fit-content;
+	max-width: 50em;
 }
