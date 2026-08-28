@@ -160,7 +160,7 @@ export function initSettingsUI({
 		// FIXME: tooltips are showing redundantly while the popover is open
 		// (Including while hovering over the popover itself!)
 		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
-		infoButton.ariaLabel = t("settings.settingInfo", { defaultValue: "Setting info" });
+		infoButton.setAttribute("aria-label", t("settings.settingInfo", { defaultValue: "Setting info" }));
 		if (setting.description) {
 			// infoButton.popoverTargetElement = infoPopover;
 			infoButton.addEventListener("click", () => {
@@ -194,7 +194,7 @@ export function initSettingsUI({
 		resetButton.className = "tracky-mouse-setting-reset-button tracky-mouse-setting-extra-button";
 		resetButton.textContent = "↩"; // "⟲";
 		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
-		resetButton.ariaLabel = t("settings.resetSetting", { defaultValue: "Reset to default" });
+		resetButton.setAttribute("aria-label", t("settings.resetSetting", { defaultValue: "Reset to default" }));
 		if ("default" in setting) {
 			resetButton.addEventListener("click", () => {
 				setControlValue(setting.default);
