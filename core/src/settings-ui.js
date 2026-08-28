@@ -168,6 +168,20 @@ export function initSettingsUI({
 			infoButton.addEventListener("click", () => {
 				infoPopover.hidden = !infoPopover.hidden;
 				infoButton.setAttribute("aria-expanded", !infoPopover.hidden);
+
+				// Fallback for positioning the popover when position-area is not supported
+				// (position-area isn't supported in Electron 31)
+				// This is one-off, whereas position-area is dynamic over time.
+				if (!infoPopover.hidden && !("positionArea" in infoPopover.style)) {
+					const buttonRect = infoButton.getBoundingClientRect();
+					infoPopover.style.top = buttonRect.bottom + "px";
+					infoPopover.style.left = buttonRect.left + "px";
+					infoPopover.style.position = "absolute";
+					const popoverRect = infoPopover.getBoundingClientRect();
+					if (popoverRect.bottom > window.innerHeight) {
+						infoPopover.style.top = buttonRect.top - popoverRect.height + "px";
+					}
+				}
 			});
 			// TODO: use event listener delegation to avoid many event listeners
 			addEventListener("pointerdown", (e) => {
