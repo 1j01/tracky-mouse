@@ -175,7 +175,7 @@
   "settings.sections.headTiltCalibration.label": "Kalibratie van hoofdknik",
   "settings.sections.pointTracking.label": "Punttracking",
   "settings.sections.video.label": "Video",
-  "settings.settingInfo": "Instellingsinformatie",
+  "settings.settingInfo": "Informatie over de instelling",
   "settings.shared.directionDown": "Omlaag",
   "settings.shared.directionLeft": "Links",
   "settings.shared.directionRight": "Rechts",
