@@ -160,8 +160,7 @@ export function initSettingsUI({
 		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
 		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
 		// Should it show the whole popover itself temporarily?
-		// FIXME: tooltips are showing redundantly while the popover is open
-		// (Including while hovering over the popover itself!)
+		// TODO: avoid redundant hover text showing while the popover is open
 		infoButton.title = t("settings.settingInfo", { defaultValue: "Setting info" });
 		infoButton.setAttribute("aria-label", t("settings.settingInfo", { defaultValue: "Setting info" }));
 		if (setting.description) {
