@@ -143,6 +143,7 @@ export function initSettingsUI({
 		infoPopover.hidden = true;
 		infoPopover.id = `tracky-mouse-${setting.className}-info-popover`;
 		infoPopover.textContent = setting.description;
+		infoPopover.title = ""; // avoid redundant tooltip
 		rowEl.appendChild(infoPopover);
 
 		const infoButton = document.createElement("button");
