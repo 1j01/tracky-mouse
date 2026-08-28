@@ -712,12 +712,17 @@ const createWindow = () => {
 		// This doesn't work for all cases; for example, the Ubuntu dock context menu
 		// is system UI that behaves a little specially.
 		// Also, for any app that is too slow to open a menu, this will not work (race condition).
-		screenOverlayWindow.hide();
-		screenOverlayWindow.show();
-		setTimeout(() => {
-			screenOverlayWindow.hide();
-			screenOverlayWindow.show();
-		}, 100);
+
+		// This is disabled because it can cause the HUD to flicker.
+		// It may be worth the tradeoff, but I don't want to include a "Known issues"
+		// section for this, or introduce a setting for it at this time.
+
+		// screenOverlayWindow.hide();
+		// screenOverlayWindow.show();
+		// setTimeout(() => {
+		// 	screenOverlayWindow.hide();
+		// 	screenOverlayWindow.show();
+		// }, 100);
 	}
 
 	ipcMain.on('click', async (_event, x, y, _time) => {
