@@ -135,6 +135,49 @@
 	margin-inline-end: 4px;
 }
 
+
+.tracky-mouse-help-close-button {
+	vertical-align: middle;
+	border: 2px solid;
+	color: inherit;
+	border-radius: 50%;
+	background: transparent;
+	position: relative;
+	width: 32px;
+	height: 32px;
+	opacity: 0.6;
+}
+
+.tracky-mouse-help-close-button:focus-visible,
+.tracky-mouse-help-close-button:hover {
+	opacity: 1;
+	background: rgba(128, 128, 128, 0.5);
+}
+
+.tracky-mouse-help-close-button:active {
+	background: rgba(128, 128, 128, 0.9);
+}
+
+.tracky-mouse-help-close-button::before,
+.tracky-mouse-help-close-button::after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 20px;
+	width: 4px;
+	background-color: currentColor;
+}
+
+.tracky-mouse-help-close-button::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tracky-mouse-help-close-button::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
 	min-height: 30px;
