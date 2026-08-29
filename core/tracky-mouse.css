@@ -144,6 +144,8 @@
 	margin-top: 5px;
 	flex: 1;
 	max-width: 400px;
+	/* Default min-width is too big, causes horizontal scrollbars */
+	min-width: 50px;
 }
 
 .tracky-mouse-ui .tracky-mouse-labeled-slider input {
@@ -160,6 +162,11 @@
 	justify-content: space-between;
 	/* If they come this close, wrap the slider label text */
 	gap: 10px;
+}
+
+.tracky-mouse-controls select {
+	/* Default min-width is too big, causes horizontal scrollbars */
+	min-width: 50px;
 }
 
 .tracky-mouse-ui .tracky-mouse-experimental-label {
