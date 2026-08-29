@@ -170,6 +170,8 @@ export class InputSimulator {
 		const dropdownDisplayButton = dropdown.cloneNode(true);
 		dropdownDisplayButton.value = dropdown.value;
 		dropdownDisplayButton.style.pointerEvents = "none";
+		const dropdownStyles = getComputedStyle(dropdown);
+		dropdownDisplayButton.style.fontSize = dropdownStyles.fontSize;
 
 		const dropdownValueWhenOpened = dropdown.value;
 		let dropdownValueToBeWhenClosed = dropdown.value;
@@ -198,6 +200,8 @@ export class InputSimulator {
 			button.style.textAlign = "left";
 			button.style.display = "block";
 			button.style.cssText += option.style.cssText;
+			const optionStyles = getComputedStyle(option);
+			button.style.fontSize = optionStyles.fontSize;
 
 			// Hover effect
 			button.addEventListener("pointerenter", () => {
