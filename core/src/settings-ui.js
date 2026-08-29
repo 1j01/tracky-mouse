@@ -1,6 +1,6 @@
 
-import { createDeferred } from "./helpers.js";
 import { traverseSettings } from "./settings.js";
+import { createDeferred } from "./utils.js";
 
 // TODO: clean up signature which is currently "whatever dependencies were needed to extract this code to a new file"
 export function initSettingsUI({
