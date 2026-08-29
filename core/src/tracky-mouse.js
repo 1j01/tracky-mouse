@@ -5,6 +5,7 @@ import { MESH_ANNOTATIONS } from "./constants.js";
 import { initDwellClicking } from "./dwell-clicker.js";
 import { curateTrackedPointsWithClmtrackr, curateTrackedPointsWithFacemesh } from "./face-hotspots.js";
 import { detectGestures } from "./gestures.js";
+import { helpContentHTML } from "./help.js";
 import { initScreenOverlay } from "./hud.js";
 import { availableLanguages, isLocaleRTL } from "./languages.js";
 import { PointTracker } from "./point-tracker.js";
@@ -152,6 +153,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
+			<button class="tracky-mouse-help-button" aria-pressed="false" aria-keyshortcuts="F1">ⓘ ${t("ui.helpButton.label", { defaultValue: "Help" })}</button>
 		</div>
 		<div class="tracky-mouse-camera-area">
 			<div class="tracky-mouse-canvas-container">
@@ -167,11 +169,20 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		<p class="tracky-mouse-desktop-app-download-message">
 			${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
 		</p>
+		<dialog class="tracky-mouse-help-dialog" closedby="any">
+			<button class="tracky-mouse-help-close-button" aria-label="${t("ui.helpDialog.closeButton", { defaultValue: "Close" })}" style="float: right">X</button>
+			<h1>${t("ui.helpDialog.title", { defaultValue: "Help" })}</h1>
+			${helpContentHTML}
+			<!-- <button class="tracky-mouse-help-close-button">${t("ui.helpDialog.closeButton", { defaultValue: "Close" })}</button> -->
+		</dialog>
 	`;
 	if (!div) {
 		document.body.appendChild(uiContainer);
 	}
 	let startStopButton = uiContainer.querySelector(".tracky-mouse-start-stop-button");
+	let helpButton = uiContainer.querySelector(".tracky-mouse-help-button");
+	let helpDialog = uiContainer.querySelector(".tracky-mouse-help-dialog");
+	let helpCloseButtons = uiContainer.querySelectorAll(".tracky-mouse-help-close-button");
 	let useCameraButton = uiContainer.querySelector(".tracky-mouse-use-camera-button");
 	let useDemoFootageButton = uiContainer.querySelector(".tracky-mouse-use-demo-footage-button");
 	let errorMessage = uiContainer.querySelector(".tracky-mouse-error-message");
@@ -207,6 +218,15 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			errorMessage.hidden = false;
 		}
 		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
+	}
+
+	helpButton.addEventListener("click", () => {
+		helpDialog.showModal();
+	});
+	for (const helpCloseButton of helpCloseButtons) {
+		helpCloseButton.addEventListener("click", () => {
+			helpDialog.close();
+		});
 	}
 
 	const cameraVideo = document.createElement('video');
@@ -1684,6 +1704,12 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		// Same shortcut as the global shortcut in the electron app
 		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F9") {
 			handleShortcut("toggle-tracking");
+		}
+
+		if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === "F1") {
+			if (uiContainer.contains(document.activeElement) || isDesktopApp) {
+				helpDialog.showModal();
+			}
 		}
 	};
 	addEventListener("keydown", handleKeydown);
