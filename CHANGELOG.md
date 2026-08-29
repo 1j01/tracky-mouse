@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   You'll need an [`importmap`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) in your HTML, or a bundler like Webpack, Rollup, or Vite, to resolve the module specifier `"tracky-mouse"` to the actual file path.
 
 - Increased the maximum for the cursor movement sensitivity and acceleration sliders. ([issue #95](https://github.com/1j01/tracky-mouse/issues/95))
+- The font size for dropdowns is increased to make it easier to click both options and the button itself.
 
 ### Deprecated
 

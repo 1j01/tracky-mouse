@@ -165,6 +165,7 @@
 }
 
 .tracky-mouse-controls select {
+	font-size: 1.2em;
 	/* Default min-width is too big, causes horizontal scrollbars */
 	min-width: 50px;
 }
