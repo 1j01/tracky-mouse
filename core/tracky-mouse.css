@@ -128,6 +128,13 @@
 	min-width: 90px;
 }
 
+.tracky-mouse-help-button-icon {
+	transform: scale(1.4);
+	display: inline-block;
+	margin-inline-start: 2px;
+	margin-inline-end: 4px;
+}
+
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;
 	min-height: 30px;
