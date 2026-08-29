@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - It will no longer request camera access when clicking "Stop", only when clicking "Start". Though this is less likely to come up now that it pauses if it can't access the camera initially. ([issue #56](https://github.com/1j01/tracky-mouse/issues/56))
 - Pressing F9 to enable Tracky Mouse will now try to start the camera stream, same as clicking the "Start (F9)" button. ([issue #56](https://github.com/1j01/tracky-mouse/issues/56))
   - In the browser, this may prompt for camera access.
-  - In the desktop app, this will immediately start the camera if available. This comes into play when another program was using the camera, then this usage was stopped, then you try to press the global shortcut F9 to enable Tracky Mouse.
+  - In the desktop app, this will immediately start the camera if available. This comes into play when the camera was in use by another program, but is no longer in use, and you press the global shortcut F9 to enable Tracky Mouse.
 
 ## [2.9.0] - 2026-06-02
 
