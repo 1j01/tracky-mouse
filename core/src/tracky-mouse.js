@@ -118,6 +118,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	if (!availableLanguages.includes(locale)) {
 		locale = "en";
 	}
+	const defaultLocaleForReset = locale;
 	try {
 		// Load settings early so that they can be used to define settings (among other things)
 		// It's a bit hacky to load them twice but yeah
@@ -237,7 +238,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 
 	const settingsCategories = getSettingsCategories({
 		t,
-		locale,
+		defaultLocale: defaultLocaleForReset,
 		serializeSettings,
 		reinit,
 		s,

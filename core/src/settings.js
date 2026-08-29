@@ -5,7 +5,7 @@ import { TrackyMouse } from "./tracky-mouse.js";
 // TODO: clean up signature which is roughly "whatever dependencies were needed to extract this code to a new file"
 export function getSettingsCategories({
 	t,
-	locale,
+	defaultLocale,
 	serializeSettings,
 	reinit,
 	s,
@@ -492,7 +492,7 @@ You may want to turn this off if you're drawing on a canvas, or increase it if y
 					key: "language",
 					type: "dropdown",
 					options: availableLanguages.map(lang => ({ value: lang, label: `${getLanguageFlagEmoji(lang)} ${languageNames[lang]?.[1]?.[0] || lang} (${languageNames[lang]?.[0]?.[0] || "?"})` })),
-					default: locale,
+					default: defaultLocale,
 					handleSettingChange: () => {
 						// console.trace("handleSettingChange for language setting");
 						// HACK: update localStorage because it's what's used to determine the language
