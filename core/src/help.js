@@ -32,6 +32,9 @@ If the camera is below, leaning forward generally moves the pointer up
 	while Head Tilt <!--provides an absolute mapping of head position to screen position. -->
 	avoids drift over time.
 </p>
+<p>
+	The following steps assume <b>Movement mode</b> is set to <b>Direct</b>.
+</p>
 <ol>
 <li>Set "Tilt influence" to the minimum, so it uses only Point Tracking (2D).</li>
 <li>Adjust the sensitivity and acceleration under "Point tracking" until it feels comfortable to point at any location on the screen.</li>
@@ -39,6 +42,17 @@ If the camera is below, leaning forward generally moves the pointer up
 <li>Adjust the settings under "Head tilt calibration" until it feels comfortable to point at any location on the screen.</li>
 <li>Adjust "Tilt influence" to find a balance between Point Tracking and Head Tilt.</li>
 </ol>
+<h3>A few more tips:</h3>
+<p>
+	For point tracking, higher acceleration makes it smoother and more stable.
+	It helps to keep the mouse in one spot.
+</p>
+<p>
+	However, with the joystick and D-pad style movement modes, you may want less acceleration, since it doesn't help keep the mouse in one spot, only the virtual joystick position.
+</p>
+<p>
+	Don't bother with the "Motion threshold" setting.
+</p>
 <h2>Troubleshooting camera access</h2>
 <p>
 	If there's a problem accessing the camera, try the following:
