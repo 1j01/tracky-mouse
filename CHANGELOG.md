@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [3.0.0] - 2026-08-30
+
 ### Removed
 
 - The previously deprecated `TrackyMouse.cleanupDwellClicking()` is removed in this release. Cleanup code should call `dispose()` on the object returned by `TrackyMouse.initDwellClicking()`.
@@ -380,7 +384,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v2.9.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/1j01/tracky-mouse/compare/v2.9.0...v3.0.0
 [2.9.0]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/1j01/tracky-mouse/compare/v2.6.0...v2.7.0
