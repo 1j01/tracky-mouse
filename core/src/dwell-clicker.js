@@ -1,5 +1,5 @@
 import { playSound } from "./audio.js";
-import { averagePoints, isSelectorValid } from "./helpers.js";
+import { averagePoints, isSelectorValid } from "./utils.js";
 
 /**
  * @param {Object} config

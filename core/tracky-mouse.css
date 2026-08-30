@@ -100,23 +100,83 @@
 	background-color: rgba(15, 0, 20, 0.5);
 }
 
-.tracky-mouse-start-stop-button {
-	background-color: rgb(191, 36, 234);
-	color: white;
-	font-size: 20px;
+.tracky-mouse-start-stop-button,
+.tracky-mouse-help-button {
 	border-radius: 5px;
 	padding: 5px;
 	margin: 5px;
 	margin-bottom: 10px;
-	min-width: 120px;
 	cursor: pointer;
 }
 
-.tracky-mouse-start-stop-button::after {
+.tracky-mouse-start-stop-button::after,
+.tracky-mouse-help-button::after {
 	content: "(" attr(aria-keyshortcuts) ")";
 	opacity: 0.6;
 	margin-inline-start: 0.5em;
 }
+
+.tracky-mouse-start-stop-button {
+	font-size: 20px;
+	min-width: 120px;
+	background-color: rgb(191, 36, 234);
+	color: white;
+}
+
+.tracky-mouse-help-button {
+	float: right;
+	min-width: 90px;
+}
+
+.tracky-mouse-help-button-icon {
+	transform: scale(1.4);
+	display: inline-block;
+	margin-inline-start: 2px;
+	margin-inline-end: 4px;
+}
+
+
+.tracky-mouse-help-close-button {
+	vertical-align: middle;
+	border: 2px solid;
+	color: inherit;
+	border-radius: 50%;
+	background: transparent;
+	position: relative;
+	width: 32px;
+	height: 32px;
+	opacity: 0.6;
+}
+
+.tracky-mouse-help-close-button:focus-visible,
+.tracky-mouse-help-close-button:hover {
+	opacity: 1;
+	background: rgba(128, 128, 128, 0.5);
+}
+
+.tracky-mouse-help-close-button:active {
+	background: rgba(128, 128, 128, 0.9);
+}
+
+.tracky-mouse-help-close-button::before,
+.tracky-mouse-help-close-button::after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 20px;
+	width: 4px;
+	background-color: currentColor;
+}
+
+.tracky-mouse-help-close-button::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tracky-mouse-help-close-button::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
 
 .tracky-mouse-ui .tracky-mouse-control-row:not([hidden]) {
 	display: flex;

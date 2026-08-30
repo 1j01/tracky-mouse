@@ -1,4 +1,4 @@
-import { signedDistancePointLine } from "./helpers.js";
+import { signedDistancePointLine } from "./utils.js";
 
 function getAspectMetrics(upperContour, lowerContour) {
 	// The lower eye keypoints have the corners
