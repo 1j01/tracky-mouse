@@ -144,8 +144,10 @@
 	flex-direction: column;
 	overflow: visible;
 	border-radius: 7px;
-	border: 2px solid black;
+	/* border: 2px solid black; */
+	border: 2px solid rgb(204, 143, 0);
 	background: rgb(255, 255, 157);
+	box-shadow: 0 2px #cc8f00, 0 4px #cc8f00, 0 0 10px #cc8f00 inset;
 }
 
 .tracky-mouse-help-dialog h1 {
@@ -156,17 +158,17 @@
 	line-height: calc(32px + 10px + 10px);
 	padding-left: 10px;
 	flex: 0 0 auto;
-	/* background: rgb(255, 255, 157); */
-	/* background: linear-gradient(#dbb6ff, #7d56d2); */
-	border-radius: 5px;
+	/* border-radius: 5px;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
-	outline: 2px solid rgb(0, 0, 0);
+	outline: 2px solid rgb(0, 0, 0); */
+	border-bottom: 7px solid rgb(255, 207, 116);
+	background: rgba(255, 165, 0, 0.27);
 }
 
 .tracky-mouse-help-dialog-content {
 	overflow: auto;
-	padding: 0.5em;
+	padding: 0.5em 1em;
 }
 
 .tracky-mouse-help-dialog ul>li,
