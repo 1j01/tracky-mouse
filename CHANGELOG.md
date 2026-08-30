@@ -41,8 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - ✷ **D-pad style (8 directions)**: Moves the cursor continuously in the direction of your head, limited to eight directions (up, down, left, right, or diagonal).
 - You can now reset a setting to its default value by hovering over it and clicking the `↩` button at the left. ([issue #115](https://github.com/1j01/tracky-mouse/issues/115))
 - Settings also now have a `ⓘ` button to show help information. This makes it easier to view a setting's description, especially when hovering is difficult. ([issue #79](https://github.com/1j01/tracky-mouse/issues/79))
-- There's a new **Help** button, which opens a window with guidance on camera placement, lighting, calibration, and troubleshooting. ([issue #33](https://github.com/1j01/tracky-mouse/issues/33))
-  - This is English-only for now.
+- There's a new ⓘ **Help** button, which opens a window with guidance on camera placement, lighting, calibration, and troubleshooting. ([issue #33](https://github.com/1j01/tracky-mouse/issues/33))
+  - The help content is English-only for now. It's a first draft.
 
 ### Fixed
 
