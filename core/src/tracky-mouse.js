@@ -171,9 +171,11 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			${t("ui.desktopAppPromo.message", { defaultValue: 'You can control your entire computer with the <a href="https://trackymouse.js.org/">TrackyMouse</a> desktop app.' })}
 		</p>
 		<dialog class="tracky-mouse-help-dialog" closedby="any">
-			<button class="tracky-mouse-help-close-button" aria-label="${t("ui.helpDialog.closeButton", { defaultValue: "Close" })}" style="float: right"></button>
+			<button class="tracky-mouse-help-close-button" aria-label="${t("ui.helpDialog.closeButton", { defaultValue: "Close" })}"></button>
 			<h1>${t("ui.helpDialog.title", { defaultValue: "Help" })}</h1>
-			${helpContentHTML}
+			<div class="tracky-mouse-help-dialog-content">
+				${helpContentHTML}
+			</div>
 			<!-- <button class="tracky-mouse-help-close-button">${t("ui.helpDialog.closeButton", { defaultValue: "Close" })}</button> -->
 		</dialog>
 	`;
