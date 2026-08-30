@@ -135,6 +135,9 @@
 	margin-inline-end: 4px;
 }
 
+.tracky-mouse-help-dialog {
+	max-width: 40em;
+}
 
 .tracky-mouse-help-close-button {
 	vertical-align: middle;
