@@ -48,10 +48,13 @@ If the camera is below, leaning forward generally moves the pointer up
 	It helps to keep the mouse in one spot.
 </p>
 <p>
-	However, with the joystick and D-pad style movement modes, you may want less acceleration, since it doesn't help keep the mouse in one spot, only the virtual joystick position.
+	However, with the joystick and D-pad style movement modes, you may want less acceleration, since in that case it doesn't steady the mouse, but rather the virtual joystick position.
+	And a steady joystick position may mean the mouse keeps moving.
 </p>
 <p>
-	Don't bother with the "Motion threshold" setting.
+	The "Motion threshold" setting is not recommended unless you <em>really</em> need to keep the mouse steady.
+	Usually high "Acceleration" can steady the mouse enough.
+	It's especially not recommended in the joystick and D-pad style movement modes.
 </p>
 <h2>Troubleshooting camera access</h2>
 <p>
@@ -62,9 +65,11 @@ If the camera is below, leaning forward generally moves the pointer up
 <li>
 	Check if another application is using it.
 	If there's an activity light on the camera, this is a strong clue that it is currently in use.
+	<!-- Tracky Mouse should also say if the camera is in use. Though the camera error messages aren't always accurate. -->
 </li>
 <li>Try unplugging and plugging it back in (if it's an external camera).</li>
 <li>Check if you can use your camera with another application.</li>
+<!-- ...but make sure to stop that application's usage afterward...? -->
 <li>On Linux, installing <code>guvcview</code> can magically fix a webcam not showing up. (<a target="_blank" href="https://forums.linuxmint.com/viewtopic.php?t=131011">source</a>)</li>
 <li>Restart the computer if needed.</li>
 </ul>
