@@ -135,14 +135,58 @@
 	margin-inline-end: 4px;
 }
 
+.tracky-mouse-help-dialog[open] {
+	max-width: 40em;
+	position: fixed;
+	padding: 0;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: visible;
+	border-radius: 7px;
+	/* border: 2px solid black; */
+	border: 2px solid rgb(204, 143, 0);
+	background: rgb(255, 255, 157);
+	box-shadow: 0 4px #cc8f00, 0 0 10px #cc8f00 inset, rgba(0, 0, 0, 0.5) 0 7px 10px;
+}
+
+.tracky-mouse-help-dialog h1 {
+	margin: 0;
+	margin-bottom: 0;
+	padding: 0;
+	height: calc(32px + 10px + 10px);
+	line-height: calc(32px + 10px + 10px);
+	padding-left: 10px;
+	flex: 0 0 auto;
+	/* border-radius: 5px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	outline: 2px solid rgb(0, 0, 0); */
+	border-bottom: 7px solid rgb(255, 207, 116);
+	background: rgba(255, 165, 0, 0.27);
+}
+
+.tracky-mouse-help-dialog-content {
+	overflow: auto;
+	padding: 0.5em 1em;
+}
+
+.tracky-mouse-help-dialog ul>li,
+.tracky-mouse-help-dialog ol>li {
+	margin-bottom: 0.5em;
+}
 
 .tracky-mouse-help-close-button {
-	vertical-align: middle;
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	/* vertical-align: middle; */
 	border: 2px solid;
 	color: inherit;
 	border-radius: 50%;
 	background: transparent;
-	position: relative;
+	/* position: relative; */
 	width: 32px;
 	height: 32px;
 	opacity: 0.6;
