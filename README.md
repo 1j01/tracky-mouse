@@ -7,10 +7,11 @@ Tracky Mouse is a desktop application providing **hands-free universal computer 
 It's also embeddable in web applications as a JavaScript library. See the [API docs](./core/README.md).
 
 Features include:
-- [x] Move your head to move the mouse pointer.
-- [x] Dwell to click.
-- [x] Blink to click mode (desktop app only).
-- [x] Open mouth to click mode (desktop app only). This provides **three-button mouse** functionality using closed eyes as modifiers.
+- [x] Move your head to move the mouse pointer, either directly or using a virtual joystick or D-pad.
+- [x] Multiple clicking modes:
+  - [x] Dwell to click
+  - [x] Blink to click
+  - [x] Open mouth to click - This provides **three-button mouse** functionality using closed eyes as modifiers.
 - [x] The screen overlay provides visual feedback for dwell clicking and facial gestures at your cursor.
 - [x] Settings for sensitivity, acceleration, running at login, and more.
 - [x] Moving the mouse manually (with a physical mouse or touchpad) automatically pauses control.
