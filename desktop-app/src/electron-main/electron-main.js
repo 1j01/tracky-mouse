@@ -217,7 +217,6 @@ if (secondInstanceOnlyArgs.some(arg => args[arg])) {
 
 const windowStateKeeper = require('electron-window-state');
 const { setMouseLocation: setMouseLocationWithoutTracking, getMouseLocation, click, mouseDown, mouseUp } = require('serenade-driver');
-const { ensureInitialRelativeMouseMove } = require('./win-relative-mouse.js');
 const screen = require('electron').screen; // Note: can't be used until ready event
 
 let screenScaleFactor = 1;
@@ -416,11 +415,6 @@ function deserializeSettings(settings) {
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
 async function setMouseLocationTracky(x, y) {
-	// On Windows, ensure the cursor is visible when using "Run at login".
-	// The cursor starts invisible at login and remains invisible when sending absolute mouse moves.
-	// ShowCursor() also does not work to show the cursor, but a relative mouse move does.
-	ensureInitialRelativeMouseMove();
-
 	const time = performance.now();
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
