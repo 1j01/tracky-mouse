@@ -114,6 +114,10 @@ module.exports = {
 				logLevel: 'debug',
 				// Windows Store supposedly allows certificates but they cause problems and won't be used anyway
 				sign: false,
+				// This maker uses MinVersion from the appxmanifest if windowsKitPath or windowsKitVersion is not provided explicitly
+				// I don't know if it can actually build with a later version and work on older versions of Windows
+				// That might be why it defaults to MinVersion. But we'll see.
+				windowsKitVersion: "10.0.28000.0"
 			}
 		},
 		{

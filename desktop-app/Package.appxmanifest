@@ -15,9 +15,6 @@
 		<Logo>app/resources/app/images/tracky-mouse-logo-50.png</Logo>
 	</Properties>
 	<Dependencies>
-		<!-- TODO: real numbers... electron-windows-msix seems to treat
-		 the min version as an EXACT VERSION OF THE SDK THAT MUST EXIST
-		 It HAS logic to find the actual installed version, but how do we trigger that (fallback) logic? -->
 		<TargetDeviceFamily
 			Name="Windows.Desktop"
 			MinVersion="10.0.26100.0"
