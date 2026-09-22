@@ -149,8 +149,10 @@ func buttonParam(params map[string]interface{}) (string, error) {
 		return "", fmt.Errorf("param button must be a string")
 	}
 	switch button {
-	case "left", "right", "middle":
+	case "left", "right":
 		return button, nil
+	case "middle":
+		return "center", nil // robotgo calls the middle button "center"
 	default:
 		return "", fmt.Errorf("invalid button: %s", button)
 	}
