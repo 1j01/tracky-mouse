@@ -23,5 +23,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
 	// as purely a visual output, rather than containing business logic for handling clicks.
 	// But this let me reuse my existing code for dwell clicking, without tearing it apart.
 
-	mouseClick: (x, y) => ipcRenderer.send('click', x, y, performance.now()),
+	mouseClick: () => ipcRenderer.send('click', performance.now()),
 });

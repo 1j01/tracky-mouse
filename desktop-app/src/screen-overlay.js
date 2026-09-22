@@ -20,7 +20,7 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 	targets: "#button-that-takes-up-the-entire-screen",
 	noCenter: (el) => el.matches("#button-that-takes-up-the-entire-screen"),
 	click: ({ x, y }) => {
-		electronAPI.mouseClick(x, y);
+			electronAPI.mouseClick();
 
 		audio?.playSound("clickPress");
 		setTimeout(() => audio?.playSound("clickRelease"), 100);
@@ -29,13 +29,16 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 
 const screenOverlay = TrackyMouse.initScreenOverlay();
 
-electronAPI.onMouseMove((_event, x, y) => {
-	// console.log("moveMouse", x, y);
+let mouseX = 0;
+let mouseY = 0;
+electronAPI.onMouseMove((_event, deltaX, deltaY) => {
+	mouseX += deltaX;
+	mouseY += deltaY;
 	document.dispatchEvent(new Event("mouseenter"));
 	const domEvent = new PointerEvent("pointermove", {
 		view: window,
-		clientX: x,
-		clientY: y,
+		clientX: mouseX,
+		clientY: mouseY,
 		pointerId: 1,
 		pointerType: "mouse",
 		isPrimary: true,
@@ -45,7 +48,7 @@ electronAPI.onMouseMove((_event, x, y) => {
 		cancelable: true,
 	});
 	window.dispatchEvent(domEvent);
-	screenOverlay.updateMousePos(x, y);
+	screenOverlay.updateMousePos(mouseX, mouseY);
 });
 
 electronAPI.onOverlayUpdate((_event, data) => {
@@ -53,6 +56,10 @@ electronAPI.onOverlayUpdate((_event, data) => {
 	const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
 
 	screenOverlay.update(data);
+	if (data.systemMousePosition) {
+		mouseX = data.systemMousePosition.x;
+		mouseY = data.systemMousePosition.y;
+	}
 
 	const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
 	const dwellClickerEnabled = isEnabled && clickingMode === "dwell" && !pauseDwellClickingDueToJoystickUsage;

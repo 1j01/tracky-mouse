@@ -368,6 +368,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	let virtualJoystickInfo;
 	let lastMouseDownTime = -Infinity;
 	let mouseNeedsInitPos = true;
+	let lastSentMouseX = 0;
+	let lastSentMouseY = 0;
 
 	// Virtual display bounds cache (Electron only); covers all connected monitors.
 	let virtualDisplayBounds = null;
@@ -1504,10 +1506,14 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			}
 
 			if (!paused) {
+				let movementDeltaX = 0;
+				let movementDeltaY = 0;
 				if (s.headTrackingMovementMode === "direct") {
 					if (!preventDragging) {
-						mouseX += deltaX * screenWidth;
-						mouseY += deltaY * screenHeight;
+						movementDeltaX = deltaX * screenWidth;
+						movementDeltaY = deltaY * screenHeight;
+						mouseX += movementDeltaX;
+						mouseY += movementDeltaY;
 					}
 					virtualJoystickInfo = null;
 				} else {
@@ -1559,8 +1565,10 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 							joystickTimeToSpeedExponent
 						);
 						if (!preventDragging && isFinite(virtualDPadAngle) && isFinite(speed)) {
-							mouseX += Math.cos(virtualDPadAngle) * speed * deltaTime;
-							mouseY += Math.sin(virtualDPadAngle) * speed * deltaTime;
+							movementDeltaX = Math.cos(virtualDPadAngle) * speed * deltaTime;
+							movementDeltaY = Math.sin(virtualDPadAngle) * speed * deltaTime;
+							mouseX += movementDeltaX;
+							mouseY += movementDeltaY;
 						}
 
 						virtualJoystickInfo.active = true;
@@ -1590,13 +1598,19 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 				mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
 
 				if (mouseNeedsInitPos) {
-					// TODO: option to get preexisting mouse position instead of set it to center of screen
+					// The native cursor is not repositioned; this only initializes the virtual cursor used by the overlay.
 					mouseX = screenOffsetX + screenWidth / 2;
 					mouseY = screenOffsetY + screenHeight / 2;
+					lastSentMouseX = mouseX;
+					lastSentMouseY = mouseY;
 					mouseNeedsInitPos = false;
 				}
 				if (window.electronAPI) {
-					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
+					const sentMouseX = Math.trunc(mouseX);
+					const sentMouseY = Math.trunc(mouseY);
+					window.electronAPI.moveMouse(sentMouseX - Math.trunc(lastSentMouseX), sentMouseY - Math.trunc(lastSentMouseY));
+					lastSentMouseX = mouseX;
+					lastSentMouseY = mouseY;
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";
