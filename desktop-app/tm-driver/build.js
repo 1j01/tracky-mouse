@@ -36,6 +36,9 @@ async function main() {
 }
 
 main().catch((error) => {
-	console.error(error.message || error);
+	console.error(error);
+	if (error.code === "ENOENT") {
+		console.error("Make sure Go is installed and included in your PATH.");
+	}
 	process.exit(1);
 });
