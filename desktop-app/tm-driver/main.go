@@ -67,18 +67,18 @@ func writeResponse(writer *bufio.Writer, resp response) error {
 func handleRequest(req request) response {
 	resp := response{ID: req.ID}
 	switch req.Method {
-	case "setMouseLocation":
-		x, err := intParam(req.Params, "x")
+	case "moveMouseRelative":
+		deltaX, err := intParam(req.Params, "deltaX")
 		if err != nil {
 			resp.Error = err.Error()
 			return resp
 		}
-		y, err := intParam(req.Params, "y")
+		deltaY, err := intParam(req.Params, "deltaY")
 		if err != nil {
 			resp.Error = err.Error()
 			return resp
 		}
-		robotgo.Move(x, y)
+		robotgo.MoveRelative(deltaX, deltaY)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
 	case "ping":

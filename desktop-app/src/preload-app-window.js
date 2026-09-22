@@ -11,8 +11,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 
 contextBridge.exposeInMainWorld("electronAPI", {
-	moveMouse: (x, y) => {
-		ipcRenderer.send('moveMouse', x, y, performance.now());
+	moveMouse: (deltaX, deltaY) => {
+		ipcRenderer.send('moveMouse', deltaX, deltaY, performance.now());
 	},
 
 	setMouseButtonState: (button, down) => {

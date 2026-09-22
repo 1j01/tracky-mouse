@@ -179,8 +179,8 @@ function callDriver(method, params = {}) {
 	});
 }
 
-async function setMouseLocation(x, y) {
-	await callDriver('setMouseLocation', { x, y });
+async function moveMouseRelative(deltaX, deltaY) {
+	await callDriver('moveMouseRelative', { deltaX, deltaY });
 }
 
 async function getMouseLocation() {
@@ -206,7 +206,7 @@ async function mouseUp(button) {
 module.exports = {
 	startTMDriver,
 	stopTMDriver,
-	setMouseLocation,
+	moveMouseRelative,
 	getMouseLocation,
 	click,
 	mouseDown,

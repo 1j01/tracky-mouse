@@ -219,7 +219,7 @@ const windowStateKeeper = require('electron-window-state');
 const {
 	startTMDriver,
 	stopTMDriver,
-	setMouseLocation: setMouseLocationWithoutTracking,
+	moveMouseRelative,
 	getMouseLocation,
 	click,
 	mouseDown,
@@ -427,7 +427,11 @@ async function setMouseLocationTracky(x, y) {
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
-	await setMouseLocationWithoutTracking(x * screenScaleFactor, y * screenScaleFactor);
+	const currentPosition = await getMouseLocation();
+	await moveMouseRelative(
+		x * screenScaleFactor - currentPosition.x,
+		y * screenScaleFactor - currentPosition.y,
+	);
 }
 function pruneMousePosHistory() {
 	const now = performance.now();
