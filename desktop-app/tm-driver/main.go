@@ -85,7 +85,7 @@ func handleRequest(req request) response {
 		resp.Result = map[string]bool{"ok": true}
 		return resp
 	case "getMouseLocation":
-		x, y := robotgo.GetMousePos()
+		x, y := robotgo.Location()
 		resp.Result = mousePosition{X: x, Y: y}
 		return resp
 	case "click":
