@@ -18,7 +18,9 @@ function getDriverExecutableName() {
 }
 
 function getPackagedDriverPath() {
-	return path.join(process.resourcesPath, 'tm-driver', 'bin', getDriverExecutableName());
+	// return path.join(process.resourcesPath, 'tm-driver', 'bin', getDriverExecutableName());
+	// I guess `extraResource` is forge.config.js copies directories without intermediate paths?
+	return path.join(process.resourcesPath, 'bin', getDriverExecutableName());
 }
 
 function getDevelopmentDriverPath(app) {
