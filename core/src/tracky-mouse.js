@@ -1594,8 +1594,8 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					// }
 				}
 
-				mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
-				mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
+				// mouseX = Math.min(Math.max(screenOffsetX, mouseX), screenOffsetX + screenWidth);
+				// mouseY = Math.min(Math.max(screenOffsetY, mouseY), screenOffsetY + screenHeight);
 
 				if (mouseNeedsInitPos) {
 					// The native cursor is not repositioned; this only initializes the virtual cursor used by the overlay.
