@@ -27,6 +27,7 @@ and writes one JSON response per line to stdout.
 
 Supported methods:
 - `setMouseLocation` with params `{ "x": number, "y": number }`
+- `moveMouseRelative` with params `{ "x": number, "y": number }`
 - `getMouseLocation`
 - `click` with params `{ "button": "left" | "right" | "middle" }`
 - `mouseDown` with params `{ "button": "left" | "right" | "middle" }`

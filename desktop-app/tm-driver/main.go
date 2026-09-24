@@ -81,6 +81,20 @@ func handleRequest(req request) response {
 		robotgo.Move(x, y)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
+	case "moveMouseRelative":
+		x, err := intParam(req.Params, "x")
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		y, err := intParam(req.Params, "y")
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		robotgo.MoveRelative(x, y)
+		resp.Result = map[string]bool{"ok": true}
+		return resp
 	case "ping":
 		resp.Result = map[string]bool{"ok": true}
 		return resp
