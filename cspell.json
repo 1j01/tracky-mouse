@@ -10,6 +10,8 @@
 		"audio",
 		"locales",
 		"new-translations.json",
+		"go.mod",
+		"go.sum",
 		"private",
 		"CNAME"
 	],
