@@ -219,6 +219,7 @@ const windowStateKeeper = require('electron-window-state');
 const {
 	startTMDriver,
 	stopTMDriver,
+	moveMouseRelative,
 	setMouseLocation: setMouseLocationWithoutTracking,
 	getMouseLocation,
 	click,
@@ -412,6 +413,27 @@ function deserializeSettings(settings) {
 	}
 }
 
+let initialRelativeMouseMoveSent = false;
+/**
+ * On Windows, ensure the cursor is visible when using "Run at login".
+ * 
+ * This function is to ensure the cursor is made visible when you start controlling the computer with Tracky Mouse
+ * when using "Run at login", since the cursor is otherwise invisible until you physically jostle the mouse.
+ * Note: Calling the Win32 ShowCursor API does NOT make the cursor visible in this case.
+ * I've tested this using AutoHotKey, logging out and in with the mouse unplugged.
+ * Sending absolute mouse moves does NOT make the cursor visible.
+ */
+function ensureCursorVisibility() {
+	if (process.platform !== 'win32') {
+		return;
+	}
+	if (initialRelativeMouseMoveSent) {
+		return;
+	}
+	moveMouseRelative(1, 0);
+	initialRelativeMouseMoveSent = true;
+}
+
 // setMouseLocation/getMouseLocation are asynchronous,
 // which means we have to be smart about detecting manual mouse movement.
 // We don't want to pause the mouse control due to head tracker based movement.
@@ -423,6 +445,8 @@ function deserializeSettings(settings) {
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
 async function setMouseLocationTracky(x, y) {
+	ensureCursorVisibility();
+
 	const time = performance.now();
 	mousePosHistory.push({ point: { x, y }, time });
 	// Test robustness using this artificial delay:
