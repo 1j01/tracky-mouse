@@ -95,6 +95,13 @@ func handleRequest(req request) response {
 		robotgo.MoveRelative(x, y)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
+	case "ensureCursorVisibility":
+		if err := ensureCursorVisibility(); err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		resp.Result = map[string]bool{"ok": true}
+		return resp
 	case "ping":
 		resp.Result = map[string]bool{"ok": true}
 		return resp

@@ -187,6 +187,10 @@ async function moveMouseRelative(x, y) {
 	await callDriver('moveMouseRelative', { x, y });
 }
 
+async function ensureCursorVisibility() {
+	await callDriver('ensureCursorVisibility');
+}
+
 async function getMouseLocation() {
 	const result = await callDriver('getMouseLocation');
 	if (!result || typeof result.x !== 'number' || typeof result.y !== 'number') {
@@ -212,6 +216,7 @@ module.exports = {
 	stopTMDriver,
 	setMouseLocation,
 	moveMouseRelative,
+	ensureCursorVisibility,
 	getMouseLocation,
 	click,
 	mouseDown,

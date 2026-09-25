@@ -219,7 +219,7 @@ const windowStateKeeper = require('electron-window-state');
 const {
 	startTMDriver,
 	stopTMDriver,
-	moveMouseRelative,
+	ensureCursorVisibility: ensureCursorVisibilityWithDriver,
 	setMouseLocation: setMouseLocationWithoutTracking,
 	getMouseLocation,
 	click,
@@ -430,7 +430,7 @@ function ensureCursorVisibility() {
 	if (initialRelativeMouseMoveSent) {
 		return;
 	}
-	moveMouseRelative(1, 0);
+	ensureCursorVisibilityWithDriver();
 	initialRelativeMouseMoveSent = true;
 }
 
