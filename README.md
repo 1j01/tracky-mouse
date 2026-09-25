@@ -221,6 +221,9 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 - Install [Node.js](https://nodejs.org/) if you don't have it
   - Recommended: install via [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
   - The supported Node.js version is specified in [`.nvmrc`](./.nvmrc)
+- Install the [requirements for RobotGo](https://github.com/go-vgo/robotgo/tree/v1.0.2#requirements) (Go, GCC, and a few libraries)
+  - Bitmap and hook related libraries are not required.
+  - The supported Go version is specified in [`go.mod`](./desktop-app/tm-driver/go.mod)
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
 
