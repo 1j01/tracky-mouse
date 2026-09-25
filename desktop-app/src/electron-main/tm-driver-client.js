@@ -38,12 +38,12 @@ function rejectAllPendingRequests(message) {
 	pendingRequests.clear();
 }
 
-function handleDriverLine(line) {
+function handleResponseJSON(responseJSON) {
 	let response;
 	try {
-		response = JSON.parse(line);
+		response = JSON.parse(responseJSON);
 	} catch (error) {
-		console.error('[tm-driver] Failed to parse JSON response:', line, error);
+		console.error('[tm-driver] Failed to parse JSON response:', responseJSON, error);
 		return;
 	}
 	if (typeof response.id !== 'number') {
@@ -70,7 +70,7 @@ function spawnDriverProcess(command, args, options = {}) {
 	});
 
 	const lineReader = readline.createInterface({ input: proc.stdout });
-	lineReader.on('line', handleDriverLine);
+	lineReader.on('line', handleResponseJSON);
 	proc.stderr.on('data', (chunk) => {
 		console.error(`[tm-driver] ${chunk.toString().trimEnd()}`);
 	});

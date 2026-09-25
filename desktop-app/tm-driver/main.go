@@ -95,16 +95,6 @@ func handleRequest(req request) response {
 		robotgo.MoveRelative(x, y)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
-	case "ensureCursorVisibility":
-		if err := ensureCursorVisibility(); err != nil {
-			resp.Error = err.Error()
-			return resp
-		}
-		resp.Result = map[string]bool{"ok": true}
-		return resp
-	case "ping":
-		resp.Result = map[string]bool{"ok": true}
-		return resp
 	case "getMouseLocation":
 		x, y := robotgo.Location()
 		resp.Result = mousePosition{X: x, Y: y}
@@ -134,6 +124,16 @@ func handleRequest(req request) response {
 			return resp
 		}
 		robotgo.Toggle(button, "up")
+		resp.Result = map[string]bool{"ok": true}
+		return resp
+	case "ensureCursorVisibility":
+		if err := ensureCursorVisibility(); err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		resp.Result = map[string]bool{"ok": true}
+		return resp
+	case "ping":
 		resp.Result = map[string]bool{"ok": true}
 		return resp
 	default:

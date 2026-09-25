@@ -22,7 +22,7 @@ The output binary is written to `desktop-app/tm-driver/bin/`.
 
 ## Process Protocol
 
-This helper process reads JSON-RPC-like requests from stdin (one JSON object per line)
+This helper process reads JSON-based requests from stdin (one JSON object per line)
 and writes one JSON response per line to stdout.
 
 Supported methods:

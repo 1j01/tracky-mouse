@@ -14,7 +14,6 @@ function run(command, args, options = {}) {
 		const child = spawn(command, args, {
 			cwd: rootDir,
 			stdio: 'inherit',
-			windowsHide: false,
 			...options,
 		});
 		child.on('error', reject);
