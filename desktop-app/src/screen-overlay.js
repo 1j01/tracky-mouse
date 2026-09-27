@@ -48,16 +48,20 @@ electronAPI.onMouseMove((_event, x, y) => {
 	screenOverlay.updateMousePos(x, y);
 });
 
-electronAPI.onOverlayUpdate((_event, data) => {
+electronAPI.onOverlayUpdate((_event, { requestId, data }) => {
 	// console.log("onOverlayUpdate", data);
-	const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
+	try {
+		const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
 
-	screenOverlay.update(data);
+		screenOverlay.update(data);
 
-	const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
-	const dwellClickerEnabled = isEnabled && clickingMode === "dwell" && !pauseDwellClickingDueToJoystickUsage;
-	dwellClicker.paused = !dwellClickerEnabled;
+		const pauseDwellClickingDueToJoystickUsage = inputFeedback.virtualJoystickInfo?.active;
+		const dwellClickerEnabled = isEnabled && clickingMode === "dwell" && !pauseDwellClickingDueToJoystickUsage;
+		dwellClicker.paused = !dwellClickerEnabled;
 
-	audio?.setAudioEnabled(soundEffectsEnabled);
+		audio?.setAudioEnabled(soundEffectsEnabled);
+	} finally {
+		electronAPI.acknowledgeOverlayUpdate(requestId);
+	}
 
 });

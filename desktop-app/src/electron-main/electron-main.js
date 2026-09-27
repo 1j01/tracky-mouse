@@ -545,23 +545,51 @@ const createWindow = () => {
 		if (!screenOverlayWindow || screenOverlayWindow.isDestroyed()) {
 			// This can happen while closing the app normally.
 			// console.error("No overlay window to update...");
-			return;
+			return false;
 		}
 		if (screenOverlayWindow.webContents.isDestroyed()) {
 			// console.error("No overlay window web contents to update...");
-			return;
+			return false;
 		}
 		if (screenOverlayWindow.webContents.isCrashed()) {
 			// console.error("Overlay window web contents is crashed; can't update overlay...");
-			return;
+			return false;
 		}
 		if (screenOverlayWindow.webContents.isLoadingMainFrame()) {
 			// This happens normally during startup.
 			// console.error("Overlay window web contents is still loading; can't update overlay yet.");
-			return;
+			return false;
 		}
 		screenOverlayWindow.webContents.send(message, ...args);
+		return true;
 	}
+
+	let nextOverlayUpdateRequestId = 1;
+	let inFlightOverlayUpdateRequestId = null;
+	const pendingOverlayUpdates = [];
+	const maxPendingOverlayUpdates = 2;
+
+	function sendNextOverlayUpdate() {
+		if (inFlightOverlayUpdateRequestId !== null || pendingOverlayUpdates.length === 0) {
+			return;
+		}
+		const data = pendingOverlayUpdates[0];
+		const requestId = nextOverlayUpdateRequestId++;
+		inFlightOverlayUpdateRequestId = requestId;
+		if (trySendOverlayWindowMessage('overlayUpdate', { requestId, data })) {
+			pendingOverlayUpdates.shift();
+		} else {
+			inFlightOverlayUpdateRequestId = null;
+		}
+	}
+
+	ipcMain.on('overlayUpdateProcessed', (event, requestId) => {
+		if (event.sender !== screenOverlayWindow?.webContents || requestId !== inFlightOverlayUpdateRequestId) {
+			return;
+		}
+		inFlightOverlayUpdateRequestId = null;
+		sendNextOverlayUpdate();
+	});
 
 	// Expose functionality to the renderer processes.
 
@@ -583,7 +611,7 @@ const createWindow = () => {
 		};
 		const isManualTakeback = enabled && regainControlTimeout !== null;
 
-		trySendOverlayWindowMessage('overlayUpdate', {
+		const data = {
 			isEnabled: enabled && !isManualTakeback,
 			isManualTakeback,
 			clickingMode: activeSettings.clickingMode,
@@ -592,7 +620,12 @@ const createWindow = () => {
 			messageText: getScreenOverlayMessageText({ isManualTakeback, enabled }),
 			systemMousePosition,
 			soundEffectsEnabled: activeSettings.soundEffects,
-		});
+		};
+		pendingOverlayUpdates.push(data);
+		if (pendingOverlayUpdates.length > maxPendingOverlayUpdates) {
+			pendingOverlayUpdates.shift();
+		}
+		sendNextOverlayUpdate();
 	};
 
 	let monitorMousePositionTid = null;
