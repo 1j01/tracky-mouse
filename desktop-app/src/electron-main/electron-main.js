@@ -4,7 +4,7 @@
 // I'm making an exception for Sentry, since it could help track down installation issues.
 const path = require('path');
 const { app, globalShortcut, dialog, BrowserWindow, ipcMain } = require('electron');
-const { invokeRenderer } = require('../ipc-invoke-shim.js');
+require('../ipc-invoke-shim.js'); // polyfills webContents#invoke()
 try {
 	const Sentry = require("@sentry/electron/main");
 	let sentryEnvironment = app.isPackaged ? "packaged" : "development";
@@ -579,7 +579,7 @@ const createWindow = () => {
 			return;
 		}
 		const thisUpdateId = ++lastSentOverlayUpdateId;
-		invokeRenderer(screenOverlayWindow.webContents, message, ...args).catch((error) => {
+		screenOverlayWindow.webContents.invoke(message, ...args).catch((error) => {
 			console.error(`Failed to send overlay window message '${message}':`, error);
 		}).finally(() => {
 			lastReceivedOverlayUpdateId = thisUpdateId;

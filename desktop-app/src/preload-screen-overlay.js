@@ -8,11 +8,11 @@
 // Sentry.init();
 
 const { contextBridge, ipcRenderer } = require('electron');
-const { handleInRenderer } = require('./ipc-invoke-shim.js');
+require('./ipc-invoke-shim.js'); // polyfills ipcRenderer.handle()
 
 contextBridge.exposeInMainWorld('electronAPI', {
-	handleOverlayUpdate: (callback) => handleInRenderer('overlayUpdate', callback),
-	handleMouseMove: (callback) => handleInRenderer('mouseMove', callback),
+	handleOverlayUpdate: (callback) => ipcRenderer.handle('overlayUpdate', callback),
+	handleMouseMove: (callback) => ipcRenderer.handle('mouseMove', callback),
 
 	// This is pretty weird but I'm giving the overlay window control over clicking,
 	// whereas the app window has control over moving the mouse.
