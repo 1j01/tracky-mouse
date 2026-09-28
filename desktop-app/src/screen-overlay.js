@@ -29,7 +29,7 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 
 const screenOverlay = TrackyMouse.initScreenOverlay();
 
-electronAPI.onMouseMove((_event, x, y) => {
+electronAPI.onMouseMove((_event, updateId, x, y) => {
 	// console.log("mouseMove", x, y);
 	document.dispatchEvent(new Event("mouseenter"));
 	const domEvent = new PointerEvent("pointermove", {
@@ -46,9 +46,10 @@ electronAPI.onMouseMove((_event, x, y) => {
 	});
 	window.dispatchEvent(domEvent);
 	screenOverlay.updateMousePos(x, y);
+	electronAPI.acknowledgeUpdate(updateId);
 });
 
-electronAPI.onOverlayUpdate((_event, data) => {
+electronAPI.onOverlayUpdate((_event, updateId, data) => {
 	// console.log("onOverlayUpdate", data);
 	const { isEnabled, clickingMode, soundEffectsEnabled, inputFeedback } = data;
 
@@ -60,4 +61,5 @@ electronAPI.onOverlayUpdate((_event, data) => {
 
 	audio?.setAudioEnabled(soundEffectsEnabled);
 
+	electronAPI.acknowledgeUpdate(updateId);
 });
