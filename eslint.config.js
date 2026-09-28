@@ -62,6 +62,7 @@ module.exports = [
 			"desktop-app/src/electron-main/*",
 			"desktop-app/src/preload-app-window.js",
 			"desktop-app/src/preload-screen-overlay.js",
+			"desktop-app/src/ipc-invoke-shim.js",
 			"desktop-app/forge.config.js",
 			"scripts/copy-with-review.js",
 			"scripts/list-ipc-events.js",
