@@ -668,7 +668,8 @@ const createWindow = () => {
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
-		trySendOverlayWindowMessage('moveMouse', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
+		// Note: name switches from "moveMouse" to "mouseMove" as it's a passive update when sent to the HUD
+		trySendOverlayWindowMessage('mouseMove', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
 	});
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
