@@ -30,7 +30,7 @@ const dwellClicker = TrackyMouse.initDwellClicking({
 const screenOverlay = TrackyMouse.initScreenOverlay();
 
 electronAPI.onMouseMove((_event, x, y) => {
-	// console.log("moveMouse", x, y);
+	// console.log("mouseMove", x, y);
 	document.dispatchEvent(new Event("mouseenter"));
 	const domEvent = new PointerEvent("pointermove", {
 		view: window,
