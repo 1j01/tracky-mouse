@@ -538,7 +538,8 @@ const createWindow = () => {
 		// Note: if re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 	});
 
-	// Helper for safely sending messages without spamming the console
+	let lastSentOverlayUpdateId = 0;
+	let lastReceivedOverlayUpdateId = 0;
 	function trySendOverlayWindowMessage(message, ...args) {
 		// Could include logic to log when toggling between able and unable to update,
 		// but for now it's enough to avoid errors spamming the console.
@@ -560,7 +561,26 @@ const createWindow = () => {
 			// console.error("Overlay window web contents is still loading; can't update overlay yet.");
 			return;
 		}
-		screenOverlayWindow.webContents.invoke(message, ...args);
+
+		// Avoid queuing too many IPC messages, which has been observed to build up incredible latency on macOS
+		// (https://github.com/1j01/tracky-mouse/issues/7)
+		// TODO: eventual consistency for important state like `paused`
+		// Could either send the latest state after a delay if nothing else has been sent,
+		// or better, send important updates immediately by diffing an "important state" object
+		// (with fields like `paused` and maybe everything other than continuously changing state)
+		// TODO: handle failed invoke() cleanly (in some way), or rename lastReceivedOverlayUpdateId.
+		// Currently fails update lastReceivedOverlayUpdateId (via `finally`),
+		// which may be semantically inaccurate in regards to the variable name (it's not necessarily "received"),
+		// although it may be fine logically for the purposes of throttling.
+
+		const inQueue = lastSentOverlayUpdateId - lastReceivedOverlayUpdateId;
+		if (inQueue > 2) {
+			return;
+		}
+		const thisUpdateId = ++lastSentOverlayUpdateId;
+		screenOverlayWindow.webContents.invoke(message, ...args).finally(() => {
+			lastReceivedOverlayUpdateId = thisUpdateId;
+		});
 	}
 
 	// Expose functionality to the renderer processes.

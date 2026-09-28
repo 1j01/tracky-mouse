@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In the desktop app, mouse control now runs in a separate Go helper process (`tm-driver`) instead of using the `serenade-driver` native Node.js module.
 
+### Fixed
+
+- Fixed severe latency of screen overlay updates observed on macOS ([issue #7](https://github.com/1j01/tracky-mouse/issues/7))
+  - (The fix is not platform-specific. I just haven't seen the issue on other platforms.)
+
 ## [3.0.0] - 2026-08-30
 
 ### Removed
