@@ -566,29 +566,32 @@ const createWindow = () => {
 
 	let nextOverlayUpdateRequestId = 1;
 	let inFlightOverlayUpdateRequestId = null;
-	const pendingOverlayUpdates = [];
-	const maxPendingOverlayUpdates = 2;
+	let latestPendingOverlayUpdate = null;
 
-	function sendNextOverlayUpdate() {
-		if (inFlightOverlayUpdateRequestId !== null || pendingOverlayUpdates.length === 0) {
+	function sendLatestOverlayUpdate() {
+		if (inFlightOverlayUpdateRequestId !== null || latestPendingOverlayUpdate === null) {
 			return;
 		}
-		const data = pendingOverlayUpdates[0];
+		const data = latestPendingOverlayUpdate;
 		const requestId = nextOverlayUpdateRequestId++;
-		inFlightOverlayUpdateRequestId = requestId;
 		if (trySendOverlayWindowMessage('overlayUpdate', { requestId, data })) {
-			pendingOverlayUpdates.shift();
-		} else {
-			inFlightOverlayUpdateRequestId = null;
+			inFlightOverlayUpdateRequestId = requestId;
+			latestPendingOverlayUpdate = null;
 		}
 	}
 
-	ipcMain.on('overlayUpdateProcessed', (event, requestId) => {
+	function updateOverlay(data) {
+		latestPendingOverlayUpdate = data;
+		sendLatestOverlayUpdate();
+	}
+
+	ipcMain.handle('overlayUpdateProcessed', (event, requestId) => {
 		if (event.sender !== screenOverlayWindow?.webContents || requestId !== inFlightOverlayUpdateRequestId) {
-			return;
+			return false;
 		}
 		inFlightOverlayUpdateRequestId = null;
-		sendNextOverlayUpdate();
+		sendLatestOverlayUpdate();
+		return true;
 	});
 
 	// Expose functionality to the renderer processes.
@@ -621,11 +624,7 @@ const createWindow = () => {
 			systemMousePosition,
 			soundEffectsEnabled: activeSettings.soundEffects,
 		};
-		pendingOverlayUpdates.push(data);
-		if (pendingOverlayUpdates.length > maxPendingOverlayUpdates) {
-			pendingOverlayUpdates.shift();
-		}
-		sendNextOverlayUpdate();
+		updateOverlay(data);
 	};
 
 	let monitorMousePositionTid = null;
