@@ -560,7 +560,7 @@ const createWindow = () => {
 			// console.error("Overlay window web contents is still loading; can't update overlay yet.");
 			return;
 		}
-		screenOverlayWindow.webContents.send(message, ...args);
+		screenOverlayWindow.webContents.invoke(message, ...args);
 	}
 
 	// Expose functionality to the renderer processes.
