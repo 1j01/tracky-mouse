@@ -12,6 +12,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
 	onOverlayUpdate: (callback) => ipcRenderer.on('overlayUpdate', callback),
 	onMouseMove: (callback) => ipcRenderer.on('mouseMove', callback),
+	acknowledgeUpdate: (updateId) => ipcRenderer.send('acknowledgeUpdate', updateId),
 
 	// This is pretty weird but I'm giving the overlay window control over clicking,
 	// whereas the app window has control over moving the mouse.

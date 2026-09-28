@@ -538,7 +538,8 @@ const createWindow = () => {
 		// Note: if re-assessing this, for macOS, make sure to handle the global shortcut, when the window doesn't exist.
 	});
 
-	// Helper for safely sending messages without spamming the console
+	let lastSentOverlayUpdateId = 0;
+	let lastReceivedOverlayUpdateId = 0;
 	function trySendOverlayWindowMessage(message, ...args) {
 		// Could include logic to log when toggling between able and unable to update,
 		// but for now it's enough to avoid errors spamming the console.
@@ -560,8 +561,46 @@ const createWindow = () => {
 			// console.error("Overlay window web contents is still loading; can't update overlay yet.");
 			return;
 		}
-		screenOverlayWindow.webContents.send(message, ...args);
+
+		// Avoid queuing too many IPC messages, which has been observed to build up incredible latency on macOS
+		// (https://github.com/1j01/tracky-mouse/issues/7)
+		// TODO: eventual consistency for important state like `paused`
+		// Could either send the latest state after a delay if nothing else has been sent,
+		// or better, send important updates immediately by diffing an "important state" object
+		// (with fields like `paused` and maybe everything other than continuously changing state)
+		// TODO: handle failed send of message or of acknowledgeUpdate in some way
+		// Right now, if one or two messages fail to send,
+		// it could stop sending messages entirely, perpetually considering
+		// the queue to be too full.
+		// A timeout could help here, resetting lastReceivedOverlayUpdateId to lastSentOverlayUpdateId.
+		// (That said, if it's not done thoughtfully it could compromise the latency buildup avoidance.)
+		// (Also, how expensive are timers? I don't know that I've ever set new timers constantly...)
+
+		const inQueue = lastSentOverlayUpdateId - lastReceivedOverlayUpdateId;
+		// NOTE: mouseMove is exempted here because otherwise this throttling was
+		// skipping too many mouseMove events, and it seems to be enough to
+		// throttle just the overlayUpdate events in order to avoid the buildup of latency.
+		// It could be because the overlayUpdate events have a larger JSON payload,
+		// combined with similar frequency, but in principle,
+		// I don't see a reason why mouseMouse events couldn't incur
+		// the latency buildup, and so it's possible they may
+		// under heavier load or on less powerful hardware.
+		// (By the way, merging the events and using differencing
+		// could help or it could just make it harder to maintain this exemption.
+		// Maybe not too hard as it could probably be done by property filtering.)
+		// NOTE also: There may be a behavioral/semantic difference
+		// between counting all messages vs. counting only messages that are to be throttled.
+		// I don't know which would be better.
+		// Currently all messages are counted, meaning extra mouseMove events can cause
+		// overlayUpdate events to be throttled.
+		if (inQueue > 2 && message !== "mouseMove") {
+			return;
+		}
+		screenOverlayWindow.webContents.send(message, ++lastSentOverlayUpdateId, ...args);
 	}
+	ipcMain.on("acknowledgeUpdate", (_event, updateId) => {
+		lastReceivedOverlayUpdateId = updateId;
+	});
 
 	// Expose functionality to the renderer processes.
 
