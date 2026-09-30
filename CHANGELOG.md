@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- In the desktop app, mouse control now runs in a separate Go helper process (`tm-driver`) instead of using the `serenade-driver` native Node.js module.
+- In the desktop app, mouse control now uses a separate helper process instead of using the `serenade-driver` native Node.js module.
+  - The new helper process (`tracky-mouse-driver.exe` on Windows, `tracky-mouse-driver` on macOS and Linux) is written in Go and uses [robotgo](https://github.com/go-vgo/robotgo) for mouse control.
+  - This avoids compilation issues when updating Node.js or Electron, may fix some platform-specific issues, and gives a clear extension point for future native features, like gamepad emulation.
 
 ### Fixed
 
-- Fixed severe latency of screen overlay updates observed on macOS ([issue #7](https://github.com/1j01/tracky-mouse/issues/7))
-  - (The fix is not platform-specific. I just haven't seen the issue on other platforms.)
+- Fixed severe latency of screen overlay updates observed on macOS. ([issue #7](https://github.com/1j01/tracky-mouse/issues/7))
+  - (The fix is not platform-specific.)
+- Fixed an issue where mouse down+mouse up wouldn't properly click things (such as dropdowns) on macOS. ([issue #102](https://github.com/1j01/tracky-mouse/issues/102))
 
 ## [3.0.0] - 2026-08-30
 
