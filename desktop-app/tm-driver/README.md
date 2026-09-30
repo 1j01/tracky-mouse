@@ -1,16 +1,22 @@
-# Tracky Mouse's Native Component
+# tm-driver
 
-Written in Go, using robotgo, this module provides mouse control for the Tracky Mouse desktop application as a separate helper process.
+Written in Go, using [robotgo](https://github.com/go-vgo/robotgo), this subprocess provides mouse control for the Tracky Mouse desktop application.
 
-Compared to serenade-driver (native Node.js module):
-- A separate process can be elevated for Windows UI automation requirements
+Previously Tracky Mouse used [serenade-driver](https://github.com/serenadeai/driver), a native Node.js module.
+
+Compared to serenade-driver:
 - No node-gyp! No compilation nightmares like C++ syntax errors showing up due to mismatched versions.
-- Hopefully we can fix a macOS issue where mouse down+mouse up doesn't properly click things: [#102](https://github.com/1j01/tracky-mouse/issues/102)
-- Hopefully we can fix a Windows issue where clicking on the non-client area can freeze the main process: [#69](https://github.com/1j01/tracky-mouse/issues/69)
+- This fixes an issue where mouse down+mouse up wouldn't properly click things (such as dropdowns) on macOS: [#102](https://github.com/1j01/tracky-mouse/issues/102)
+- A separate process might avoid issues like [#69](https://github.com/1j01/tracky-mouse/issues/69) although that was already fixed before switching to tm-driver.
+- A separate process could be elevated for Windows UI automation requirements... theoretically.
+  - See docs for [Security Considerations for Assistive Technologies](https://learn.microsoft.com/windows/win32/winauto/uiauto-securityoverview), [Application Manifests](https://learn.microsoft.com/windows/win32/sbscs/application-manifests), which might be the same thing as [Assembly Manifests](https://learn.microsoft.com/windows/win32/sbscs/assembly-manifests), but is definitely different from the [App package manifest](https://learn.microsoft.com/uwp/schemas/appxpackage/appx-package-manifest) (.appxmanifest, which also includes [capability declarations](https://learn.microsoft.com/windows/apps/package-and-deploy/app-capability-declarations) for UI access, which I've already included), and [Authenticode digital signatures](https://learn.microsoft.com/windows-hardware/drivers/install/authenticode)
+  - A key question is whether this requires coughing up cash to Microsoft for a code signing certificate. Allegedly I don't need to when uploading to the Microsoft Store. But so far I don't see anything that says this works with Microsoft's automatic signing when uploading to the Store.
+    - Actually, apparently, [`uiAccess="true"` doesn't even work with MSIX](https://github.com/microsoft/WindowsAppSDK/issues/1669)
+  - The main process maybe should be elevated too to be able to place the overlay window as "the topmost application in the z-order at any time", which maybe means this being a separate process isn't helpful to achieving full capability anyway.
 
 ## Build
 
-The desktop app builds this process automatically before `start`, `package`, `make`, and `publish`.
+The desktop app builds this Go binary automatically before `start`, `package`, `make`, and `publish`.
 
 To build it manually:
 
@@ -33,3 +39,4 @@ Supported methods:
 - `click` with params `{ "button": "left" | "right" | "middle" }`
 - `mouseDown` with params `{ "button": "left" | "right" | "middle" }`
 - `mouseUp` with params `{ "button": "left" | "right" | "middle" }`
+- `ping`
