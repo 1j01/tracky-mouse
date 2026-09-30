@@ -1,16 +1,18 @@
-# Tracky Mouse's Native Component
+# tm-driver
 
-Written in Go, using robotgo, this module provides mouse control for the Tracky Mouse desktop application as a separate helper process.
+Written in Go, using [robotgo](https://github.com/go-vgo/robotgo), this subprocess provides mouse control for the Tracky Mouse desktop application.
 
-Compared to serenade-driver (native Node.js module):
-- A separate process can be elevated for Windows UI automation requirements
+Previously Tracky Mouse used [serenade-driver](https://github.com/serenadeai/driver), a native Node.js module.
+
+Compared to serenade-driver:
+- A separate process can be elevated for Windows UI automation requirements.
 - No node-gyp! No compilation nightmares like C++ syntax errors showing up due to mismatched versions.
-- Hopefully we can fix a macOS issue where mouse down+mouse up doesn't properly click things: [#102](https://github.com/1j01/tracky-mouse/issues/102)
-- Hopefully we can fix a Windows issue where clicking on the non-client area can freeze the main process: [#69](https://github.com/1j01/tracky-mouse/issues/69)
+- This fixes an issue where mouse down+mouse up wouldn't properly click things (such as dropdowns) on macOS: [#102](https://github.com/1j01/tracky-mouse/issues/102)
+- A separate process might avoid issues like [#69](https://github.com/1j01/tracky-mouse/issues/69) although that was already fixed before switching to tm-driver.
 
 ## Build
 
-The desktop app builds this process automatically before `start`, `package`, `make`, and `publish`.
+The desktop app builds this Go binary automatically before `start`, `package`, `make`, and `publish`.
 
 To build it manually:
 
