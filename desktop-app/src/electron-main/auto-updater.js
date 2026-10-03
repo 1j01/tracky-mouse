@@ -154,6 +154,11 @@ module.exports = {
 					release = JSON.parse(body);
 				} catch (e) {
 					console.error('Error parsing app update GitHub API response:', e);
+					return;
+				}
+				if (typeof release.tag_name !== 'string') {
+					console.error('Invalid release tag in GitHub API response:', release.tag_name);
+					return;
 				}
 				const latestVersion = release.tag_name;
 				if (typeof release.html_url !== 'string' || release.html_url.match(/^https?:\/\/.+/i) === null) {

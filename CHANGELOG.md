@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed severe latency of screen overlay updates observed on macOS. ([issue #7](https://github.com/1j01/tracky-mouse/issues/7))
   - (The fix is not platform-specific.)
 - Fixed an issue where mouse down+mouse up wouldn't properly click things (such as dropdowns) on macOS. ([issue #102](https://github.com/1j01/tracky-mouse/issues/102))
+- Fixed error handling in the auto-updater in case the GitHub API response is invalid.
 
 ## [3.0.0] - 2026-08-30
 
