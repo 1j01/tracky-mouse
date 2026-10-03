@@ -29,6 +29,7 @@ function run(command, args, options = {}) {
 
 async function main() {
 	await fs.mkdir(outDir, { recursive: true });
+	await run('go', ['mod', 'tidy']);
 	await run('go', ['mod', 'download']);
 	const isWayland = process.platform === 'linux' &&
 		(process.env.XDG_SESSION_TYPE === 'wayland' || process.env.WAYLAND_DISPLAY);
