@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node ../scripts/check-symlinks.js && live-server --port=64206 --no-browser",
     "test": "node ../scripts/copy-with-review.js . ../dist globs-for-deploy.js --dry-run",
-    "deploy": "rm -rf ../dist && node ../scripts/copy-with-review.js . ../dist globs-for-deploy.js && gh-pages -d ../dist",
+    "deploy": "node ../scripts/check-symlinks.js && rm -rf ../dist && node ../scripts/copy-with-review.js . ../dist globs-for-deploy.js && gh-pages -d ../dist",
     "deploy:rollback": "git fetch origin gh-pages && git push --force-with-lease origin origin/gh-pages~1:gh-pages",
     "tunnel": "run-p tunnel:*",
     "tunnel:server": "live-server --port=8080 --no-browser",

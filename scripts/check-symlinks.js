@@ -5,35 +5,41 @@ const { execFileSync } = require("child_process");
 const readline = require("readline");
 
 const root = path.resolve(__dirname, "..");
-const symlinkPaths = ["website/core", "website/images"];
-
-function isBroken(rel) {
-	const full = path.join(root, rel);
-	try {
-		return !fs.lstatSync(full).isSymbolicLink();
-	} catch (_error) {
-		return false; // missing, e.g. not a git checkout
-	}
+function git(...args) {
+	return execFileSync("git", args, { cwd: root, stdio: "pipe" }).toString();
 }
 
-function git(...args) {
-	return execFileSync("git", args, { cwd: root, stdio: "pipe" }).toString().trim();
+// Mode 120000 is how git records symlinks.
+function getSymlinkPaths() {
+	return git("ls-files", "-s", "-z")
+		.split("\0")
+		.filter((entry) => entry.startsWith("120000 "))
+		.map((entry) => entry.slice(entry.indexOf("\t") + 1));
+}
+
+function isNotSymlink(relativePath) {
+	try {
+		return !fs.lstatSync(path.join(root, relativePath)).isSymbolicLink();
+	} catch (_error) {
+		return false;
+	}
 }
 
 function ask(question) {
 	const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 	return new Promise((resolve) => rl.question(question, (answer) => {
 		rl.close();
-		resolve(/^y/i.test(answer.trim()));
+		resolve(!/^n/i.test(answer.trim()));
 	}));
 }
 
 async function main() {
 	if (process.platform !== "win32") return;
-	const broken = symlinkPaths.filter(isBroken);
+	const broken = getSymlinkPaths().filter(isNotSymlink);
 	if (broken.length === 0) return;
 
-	console.warn(`\nThese should be symbolic links, but were checked out as regular files/folders:\n  ${broken.join("\n  ")}`);
+	process.exitCode = 1;
+	console.warn(`\nThese should be symbolic links, but were checked out as regular files:\n  ${broken.join("\n  ")}`);
 	console.warn("This happens when git's core.symlinks setting is off, which is the default on Windows without Developer Mode.");
 
 	if (!process.stdin.isTTY) {
@@ -41,7 +47,7 @@ async function main() {
 		return;
 	}
 	console.warn("Fixing requires Developer Mode enabled in Windows settings (or an administrator terminal).");
-	if (!await ask("Set core.symlinks=true for this repo and re-checkout the links? [y/N] ")) return;
+	if (!await ask("Set core.symlinks=true for this repo and re-checkout the links? [Y/n] ")) return;
 
 	try {
 		git("config", "core.symlinks", "true");
@@ -52,14 +58,13 @@ async function main() {
 	} catch (error) {
 		console.error("Automatic fix failed:", error.stderr ? error.stderr.toString() : error.message);
 		console.error("Enable Developer Mode (or run as administrator), then run: node scripts/check-symlinks.js");
-		process.exitCode = 1;
 		return;
 	}
-	const stillBroken = symlinkPaths.filter(isBroken);
+	const stillBroken = broken.filter(isNotSymlink);
 	if (stillBroken.length) {
 		console.error("Still not symlinks:", stillBroken.join(", "), "- enable Developer Mode and try again.");
-		process.exitCode = 1;
 	} else {
+		process.exitCode = 0;
 		console.log("Symlinks restored.");
 	}
 }
