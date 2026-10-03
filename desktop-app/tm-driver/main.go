@@ -92,7 +92,7 @@ func handleRequest(req request) response {
 			resp.Error = err.Error()
 			return resp
 		}
-		robotgo.MoveRelative(x, y)
+		moveMouseRelative(x, y)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
 	case "getMouseLocation":

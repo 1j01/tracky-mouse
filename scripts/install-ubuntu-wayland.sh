@@ -115,12 +115,6 @@ update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || tru
 systemctl --user start xdg-desktop-portal.service >/dev/null 2>&1 || true
 systemctl --user start xdg-desktop-portal-gnome.service >/dev/null 2>&1 || true
 
-log "Running npm audit fix twice"
-cd "$ROOT"
-npm audit fix
-npm audit fix
-ok "npm audit fix completed twice"
-
 log "Restarting Tracky Mouse"
 pkill -u "$UID" -f "$ROOT/desktop-app/node_modules/electron/dist/electron" >/dev/null 2>&1 || true
 sleep 1
