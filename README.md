@@ -216,7 +216,7 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 
 ## Development Setup
 
-- Before cloning on Windows, make sure you have `git config --global core.symlinks true` set, or you may have issues with symbolic links.
+- On Windows, symbolic links need Developer Mode enabled and `git config --global core.symlinks true` set before cloning. If you didn't, `npm install` in the repo root will detect it and offer to fix it (or run `npm run check-symlinks`).
 - [Clone the repo.](https://help.github.com/articles/cloning-a-repository/)
 - Install [Node.js](https://nodejs.org/) if you don't have it
   - Recommended: install via [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)

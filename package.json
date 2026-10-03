@@ -9,6 +9,8 @@
 		"website"
 	],
 	"scripts": {
+		"postinstall": "node scripts/check-symlinks.js",
+		"check-symlinks": "node scripts/check-symlinks.js",
 		"install-all": "npm install && cd core && npm install && cd .. && cd website && npm install && cd .. && cd desktop-app && npm install && cd ..",
 		"website": "cd website && npm run start",
 		"in-website": "cd website &&",
