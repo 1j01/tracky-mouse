@@ -14,7 +14,7 @@ Features include:
   - [x] Open mouth to click - This provides **three-button mouse** functionality using closed eyes as modifiers.
 - [x] The screen overlay provides visual feedback for dwell clicking and facial gestures at your cursor.
 - [x] Settings for sensitivity, acceleration, running at login, and more.
-- [x] Moving the mouse manually (with a physical mouse or touchpad) automatically pauses control.
+- [x] Moving the mouse manually (with a physical mouse or touchpad) automatically pauses control where the platform exposes the real cursor position. On GNOME Wayland/libei, use <kbd>F9</kbd> to pause/resume instead.
 
 By building it as a desktop app *and* an embeddable web UI, users can try it out right away in their browser, and then install the desktop app for full computer control.
 <!-- Building Tracky Mouse as a desktop app *and* an embeddable web UI means you can try it out right away in their browser, and then install the desktop app for full computer control. -->
@@ -38,6 +38,42 @@ Settings could be shared between all three products (with import/export, which i
   - You may need to make it executable first by right-clicking the file, selecting "Properties", going to the "Permissions" tab, and checking "Allow this file to run as a program" or "Is executable" or similar (depending on your file manager). Then you can double-click it to run it. See [How to run an AppImage](https://discourse.appimage.org/t/how-to-run-an-appimage/80) for more details.
 - [⬇️ Download for Linux (.deb)](https://github.com/1j01/tracky-mouse/releases/download/v3.0.0/tracky-mouse_3.0.0_amd64.deb)
 - [⬇️ Download for Linux (.rpm)](https://github.com/1j01/tracky-mouse/releases/download/v3.0.0/tracky-mouse-3.0.0-1.x86_64.rpm)
+
+### Ubuntu 26.04 / GNOME Wayland
+
+Native GNOME Wayland support is available when running Tracky Mouse from source. This setup has been tested on Ubuntu 26.04 with a native GNOME Wayland session.
+
+The Wayland backend uses [RobotGo](https://github.com/go-vgo/robotgo) v1.1.0 with its `libei` backend and the freedesktop RemoteDesktop portal, so it does not depend on X11/XTest for mouse injection.
+
+Recommended setup:
+
+```sh
+git clone https://github.com/1j01/tracky-mouse.git
+cd tracky-mouse
+./scripts/install-ubuntu-wayland.sh
+```
+
+The installer:
+
+- installs `xdg-desktop-portal` and `xdg-desktop-portal-gnome`
+- installs all project dependencies
+- builds `tm-driver` with `CGO_ENABLED=0 -tags libei`
+- registers <kbd>F9</kbd> as a GNOME-global pause/resume shortcut
+- creates a local launcher and desktop entry
+- starts Tracky Mouse
+
+You can start it again later with:
+
+```sh
+npm start
+```
+
+The desktop app currently pins Electron `44.5.1`, which is the tested runtime for this Ubuntu 26.04 Wayland setup.
+
+> [!NOTE]
+> The Wayland RemoteDesktop/libei API does not expose the real physical cursor position. Because of this, Tracky Mouse cannot use the same automatic "manual mouse takeover" detection that it uses on X11. On GNOME Wayland, pause and resume tracking explicitly with <kbd>F9</kbd>.
+>
+> Mouse movement itself uses true relative libei pointer motion, so moving a physical mouse or touchpad does not make Tracky Mouse snap the pointer back to a stale absolute position.
 
 Pre-built binaries are not yet available for macOS, due to a couple issues: [camera permissions](https://github.com/1j01/tracky-mouse/issues/119), and [the more powerful clicking modes not clicking properly](https://github.com/1j01/tracky-mouse/issues/102).
 You *can* still run the app on macOS, if you follow the [Development Setup](#development-setup) instructions.
@@ -221,24 +257,29 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 - Install [Node.js](https://nodejs.org/) if you don't have it
   - Recommended: install via [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
   - The supported Node.js version is specified in [`.nvmrc`](./.nvmrc)
-- Install the [requirements for RobotGo](https://github.com/go-vgo/robotgo/tree/v1.0.2#requirements) (Go, GCC, and a few libraries)
+- Install the [requirements for RobotGo](https://github.com/go-vgo/robotgo/tree/v1.1.0#requirements) (Go, GCC, and a few libraries)
   - Bitmap and hook related libraries are not required.
   - The supported Go version is specified in [`go.mod`](./desktop-app/tm-driver/go.mod)
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
 
 > [!NOTE]
-> There's also `npm run install-all` as a shortcut to install dependencies for all packages.
+> There's also `npm run install-all` as a shortcut to install dependencies for all packages. It also runs `npm audit fix` twice at the end.
 
 For the website:
 - Run `npm run in-website -- npm install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run a command within the directory of the package.)
 - Run `npm run website` to start a web server that will automatically reload when files change.
 
 For the desktop app:
-- For Linux, install XTest library needed for sending mouse input:
+- On Linux/X11, install the XTest library needed for sending mouse input:
   - On Ubuntu: `sudo apt-get install libxtst-dev`
   - On Fedora: `sudo yum install libXtst-devel`
   - On RHEL6.2: `sudo yum install libXi-devel`
+- On Ubuntu 26.04 / GNOME Wayland, use the libei/portal backend instead:
+  - Install the portal packages: `sudo apt-get install xdg-desktop-portal xdg-desktop-portal-gnome`
+  - `desktop-app/tm-driver/build.js` detects a Wayland session and builds with `CGO_ENABLED=0 -tags libei`.
+  - You can use `./scripts/install-ubuntu-wayland.sh` for the complete setup, including the global <kbd>F9</kbd> shortcut.
+  - XTest is not required for the Wayland/libei build.
 - For macOS:
   - macOS 10.14 (Mojave) is the supported version
   - You apparently need a full Xcode installation, not just the command line tools, for the native module to compile.
