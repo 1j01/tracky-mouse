@@ -43,37 +43,37 @@ Settings could be shared between all three products (with import/export, which i
 
 Native GNOME Wayland support is available when running Tracky Mouse from source. This setup has been tested on Ubuntu 26.04 with a native GNOME Wayland session.
 
-The Wayland backend uses [RobotGo](https://github.com/go-vgo/robotgo) v1.1.0 with its `libei` backend and the freedesktop RemoteDesktop portal, so it does not depend on X11/XTest for mouse injection.
+The Wayland backend uses [RobotGo](https://github.com/go-vgo/robotgo) v1.1.0 with its `libei` backend and the freedesktop RemoteDesktop portal. X11/XTest is not used for mouse injection when Tracky Mouse is running in a Wayland session.
 
-Recommended setup:
+For a normal Ubuntu 26.04 GNOME development setup, install the project dependencies:
 
 ```sh
-git clone https://github.com/1j01/tracky-mouse.git
-cd tracky-mouse
-./scripts/install-ubuntu-wayland.sh
+npm run install-all
 ```
 
-The installer:
-
-- installs `xdg-desktop-portal` and `xdg-desktop-portal-gnome`
-- installs all project dependencies
-- builds `tm-driver` with `CGO_ENABLED=0 -tags libei`
-- registers <kbd>F9</kbd> as a GNOME-global pause/resume shortcut
-- creates a local launcher and desktop entry
-- starts Tracky Mouse
-
-You can start it again later with:
+Then start Tracky Mouse normally:
 
 ```sh
 npm start
 ```
 
-The desktop app currently pins Electron `44.5.1`, which is the tested runtime for this Ubuntu 26.04 Wayland setup.
+No separate Wayland build command is required. `desktop-app/tm-driver/build.js` detects the session automatically and, on Wayland, builds the mouse driver with:
+
+```sh
+CGO_ENABLED=0 go build -tags libei
+```
+
+On X11, the normal RobotGo/X11 build path is used instead.
+
+The desktop app currently pins Electron `44.5.1`, which is the version tested with this Ubuntu 26.04 Wayland setup.
 
 > [!NOTE]
-> The Wayland RemoteDesktop/libei API does not expose the real physical cursor position. Because of this, Tracky Mouse cannot use the same automatic "manual mouse takeover" detection that it uses on X11. On GNOME Wayland, pause and resume tracking explicitly with <kbd>F9</kbd>.
+> The Wayland RemoteDesktop/libei API does not expose the real physical cursor position. Because of this, Tracky Mouse cannot use the same automatic physical-mouse takeover detection that it uses on X11.
 >
-> Mouse movement itself uses true relative libei pointer motion, so moving a physical mouse or touchpad does not make Tracky Mouse snap the pointer back to a stale absolute position.
+> Wayland mouse movement uses true relative libei pointer motion so moving a physical mouse or touchpad does not make Tracky Mouse snap back to stale absolute coordinates.
+
+> [!TIP]
+> `scripts/install-ubuntu-wayland.sh` is **not required** for the normal tested setup above. It is an optional helper for systems that still need GNOME portal/desktop integration, including setting up a GNOME-level F9 shortcut.
 
 Pre-built binaries are not yet available for macOS, due to a couple issues: [camera permissions](https://github.com/1j01/tracky-mouse/issues/119), and [the more powerful clicking modes not clicking properly](https://github.com/1j01/tracky-mouse/issues/102).
 You *can* still run the app on macOS, if you follow the [Development Setup](#development-setup) instructions.
@@ -88,7 +88,7 @@ These instructions apply to using the desktop app or the web UI.
 - Your webcam should be centered in front of your head, with your head fully visible when sitting comfortably.
 
 ### Start using Tracky Mouse:
-- Press the "Start" button to start moving the mouse and clicking. You can also use the keyboard shortcut <kbd>F9</kbd>. When using the desktop app, this shortcut works even when the app is not in focus.
+- Press the "Start" button to start moving the mouse and clicking. You can also use the keyboard shortcut <kbd>F9</kbd>. On platforms where Electron can register the global shortcut directly, it works even when the app is not focused. On GNOME Wayland, a GNOME-level shortcut may be needed for global F9 behavior; `scripts/install-ubuntu-wayland.sh` can configure that optional integration.
 - Dwell in one spot to click. To avoid clicking, you have to keep moving your head, or pause the app with <kbd>F9</kbd>.
 - (Desktop app only) Try changing **Clicking mode** to **Wink to click** or **Open mouth to click** in the settings. 
   - With **Wink to click**:
@@ -212,6 +212,8 @@ Deploys can be rolled back by force-pushing to the `gh-pages` branch. The comman
 
 ### Desktop App
 
+On Linux, the tm-driver selects its mouse backend at build time based on the current session: normal RobotGo/X11 on X11, and RobotGo/libei on Wayland. The Wayland path uses relative pointer motion because the RemoteDesktop portal does not expose the real physical cursor position.
+
 The desktop application's architecture is kind of *amusing*...
 
 I will explain. First, some groundwork. Electron apps are multi-process programs. They have a main process, which creates browser windows, and renderer processes, which render the content of the browser windows.
@@ -264,7 +266,7 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 - Run `npm install` to install project-wide dependencies.
 
 > [!NOTE]
-> There's also `npm run install-all` as a shortcut to install dependencies for all packages. It also runs `npm audit fix` twice at the end.
+> For a full checkout, `npm run install-all` installs dependencies for the root, core, website, and desktop app, then runs `npm audit fix` twice. This is the recommended setup command for the tested Ubuntu 26.04 Wayland workflow.
 
 For the website:
 - Run `npm run in-website -- npm install` to install the website's dependencies. (`--` allows passing arguments to the script, which is just a simple wrapper to run a command within the directory of the package.)
@@ -275,11 +277,12 @@ For the desktop app:
   - On Ubuntu: `sudo apt-get install libxtst-dev`
   - On Fedora: `sudo yum install libXtst-devel`
   - On RHEL6.2: `sudo yum install libXi-devel`
-- On Ubuntu 26.04 / GNOME Wayland, use the libei/portal backend instead:
-  - Install the portal packages: `sudo apt-get install xdg-desktop-portal xdg-desktop-portal-gnome`
-  - `desktop-app/tm-driver/build.js` detects a Wayland session and builds with `CGO_ENABLED=0 -tags libei`.
-  - You can use `./scripts/install-ubuntu-wayland.sh` for the complete setup, including the global <kbd>F9</kbd> shortcut.
+- On Ubuntu 26.04 / GNOME Wayland:
+  - Run `npm run install-all`, then `npm start`.
+  - `desktop-app/tm-driver/build.js` automatically detects Wayland and builds with `CGO_ENABLED=0 -tags libei`.
   - XTest is not required for the Wayland/libei build.
+  - Standard Ubuntu GNOME installations normally already provide the required desktop portal services. If they are missing, install `xdg-desktop-portal` and `xdg-desktop-portal-gnome`.
+  - `scripts/install-ubuntu-wayland.sh` is optional and only needed for additional GNOME portal/desktop integration such as a GNOME-level global F9 shortcut.
 - For macOS:
   - macOS 10.14 (Mojave) is the supported version
   - You apparently need a full Xcode installation, not just the command line tools, for the native module to compile.
