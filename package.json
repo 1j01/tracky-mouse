@@ -10,7 +10,7 @@
 	],
 	"scripts": {
 		"preinstall": "node scripts/check-symlinks.js",
-		"install-all": "npm install && cd core && npm install && cd .. && cd website && npm install && cd .. && cd desktop-app && npm install && cd ..",
+		"install-all": "npm install && cd core && npm install && cd .. && cd website && npm install && cd .. && cd desktop-app && npm install && cd .. && npm audit fix && npm audit fix",
 		"website": "cd website && npm run start",
 		"in-website": "cd website &&",
 		"desktop-app": "cd desktop-app && npm run start",
