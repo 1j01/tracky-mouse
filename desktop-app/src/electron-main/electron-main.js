@@ -39,6 +39,10 @@ const { handleStartupEvent } = require('./squirrel-update.js');
 // Needs to be set early since `setLoginItemSettings` is used in the `--squirrel-uninstall` handler.
 app.setAppUserModelId("io.isaiahodhner.tracky-mouse");
 
+const isWaylandSession =
+	process.platform === "linux" &&
+	(process.env.XDG_SESSION_TYPE === "wayland" || Boolean(process.env.WAYLAND_DISPLAY));
+
 // Handle installing/uninstalling shortcuts and the CLI's PATH modification on Windows.
 if (process.platform === 'win32') {
 	const possibleSquirrelEventFlag = process.argv[1];
@@ -463,6 +467,16 @@ function pruneMousePosHistory() {
 
 /** @type {BrowserWindow} */
 let appWindow;
+
+// GNOME owns the global F9 binding on Wayland and signals the already-running
+// Tracky Mouse process. This avoids Electron's unreliable globalShortcut path.
+if (isWaylandSession) {
+	process.on("SIGUSR1", () => {
+		if (appWindow && !appWindow.isDestroyed()) {
+			appWindow.webContents.send("shortcut", "toggle-tracking");
+		}
+	});
+}
 /** @type {BrowserWindow} */
 let screenOverlayWindow;
 
@@ -658,6 +672,21 @@ const createWindow = () => {
 	monitorMousePosition();
 
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
+		// The libei/RemoteDesktop portal backend cannot observe the physical
+		// pointer position. The X11 manual-takeback heuristic therefore produces
+		// false positives on Wayland. Use F9 explicitly to pause/resume instead.
+		if (isWaylandSession) {
+			if (enabled) {
+				void setMouseLocationTracky(x, y);
+			}
+			trySendOverlayWindowMessage(
+				'mouseMove',
+				x - virtualDisplayBounds.x,
+				y - virtualDisplayBounds.y,
+				time,
+			);
+			return;
+		}
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		// Update: I have done a test of extracting this. It works but note that it may change the
@@ -994,12 +1023,13 @@ app.on('ready', async () => {
 	screen.on('display-added', updateScreenScaleFactor);
 	screen.on('display-removed', updateScreenScaleFactor);
 
-	const success = globalShortcut.register('F9', () => {
-		// console.log('Toggle tracking');
-		appWindow?.webContents.send("shortcut", "toggle-tracking");
-	});
-	if (!success) {
-		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
+	if (!isWaylandSession) {
+		const success = globalShortcut.register('F9', () => {
+			appWindow?.webContents.send("shortcut", "toggle-tracking");
+		});
+		if (!success) {
+			dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
+		}
 	}
 });
 
