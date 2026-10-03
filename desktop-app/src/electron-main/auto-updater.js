@@ -5,6 +5,7 @@ const { execFile } = require('child_process');
 const { t } = require('./i18n');
 
 const REPO = '1j01/tracky-mouse';
+const REPO_GIT_URL = `https://github.com/${REPO}.git`;
 let API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
 
 // NOTE TO SELF: If you're expecting to see the update dialog,
@@ -201,7 +202,12 @@ module.exports = {
 						if (repoRoot) {
 							let step = "fetch";
 							try {
-								await exec('git', ['-C', repoRoot, 'fetch', '--tags']);
+								await exec('git', ['-C', repoRoot, 'fetch', REPO_GIT_URL, '--tags'], {
+									env: {
+										...process.env,
+										GIT_TERMINAL_PROMPT: '0',
+									},
+								});
 								step = "checkout";
 								await exec('git', ['-C', repoRoot, 'checkout', latestVersion]);
 								step = "install";
