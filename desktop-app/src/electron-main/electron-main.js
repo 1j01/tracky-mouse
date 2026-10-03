@@ -672,21 +672,6 @@ const createWindow = () => {
 	monitorMousePosition();
 
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
-		// The libei/RemoteDesktop portal backend cannot observe the physical
-		// pointer position. The X11 manual-takeback heuristic therefore produces
-		// false positives on Wayland. Use F9 explicitly to pause/resume instead.
-		if (isWaylandSession) {
-			if (enabled) {
-				void setMouseLocationTracky(x, y);
-			}
-			trySendOverlayWindowMessage(
-				'mouseMove',
-				x - virtualDisplayBounds.x,
-				y - virtualDisplayBounds.y,
-				time,
-			);
-			return;
-		}
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		// Update: I have done a test of extracting this. It works but note that it may change the
@@ -706,7 +691,7 @@ const createWindow = () => {
 		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
 		const distanceMoved = distances.length ? Math.min(...distances) : 0;
 		// console.log("distanceMoved", distanceMoved);
-		if (distanceMoved > thresholdToRegainControl) {
+		if (!isWaylandSession && distanceMoved > thresholdToRegainControl) {
 			// if (regainControlTimeout === null) {
 			// 	console.log("mousePosHistory", mousePosHistory);
 			// 	console.log("distances", distances);
