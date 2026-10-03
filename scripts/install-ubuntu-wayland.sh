@@ -35,6 +35,7 @@ cd "$ROOT/desktop-app/tm-driver"
 go mod tidy
 
 log "Building the libei mouse driver"
+mkdir -p bin
 CGO_ENABLED=0 go build -tags libei -o bin/tracky-mouse-driver .
 
 mkdir -p "$HOME/.local/bin" "$HOME/.local/share/applications" "$HOME/.cache"
