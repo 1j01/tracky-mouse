@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In the desktop app, mouse control now uses a separate helper process instead of using the `serenade-driver` native Node.js module.
   - The new helper process (`tracky-mouse-driver.exe` on Windows, `tracky-mouse-driver` on macOS and Linux) is written in Go and uses [robotgo](https://github.com/go-vgo/robotgo) for mouse control.
   - This avoids compilation issues when updating Node.js or Electron, may fix some platform-specific issues, and gives a clear extension point for future native features, like gamepad emulation.
+- Added a note in the Help about Windows 11's setting to allow multiple applications to access a camera at the same time.
 
 ### Fixed
 
