@@ -137,6 +137,9 @@
 
 .tracky-mouse-help-dialog[open] {
 	max-width: 40em;
+	top: calc(env(titlebar-area-height, 0px) + 8px);
+	bottom: 8px;
+	max-height: calc(100vh - env(titlebar-area-height, 0px) - 16px);
 	position: fixed;
 	padding: 0;
 	margin: auto;

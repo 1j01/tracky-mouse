@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed error handling in the auto-updater in case the GitHub API response is invalid.
 - The auto-updater now fetches tags from the official GitHub repository even if the repo is forked.
   - No attempt is made to merge the fork's changes with the new updates. It simply checks out the latest tag.
+- Fixed the app's titlebar buttons overlapping the Help dialog on Windows.
 
 ## [3.0.0] - 2026-08-30
 
