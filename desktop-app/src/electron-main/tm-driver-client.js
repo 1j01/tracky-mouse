@@ -124,24 +124,11 @@ async function startTMDriver({ app }) {
 	if (!driverProcess) {
 		throw new Error(`Failed to start tm-driver (${executableName}).`);
 	}
-	try {
-		await withTimeout(
-			callDriver('ping'),
-			3000,
-			`Timed out waiting for tm-driver startup (${executableName}).`,
-		);
-	} catch (error) {
-		if (driverProcess) {
-			const failedProcess = driverProcess;
-			driverProcess = null;
-			rejectAllPendingRequests(`tm-driver failed to start: ${error.message}`);
-			await new Promise((resolve) => {
-				failedProcess.once('exit', resolve);
-				failedProcess.kill();
-			});
-		}
-		throw error;
-	}
+	await withTimeout(
+		callDriver('ping'),
+		3000,
+		`Timed out waiting for tm-driver startup (${executableName}).`,
+	);
 	if (!hasProcessExitHook) {
 		hasProcessExitHook = true;
 		process.once('exit', () => {

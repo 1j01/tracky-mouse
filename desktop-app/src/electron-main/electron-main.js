@@ -969,26 +969,25 @@ app.on('ready', async () => {
 		app.quit();
 		return;
 	}
-	let driverStarted = false;
-	while (!driverStarted) {
-		try {
-			await startTMDriver({ app });
-			driverStarted = true;
-		} catch (error) {
-			console.error("Failed to start tm-driver:", error);
-			const { response } = await dialog.showMessageBox({
-				type: 'error',
-				title: "Failed to start mouse driver",
-				message: `Failed to start tm-driver. Would you like to retry?\n\n${error.message}`,
-				buttons: ["Retry", "Quit"],
-				defaultId: 0,
-				cancelId: 1,
-			});
-			if (response !== 0) {
-				app.quit();
-				return;
-			}
+	try {
+		await startTMDriver({ app });
+	} catch (error) {
+		console.error("Failed to start tm-driver:", error);
+		const { response } = await dialog.showMessageBox({
+			type: 'error',
+			title: "Failed to start mouse driver",
+			message: `Failed to start tm-driver. Would you like to retry?\n\n${error.message}`,
+			buttons: ["Retry", "Quit"],
+			defaultId: 0,
+			cancelId: 1,
+		});
+		if (response === 0) {
+			app.relaunch();
+			app.exit(0);
+		} else {
+			app.quit();
 		}
+		return;
 	}
 	createWindow();
 	// Ensure the custom menus exist when language is not set (i.e. first run)
