@@ -135,6 +135,10 @@
 	margin-inline-end: 4px;
 }
 
+.tracky-mouse-help-dialog::backdrop {
+	top: env(titlebar-area-height, 0px);
+}
+
 .tracky-mouse-help-dialog[open] {
 	max-width: 40em;
 	top: calc(env(titlebar-area-height, 0px) + 8px);
