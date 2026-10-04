@@ -134,9 +134,9 @@ async function startTMDriver({ app }) {
 		if (driverProcess) {
 			const failedProcess = driverProcess;
 			driverProcess = null;
-			pendingRequests.clear();
+			rejectAllPendingRequests(`tm-driver failed to start: ${error.message}`);
 			await new Promise((resolve) => {
-				failedProcess.once('close', resolve);
+				failedProcess.once('exit', resolve);
 				failedProcess.kill();
 			});
 		}
