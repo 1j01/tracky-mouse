@@ -540,6 +540,11 @@ const createWindow = () => {
 
 	let lastSentOverlayUpdateId = 0;
 	let lastReceivedOverlayUpdateId = 0;
+	function resetOverlayMessageThrottling() {
+		// Just in case messages failed to send, which could cause the throttling code to perpetually skip updates,
+		// resetOverlayMessageThrottling pretends we're caught up, so that new messages will not be skipped by throttling.
+		lastReceivedOverlayUpdateId = lastSentOverlayUpdateId;
+	}
 	function trySendOverlayWindowMessage(message, ...args) {
 		// Could include logic to log when toggling between able and unable to update,
 		// but for now it's enough to avoid errors spamming the console.
@@ -572,9 +577,10 @@ const createWindow = () => {
 		// Right now, if one or two messages fail to send,
 		// it could stop sending messages entirely, perpetually considering
 		// the queue to be too full.
-		// A timeout could help here, resetting lastReceivedOverlayUpdateId to lastSentOverlayUpdateId.
-		// (That said, if it's not done thoughtfully it could compromise the latency buildup avoidance.)
-		// (Also, how expensive are timers? I don't know that I've ever set new timers constantly...)
+		// `resetOverlayMessageThrottling` exists to mitigate this. It's called when toggling mouse control.
+		// Should it also be called if it's been a second since an overlay update was acknowledged?
+		// (If it's not done thoughtfully it could compromise the latency buildup avoidance.)
+		// (Also, it probably shouldn't be done with setTimeout, but rather timestamp checks, since this code is called frequently.)
 
 		const inQueue = lastSentOverlayUpdateId - lastReceivedOverlayUpdateId;
 		// NOTE: mouseMove is exempted here because otherwise this throttling was
@@ -729,6 +735,7 @@ const createWindow = () => {
 			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		}
 
+		resetOverlayMessageThrottling();
 		updateDwellClickingAndHUD();
 	});
 	ipcMain.on('updateInputFeedback', (_event, data) => {
