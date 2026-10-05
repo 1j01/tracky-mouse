@@ -20,10 +20,18 @@ If the camera is below, leaning forward generally moves the pointer up
 </p>
 <h2>Lighting</h2>
 <p>
-	Good lighting is important for accurate head tracking.
+	Good lighting is very important for accurate head tracking.
 </p>
 <p>
 	Make sure your face is well-lit and avoid strong backlighting.
+</p>
+<p>
+	<!--Even if the camera view appears bright enough, it may be due to low light compensation, which can be noisy and affect tracking accuracy.-->
+	Keep in mind that our eyes adjust to low light, and often, so do cameras.
+	However, when cameras compensate for low light, the <!--high frequency--> tiny image details needed for accurate tracking can be lost, even if the image appears bright enough.
+</p>
+<p>
+	A lamp can go a long way!
 </p>
 <h2>Calibration</h2>
 <p>

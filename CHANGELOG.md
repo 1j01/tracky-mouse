@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added a section in the Help window about using the camera in multiple apps at once in Windows.
+- Added some more words about lighting in the Help window.
 
 ### Fixed
 
