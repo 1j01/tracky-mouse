@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [3.1.0] - 2026-10-05
+
 ### Changed
 
 - In the desktop app, mouse control now uses a separate helper process instead of using the `serenade-driver` native Node.js module.
@@ -405,7 +409,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/1j01/tracky-mouse/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/1j01/tracky-mouse/compare/v2.9.0...v3.0.0
 [2.9.0]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...v2.8.0
