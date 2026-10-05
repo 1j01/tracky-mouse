@@ -12,7 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The new helper process (`tracky-mouse-driver.exe` on Windows, `tracky-mouse-driver` on macOS and Linux) is written in Go and uses [robotgo](https://github.com/go-vgo/robotgo) for mouse control.
   - This avoids compilation issues when updating Node.js or Electron, may fix some platform-specific issues, and gives a clear extension point for future native features, like gamepad emulation.
   - **If building from source code**, you'll need to [install Go](https://go.dev/doc/install) and have it available in your system's `PATH`.
-- Added a note in the Help about Windows 11's setting to allow multiple applications to access a camera at the same time.
+
+### Added
+
+- Added a section in the Help window about using the camera in multiple apps at once in Windows.
 
 ### Fixed
 

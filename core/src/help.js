@@ -71,7 +71,25 @@ If the camera is below, leaning forward generally moves the pointer up
 <li>Check if you can use your camera with another application.</li>
 <!-- ...but make sure to stop that application's usage afterward...? -->
 <li>On Linux, installing <code>guvcview</code> can magically fix a webcam not showing up. (<a target="_blank" href="https://forums.linuxmint.com/viewtopic.php?t=131011">source</a>)</li>
-<li>On Windows 11, it's possible to allow multiple applications to access the camera at the same time. To enable this, open the Settings app, go to Bluetooth & devices > Camera, select your camera, click Edit next to "Advanced camera options", and turn on "Allow multiple apps to use the camera at the same time".</li>
 <li>Restart the computer if needed.</li>
+</ul>
+<h2>Using the camera in other apps</h2>
+<p>
+	By default, Windows only lets one application use a camera at a given time.
+</p>
+<p>
+	In Windows 11, there's a setting to allow multiple apps to use the camera at once.
+</p>
+<p>
+	To enable it:
+</p>
+<ul>
+<li>First, close any apps that are currently using the camera.</li>
+<li>Open the Windows Settings app.</li>
+<li>Go to <b>Bluetooth & devices > Camera</b>.</li>
+<li>Select your camera.</li>
+<li>Click <b>Edit</b> next to <b>Advanced camera options</b>.</li>
+<li>Turn on <b>Allow multiple apps to use the camera at the same time</b>.</li>
+<li>Hit <b>Apply</b>.</li>
 </ul>
 `;
