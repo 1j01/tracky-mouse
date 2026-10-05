@@ -546,6 +546,7 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	border: 2px solid transparent;
 	border-radius: 4px;
 	cursor: pointer;
+	aspect-ratio: 1 / 1;
 }
 
 .tracky-mouse-setting-extra-button svg {
