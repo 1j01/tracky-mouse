@@ -4,6 +4,7 @@ go 1.25.0
 
 require (
 	github.com/CB2Moon/vgamepad-go v0.1.1
+	github.com/bendahl/uinput v1.7.0
 	github.com/go-vgo/robotgo v1.0.2
 )
 
