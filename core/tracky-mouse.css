@@ -129,14 +129,23 @@
 }
 
 .tracky-mouse-help-button-icon {
+	width: 1em;
+	height: 1em;
 	transform: scale(1.4);
 	display: inline-block;
 	margin-inline-start: 2px;
 	margin-inline-end: 4px;
 }
 
+.tracky-mouse-help-dialog::backdrop {
+	top: env(titlebar-area-height, 0px);
+}
+
 .tracky-mouse-help-dialog[open] {
 	max-width: 40em;
+	top: calc(env(titlebar-area-height, 0px) + 8px);
+	bottom: 8px;
+	max-height: calc(100vh - env(titlebar-area-height, 0px) - 16px);
 	position: fixed;
 	padding: 0;
 	margin: auto;
@@ -537,6 +546,13 @@ body:not(.tracky-mouse-manual-takeback) .tracky-mouse-manual-takeback-indicator 
 	border: 2px solid transparent;
 	border-radius: 4px;
 	cursor: pointer;
+	aspect-ratio: 1 / 1;
+}
+
+.tracky-mouse-setting-extra-button svg {
+	display: block;
+	width: 24px;
+	height: 24px;
 }
 
 .tracky-mouse-setting-extra-button:hover,

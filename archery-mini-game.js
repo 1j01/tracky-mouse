@@ -376,6 +376,6 @@ async function animateTargetHit(archery_target) {
 			fill: "both",
 		}).finished;
 	} catch (_error) {
-		// ignore cancelation
+		// ignore cancellation
 	}
 }

@@ -1,7 +1,7 @@
 /* global Stats, clm, faceLandmarksDetection, OneEuroFilter */
 
 import { initAudio, playSound, setAudioEnabled, SleepSweep } from "./audio.js";
-import { MESH_ANNOTATIONS } from "./constants.js";
+import { infoIconSVG, MESH_ANNOTATIONS } from "./constants.js";
 import { initDwellClicking } from "./dwell-clicker.js";
 import { curateTrackedPointsWithClmtrackr, curateTrackedPointsWithFacemesh } from "./face-hotspots.js";
 import { detectGestures } from "./gestures.js";
@@ -154,7 +154,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 	uiContainer.innerHTML = `
 		<div class="tracky-mouse-controls">
 			<button class="tracky-mouse-start-stop-button" aria-pressed="false" aria-keyshortcuts="F9">${t("ui.startStopButton.start", { defaultValue: "Start" })}</button>
-			<button class="tracky-mouse-help-button" aria-pressed="false" aria-keyshortcuts="F1"><span class="tracky-mouse-help-button-icon">ⓘ</span> ${t("ui.helpButton.label", { defaultValue: "Help" })}</button>
+			<button class="tracky-mouse-help-button" aria-pressed="false" aria-keyshortcuts="F1"><span class="tracky-mouse-help-button-icon">${infoIconSVG}</span> ${t("ui.helpButton.label", { defaultValue: "Help" })}</button>
 		</div>
 		<div class="tracky-mouse-camera-area">
 			<div class="tracky-mouse-canvas-container">

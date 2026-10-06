@@ -20,10 +20,18 @@ If the camera is below, leaning forward generally moves the pointer up
 </p>
 <h2>Lighting</h2>
 <p>
-	Good lighting is important for accurate head tracking.
+	Good lighting is very important for accurate head tracking.
 </p>
 <p>
 	Make sure your face is well-lit and avoid strong backlighting.
+</p>
+<p>
+	<!--Even if the camera view appears bright enough, it may be due to low light compensation, which can be noisy and affect tracking accuracy.-->
+	Keep in mind that our eyes adjust to low light, and often, so do cameras.
+	However, when cameras compensate for low light, the <!--high frequency--> tiny image details needed for accurate tracking can be lost, even if the image appears bright enough.
+</p>
+<p>
+	A lamp can go a long way!
 </p>
 <h2>Calibration</h2>
 <p>
@@ -72,5 +80,24 @@ If the camera is below, leaning forward generally moves the pointer up
 <!-- ...but make sure to stop that application's usage afterward...? -->
 <li>On Linux, installing <code>guvcview</code> can magically fix a webcam not showing up. (<a target="_blank" href="https://forums.linuxmint.com/viewtopic.php?t=131011">source</a>)</li>
 <li>Restart the computer if needed.</li>
+</ul>
+<h2>Using the camera in other apps</h2>
+<p>
+	By default, Windows only lets one application use a camera at a given time.
+</p>
+<p>
+	In Windows 11, there's a setting to allow multiple apps to use the camera at once.
+</p>
+<p>
+	To enable it:
+</p>
+<ul>
+<li>First, close any apps that are currently using the camera.</li>
+<li>Open the Windows Settings app.</li>
+<li>Go to <b>Bluetooth & devices > Camera</b>.</li>
+<li>Select your camera.</li>
+<li>Click <b>Edit</b> next to <b>Advanced camera options</b>.</li>
+<li>Turn on <b>Allow multiple apps to use the camera at the same time</b>.</li>
+<li>Hit <b>Apply</b>.</li>
 </ul>
 `;
