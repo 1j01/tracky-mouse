@@ -135,10 +135,11 @@ func writeEvents(file *os.File, events ...inputEvent) error {
 	return err
 }
 
+// Takes values where positive Y is up (as with XInput), but evdev's positive Y is down.
 func writeAxes(file *os.File, x, y float64) error {
 	return writeEvents(file,
 		inputEvent{Type: evAbs, Code: absX, Value: int32(x * maxAxisValue)},
-		inputEvent{Type: evAbs, Code: absY, Value: int32(y * maxAxisValue)},
+		inputEvent{Type: evAbs, Code: absY, Value: int32(-y * maxAxisValue)},
 	)
 }
 
