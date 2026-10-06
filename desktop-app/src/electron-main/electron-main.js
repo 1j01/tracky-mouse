@@ -849,7 +849,12 @@ const createWindow = () => {
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
 		// Note: name switches from "moveMouse" to "mouseMove" as it's a passive update when sent to the HUD
-		trySendOverlayWindowMessage('mouseMove', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
+		// When emulating a gamepad, the system cursor isn't being moved, so keep the HUD at the real cursor.
+		if (isGamepadOutput && systemMousePosition) {
+			trySendOverlayWindowMessage('mouseMove', systemMousePosition.x, systemMousePosition.y, time);
+		} else {
+			trySendOverlayWindowMessage('mouseMove', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
+		}
 	});
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
