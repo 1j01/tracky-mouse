@@ -789,6 +789,11 @@ const createWindow = () => {
 			initialPos.y /= screenScaleFactor;
 		}
 		enabled = nowEnabled;
+		if (!nowEnabled && previousMouseOutputMode === "gamepad") {
+			setGamepadState(0, 0).catch((error) => console.error("Failed to reset gamepad state:", error));
+			previousMouseOutputMode = "absolute";
+			previousRelativeMousePosition = null;
+		}
 
 		// Start immediately if enabled.
 		clearTimeout(regainControlTimeout);

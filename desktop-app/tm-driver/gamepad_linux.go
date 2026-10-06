@@ -28,8 +28,16 @@ func setGamepadState(x, y float64) error {
 	}
 	select {
 	case err := <-moltenGamepadDone:
+		if linuxGamepad != nil {
+			_ = linuxGamepad.Close()
+			linuxGamepad = nil
+		}
 		moltenGamepad = nil
 		moltenGamepadDone = nil
+		removeMoltenGamepadConfig()
+		if err == nil {
+			err = fmt.Errorf("process stopped unexpectedly")
+		}
 		return fmt.Errorf("MoltenGamepad exited: %w", err)
 	default:
 	}
@@ -102,32 +110,28 @@ func startLinuxGamepad() error {
 }
 
 func closeGamepad() error {
+	var closeErr error
 	if linuxGamepad != nil {
 		_ = linuxGamepad.LeftStickMove(0, 0)
-		if err := linuxGamepad.Close(); err != nil {
-			return err
-		}
+		closeErr = linuxGamepad.Close()
 		linuxGamepad = nil
 	}
-	return stopMoltenGamepad()
+	if err := stopMoltenGamepad(); closeErr == nil {
+		return err
+	}
+	return closeErr
 }
 
 func stopMoltenGamepad() error {
 	if moltenGamepad == nil {
-		if moltenGamepadConfigDir != "" {
-			_ = os.RemoveAll(moltenGamepadConfigDir)
-			moltenGamepadConfigDir = ""
-		}
+		removeMoltenGamepadConfig()
 		return nil
 	}
 	_ = moltenGamepad.Process.Kill()
 	err := <-moltenGamepadDone
 	moltenGamepad = nil
 	moltenGamepadDone = nil
-	if moltenGamepadConfigDir != "" {
-		_ = os.RemoveAll(moltenGamepadConfigDir)
-		moltenGamepadConfigDir = ""
-	}
+	removeMoltenGamepadConfig()
 	if err != nil {
 		if _, ok := err.(*exec.ExitError); ok {
 			return nil
@@ -135,4 +139,11 @@ func stopMoltenGamepad() error {
 		return err
 	}
 	return nil
+}
+
+func removeMoltenGamepadConfig() {
+	if moltenGamepadConfigDir != "" {
+		_ = os.RemoveAll(moltenGamepadConfigDir)
+		moltenGamepadConfigDir = ""
+	}
 }

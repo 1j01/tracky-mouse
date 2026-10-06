@@ -61,7 +61,7 @@ export function getSettingsCategories({
 							? [{ value: "gamepad", label: t("settings.outputMode.gamepad.label", { defaultValue: "Gamepad" }) }]
 							: []),
 					],
-					description: t("settings.outputMode.description", { defaultValue: "Choose whether head movement controls the mouse or a virtual gamepad." }),
+					description: t("settings.outputMode.description", { defaultValue: "Choose whether head movement controls the mouse or a virtual gamepad. Windows requires ViGEmBus; Linux requires MoltenGamepad and write access to /dev/uinput." }),
 				},
 				{
 					label: t("settings.tiltInfluence.label", { defaultValue: "Tilt influence" }),

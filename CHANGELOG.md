@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Added
+
+- Added an **Output mode** setting to control the mouse with absolute or relative movement, or to control a virtual gamepad on Windows and Linux.
 
 ## [3.1.0] - 2026-10-05
 

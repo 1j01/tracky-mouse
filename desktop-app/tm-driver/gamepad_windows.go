@@ -28,11 +28,11 @@ func closeGamepad() error {
 	}
 	windowsGamepad.Reset()
 	if err := windowsGamepad.Update(); err != nil {
-		_ = windowsGamepad.Close()
+		windowsGamepad.Close()
 		windowsGamepad = nil
 		return err
 	}
-	err := windowsGamepad.Close()
+	windowsGamepad.Close()
 	windowsGamepad = nil
-	return err
+	return nil
 }

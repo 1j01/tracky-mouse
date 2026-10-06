@@ -2,6 +2,8 @@
 
 Written in Go, using [robotgo](https://github.com/go-vgo/robotgo), this subprocess provides mouse control for the Tracky Mouse desktop application.
 
+Gamepad output is supported on Windows with [ViGEmBus](https://github.com/nefarius/ViGEmBus) and on Linux with [MoltenGamepad](https://github.com/jgeumlek/MoltenGamepad). On Linux, the app also needs write access to `/dev/uinput`; the driver creates a temporary uinput source and an isolated MoltenGamepad configuration, then removes them when it exits.
+
 Previously Tracky Mouse used [serenade-driver](https://github.com/serenadeai/driver), a native Node.js module.
 
 Compared to serenade-driver:
@@ -34,6 +36,7 @@ and writes one JSON response per line to stdout.
 Supported methods:
 - `setMouseLocation` with params `{ "x": number, "y": number }`
 - `moveMouseRelative` with params `{ "x": number, "y": number }`
+- `setGamepadState` with normalized params `{ "x": number, "y": number }` in the range -1 to 1
 - `ensureCursorVisibility` (Windows only)
 - `getMouseLocation`
 - `click` with params `{ "button": "left" | "right" | "middle" }`
