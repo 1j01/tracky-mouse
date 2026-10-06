@@ -2,7 +2,7 @@
 
 Written in Go, using [robotgo](https://github.com/go-vgo/robotgo), this subprocess provides mouse control for the Tracky Mouse desktop application.
 
-Gamepad output is supported on Windows with [ViGEmBus](https://github.com/nefarius/ViGEmBus) and on Linux with [uinput](https://github.com/bendahl/uinput).
+Gamepad output is supported on Windows with [ViGEmBus](https://github.com/nefarius/ViGEmBus) and on Linux with uinput.
 On Linux, the kernel's `uinput` device must be enabled and the user running Tracky Mouse must have permission to access `/dev/uinput`.
 
 Previously Tracky Mouse used [serenade-driver](https://github.com/serenadeai/driver), a native Node.js module.

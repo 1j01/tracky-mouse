@@ -4,8 +4,8 @@ go 1.25.0
 
 require (
 	github.com/CB2Moon/vgamepad-go v0.1.1
-	github.com/bendahl/uinput v1.7.0
 	github.com/go-vgo/robotgo v1.0.2
+	golang.org/x/sys v0.42.0
 )
 
 require (
@@ -31,5 +31,4 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/exp v0.0.0-20260312153236-7ab1446f8b90 // indirect
 	golang.org/x/image v0.38.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
 )
