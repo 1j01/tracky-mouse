@@ -49,3 +49,56 @@ func TestFloatParam(t *testing.T) {
 		})
 	}
 }
+
+func TestGamepadButtonParam(t *testing.T) {
+	tests := []struct {
+		name    string
+		params  map[string]interface{}
+		want    string
+		wantErr bool
+	}{
+		{name: "left", params: map[string]interface{}{"button": "left"}, want: "left"},
+		{name: "right", params: map[string]interface{}{"button": "right"}, want: "right"},
+		{name: "middle", params: map[string]interface{}{"button": "middle"}, want: "middle"},
+		{name: "missing params", wantErr: true},
+		{name: "missing button", params: map[string]interface{}{}, wantErr: true},
+		{name: "invalid button", params: map[string]interface{}{"button": "start"}, wantErr: true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := gamepadButtonParam(test.params)
+			if (err != nil) != test.wantErr {
+				t.Fatalf("gamepadButtonParam() error = %v, wantErr %v", err, test.wantErr)
+			}
+			if err == nil && got != test.want {
+				t.Errorf("gamepadButtonParam() = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
+func TestBoolParam(t *testing.T) {
+	tests := []struct {
+		name    string
+		params  map[string]interface{}
+		want    bool
+		wantErr bool
+	}{
+		{name: "true", params: map[string]interface{}{"down": true}, want: true},
+		{name: "false", params: map[string]interface{}{"down": false}, want: false},
+		{name: "missing params", wantErr: true},
+		{name: "missing value", params: map[string]interface{}{}, wantErr: true},
+		{name: "wrong type", params: map[string]interface{}{"down": "true"}, wantErr: true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := boolParam(test.params, "down")
+			if (err != nil) != test.wantErr {
+				t.Fatalf("boolParam() error = %v, wantErr %v", err, test.wantErr)
+			}
+			if err == nil && got != test.want {
+				t.Errorf("boolParam() = %v, want %v", got, test.want)
+			}
+		})
+	}
+}

@@ -11,16 +11,51 @@ import (
 
 var linuxGamepad uinput.Gamepad
 
-func setGamepadState(x, y float64) error {
+func getLinuxGamepad() (uinput.Gamepad, error) {
 	if linuxGamepad == nil {
 		gamepad, err := uinput.CreateGamepad("/dev/uinput", []byte("Tracky Mouse Gamepad"), 0x1, 0x1)
 		if err != nil {
-			return fmt.Errorf("failed to create virtual gamepad using /dev/uinput; ensure uinput is enabled and accessible to your user: %w", err)
+			return nil, fmt.Errorf("failed to create virtual gamepad using /dev/uinput; ensure uinput is enabled and accessible to your user: %w", err)
 		}
 		linuxGamepad = gamepad
 	}
-	if err := linuxGamepad.LeftStickMove(float32(x), float32(y)); err != nil {
+	return linuxGamepad, nil
+}
+
+func setGamepadState(x, y float64) error {
+	gamepad, err := getLinuxGamepad()
+	if err != nil {
+		return err
+	}
+	if err := gamepad.LeftStickMove(float32(x), float32(y)); err != nil {
 		return fmt.Errorf("failed to update virtual gamepad: %w", err)
+	}
+	return nil
+}
+
+func setGamepadButton(button string, down bool) error {
+	gamepad, err := getLinuxGamepad()
+	if err != nil {
+		return err
+	}
+	var key int
+	switch button {
+	case "left":
+		key = uinput.ButtonSouth
+	case "right":
+		key = uinput.ButtonEast
+	case "middle":
+		key = uinput.ButtonWest
+	default:
+		return fmt.Errorf("invalid gamepad button: %s", button)
+	}
+	if down {
+		err = gamepad.ButtonDown(key)
+	} else {
+		err = gamepad.ButtonUp(key)
+	}
+	if err != nil {
+		return fmt.Errorf("failed to update virtual gamepad button: %w", err)
 	}
 	return nil
 }

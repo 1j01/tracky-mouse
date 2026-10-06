@@ -191,6 +191,10 @@ async function setGamepadState(x, y) {
 	await callDriver('setGamepadState', { x, y });
 }
 
+async function setGamepadButton(button, down) {
+	await callDriver('setGamepadButton', { button, down });
+}
+
 async function ensureCursorVisibility() {
 	await callDriver('ensureCursorVisibility');
 }
@@ -221,6 +225,7 @@ module.exports = {
 	setMouseLocation,
 	moveMouseRelative,
 	setGamepadState,
+	setGamepadButton,
 	ensureCursorVisibility,
 	getMouseLocation,
 	click,

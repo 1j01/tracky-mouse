@@ -224,6 +224,7 @@ const {
 	getMouseLocation,
 	moveMouseRelative,
 	setGamepadState,
+	setGamepadButton,
 	click,
 	mouseDown,
 	mouseUp,
@@ -451,6 +452,13 @@ let previousRelativeMousePosition = null;
 let gamepadOutputError = false;
 let gamepadOutputRequestPending = false;
 let queuedGamepadState = null;
+const gamepadButtonSources = new Map();
+function reportGamepadOutputError(error) {
+	if ((activeSettings.outputMode === "gamepad" || previousMouseOutputMode === "gamepad") && !gamepadOutputError) {
+		gamepadOutputError = true;
+		appWindow?.webContents.send('gamepadOutputError', error.message);
+	}
+}
 function updateGamepadState(x, y) {
 	if (gamepadOutputError) {
 		return;
@@ -461,10 +469,7 @@ function updateGamepadState(x, y) {
 	}
 	gamepadOutputRequestPending = true;
 	setGamepadState(x, y).catch((error) => {
-		if (previousMouseOutputMode === "gamepad" && !gamepadOutputError) {
-			gamepadOutputError = true;
-			appWindow?.webContents.send('gamepadOutputError', error.message);
-		}
+		reportGamepadOutputError(error);
 	}).finally(() => {
 		gamepadOutputRequestPending = false;
 		if (queuedGamepadState) {
@@ -473,6 +478,44 @@ function updateGamepadState(x, y) {
 			updateGamepadState(queuedX, queuedY);
 		}
 	});
+}
+async function updateGamepadButtonSource(button, source, down) {
+	let sources = gamepadButtonSources.get(button);
+	if (!sources) {
+		sources = new Set();
+		gamepadButtonSources.set(button, sources);
+	}
+	const wasDown = sources.size > 0;
+	if (down) {
+		sources.add(source);
+	} else {
+		sources.delete(source);
+	}
+	const isDown = sources.size > 0;
+	if (wasDown === isDown || (gamepadOutputError && isDown)) {
+		return false;
+	}
+	try {
+		await setGamepadButton(button, isDown);
+		return true;
+	} catch (error) {
+		if (isDown) {
+			sources.delete(source);
+		} else {
+			sources.add(source);
+		}
+		reportGamepadOutputError(error);
+		return false;
+	}
+}
+function releaseGamepadButtons() {
+	for (const [button, sources] of gamepadButtonSources) {
+		if (!sources.size) {
+			continue;
+		}
+		sources.clear();
+		setGamepadButton(button, false).catch(reportGamepadOutputError);
+	}
 }
 async function setMouseLocationTracky(x, y) {
 	ensureCursorVisibility();
@@ -728,6 +771,7 @@ const createWindow = () => {
 		}
 		if (previousMouseOutputMode === "gamepad" && !isGamepadOutput) {
 			updateGamepadState(0, 0);
+			releaseGamepadButtons();
 			gamepadOutputError = false;
 		}
 		previousMouseOutputMode = outputMode;
@@ -818,6 +862,7 @@ const createWindow = () => {
 		enabled = nowEnabled;
 		if (!nowEnabled && previousMouseOutputMode === "gamepad") {
 			updateGamepadState(0, 0);
+			releaseGamepadButtons();
 			previousRelativeMousePosition = null;
 		}
 
@@ -902,6 +947,17 @@ const createWindow = () => {
 			return;
 		}
 
+		if (activeSettings.outputMode === "gamepad") {
+			const button = activeSettings.swapMouseButtons ? "right" : "left";
+			const source = Symbol("dwell click");
+			void updateGamepadButtonSource(button, source, true);
+			setTimeout(() => {
+				void updateGamepadButtonSource(button, source, false);
+			}, 100);
+			keepOverlayOnTop();
+			return;
+		}
+
 		// Translate coords in case of debug (doesn't matter when it's fullscreen).
 		x += screenOverlayWindow.getContentBounds().x;
 		y += screenOverlayWindow.getContentBounds().y;
@@ -932,6 +988,9 @@ const createWindow = () => {
 		let buttonName = "middle";
 		if (button !== 1) {
 			buttonName = (activeSettings.swapMouseButtons !== (button === 2)) ? "right" : "left";
+		}
+		if (activeSettings.outputMode === "gamepad") {
+			return updateGamepadButtonSource(buttonName, "gesture", down);
 		}
 		let stateChanged = false;
 		if (down) {

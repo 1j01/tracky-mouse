@@ -38,6 +38,7 @@ Supported methods:
 - `setMouseLocation` with params `{ "x": number, "y": number }`
 - `moveMouseRelative` with params `{ "x": number, "y": number }`
 - `setGamepadState` with normalized params `{ "x": number, "y": number }` in the range -1 to 1 (Windows and Linux)
+- `setGamepadButton` with params `{ "button": "left" | "right" | "middle", "down": boolean }` (Windows and Linux)
 - `ensureCursorVisibility` (Windows only)
 - `getMouseLocation`
 - `click` with params `{ "button": "left" | "right" | "middle" }`

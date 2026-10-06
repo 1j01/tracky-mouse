@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Renamed **Movement mode** to **Input mode** and **Cursor Movement** to **Movement**. Added an **Output mode** setting for absolute mouse, relative mouse, or virtual gamepad control on Windows and Linux.
+- Renamed **Movement mode** to **Input mode** and **Cursor Movement** to **Movement**. Added an **Output mode** setting for absolute mouse, relative mouse, or virtual gamepad control on Windows and Linux, including gamepad button presses for clicks.
 
 ### Changed
 

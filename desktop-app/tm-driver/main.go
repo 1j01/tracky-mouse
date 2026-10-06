@@ -119,6 +119,23 @@ func handleRequest(req request) response {
 		}
 		resp.Result = map[string]bool{"ok": true}
 		return resp
+	case "setGamepadButton":
+		button, err := gamepadButtonParam(req.Params)
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		down, err := boolParam(req.Params, "down")
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		if err := setGamepadButton(button, down); err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		resp.Result = map[string]bool{"ok": true}
+		return resp
 	case "getMouseLocation":
 		x, y := robotgo.Location()
 		resp.Result = mousePosition{X: x, Y: y}
@@ -220,4 +237,39 @@ func buttonParam(params map[string]interface{}) (string, error) {
 	default:
 		return "", fmt.Errorf("invalid button: %s", button)
 	}
+}
+
+func gamepadButtonParam(params map[string]interface{}) (string, error) {
+	if params == nil {
+		return "", fmt.Errorf("missing params")
+	}
+	value, ok := params["button"]
+	if !ok {
+		return "", fmt.Errorf("missing param: button")
+	}
+	button, ok := value.(string)
+	if !ok {
+		return "", fmt.Errorf("param button must be a string")
+	}
+	switch button {
+	case "left", "right", "middle":
+		return button, nil
+	default:
+		return "", fmt.Errorf("invalid gamepad button: %s", button)
+	}
+}
+
+func boolParam(params map[string]interface{}, key string) (bool, error) {
+	if params == nil {
+		return false, fmt.Errorf("missing params")
+	}
+	value, ok := params[key]
+	if !ok {
+		return false, fmt.Errorf("missing param: %s", key)
+	}
+	boolean, ok := value.(bool)
+	if !ok {
+		return false, fmt.Errorf("param %s must be a boolean", key)
+	}
+	return boolean, nil
 }
