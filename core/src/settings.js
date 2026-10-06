@@ -57,7 +57,7 @@ export function getSettingsCategories({
 					options: [
 						{ value: "absolute", label: t("settings.outputMode.absolute.label", { defaultValue: "Mouse (absolute)" }) },
 						{ value: "relative", label: t("settings.outputMode.relative.label", { defaultValue: "Mouse (relative)" }) },
-						...(window.electronAPI?.getPlatform() === "win32" || window.electronAPI?.getPlatform() === "linux"
+						...(window.electronAPI?.getPlatform() === "win32"
 							? [{ value: "gamepad", label: t("settings.outputMode.gamepad.label", { defaultValue: "Gamepad" }) }]
 							: []),
 					],
