@@ -221,9 +221,6 @@ Also, I do plan to reign in this madness, see [issue #72](https://github.com/1j0
 - Install [Node.js](https://nodejs.org/) if you don't have it
   - Recommended: install via [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
   - The supported Node.js version is specified in [`.nvmrc`](./.nvmrc)
-- Install the [requirements for RobotGo](https://github.com/go-vgo/robotgo/tree/v1.0.2#requirements) (Go, GCC, and a few libraries)
-  - Bitmap and hook related libraries are not required.
-  - The supported Go version is specified in [`go.mod`](./desktop-app/tm-driver/go.mod)
 - Open up a command prompt / terminal in the project directory.
 - Run `npm install` to install project-wide dependencies.
 
@@ -235,13 +232,16 @@ For the website:
 - Run `npm run website` to start a web server that will automatically reload when files change.
 
 For the desktop app:
+- Install the [requirements for RobotGo](https://github.com/go-vgo/robotgo/tree/v1.0.2#requirements) (Go, GCC, and a few libraries)
+  - Bitmap and hook related libraries are not required.
+  - The supported Go version is specified in [`go.mod`](./desktop-app/tm-driver/go.mod)
 - For Linux, install XTest library needed for sending mouse input:
   - On Ubuntu: `sudo apt-get install libxtst-dev`
   - On Fedora: `sudo yum install libXtst-devel`
   - On RHEL6.2: `sudo yum install libXi-devel`
 - For macOS:
   - macOS 10.14 (Mojave) is the supported version
-  - You apparently need a full Xcode installation, not just the command line tools, for the native module to compile.
+  - You may need a full Xcode installation, not just the command line tools, I'm not sure. (This was the case when the app used serenade-driver rather than RobotGo.)
   - Tested with Xcode 10.3. Old versions of Xcode can be downloaded from [xcodereleases.com](https://xcodereleases.com/)
 - Run `npm run in-desktop-app -- npm install` to install dependencies.
 - Run `npm run desktop-app` to start the app.
