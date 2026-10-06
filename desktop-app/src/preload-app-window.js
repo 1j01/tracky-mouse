@@ -33,6 +33,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.send('updateInputFeedback', data);
 	},
 
+	onGamepadOutputError: (callback) => {
+		const listener = (_event, errorMessage) => callback(errorMessage);
+		ipcRenderer.on('gamepadOutputError', listener);
+		return () => { ipcRenderer.removeListener('gamepadOutputError', listener); };
+	},
+
 	setOptions: (optionsPatch) => {
 		ipcRenderer.send('setOptions', optionsPatch);
 	},

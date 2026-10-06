@@ -222,6 +222,9 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 		}
 		lastShownErrorDetails = { message, error, time: performance.now(), errorClass };
 	}
+	const removeGamepadOutputErrorListener = window.electronAPI?.onGamepadOutputError?.((details) => {
+		showError(details, undefined, { errorClass: "gamepadOutput" });
+	});
 
 	helpButton.addEventListener("click", () => {
 		helpDialog.showModal();
@@ -1781,6 +1784,7 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 			disposeSettingsUI();
 
 			removeShortcutListener?.();
+			removeGamepadOutputErrorListener?.();
 
 			// This is a little awkward, reversing the initialization based on a possibly-preexisting element
 			// Could save and restore innerHTML but that won't restore event listeners, references, etc.

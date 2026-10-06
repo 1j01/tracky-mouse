@@ -448,6 +448,32 @@ const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch
 const mousePosHistory = [];
 let previousMouseOutputMode = "absolute";
 let previousRelativeMousePosition = null;
+let gamepadOutputError = false;
+let gamepadOutputRequestPending = false;
+let queuedGamepadState = null;
+function updateGamepadState(x, y) {
+	if (gamepadOutputError) {
+		return;
+	}
+	if (gamepadOutputRequestPending) {
+		queuedGamepadState = { x, y };
+		return;
+	}
+	gamepadOutputRequestPending = true;
+	setGamepadState(x, y).catch((error) => {
+		if (previousMouseOutputMode === "gamepad" && !gamepadOutputError) {
+			gamepadOutputError = true;
+			appWindow?.webContents.send('gamepadOutputError', error.message);
+		}
+	}).finally(() => {
+		gamepadOutputRequestPending = false;
+		if (queuedGamepadState) {
+			const { x: queuedX, y: queuedY } = queuedGamepadState;
+			queuedGamepadState = null;
+			updateGamepadState(queuedX, queuedY);
+		}
+	});
+}
 async function setMouseLocationTracky(x, y) {
 	ensureCursorVisibility();
 
@@ -701,12 +727,13 @@ const createWindow = () => {
 			previousRelativeMousePosition = null;
 		}
 		if (previousMouseOutputMode === "gamepad" && !isGamepadOutput) {
-			setGamepadState(0, 0).catch((error) => console.error("Failed to reset gamepad state:", error));
+			updateGamepadState(0, 0);
+			gamepadOutputError = false;
 		}
 		previousMouseOutputMode = outputMode;
 
 		if (isGamepadOutput) {
-			setGamepadState(gamepadX, -gamepadY).catch((error) => console.error("Failed to update gamepad state:", error));
+			updateGamepadState(gamepadX, -gamepadY);
 		} else {
 			// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 			// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
@@ -790,8 +817,7 @@ const createWindow = () => {
 		}
 		enabled = nowEnabled;
 		if (!nowEnabled && previousMouseOutputMode === "gamepad") {
-			setGamepadState(0, 0).catch((error) => console.error("Failed to reset gamepad state:", error));
-			previousMouseOutputMode = "absolute";
+			updateGamepadState(0, 0);
 			previousRelativeMousePosition = null;
 		}
 
