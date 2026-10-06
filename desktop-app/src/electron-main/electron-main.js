@@ -75,7 +75,7 @@ try {
 const { parser } = require('./cli.js');
 
 // Note: this may exit the app, if the user runs `tracky-mouse --help`.
-const args = parser.parse_args(argsArray);
+const [args] = parser.parse_known_args(argsArray);
 
 // After argument parsing that may have exited the app, handle single instance behavior.
 // Electron provides a way to communicate between instances of the app,
@@ -1211,7 +1211,7 @@ app.on("second-instance", (_event, uselessCorruptedArgv, workingDirectory, addit
 			return;
 		}
 
-		const args = parser.parse_args(argv);
+		const [args] = parser.parse_known_args(argv);
 		console.log("second-instance: parsed args:", args);
 		// if (args.profile) {
 		// 	const filePath = path.resolve(workingDirectory, args.profile[0]);

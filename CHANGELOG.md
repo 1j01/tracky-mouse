@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed **Movement mode** to **Input mode** and **Cursor Movement** to **Movement**. Added an **Output mode** setting for absolute mouse, relative mouse, or virtual gamepad control on Windows and Linux.
 
+### Changed
+
+- The desktop app CLI now ignores unrecognized arguments.
+
 ## [3.1.0] - 2026-10-05
 
 ### Changed

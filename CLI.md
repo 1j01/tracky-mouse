@@ -6,6 +6,8 @@ It can start and stop head tracking + dwell clicking, and in the future it will 
 
 Any program that can launch other programs can use this CLI to control Tracky Mouse. A good use case is a voice command system, which would let you control Tracky Mouse with your voice.
 
+Unrecognized arguments are ignored.
+
 ## Installation
 
 The command `tracky-mouse` is installed automatically when you install the desktop app on Windows.
