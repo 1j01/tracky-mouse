@@ -30,10 +30,10 @@ export function getSettingsCategories({
 	const settingsCategories = [
 		{
 			type: "group",
-			label: t("settings.sections.cursorMovement.label", { defaultValue: "Movement" }),
+			label: t("settings.sections.movement.label", { defaultValue: "Movement" }),
 			settings: [
 				{
-					label: t("settings.movementMode.label", { defaultValue: "Input mode" }),
+					label: t("settings.inputMode.label", { defaultValue: "Input mode" }),
 					className: "tracky-mouse-movement-mode",
 					key: "headTrackingMovementMode",
 					type: "dropdown",
@@ -61,7 +61,7 @@ export function getSettingsCategories({
 							? [{ value: "gamepad", label: t("settings.outputMode.gamepad.label", { defaultValue: "Gamepad" }) }]
 							: []),
 					],
-					description: t("settings.outputMode.description", { defaultValue: "Choose whether head movement controls the mouse or a virtual gamepad. Windows requires ViGEmBus; Linux requires MoltenGamepad and write access to /dev/uinput." }),
+					description: t("settings.outputMode.description", { defaultValue: "Choose the output device." }),
 				},
 				{
 					label: t("settings.tiltInfluence.label", { defaultValue: "Tilt influence" }),
