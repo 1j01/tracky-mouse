@@ -30,10 +30,10 @@ export function getSettingsCategories({
 	const settingsCategories = [
 		{
 			type: "group",
-			label: t("settings.sections.cursorMovement.label", { defaultValue: "Cursor Movement" }),
+			label: t("settings.sections.cursorMovement.label", { defaultValue: "Movement" }),
 			settings: [
 				{
-					label: t("settings.movementMode.label", { defaultValue: "Movement mode" }),
+					label: t("settings.movementMode.label", { defaultValue: "Input mode" }),
 					className: "tracky-mouse-movement-mode",
 					key: "headTrackingMovementMode",
 					type: "dropdown",
@@ -46,6 +46,22 @@ export function getSettingsCategories({
 						{ value: "joystick-8dir", label: t("settings.movementMode.joystick8dir.label", { defaultValue: "✷ D-pad style (8 directions)" }), description: t("settings.movementMode.joystick8dir.description", { defaultValue: "Moves the cursor continuously in the direction of your head, limited to eight directions (up, down, left, right, or diagonal)." }) },
 					],
 					description: t("settings.movementMode.description", { defaultValue: "Choose how head movement is translated into cursor movement." }),
+				},
+				{
+					label: t("settings.outputMode.label", { defaultValue: "Output mode" }),
+					className: "tracky-mouse-output-mode",
+					key: "outputMode",
+					type: "dropdown",
+					default: "absolute",
+					visible: () => isDesktopApp,
+					options: [
+						{ value: "absolute", label: t("settings.outputMode.absolute.label", { defaultValue: "Mouse (absolute)" }) },
+						{ value: "relative", label: t("settings.outputMode.relative.label", { defaultValue: "Mouse (relative)" }) },
+						...(window.electronAPI?.getPlatform() === "win32" || window.electronAPI?.getPlatform() === "linux"
+							? [{ value: "gamepad", label: t("settings.outputMode.gamepad.label", { defaultValue: "Gamepad" }) }]
+							: []),
+					],
+					description: t("settings.outputMode.description", { defaultValue: "Choose whether head movement controls the mouse or a virtual gamepad." }),
 				},
 				{
 					label: t("settings.tiltInfluence.label", { defaultValue: "Tilt influence" }),

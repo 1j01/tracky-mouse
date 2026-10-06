@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 
 	"github.com/go-vgo/robotgo"
@@ -27,6 +28,12 @@ type mousePosition struct {
 }
 
 func main() {
+	defer func() {
+		if err := closeGamepad(); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to close virtual gamepad: %v\n", err)
+		}
+	}()
+
 	scanner := bufio.NewScanner(os.Stdin)
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
@@ -95,6 +102,23 @@ func handleRequest(req request) response {
 		robotgo.MoveRelative(x, y)
 		resp.Result = map[string]bool{"ok": true}
 		return resp
+	case "setGamepadState":
+		x, err := floatParam(req.Params, "x")
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		y, err := floatParam(req.Params, "y")
+		if err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		if err := setGamepadState(clampAxis(x), clampAxis(y)); err != nil {
+			resp.Error = err.Error()
+			return resp
+		}
+		resp.Result = map[string]bool{"ok": true}
+		return resp
 	case "getMouseLocation":
 		x, y := robotgo.Location()
 		resp.Result = mousePosition{X: x, Y: y}
@@ -140,6 +164,25 @@ func handleRequest(req request) response {
 		resp.Error = fmt.Sprintf("unsupported method: %s", req.Method)
 		return resp
 	}
+}
+
+func floatParam(params map[string]interface{}, key string) (float64, error) {
+	if params == nil {
+		return 0, fmt.Errorf("missing params")
+	}
+	value, ok := params[key]
+	if !ok {
+		return 0, fmt.Errorf("missing param: %s", key)
+	}
+	number, ok := value.(float64)
+	if !ok || math.IsNaN(number) || math.IsInf(number, 0) {
+		return 0, fmt.Errorf("param %s must be a finite number", key)
+	}
+	return number, nil
+}
+
+func clampAxis(value float64) float64 {
+	return math.Max(-1, math.Min(1, value))
 }
 
 func intParam(params map[string]interface{}, key string) (int, error) {

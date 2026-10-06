@@ -187,6 +187,10 @@ async function moveMouseRelative(x, y) {
 	await callDriver('moveMouseRelative', { x, y });
 }
 
+async function setGamepadState(x, y) {
+	await callDriver('setGamepadState', { x, y });
+}
+
 async function ensureCursorVisibility() {
 	await callDriver('ensureCursorVisibility');
 }
@@ -216,6 +220,7 @@ module.exports = {
 	stopTMDriver,
 	setMouseLocation,
 	moveMouseRelative,
+	setGamepadState,
 	ensureCursorVisibility,
 	getMouseLocation,
 	click,

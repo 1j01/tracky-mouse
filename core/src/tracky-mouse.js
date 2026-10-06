@@ -1596,7 +1596,16 @@ TrackyMouse._initInner = function (div, initOptions, reinit) {
 					mouseNeedsInitPos = false;
 				}
 				if (window.electronAPI) {
-					window.electronAPI.moveMouse(~~mouseX, ~~mouseY);
+					let gamepadX;
+					let gamepadY;
+					if (s.headTrackingMovementMode === "direct") {
+						gamepadX = (mouseX - screenOffsetX - screenWidth / 2) / (screenWidth / 2);
+						gamepadY = (mouseY - screenOffsetY - screenHeight / 2) / (screenHeight / 2);
+					} else {
+						gamepadX = virtualJoystickX / joystickMaxMagnitude;
+						gamepadY = virtualJoystickY / joystickMaxMagnitude;
+					}
+					window.electronAPI.moveMouse(~~mouseX, ~~mouseY, s.outputMode ?? "absolute", gamepadX, gamepadY);
 					pointerEl.style.display = "none";
 				} else {
 					pointerEl.style.display = "";

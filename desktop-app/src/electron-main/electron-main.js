@@ -222,6 +222,8 @@ const {
 	ensureCursorVisibility: ensureCursorVisibilityWithDriver,
 	setMouseLocation: setMouseLocationWithoutTracking,
 	getMouseLocation,
+	moveMouseRelative,
+	setGamepadState,
 	click,
 	mouseDown,
 	mouseUp,
@@ -444,6 +446,8 @@ function ensureCursorVisibility() {
 // However, a simple time limit should be fine.
 const mousePosHistoryDuration = 5000; // in milliseconds; affects time to switch back to camera control after manual mouse movement (although maybe it shouldn't)
 const mousePosHistory = [];
+let previousMouseOutputMode = "absolute";
+let previousRelativeMousePosition = null;
 async function setMouseLocationTracky(x, y) {
 	ensureCursorVisibility();
 
@@ -681,52 +685,94 @@ const createWindow = () => {
 	}
 	monitorMousePosition();
 
-	ipcMain.on('moveMouse', async (_event, x, y, time) => {
-		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
-		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
-		// Update: I have done a test of extracting this. It works but note that it may change the
-		// effective scale of `thresholdToRegainControl` if the frequency of mouse position measurements changes.
-		// There is now the monitorMousePosition loop which could be merged with this
-		// (It was this hide-HUD-near-cursor feature that had me trying extracting this, but I decided to make it a separate loop for now,
-		// to preserve the behavior of `thresholdToRegainControl` and introduce the hide-HUD-near-cursor feature with minimal code changes.
-		// The downside being `getMouseLocation` is called in multiple loops in parallel.)
-		const curPos = await getMouseLocation();
-		curPos.x /= screenScaleFactor;
-		curPos.y /= screenScaleFactor;
-		// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
-		// since setMouseLocation is asynchronous,
-		// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
-		// since getMouseLocation is asynchronous.
-		pruneMousePosHistory();
-		const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
-		const distanceMoved = distances.length ? Math.min(...distances) : 0;
-		// console.log("distanceMoved", distanceMoved);
-		if (distanceMoved > thresholdToRegainControl) {
-			// if (regainControlTimeout === null) {
-			// 	console.log("mousePosHistory", mousePosHistory);
-			// 	console.log("distances", distances);
-			// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
-			// 	console.log("Pausing camera control due to manual mouse movement.");
-			// }
-			clearTimeout(regainControlTimeout);
-			regainControlTimeout = setTimeout(() => {
-				regainControlTimeout = null; // used to check if we're pausing
-				// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+	ipcMain.on('moveMouse', async (_event, x, y, time, outputMode = "absolute", gamepadX = 0, gamepadY = 0) => {
+		const isGamepadOutput = outputMode === "gamepad";
+		const isRelativeOutput = outputMode === "relative";
+		let relativeDelta = null;
+		if (isRelativeOutput) {
+			if (previousRelativeMousePosition) {
+				relativeDelta = {
+					x: x - previousRelativeMousePosition.x,
+					y: y - previousRelativeMousePosition.y,
+				};
+			}
+			previousRelativeMousePosition = { x, y };
+		} else {
+			previousRelativeMousePosition = null;
+		}
+		if (previousMouseOutputMode === "gamepad" && !isGamepadOutput) {
+			setGamepadState(0, 0).catch((error) => console.error("Failed to reset gamepad state:", error));
+		}
+		previousMouseOutputMode = outputMode;
+
+		if (isGamepadOutput) {
+			setGamepadState(gamepadX, -gamepadY).catch((error) => console.error("Failed to update gamepad state:", error));
+		} else {
+			// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
+			// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
+			// Update: I have done a test of extracting this. It works but note that it may change the
+			// effective scale of `thresholdToRegainControl` if the frequency of mouse position measurements changes.
+			// There is now the monitorMousePosition loop which could be merged with this
+			// (It was this hide-HUD-near-cursor feature that had me trying extracting this, but I decided to make it a separate loop for now,
+			// to preserve the behavior of `thresholdToRegainControl` and introduce the hide-HUD-near-cursor feature with minimal code changes.
+			// The downside being `getMouseLocation` is called in multiple loops in parallel.)
+			const curPos = await getMouseLocation();
+			curPos.x /= screenScaleFactor;
+			curPos.y /= screenScaleFactor;
+			// Assume any point in setMouseLocationHistory may be the latest that the mouse has been moved to,
+			// since setMouseLocation is asynchronous,
+			// or that getMouseLocation's result may be outdated and we've moved the mouse since then,
+			// since getMouseLocation is asynchronous.
+			pruneMousePosHistory();
+			const distances = mousePosHistory.map(({ point }) => Math.hypot(curPos.x - point.x, curPos.y - point.y));
+			const distanceMoved = distances.length ? Math.min(...distances) : 0;
+			// console.log("distanceMoved", distanceMoved);
+			if (distanceMoved > thresholdToRegainControl) {
+				// if (regainControlTimeout === null) {
+				// 	console.log("mousePosHistory", mousePosHistory);
+				// 	console.log("distances", distances);
+				// 	console.log("distanceMoved", distanceMoved, ">", thresholdToRegainControl, "curPos", curPos, "last pos", mousePosHistory[mousePosHistory.length - 1], "mousePosHistory.length", mousePosHistory.length);
+				// 	console.log("Pausing camera control due to manual mouse movement.");
+				// }
+				clearTimeout(regainControlTimeout);
+				regainControlTimeout = setTimeout(() => {
+					regainControlTimeout = null; // used to check if we're pausing
+					// console.log("Mouse not moved for", regainControlForTime, "ms; resuming.");
+					updateDwellClickingAndHUD();
+				}, regainControlForTime);
 				updateDwellClickingAndHUD();
-			}, regainControlForTime);
-			updateDwellClickingAndHUD();
-			// Prevent immediately returning to manual control after switching to camera control
-			// based on head movement while in manual control mode.
-			// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
-			// It may be a good idea to split `mousePosHistory` into two arrays,
-			// say `setMouseLocationHistory` and `getMouseLocationHistory`,
-			// in order to handle maintaining manual control differently from switching to manual control,
-			// and/or for clarity of intent.
-			mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
-		} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
-			// Note: there's no await here, not necessarily for a particular reason,
-			// although maybe it's better to send the 'moveMouse' event as soon as possible?
-			setMouseLocationTracky(x, y);
+				// Prevent immediately returning to manual control after switching to camera control
+				// based on head movement while in manual control mode.
+				// This is one of two places where we add the RETRIEVED system mouse position to `mousePosHistory`.
+				// It may be a good idea to split `mousePosHistory` into two arrays,
+				// say `setMouseLocationHistory` and `getMouseLocationHistory`,
+				// in order to handle maintaining manual control differently from switching to manual control,
+				// and/or for clarity of intent.
+				mousePosHistory.push({ point: { x: curPos.x, y: curPos.y }, time: performance.now(), from: "moveMouse" });
+			} else if (regainControlTimeout === null && enabled) { // (shouldn't really get this event if enabled is false)
+				// Note: there's no await here, not necessarily for a particular reason,
+				// although maybe it's better to send the 'moveMouse' event as soon as possible?
+				if (isRelativeOutput) {
+					if (relativeDelta && (relativeDelta.x !== 0 || relativeDelta.y !== 0)) {
+						ensureCursorVisibility();
+						const expectedPosition = {
+							x: curPos.x + relativeDelta.x,
+							y: curPos.y + relativeDelta.y,
+						};
+						mousePosHistory.push({ point: expectedPosition, time: performance.now(), from: "moveMouseRelative" });
+						moveMouseRelative(relativeDelta.x * screenScaleFactor, relativeDelta.y * screenScaleFactor).then(async () => {
+							const actualPosition = await getMouseLocation();
+							mousePosHistory.push({
+								point: { x: actualPosition.x / screenScaleFactor, y: actualPosition.y / screenScaleFactor },
+								time: performance.now(),
+								from: "moveMouseRelative",
+							});
+						}).catch((error) => console.error("Failed to move mouse relatively:", error));
+					}
+				} else {
+					setMouseLocationTracky(x, y);
+				}
+			}
 		}
 		// const latency = performance.now() - time;
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
