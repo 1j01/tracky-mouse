@@ -849,8 +849,9 @@ const createWindow = () => {
 		// console.log(`moveMouse: (${x}, ${y}), latency: ${latency}, distanceMoved: ${distanceMoved}, curPos: (${curPos.x}, ${curPos.y}), lastPos: (${lastPos.x}, ${lastPos.y})`);
 
 		// Note: name switches from "moveMouse" to "mouseMove" as it's a passive update when sent to the HUD
-		// When emulating a gamepad, the system cursor isn't being moved, so keep the HUD at the real cursor.
-		if (isGamepadOutput && systemMousePosition) {
+		// Note: When emulating a gamepad, the system cursor isn't being moved, so keep the HUD at the real cursor.
+		// Also, when using relative mouse move mode, currently the actual cursor position isn't tracked properly except with systemMousePosition.
+		if ((isGamepadOutput || isRelativeOutput) && systemMousePosition) {
 			trySendOverlayWindowMessage('mouseMove', systemMousePosition.x, systemMousePosition.y, time);
 		} else {
 			trySendOverlayWindowMessage('mouseMove', x - virtualDisplayBounds.x, y - virtualDisplayBounds.y, time);
