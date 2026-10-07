@@ -128,13 +128,16 @@ async function startTMDriver({ app }) {
 		const passthrough = ['PATH', 'HOME', 'DISPLAY', 'XAUTHORITY', 'WAYLAND_DISPLAY', 'DBUS_SESSION_BUS_ADDRESS', 'XDG_RUNTIME_DIR']
 			.filter((name) => process.env[name])
 			.map((name) => `${name}=${process.env[name]}`);
-		args = ['env', ...passthrough, command, ...args];
-		command = 'pkexec';
 		if (options.cwd) {
-			// pkexec sets cwd to root's home, so change directory inside the elevated process
-			args = ['env', ...passthrough, 'sh', '-c', 'cd "$1" && shift && exec "$@"', 'sh', options.cwd, ...args.slice(1 + passthrough.length)];
+			// `go run` fallback (development only): pkexec sets cwd to root's home, so cd inside the elevated process.
+			args = ['env', ...passthrough, 'sh', '-c', 'cd "$1" && shift && exec "$@"', 'sh', options.cwd, command, ...args];
 			delete options.cwd;
+		} else {
+			// Run the driver directly so the password prompt names it rather than `env`.
+			// The driver applies --env arguments to its own environment.
+			args = [command, ...passthrough.flatMap((assignment) => ['--env', assignment]), ...args];
 		}
+		command = 'pkexec';
 	}
 	driverProcess = spawnDriverProcess(command, args, options);
 	if (!driverProcess) {

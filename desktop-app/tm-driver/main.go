@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strings"
 
 	"github.com/go-vgo/robotgo"
 )
@@ -28,6 +29,16 @@ type mousePosition struct {
 }
 
 func main() {
+	// `--env KEY=VALUE` lets the launcher pass environment through pkexec, which resets it.
+	for i := 1; i+1 < len(os.Args); i++ {
+		if os.Args[i] == "--env" {
+			if key, value, ok := strings.Cut(os.Args[i+1], "="); ok {
+				os.Setenv(key, value)
+			}
+			i++
+		}
+	}
+
 	defer func() {
 		if err := closeGamepad(); err != nil {
 			fmt.Fprintf(os.Stderr, "failed to close virtual gamepad: %v\n", err)
