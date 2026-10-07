@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The desktop app CLI now ignores unrecognized arguments.
+- On Linux, the desktop app now asks for your system password at startup, to run the mouse helper process as root. This is needed for virtual gamepad control.
 
 ## [3.1.0] - 2026-10-05
 

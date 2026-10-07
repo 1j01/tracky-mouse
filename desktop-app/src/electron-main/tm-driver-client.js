@@ -120,19 +120,36 @@ async function startTMDriver({ app }) {
 		args = ['run', '.'];
 		options = { cwd: getGoSourceDir(app) };
 	}
+	// Root is needed on Linux for gamepad emulation (/dev/uinput).
+	// pkexec shows the system password prompt if needed, and resets the environment,
+	// so pass through what the driver needs for X11 and `go run`.
+	const elevate = process.platform === 'linux';
+	if (elevate) {
+		const passthrough = ['PATH', 'HOME', 'DISPLAY', 'XAUTHORITY', 'WAYLAND_DISPLAY', 'DBUS_SESSION_BUS_ADDRESS', 'XDG_RUNTIME_DIR']
+			.filter((name) => process.env[name])
+			.map((name) => `${name}=${process.env[name]}`);
+		args = ['env', ...passthrough, command, ...args];
+		command = 'pkexec';
+		if (options.cwd) {
+			// pkexec sets cwd to root's home, so change directory inside the elevated process
+			args = ['env', ...passthrough, 'sh', '-c', 'cd "$1" && shift && exec "$@"', 'sh', options.cwd, ...args.slice(1 + passthrough.length)];
+			delete options.cwd;
+		}
+	}
 	driverProcess = spawnDriverProcess(command, args, options);
 	if (!driverProcess) {
 		throw new Error(`Failed to start tm-driver (${executableName}).`);
 	}
 	await withTimeout(
 		callDriver('ping'),
-		3000,
+		elevate ? 120000 : 3000, // allow time to enter a password
 		`Timed out waiting for tm-driver startup (${executableName}).`,
 	);
 	if (!hasProcessExitHook) {
 		hasProcessExitHook = true;
 		process.once('exit', () => {
 			if (driverProcess) {
+				driverProcess.stdin.end();
 				driverProcess.kill();
 			}
 		});
@@ -149,6 +166,8 @@ async function stopTMDriver() {
 	pendingRequests.clear(); // Drop silently instead of rejecting, to avoid errors during shutdown
 	await new Promise((resolve) => {
 		proc.once('exit', () => resolve());
+		// The driver may be running as root, so it can't be signaled directly; it exits when stdin closes.
+		proc.stdin.end();
 		proc.kill();
 	});
 }
