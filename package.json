@@ -2,7 +2,7 @@
 	"private": true,
 	"name": "tracky-mouse-monorepo",
 	"description": "This package contains scripts shared between packages.",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"CAN'T USE NPM WORKSPACES, see: https://github.com/1j01/tracky-mouse/issues/53": [
 		"core",
 		"desktop-app",
@@ -36,7 +36,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
 		"@types/eslint": "^8.56.9",
-		"cspell-cli": "^8.7.0",
+		"cspell-cli": "10.3.0",
 		"eslint": "^9.0.0",
 		"fast-glob": "^3.3.3",
 		"i18next-cli": "^1.42.12",

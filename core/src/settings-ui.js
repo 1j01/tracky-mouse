@@ -1,4 +1,5 @@
 
+import { infoIconSVG, resetIconSVG } from "./constants.js";
 import { traverseSettings } from "./settings.js";
 import { createDeferred } from "./utils.js";
 
@@ -157,7 +158,7 @@ export function initSettingsUI({
 		infoButton.className = "tracky-mouse-setting-info-button tracky-mouse-setting-extra-button";
 		infoButton.setAttribute("aria-controls", infoPopover.id);
 		infoButton.setAttribute("aria-expanded", false);
-		infoButton.textContent = "ⓘ";
+		infoButton.innerHTML = infoIconSVG;
 		// TODO: not sure what the tooltip should say, "Setting info" is just AI-suggested
 		// Should it have a tooltip at all? Should it show the whole popover text in the tooltip?
 		// Should it show the whole popover itself temporarily?
@@ -207,7 +208,7 @@ export function initSettingsUI({
 
 		const resetButton = document.createElement("button");
 		resetButton.className = "tracky-mouse-setting-reset-button tracky-mouse-setting-extra-button";
-		resetButton.textContent = "↩"; // "⟲";
+		resetButton.innerHTML = resetIconSVG;
 		resetButton.title = t("settings.resetSetting", { defaultValue: "Reset to default" });
 		resetButton.setAttribute("aria-label", t("settings.resetSetting", { defaultValue: "Reset to default" }));
 		if ("default" in setting) {

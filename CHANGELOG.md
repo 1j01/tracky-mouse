@@ -6,11 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+No changes here yet.
+
+## [3.1.0] - 2026-10-05
+
 ### Changed
 
 - In the desktop app, mouse control now uses a separate helper process instead of using the `serenade-driver` native Node.js module.
   - The new helper process (`tracky-mouse-driver.exe` on Windows, `tracky-mouse-driver` on macOS and Linux) is written in Go and uses [robotgo](https://github.com/go-vgo/robotgo) for mouse control.
   - This avoids compilation issues when updating Node.js or Electron, may fix some platform-specific issues, and gives a clear extension point for future native features, like gamepad emulation.
+  - **If building from source code**, you'll need to [install Go](https://go.dev/doc/install) and have it available in your system's `PATH`.
+
+### Added
+
+- Added a section in the Help window about using the camera in multiple apps at once in Windows.
+- Added some more words about lighting in the Help window.
 
 ### Fixed
 
@@ -20,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed error handling in the auto-updater in case the GitHub API response is invalid.
 - The auto-updater now fetches tags from the official GitHub repository even if the repo is forked.
   - No attempt is made to merge the fork's changes with the new updates. It simply checks out the latest tag.
+- Fixed the app's titlebar buttons overlapping the Help dialog on Windows.
+- The help and reset setting buttons now use SVG icons for consistent rendering across platforms.
 
 ## [3.0.0] - 2026-08-30
 
@@ -397,7 +409,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Electron](https://electronjs.org/) app for desktop (not yet packaged for distribution).
 
 
-[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/1j01/tracky-mouse/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/1j01/tracky-mouse/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/1j01/tracky-mouse/compare/v2.9.0...v3.0.0
 [2.9.0]: https://github.com/1j01/tracky-mouse/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/1j01/tracky-mouse/compare/v2.7.0...v2.8.0

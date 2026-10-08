@@ -48,3 +48,13 @@ export const MESH_ANNOTATIONS = {
 	rightCheek: [205],
 	leftCheek: [425]
 };
+
+export const infoIconSVG = `<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>`;
+// export const infoIconSVG = `<svg aria-hidden="true" focusable="false" viewBox="0 0 48 48" fill="none">
+// 	<path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" stroke-width="3"/>
+// 	<path d="M24 20.5V34.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+// 	<path d="M24 15C24.8284 15 25.5 14.3284 25.5 13.5C25.5 12.6716 24.8284 12 24 12C23.1716 12 22.5 12.6716 22.5 13.5C22.5 14.3284 23.1716 15 24 15Z" fill="currentColor"/>
+// </svg>`;
+// export const infoIconSVG = `<svg aria-hidden="true" focusable="false" viewBox="0 0 48 48" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M46 24C46 36.1503 36.1503 46 24 46C11.8497 46 2 36.1503 2 24C2 11.8497 11.8497 2 24 2C36.1503 2 46 11.8497 46 24ZM26.75 13C26.75 14.5188 25.5188 15.75 24 15.75C22.4812 15.75 21.25 14.5188 21.25 13C21.25 11.4812 22.4812 10.25 24 10.25C25.5188 10.25 26.75 11.4812 26.75 13ZM21.25 21.25C19.7312 21.25 18.5 22.4812 18.5 24C18.5 25.5188 19.7312 26.75 21.25 26.75V35C21.25 36.5188 22.4812 37.75 24 37.75H26.75C28.2688 37.75 29.5 36.5188 29.5 35C29.5 33.4812 28.2688 32.25 26.75 32.25V24C26.75 22.4812 25.5188 21.25 24 21.25H21.25Z" fill="currentColor"/></svg>`;
+
+export const resetIconSVG = `<svg aria-hidden="true" focusable="false" viewBox="0 0 48 48" fill="none"><path d="M2.16645 21.8503C1.94452 21.6506 1.94452 21.3026 2.16645 21.1028L21.0251 4.13007C21.3487 3.83884 21.8643 4.06848 21.8643 4.50381V16.4483C35.1941 16.4483 46 27.2542 46 40.584C46 41.4921 45.9498 42.3885 45.8522 43.2706C45.7924 43.8106 45.034 43.8362 44.8694 43.3185C41.7688 33.5684 32.6415 26.5049 21.8643 26.5049V38.4493C21.8643 38.8847 21.3487 39.1143 21.0251 38.8231L2.16645 21.8503Z" fill="currentColor"/></svg>`;

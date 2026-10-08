@@ -472,6 +472,8 @@ function pruneMousePosHistory() {
 	}
 }
 
+// For testing
+// let failSendingNextMessages = 0;
 
 /** @type {BrowserWindow} */
 let appWindow;
@@ -562,6 +564,13 @@ const createWindow = () => {
 
 	let lastSentOverlayUpdateId = 0;
 	let lastReceivedOverlayUpdateId = 0;
+	function resetOverlayMessageThrottling() {
+		// Just in case messages failed to send, which could cause the throttling code to perpetually skip updates*,
+		// resetOverlayMessageThrottling pretends we're caught up, so that new messages will not be skipped by throttling.
+		// *This theoretical problem doesn't actually happen even if many messages fail to send,
+		// because of the mouseMove exemption from throttling.
+		lastReceivedOverlayUpdateId = lastSentOverlayUpdateId;
+	}
 	function trySendOverlayWindowMessage(message, ...args) {
 		// Could include logic to log when toggling between able and unable to update,
 		// but for now it's enough to avoid errors spamming the console.
@@ -590,13 +599,13 @@ const createWindow = () => {
 		// Could either send the latest state after a delay if nothing else has been sent,
 		// or better, send important updates immediately by diffing an "important state" object
 		// (with fields like `paused` and maybe everything other than continuously changing state)
-		// TODO: handle failed send of message or of acknowledgeUpdate in some way
-		// Right now, if one or two messages fail to send,
-		// it could stop sending messages entirely, perpetually considering
-		// the queue to be too full.
-		// A timeout could help here, resetting lastReceivedOverlayUpdateId to lastSentOverlayUpdateId.
-		// (That said, if it's not done thoughtfully it could compromise the latency buildup avoidance.)
-		// (Also, how expensive are timers? I don't know that I've ever set new timers constantly...)
+		// NOTE: If messages to the overlay window, or the acknowledgment messages in return, fail to send,
+		// I theorized there could be a deadlock where the throttling code would stop sending messages entirely
+		// due to counting the failed messages as still being in the queue.
+		// However, due to the mouseMove exemption from throttling, even if many messages fail to send,
+		// there are still new messages with new update IDs and acknowledgments that come through,
+		// so lastReceivedOverlayUpdateId doesn't get stuck and updates continue.
+		// This does mean that the mouseMove exemption has unintended importance that needs to be considered.
 
 		const inQueue = lastSentOverlayUpdateId - lastReceivedOverlayUpdateId;
 		// NOTE: mouseMove is exempted here because otherwise this throttling was
@@ -604,21 +613,36 @@ const createWindow = () => {
 		// throttle just the overlayUpdate events in order to avoid the buildup of latency.
 		// It could be because the overlayUpdate events have a larger JSON payload,
 		// combined with similar frequency, but in principle,
-		// I don't see a reason why mouseMouse events couldn't incur
+		// I don't see a reason why mouseMove events couldn't incur
 		// the latency buildup, and so it's possible they may
 		// under heavier load or on less powerful hardware.
 		// (By the way, merging the events and using differencing
 		// could help or it could just make it harder to maintain this exemption.
-		// Maybe not too hard as it could probably be done by property filtering.)
-		// NOTE also: There may be a behavioral/semantic difference
-		// between counting all messages vs. counting only messages that are to be throttled.
-		// I don't know which would be better.
-		// Currently all messages are counted, meaning extra mouseMove events can cause
-		// overlayUpdate events to be throttled.
+		// Maybe not too hard as it could probably be done by property filtering.
+		// But note that the exemption for mouseMove events may be crucial for avoiding deadlocks
+		// in case some messages fail to send. The throttling code would have to be removed or rewritten.)
+		// NOTE also: There is a behavioral/semantic difference
+		// between tracking acknowledgments for any messages vs. counting only messages that are to be throttled.
+		// Currently all messages are included, meaning
+		// 1. extra mouseMove events can cause overlayUpdate events to be throttled.
+		// 2. mouseMove events can incidentally avoid deadlocks.
+		// There's also a difference between counting acknowledgments vs tracking the last acknowledged update ID.
+		// Using an actual counter or a set of pending update IDs would not allow mouseMove events to incidentally avoid deadlocks.
+		// Yes, I'm being a bit redundant, but I don't want to bury the complexity here.
+		// The mouseMove is almost acting like a heartbeat message, doing more jobs than it was intended for.
+		// Maybe if this is rewritten to use a single overlayUpdate message with differencing,
+		// it will be less data and will simply not need the throttling in practice.
+		// We're already relying on "smaller JSON payload = no latency buildup" for mouseMove events as far as I can tell.
 		if (inQueue > 2 && message !== "mouseMove") {
 			return;
 		}
-		screenOverlayWindow.webContents.send(message, ++lastSentOverlayUpdateId, ...args);
+		lastSentOverlayUpdateId++;
+		// if (failSendingNextMessages > 0) {
+		// 	console.log('Simulating failure to send message');
+		// 	failSendingNextMessages--;
+		// 	return;
+		// }
+		screenOverlayWindow.webContents.send(message, lastSentOverlayUpdateId, ...args);
 	}
 	ipcMain.on("acknowledgeUpdate", (_event, updateId) => {
 		lastReceivedOverlayUpdateId = updateId;
@@ -807,6 +831,7 @@ const createWindow = () => {
 			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		}
 
+		resetOverlayMessageThrottling();
 		updateDwellClickingAndHUD();
 	});
 	ipcMain.on('updateInputFeedback', (_event, data) => {
@@ -1074,14 +1099,21 @@ app.on('ready', async () => {
 	screen.on('display-added', updateScreenScaleFactor);
 	screen.on('display-removed', updateScreenScaleFactor);
 
-	if (!isWaylandSession) {
-		const success = globalShortcut.register('F9', () => {
-			appWindow?.webContents.send("shortcut", "toggle-tracking");
-		});
-		if (!success) {
-			dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
-		}
+	const successRegisteringF9 = globalShortcut.register('F9', () => {
+		// console.log('Toggle tracking');
+		appWindow?.webContents.send("shortcut", "toggle-tracking");
+	});
+	if (!successRegisteringF9) {
+		dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F9. You'll need to pause from within the app.");
 	}
+	// Debug: simulate failure sending messages to the overlay window
+	// const successRegisteringF10 = globalShortcut.register('F10', () => {
+	// 	console.log('Fail sending next few messages on purpose');
+	// 	failSendingNextMessages = 100;
+	// });
+	// if (!successRegisteringF10) {
+	// 	dialog.showErrorBox("Failed to register shortcut", "Failed to register global shortcut F10.");
+	// }
 });
 
 app.on('before-quit', () => {
