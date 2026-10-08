@@ -39,6 +39,10 @@ const { handleStartupEvent } = require('./squirrel-update.js');
 // Needs to be set early since `setLoginItemSettings` is used in the `--squirrel-uninstall` handler.
 app.setAppUserModelId("io.isaiahodhner.tracky-mouse");
 
+const isWaylandSession =
+	process.platform === "linux" &&
+	(process.env.XDG_SESSION_TYPE === "wayland" || Boolean(process.env.WAYLAND_DISPLAY));
+
 // Handle installing/uninstalling shortcuts and the CLI's PATH modification on Windows.
 if (process.platform === 'win32') {
 	const possibleSquirrelEventFlag = process.argv[1];
@@ -221,6 +225,7 @@ const {
 	stopTMDriver,
 	ensureCursorVisibility: ensureCursorVisibilityWithDriver,
 	setMouseLocation: setMouseLocationWithoutTracking,
+	moveMouseRelative: moveMouseRelativeWithoutTracking,
 	getMouseLocation,
 	click,
 	mouseDown,
@@ -453,6 +458,13 @@ async function setMouseLocationTracky(x, y) {
 	// await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 	await setMouseLocationWithoutTracking(x * screenScaleFactor, y * screenScaleFactor);
 }
+async function moveMouseRelativeTracky(x, y) {
+	ensureCursorVisibility();
+	await moveMouseRelativeWithoutTracking(
+		Math.round(x * screenScaleFactor),
+		Math.round(y * screenScaleFactor),
+	);
+}
 function pruneMousePosHistory() {
 	const now = performance.now();
 	while (mousePosHistory[0] && now - mousePosHistory[0].time > mousePosHistoryDuration) {
@@ -465,6 +477,16 @@ function pruneMousePosHistory() {
 
 /** @type {BrowserWindow} */
 let appWindow;
+
+// GNOME owns the global F9 binding on Wayland and signals the already-running
+// Tracky Mouse process. This avoids Electron's unreliable globalShortcut path.
+if (isWaylandSession) {
+	process.on("SIGUSR1", () => {
+		if (appWindow && !appWindow.isDestroyed()) {
+			appWindow.webContents.send("shortcut", "toggle-tracking");
+		}
+	});
+}
 /** @type {BrowserWindow} */
 let screenOverlayWindow;
 
@@ -637,6 +659,36 @@ const createWindow = () => {
 	let virtualDisplayBounds = computeVirtualDisplayBounds();
 	let isMultiMonitor = screen.getAllDisplays().length > 1;
 	let systemMousePosition = null;
+
+	// libei cannot observe physical pointer position through the RemoteDesktop portal.
+	// Keep only the Tracky Mouse virtual target and turn changes in that target into
+	// true relative pointer motion. Deltas are coalesced while a driver request is in flight.
+	let lastWaylandTrackyTarget = null;
+	let pendingWaylandDeltaX = 0;
+	let pendingWaylandDeltaY = 0;
+	let waylandMoveInFlight = false;
+	async function flushWaylandMouseMovement() {
+		if (waylandMoveInFlight) {
+			return;
+		}
+		waylandMoveInFlight = true;
+		try {
+			while (pendingWaylandDeltaX !== 0 || pendingWaylandDeltaY !== 0) {
+				const deltaX = pendingWaylandDeltaX;
+				const deltaY = pendingWaylandDeltaY;
+				pendingWaylandDeltaX = 0;
+				pendingWaylandDeltaY = 0;
+				await moveMouseRelativeTracky(deltaX, deltaY);
+			}
+		} catch (error) {
+			console.error("Error moving mouse relatively through libei:", error);
+		} finally {
+			waylandMoveInFlight = false;
+			if (pendingWaylandDeltaX !== 0 || pendingWaylandDeltaY !== 0) {
+				void flushWaylandMouseMovement();
+			}
+		}
+	}
 	const updateDwellClickingAndHUD = () => {
 		const workAreaContainerBounds = {
 			x: primaryDisplay.workArea.x - virtualDisplayBounds.x,
@@ -679,9 +731,32 @@ const createWindow = () => {
 		clearTimeout(monitorMousePositionTid);
 		monitorMousePositionTid = setTimeout(monitorMousePosition, 10);
 	}
-	monitorMousePosition();
+	if (!isWaylandSession) {
+		monitorMousePosition();
+	}
 
 	ipcMain.on('moveMouse', async (_event, x, y, time) => {
+		if (isWaylandSession) {
+			if (enabled) {
+				if (lastWaylandTrackyTarget !== null) {
+					pendingWaylandDeltaX += x - lastWaylandTrackyTarget.x;
+					pendingWaylandDeltaY += y - lastWaylandTrackyTarget.y;
+					void flushWaylandMouseMovement();
+				}
+				lastWaylandTrackyTarget = { x, y };
+			} else {
+				lastWaylandTrackyTarget = null;
+				pendingWaylandDeltaX = 0;
+				pendingWaylandDeltaY = 0;
+			}
+			trySendOverlayWindowMessage(
+				'mouseMove',
+				x - virtualDisplayBounds.x,
+				y - virtualDisplayBounds.y,
+				time,
+			);
+			return;
+		}
 		// TODO: consider postponing getMouseLocation, if possible, to minimize latency,
 		// perhaps separating logic for pausing/resuming camera control out from the camera control itself.
 		// Update: I have done a test of extracting this. It works but note that it may change the
@@ -737,7 +812,7 @@ const createWindow = () => {
 
 	ipcMain.on('notifyToggleState', async (_event, nowEnabled) => {
 		let initialPos;
-		if (nowEnabled) { // don't rely on getMouseLocation when disabling the software
+		if (nowEnabled && !isWaylandSession) { // don't rely on fake libei Location() on Wayland
 			initialPos = await getMouseLocation();
 			initialPos.x /= screenScaleFactor;
 			initialPos.y /= screenScaleFactor;
@@ -748,7 +823,10 @@ const createWindow = () => {
 		clearTimeout(regainControlTimeout);
 		regainControlTimeout = null;
 		mousePosHistory.length = 0;
-		if (nowEnabled) {
+		lastWaylandTrackyTarget = null;
+		pendingWaylandDeltaX = 0;
+		pendingWaylandDeltaY = 0;
+		if (nowEnabled && !isWaylandSession) {
 			// Avoid false positive for manual takeback.
 			mousePosHistory.push({ point: { x: initialPos.x, y: initialPos.y }, time: performance.now(), from: "notifyToggleState" });
 		}
@@ -829,7 +907,9 @@ const createWindow = () => {
 		x += screenOverlayWindow.getContentBounds().x;
 		y += screenOverlayWindow.getContentBounds().y;
 
-		await setMouseLocationTracky(x, y);
+		if (!isWaylandSession) {
+			await setMouseLocationTracky(x, y);
+		}
 		await click(activeSettings.swapMouseButtons ? "right" : "left");
 
 		// const latency = performance.now() - time;

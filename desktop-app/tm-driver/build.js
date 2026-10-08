@@ -29,8 +29,20 @@ function run(command, args, options = {}) {
 
 async function main() {
 	await fs.mkdir(outDir, { recursive: true });
+	await run('go', ['mod', 'tidy']);
 	await run('go', ['mod', 'download']);
-	await run('go', ['build', '-o', outPath, '.']);
+	const isWayland = process.platform === 'linux' &&
+		(process.env.XDG_SESSION_TYPE === 'wayland' || process.env.WAYLAND_DISPLAY);
+	const buildArgs = ['build'];
+	const buildEnv = { ...process.env };
+
+	if (isWayland) {
+		buildArgs.push('-tags', 'libei');
+		buildEnv.CGO_ENABLED = '0';
+	}
+
+	buildArgs.push('-o', outPath, '.');
+	await run('go', buildArgs, { env: buildEnv });
 	console.log(`Built tm-driver at ${outPath}`);
 }
 

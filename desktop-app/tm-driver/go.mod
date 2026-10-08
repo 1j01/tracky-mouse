@@ -2,7 +2,7 @@ module github.com/1j01/tracky-mouse/desktop-app/tm-driver
 
 go 1.25.0
 
-require github.com/go-vgo/robotgo v1.0.2
+require github.com/go-vgo/robotgo v1.1.0
 
 require (
 	github.com/dblohm7/wingoes v0.0.0-20250822163801-6d8e6105c62d // indirect
