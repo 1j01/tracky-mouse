@@ -28,8 +28,10 @@
 	</Resources>
 	<Capabilities>
 		<rescap:Capability Name="runFullTrust" />
-		<rescap:Capability Name="uiAccess" />
-		<rescap:Capability Name="inputInjectionBrokered" />
+		<!-- <rescap:Capability Name="uiAccess" /> for clicking on elevated process windows such as
+		the Task Manager, and placing the overlay at the topmost depth; see
+		https://github.com/microsoft/WindowsAppSDK/issues/1669 -->
+		<!-- <rescap:Capability Name="inputInjectionBrokered" /> for clicking -->
 		<!-- <Capability Name="internetClient" /> for Sentry error reporting -->
 		<!-- <DeviceCapability Name="microphone" /> for future hiss/pop based clicking -->
 		<DeviceCapability Name="webcam" />

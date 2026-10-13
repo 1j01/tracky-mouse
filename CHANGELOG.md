@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No changes here yet.
+### Changed
+
+- **For Windows Store**: Removed restricted capabilities `uiAccess` and `inputInjectionBrokered` from the app manifest.
+  - The app should absolutely have these capabilities, but Microsoft rejects apps that request them without providing reasoning.
+  - The app should still be able to click on most things, but not the Task Manager or other elevated process windows.
+  - The app won't be able to show the HUD over top of the Start menu without this.
+  - It may be impossible to access these capabilities in an MSIX packaged app (as needed for the Windows Store). See [WindowsAppSDK issue #1669](https://github.com/microsoft/WindowsAppSDK/issues/1669). Apparently it has caused problems for internal Microsoft teams as well.
 
 ## [3.1.0] - 2026-10-05
 
