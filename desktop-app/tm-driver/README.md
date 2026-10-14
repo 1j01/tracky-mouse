@@ -26,6 +26,8 @@ npm run in-desktop-app -- npm run build-tm-driver
 
 The output binary is written to `desktop-app/tm-driver/bin/`.
 
+On Linux, one binary is built for each robotgo backend (`tracky-mouse-driver-x11`, `-wayland`, and `-libei`), and the desktop app picks one at runtime based on `XDG_SESSION_TYPE`, `WAYLAND_DISPLAY`, and `XDG_CURRENT_DESKTOP`: X11 sessions use `x11`, GNOME/KDE/etc. on Wayland use `libei`, and other Wayland compositors (wlroots-based) use `wayland`.
+
 ## Process Protocol
 
 This helper process reads JSON-based requests from stdin (one JSON object per line)

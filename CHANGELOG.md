@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated robotgo to 1.3.5 and enabled pure Go compilation for tm-driver.
-  - This breaks Ubuntu 22 support temporarily due to the default robotgo backend being `wayland` with `purego` enabled. I plan to fix this before the next release.
-  - It may or may not fix Ubuntu 24+ support.
+  - On Linux, the helper is built for each of X11, Wayland, and GNOME/KDE (libei), and the right one is chosen at startup depending on your session.
 - **For Windows Store**: Removed restricted capabilities `uiAccess` and `inputInjectionBrokered` from the app manifest.
   - The app should absolutely have these capabilities, but Microsoft rejects apps that request them without providing reasoning.
   - The app should still be able to click on most things, but not the Task Manager or other elevated process windows.

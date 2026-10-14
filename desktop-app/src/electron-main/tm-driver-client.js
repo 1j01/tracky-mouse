@@ -13,8 +13,34 @@ let nextRequestId = 1;
 let hasProcessExitHook = false;
 let isShuttingDown = false;
 
+/**
+ * Picks the robotgo backend to use on Linux, based on the session type and desktop environment.
+ * - `wayland`: wlroots compositors (Sway, Hyprland, ...), via virtual input protocols
+ * - `libei`: GNOME and KDE on Wayland, via the RemoteDesktop portal
+ * - `x11`: X11 sessions
+ * @returns {'x11' | 'wayland' | 'libei'}
+ */
+function getLinuxBackend(env = process.env) {
+	const sessionType = (env.XDG_SESSION_TYPE || '').toLowerCase();
+	const isWayland = sessionType === 'wayland' || (sessionType !== 'x11' && !!env.WAYLAND_DISPLAY);
+	if (!isWayland) {
+		return 'x11';
+	}
+	const desktops = `${env.XDG_CURRENT_DESKTOP || ''}:${env.XDG_SESSION_DESKTOP || ''}`.toLowerCase();
+	if (/gnome|kde|plasma|unity|ubuntu|budgie|cinnamon|pantheon|cosmic/.test(desktops)) {
+		return 'libei';
+	}
+	return 'wayland';
+}
+
 function getDriverExecutableName() {
-	return process.platform === 'win32' ? 'tracky-mouse-driver.exe' : 'tracky-mouse-driver';
+	if (process.platform === 'win32') {
+		return 'tracky-mouse-driver.exe';
+	}
+	if (process.platform === 'linux') {
+		return `tracky-mouse-driver-${getLinuxBackend()}`;
+	}
+	return 'tracky-mouse-driver';
 }
 
 function getPackagedDriverPath() {
