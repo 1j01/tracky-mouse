@@ -30,7 +30,12 @@ function run(command, args, options = {}) {
 async function main() {
 	await fs.mkdir(outDir, { recursive: true });
 	await run('go', ['mod', 'download']);
-	await run('go', ['build', '-o', outPath, '.']);
+	await run('go', ['build', '-tags', 'purego', '-o', outPath, '.'], {
+		env: {
+			...process.env,
+			CGO_ENABLED: '0',
+		},
+	});
 	console.log(`Built tm-driver at ${outPath}`);
 }
 

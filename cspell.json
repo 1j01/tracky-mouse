@@ -111,6 +111,7 @@
 		"pointerleave",
 		"pointermove",
 		"pointerup",
+		"purego",
 		"readdir",
 		"referentiality",
 		"reinit",
