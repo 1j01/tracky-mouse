@@ -7,7 +7,10 @@ const { spawn } = require('child_process');
 const rootDir = __dirname;
 const outDir = path.join(rootDir, 'bin');
 const exeName = process.platform === 'win32' ? 'tracky-mouse-driver.exe' : 'tracky-mouse-driver';
-const outPath = path.join(outDir, exeName);
+
+// On Linux, robotgo has multiple pure Go backends, and the right one depends on the session type.
+// The backend is picked at runtime by the desktop app; see tm-driver-client.js.
+const linuxBackends = ['x11', 'wayland', 'libei'];
 
 function run(command, args, options = {}) {
 	return new Promise((resolve, reject) => {
@@ -27,16 +30,26 @@ function run(command, args, options = {}) {
 	});
 }
 
-async function main() {
-	await fs.mkdir(outDir, { recursive: true });
-	await run('go', ['mod', 'download']);
-	await run('go', ['build', '-tags', 'purego', '-o', outPath, '.'], {
+async function build(outPath, tags) {
+	await run('go', ['build', '-tags', tags, '-o', outPath, '.'], {
 		env: {
 			...process.env,
 			CGO_ENABLED: '0',
 		},
 	});
 	console.log(`Built tm-driver at ${outPath}`);
+}
+
+async function main() {
+	await fs.mkdir(outDir, { recursive: true });
+	await run('go', ['mod', 'download']);
+	if (process.platform === 'linux') {
+		for (const backend of linuxBackends) {
+			await build(path.join(outDir, `${exeName}-${backend}`), backend);
+		}
+	} else {
+		await build(path.join(outDir, exeName), 'purego');
+	}
 }
 
 main().catch((error) => {
