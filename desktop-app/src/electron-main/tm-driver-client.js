@@ -21,11 +21,23 @@ let isShuttingDown = false;
  * @returns {'x11' | 'wayland' | 'libei'}
  */
 function getLinuxBackend(env = process.env) {
+	if (env.TRACKY_MOUSE_BACKEND) {
+		// TODO: would a setting in the app's settings file be a better escape hatch?
+		// Maybe even in settings UI but in an advanced settings section / view.
+		return env.TRACKY_MOUSE_BACKEND.toLowerCase();
+	}
 	const sessionType = (env.XDG_SESSION_TYPE || '').toLowerCase();
 	const isWayland = sessionType === 'wayland' || (sessionType !== 'x11' && !!env.WAYLAND_DISPLAY);
 	if (!isWayland) {
 		return 'x11';
 	}
+	// This regexp list of desktop environments is not verified.
+	// This approach is not ideal since desktops could change implementations over time, and
+	// the list can't be exhaustive.
+	// Hence the TRACKY_MOUSE_BACKEND escape hatch, to at least allow manual override for advanced users.
+	// TODO: can we detect libei support properly, akin to feature detection instead of user agent sniffing?
+	// We might need to initialize the backend process for this, and check for an error, but perhaps there's another way.
+	// If we do that we need to support switching backends over time.
 	const desktops = `${env.XDG_CURRENT_DESKTOP || ''}:${env.XDG_SESSION_DESKTOP || ''}`.toLowerCase();
 	if (/gnome|kde|plasma|unity|ubuntu|budgie|cinnamon|pantheon|cosmic/.test(desktops)) {
 		return 'libei';

@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated robotgo to 1.3.5 and enabled pure Go compilation for tm-driver.
-  - On Linux, the helper is built for each of X11, Wayland, and GNOME/KDE (libei), and the right one is chosen at startup depending on your session.
+  - On Linux, the helper is built for each of X11, Wayland, and GNOME/KDE (libei), and the right one should be chosen at startup depending on your session.
+  - If automatic detection doesn't work right, the backend can be overridden by setting the `TRACKY_MOUSE_BACKEND` environment variable to `x11`, `wayland`, or `libei`.
 - **For Windows Store**: Removed restricted capabilities `uiAccess` and `inputInjectionBrokered` from the app manifest.
   - The app should absolutely have these capabilities, but Microsoft rejects apps that request them without providing reasoning.
   - The app should still be able to click on most things, but not the Task Manager or other elevated process windows.
